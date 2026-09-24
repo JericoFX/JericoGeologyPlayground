@@ -6,7 +6,7 @@ Laboratorio independiente en C++20, Diligent/Vulkan e ImGui para experimentar co
 
 Ejecutar `build-surface/Release/JericoGeologyPlayground.exe` o `Run.cmd`.
 
-La compilación vigente está en **build-surface/Release**; los otros árboles conservan pruebas históricas. Para probar el cliff, elegir `Plane cliff`, `Solid cliff` o `BSP geology` en Presets y pulsar `Fit`. El estado verificable más reciente está en `Evidence/2026-09-24-geology-math-checkpoint.md`.
+La compilación vigente está en **build/Release**; los otros árboles conservan pruebas históricas. Para probar el cliff, elegir `Plane cliff`, `Solid cliff` o `BSP geology` en Presets y pulsar `Fit`. El estado verificable más reciente está en `Evidence/2026-09-24-geology-math-checkpoint.md`.
 
 1. `New` crea un cubo sin operaciones. Elegir Cube, Sphere, Cylinder, Cone, Plane/Wall o BSP wall. Esta última es un fixture construido con el BSP real del engine, no la selección de su editor productivo.
 2. Elegir una operación y pulsar `Add layer`. Activar, seleccionar, duplicar, borrar o reordenar en el panel izquierdo.

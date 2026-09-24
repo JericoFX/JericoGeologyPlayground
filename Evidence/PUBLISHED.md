@@ -1,5 +1,7 @@
 # Evidencia seleccionada para el repositorio privado
 
+Repositorio: [JericoFX/JericoGeologyPlayground](https://github.com/JericoFX/JericoGeologyPlayground), rama `main`, visibilidad `PRIVATE` verificada tras la publicación inicial.
+
 El repositorio conserva el código, las referencias documentales M8 copiadas con SHA-256, el checkpoint vigente, las fotos USGS y texturas Poly Haven CC0 con sus manifiestos, y la prueba visual más reciente de las seis familias. Los builds y los aproximadamente 7 GB de paquetes intermedios de `Evidence/` permanecen sólo en el playground local y se pueden regenerar; su ausencia en Git no significa que los bakes estén aceptados para M8.
 
 La corrida reproducible más reciente está identificada por `specialist-mips-input-artifact-hashes.json`. Incluye el resumen `2026-09-24-specialist-mips-six-family-lods/rock-lod-bakes-proof.json`, la auditoría de los 17 bakes/mips, el comparador visual de 17 LOD, los logs RED/GREEN/Release y capturas originales `high.png`, `low.png`, `low-normal.png`, AO, contact, cavity y convex-edge para cada LOD válido. Las bases/mips PNG de textura y OBJ completos se regeneran localmente.

@@ -16,8 +16,8 @@
   },
   {
     "path": "README.md",
-    "bytes": 27832,
-    "sha256": "4d3574ec569762d1f8ef865d07adbdeca9450e6d48bd41293fb2ea0fef084d7b"
+    "bytes": 27824,
+    "sha256": "c79e44ff118041d070bf6b258eb6e67fb95e36e119482f04ad1d364151e77029"
   },
   {
     "path": "Source/NormalBake.hpp",
@@ -56,13 +56,13 @@
   },
   {
     "path": "Evidence/PUBLISHED.md",
-    "bytes": 1853,
-    "sha256": "036226d9ddbb2136a26de829aa308f36307a48ff2f46f3b30a608c4b09583246"
+    "bytes": 2032,
+    "sha256": "14e9bdfe24708268f9ca550ccb3f9d642f3283d9173aa86d030fc364bd8b119a"
   },
   {
     "path": "Evidence/2026-09-24-geology-math-checkpoint.md",
-    "bytes": 96387,
-    "sha256": "82eee8c985c3403e0a39c879d53c2a0b67dc5a42cb53ff3d95b3e6bcddb1d5f8"
+    "bytes": 96685,
+    "sha256": "f83be5d445f4af63c5463dd2cf0ddcac342ac4ffed46c41ff6b2bf9a910acd47"
   },
   {
     "path": "Evidence/2026-09-24-specialist-mips-six-family-lods/rock-lod-bakes-proof.json",
