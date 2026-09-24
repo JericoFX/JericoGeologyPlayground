@@ -2,6 +2,7 @@
 #include "Model.hpp"
 #include "SurfaceGeometry.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <map>
@@ -53,7 +54,34 @@ int main()
         require(PA::validateClosedMesh(cliffCut.mesh).hasValue(), "cut cliff remains a closed solid");
         auto cut = evaluate(cliffPreset, 32, 4);
         require(!cut.closedSolid, "cut is applied before solidification");
-        Jerico::Guid cutId{};
+        require(cut.mesh.positions.size() > 33 * 33 &&
+                    cut.mesh.triangleRegions.size() > 2 * 32 * 32,
+                "cut creates joint geometry instead of only displacing grid vertices");
+        std::map<std::pair<double, double>, std::pair<double, double>> elevations;
+        for (auto p : cut.mesh.positions)
+        {
+            auto [entry, inserted] = elevations.try_emplace({p.x, p.y}, p.z, p.z);
+            if (!inserted)
+            {
+                entry->second.first = std::min(entry->second.first, p.z);
+                entry->second.second = std::max(entry->second.second, p.z);
+            }
+        }
+        std::size_t steppedVertices = 0;
+        double shallowestJoint = 1e20, deepestJoint = 0;
+        for (const auto &[xy, z] : elevations)
+        {
+            const auto depth = z.second - z.first;
+            if (depth > 0.08)
+            {
+                ++steppedVertices;
+                shallowestJoint = std::min(shallowestJoint, depth);
+                deepestJoint = std::max(deepestJoint, depth);
+            }
+        }
+        require(steppedVertices > 8 && deepestJoint - shallowestJoint > 0.02,
+                "cut has a localized joint and a ledge of variable physical depth");
+        Jerico::Guid cutId{}, jointId{};
         for (const auto &region : cut.regions)
             if (region.role == SurfaceRole::CutLoop)
             {
@@ -62,11 +90,27 @@ int main()
                         "cut retains operation and source lineage");
             }
         require(cutId != Jerico::Guid{}, "cut region has a selectable stable GUID");
+        for (const auto &region : cut.regions)
+            if (region.role == SurfaceRole::CutFace)
+            {
+                jointId = region.id;
+                require(region.parent == cutId && region.operation == 4,
+                        "joint faces retain their cut parent and operation");
+            }
+        require(jointId != Jerico::Guid{} && jointId != cutId &&
+                    std::count(cut.mesh.triangleRegions.begin(),
+                               cut.mesh.triangleRegions.end(), jointId) > 16,
+                "real cut faces have their own selectable region");
         auto lower = evaluate(cliffPreset, 16, 4);
-        bool sameRegion = false;
+        bool sameRegion = false, sameJoint = false;
         for (const auto &region : lower.regions)
+        {
             sameRegion |= region.role == SurfaceRole::CutLoop && region.id == cutId;
-        require(sameRegion, "cut region identity survives lower resolution regeneration");
+            sameJoint |= region.role == SurfaceRole::CutFace && region.id == jointId &&
+                         region.parent == cutId;
+        }
+        require(sameRegion && sameJoint,
+                "cut and joint region identity survive lower resolution regeneration");
         std::map<std::pair<std::uint32_t, std::uint32_t>, std::vector<Jerico::Guid>> edges;
         for (std::size_t t = 0; t < cut.mesh.triangleRegions.size(); ++t)
             for (int k = 0; k < 3; ++k)
@@ -85,12 +129,18 @@ int main()
         for (const auto &[vertex, degree] : boundaryDegree)
             require(degree == 2, "cut boundary is a closed, nonbranching loop");
         auto uv = planAutomaticUv(cut.mesh, {.resolution = 512, .mipCount = 3});
-        std::set<std::uint32_t> cutCharts, sourceCharts;
+        std::set<std::uint32_t> cutCharts, sourceCharts, jointCharts;
         for (std::size_t t = 0; t < cut.mesh.triangleRegions.size(); ++t)
-            (cut.mesh.triangleRegions[t] == cutId ? cutCharts : sourceCharts).insert(uv.triangleIsland[t]);
-        require(!cutCharts.empty() && !sourceCharts.empty(), "automatic UV covers both cut and source");
+            (cut.mesh.triangleRegions[t] == cutId ? cutCharts :
+             cut.mesh.triangleRegions[t] == jointId ? jointCharts : sourceCharts)
+                .insert(uv.triangleIsland[t]);
+        require(!cutCharts.empty() && !sourceCharts.empty() && !jointCharts.empty(),
+                "automatic UV covers cut, joint faces and source");
         for (auto chart : cutCharts)
-            require(!sourceCharts.contains(chart), "ZenUV-style automatic charts split at cut region");
+            require(!sourceCharts.contains(chart) && !jointCharts.contains(chart),
+                    "ZenUV-style automatic charts split the cut from its joint and source");
+        for (auto chart : jointCharts)
+            require(!sourceCharts.contains(chart), "joint faces have distinct automatic UV charts");
         require(meshHash(cliffCut.mesh) == meshHash(evaluate(deserialize(serialize(cliffPreset)), 32).mesh),
                 "cut cliff is deterministic after recipe roundtrip");
         auto v9Recipe = serialize(preset(7));

@@ -1,0 +1,82 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 8,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4723.6689,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.04,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 0,
+          "lowHash": 12244607560334983867,
+          "lowTriangles": 8894,
+          "misses": 0,
+          "sampledSurfaceError": 0.034243550479393745,
+          "samples": 1975575,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4730.6553,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.06,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 1,
+          "lowHash": 17143435401045846404,
+          "lowTriangles": 6558,
+          "misses": 0,
+          "sampledSurfaceError": 0.04916044231888833,
+          "samples": 1974051,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4764.8642,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.1,
+          "errorBudget": 0.08,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 2,
+          "lowHash": 7200223194218595769,
+          "lowTriangles": 5334,
+          "misses": 0,
+          "sampledSurfaceError": 0.05342013473739166,
+          "samples": 1973443,
+          "status": "BAKED"
+        }
+      ]
+    }
+  ],
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

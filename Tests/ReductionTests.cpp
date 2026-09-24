@@ -1,5 +1,7 @@
 #include "Model.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 using namespace Playground;
@@ -25,13 +27,40 @@ int main()
         require(PA::validateClosedMesh(reduced.mesh).hasValue(), "reduced cube stays closed");
         recipe = preset(8);
         auto wall = evaluate(recipe, 64);
+        Jerico::Guid cutId{}, jointId{};
+        for (const auto &region : wall.regions)
+        {
+            if (region.role == SurfaceRole::CutLoop) cutId = region.id;
+            if (region.role == SurfaceRole::CutFace) jointId = region.id;
+        }
+        require(cutId != Jerico::Guid{} && jointId != Jerico::Guid{},
+                "high cliff retains cut and joint face identities");
+        auto jointArea = [&](const auto &mesh)
+        {
+            double area = 0;
+            for (std::size_t t = 0; t < mesh.triangleRegions.size(); ++t)
+                if (mesh.triangleRegions[t] == jointId)
+                {
+                    const auto a = mesh.positions[mesh.indices[3 * t]],
+                               b = mesh.positions[mesh.indices[3 * t + 1]],
+                               c = mesh.positions[mesh.indices[3 * t + 2]];
+                    const auto ux = b.x - a.x, uy = b.y - a.y, uz = b.z - a.z;
+                    const auto vx = c.x - a.x, vy = c.y - a.y, vz = c.z - a.z;
+                    area += 0.5 * std::sqrt(std::pow(uy * vz - uz * vy, 2) +
+                                            std::pow(uz * vx - ux * vz, 2) +
+                                            std::pow(ux * vy - uy * vx, 2));
+                }
+            return area;
+        };
+        const auto highJointArea = jointArea(wall.mesh);
+        require(highJointArea > 0.1, "high cliff contains a physical joint face");
         recipe.layers.push_back(reduce);
         auto low = evaluate(recipe, 64);
         require(low.mesh.indices.size() <= wall.mesh.indices.size(),
                 "quality fallback never increases triangles");
-    require(low.sampledReductionError <= 0.01, "cliff stays inside declared sampled error");
-        require(PA::hashTriangleMesh(low.mesh) ==
-                    PA::hashTriangleMesh(evaluate(deserialize(serialize(recipe)), 64).mesh),
+        require(low.sampledReductionError <= 0.01, "cliff stays inside declared sampled error");
+        auto replay = evaluate(deserialize(serialize(recipe)), 64);
+        require(PA::hashTriangleMesh(low.mesh) == PA::hashTriangleMesh(replay.mesh),
                 "reduction reproducible with region identity");
         std::cout << "PASS quality gate: cube " << source.mesh.indices.size() / 3 << " -> "
                   << reduced.mesh.indices.size() / 3 << ", cliff " << wall.mesh.indices.size() / 3 << " -> "
@@ -42,8 +71,17 @@ int main()
             auto candidate = evaluate(recipe, 64);
             require(candidate.sampledReductionError <= limit, "each explicit quality budget is enforced");
             if (limit == 0.05f)
+            {
                 require(candidate.mesh.indices.size() < wall.mesh.indices.size(),
                         "cliff reduces at the separately declared 0.05-unit budget");
+                require(std::count(candidate.mesh.triangleRegions.begin(),
+                                   candidate.mesh.triangleRegions.end(), cutId) > 0 &&
+                            std::count(candidate.mesh.triangleRegions.begin(),
+                                       candidate.mesh.triangleRegions.end(), jointId) > 0,
+                        "low cliff preserves both block and joint faces");
+                require(jointArea(candidate.mesh) >= 0.5 * highJointArea,
+                        "low cliff retains substantial physical joint area");
+            }
             std::cout << "cliff limit " << limit << ": " << wall.mesh.indices.size() / 3 << " -> "
                       << candidate.mesh.indices.size() / 3 << ", sampled error "
                       << candidate.sampledReductionError << '\n';

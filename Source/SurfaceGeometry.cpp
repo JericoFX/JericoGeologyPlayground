@@ -91,12 +91,13 @@ MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *canc
     document.brushes.push_back(wall);
     return bspSource(document, std::span<const Jerico::Guid>(&id, 1), subdivisions, cancel);
 }
-void cliffCutLoop(MeshResult &surface, const Layer &layer, int operation, bool showField,
+void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &layer, int operation, bool showField,
                   const Jerico::CancellationToken *cancel)
 {
     check(cancel);
     if (surface.closedSolid || surface.mesh.positions.empty() ||
-        surface.field.size() != surface.mesh.positions.size())
+        surface.field.size() != surface.mesh.positions.size() ||
+        warp.size() != surface.mesh.positions.size())
         throw std::runtime_error("Cliff cut loop requires an open plane surface");
     const auto side = std::size_t(std::llround(std::sqrt(double(surface.mesh.positions.size()))));
     if (side < 5 || side > 65 || side * side != surface.mesh.positions.size() ||
@@ -148,6 +149,8 @@ void cliffCutLoop(MeshResult &surface, const Layer &layer, int operation, bool s
             selectedCount += hit;
             if (hit)
             {
+                if (x == 0 || y == 0 || x + 1 == n || y + 1 == n)
+                    throw std::runtime_error("Cliff cut loop must stay inside the source surface");
                 const auto id = surface.mesh.triangleRegions[2 * q];
                 if (parent == Jerico::Guid{})
                     parent = id;
@@ -162,28 +165,120 @@ void cliffCutLoop(MeshResult &surface, const Layer &layer, int operation, bool s
         }
     if (selectedCount < 4 || selectedCount == n * n)
         throw std::runtime_error("Cliff cut loop must select a local interior patch");
+    std::vector<std::pair<std::uint32_t, std::uint32_t>> boundary;
+    std::vector<unsigned> boundaryDegree(surface.mesh.positions.size());
+    std::vector<std::vector<std::uint32_t>> boundaryNeighbors(surface.mesh.positions.size());
+    auto appendBoundary = [&](std::uint32_t a, std::uint32_t b)
+    {
+        boundary.emplace_back(a, b);
+        ++boundaryDegree[a];
+        ++boundaryDegree[b];
+        boundaryNeighbors[a].push_back(b);
+        boundaryNeighbors[b].push_back(a);
+    };
+    for (std::size_t y = 1; y + 1 < n; ++y)
+        for (std::size_t x = 1; x + 1 < n; ++x)
+        {
+            if (!selected[y * n + x])
+                continue;
+            const auto a = std::uint32_t(y * side + x), b = a + 1,
+                       c = a + std::uint32_t(side), d = c + 1;
+            if (!selected[(y - 1) * n + x]) appendBoundary(a, b);
+            if (!selected[y * n + x + 1]) appendBoundary(b, d);
+            if (!selected[(y + 1) * n + x]) appendBoundary(d, c);
+            if (!selected[y * n + x - 1]) appendBoundary(c, a);
+        }
+    if (boundary.size() < 8 || std::any_of(boundaryDegree.begin(), boundaryDegree.end(),
+                                            [](unsigned degree) { return degree != 0 && degree != 2; }))
+        throw std::runtime_error("Cliff cut loop must form a single nonbranching joint");
+    std::vector<unsigned char> visited(boundaryDegree.size());
+    std::vector<std::uint32_t> pending{boundary.front().first};
+    visited[pending.back()] = 1;
+    std::size_t connectedVertices = 0;
+    while (!pending.empty())
+    {
+        const auto vertex = pending.back();
+        pending.pop_back();
+        ++connectedVertices;
+        for (auto neighbor : boundaryNeighbors[vertex])
+            if (!visited[neighbor])
+            {
+                visited[neighbor] = 1;
+                pending.push_back(neighbor);
+            }
+    }
+    if (connectedVertices != boundary.size())
+        throw std::runtime_error("Cliff cut loop contains disconnected joints");
+    for (std::size_t i = 0; i < boundaryDegree.size(); ++i)
+        if (boundaryDegree[i])
+        {
+            auto &p = surface.mesh.positions[i];
+            auto [u, v] = coordinates(p);
+            const auto radius = std::hypot(u, v);
+            if (radius < 1e-6)
+                throw std::runtime_error("Cliff joint contour cannot pass through its center");
+            const auto scale = 1.0 + 0.5 * (contour(u, v) / radius - 1.0);
+            u *= scale * layer.projectorRadius[0];
+            v *= scale * layer.projectorRadius[1];
+            p.x = layer.translation[0] + cs * u - sn * v;
+            p.y = layer.translation[1] + sn * u + cs * v;
+        }
     const auto id = Solid::region(layer.seed, 0x434c494646000000ULL ^ std::uint64_t(operation));
-    for (std::size_t q = 0; q < selected.size(); ++q)
-        if (selected[q])
-            surface.mesh.triangleRegions[2 * q] = surface.mesh.triangleRegions[2 * q + 1] = id;
+    const auto faceId = Solid::region(layer.seed, 0x434c494646100000ULL ^ std::uint64_t(operation));
     surface.regions.push_back({id, parent, SurfaceRole::CutLoop, operation, -1});
-    for (std::size_t i = 0; i < surface.mesh.positions.size(); ++i)
+    surface.regions.push_back({faceId, id, SurfaceRole::CutFace, operation, -1});
+    const auto originalCount = surface.mesh.positions.size();
+    std::vector<std::uint32_t> selectedVertex(originalCount);
+    for (std::size_t i = 0; i < originalCount; ++i)
     {
         if ((i & 255) == 0)
             check(cancel);
-        if (!inside[i] || inside[i] != incident[i])
+        selectedVertex[i] = std::uint32_t(i);
+        if (!inside[i] || inside[i] == incident[i])
+            continue;
+        selectedVertex[i] = std::uint32_t(surface.mesh.positions.size());
+        surface.mesh.positions.push_back(surface.mesh.positions[i]);
+        const auto priorWarp = warp[i];
+        warp.push_back(priorWarp);
+        surface.field.push_back(surface.field[i]);
+        auto duplicate = [&](auto &values)
         {
-            if (showField)
-                surface.field[i] = 0;
+            if (!values.empty())
+                values.push_back(values[i]);
+        };
+        duplicate(surface.layerIndices);
+        duplicate(surface.layerThickness);
+        duplicate(surface.layerEdgeDistance);
+    }
+    for (std::size_t i = 0; i < originalCount; ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        if (!inside[i])
+        {
+            if (showField) surface.field[i] = 0;
             continue;
         }
-        auto &p = surface.mesh.positions[i];
+        auto &p = surface.mesh.positions[selectedVertex[i]];
         auto [u, v] = coordinates(p);
-        const double depth = std::clamp((contour(u, v) - std::hypot(u, v)) / 0.55, 0.0, 1.0);
-        const double blend = depth * depth * (3 - 2 * depth);
-        p.z += blend * (-layer.amplitude - 0.65 * p.z + layer.lateral * v);
+        p.z += -layer.amplitude - 0.3 * p.z + layer.lateral * v;
         if (showField)
-            surface.field[i] = float(blend);
+            surface.field[selectedVertex[i]] = 1;
+        if (showField && selectedVertex[i] != i)
+            surface.field[i] = 0;
+    }
+    for (std::size_t q = 0; q < selected.size(); ++q)
+        if (selected[q])
+        {
+            for (int k = 0; k < 6; ++k)
+                surface.mesh.indices[6 * q + k] = selectedVertex[surface.mesh.indices[6 * q + k]];
+            surface.mesh.triangleRegions[2 * q] = surface.mesh.triangleRegions[2 * q + 1] = id;
+        }
+    for (const auto &[a, b] : boundary)
+    {
+        surface.mesh.indices.insert(surface.mesh.indices.end(),
+                                    {a, b, selectedVertex[b], a, selectedVertex[b], selectedVertex[a]});
+        surface.mesh.triangleRegions.insert(surface.mesh.triangleRegions.end(), {faceId, faceId});
     }
     surface.hardRegions = true;
     normals(surface);

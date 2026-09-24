@@ -929,7 +929,7 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         }
         if (l.kind == Kind::CliffCutLoop)
         {
-            cliffCutLoop(result, l, int(stage), int(stage) == fieldLayer, cancel);
+            cliffCutLoop(result, warp, l, int(stage), int(stage) == fieldLayer, cancel);
             continue;
         }
         if (l.kind == Kind::Reduce)

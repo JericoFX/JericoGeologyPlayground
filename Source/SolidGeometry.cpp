@@ -157,6 +157,8 @@ TriangleMesh envelope(const TriangleMesh &mesh, const Layer &layer, const Jerico
 void transferSamples(const MeshResult &source, const std::vector<Vec3d> &sourceWarp, MeshResult &destination,
                      std::vector<Vec3d> &destinationWarp, const Jerico::CancellationToken *cancel)
 {
+    if (sourceWarp.size() != source.mesh.positions.size())
+        throw std::runtime_error("Source warp length does not match vertices");
     std::vector<D::Triangle> triangles;
     for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
     {

@@ -119,7 +119,8 @@ enum class SurfaceRole
     EnvelopeCut,
     SolidBack,
     SolidRim,
-    CutLoop
+    CutLoop,
+    CutFace
 };
 struct RegionInfo
 {

@@ -10,6 +10,6 @@ MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Gu
                      int subdivisions, const Jerico::CancellationToken *cancel = nullptr);
 MeshResult solidifySurface(const MeshResult &source, const Layer &layer,
                            const Jerico::CancellationToken *cancel = nullptr);
-void cliffCutLoop(MeshResult &surface, const Layer &layer, int operation,
+void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &layer, int operation,
                   bool showField, const Jerico::CancellationToken *cancel = nullptr);
 } // namespace Playground
