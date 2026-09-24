@@ -1,0 +1,87 @@
+[
+  {
+    "path": ".gitattributes",
+    "bytes": 160,
+    "sha256": "231d198b9db3aad8a7bf7db915b9b6f9599556ed436f8d7144c68e7246dd5724"
+  },
+  {
+    "path": ".gitignore",
+    "bytes": 90,
+    "sha256": "46353e0d8b397835f03bbebea722abdaa4109c143423525b8c3515b85d30594a"
+  },
+  {
+    "path": "GOAL.md",
+    "bytes": 2950,
+    "sha256": "85c004be17e98dc2ade843769b5dc9761db50b9fb35bffa5b210248495278b6a"
+  },
+  {
+    "path": "README.md",
+    "bytes": 27832,
+    "sha256": "4d3574ec569762d1f8ef865d07adbdeca9450e6d48bd41293fb2ea0fef084d7b"
+  },
+  {
+    "path": "Source/NormalBake.hpp",
+    "bytes": 2480,
+    "sha256": "0f7b662eecbbc1a5eee66f7edfb66fde80b7f68ae7f286256b68cf6b44da044e"
+  },
+  {
+    "path": "Source/NormalBake.cpp",
+    "bytes": 48308,
+    "sha256": "2496968285619bd5338aea5a9777135e4b7da1e0ac3d75f5de15cdb864e566c8"
+  },
+  {
+    "path": "Tests/NormalBakeTests.cpp",
+    "bytes": 31429,
+    "sha256": "366341ae9d6c48a94c0de2a02eec05250d2b0d9387cfaf749460d79c11f99c7d"
+  },
+  {
+    "path": "Tests/AutoUvBakeAudit.py",
+    "bytes": 6269,
+    "sha256": "25a24306d86d0df371e8b6abaeddb9f58f3c3453c2d9f17ef0d7f3c3995316fb"
+  },
+  {
+    "path": "Tests/RockLodBakeAudit.py",
+    "bytes": 6628,
+    "sha256": "d34058471a24460983a285b7aaea356a3bd94637751b92a934a8351353eb5d07"
+  },
+  {
+    "path": "docs/engine-reference-2026-09-24/README.md",
+    "bytes": 5139,
+    "sha256": "538f5aac469291b60b91519e9b44e1e145b2224dcc5d38a3372fe8e423a61848"
+  },
+  {
+    "path": "docs/engine-reference-2026-09-24/SOURCE_MANIFEST.json",
+    "bytes": 57054,
+    "sha256": "4c21d2566339564ca08e70f05ebe3b38d8b0d653fd49c43550e197bdf09e2912"
+  },
+  {
+    "path": "Evidence/PUBLISHED.md",
+    "bytes": 1853,
+    "sha256": "036226d9ddbb2136a26de829aa308f36307a48ff2f46f3b30a608c4b09583246"
+  },
+  {
+    "path": "Evidence/2026-09-24-geology-math-checkpoint.md",
+    "bytes": 96387,
+    "sha256": "82eee8c985c3403e0a39c879d53c2a0b67dc5a42cb53ff3d95b3e6bcddb1d5f8"
+  },
+  {
+    "path": "Evidence/2026-09-24-specialist-mips-six-family-lods/rock-lod-bakes-proof.json",
+    "bytes": 8689,
+    "sha256": "9162a657171d196b84f39c0b10e8fd5df98875d2c6cb3a773f49db5571f28e98"
+  },
+  {
+    "path": "Evidence/specialist-mips-six-family-lods-audit.json",
+    "bytes": 30736,
+    "sha256": "a2f5a7ec94c178c6d7cb877835c8c6b7ddffae340f9b9e522e18339152b506bc"
+  },
+  {
+    "path": "Evidence/specialist-mips-six-family-lods-visual-audit.json",
+    "bytes": 8505,
+    "sha256": "7561b2f239e812b9c08da867f0df7717365c7373c16bbe6637b670e74c19cbed"
+  },
+  {
+    "path": "build/Release/JericoGeologyPlayground.exe",
+    "bytes": 1702912,
+    "sha256": "cf49541c0a3751c53d32d5b81f037f1b15eb2037a36a2ac94648cf8bedd7e962"
+  }
+]

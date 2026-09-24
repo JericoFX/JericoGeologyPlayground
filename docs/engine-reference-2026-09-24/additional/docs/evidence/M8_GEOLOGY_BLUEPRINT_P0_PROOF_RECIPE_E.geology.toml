@@ -1,0 +1,160 @@
+schemaVersion = 12
+kind = "GeologyStackRecipe"
+id = "C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF"
+name = "P0 Proof E - Weathered Rounded Boulder"
+splines = []
+
+[quality]
+profile = "Custom"
+voxelSizeMeters = 0.12
+
+[[masks]]
+id = "C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4"
+name = "Rounded Boulder Sparse Pit Mask"
+
+[[masks.nodes]]
+kind = "RBrushLocalField"
+assetGuid = "C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5"
+presetGuid = "C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6"
+tipGuid = "C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7"
+canonicalTipHash = "C800000000000000000000000000000000000000000000000000000000000000"
+width = 3
+height = 3
+coverageR8 = "FFFFFFFFFFFFFFFFFF"
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+widthMeters = 3.8
+heightMeters = 3.0
+projectionDepthMeters = 2.6
+falloffMeters = 0.0
+
+[[layers]]
+id = "C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0"
+name = "Source Box"
+kind = "Source"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+sourceKind = "BspGroup"
+documentGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceRevision = 22
+sourceContentHash = "ee87c10f2bf50246"
+selectedBrushGuids = []
+
+[[layers]]
+id = "C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1"
+name = "Rounded Boulder Directional Warp"
+kind = "DirectionalWarp"
+enabled = true
+strength = 1.0
+seed = "082efa98ec4e6c89"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+directionWorld = [0.72, 0.18, 0.67]
+amplitudeMeters = 0.52
+frequencyPerMeter = [0.18, 0.14, 0.16]
+octaves = 2
+lacunarity = 2.0
+gain = 0.5
+
+[[layers]]
+id = "C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2"
+name = "Rounded Boulder Bubble Weathering"
+kind = "SurfaceWeathering"
+enabled = true
+strength = 0.92
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+model = "Bubble"
+exposureRadiusMeters = 0.24
+maximumWearMetersPerIteration = 0.07
+durability = 0.1
+iterations = 4
+
+[[layers]]
+id = "C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3"
+name = "Rounded Boulder Curvature Weathering"
+kind = "SurfaceWeathering"
+enabled = true
+strength = 0.86
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+model = "Curvature"
+mode = "Convex"
+sampleSpacingMeters = 0.12
+curvatureResponseLengthMeters = 0.48
+maximumWearMetersPerIteration = 0.06
+durability = 0.08
+iterations = 2
+
+[[layers]]
+id = "C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8"
+name = "Rounded Boulder Sparse Pit"
+kind = "CavityCarve"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4"
+maskInverted = false
+translation = [0.82, 0.42, 0.72]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+shape = "Sphere"
+radiusMeters = 0.3
+smoothnessMeters = 0.06
+
+[[layers]]
+id = "CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9"
+name = "Rounded Boulder FBM Detail"
+kind = "Noise"
+enabled = true
+strength = 0.85
+seed = "d1b54a32d192edc9"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+noise = "OpenSimplex2"
+fractal = "Fbm"
+frequencyPerMeter = [0.8, 0.72, 0.78]
+amplitudeMeters = 0.045
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+domainWarpAmplitudeMeters = 0.018
+domainWarpFrequencyPerMeter = [0.7, 0.55, 0.8]
+displacement = "SurfaceNormal"
+surfaceBandMeters = 0.48
+clampMeters = 0.055
+remap = [-1.0, 1.0, -1.0, 1.0]

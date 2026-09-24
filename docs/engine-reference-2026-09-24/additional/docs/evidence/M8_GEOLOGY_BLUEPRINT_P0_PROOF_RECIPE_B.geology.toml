@@ -1,0 +1,253 @@
+schemaVersion = 12
+kind = "GeologyStackRecipe"
+id = "A0A1A2A3A4A5A6A7A8A9AAABACADAEAF"
+name = "P0 Proof B - Fractured Boulder"
+masks = []
+splines = []
+
+[quality]
+profile = "Custom"
+voxelSizeMeters = 0.12
+
+[[layers]]
+id = "A1A2A3A4A5A6A7A8A9AAABACADAEAFB0"
+name = "Source Box"
+kind = "Source"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+sourceKind = "BspGroup"
+documentGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceRevision = 22
+sourceContentHash = "ee87c10f2bf50246"
+selectedBrushGuids = []
+
+[[layers]]
+id = "A2A3A4A5A6A7A8A9AAABACADAEAFB0B1"
+name = "Boulder Directional Warp"
+kind = "DirectionalWarp"
+enabled = true
+strength = 1.0
+seed = "9e3779b97f4a7c15"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+directionWorld = [1.0, 0.15, 0.2]
+amplitudeMeters = 0.36
+frequencyPerMeter = [0.28, 0.21, 0.25]
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+
+[[layers]]
+id = "A3A4A5A6A7A8A9AAABACADAEAFB0B1B2"
+name = "Boulder Plane A"
+kind = "PlaneCut"
+enabled = true
+strength = 1.0
+seed = "243f6a8885a308d3"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+normalWorld = [1.0, 0.15, 0.25]
+offsetMeters = 1.72
+roughnessMeters = 0.03
+roughnessFrequencyPerMeter = [0.38, 0.33, 0.29]
+
+[[layers]]
+id = "A4A5A6A7A8A9AAABACADAEAFB0B1B2B3"
+name = "Boulder Plane B"
+kind = "PlaneCut"
+enabled = true
+strength = 1.0
+seed = "13198a2e03707344"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+normalWorld = [-0.22, 1.0, 0.18]
+offsetMeters = 1.38
+roughnessMeters = 0.025
+roughnessFrequencyPerMeter = [0.31, 0.27, 0.35]
+
+[[layers]]
+id = "A5A6A7A8A9AAABACADAEAFB0B1B2B3B4"
+name = "Boulder Structural Cells"
+kind = "AnisotropicVoronoiCells"
+enabled = true
+strength = 1.0
+seed = "a4093822299f31d0"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+
+[[layers.payload.cells]]
+positionWorld = [-1.45, -0.62, -0.35]
+localToWorldRotation = [0.0, 0.0, 0.0, 1.0]
+metricWeights = [2.4, 0.8, 1.4]
+relativeScale = 1.0
+
+[[layers.payload.cells]]
+positionWorld = [-0.55, 0.58, 0.4]
+localToWorldRotation = [0.0, 0.0, 0.3826834323650898, 0.9238795325112867]
+metricWeights = [1.9, 1.1, 0.75]
+relativeScale = 1.1
+
+[[layers.payload.cells]]
+positionWorld = [0.45, -0.52, 0.48]
+localToWorldRotation = [0.0, 0.0, -0.2588190451025207, 0.9659258262890683]
+metricWeights = [2.2, 0.7, 1.25]
+relativeScale = 0.9
+
+[[layers.payload.cells]]
+positionWorld = [1.48, 0.62, -0.28]
+localToWorldRotation = [0.0, 0.0, 0.5, 0.8660254037844386]
+metricWeights = [1.7, 1.3, 0.8]
+relativeScale = 1.0
+
+[[layers.payload.cells]]
+positionWorld = [-0.65, 0.12, -0.78]
+localToWorldRotation = [0.0, 0.0, 0.1305261922200516, 0.9914448613738104]
+metricWeights = [2.6, 0.9, 1.1]
+relativeScale = 1.05
+
+[[layers.payload.cells]]
+positionWorld = [0.72, 0.35, -0.68]
+localToWorldRotation = [0.0, 0.0, -0.4226182617406994, 0.9063077870366499]
+metricWeights = [1.8, 0.75, 1.5]
+relativeScale = 0.95
+
+[[layers]]
+id = "A6A7A8A9AAABACADAEAFB0B1B2B3B4B5"
+name = "Boulder Cell Fractures"
+kind = "FractureCells"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+widthMeters = 0.2
+softnessMeters = 0.08
+mode = "Carve"
+
+[[layers]]
+id = "A7A8A9AAABACADAEAFB0B1B2B3B4B5B6"
+name = "Boulder Cavity"
+kind = "CavityCarve"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.72, -0.22, 0.55]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+shape = "Sphere"
+radiusMeters = 0.38
+smoothnessMeters = 0.07
+
+[[layers]]
+id = "A8A9AAABACADAEAFB0B1B2B3B4B5B6B7"
+name = "Boulder Bubble Weathering"
+kind = "SurfaceWeathering"
+enabled = true
+strength = 0.78
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+model = "Bubble"
+exposureRadiusMeters = 0.24
+maximumWearMetersPerIteration = 0.03
+durability = 0.25
+iterations = 2
+
+[[layers]]
+id = "A9AAABACADAEAFB0B1B2B3B4B5B6B7B8"
+name = "Boulder Ridged Detail"
+kind = "Noise"
+enabled = true
+strength = 0.85
+seed = "d1b54a32d192edaa"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+noise = "OpenSimplex2"
+fractal = "Ridged"
+frequencyPerMeter = [0.82, 0.71, 0.76]
+amplitudeMeters = 0.065
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+domainWarpAmplitudeMeters = 0.035
+domainWarpFrequencyPerMeter = [0.7, 0.55, 0.8]
+displacement = "SurfaceNormal"
+surfaceBandMeters = 0.48
+clampMeters = 0.08
+remap = [-1.0, 1.0, -1.0, 1.0]
+
+[[layers]]
+id = "AAABACADAEAFB0B1B2B3B4B5B6B7B8B9"
+name = "Boulder FBM Detail"
+kind = "Noise"
+enabled = true
+strength = 0.85
+seed = "d1b54a32d192eda9"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+noise = "OpenSimplex2"
+fractal = "Fbm"
+frequencyPerMeter = [0.96, 0.84, 0.78]
+amplitudeMeters = 0.04
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+domainWarpAmplitudeMeters = 0.02
+domainWarpFrequencyPerMeter = [0.7, 0.55, 0.8]
+displacement = "SurfaceNormal"
+surfaceBandMeters = 0.48
+clampMeters = 0.055
+remap = [-1.0, 1.0, -1.0, 1.0]

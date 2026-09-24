@@ -1,0 +1,82 @@
+[
+  {
+    "path": "Source/Model.hpp",
+    "bytes": 4739,
+    "sha256": "e36daaa2cea04fa82885bee65fddd25cd8f48294b53b7cb83f236019e1320d78"
+  },
+  {
+    "path": "Source/Model.cpp",
+    "bytes": 64410,
+    "sha256": "6dbc8c02dc2c8055ff9e32a557d648395a855c9f12aaa8feeba3a78bc11ecfd1"
+  },
+  {
+    "path": "Source/SurfaceGeometry.hpp",
+    "bytes": 812,
+    "sha256": "511c4ca99d7806cb7d85a679827dd2b3bfecff18b4c904e8094f0fb6c3ca03cb"
+  },
+  {
+    "path": "Source/SurfaceGeometry.cpp",
+    "bytes": 14271,
+    "sha256": "407e049860a20642e54346df2f4974815229bf8abb2d00953bb3c4d8578fe836"
+  },
+  {
+    "path": "Source/Main.cpp",
+    "bytes": 94735,
+    "sha256": "de6ff0a91e622c4a6a6827e4d646f3e7bc545359610b02fa330ea5da93f64e4f"
+  },
+  {
+    "path": "Tests/SurfaceTests.cpp",
+    "bytes": 7135,
+    "sha256": "68bdf85a370a4d36272a910e5746d261ea7b7049e6bba910a1446eeef146e208"
+  },
+  {
+    "path": "Tests/SurfaceFeatureTests.cpp",
+    "bytes": 19726,
+    "sha256": "68785a5e52bd881a350a477ffd779a721a93a933a67e7baa23664dc133e19476"
+  },
+  {
+    "path": "GOAL.md",
+    "bytes": 2961,
+    "sha256": "59381aa8b6e8cf7d533bf0136edd613c50c9412235a3e27be484d8c8f837fe69"
+  },
+  {
+    "path": "README.md",
+    "bytes": 27196,
+    "sha256": "64c99117eb5a0f0ecb539b5206b0acd919ea174d7e5165b8dc0f0897eb641125"
+  },
+  {
+    "path": "Evidence/2026-09-24-geology-math-checkpoint.md",
+    "bytes": 93242,
+    "sha256": "a242eab4f365e10f00e1b40e0dfe27d474e17b3ca69f68b5583bdcd517408498"
+  },
+  {
+    "path": "build/Release/JericoGeologyPlayground.exe",
+    "bytes": 1694720,
+    "sha256": "4762edc8512d6328fbece1cfd2599614ac039c2e2f16a52917dd5b30c162f61a"
+  },
+  {
+    "path": "Evidence/2026-09-24-cut-loop-six-family-lods/rock-lod-bakes-proof.json",
+    "bytes": 8688,
+    "sha256": "624839e95353420a876b3ed492d056175aa49967e3a9cde4380907e4ce07f0ae"
+  },
+  {
+    "path": "Evidence/cut-loop-six-family-lods-audit.json",
+    "bytes": 23940,
+    "sha256": "f25997180748bab44567551c7154f01e9f99f7ff76fc34f429d1fa258694b3d1"
+  },
+  {
+    "path": "Evidence/cut-loop-six-family-visual-audit.json",
+    "bytes": 8505,
+    "sha256": "7561b2f239e812b9c08da867f0df7717365c7373c16bbe6637b670e74c19cbed"
+  },
+  {
+    "path": "Evidence/2026-09-24-cut-loop-six-family-lods/rock-8/lod-0/low-normal.png",
+    "bytes": 432195,
+    "sha256": "4653bc98d917f3b2b05f9ff49c50fd0debe43c853e1293b8c22881d63228029e"
+  },
+  {
+    "path": "Evidence/2026-09-24-usgs-geology-references/coconino-cliff-cross-strata.jpg",
+    "bytes": 500663,
+    "sha256": "eab38fc5b7f800deaf07cd8de80ab3156e0afe36773e9d495e9e115e146f7b66"
+  }
+]

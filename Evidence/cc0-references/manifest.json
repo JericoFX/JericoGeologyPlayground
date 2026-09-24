@@ -1,0 +1,50 @@
+[
+  {
+    "asset": "cliff_side",
+    "map": "Diffuse",
+    "sourcePage": "https://polyhaven.com/a/cliff_side",
+    "api": "https://api.polyhaven.com/files/cliff_side",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cliff_side/cliff_side_diff_1k.jpg",
+    "license": "CC0",
+    "size": 859756,
+    "sha256": "5c6858541108fc34e5726ecf4d8d942d6301155c489e7341619260f2909570c5",
+    "apiMd5": "a64986e5f858e4f8df30f0394ededd78",
+    "downloadedUtc": "2026-09-24T03:59:59.3574026Z"
+  },
+  {
+    "asset": "cliff_side",
+    "map": "Displacement",
+    "sourcePage": "https://polyhaven.com/a/cliff_side",
+    "api": "https://api.polyhaven.com/files/cliff_side",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/cliff_side/cliff_side_disp_1k.png",
+    "license": "CC0",
+    "size": 1486936,
+    "sha256": "2861630bab9f8a17014915ff624be83281185b04ff3f4b64a123db60d5e160d3",
+    "apiMd5": "ecdbafe9ac0a18d08217385236f70470",
+    "downloadedUtc": "2026-09-24T04:00:01.1076783Z"
+  },
+  {
+    "asset": "rock_06",
+    "map": "Diffuse",
+    "sourcePage": "https://polyhaven.com/a/rock_06",
+    "api": "https://api.polyhaven.com/files/rock_06",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_06/rock_06_diff_1k.jpg",
+    "license": "CC0",
+    "size": 913680,
+    "sha256": "0f9f0fc0438f99cdd9e33cfadc9ba01c527f74c1085fdac425e06e6a808a7736",
+    "apiMd5": "72a5bd7c0d441c750bf9b7c97e764e33",
+    "downloadedUtc": "2026-09-24T04:00:03.0727372Z"
+  },
+  {
+    "asset": "rock_06",
+    "map": "Displacement",
+    "sourcePage": "https://polyhaven.com/a/rock_06",
+    "api": "https://api.polyhaven.com/files/rock_06",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/rock_06/rock_06_disp_1k.png",
+    "license": "CC0",
+    "size": 2008585,
+    "sha256": "0a04485323131aa781299f6c151aefddba389d767d556179cb4d2024068626ca",
+    "apiMd5": "560957b9904ba12b1ad98fa0ee3144c4",
+    "downloadedUtc": "2026-09-24T04:00:05.1078960Z"
+  }
+]

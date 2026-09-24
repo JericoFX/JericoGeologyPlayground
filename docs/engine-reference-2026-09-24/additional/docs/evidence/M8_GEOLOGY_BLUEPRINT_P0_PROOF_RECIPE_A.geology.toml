@@ -1,0 +1,217 @@
+schemaVersion = 12
+kind = "GeologyStackRecipe"
+id = "808182838485868788898A8B8C8D8E8F"
+name = "P0 Proof A - Sedimentary Cliff"
+masks = []
+splines = []
+
+[quality]
+profile = "Custom"
+voxelSizeMeters = 0.12
+
+[[layers]]
+id = "8182838485868788898A8B8C8D8E8F90"
+name = "Source Box"
+kind = "Source"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+sourceKind = "BspGroup"
+documentGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceGuid = "78797A7B7C7D7E7F8081828384858687"
+sourceRevision = 22
+sourceContentHash = "ee87c10f2bf50246"
+selectedBrushGuids = []
+
+[[layers]]
+id = "82838485868788898A8B8C8D8E8F9091"
+name = "Primary Cliff Plane"
+kind = "PlaneCut"
+enabled = true
+strength = 1.0
+seed = "18a09e667f3bcc91"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+normalWorld = [0.0, 0.0, 1.0]
+offsetMeters = 0.82
+roughnessMeters = 0.035
+roughnessFrequencyPerMeter = [0.42, 0.31, 0.37]
+
+[[layers]]
+id = "838485868788898A8B8C8D8E8F909192"
+name = "Sedimentary Strata"
+kind = "Strata"
+enabled = true
+strength = 0.92
+seed = "27d4eb2f165667c5"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+directionWorld = [0.0, 1.0, 0.0]
+spacingMeters = 0.44
+phaseOffsetCycles = 0.17
+warpAmplitudeMeters = 0.1
+warpFrequencyPerMeter = [0.24, 0.15, 0.2]
+profileMinimum = 0.16
+profileMaximum = 0.78
+shapeDisplacementMeters = 0.11
+grooveDepthMeters = 0.05
+grooveWidth = 0.09
+surfaceBandMeters = 0.42
+materialClassMinimum = 0.0
+materialClassMaximum = 1.0
+hardnessMinimum = 1.0
+hardnessMaximum = 1.0
+erodibilityMinimum = 0.0
+erodibilityMaximum = 0.0
+
+[[layers]]
+id = "8485868788898A8B8C8D8E8F90919293"
+name = "Secondary Cliff Plane"
+kind = "PlaneCut"
+enabled = true
+strength = 1.0
+seed = "94d049bb133111eb"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+normalWorld = [0.18, 1.0, 0.12]
+offsetMeters = 1.34
+roughnessMeters = 0.02
+roughnessFrequencyPerMeter = [0.36, 0.29, 0.33]
+
+[[layers]]
+id = "85868788898A8B8C8D8E8F9091929394"
+name = "Bedding Fault"
+kind = "FaultDisplace"
+enabled = true
+strength = 0.9
+seed = "d2b74407b1ce6e93"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+faultNormalWorld = [1.0, 0.0, 0.18]
+planeOffsetMeters = -0.15
+slipDirectionWorld = [0.0, 1.0, 0.0]
+displacementMeters = 0.28
+transitionHalfWidthMeters = 0.18
+boundaryRoughnessMeters = 0.04
+roughnessFrequencyPerMeter = [0.28, 0.24, 0.31]
+
+[[layers]]
+id = "868788898A8B8C8D8E8F909192939495"
+name = "Cliff Cavity"
+kind = "CavityCarve"
+enabled = true
+strength = 1.0
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [-1.05, 0.15, 0.62]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+shape = "Sphere"
+radiusMeters = 0.42
+smoothnessMeters = 0.08
+
+[[layers]]
+id = "8788898A8B8C8D8E8F90919293949596"
+name = "Cliff Bubble Weathering"
+kind = "SurfaceWeathering"
+enabled = true
+strength = 0.72
+seed = "0000000000000000"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+model = "Bubble"
+exposureRadiusMeters = 0.24
+maximumWearMetersPerIteration = 0.035
+durability = 0.3
+iterations = 2
+
+[[layers]]
+id = "88898A8B8C8D8E8F9091929394959697"
+name = "Cliff Ridged Detail"
+kind = "Noise"
+enabled = true
+strength = 0.85
+seed = "d1b54a32d192ed8b"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+noise = "OpenSimplex2"
+fractal = "Ridged"
+frequencyPerMeter = [0.78, 0.66, 0.72]
+amplitudeMeters = 0.07
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+domainWarpAmplitudeMeters = 0.035
+domainWarpFrequencyPerMeter = [0.7, 0.55, 0.8]
+displacement = "SurfaceNormal"
+surfaceBandMeters = 0.48
+clampMeters = 0.08
+remap = [-1.0, 1.0, -1.0, 1.0]
+
+[[layers]]
+id = "898A8B8C8D8E8F909192939495969798"
+name = "Cliff FBM Detail"
+kind = "Noise"
+enabled = true
+strength = 0.85
+seed = "d1b54a32d192ed8a"
+maskGuid = "00000000000000000000000000000000"
+maskInverted = false
+translation = [0.0, 0.0, 0.0]
+rotation = [0.0, 0.0, 0.0, 1.0]
+scale = [1.0, 1.0, 1.0]
+
+[layers.payload]
+noise = "OpenSimplex2"
+fractal = "Fbm"
+frequencyPerMeter = [0.95, 0.82, 0.74]
+amplitudeMeters = 0.045
+octaves = 3
+lacunarity = 2.0
+gain = 0.5
+domainWarpAmplitudeMeters = 0.025
+domainWarpFrequencyPerMeter = [0.7, 0.55, 0.8]
+displacement = "SurfaceNormal"
+surfaceBandMeters = 0.48
+clampMeters = 0.06
+remap = [-1.0, 1.0, -1.0, 1.0]

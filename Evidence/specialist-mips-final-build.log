@@ -1,0 +1,28 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  Main.cpp
+  Renderer.cpp
+  Generando código...
+  JericoDiligentImgui.lib(imgui.obj) : se encontró .netmodule MSIL o un módulo compilado con /GL; reiniciando la vinculación con /LTCG; agregue /LTCG a la línea de comandos de vínculo para mejorar el rendimiento del vinculador
+  Generando código
+  Generación de código finalizada
+  JericoGeologyPlayground.vcxproj -> F:\JericoGeologyPlayground\build\Release\JericoGeologyPlayground.exe
+  PlaygroundAutoUvTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundAutoUvTests.exe
+  PlaygroundBackendTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundBackendTests.exe
+  PlaygroundBspSourceTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundBspSourceTests.exe
+  PlaygroundDriftTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundDriftTests.exe
+  PlaygroundEdgeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundEdgeTests.exe
+  PlaygroundEnvelopeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundEnvelopeTests.exe
+  NormalBakeTests.cpp
+  PlaygroundNormalBakeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundNormalBakeTests.exe
+  PlaygroundRBrushImageRoundtripTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRBrushImageRoundtripTests.exe
+  PlaygroundRBrushInteropTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRBrushInteropTests.exe
+  PlaygroundReductionTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundReductionTests.exe
+  PlaygroundRockAddonMathTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRockAddonMathTests.exe
+  PlaygroundSharedWarpTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSharedWarpTests.exe
+  PlaygroundSolidTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSolidTests.exe
+  PlaygroundSurfaceFeatureTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSurfaceFeatureTests.exe
+  PlaygroundSurfaceTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSurfaceTests.exe
+  PlaygroundTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundTests.exe
+  PlaygroundThicknessTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundThicknessTests.exe

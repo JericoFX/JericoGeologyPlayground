@@ -1,0 +1,250 @@
+#include "SurfaceFeatures.hpp"
+#include "SurfaceRay.hpp"
+#include <TriangleBvh.hpp>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <map>
+#include <numbers>
+#include <queue>
+#include <stdexcept>
+namespace Playground
+{
+namespace D = PA::Detail;
+namespace
+{
+void check(const Jerico::CancellationToken *cancel)
+{
+    if (cancel && cancel->isCancellationRequested())
+        throw std::runtime_error("Cancelled");
+}
+Vec3d cross(Vec3d a, Vec3d b)
+{
+    return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};
+}
+double length(Vec3d p)
+{
+    return std::sqrt(D::dot(p, p));
+}
+Vec3d unit(Vec3d p)
+{
+    auto size = length(p);
+    if (!(size > 0))
+        throw std::runtime_error("Surface feature normal has zero support");
+    return D::multiply(p, 1 / size);
+}
+} // namespace
+SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeatureSettings &settings,
+                                     const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    if (!std::isfinite(settings.radius) || settings.radius < 0.001 || settings.radius > 10 ||
+        !std::isfinite(settings.creaseAngleDegrees) || settings.creaseAngleDegrees < 1 ||
+        settings.creaseAngleDegrees > 179 || settings.contactSamples < 4 || settings.contactSamples > 64 ||
+        !std::isfinite(settings.ambientRadius) || settings.ambientRadius < 0.001 ||
+        settings.ambientRadius > 100 || settings.ambientSamples < 4 || settings.ambientSamples > 128 ||
+        !std::isfinite(settings.thicknessRadius) || settings.thicknessRadius < 0.001 ||
+        settings.thicknessRadius > 1000 || !std::isfinite(settings.exposureDirection.x) ||
+        !std::isfinite(settings.exposureDirection.y) || !std::isfinite(settings.exposureDirection.z) ||
+        !(D::lengthSquared(settings.exposureDirection) > 1e-18))
+        throw std::runtime_error("Surface feature settings outside limits");
+    const auto size = mesh.positions.size();
+    if (size == 0 || size > 240000 || mesh.indices.empty() || mesh.indices.size() % 3 ||
+        mesh.indices.size() > 720000)
+        throw std::runtime_error("Surface feature input shape or budget invalid");
+    for (auto p : mesh.positions)
+        if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z))
+            throw std::runtime_error("Surface feature position is non-finite");
+    SurfaceFeatureFields result;
+    result.signedDihedralCurvature.resize(size);
+    result.convexity.resize(size);
+    result.concavity.resize(size);
+    result.absoluteCurvature.resize(size);
+    result.edgeDistance.assign(size, std::numeric_limits<double>::infinity());
+    result.boundaryDistance.assign(size, std::numeric_limits<double>::infinity());
+    result.exposure.resize(size);
+    result.minimumEdgeLength.assign(size, std::numeric_limits<double>::infinity());
+    result.minimumTriangleAltitude.assign(size, std::numeric_limits<double>::infinity());
+    result.boundary.resize(size);
+    std::vector<double> area(size);
+    std::vector<Vec3d> vertexNormals(size), faceNormals;
+    std::vector<D::Triangle> triangles;
+    faceNormals.reserve(mesh.indices.size() / 3);
+    triangles.reserve(mesh.indices.size() / 3);
+    struct Edge
+    {
+        std::uint32_t from{}, to{}, face{};
+        int count{};
+    };
+    std::map<std::pair<std::uint32_t, std::uint32_t>, Edge> edges;
+    std::vector<std::vector<std::pair<std::uint32_t, double>>> neighbors(size);
+    const auto angleLimit = settings.creaseAngleDegrees * std::numbers::pi / 180;
+    for (std::size_t t = 0; t < mesh.indices.size(); t += 3)
+    {
+        if (t % 768 == 0)
+            check(cancel);
+        auto a = mesh.indices[t], b = mesh.indices[t + 1], c = mesh.indices[t + 2];
+        if (a >= size || b >= size || c >= size)
+            throw std::runtime_error("Surface feature index out of range");
+        auto p = mesh.positions[a], q = mesh.positions[b], r = mesh.positions[c];
+        auto ab = D::subtract(q, p), ac = D::subtract(r, p), n = cross(ab, ac);
+        double area2 = length(n), scale = std::max(D::lengthSquared(ab), D::lengthSquared(ac));
+        if (!(area2 > 1e-12 * scale) || !std::isfinite(area2))
+            throw std::runtime_error("Surface feature degenerate triangle");
+        faceNormals.push_back(D::multiply(n, 1 / area2));
+        auto altitude = area2 / std::max({length(ab), length(ac), length(D::subtract(r, q))});
+        for (auto i : {a, b, c})
+        {
+            area[i] += area2 / 6;
+            vertexNormals[i] = D::add(vertexNormals[i], n);
+            result.minimumTriangleAltitude[i] = std::min(result.minimumTriangleAltitude[i], altitude);
+        }
+        auto bounds = D::emptyBounds();
+        D::include(bounds, p);
+        D::include(bounds, q);
+        D::include(bounds, r);
+        triangles.push_back(
+            {p, q, r, D::multiply(D::add(D::add(p, q), r), 1.0 / 3), bounds, 0, std::uint32_t(t / 3)});
+        for (int k = 0; k < 3; ++k)
+        {
+            auto from = mesh.indices[t + k], to = mesh.indices[t + (k + 1) % 3];
+            auto key = std::minmax(from, to);
+            auto &edge = edges[{key.first, key.second}];
+            if (++edge.count == 1)
+            {
+                edge.from = from;
+                edge.to = to;
+                edge.face = std::uint32_t(t / 3);
+            }
+            else
+            {
+                if (edge.count != 2 || edge.from != to || edge.to != from)
+                    throw std::runtime_error("Surface feature non-manifold or inconsistent winding");
+                auto tangent = unit(D::subtract(mesh.positions[edge.to], mesh.positions[edge.from]));
+                auto nf = faceNormals[edge.face], ng = faceNormals[t / 3];
+                auto theta =
+                    std::atan2(D::dot(tangent, cross(nf, ng)), std::clamp(D::dot(nf, ng), -1.0, 1.0));
+                auto integral = length(D::subtract(mesh.positions[from], mesh.positions[to])) * theta;
+                result.signedDihedralCurvature[from] += integral;
+                result.signedDihedralCurvature[to] += integral;
+                if (std::abs(theta) >= angleLimit)
+                    result.edgeDistance[from] = result.edgeDistance[to] = 0;
+            }
+        }
+    }
+    for (const auto &[key, edge] : edges)
+    {
+        double distance = length(D::subtract(mesh.positions[key.first], mesh.positions[key.second]));
+        for (auto i : {key.first, key.second})
+        {
+            result.minimumEdgeLength[i] = std::min(result.minimumEdgeLength[i], distance);
+            if (edge.count == 1)
+            {
+                result.boundary[i] = true;
+                result.boundaryDistance[i] = 0;
+            }
+        }
+        neighbors[key.first].push_back({key.second, distance});
+        neighbors[key.second].push_back({key.first, distance});
+    }
+    auto exposureDirection = unit(settings.exposureDirection);
+    for (std::uint32_t i = 0; i < size; ++i)
+    {
+        if (!(area[i] > 0))
+            throw std::runtime_error("Surface feature isolated vertex");
+        result.signedDihedralCurvature[i] /= 4 * area[i];
+        if (!std::isfinite(result.signedDihedralCurvature[i]))
+            throw std::runtime_error("Surface feature curvature overflow");
+        result.convexity[i] = std::max(0.0, result.signedDihedralCurvature[i]);
+        result.concavity[i] = std::max(0.0, -result.signedDihedralCurvature[i]);
+        result.absoluteCurvature[i] = std::abs(result.signedDihedralCurvature[i]);
+        result.exposure[i] = std::max(0.0, D::dot(unit(vertexNormals[i]), exposureDirection));
+    }
+    auto propagateDistance = [&](std::vector<double> &distance)
+    {
+        using Entry = std::pair<double, std::uint32_t>;
+        std::priority_queue<Entry, std::vector<Entry>, std::greater<Entry>> queue;
+        for (std::uint32_t i = 0; i < size; ++i)
+            if (distance[i] == 0)
+                queue.push({0, i});
+        std::size_t visits = 0;
+        while (!queue.empty())
+        {
+            if ((visits++ & 255) == 0)
+                check(cancel);
+            auto [current, i] = queue.top();
+            queue.pop();
+            if (current > distance[i])
+                continue;
+            for (auto [j, step] : neighbors[i])
+                if (current + step < distance[j])
+                {
+                    distance[j] = current + step;
+                    queue.push({current + step, j});
+                }
+        }
+    };
+    propagateDistance(result.edgeDistance);
+    propagateDistance(result.boundaryDistance);
+    if (settings.contact || settings.ambient || settings.thickness)
+    {
+        check(cancel);
+        D::TriangleBvh bvh(std::move(triangles));
+        if (settings.contact)
+            result.contactOcclusion.resize(size);
+        if (settings.ambient)
+            result.ambientOcclusion.resize(size);
+        if (settings.thickness)
+        {
+            result.thickness.resize(size);
+            result.thicknessConfidence.resize(size);
+        }
+        for (std::uint32_t i = 0; i < size; ++i)
+        {
+            if ((i & 63) == 0)
+                check(cancel);
+            auto n = unit(vertexNormals[i]);
+            auto tangent = unit(cross(std::abs(n.z) < 0.9 ? Vec3d{0, 0, 1} : Vec3d{0, 1, 0}, n));
+            auto bitangent = cross(n, tangent);
+            auto occlusion = [&](double radius, int samples)
+            {
+                const double bias = radius * 1e-5;
+                auto origin = D::add(mesh.positions[i], D::multiply(n, bias));
+                double sum = 0;
+                for (int j = 0; j < samples; ++j)
+                {
+                    // Fixed cosine-weighted golden-angle disk sequence. No seed-dependent AO shimmer.
+                    double u = (j + 0.5) / samples, phi = j * std::numbers::pi * (3 - std::sqrt(5.0));
+                    auto direction =
+                        D::add(D::multiply(n, std::sqrt(1 - u)),
+                               D::add(D::multiply(tangent, std::sqrt(u) * std::cos(phi)),
+                                      D::multiply(bitangent, std::sqrt(u) * std::sin(phi))));
+                    auto distance = Projection::cast(bvh, mesh, origin, direction, radius - bias, i).distance +
+                                    bias;
+                    if (distance < radius)
+                        sum += 1 - distance / radius;
+                }
+                return sum / samples;
+            };
+            if (settings.contact)
+                result.contactOcclusion[i] = occlusion(settings.radius, settings.contactSamples);
+            if (settings.ambient)
+                result.ambientOcclusion[i] = occlusion(settings.ambientRadius, settings.ambientSamples);
+            if (settings.thickness)
+            {
+                const double bias = settings.thicknessRadius * 1e-7;
+                auto origin = D::subtract(mesh.positions[i], D::multiply(n, bias));
+                auto hit = Projection::cast(bvh, mesh, origin, D::multiply(n, -1),
+                                            settings.thicknessRadius - bias, i);
+                if (std::isfinite(hit.distance))
+                {
+                    result.thickness[i] = hit.distance + bias;
+                    result.thicknessConfidence[i] = 1;
+                }
+            }
+        }
+    }
+    check(cancel);
+    return result;
+}
+} // namespace Playground

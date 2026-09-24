@@ -1,0 +1,46 @@
+{
+  "purpose": "Observed real geology references for native C++ rock, cliff, strata and talus math; photographs are not procedural texture inputs",
+  "license": "USGS pages individually label each photograph Public Domain",
+  "references": [
+    {
+      "file": "sandstone-cross-bedding.jpg",
+      "sourcePage": "https://www.usgs.gov/media/images/cross-bedded-sandstone",
+      "originalUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/3d010.jpg",
+      "credit": "Phil Stoffer / USGS",
+      "pixels": [800, 598],
+      "sha256": "71cab23cbf2de2217117c7a44906068ecec265b2a9023d733bddad1fe206cc06",
+      "observed": "Many continuous cross-beds bend and truncate within a large sandstone mass; visible relief follows broad banding rather than isolated floating slabs.",
+      "playgroundGap": "Preset 5 currently makes parallel, stacked contact slabs but no oblique internal foresets or truncation."
+    },
+    {
+      "file": "coconino-cliff-cross-strata.jpg",
+      "sourcePage": "https://www.usgs.gov/media/images/phantom-ranch-tour-cliff-face-coconino-sandstone",
+      "originalUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/Phantom%20Ranch%20Tour6.jpg",
+      "credit": "USGS",
+      "pixels": [1200, 900],
+      "sha256": "eab38fc5b7f800deaf07cd8de80ab3156e0afe36773e9d495e9e115e146f7b66",
+      "observed": "Massive face with fine inclined laminations, cut joints and an undercut/ledge; bedding and fracture directions are distinct.",
+      "playgroundGap": "The current cliff has directional relief but a wall-like outline; masks/normal detail cannot add structural joints or ledges."
+    },
+    {
+      "file": "basalt-columnar-cliff.jpg",
+      "sourcePage": "https://www.usgs.gov/media/images/junction-butte-basalt-displays-columnar-jointing-overhanging-cliff",
+      "originalUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/vhp_img125.jpg",
+      "credit": "S. R. Brantley / USGS",
+      "pixels": [500, 800],
+      "sha256": "39f87995bc37e57c3d82f0c19506ad60293eaaad416c5f25afa648632b733136",
+      "observed": "Vertical cooling columns below an irregular overhang, intersecting upper joints and broken angular fragments at the base.",
+      "playgroundGap": "A basalt-column option would need aligned column joints and fallen contact pieces; the sedimentary cliff preset is not a basalt model."
+    },
+    {
+      "file": "angular-talus.jpg",
+      "sourcePage": "https://www.usgs.gov/media/images/devils-tower-national-monument-14",
+      "originalUrl": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/deto0010_0.jpg",
+      "credit": "Phil Stoffer / USGS",
+      "pixels": [800, 600],
+      "sha256": "1b8501d22f5959d1b7a76fee5fd0c747409784340a42cd99e6b11cae1bd29273",
+      "observed": "Broken blocks vary greatly in size and facet orientation and rest in a contact-filled talus slope, without broad air bands.",
+      "playgroundGap": "Angular preset 10 is one clipped block, not a fractured pile; layered contact settling is only static first-contact placement."
+    }
+  ]
+}

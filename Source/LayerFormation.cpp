@@ -1,0 +1,494 @@
+#include "LayerFormation.hpp"
+#include "SolidGeometry.hpp"
+#include <Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp>
+#include <TriangleBvh.hpp>
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <memory>
+#include <limits>
+#include <set>
+#include <stdexcept>
+
+namespace Playground
+{
+namespace D = PA::Detail;
+namespace
+{
+Vec3d cross(Vec3d a, Vec3d b)
+{
+    return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};
+}
+Vec3d unit(Vec3d p)
+{
+    double length = std::sqrt(D::lengthSquared(p));
+    return length > 1e-12 ? D::multiply(p, 1 / length) : Vec3d{0, 1, 0};
+}
+double random(std::uint32_t value)
+{
+    value ^= value >> 16;
+    value *= 0x7feb352dU;
+    value ^= value >> 15;
+    value *= 0x846ca68bU;
+    value ^= value >> 16;
+    return double(value & 0xffffffU) / 16777215.0;
+}
+struct ContactPoint
+{
+    double u{}, v{}, height{};
+};
+struct ContactFace
+{
+    std::array<ContactPoint, 3> points;
+    double minU{}, maxU{}, minV{}, maxV{};
+};
+double orient(ContactPoint a, ContactPoint b, ContactPoint c)
+{
+    return (b.u - a.u) * (c.v - a.v) - (b.v - a.v) * (c.u - a.u);
+}
+ContactPoint lerp(ContactPoint a, ContactPoint b, double t)
+{
+    return {a.u + (b.u - a.u) * t, a.v + (b.v - a.v) * t,
+            a.height + (b.height - a.height) * t};
+}
+double minimumClearance(const ContactFace &upper, const ContactFace &lower)
+{
+    std::vector<ContactPoint> polygon(upper.points.begin(), upper.points.end());
+    const auto orientation = orient(lower.points[0], lower.points[1], lower.points[2]);
+    if (std::abs(orientation) <= 1e-18)
+        return std::numeric_limits<double>::infinity();
+    const auto winding = orientation > 0 ? 1.0 : -1.0;
+    for (int edge = 0; edge < 3 && !polygon.empty(); ++edge)
+    {
+        std::vector<ContactPoint> clipped;
+        auto a = lower.points[edge], b = lower.points[(edge + 1) % 3];
+        for (std::size_t i = 0; i < polygon.size(); ++i)
+        {
+            auto first = polygon[i], second = polygon[(i + 1) % polygon.size()];
+            double f = winding * orient(a, b, first), s = winding * orient(a, b, second);
+            bool insideFirst = f >= -1e-12, insideSecond = s >= -1e-12;
+            if (insideFirst != insideSecond)
+                clipped.push_back(lerp(first, second, std::clamp(f / (f - s), 0.0, 1.0)));
+            if (insideSecond)
+                clipped.push_back(second);
+        }
+        polygon = std::move(clipped);
+    }
+    double overlapTwiceArea = 0;
+    for (std::size_t i = 2; i < polygon.size(); ++i)
+        overlapTwiceArea += orient(polygon[0], polygon[i - 1], polygon[i]);
+    if (std::abs(overlapTwiceArea) <= std::abs(orientation) * 1e-10)
+        return std::numeric_limits<double>::infinity();
+    double clearance = std::numeric_limits<double>::infinity();
+    for (auto p : polygon)
+    {
+        auto a = lower.points[0], b = lower.points[1], c = lower.points[2];
+        auto u = orient(a, p, c) / orientation;
+        auto v = orient(a, b, p) / orientation;
+        auto lowerHeight = a.height + u * (b.height - a.height) + v * (c.height - a.height);
+        clearance = std::min(clearance, p.height - lowerHeight);
+    }
+    return clearance;
+}
+} // namespace
+void layerEdgeDistances(MeshResult &mesh, const Layer &layer, const Jerico::CancellationToken *cancel)
+{
+    if (mesh.layerIndices.size() != mesh.mesh.positions.size())
+        throw std::runtime_error("Edge breakup requires layer formation upstream");
+    if (mesh.layerIndices.empty())
+        throw std::runtime_error("Layer metadata is empty");
+    for (int k : mesh.layerIndices)
+        if (k < 0 || k >= 12)
+            throw std::runtime_error("Layer index outside 0..11");
+    auto d = unit({layer.direction[0], layer.direction[1], layer.direction[2]});
+    int count = *std::max_element(mesh.layerIndices.begin(), mesh.layerIndices.end()) + 1;
+    std::vector<std::vector<D::Triangle>> sides(count);
+    for (std::size_t t = 0; t < mesh.mesh.indices.size(); t += 3)
+    {
+        if ((t % 768) == 0 && cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+        auto ai = mesh.mesh.indices[t], bi = mesh.mesh.indices[t + 1], ci = mesh.mesh.indices[t + 2];
+        auto a = mesh.mesh.positions[ai], b = mesh.mesh.positions[bi], c = mesh.mesh.positions[ci];
+        auto normal = unit(cross(D::subtract(b, a), D::subtract(c, a)));
+        if (std::abs(D::dot(normal, d)) >= 0.65)
+            continue;
+        int k = mesh.layerIndices[ai];
+        if (k != mesh.layerIndices[bi] || k != mesh.layerIndices[ci])
+            continue;
+        auto bounds = D::emptyBounds();
+        D::include(bounds, a);
+        D::include(bounds, b);
+        D::include(bounds, c);
+        sides[k].push_back({a, b, c, D::multiply(D::add(D::add(a, b), c), 1.0 / 3), bounds,
+                            std::uint32_t(t / 3), std::uint32_t(t / 3)});
+    }
+    std::vector<std::unique_ptr<D::TriangleBvh>> trees(count);
+    for (int k = 0; k < count; ++k)
+        if (!sides[k].empty())
+            trees[k] = std::make_unique<D::TriangleBvh>(std::move(sides[k]));
+    mesh.layerEdgeDistance.resize(mesh.mesh.positions.size());
+    for (std::size_t i = 0; i < mesh.mesh.positions.size(); ++i)
+    {
+        if ((i & 255) == 0 && cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+        auto &tree = trees[mesh.layerIndices[i]];
+        if (!tree)
+            throw std::runtime_error("No lateral layer boundary found; align Edge direction with strata");
+        mesh.layerEdgeDistance[i] = float(tree->closest(mesh.mesh.positions[i], 1e-12).distance);
+    }
+}
+MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, bool showThickness,
+                                  const std::vector<Vec3d> &sourceWarp, std::vector<Vec3d> &outputWarp,
+                                  const Jerico::CancellationToken *cancel)
+{
+    const auto count = source.mesh.positions.size();
+    if (count * layer.count > 240000)
+        throw std::runtime_error("Layer formation exceeds 240,000 vertices");
+    auto d = unit({layer.direction[0], layer.direction[1], layer.direction[2]});
+    auto u = unit(cross(std::abs(d.y) < 0.9 ? Vec3d{0, 1, 0} : Vec3d{1, 0, 0}, d)), v = cross(d, u);
+    double lo = 1e20, hi = -1e20, minU = 1e20, maxU = -1e20;
+    double minV = 1e20, maxV = -1e20;
+    for (auto p : source.mesh.positions)
+    {
+        const auto height = D::dot(p, d);
+        lo = std::min(lo, height);
+        hi = std::max(hi, height);
+        minU = std::min(minU, D::dot(p, u));
+        maxU = std::max(maxU, D::dot(p, u));
+        minV = std::min(minV, D::dot(p, v));
+        maxV = std::max(maxV, D::dot(p, v));
+    }
+    if (hi - lo < 1e-6)
+        throw std::runtime_error("Layer source has no thickness along its direction");
+    const auto centerHeight = 0.5 * (lo + hi);
+    const auto planarCenter = D::add(D::multiply(u, 0.5 * (minU + maxU)),
+                                     D::multiply(v, 0.5 * (minV + maxV)));
+    const auto sourceCenter = D::add(planarCenter, D::multiply(d, centerHeight));
+    double maximumRadius = 0;
+    for (auto p : source.mesh.positions)
+    {
+        auto planar = D::subtract(D::subtract(p, D::multiply(d, D::dot(p, d))), planarCenter);
+        maximumRadius = std::max(maximumRadius, std::sqrt(D::lengthSquared(planar)));
+    }
+    MeshResult result;
+    result.hardRegions = source.hardRegions;
+    result.sourceSelection=source.sourceSelection;result.sourceRevision=source.sourceRevision;
+    result.regions = source.regions;
+    result.mesh.positions.resize(count * layer.count);
+    result.field.resize(count * layer.count);
+    result.layerThickness.resize(count * layer.count);
+    result.layerIndices.resize(count * layer.count);
+    outputWarp.resize(count * layer.count);
+    std::array<Vec3d, 12> offsets;
+    std::array<double, 12> angles{}, scales{};
+    std::array<double, 4> state{};
+    Vec3d bias{layer.driftBias[0], layer.driftBias[1], layer.driftBias[2]};
+    bias = D::subtract(bias, D::multiply(d, D::dot(bias, d)));
+    for (int k = 0; k < layer.count; ++k)
+    {
+        for (int channel = 0; channel < 4; ++channel)
+        {
+            double innovation = 2 * random(layer.seed + k * 133 + 7 + channel * 2) - 1;
+            state[channel] =
+                k == 0 ? innovation
+                       : layer.driftCorrelation * state[channel] + (1 - layer.driftCorrelation) * innovation;
+        }
+        offsets[k] =
+            D::add(D::add(D::multiply(u, layer.lateral * state[0]), D::multiply(v, layer.lateral * state[1])),
+                   D::multiply(bias, layer.lateral * (double(k) / std::max(1, layer.count - 1) - 0.5)));
+        angles[k] = state[2] * layer.rotationDrift * 3.141592653589793 / 180;
+        scales[k] = std::max(0.15, 1.0 + k * layer.layerScale + state[3] * layer.scaleDrift);
+    }
+    // Adjacent coherent strata must evaluate the same planar frame at their shared horizon.
+    // Interpolate each slab between boundary frames instead of transforming whole slabs independently.
+    std::array<Vec3d, 13> horizonOffsets{};
+    std::array<double, 13> horizonAngles{}, horizonScales{};
+    for (int boundary = 0; boundary <= layer.count; ++boundary)
+    {
+        const int lower = std::clamp(boundary - 1, 0, layer.count - 1);
+        const int upper = std::clamp(boundary, 0, layer.count - 1);
+        horizonOffsets[boundary] = D::multiply(D::add(offsets[lower], offsets[upper]), 0.5);
+        horizonAngles[boundary] = 0.5 * (angles[lower] + angles[upper]);
+        horizonScales[boundary] = 0.5 * (scales[lower] + scales[upper]);
+    }
+    auto heights = [&](Vec3d p)
+    {
+        auto local = D::subtract(p, sourceCenter);
+        Vec3d q{D::dot(local, u) * layer.thicknessFrequency, 0,
+                D::dot(local, v) * layer.thicknessFrequency};
+        double shared = PA::evaluateGeologyFbmReference(q, layer.seed + 0x58e571U, 2, 2, 0.5);
+        std::array<double, 12> values{};
+        for (int k = 0; k < layer.count; ++k)
+        {
+            double local = PA::evaluateGeologyFbmReference(q, layer.seed + k * 71 + 0xa8192U, 2, 2, 0.5);
+            double signal = layer.thicknessCorrelation * shared + (1 - layer.thicknessCorrelation) * local;
+            values[k] = std::clamp(layer.thickness * (1 + layer.jitter * signal),
+                                   double(layer.minimumThickness), double(layer.maximumThickness));
+        }
+        return values;
+    };
+    auto positions = [&](Vec3d p, const std::array<double, 12> &thickness)
+    {
+        std::array<Vec3d, 12> values{};
+        double total = (layer.count - 1) * layer.spacing;
+        for (int k = 0; k < layer.count; ++k)
+            total += thickness[k];
+        double cursor = -total * 0.5, h = D::dot(p, d);
+        auto planar = D::subtract(D::subtract(p, D::multiply(d, h)), planarCenter);
+        auto normalizedHeight = std::clamp((h - lo) / (hi - lo), 0.0, 1.0);
+        auto radialLength = std::sqrt(D::lengthSquared(planar));
+        std::array<double, 13> boundaryOffset{};
+        if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
+        {
+            auto facetCount = std::clamp(int(std::lround(layer.frequency * 4)), 6, 24);
+            auto angle = std::atan2(D::dot(planar, v), D::dot(planar, u));
+            auto angularPosition = (angle + 3.141592653589793) * facetCount /
+                                   (2 * 3.141592653589793);
+            auto facet = int(std::floor(angularPosition)) % facetCount;
+            auto facetFraction = angularPosition - std::floor(angularPosition);
+            auto first = 2 * random(layer.seed + 0x328a1e77U + std::uint32_t(facet) * 4127U) - 1;
+            auto next = 2 * random(layer.seed + 0x328a1e77U +
+                                   std::uint32_t((facet + 1) % facetCount) * 4127U) - 1;
+            auto sharedFacet = first + (next - first) * facetFraction;
+            for (int boundary = 1; boundary < layer.count; ++boundary)
+            {
+                auto facetSeed = layer.seed + 0xa73e29d1U + std::uint32_t(boundary) * 1907U;
+                auto localFirst = 2 * random(facetSeed + std::uint32_t(facet) * 4127U) - 1;
+                auto localNext = 2 * random(facetSeed +
+                                            std::uint32_t((facet + 1) % facetCount) * 4127U) - 1;
+                auto localFacet = localFirst + (localNext - localFirst) * facetFraction;
+                boundaryOffset[boundary] = layer.perimeterAmplitude *
+                    (0.35 * sharedFacet + 0.65 * localFacet);
+            }
+            if (layer.shapeOuterCaps)
+            {
+                // Exposed ends weather inward relative to their neighboring contact horizons.
+                boundaryOffset[0] = std::min(0.0, boundaryOffset[1]) - 0.05 * layer.perimeterAmplitude;
+                boundaryOffset[layer.count] =
+                    std::min(0.0, boundaryOffset[layer.count - 1]) - 0.05 * layer.perimeterAmplitude;
+            }
+        }
+        for (int k = 0; k < layer.count; ++k)
+        {
+            auto offset = boundaryOffset[k] * (1 - normalizedHeight) +
+                          boundaryOffset[k + 1] * normalizedHeight;
+            // Keep the angular perimeter deformation at the rim; a full-strength angular
+            // displacement around the center can invert the source cap triangulation.
+            const auto normalizedRadius = maximumRadius > 1e-12
+                                              ? std::clamp(radialLength / maximumRadius, 0.0, 1.0)
+                                              : 0.0;
+            offset *= normalizedRadius * normalizedRadius;
+            double relief = 0;
+            if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
+            {
+                auto envelope = std::sin(3.141592653589793 * normalizedHeight);
+                Vec3d q{D::dot(planar, u) * layer.frequency * 2.5,
+                        (h - centerHeight) * layer.frequency * 2.5,
+                        D::dot(planar, v) * layer.frequency * 2.5};
+                relief = layer.perimeterAmplitude * 0.22 * envelope * envelope *
+                         PA::evaluateGeologyFbmReference(q, layer.seed + 0xd811a7U +
+                                                         std::uint32_t(k) * 509U,
+                                                         layer.octaves, layer.lacunarity,
+                                                         layer.roughness);
+            }
+            auto side = D::multiply(planar, 1 + offset + relief);
+            const auto blend = [&](double lower, double upper)
+            {
+                return lower * (1 - normalizedHeight) + upper * normalizedHeight;
+            };
+            auto angle = blend(horizonAngles[k], horizonAngles[k + 1]);
+            auto scale = blend(horizonScales[k], horizonScales[k + 1]);
+            auto shift = D::add(D::multiply(horizonOffsets[k], 1 - normalizedHeight),
+                                D::multiply(horizonOffsets[k + 1], normalizedHeight));
+            auto rotated = D::add(D::multiply(side, std::cos(angle)),
+                                  D::multiply(cross(d, side), std::sin(angle)));
+            values[k] = D::add(D::add(D::add(planarCenter, D::multiply(rotated, scale)), shift),
+                               D::multiply(d, centerHeight + cursor +
+                                                  thickness[k] * (h - lo) / (hi - lo)));
+            cursor += thickness[k] + layer.spacing;
+        }
+        return values;
+    };
+    for (std::size_t i = 0; i < count; ++i)
+    {
+        if ((i & 255) == 0 && cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+        auto thickness = heights(source.mesh.positions[i]);
+        auto p = positions(source.mesh.positions[i], thickness);
+        std::array<Vec3d, 12> warped = p;
+        if (D::lengthSquared(sourceWarp[i]) > 0)
+        {
+            auto q = D::add(source.mesh.positions[i], sourceWarp[i]);
+            warped = positions(q, heights(q));
+        }
+        for (int k = 0; k < layer.count; ++k)
+        {
+            auto at = count * k + i;
+            result.mesh.positions[at] = p[k];
+            result.layerIndices[at] = k;
+            result.layerThickness[at] = float(thickness[k]);
+            result.field[at] = showThickness ? float(thickness[k]) : source.field[i];
+            outputWarp[at] = D::subtract(warped[k], p[k]);
+        }
+    }
+    std::vector<unsigned char> sourceContacts;
+    sourceContacts.reserve(source.mesh.indices.size() / 3);
+    for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
+    {
+        auto cap = [&](double height)
+        {
+            for (int corner = 0; corner < 3; ++corner)
+                if (std::abs(D::dot(source.mesh.positions[source.mesh.indices[t + corner]], d) - height) > 1e-8)
+                    return false;
+            return true;
+        };
+        sourceContacts.push_back(cap(hi) ? 1 : cap(lo) ? 2 : 0);
+    }
+    if (std::find(sourceContacts.begin(), sourceContacts.end(), 1) == sourceContacts.end() ||
+        std::find(sourceContacts.begin(), sourceContacts.end(), 2) == sourceContacts.end())
+        sourceContacts.clear();
+    for (int k = 0; k < layer.count; ++k)
+    {
+        for (auto i : source.mesh.indices)
+            result.mesh.indices.push_back(std::uint32_t(k * count + i));
+        result.layerContactFaces.insert(result.layerContactFaces.end(), sourceContacts.begin(),
+                                        sourceContacts.end());
+        std::set<Jerico::Guid> recorded;
+        for (auto id : source.mesh.triangleRegions)
+        {
+            auto stratum = Solid::region(layer.seed, Jerico::stableGuidHash(id) ^ (0x20000 + k));
+            result.mesh.triangleRegions.push_back(stratum);
+            if (recorded.insert(stratum).second)
+                result.regions.push_back({stratum, id, SurfaceRole::Stratum, -1, k});
+        }
+    }
+    return result;
+}
+std::vector<double> settleLayerStack(MeshResult &mesh, Vec3d up,
+                                     const Jerico::CancellationToken *cancel)
+{
+    if (mesh.layerIndices.size() != mesh.mesh.positions.size() || mesh.layerIndices.empty())
+        throw std::runtime_error("Layer settling requires upstream layer formation");
+    auto length = std::sqrt(D::lengthSquared(up));
+    if (!(length > 1e-12) || !std::isfinite(length))
+        throw std::runtime_error("Layer settling requires a finite up axis");
+    up = D::multiply(up, 1 / length);
+    auto tangent = unit(cross(std::abs(up.y) < 0.9 ? Vec3d{0, 1, 0} : Vec3d{1, 0, 0}, up));
+    auto bitangent = cross(up, tangent);
+    int count = *std::max_element(mesh.layerIndices.begin(), mesh.layerIndices.end()) + 1;
+    if (count < 2 || count > 12)
+        throw std::runtime_error("Layer settling requires 2..12 strata");
+    std::vector<std::vector<ContactFace>> tops(count), bottoms(count);
+    const bool taggedContacts = mesh.layerContactFaces.size() == mesh.mesh.indices.size() / 3;
+    for (std::size_t t = 0; t < mesh.mesh.indices.size(); t += 3)
+    {
+        if ((t & 255) == 0 && cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+        std::array<std::uint32_t, 3> index{mesh.mesh.indices[t], mesh.mesh.indices[t + 1],
+                                            mesh.mesh.indices[t + 2]};
+        if (index[0] >= mesh.layerIndices.size() || index[1] >= mesh.layerIndices.size() ||
+            index[2] >= mesh.layerIndices.size())
+            throw std::runtime_error("Layer settling mesh index invalid");
+        int k = mesh.layerIndices[index[0]];
+        if (k < 0 || k >= count || mesh.layerIndices[index[1]] != k || mesh.layerIndices[index[2]] != k)
+            throw std::runtime_error("Layer settling requires separate stratum triangles");
+        auto a = mesh.mesh.positions[index[0]], b = mesh.mesh.positions[index[1]],
+             c = mesh.mesh.positions[index[2]];
+        auto normal = cross(D::subtract(b, a), D::subtract(c, a));
+        auto faceLength = std::sqrt(D::lengthSquared(normal));
+        if (!(faceLength > 1e-15))
+            throw std::runtime_error("Layer settling requires nondegenerate faces");
+        auto facing = D::dot(normal, up) / faceLength;
+        if (taggedContacts)
+        {
+            auto tag = mesh.layerContactFaces[t / 3];
+            if (tag == 0)
+                continue;
+            if ((tag == 1 && facing <= 0) || (tag == 2 && facing >= 0))
+                throw std::runtime_error("Layer contact face is folded at triangle " +
+                                         std::to_string(t / 3) + " stratum " +
+                                         std::to_string(k) + " facing " +
+                                         std::to_string(facing));
+        }
+        else if (std::abs(facing) < 0.5)
+            continue;
+        ContactFace face;
+        for (int i = 0; i < 3; ++i)
+        {
+            auto p = mesh.mesh.positions[index[i]];
+            face.points[i] = {D::dot(p, tangent), D::dot(p, bitangent), D::dot(p, up)};
+        }
+        face.minU = std::min({face.points[0].u, face.points[1].u, face.points[2].u});
+        face.maxU = std::max({face.points[0].u, face.points[1].u, face.points[2].u});
+        face.minV = std::min({face.points[0].v, face.points[1].v, face.points[2].v});
+        face.maxV = std::max({face.points[0].v, face.points[1].v, face.points[2].v});
+        (facing > 0 ? tops[k] : bottoms[k]).push_back(face);
+    }
+    std::vector<double> shifts(count);
+    for (int k = 1; k < count; ++k)
+    {
+        if (tops[k - 1].empty() || bottoms[k].empty())
+            throw std::runtime_error("Layer settling has no facing support faces");
+        std::vector<D::Triangle> projected;
+        projected.reserve(tops[k - 1].size());
+        for (std::size_t i = 0; i < tops[k - 1].size(); ++i)
+        {
+            auto &face = tops[k - 1][i];
+            auto a = Vec3d{face.points[0].u, face.points[0].v, 0};
+            auto b = Vec3d{face.points[1].u, face.points[1].v, 0};
+            auto c = Vec3d{face.points[2].u, face.points[2].v, 0};
+            auto bounds = D::emptyBounds();
+            D::include(bounds, a);
+            D::include(bounds, b);
+            D::include(bounds, c);
+            projected.push_back({a, b, c, D::multiply(D::add(D::add(a, b), c), 1.0 / 3),
+                                 bounds, std::uint32_t(i), std::uint32_t(i)});
+        }
+        D::TriangleBvh tree(std::move(projected));
+        double gap = std::numeric_limits<double>::infinity();
+        for (std::size_t i = 0; i < bottoms[k].size(); ++i)
+        {
+            if ((i & 63) == 0 && cancel && cancel->isCancellationRequested())
+                throw std::runtime_error("Cancelled");
+            auto &upper = bottoms[k][i];
+            std::array<std::uint32_t, 128> stack{};
+            std::size_t size = 1;
+            while (size)
+            {
+                auto &node = tree.nodes()[stack[--size]];
+                if (node.bounds.maximum.x < upper.minU || node.bounds.minimum.x > upper.maxU ||
+                    node.bounds.maximum.y < upper.minV || node.bounds.minimum.y > upper.maxV)
+                    continue;
+                if (node.count == 0)
+                {
+                    if (size + 2 > stack.size())
+                        throw std::runtime_error("Layer settling support BVH stack limit");
+                    stack[size++] = node.left;
+                    stack[size++] = node.right;
+                    continue;
+                }
+                for (std::uint32_t j = 0; j < node.count; ++j)
+                {
+                    auto &tri = tree.triangles()[tree.order()[node.begin + j]];
+                    auto &lower = tops[k - 1][tri.owner];
+                    if (lower.maxU < upper.minU || lower.minU > upper.maxU ||
+                        lower.maxV < upper.minV || lower.minV > upper.maxV)
+                        continue;
+                    gap = std::min(gap, minimumClearance(upper, lower) - shifts[k - 1]);
+                }
+            }
+        }
+        if (!std::isfinite(gap))
+            throw std::runtime_error("Layer settling has no overlapping support footprint");
+        shifts[k] = -gap;
+    }
+    for (std::size_t i = 0; i < mesh.mesh.positions.size(); ++i)
+    {
+        if ((i & 255) == 0 && cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+        mesh.mesh.positions[i] = D::add(mesh.mesh.positions[i],
+                                        D::multiply(up, shifts[mesh.layerIndices[i]]));
+    }
+    return shifts;
+}
+} // namespace Playground

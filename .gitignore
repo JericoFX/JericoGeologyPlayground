@@ -1,0 +1,7 @@
+/build/
+/build-*/
+/graft/
+/normal-bake-specialist-mips/
+**/__pycache__/
+*.pyc
+/Evidence/*

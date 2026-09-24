@@ -1,0 +1,302 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 5,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 13469.2427,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 0,
+          "lowHash": 6674352002536610346,
+          "lowTriangles": 18432,
+          "misses": 0,
+          "sampledSurfaceError": 0.025525443252896657,
+          "samples": 1666066,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 11556.2973,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 1,
+          "lowHash": 10176659298820879081,
+          "lowTriangles": 10368,
+          "misses": 0,
+          "sampledSurfaceError": 0.03609651874508104,
+          "samples": 1613454,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 10904.3381,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 2,
+          "lowHash": 1888092843182655006,
+          "lowTriangles": 7200,
+          "misses": 0,
+          "sampledSurfaceError": 0.049307165406336353,
+          "samples": 1779955,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 8,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4398.3398,
+          "edgeRadius": 0.1,
+          "errorBudget": 0.04,
+          "highHash": 16945895109593090897,
+          "highTriangles": 16896,
+          "lod": 0,
+          "lowHash": 45464438535374601,
+          "lowTriangles": 8802,
+          "misses": 0,
+          "sampledSurfaceError": 0.023908499116336083,
+          "samples": 1750712,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4428.2272,
+          "edgeRadius": 0.1,
+          "errorBudget": 0.06,
+          "highHash": 16945895109593090897,
+          "highTriangles": 16896,
+          "lod": 1,
+          "lowHash": 8098608718277268020,
+          "lowTriangles": 6364,
+          "misses": 0,
+          "sampledSurfaceError": 0.04225481591635544,
+          "samples": 1751360,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4427.1234,
+          "edgeRadius": 0.1,
+          "errorBudget": 0.08,
+          "highHash": 16945895109593090897,
+          "highTriangles": 16896,
+          "lod": 2,
+          "lowHash": 15952131227751529098,
+          "lowTriangles": 5068,
+          "misses": 0,
+          "sampledSurfaceError": 0.05342013473739166,
+          "samples": 1750127,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 9,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 6567.2023,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 18330131349438008082,
+          "highTriangles": 49152,
+          "lod": 0,
+          "lowHash": 4246975193773503108,
+          "lowTriangles": 11658,
+          "misses": 0,
+          "sampledSurfaceError": 0.013914418520700878,
+          "samples": 1324723,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 8233.0836,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.05000000074505806,
+          "highHash": 18330131349438008082,
+          "highTriangles": 49152,
+          "lod": 1,
+          "lowHash": 17777018368194027313,
+          "lowTriangles": 10008,
+          "misses": 0,
+          "sampledSurfaceError": 0.043146303549849226,
+          "samples": 1334657,
+          "status": "BAKED"
+        },
+        {
+          "lod": 2,
+          "reason": "LOD does not reduce triangle count",
+          "status": "REJECTED"
+        }
+      ]
+    },
+    {
+      "family": 10,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 18895.6126,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.005,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 0,
+          "lowHash": 14075266775463162209,
+          "lowTriangles": 3856,
+          "misses": 0,
+          "sampledSurfaceError": 0.00307462057367183,
+          "samples": 1651548,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 21523.5549,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.0075,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 1,
+          "lowHash": 16378930977620567661,
+          "lowTriangles": 3634,
+          "misses": 0,
+          "sampledSurfaceError": 0.0042540113182084486,
+          "samples": 1730756,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 23520.1549,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.00800000037997961,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 2,
+          "lowHash": 13483279071932170471,
+          "lowTriangles": 3596,
+          "misses": 0,
+          "sampledSurfaceError": 0.0042540113182084486,
+          "samples": 1641232,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 11,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 9646.3574,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.02,
+          "highHash": 965077291393930849,
+          "highTriangles": 27648,
+          "lod": 0,
+          "lowHash": 6526322239096728620,
+          "lowTriangles": 13086,
+          "misses": 0,
+          "sampledSurfaceError": 0.01764228579060936,
+          "samples": 1291126,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 10232.8845,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.03,
+          "highHash": 965077291393930849,
+          "highTriangles": 27648,
+          "lod": 1,
+          "lowHash": 14861578348673076970,
+          "lowTriangles": 10340,
+          "misses": 0,
+          "sampledSurfaceError": 0.027501045552076574,
+          "samples": 1280079,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 8492.6988,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 965077291393930849,
+          "highTriangles": 27648,
+          "lod": 2,
+          "lowHash": 28610258160271614,
+          "lowTriangles": 9040,
+          "misses": 0,
+          "sampledSurfaceError": 0.03590235573786318,
+          "samples": 1233050,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 12,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 6998.0664,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 0,
+          "lowHash": 15348194532329691083,
+          "lowTriangles": 1058,
+          "misses": 0,
+          "sampledSurfaceError": 0.03592637403241324,
+          "samples": 1938929,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 7638.8932,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.06,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 1,
+          "lowHash": 5806793454232741432,
+          "lowTriangles": 672,
+          "misses": 0,
+          "sampledSurfaceError": 0.056193880825000896,
+          "samples": 1803484,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4916.546,
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 2,
+          "lowHash": 9049429820146610649,
+          "lowTriangles": 588,
+          "misses": 0,
+          "sampledSurfaceError": 0.06622289326757985,
+          "samples": 2127310,
+          "status": "BAKED"
+        }
+      ]
+    }
+  ],
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

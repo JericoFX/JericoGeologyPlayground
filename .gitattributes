@@ -1,0 +1,3 @@
+* whitespace=cr-at-eol
+docs/engine-reference-2026-09-24/** -text whitespace=-trailing-space,cr-at-eol
+Evidence/*.log -text whitespace=-trailing-space,cr-at-eol
