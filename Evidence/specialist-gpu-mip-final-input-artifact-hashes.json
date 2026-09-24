@@ -1,0 +1,425 @@
+{
+  "scope": "final C++ source, 170-document reference index, 17-bake/6-family Vulkan evidence; full OBJ/maps stay local",
+  "files": [
+    {
+      "path": "build/Release/JericoGeologyPlayground.exe",
+      "bytes": 1706496,
+      "sha256": "246B0D0312CDD82A10570749FB6B013FCEF6DC1DEAC1CD35324671EC709D658D"
+    },
+    {
+      "path": "Source/Main.cpp",
+      "bytes": 96627,
+      "sha256": "EAD0386B55644B80AF66702E58FF75390AEC6B751E498FACDAD5972717EEA0B6"
+    },
+    {
+      "path": "Source/Renderer.cpp",
+      "bytes": 24223,
+      "sha256": "2E75673CCE9E2669EDC17E9E6802FB0E60D97EA51C73D7ADB1CE9FD1F14CC40E"
+    },
+    {
+      "path": "Source/Renderer.hpp",
+      "bytes": 1093,
+      "sha256": "F90B3EA8D6D7F4C7EDBDA4B75FB8CC3A56951BFE27298CCFDF6CFBD44CE3927A"
+    },
+    {
+      "path": "Tests/SpecialistPreviewAudit.py",
+      "bytes": 3453,
+      "sha256": "CEEDF3709342D0FC125B7C22F2699E2E59EDD8ED0CB64AD43F19068711BC99A6"
+    },
+    {
+      "path": "Tests/RockLodVisualAudit.py",
+      "bytes": 2393,
+      "sha256": "749351BACD273B85D605BBF94AF22E357D1681CD785AD29893D1FCFD1E28BD12"
+    },
+    {
+      "path": "README.md",
+      "bytes": 28392,
+      "sha256": "3D2A9DDF1BC9CCD9EF8A61479FFC8759DD674BC2B2C25A42D2EE4028216ADA61"
+    },
+    {
+      "path": "GOAL.md",
+      "bytes": 2950,
+      "sha256": "85C004BE17E98DC2ADE843769B5DC9761DB50B9FB35BFFA5B210248495278B6A"
+    },
+    {
+      "path": "docs/engine-reference-2026-09-24/README.md",
+      "bytes": 7082,
+      "sha256": "DD6973E90310995D1136D8EF47303D469853FB951B9B46C73DA841DD30C99A64"
+    },
+    {
+      "path": "docs/engine-reference-2026-09-24/SOURCE_MANIFEST.json",
+      "bytes": 62496,
+      "sha256": "1E9E0EB87B4277088DF9A5C7AD9C431AFC181770DE46944855811A01569E71ED"
+    },
+    {
+      "path": "Evidence/PUBLISHED.md",
+      "bytes": 3372,
+      "sha256": "E947CB0F3BCC12208458B1A4322539C13D6E8EDD7140ABD69263E5E71BDD7262"
+    },
+    {
+      "path": "Evidence/2026-09-24-geology-math-checkpoint.md",
+      "bytes": 100197,
+      "sha256": "03465A2CFF3A79D315A2AABC07D4A349A889B3364FA98BF0AD23845C555C6D42"
+    },
+    {
+      "path": "Evidence/specialist-preview-red.log",
+      "bytes": 443,
+      "sha256": "A745767F5D606AB49A8CE2E1CC2F3297A99FE3F88E449BE8A1C47B3BB8FB606E"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-build.log",
+      "bytes": 563,
+      "sha256": "33554BC117300C340918FCBDE1C37265E877043EE4C1FD97E807B664B27F856E"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-run.log",
+      "bytes": 30808,
+      "sha256": "8B6E19F2E9CC6D57AB52DE52CDD3019E7B35A24EBDAAC98AD32EEB8BAA38863F"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-ctest-after-review.log",
+      "bytes": 2045,
+      "sha256": "11E0096A3E9168B38FBCF5724DBA62F4A1FDD63AF39E9DEF00477902897D43A0"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-bake-audit.json",
+      "bytes": 30736,
+      "sha256": "A2F5A7EC94C178C6D7CB877835C8C6B7DDFFAE340F9B9E522E18339152B506BC"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-bake-audit.log",
+      "bytes": 51,
+      "sha256": "5A57BEFF8DF7F280E241037CB56B1CA4D21FA3C5905868EACE0FB6AEA8731B66"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-preview-audit.json",
+      "bytes": 8743,
+      "sha256": "10600BC461E3A5649A67BB8B2B5C438025BE936C0C71644E1DC4B62C011CB638"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-preview-audit.log",
+      "bytes": 56,
+      "sha256": "7A1A2849DF57401ADF3E93FBE64D4E102E497D73722097B11FD845FBFB9D20E3"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-visual-audit.json",
+      "bytes": 8838,
+      "sha256": "4D232E5CAF0E1F6A42FD1A3D38CBF600940FEA8F4A6A8911C6C72F095F907063"
+    },
+    {
+      "path": "Evidence/specialist-gpu-mip-final-six-family-visual-audit.log",
+      "bytes": 37,
+      "sha256": "39CF19BF3462B0A5A54977D62CB4FCF22EC176264C2AE9AA5ECD67DFFEC117BE"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-lod-bakes-proof.json",
+      "bytes": 12113,
+      "sha256": "F2CD0FC17C9E65F59482208FB555761F2E696EA2A0CB3ED346DD8A4EC711DC7C"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-ao-far-base.png",
+      "bytes": 100037,
+      "sha256": "E6D484561FCD45422466D3A65EF5CC38E2364758BACB0CDC171BE5C7A0988715"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-ao-far-mips.png",
+      "bytes": 98565,
+      "sha256": "2E7D03514754AF079FDBE3208AE181B69329E267D1EBA1E792D826212B5347F0"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-contact-far-base.png",
+      "bytes": 94791,
+      "sha256": "639272541FB4113EB55EAEEC83CAA24131B9E5A719B1CFF109CD637A4D38E5A7"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-contact-far-mips.png",
+      "bytes": 93647,
+      "sha256": "581C5B9AA974A42AA967E4C48466273C969C4CA499B784250E2B7C349593A614"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-cavity-far-base.png",
+      "bytes": 108993,
+      "sha256": "EDFE3CAE25A77E1C60C24FE66F71A82E9B5A5A8D83267078C52BA625BD56ADB9"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-cavity-far-mips.png",
+      "bytes": 118617,
+      "sha256": "D107430A0A9149D3D01AD9459C91F4987965F1689C8E01B106EB1057FD80FC50"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-convex-edge-far-base.png",
+      "bytes": 97868,
+      "sha256": "B2A88236706C44F6F9BE6D1ACF18DACEC9C09F3A1015B805F2599E86066C6429"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-convex-edge-far-mips.png",
+      "bytes": 110258,
+      "sha256": "A92809C1DC6802F8E4FE5251444E1C70CC3900C3D13D746DB17E8BF71E32B06C"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/high-far.png",
+      "bytes": 127314,
+      "sha256": "E8321E0D1675F1A8DD4ADF01F03C52E3BDF88259E2D79A8B48330BBF44A84686"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-5/lod-2/low-normal-far.png",
+      "bytes": 125673,
+      "sha256": "ABC9D29DB3CD270D1636F32673BFA41D8DF532ADD1E4C7C0A7470FC0F877F8C1"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-ao-far-base.png",
+      "bytes": 94813,
+      "sha256": "66CFE6EED9CA198C3D5CD67CD27B781CE510D0331571D6689239284247BA13CB"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-ao-far-mips.png",
+      "bytes": 93922,
+      "sha256": "A601877EC357491A52533AEB499B053DEBDAD89149ACEF0B9CB97C4D3086991A"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-contact-far-base.png",
+      "bytes": 65878,
+      "sha256": "B8AC98E3C46F3A455B1F7578DC1548487B9D48A090580F1D6B0E46C0B34B1401"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-contact-far-mips.png",
+      "bytes": 66507,
+      "sha256": "7AF3A6C4CA5B2CDA41172310BDE033928AE6886665C77EBE83A57C6537D8665F"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-cavity-far-base.png",
+      "bytes": 74509,
+      "sha256": "DEB7EDD61D8F6801EF2C2A359BA5D06A427B1747557802BB38D80AA997822568"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-cavity-far-mips.png",
+      "bytes": 77052,
+      "sha256": "81496171AED3100D59AC1A37A62D12C2F1FFA574E56835BED96AD452A17F6B7C"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-convex-edge-far-base.png",
+      "bytes": 104548,
+      "sha256": "576842F55A71D49038FB2A2D9D4BB5B9A1CA9E3E0E205303D5F98254EC99EF8D"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-convex-edge-far-mips.png",
+      "bytes": 109170,
+      "sha256": "5FF9619C888E72CFB891655BAAEAB8270086D2BD1F3ACCF9426AD4D3D5F7FB68"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/high-far.png",
+      "bytes": 167235,
+      "sha256": "C8AAC4E0B9496FF5E93EB8A1AEFC25E99FB0B680F430CD6AE1F8CDDA0F2A6CDC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-8/lod-2/low-normal-far.png",
+      "bytes": 173577,
+      "sha256": "17D74BAB1643868987AAB16A892AC1C4652DE930DB936DAC3ACC278F20B2B5B3"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-ao-far-base.png",
+      "bytes": 114416,
+      "sha256": "F6AF92031FF1B5AC79D95E4CDC0075C1D70ECFAA990AA1B64F043825BE9AFA58"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-ao-far-mips.png",
+      "bytes": 112848,
+      "sha256": "758661F48D8723A105685A8690E68C1702E0A0D8247BF29C2132AC8671602974"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-contact-far-base.png",
+      "bytes": 80223,
+      "sha256": "D2B888CC8F2C146C4DE7F5085E2F3971C78B0BFA1D2735FF0EDD93D19FCAB221"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-contact-far-mips.png",
+      "bytes": 80572,
+      "sha256": "0B35B9108B1E0E9913D1C8B3CCAE13C0E6CC2D884E5A75D7E8FAA85FC1D0E561"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-cavity-far-base.png",
+      "bytes": 83416,
+      "sha256": "64FD25C1F5B1285D6F1752BF60597D36D486FD811BA4D4EB373ECB21449E21C0"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-cavity-far-mips.png",
+      "bytes": 87305,
+      "sha256": "DD76624EFBC613140E25B50BCD76707C1EFC741D8D04C48E7DEDDC9A7932D145"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-convex-edge-far-base.png",
+      "bytes": 54097,
+      "sha256": "6A6809BC7AC608F48DF09AA9AAA3EDD015BD67D46747BCFA762F09C12E516247"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-convex-edge-far-mips.png",
+      "bytes": 56242,
+      "sha256": "8F1C21BDC547D8EF5E7FED8D6B4E067E857B7BFA6C405409EB4D73C37E42E8EC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/high-far.png",
+      "bytes": 147669,
+      "sha256": "EC109D7253814625C679CCB96AC0EA2ED27CECF1FB8A4EA1FFBE5A306B3A623E"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-9/lod-1/low-normal-far.png",
+      "bytes": 153958,
+      "sha256": "EB91820843891C2EEEF7BE53388A46F7B05D5A6EB8600C550F7C77B18B2EC456"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-ao-far-base.png",
+      "bytes": 49993,
+      "sha256": "2E4AFA8E9A4B046FD416371B616B056B0BCE3546F9961552198CBF6F32AF28AC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-ao-far-mips.png",
+      "bytes": 49993,
+      "sha256": "2E4AFA8E9A4B046FD416371B616B056B0BCE3546F9961552198CBF6F32AF28AC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-contact-far-base.png",
+      "bytes": 49993,
+      "sha256": "2E4AFA8E9A4B046FD416371B616B056B0BCE3546F9961552198CBF6F32AF28AC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-contact-far-mips.png",
+      "bytes": 49993,
+      "sha256": "2E4AFA8E9A4B046FD416371B616B056B0BCE3546F9961552198CBF6F32AF28AC"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-cavity-far-base.png",
+      "bytes": 52514,
+      "sha256": "F56827A6F34C2888C6341057456A4C5BFCCF5C977F6102564FA58B7FD06EDA43"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-cavity-far-mips.png",
+      "bytes": 54243,
+      "sha256": "2B4A9116C792ADB44DDA93510B78B4C460F6DBC8511D21562BE8683A6566E972"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-convex-edge-far-base.png",
+      "bytes": 55131,
+      "sha256": "C7B8E928B9FAE8B533D67B1FEFEF97778236B8E71ABF8ABE780A3BE3D6A6202A"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-convex-edge-far-mips.png",
+      "bytes": 58093,
+      "sha256": "D1C59928014178F22C956597D2142A8D3725070C84512497463B7E3E3FE39309"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/high-far.png",
+      "bytes": 66344,
+      "sha256": "673F111E0B94A26BB852B8EB52D21655212EA4456D1A3042CBB78BC2FE6CCC67"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-10/lod-2/low-normal-far.png",
+      "bytes": 69205,
+      "sha256": "0AC68F48B7C91F4C201E6E4A064AE0D6607900EB11F781E42616070744D08D63"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-ao-far-base.png",
+      "bytes": 85323,
+      "sha256": "7B7240BCF0E93D6D3E262962505469DB87F3D5262D88FF4F07CA7A54971A70D4"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-ao-far-mips.png",
+      "bytes": 85855,
+      "sha256": "856D7CBBEF6C15BE80115456B34E7CB42C3764442619994D65A6D879B54011D3"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-contact-far-base.png",
+      "bytes": 80503,
+      "sha256": "E68314D0EB7F59FAF7BE9DF6C012D9CA096AF645F7C8ABF721F3141FB015338C"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-contact-far-mips.png",
+      "bytes": 80989,
+      "sha256": "19BA0B4483769FB4B4BBAE3D23E251A7CFE7C092755E46AC98F23CB2450F4874"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-cavity-far-base.png",
+      "bytes": 91308,
+      "sha256": "C651FAA6680CAB9542C3F14A6DB3FCABE635CFE37D3B2DEFD0281CCB15C8356F"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-cavity-far-mips.png",
+      "bytes": 101756,
+      "sha256": "267F9828677997F97A9779349360A456796AAE7E1D9510AD384B7AC43530C89B"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-convex-edge-far-base.png",
+      "bytes": 80945,
+      "sha256": "C3BCC5AAEB2D871BFA7B6E9D3D57C2654BB654A7BA42B2D4AED33487BDEB4C2B"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-convex-edge-far-mips.png",
+      "bytes": 89996,
+      "sha256": "11776BF2200D0306512C8B3E4B89904ACD45A4FA7E9E0508FABBE8552BFA18F5"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/high-far.png",
+      "bytes": 113437,
+      "sha256": "3FE59C23F6DF5FB1BF779CB26AE5CA9BD0045855C0B25821AF932A63FEE9D494"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-11/lod-2/low-normal-far.png",
+      "bytes": 114493,
+      "sha256": "BE569BAD70C71E9EB45595D1A0816FBC780D2E9FECEEC54A136CCA5A9C151C14"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-ao-far-base.png",
+      "bytes": 56236,
+      "sha256": "E68B0D46A9557ED139909E6068C087DB273C797AB29EE5C95E04F73EE47FDE11"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-ao-far-mips.png",
+      "bytes": 56587,
+      "sha256": "4772FFAC77A293897B4F3887AE5419801FD2F8D09B43F562423CB37F239396FE"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-contact-far-base.png",
+      "bytes": 51863,
+      "sha256": "7627CB7804F450C8D8393CB4FC75E0BFEE1AF2EBCAC2588ED64220D2F9324F9F"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-contact-far-mips.png",
+      "bytes": 51980,
+      "sha256": "8D9A7764FFDA3E57B5CC38D83ADD18E0E672156BA64344E9318D44EB96524911"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-cavity-far-base.png",
+      "bytes": 53621,
+      "sha256": "4A19A8012C201E4D2B8CD67ECCA0B815B87B19B5C001CA1681568280BA2A9743"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-cavity-far-mips.png",
+      "bytes": 53904,
+      "sha256": "A3EB783B1E5C28297182F83262800DD1233B425782F9A2F3EEFAEA7C622E97E4"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-convex-edge-far-base.png",
+      "bytes": 49969,
+      "sha256": "2D4528064F5618922D63AB47D313D79F92F72E1E1EFD902FB366C9AB47E367CB"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-convex-edge-far-mips.png",
+      "bytes": 49969,
+      "sha256": "2D4528064F5618922D63AB47D313D79F92F72E1E1EFD902FB366C9AB47E367CB"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/high-far.png",
+      "bytes": 90876,
+      "sha256": "20199E6CE3D1EDE140D905E6BA2152793F14A5848A8A4A95FF0132A3FE68A2FA"
+    },
+    {
+      "path": "Evidence/2026-09-24-specialist-gpu-mip-final-six-family/rock-12/lod-2/low-normal-far.png",
+      "bytes": 89470,
+      "sha256": "6D2A1928E5A82F44801C0577A628A76694F5DDF0176CF13C5509C5B06DFC6006"
+    },
+    {
+      "path": "Evidence/specialist-preview-per-map-red.log",
+      "bytes": 433,
+      "sha256": "97D278B8628C6EFF388D2CFA6F28F5D2299B2D62611EDB6EB4D232D0153353E4"
+    }
+  ]
+}

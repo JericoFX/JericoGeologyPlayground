@@ -208,7 +208,8 @@ void Renderer::begin(unsigned width, unsigned height)
     r.ui->NewFrame(width, height, r.swap->GetDesc().PreTransform);
 }
 void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
-                      const std::vector<std::uint8_t> *diagnosticMap)
+                      const std::vector<std::uint8_t> *diagnosticMap,
+                      const std::vector<std::vector<std::uint8_t>> *diagnosticMips)
 {
     auto &r = *impl;
     std::vector<Vertex> vertices;
@@ -222,6 +223,7 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
                     (!diagnosticMap || diagnosticMap->size() == bake->rgba.size()),
                 "Normal bake renderer input mismatch");
     require(!diagnosticMap || bake, "Diagnostic map requires the baked low UVs");
+    require(!diagnosticMips || diagnosticMap, "Diagnostic mips require a diagnostic map");
     auto count = corners ? indices.size() : mesh.mesh.positions.size();
     vertices.reserve(count);
     r.low = 1e20f;
@@ -273,7 +275,12 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     texture.Name = "Playground baked texture";
     texture.Type = RESOURCE_DIM_TEX_2D;
     texture.Width = texture.Height = bake ? bake->resolution : 1;
-    texture.MipLevels = bake && !diagnosticMap ? Uint32(bake->normalMips.size() + 1) : 1;
+    const auto *mips = diagnosticMap ? diagnosticMips : bake ? &bake->normalMips : nullptr;
+    std::size_t maxMipCount = 0;
+    for (auto dimension = texture.Width; dimension > 1; dimension >>= 1)
+        ++maxMipCount;
+    require(!mips || mips->size() <= maxMipCount, "Baked texture mip count exceeds its dimensions");
+    texture.MipLevels = mips ? Uint32(mips->size() + 1) : 1;
     texture.Format = TEX_FORMAT_RGBA8_UNORM;
     texture.Usage = USAGE_IMMUTABLE;
     texture.BindFlags = BIND_SHADER_RESOURCE;
@@ -283,9 +290,9 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     for (Uint32 level = 1; level < texture.MipLevels; ++level)
     {
         auto size = texture.Width >> level;
-        require(bake->normalMips[level - 1].size() == std::size_t(size) * size * 4,
-                "Normal bake mip dimensions mismatch");
-        subresources[level].pData = bake->normalMips[level - 1].data();
+        require((*mips)[level - 1].size() == std::size_t(size) * size * 4,
+                "Baked texture mip dimensions mismatch");
+        subresources[level].pData = (*mips)[level - 1].data();
         subresources[level].Stride = size * 4;
     }
     TextureData initial;

@@ -636,6 +636,24 @@
     "bytes": 178661
   },
   {
+    "source": "F:\\JericoEngine\\docs\\research\\2026-07-31-texture-mips-bc-encoder-audit.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\research\\2026-07-31-texture-mips-bc-encoder-audit.md",
+    "sha256": "123646CD4578521DBB8D80606937357CC53D4697DF46423D2FDE15D9CB7040B4",
+    "bytes": 24416
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\research\\2026-08-02-jolt-static-mesh-and-marching-cubes.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\research\\2026-08-02-jolt-static-mesh-and-marching-cubes.md",
+    "sha256": "EEC441F60FC6FDD1106C47C75C68DB2E1394BCA408441510F0AB4B02C3D98E57",
+    "bytes": 3230
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\research\\2026-08-02-silhouette-pom-adoption.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\research\\2026-08-02-silhouette-pom-adoption.md",
+    "sha256": "E3E730FBAFB86BDAD2FF1FA4E1A3F59D18E870ADE6FA02CF17560643D6445AAC",
+    "bytes": 18899
+  },
+  {
     "source": "F:\\JericoEngine\\docs\\research\\2026-08-23-sparse-sdf-geology-generator-math-audit.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\2026-08-23-sparse-sdf-geology-generator-math-audit.md",
     "sha256": "E60211C7ECD45892834F90483727BE92AD4AA5C5ACE71BC86D7650D0DE8F734C",
@@ -840,6 +858,12 @@
     "bytes": 8057
   },
   {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-sdf-material-stamp-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-sdf-material-stamp-design.md",
+    "sha256": "509CDB203528C0F57F022356745232DCD93D06F8542C580D5BFDCFA9293A04AD",
+    "bytes": 7805
+  },
+  {
     "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-sdf-projection-design.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-sdf-projection-design.md",
     "sha256": "5BBC71ADBB41957F47FE295A217ED62E857ED49F51193AD8566CBE699801EB31",
@@ -850,6 +874,18 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-sdf-stamp-design.md",
     "sha256": "8E9FD3CE07A285330183F49EF2A8563E7E7C2334287548AF191FB0D90B4F4585",
     "bytes": 7841
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-static-sparse-sdf-cook-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-static-sparse-sdf-cook-design.md",
+    "sha256": "E7720A45AA987FC886D3215E1ED4D313787868100C39842C0D992AC1413054C3",
+    "bytes": 5430
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-static-surface-paint-cook-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-14-m8-rbrush-static-surface-paint-cook-design.md",
+    "sha256": "9CE27E03C355A98D6090569A5E853F0C1B10EA3CC3D3EC9A3829EB1FC4F4C6A0",
+    "bytes": 7844
   },
   {
     "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-23-m8-sparse-sdf-geology-typed-controls-design.md",
@@ -868,6 +904,12 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-28-m8-directed-crack-swept-volume-design.md",
     "sha256": "897A3119DCADF3A935EF936EE044EFC70E2CF2771BB20A497A73471FAAFA4175",
     "bytes": 14545
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-28-m8-geological-material-integration-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-28-m8-geological-material-integration-design.md",
+    "sha256": "38E7E89DB56A3790C4728F680297C9C26BDDF56B29DBD62CB019B7992632BC10",
+    "bytes": 7066
   },
   {
     "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-28-m8-rockfall-design.md",
@@ -894,6 +936,18 @@
     "bytes": 11470
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\BACKEND_COMPLETENESS_AUDIT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\BACKEND_COMPLETENESS_AUDIT.md",
+    "sha256": "0B6058D4E3AC053ADF356220F3B8AE572B03E011CE9C6D908F3A14B0673E21E2",
+    "bytes": 21696
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\FAMILY_MIX_IMPLEMENTATION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\FAMILY_MIX_IMPLEMENTATION.md",
+    "sha256": "A10A72E2DB11E4A5063918A5D4F3F4E7E2ADA4B878C4384C8005306B98A60DC0",
+    "bytes": 5740
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\FAMILY_MIX_STATUS.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\FAMILY_MIX_STATUS.md",
     "sha256": "786485E85B583593CC7947363722257837508143A21FD30B6D3FD79C7325C3F5",
@@ -912,6 +966,12 @@
     "bytes": 34331
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\GEOMETRY_NODES_CAPABILITY_ATLAS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\GEOMETRY_NODES_CAPABILITY_ATLAS.md",
+    "sha256": "D8867E03B0C1F3A519ADFF98F276ED7C4067C3B9948CB1A5197ED314AAEBD71E",
+    "bytes": 54204
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\MODELING_TO_LOD_PWAS_EPLS.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\MODELING_TO_LOD_PWAS_EPLS.md",
     "sha256": "DA06FC9885240A3900BDF56B5FF310822A6428291225DBF43302D76F29EA6502",
@@ -924,9 +984,39 @@
     "bytes": 49829
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\NEW_ADDONS_SECURITY_INTAKE_20260909.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\NEW_ADDONS_SECURITY_INTAKE_20260909.md",
+    "sha256": "15ECA2121D52D1FEA3F9CFB2B8A3399DA7B9B373AECD88B5EC2D8BB2FF1719C6",
+    "bytes": 16222
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\ORIGINAL_ROCK_TO_ICE_FINDINGS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\ORIGINAL_ROCK_TO_ICE_FINDINGS.md",
+    "sha256": "2F64A28F89B630E8BD6D50AC7F99B041726796E1BD8B736F3797021113E151C9",
+    "bytes": 5159
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\REFERENCE_AUDIT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\REFERENCE_AUDIT.md",
+    "sha256": "C6420A34F14B8A7F3EC7C7B5DE93FBD5E3B1CBFC9C699E85A4451777AC078D26",
+    "bytes": 11864
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\ROCK_V2_PLAN.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\ROCK_V2_PLAN.md",
+    "sha256": "35371A44B37DB28274835F2FC3CBA69B3A1C8DBCF759136396A61748E7E59F90",
+    "bytes": 2724
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\SURFACE_RELIEF_EXPERIMENT.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\SURFACE_RELIEF_EXPERIMENT.md",
     "sha256": "F73DACCFF7662A07CC212DD7E2B433E1EFE9D92F9ABD4237F9C2DE72F671803A",
     "bytes": 23867
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\USER_VISUAL_TARGETS_20260910.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\USER_VISUAL_TARGETS_20260910.md",
+    "sha256": "BFCED23D68B79A71726721417C34B336AD162BA8C86C77A2EB95A4AB9C71773A",
+    "bytes": 33380
   }
 ]

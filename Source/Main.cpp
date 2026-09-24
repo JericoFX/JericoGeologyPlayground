@@ -734,7 +734,19 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                     renderer.capture(directory / (variant == 0 ? "high.png" :
                                                   variant == 1 ? "low.png" : "low-normal.png"));
                 }
-                if (lod == 2)
+                struct MapView
+                {
+                    const char *name;
+                    const std::vector<std::uint8_t> *image;
+                    const std::vector<std::vector<std::uint8_t>> *mips;
+                };
+                const MapView maps[] = {
+                    {"low-ao.png", &preview.bake.ambientRgba, &preview.bake.specialistMips.ambient},
+                    {"low-contact.png", &preview.bake.contactRgba, &preview.bake.specialistMips.contact},
+                    {"low-cavity.png", &preview.bake.cavityRgba, &preview.bake.specialistMips.cavity},
+                    {"low-convex-edge.png", &preview.bake.edgeRgba, &preview.bake.specialistMips.edge}};
+                nlohmann::json diagnosticMipMaps = nlohmann::json::object();
+                if (lod == 2 || (automaticUv && family == 9 && lod == 1))
                 {
                     auto farCamera = camera;
                     farCamera.distance *= 2;
@@ -744,22 +756,39 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                     renderer.upload(preview.bake.low, &preview.bake);
                     renderer.draw(1280, 960, farCamera, 0);
                     renderer.capture(directory / "low-normal-far.png");
+                    if (automaticUv)
+                        for (const auto &map : maps)
+                        {
+                            auto stem = std::string(map.name);
+                            stem.resize(stem.size() - 4);
+                            renderer.upload(preview.bake.low, &preview.bake, map.image);
+                            auto baseBytes = renderer.bufferBytes();
+                            renderer.draw(1280, 960, farCamera, 4);
+                            renderer.capture(directory / (stem + "-far-base.png"));
+                            renderer.upload(preview.bake.low, &preview.bake, map.image, map.mips);
+                            auto mipBytes = renderer.bufferBytes();
+                            if (mipBytes <= baseBytes)
+                                throw std::runtime_error("Specialist mip preview did not allocate mip levels");
+                            diagnosticMipMaps[stem.substr(4)] = {
+                                {"levels", map.mips->size() + 1},
+                                {"bytesAddedEstimate", mipBytes - baseBytes}};
+                            renderer.draw(1280, 960, farCamera, 4);
+                            renderer.capture(directory / (stem + "-far-mips.png"));
+                        }
                 }
-                for (const auto &[name, map] :
-                     {std::pair<const char *, const std::vector<std::uint8_t> *>{"low-ao.png", &preview.bake.ambientRgba},
-                      {"low-contact.png", &preview.bake.contactRgba},
-                      {"low-cavity.png", &preview.bake.cavityRgba},
-                      {"low-convex-edge.png", &preview.bake.edgeRgba}})
+                for (const auto &map : maps)
                 {
-                    renderer.upload(preview.bake.low, &preview.bake, map);
+                    renderer.upload(preview.bake.low, &preview.bake, map.image,
+                                    automaticUv ? map.mips : nullptr);
                     renderer.draw(1280, 960, camera, 4);
-                    renderer.capture(directory / name);
+                    renderer.capture(directory / map.name);
                 }
                 familyReport["lods"].push_back({{"lod", lod},
                     {"status", preview.bake.misses ? "BAKED_WITH_MISSES" : "BAKED"},
                     {"highTriangles", preview.high.mesh.indices.size() / 3},
                     {"lowTriangles", triangles}, {"highHash", preview.bake.highHash},
                     {"lowHash", preview.bake.lowHash},
+                    {"diagnosticMipMaps", diagnosticMipMaps},
                     {"edgeRadius", preview.bake.settings.edgeRadius},
                     {"sampledSurfaceError", preview.bake.low.sampledReductionError},
                     {"errorBudget", error}, {"samples", preview.bake.samples},

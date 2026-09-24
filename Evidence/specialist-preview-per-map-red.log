@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\SpecialistPreviewAudit.py", line 71, in <module>
+    result = audit(Path(sys.argv[1]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\SpecialistPreviewAudit.py", line 55, in audit
+    raise AssertionError(f"incomplete {name} mip upload proof: {family}/{lod_index}")
+AssertionError: incomplete ao mip upload proof: 5/2

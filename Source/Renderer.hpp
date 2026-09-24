@@ -22,7 +22,8 @@ class Renderer
     ~Renderer();
     void begin(unsigned width, unsigned height);
     void upload(const MeshResult &mesh, const NormalBake *bake = nullptr,
-                const std::vector<std::uint8_t> *diagnosticMap = nullptr);
+                const std::vector<std::uint8_t> *diagnosticMap = nullptr,
+                const std::vector<std::vector<std::uint8_t>> *diagnosticMips = nullptr);
     void *draw(unsigned width, unsigned height, const Camera &camera, int mode);
     void present();
     void capture(const std::filesystem::path &path);

@@ -1,0 +1,238 @@
+{
+  "metric": "same-camera 1280x960 foreground RGB MAE; threshold mean RGB > 40",
+  "limit": "screen-space diagnostic, not perceptual or M8 Beauty acceptance",
+  "scriptSha256": "749351bacd273b85d605bbf94af22e357d1681cd785ad29893d1fcfd1e28bd12",
+  "numpyVersion": "2.3.5",
+  "pillowVersion": "12.3.0",
+  "cases": [
+    {
+      "family": 5,
+      "lod": 0,
+      "near": {
+        "highSha256": "c6b121ab1ad45c9bbfdc2cfb0ce6fe61ecc720f1c6fb8be33cf3705bf1b5dbe0",
+        "lowSha256": "896a487765faa1541a8d3685691e00a44c6e46414fe028a516a6f3a88604534c",
+        "commonPixels": 154742,
+        "silhouetteIou": 0.996419786475035,
+        "foregroundRgbMae": 2.8223342895507812
+      }
+    },
+    {
+      "family": 5,
+      "lod": 1,
+      "near": {
+        "highSha256": "c6b121ab1ad45c9bbfdc2cfb0ce6fe61ecc720f1c6fb8be33cf3705bf1b5dbe0",
+        "lowSha256": "e71211de92f1fac2b3ca5f351a1aebe25979b36a52a21c980a7c2c5b1a007f2a",
+        "commonPixels": 154576,
+        "silhouetteIou": 0.9947743712513193,
+        "foregroundRgbMae": 3.2903103828430176
+      }
+    },
+    {
+      "family": 5,
+      "lod": 2,
+      "near": {
+        "highSha256": "c6b121ab1ad45c9bbfdc2cfb0ce6fe61ecc720f1c6fb8be33cf3705bf1b5dbe0",
+        "lowSha256": "2133a136a37bcf7db9865e4bdbe7af660e5f65429acbf666cf26b9482b4121b9",
+        "commonPixels": 154044,
+        "silhouetteIou": 0.9912103468245287,
+        "foregroundRgbMae": 4.122964859008789
+      },
+      "far": {
+        "highSha256": "e8321e0d1675f1a8dd4adf01f03c52e3bdf88259e2d79a8b48330bbf44a84686",
+        "lowSha256": "abc9d29db3cd270d1636f32673bfa41d8df532add1e4c7c0a7470fc0f877f8c1",
+        "commonPixels": 37649,
+        "silhouetteIou": 0.9905546200799832,
+        "foregroundRgbMae": 5.008100986480713
+      }
+    },
+    {
+      "family": 8,
+      "lod": 0,
+      "near": {
+        "highSha256": "28a7f9ba16a63e2b32ca5d707a011ec72bd26998e83cc42266aa8d5df225eee1",
+        "lowSha256": "4653bc98d917f3b2b05f9ff49c50fd0debe43c853e1293b8c22881d63228029e",
+        "commonPixels": 330283,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.30353060364723206
+      }
+    },
+    {
+      "family": 8,
+      "lod": 1,
+      "near": {
+        "highSha256": "28a7f9ba16a63e2b32ca5d707a011ec72bd26998e83cc42266aa8d5df225eee1",
+        "lowSha256": "0344746d4e5deb81bb6e2a3d3b1b282d46b3f31b88fbe7ee6b0d8b35b78d3d7c",
+        "commonPixels": 330283,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.45073872804641724
+      }
+    },
+    {
+      "family": 8,
+      "lod": 2,
+      "near": {
+        "highSha256": "28a7f9ba16a63e2b32ca5d707a011ec72bd26998e83cc42266aa8d5df225eee1",
+        "lowSha256": "21021ee31cec5d951dd06da31582e865e128621787c572c6c557b97e4cb9d8ec",
+        "commonPixels": 330283,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.663864016532898
+      },
+      "far": {
+        "highSha256": "c8aac4e0b9496ff5e93eb8a1aefc25e99fb0b680f430cd6ae1f8cdda0f2a6cdc",
+        "lowSha256": "17d74bab1643868987aab16a892ac1c4652de930db936dac3acc278f20b2b5b3",
+        "commonPixels": 78914,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.7903879284858704
+      }
+    },
+    {
+      "family": 9,
+      "lod": 0,
+      "near": {
+        "highSha256": "20a1db9289f703c279359d4cfe074eda639e25c7f29423c7837d7e73e2c69113",
+        "lowSha256": "253bf50316609c8962c4fbc54410ff08dd869d45fc6738ba5786f19b31546556",
+        "commonPixels": 331862,
+        "silhouetteIou": 0.9999969867083707,
+        "foregroundRgbMae": 0.2911893129348755
+      }
+    },
+    {
+      "family": 9,
+      "lod": 1,
+      "near": {
+        "highSha256": "20a1db9289f703c279359d4cfe074eda639e25c7f29423c7837d7e73e2c69113",
+        "lowSha256": "0b725b6a2e7ce677fe334d2c3dccb66ce37f7f2e82c8d28dd89e97650e9e857b",
+        "commonPixels": 331828,
+        "silhouetteIou": 0.9998885088816235,
+        "foregroundRgbMae": 0.29780489206314087
+      },
+      "far": {
+        "highSha256": "ec109d7253814625c679ccb96ac0ea2ed27cecf1fb8a4ea1ffbe5a306b3a623e",
+        "lowSha256": "eb91820843891c2eeef7be53388a46f7b05d5a6eb8600c550f7c77b18b2ec456",
+        "commonPixels": 81709,
+        "silhouetteIou": 0.9999388109748636,
+        "foregroundRgbMae": 0.6873375773429871
+      }
+    },
+    {
+      "family": 10,
+      "lod": 0,
+      "near": {
+        "highSha256": "a16f59040e65fe4ae088064d12664b6093ce02bafe76fc6157e69f4cc9b5537a",
+        "lowSha256": "81715b6879dc72bc075314d38193b90900968efc0bd51f51cf1da9e8fbc85a74",
+        "commonPixels": 164827,
+        "silhouetteIou": 0.9999332678144602,
+        "foregroundRgbMae": 0.1578584462404251
+      }
+    },
+    {
+      "family": 10,
+      "lod": 1,
+      "near": {
+        "highSha256": "a16f59040e65fe4ae088064d12664b6093ce02bafe76fc6157e69f4cc9b5537a",
+        "lowSha256": "3ea01116f7fc3e57219c7ecf9447775328ad0167b34bf8488fde2683163363f4",
+        "commonPixels": 164814,
+        "silhouetteIou": 0.9998544025042769,
+        "foregroundRgbMae": 0.1505839079618454
+      }
+    },
+    {
+      "family": 10,
+      "lod": 2,
+      "near": {
+        "highSha256": "a16f59040e65fe4ae088064d12664b6093ce02bafe76fc6157e69f4cc9b5537a",
+        "lowSha256": "368e6e19f2eeeed04c5b37a0c27e5ab41e72e0c9010a100c0f7c5fe76d13db8d",
+        "commonPixels": 164822,
+        "silhouetteIou": 0.9998968690661797,
+        "foregroundRgbMae": 0.16439956426620483
+      },
+      "far": {
+        "highSha256": "673f111e0b94a26bb852b8eb52d21655212ea4456d1a3042cbb78bc2fe6ccc67",
+        "lowSha256": "0ac68f48b7c91f4c201e6e4a064ae0d6607900eb11f781e42616070744d08d63",
+        "commonPixels": 39959,
+        "silhouetteIou": 0.9999499512024224,
+        "foregroundRgbMae": 0.18603233993053436
+      }
+    },
+    {
+      "family": 11,
+      "lod": 0,
+      "near": {
+        "highSha256": "b00702c6ce10d6367b4a91a52355599d8e7ee28582b462a3f746d5484a33137b",
+        "lowSha256": "aa2ebe36cc42882e48d0695e5705134be45960107ff18ca7d9b505b0e6fd72b0",
+        "commonPixels": 131609,
+        "silhouetteIou": 0.9977257048419744,
+        "foregroundRgbMae": 1.5929306745529175
+      }
+    },
+    {
+      "family": 11,
+      "lod": 1,
+      "near": {
+        "highSha256": "b00702c6ce10d6367b4a91a52355599d8e7ee28582b462a3f746d5484a33137b",
+        "lowSha256": "933a1137000ac708106b1926ea49d0a96ace72057e75e7fcedc0e6489d225859",
+        "commonPixels": 131022,
+        "silhouetteIou": 0.9933057882566999,
+        "foregroundRgbMae": 2.363018035888672
+      }
+    },
+    {
+      "family": 11,
+      "lod": 2,
+      "near": {
+        "highSha256": "b00702c6ce10d6367b4a91a52355599d8e7ee28582b462a3f746d5484a33137b",
+        "lowSha256": "0d50b6a7308abfa48b0ef4a5844b73e618f25eb17993e1772e1f426661d19798",
+        "commonPixels": 130248,
+        "silhouetteIou": 0.9873481052479969,
+        "foregroundRgbMae": 2.8083887100219727
+      },
+      "far": {
+        "highSha256": "3fe59c23f6df5fb1bf779cb26ae5ca9bd0045855c0b25821af932a63fee9d494",
+        "lowSha256": "be569bad70c71e9eb45595d1a0816fbc780d2e9feceec54a136cca5a9c151c14",
+        "commonPixels": 31901,
+        "silhouetteIou": 0.9864559819413092,
+        "foregroundRgbMae": 3.5532217025756836
+      }
+    },
+    {
+      "family": 12,
+      "lod": 0,
+      "near": {
+        "highSha256": "a0f4ad3d56f557f1053bc6656dd472024883266e388ba7085c0f59b18fa650ce",
+        "lowSha256": "266ba578136ab73c9218861a7de29359ca7a534a968e2983029343abda5480ef",
+        "commonPixels": 128997,
+        "silhouetteIou": 0.9916819778749837,
+        "foregroundRgbMae": 0.6917060017585754
+      }
+    },
+    {
+      "family": 12,
+      "lod": 1,
+      "near": {
+        "highSha256": "a0f4ad3d56f557f1053bc6656dd472024883266e388ba7085c0f59b18fa650ce",
+        "lowSha256": "6e4668e588534fa3d04070df7b2fa39512037a6a074c5b5505f3b9880fc57c67",
+        "commonPixels": 128047,
+        "silhouetteIou": 0.9845073887838108,
+        "foregroundRgbMae": 1.1873140335083008
+      }
+    },
+    {
+      "family": 12,
+      "lod": 2,
+      "near": {
+        "highSha256": "a0f4ad3d56f557f1053bc6656dd472024883266e388ba7085c0f59b18fa650ce",
+        "lowSha256": "f378132e8a0c5c1c7251095741e2bd246f4ee279d93b1b63ff0cc137d59ade01",
+        "commonPixels": 127671,
+        "silhouetteIou": 0.9815938184753777,
+        "foregroundRgbMae": 1.9115303754806519
+      },
+      "far": {
+        "highSha256": "20199e6ce3d1ede140d905e6ba2152793f14a5848a8a4a95ff0132a3fe68a2fa",
+        "lowSha256": "6d2a1928e5a82f44801c0577a628a76694f5ddf0176cf13c5509c5b06dfc6006",
+        "commonPixels": 31271,
+        "silhouetteIou": 0.9790851310310279,
+        "foregroundRgbMae": 1.7448222637176514
+      }
+    }
+  ]
+}

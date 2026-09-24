@@ -38,7 +38,7 @@ def audit(root: Path) -> dict:
             directory = root / f"rock-{family}" / f"lod-{lod['lod']}"
             entry = {"family": family, "lod": lod["lod"],
                      "near": compare(directory / "high.png", directory / "low-normal.png")}
-            if lod["lod"] == 2:
+            if (directory / "high-far.png").exists() or (directory / "low-normal-far.png").exists():
                 entry["far"] = compare(directory / "high-far.png",
                                        directory / "low-normal-far.png")
             cases.append(entry)
