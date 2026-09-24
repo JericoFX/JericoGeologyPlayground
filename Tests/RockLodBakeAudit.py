@@ -61,7 +61,7 @@ def audit(root: Path, require_automatic_uv: bool = False,
             assert metadata["misses"] == lod["misses"]
             assert metadata["lowTriangles"] == lod["lowTriangles"]
             assert metadata["lowStrategy"] == (
-                "recipe-regenerated" if family == 5 or family == 12 and lod["lod"] == 2
+                "recipe-regenerated" if family in {5, 11} or family == 12 and lod["lod"] == 2
                 else "native-simplify")
             assert metadata["edgeRadius"] == lod["edgeRadius"]
             assert lod["edgeRadius"] == (0.1 if family == 8 else 0.02)

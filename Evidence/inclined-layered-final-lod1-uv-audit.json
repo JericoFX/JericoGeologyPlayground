@@ -1,0 +1,74 @@
+{
+  "triangles": 12288,
+  "samples": 393216,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 209,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      1024,
+      1024
+    ],
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      255,
+      255,
+      255
+    ],
+    "convex-edge": [
+      255,
+      255,
+      255
+    ]
+  }
+}

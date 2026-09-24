@@ -305,6 +305,21 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
             values[k] = D::add(D::add(D::add(planarCenter, D::multiply(rotated, scale)), shift),
                                D::multiply(d, centerHeight + cursor +
                                                   thickness[k] * (h - lo) / (hi - lo)));
+            if (layer.beddingTilt > 0)
+            {
+                const auto point = values[k];
+                const auto height = D::dot(point, d) - centerHeight;
+                const auto horizontal = D::subtract(D::subtract(point, D::multiply(d, D::dot(point, d))),
+                                                    planarCenter);
+                const auto x = D::dot(horizontal, u), y = D::dot(horizontal, v);
+                const auto seedAngle = double(layer.seed % 1000) * 0.019;
+                const auto angle = seedAngle +
+                                   0.35 * std::sin(1.7 * height / std::max(1.0, maximumRadius) + seedAngle);
+                const auto slope = x * std::cos(angle) + y * std::sin(angle);
+                const auto undulation = 0.2 * PA::evaluateGeologyFbmReference(
+                    {x * 0.75, 0, y * 0.75}, layer.seed + 0xbedd1a7U, 2, 2, 0.5);
+                values[k] = D::add(point, D::multiply(d, layer.beddingTilt * (slope + undulation)));
+            }
             cursor += thickness[k] + layer.spacing;
         }
         return values;

@@ -1,0 +1,421 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 5,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 13154.4861,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 0,
+          "lowHash": 6674352002536610346,
+          "lowTriangles": 18432,
+          "misses": 0,
+          "sampledSurfaceError": 0.025525443252896657,
+          "samples": 1666066,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 11491.5852,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 1,
+          "lowHash": 10176659298820879081,
+          "lowTriangles": 10368,
+          "misses": 0,
+          "sampledSurfaceError": 0.03609651874508104,
+          "samples": 1613454,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 10875.1182,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 5093114658443750950,
+          "highTriangles": 73728,
+          "lod": 2,
+          "lowHash": 1888092843182655006,
+          "lowTriangles": 7200,
+          "misses": 0,
+          "sampledSurfaceError": 0.049307165406336353,
+          "samples": 1779955,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 8,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4723.8141,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.04,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 0,
+          "lowHash": 12244607560334983867,
+          "lowTriangles": 8894,
+          "misses": 0,
+          "sampledSurfaceError": 0.034243550479393745,
+          "samples": 1975575,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4748.0456,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.06,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 1,
+          "lowHash": 17143435401045846404,
+          "lowTriangles": 6558,
+          "misses": 0,
+          "sampledSurfaceError": 0.04916044231888833,
+          "samples": 1974051,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4765.9415,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.1,
+          "errorBudget": 0.08,
+          "highHash": 11901763614008258559,
+          "highTriangles": 17488,
+          "lod": 2,
+          "lowHash": 7200223194218595769,
+          "lowTriangles": 5334,
+          "misses": 0,
+          "sampledSurfaceError": 0.05342013473739166,
+          "samples": 1973443,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 9,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 6556.4547,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 18330131349438008082,
+          "highTriangles": 49152,
+          "lod": 0,
+          "lowHash": 4246975193773503108,
+          "lowTriangles": 11658,
+          "misses": 0,
+          "sampledSurfaceError": 0.013914418520700878,
+          "samples": 1324723,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 8250.4192,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.05000000074505806,
+          "highHash": 18330131349438008082,
+          "highTriangles": 49152,
+          "lod": 1,
+          "lowHash": 17777018368194027313,
+          "lowTriangles": 10008,
+          "misses": 0,
+          "sampledSurfaceError": 0.043146303549849226,
+          "samples": 1334657,
+          "status": "BAKED"
+        },
+        {
+          "lod": 2,
+          "reason": "LOD does not reduce triangle count",
+          "status": "REJECTED"
+        }
+      ]
+    },
+    {
+      "family": 10,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 18860.7923,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.005,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 0,
+          "lowHash": 14075266775463162209,
+          "lowTriangles": 3856,
+          "misses": 0,
+          "sampledSurfaceError": 0.00307462057367183,
+          "samples": 1651548,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 21301.3103,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.0075,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 1,
+          "lowHash": 16378930977620567661,
+          "lowTriangles": 3634,
+          "misses": 0,
+          "sampledSurfaceError": 0.0042540113182084486,
+          "samples": 1730756,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 22893.3768,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.00800000037997961,
+          "highHash": 11750237061285492936,
+          "highTriangles": 45198,
+          "lod": 2,
+          "lowHash": 13483279071932170471,
+          "lowTriangles": 3596,
+          "misses": 0,
+          "sampledSurfaceError": 0.0042540113182084486,
+          "samples": 1641232,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 11,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 9516.6985,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.02,
+          "highHash": 15567389676836620793,
+          "highTriangles": 27648,
+          "lod": 0,
+          "lowHash": 7430133999034510048,
+          "lowTriangles": 19200,
+          "misses": 0,
+          "sampledSurfaceError": 0.01582484344201432,
+          "samples": 1610280,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 8463.9533,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.03,
+          "highHash": 15567389676836620793,
+          "highTriangles": 27648,
+          "lod": 1,
+          "lowHash": 8058598438253134625,
+          "lowTriangles": 12288,
+          "misses": 0,
+          "sampledSurfaceError": 0.022598700736827713,
+          "samples": 1627594,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 8225.0951,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 15567389676836620793,
+          "highTriangles": 27648,
+          "lod": 2,
+          "lowHash": 14847667820224353784,
+          "lowTriangles": 9408,
+          "misses": 0,
+          "sampledSurfaceError": 0.031584790972245785,
+          "samples": 1783698,
+          "status": "BAKED"
+        }
+      ]
+    },
+    {
+      "family": 12,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 5556.4896,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 0,
+          "lowHash": 15348194532329691083,
+          "lowTriangles": 1058,
+          "misses": 0,
+          "sampledSurfaceError": 0.03592637403241324,
+          "samples": 1938929,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 5281.2131,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.06,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 1,
+          "lowHash": 5806793454232741432,
+          "lowTriangles": 672,
+          "misses": 0,
+          "sampledSurfaceError": 0.056193880825000896,
+          "samples": 1803484,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4834.5597,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.08,
+          "highHash": 12614439437733294282,
+          "highTriangles": 12288,
+          "lod": 2,
+          "lowHash": 9049429820146610649,
+          "lowTriangles": 588,
+          "misses": 0,
+          "sampledSurfaceError": 0.06622289326757985,
+          "samples": 2127310,
+          "status": "BAKED"
+        }
+      ]
+    }
+  ],
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

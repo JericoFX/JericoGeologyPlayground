@@ -1,0 +1,209 @@
+{
+  "scope": "same-camera 1280x960 Vulkan base-only versus four-level specialist map previews",
+  "cases": [
+    {
+      "family": 5,
+      "lod": 2,
+      "maps": {
+        "ao": {
+          "baseSha256": "e6d484561fcd45422466d3a65ef5cc38e2364758bacb0cdc171be5c7a0988715",
+          "mipSha256": "2e7d03514754af079fdbe3208ae181b69329e267d1eba1e792d826212b5347f0",
+          "changedPixels": 26347,
+          "meanRgbAbsoluteDifference": 0.12335530598958333,
+          "sourceRange": 248
+        },
+        "contact": {
+          "baseSha256": "639272541fb4113eb55eaeec83caa24131b9e5a719b1cff109cd637a4d38e5a7",
+          "mipSha256": "581c5b9aa974a42aa967e4c48466273c969c4ca499b784250e2b7c349593a614",
+          "changedPixels": 24282,
+          "meanRgbAbsoluteDifference": 0.1029541015625,
+          "sourceRange": 242
+        },
+        "cavity": {
+          "baseSha256": "edfe3cae25a77e1c60c24fe66f71a82e9b5a5a8d83267078c52ba625bd56adb9",
+          "mipSha256": "d107430a0a9149d3d01ad9459c91f4987965f1689c8e01b106eb1057fd80fc50",
+          "changedPixels": 27388,
+          "meanRgbAbsoluteDifference": 1.0062898763020833,
+          "sourceRange": 255
+        },
+        "convex-edge": {
+          "baseSha256": "b2a88236706c44f6f9be6d1acf18dacec9c09f3a1015b805f2599e86066c6429",
+          "mipSha256": "a92809c1dc6802f8e4fe5251444e1c70cc3900c3d13d746db17e8bf71e32b06c",
+          "changedPixels": 25030,
+          "meanRgbAbsoluteDifference": 0.5052994791666666,
+          "sourceRange": 255
+        }
+      }
+    },
+    {
+      "family": 8,
+      "lod": 2,
+      "maps": {
+        "ao": {
+          "baseSha256": "f2ec83b847668d2c9f69497cde60a3e8c961c0c54d63ff5361229a43e48062f2",
+          "mipSha256": "e14f9ff3c3aec0ecabd1e550b999c3ad515244dffa37055b4522d5504e2f4742",
+          "changedPixels": 20241,
+          "meanRgbAbsoluteDifference": 0.021883138020833335,
+          "sourceRange": 139
+        },
+        "contact": {
+          "baseSha256": "562cf6de741474aaf18322cfb3f83db3523d16e950d732233b774c27cc464275",
+          "mipSha256": "87827dcd3e09f75f3dcceb77c7e88112e1bc0623ee2307385fcce28f33261755",
+          "changedPixels": 7248,
+          "meanRgbAbsoluteDifference": 0.007474772135416667,
+          "sourceRange": 60
+        },
+        "cavity": {
+          "baseSha256": "3d28782208d4b4a15208cfe2df8785b0378ca177d8a7b574040682f0e82a7e8f",
+          "mipSha256": "45ed219822cd4383e6f1cde58e52d9e866587c07997de1434a68f13b7a3278d0",
+          "changedPixels": 11351,
+          "meanRgbAbsoluteDifference": 0.054032389322916666,
+          "sourceRange": 255
+        },
+        "convex-edge": {
+          "baseSha256": "7a9bf12048487331356a3bdb19ff5b5d1cd2d4b7805ca9381083fe3b316d8b69",
+          "mipSha256": "3a6ed6f86539e9abc608be84c7acbd93617202994961e27ec48ef1ce184ef5ac",
+          "changedPixels": 24724,
+          "meanRgbAbsoluteDifference": 0.15677001953125,
+          "sourceRange": 255
+        }
+      }
+    },
+    {
+      "family": 9,
+      "lod": 1,
+      "maps": {
+        "ao": {
+          "baseSha256": "f6af92031ff1b5ac79d95e4cdc0075c1d70ecfaa990aa1b64f043825be9afa58",
+          "mipSha256": "758661f48d8723a105685a8690e68c1702e0a0d8247bf29c2132ac8671602974",
+          "changedPixels": 30836,
+          "meanRgbAbsoluteDifference": 0.04021728515625,
+          "sourceRange": 237
+        },
+        "contact": {
+          "baseSha256": "d2b888cc8f2c146c4de7f5085e2f3971c78b0bfa1d2735ff0edd93d19fcab221",
+          "mipSha256": "0b35b9108b1e0e9913d1c8b3ccae13c0e6cc2d884e5a75d7e8faa85fc1d0e561",
+          "changedPixels": 12631,
+          "meanRgbAbsoluteDifference": 0.015030924479166667,
+          "sourceRange": 231
+        },
+        "cavity": {
+          "baseSha256": "64fd25c1f5b1285d6f1752bf60597d36d486fd811ba4d4eb373ecb21449e21c0",
+          "mipSha256": "dd76624efbc613140e25b50bcd76707c1efc741d8d04c48e7deddc9a7932d145",
+          "changedPixels": 15492,
+          "meanRgbAbsoluteDifference": 0.06629638671875,
+          "sourceRange": 255
+        },
+        "convex-edge": {
+          "baseSha256": "6a6809bc7ac608f48df09aa9aaa3edd015bd67d46747bcfa762f09c12e516247",
+          "mipSha256": "8f1c21bdc547d8ef5e7fed8d6b4e067e857b7bfa6c405409eb4d73c37e42e8ec",
+          "changedPixels": 2153,
+          "meanRgbAbsoluteDifference": 0.01457275390625,
+          "sourceRange": 255
+        }
+      }
+    },
+    {
+      "family": 10,
+      "lod": 2,
+      "maps": {
+        "ao": {
+          "baseSha256": "2e4afa8e9a4b046fd416371b616b056b0bce3546f9961552198cbf6f32af28ac",
+          "mipSha256": "2e4afa8e9a4b046fd416371b616b056b0bce3546f9961552198cbf6f32af28ac",
+          "changedPixels": 0,
+          "meanRgbAbsoluteDifference": 0.0,
+          "sourceRange": 0
+        },
+        "contact": {
+          "baseSha256": "2e4afa8e9a4b046fd416371b616b056b0bce3546f9961552198cbf6f32af28ac",
+          "mipSha256": "2e4afa8e9a4b046fd416371b616b056b0bce3546f9961552198cbf6f32af28ac",
+          "changedPixels": 0,
+          "meanRgbAbsoluteDifference": 0.0,
+          "sourceRange": 0
+        },
+        "cavity": {
+          "baseSha256": "f56827a6f34c2888c6341057456a4c5bfccf5c977f6102564fa58b7fd06eda43",
+          "mipSha256": "2b4a9116c792adb44dda93510b78b4c460f6dbc8511d21562be8683a6566e972",
+          "changedPixels": 1187,
+          "meanRgbAbsoluteDifference": 0.00868408203125,
+          "sourceRange": 255
+        },
+        "convex-edge": {
+          "baseSha256": "c7b8e928b9fae8b533d67b1fefef97778236b8e71abf8abe780a3be3d6a6202a",
+          "mipSha256": "d1c59928014178f22c956597d2142a8d3725070c84512497463b7e3e3fe39309",
+          "changedPixels": 2235,
+          "meanRgbAbsoluteDifference": 0.03429524739583333,
+          "sourceRange": 255
+        }
+      }
+    },
+    {
+      "family": 11,
+      "lod": 2,
+      "maps": {
+        "ao": {
+          "baseSha256": "e4f38d93fd7f4449f663a0e8b81fd2cf7f77da92675ef1fa2e33ce254dcd085b",
+          "mipSha256": "57307c4684e53764368a2c8270dc316b1836200df4286f6dfae81956ee2f63cb",
+          "changedPixels": 18509,
+          "meanRgbAbsoluteDifference": 0.06916178385416667,
+          "sourceRange": 209
+        },
+        "contact": {
+          "baseSha256": "36697bac72106c2b5bbfda9b3811870cd7b4faed6070591847d22b437d71737c",
+          "mipSha256": "0114903222dc682fedea4a555e168e5a640654daab09d3af1be573997458bf63",
+          "changedPixels": 16314,
+          "meanRgbAbsoluteDifference": 0.056958821614583335,
+          "sourceRange": 188
+        },
+        "cavity": {
+          "baseSha256": "138883428431460526bd2add37493c5f777192dca23c9c59d8d11bb640ee6e1b",
+          "mipSha256": "38d0f43eb4b088fae504745de6b9a0051e789ea975618dd9555d6f626e2d3ed6",
+          "changedPixels": 20565,
+          "meanRgbAbsoluteDifference": 0.6306201171875,
+          "sourceRange": 255
+        },
+        "convex-edge": {
+          "baseSha256": "eb791e0702a996b0f4c93c1e6e0d02a8de84133d218b1c0e8a95e36f8429730a",
+          "mipSha256": "91b0c0d7cb2d52da6b8e7db6d9fd397c3e29ed25c802ef20f3a41e3ebfb9ce68",
+          "changedPixels": 18000,
+          "meanRgbAbsoluteDifference": 0.2705940755208333,
+          "sourceRange": 255
+        }
+      }
+    },
+    {
+      "family": 12,
+      "lod": 2,
+      "maps": {
+        "ao": {
+          "baseSha256": "e68b0d46a9557ed139909e6068c087db273c797ab29ee5c95e04f73ee47fde11",
+          "mipSha256": "4772ffac77a293897b4f3887ae5419801fd2f8d09b43f562423cb37f239396fe",
+          "changedPixels": 2534,
+          "meanRgbAbsoluteDifference": 0.00216064453125,
+          "sourceRange": 20
+        },
+        "contact": {
+          "baseSha256": "7627cb7804f450c8d8393cb4fc75e0bfee1af2ebcac2588ed64220d2f9324f9f",
+          "mipSha256": "8d9a7764ffda3e57b5cc38d83add18e0e672156ba64344e9318d44eb96524911",
+          "changedPixels": 563,
+          "meanRgbAbsoluteDifference": 0.0004736328125,
+          "sourceRange": 10
+        },
+        "cavity": {
+          "baseSha256": "4a19a8012c201e4d2b8cd67ecca0b815b87b19b5c001ca1681568280ba2a9743",
+          "mipSha256": "a3eb783b1e5c28297182f83262800dd1233b425782f9a2f3eefaea7c622e97e4",
+          "changedPixels": 1252,
+          "meanRgbAbsoluteDifference": 0.0020987955729166665,
+          "sourceRange": 128
+        },
+        "convex-edge": {
+          "baseSha256": "2d4528064f5618922d63ab47d313d79f92f72e1e1efd902fb366c9ab47e367cb",
+          "mipSha256": "2d4528064f5618922d63ab47d313d79f92f72e1e1efd902fb366c9ab47e367cb",
+          "changedPixels": 0,
+          "meanRgbAbsoluteDifference": 0.0,
+          "sourceRange": 1
+        }
+      }
+    }
+  ]
+}

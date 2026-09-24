@@ -1,6 +1,8 @@
 #include "Model.hpp"
+#include "MeshReduction.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -85,6 +87,23 @@ int main()
             std::cout << "cliff limit " << limit << ": " << wall.mesh.indices.size() / 3 << " -> "
                       << candidate.mesh.indices.size() / 3 << ", sampled error "
                       << candidate.sampledReductionError << '\n';
+        }
+        auto layered = preset(11);
+        for (auto &layer : layered.layers) layer.seed = 123;
+        auto layeredHigh = evaluate(layered, layered.finalResolution);
+        std::size_t previousLayeredTriangles = layeredHigh.mesh.indices.size() / 3;
+        for (const auto &[resolution, budget] : std::array<std::pair<int, double>, 3>{
+                 {{20, 0.02}, {16, 0.03}, {14, 0.04}}})
+        {
+            auto regenerated = evaluate(layered, resolution);
+            const auto triangles = regenerated.mesh.indices.size() / 3;
+            require(triangles < previousLayeredTriangles,
+                    "regenerated layered LODs must strictly reduce triangle count");
+            require(sampledBidirectionalMeshError(layeredHigh.mesh, regenerated.mesh) <= budget,
+                    "regenerated layered LOD stays inside its original surface-error budget");
+            require(PA::validateClosedMesh(regenerated.mesh).hasValue(),
+                    "regenerated layered LOD remains closed");
+            previousLayeredTriangles = triangles;
         }
         return 0;
     }

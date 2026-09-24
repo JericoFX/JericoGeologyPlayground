@@ -112,6 +112,11 @@ int main()
         unsettledRecipe.layers.back().enabled = false;
         auto productionRaw = evaluate(unsettledRecipe, production.finalResolution);
         auto productionSettled = evaluate(production, production.finalResolution);
+        auto replayedProduction = deserialize(serialize(production));
+        require(replayedProduction.layers[0].beddingTilt == production.layers[0].beddingTilt &&
+                    meshHash(evaluate(replayedProduction, production.finalResolution).mesh) ==
+                        meshHash(productionSettled.mesh),
+                "inclined bedding survives recipe serialization and exact regeneration");
         using ContactVertex = std::tuple<long long, long long, long long>;
         using ContactTriangle = std::array<ContactVertex, 3>;
         auto contactTriangles = [&](const MeshResult &stack, int stratum, unsigned char face)
@@ -136,6 +141,61 @@ int main()
             }
             return triangles;
         };
+        auto inclinedBedding = production;
+        inclinedBedding.layers[0].jitter = 0;
+        inclinedBedding.layers[0].perimeterAmplitude = 0;
+        inclinedBedding.layers[0].shapeOuterCaps = false;
+        auto inclinedStack = evaluate(inclinedBedding, inclinedBedding.finalResolution);
+        double lowestContact = 1e30, highestContact = -1e30;
+        for (std::size_t t = 0; t < inclinedStack.layerContactFaces.size(); ++t)
+            if (inclinedStack.layerContactFaces[t] == 1 &&
+                inclinedStack.layerIndices[inclinedStack.mesh.indices[3 * t]] == 0)
+                for (int corner = 0; corner < 3; ++corner)
+                {
+                    const auto y = inclinedStack.mesh.positions[inclinedStack.mesh.indices[3 * t + corner]].y;
+                    lowestContact = std::min(lowestContact, y);
+                    highestContact = std::max(highestContact, y);
+                }
+        require(highestContact - lowestContact > 0.15,
+                "layered preset needs a visible oblique shared horizon without thickness noise");
+        for (int k = 0; k + 1 < inclinedBedding.layers[0].count; ++k)
+            require(contactTriangles(inclinedStack, k, 1) ==
+                        contactTriangles(inclinedStack, k + 1, 2),
+                    "inclined bedding must retain complete contact without floating layers");
+        Recipe wideBedding;
+        wideBedding.base = Base::Cylinder;
+        auto widen = defaultLayer(Kind::Transform);
+        widen.scale = {5, 1, 5};
+        auto widenAgain = defaultLayer(Kind::Transform);
+        widenAgain.scale = {4, 1, 4};
+        auto wideStrata = defaultLayer(Kind::Layers);
+        wideStrata.coherentLayers = true;
+        wideStrata.count = 2;
+        wideStrata.thickness = 0.3f;
+        wideStrata.spacing = wideStrata.jitter = wideStrata.lateral = wideStrata.layerScale = 0;
+        wideStrata.beddingTilt = 0.25f;
+        wideBedding.layers = {widen, widenAgain, wideStrata};
+        auto wideSource = evaluate(wideBedding, 12, 1);
+        auto wideStack = evaluate(wideBedding, 12);
+        int matchedPairs = 0;
+        for (std::size_t i = 0; i < wideSource.mesh.positions.size(); ++i)
+        {
+            const auto upper = wideSource.mesh.positions[i];
+            if (std::abs(upper.y - 1) > 1e-9)
+                continue;
+            for (std::size_t j = 0; j < wideSource.mesh.positions.size(); ++j)
+            {
+                const auto lower = wideSource.mesh.positions[j];
+                if (std::abs(lower.y + 1) > 1e-9 ||
+                    std::hypot(upper.x - lower.x, upper.z - lower.z) > 1e-9)
+                    continue;
+                require(wideStack.mesh.positions[i].y - wideStack.mesh.positions[j].y > 0.02,
+                        "bedding tilt must not invert a wide stratum side wall");
+                ++matchedPairs;
+                break;
+            }
+        }
+        require(matchedPairs > 8, "wide bedding regression must inspect source side walls");
         auto drifting = production;
         drifting.layers[0].lateral = 0.08f;
         drifting.layers.back().enabled = false;

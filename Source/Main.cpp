@@ -711,6 +711,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
             try
             {
                 auto lowResolution = family == 5 ? (lod == 0 ? 16 : lod == 1 ? 12 : 10) :
+                                     family == 11 ? (lod == 0 ? 20 : lod == 1 ? 16 : 14) :
                                      family == 12 && lod == 2 ? 7 : 0;
                 auto error = family == 10 && lod == 2 ? 0.008f :
                              family == 9 && lod == 1 ? 0.05f :

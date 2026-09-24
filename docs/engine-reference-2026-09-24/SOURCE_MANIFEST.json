@@ -1026,6 +1026,12 @@
     "bytes": 54204
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\M10_5_GENERATOR_CONTROLS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\M10_5_GENERATOR_CONTROLS.md",
+    "sha256": "8A7E51C8AC36E82EC7745A9A75CC93C73E63E353A3A9BF2026C9AC9143B74A5F",
+    "bytes": 8212
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\MODELING_TO_LOD_PWAS_EPLS.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\MODELING_TO_LOD_PWAS_EPLS.md",
     "sha256": "DA06FC9885240A3900BDF56B5FF310822A6428291225DBF43302D76F29EA6502",
@@ -1054,6 +1060,12 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_ADDON_SUITE_M10_5.md",
     "sha256": "9CB4A98B616AC9283D73983A2D34E4E793872CE97C32354AD4208DE051D19958",
     "bytes": 21069
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_PREVIEW_EXECUTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_PREVIEW_EXECUTION.md",
+    "sha256": "1CCC9BA0B28B66EDF7A1A02CF6EC28C6D29E15879CA1DE6BBFB4F7E597F68624",
+    "bytes": 19269
   },
   {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_REFERENCE_TECHNIQUE_AUDIT.md",
