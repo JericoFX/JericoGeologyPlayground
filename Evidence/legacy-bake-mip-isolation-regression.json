@@ -1,0 +1,41 @@
+{
+  "scope": "fixed-UV angle to base normal after naive 2x2 box mips; not GPU/runtime LOD or Beauty",
+  "scriptSha256": "50f58b89c94f0b7210b036f6ed408a2936888d5f2a460ccb50e0d4f5709de460",
+  "automaticUvSamplesPerTriangle": null,
+  "cases": [
+    {
+      "family": "normal-bake-5",
+      "lowTriangles": 18432,
+      "sampledUvs": 73728,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.5814704453843311,
+          "p95AngleDegrees": 9.473660981999757,
+          "p99AngleDegrees": 18.462194644745924,
+          "maximumAngleDegrees": 47.1917648860882,
+          "fractionOver5Degrees": 0.1139187282986111,
+          "fractionOver10Degrees": 0.046223958333333336
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 2.2414994291930856,
+          "p95AngleDegrees": 16.87281493413275,
+          "p99AngleDegrees": 30.50736146522436,
+          "maximumAngleDegrees": 143.6542265421455,
+          "fractionOver5Degrees": 0.2706570095486111,
+          "fractionOver10Degrees": 0.11509874131944445
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 4.998887039242966,
+          "p95AngleDegrees": 25.109867720962676,
+          "p99AngleDegrees": 43.77514829641337,
+          "maximumAngleDegrees": 152.1494734225089,
+          "fractionOver5Degrees": 0.4999050564236111,
+          "fractionOver10Degrees": 0.24894205729166666
+        }
+      ]
+    }
+  ]
+}

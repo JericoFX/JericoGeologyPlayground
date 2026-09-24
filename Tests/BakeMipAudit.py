@@ -104,12 +104,44 @@ def audit_auto_uv(folder: Path) -> dict:
     face = np.asarray(faces, dtype=np.int64)
     if face.shape != (int(bake["lowTriangles"]), 3) or not np.isfinite(uv).all():
         raise ValueError(f"invalid automatic UV mesh: {folder}")
+    island = np.asarray(json.loads((folder / "uv-chart-islands.json").read_text(encoding="utf-8")),
+                        dtype=np.int64)
+    if (not len(face) or island.shape != (len(face),) or np.any(island < 0) or
+            np.max(island) >= int(bake["automaticUvIslandCount"])):
+        raise ValueError(f"invalid automatic UV island identities: {folder}")
     weights = np.asarray([[1 / 3, 1 / 3, 1 / 3], [0.75, 0.125, 0.125],
                           [0.125, 0.75, 0.125], [0.125, 0.125, 0.75]])
     points = np.einsum("sc,fck->fsk", weights, uv[face]).reshape(-1, 2)
+    island_corners = np.repeat(island, 3)
+    corners = uv[face].reshape(-1, 2)
+    island_count = int(bake["automaticUvIslandCount"])
+    island_min = np.full((island_count, 2), np.inf)
+    island_max = np.full((island_count, 2), -np.inf)
+    np.minimum.at(island_min, island_corners, corners)
+    np.maximum.at(island_max, island_corners, corners)
+    if not np.isfinite(island_min).all() or not np.isfinite(island_max).all():
+        raise ValueError(f"automatic UV island without triangles: {folder}")
+    sample_island = np.repeat(island, len(weights))
+    chart_boundary_distance = np.minimum(points - island_min[sample_island],
+                                         island_max[sample_island] - points).min(axis=1) * resolution
+    # A mip-3 bilinear footprint spans up to 16 base pixels. Samples farther from
+    # the packed island rectangle cannot incorporate a different island's texels.
+    interior = chart_boundary_distance >= 16
     base = np.asarray(Image.open(folder / "normal.png").convert("RGBA"), dtype=np.float32)
     if base.shape != (resolution, resolution, 4):
         raise ValueError(f"invalid automatic UV normal dimensions: {folder}")
+    owner = np.full((resolution, resolution), -1, dtype=np.int32)
+    for chart in range(island_count):
+        x0 = max(0, math.floor(island_min[chart, 0] * resolution) - int(bake["padding"]))
+        x1 = min(resolution, math.ceil(island_max[chart, 0] * resolution) + int(bake["padding"]))
+        y0 = max(0, math.floor((1 - island_max[chart, 1]) * resolution) - int(bake["padding"]))
+        y1 = min(resolution, math.ceil((1 - island_min[chart, 1]) * resolution) + int(bake["padding"]))
+        if np.any(owner[y0:y1, x0:x1] >= 0):
+            raise ValueError(f"automatic UV chart padding rectangles overlap: {folder}")
+        owner[y0:y1, x0:x1] = chart
+    owner[base[:, :, 3] == 0] = -1
+    if np.any((base[:, :, 3] > 0) & (owner < 0)):
+        raise ValueError(f"automatic UV painted texel has no chart owner: {folder}")
 
     def coordinates(size):
         return points[:, 0] * size - 0.5, (1 - points[:, 1]) * size - 0.5
@@ -125,21 +157,51 @@ def audit_auto_uv(folder: Path) -> dict:
     results = []
     for level in range(1, mip_count):
         size = resolution // (2**level)
+        blocks = owner.reshape(size, 2, size, 2).transpose(0, 2, 1, 3).reshape(size, size, 4)
+        lowest = np.where(blocks >= 0, blocks, island_count).min(axis=2)
+        highest = blocks.max(axis=2)
+        mixed = np.any(blocks == -2, axis=2) | ((highest >= 0) & (lowest != highest))
+        owner = np.where(mixed, -2, np.where(highest < 0, -1, highest))
+        mixed_texels = int(np.count_nonzero(owner == -2))
         mip = np.asarray(Image.open(folder / f"normal-mip-{level}.png").convert("RGBA"),
                          dtype=np.float32)
         if mip.shape != (size, size, 4):
             raise ValueError(f"invalid automatic UV mip dimensions: {folder} level {level}")
+        if np.any((mip[:, :, 3] > 0) != (owner != -1)):
+            raise ValueError(f"automatic UV mip alpha disagrees with chart ownership: {folder} level {level}")
         x, y = coordinates(size)
         filtered = sample(mip, x, y)
         angle = np.degrees(np.arccos(np.clip((original * filtered).sum(axis=1), -1, 1)))
+        x0 = np.clip(np.floor(x).astype(np.int32), 0, size - 1)
+        y0 = np.clip(np.floor(y).astype(np.int32), 0, size - 1)
+        x1 = np.minimum(x0 + 1, size - 1)
+        y1 = np.minimum(y0 + 1, size - 1)
+        footprint = np.stack((owner[y0, x0], owner[y0, x1],
+                              owner[y1, x0], owner[y1, x1]), axis=1)
+        cross_island = np.any((footprint != -1) & (footprint != sample_island[:, None]), axis=1)
+        fx = np.clip(x, 0, size - 1) - x0
+        fy = np.clip(y, 0, size - 1) - y0
+        weights = np.stack(((1 - fx) * (1 - fy), fx * (1 - fy),
+                            (1 - fx) * fy, fx * fy), axis=1)
+        empty_weight = np.sum(weights * (footprint == -1), axis=1)
         results.append({
             "mip": level,
             "medianAngleDegrees": float(np.median(angle)),
             "p95AngleDegrees": float(np.percentile(angle, 95)),
+            "islandInteriorP95AngleDegrees": (float(np.percentile(angle[interior], 95))
+                                                  if np.any(interior) else None),
+            "islandMarginP95AngleDegrees": (float(np.percentile(angle[~interior], 95))
+                                                if np.any(~interior) else None),
             "p99AngleDegrees": float(np.percentile(angle, 99)),
             "maximumAngleDegrees": float(angle.max()),
             "fractionOver10Degrees": float((angle > 10).mean()),
             "unpaintedInteriorSamples": unpainted(mip, x, y),
+            "mixedIslandTexels": mixed_texels,
+            "crossIslandBilinearSamples": int(np.count_nonzero(cross_island)),
+            "emptyGutterBilinearSamples": int(np.count_nonzero(empty_weight > 1e-8)),
+            "meanEmptyGutterWeight": float(np.mean(empty_weight)),
+            "p95EmptyGutterWeight": float(np.percentile(empty_weight, 95)),
+            "maximumEmptyGutterWeight": float(np.max(empty_weight)),
         })
     specialist = {}
     scalar_maps = ("ambient-occlusion", "contact-occlusion", "signed-curvature",
@@ -167,10 +229,18 @@ def audit_auto_uv(folder: Path) -> dict:
             else:
                 difference = np.abs(base_values - values) / 255
                 levels.append({"mip": level, "meanAbsoluteDifference": float(np.mean(difference)),
-                               "p95AbsoluteDifference": float(np.percentile(difference, 95))})
+                               "p95AbsoluteDifference": float(np.percentile(difference, 95)),
+                               "islandInteriorP95Difference":
+                               (float(np.percentile(difference[interior], 95))
+                                if np.any(interior) else None),
+                               "islandMarginP95Difference":
+                               (float(np.percentile(difference[~interior], 95))
+                                if np.any(~interior) else None)})
         specialist[name] = levels
     return {"family": folder.parent.name, "lod": folder.name,
             "lowTriangles": len(face), "sampledUvs": len(points),
+            "islandInteriorSamples": int(np.count_nonzero(interior)),
+            "islandMarginSamples": int(np.count_nonzero(~interior)),
             "baseUnpaintedInteriorSamples": base_holes, "mips": results,
             "specialistMips": specialist}
 
@@ -185,8 +255,9 @@ if __name__ == "__main__":
     if not cases:
         raise SystemExit(f"no bake folders in {root}")
     report = {
-        "scope": ("fixed-UV normal angle, scalar-map difference, and region mismatch "
-                  "from exported automatic-UV mips; not moving-runtime or perceptual Beauty"
+        "scope": ("fixed-UV normal angle, scalar-map difference, region mismatch, and "
+                  "inter-island footprint audit from exported automatic-UV mips; "
+                  "not moving-runtime or perceptual Beauty"
                   if auto_folders else
                   "fixed-UV angle to base normal after naive 2x2 box mips; "
                   "not GPU/runtime LOD or Beauty"),
@@ -195,4 +266,8 @@ if __name__ == "__main__":
         "cases": cases,
     }
     Path(sys.argv[2]).write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    if auto_folders and any(result["mixedIslandTexels"] or result["crossIslandBilinearSamples"] or
+                            result["emptyGutterBilinearSamples"]
+                            for case in cases for result in case["mips"]):
+        raise SystemExit("automatic UV mips can sample another island or empty gutter")
     print(json.dumps(cases, indent=2))
