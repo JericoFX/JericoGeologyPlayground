@@ -297,6 +297,7 @@ Json layerJson(const Layer &l)
                 {"layerScale", l.layerScale},
                 {"perimeterAmplitude", l.perimeterAmplitude},
                 {"beddingTilt", l.beddingTilt},
+                {"macroAxisAsymmetry", l.macroAxisAsymmetry},
                 {"shapeOuterCaps", l.shapeOuterCaps},
                 {"jitter", l.jitter},
                 {"lateral", l.lateral},
@@ -622,6 +623,7 @@ Recipe preset(int index)
         strata.layerScale = 0;
         strata.perimeterAmplitude = 0.16f;
         strata.beddingTilt = 0.10f;
+        strata.macroAxisAsymmetry = 0.42f;
         strata.shapeOuterCaps = true;
         strata.frequency = 3.0f;
         r.layers = {strata, defaultLayer(Kind::LayerSettle)};
@@ -706,9 +708,12 @@ void validate(const Recipe &r)
             require(l.thickness >= l.minimumThickness && l.thickness <= l.maximumThickness);
         require(l.perimeterAmplitude >= 0 && l.perimeterAmplitude <= 0.3f);
         require(l.beddingTilt >= 0 && l.beddingTilt <= 0.25f);
+        require(l.macroAxisAsymmetry >= 0 && l.macroAxisAsymmetry <= 0.45f);
         if (l.perimeterAmplitude > 0)
             require(l.kind == Kind::Layers && l.coherentLayers);
         if (l.beddingTilt > 0)
+            require(l.kind == Kind::Layers && l.coherentLayers);
+        if (l.macroAxisAsymmetry > 0)
             require(l.kind == Kind::Layers && l.coherentLayers);
         if (l.shapeOuterCaps)
             require(l.kind == Kind::Layers && l.coherentLayers && l.perimeterAmplitude > 0);
@@ -1432,6 +1437,7 @@ Recipe deserialize(const std::string &text)
             READ_OPTIONAL(coherentLayers);
             READ_OPTIONAL(thicknessFrequency);
             READ_OPTIONAL(beddingTilt);
+            READ_OPTIONAL(macroAxisAsymmetry);
             READ_OPTIONAL(thicknessCorrelation);
             READ_OPTIONAL(minimumThickness);
             READ_OPTIONAL(maximumThickness);

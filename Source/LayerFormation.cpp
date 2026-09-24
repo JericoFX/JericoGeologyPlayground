@@ -211,6 +211,27 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
         horizonAngles[boundary] = 0.5 * (angles[lower] + angles[upper]);
         horizonScales[boundary] = 0.5 * (scales[lower] + scales[upper]);
     }
+    std::array<std::array<double, 3>, 13> macroAxes{};
+    for (int boundary = 0; boundary <= layer.count; ++boundary)
+    {
+        if (layer.macroAxisAsymmetry == 0)
+        {
+            macroAxes[boundary] = {1, 0, 1};
+            continue;
+        }
+        const auto phase = 2 * 3.141592653589793 * random(layer.seed + 0x5e71acU) +
+                           0.25 * (2 * random(layer.seed + 0xa571acU +
+                                              std::uint32_t(boundary) * 1907U) - 1);
+        const auto c = std::cos(phase), s = std::sin(phase);
+        const auto stretch = 1 + 0.12 * layer.macroAxisAsymmetry *
+                                random(layer.seed + 0x62ad18U + std::uint32_t(boundary) * 1907U);
+        const auto squash = 1 - layer.macroAxisAsymmetry *
+                                (0.8 + 0.2 * random(layer.seed + 0x71d88aU +
+                                                    std::uint32_t(boundary) * 1907U));
+        macroAxes[boundary] = {stretch * c * c + squash * s * s,
+                               (stretch - squash) * c * s,
+                               stretch * s * s + squash * c * c};
+    }
     auto heights = [&](Vec3d p)
     {
         auto local = D::subtract(p, sourceCenter);
@@ -237,6 +258,9 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
         auto planar = D::subtract(D::subtract(p, D::multiply(d, h)), planarCenter);
         auto normalizedHeight = std::clamp((h - lo) / (hi - lo), 0.0, 1.0);
         auto radialLength = std::sqrt(D::lengthSquared(planar));
+        const auto normalizedRadius = maximumRadius > 1e-12
+                                          ? std::clamp(radialLength / maximumRadius, 0.0, 1.0)
+                                          : 0.0;
         std::array<double, 13> boundaryOffset{};
         if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
         {
@@ -274,9 +298,6 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                           boundaryOffset[k + 1] * normalizedHeight;
             // Keep the angular perimeter deformation at the rim; a full-strength angular
             // displacement around the center can invert the source cap triangulation.
-            const auto normalizedRadius = maximumRadius > 1e-12
-                                              ? std::clamp(radialLength / maximumRadius, 0.0, 1.0)
-                                              : 0.0;
             offset *= normalizedRadius * normalizedRadius;
             double relief = 0;
             if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
@@ -291,11 +312,21 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                                                          layer.octaves, layer.lacunarity,
                                                          layer.roughness);
             }
-            auto side = D::multiply(planar, 1 + offset + relief);
             const auto blend = [&](double lower, double upper)
             {
                 return lower * (1 - normalizedHeight) + upper * normalizedHeight;
             };
+            auto macroPlanar = planar;
+            if (layer.macroAxisAsymmetry > 0)
+            {
+                const auto x = D::dot(planar, u), y = D::dot(planar, v);
+                const auto xx = blend(macroAxes[k][0], macroAxes[k + 1][0]);
+                const auto xy = blend(macroAxes[k][1], macroAxes[k + 1][1]);
+                const auto yy = blend(macroAxes[k][2], macroAxes[k + 1][2]);
+                macroPlanar = D::add(D::multiply(u, xx * x + xy * y),
+                                     D::multiply(v, xy * x + yy * y));
+            }
+            auto side = D::multiply(macroPlanar, 1 + offset + relief);
             auto angle = blend(horizonAngles[k], horizonAngles[k + 1]);
             auto scale = blend(horizonScales[k], horizonScales[k + 1]);
             auto shift = D::add(D::multiply(horizonOffsets[k], 1 - normalizedHeight),

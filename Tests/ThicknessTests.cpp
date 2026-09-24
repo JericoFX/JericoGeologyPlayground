@@ -97,6 +97,51 @@ int main()
         require(meshHash(settled.mesh) == meshHash(evaluate(deserialize(serialize(unsupported)), 8).mesh),
                 "settled rock repeats after recipe serialization");
         auto production = preset(11);
+        auto rejectsInvalidMacro = [](const Recipe &candidate)
+        {
+            try
+            {
+                validate(candidate);
+            }
+            catch (const std::exception &)
+            {
+                return true;
+            }
+            return false;
+        };
+        auto excessiveMacro = production;
+        excessiveMacro.layers[0].macroAxisAsymmetry = 0.5f;
+        require(rejectsInvalidMacro(excessiveMacro), "macro axis asymmetry must respect its deformation limit");
+        Recipe unsupportedMacro;
+        auto ordinaryWarp = defaultLayer(Kind::Warp);
+        ordinaryWarp.macroAxisAsymmetry = 0.1f;
+        unsupportedMacro.layers.push_back(ordinaryWarp);
+        require(rejectsInvalidMacro(unsupportedMacro), "macro axis asymmetry requires coherent layers");
+        auto macroOnly = production;
+        macroOnly.layers[0].jitter = 0;
+        macroOnly.layers[0].perimeterAmplitude = 0;
+        macroOnly.layers[0].shapeOuterCaps = false;
+        macroOnly.layers[0].beddingTilt = 0;
+        macroOnly.layers.back().enabled = false;
+        Recipe macroSourceRecipe;
+        macroSourceRecipe.base = production.base;
+        auto macroSource = evaluate(macroSourceRecipe, production.finalResolution);
+        auto macroStack = evaluate(macroOnly, production.finalResolution);
+        double leastMacroRadius = 1e30, greatestMacroRadius = 0;
+        int macroRimVertices = 0;
+        for (std::size_t i = 0; i < macroSource.mesh.positions.size(); ++i)
+        {
+            const auto sourcePoint = macroSource.mesh.positions[i];
+            if (sourcePoint.y < 0.99 || std::hypot(sourcePoint.x, sourcePoint.z) < 0.99)
+                continue;
+            const auto mapped = macroStack.mesh.positions[i];
+            const auto radius = std::hypot(mapped.x, mapped.z);
+            leastMacroRadius = std::min(leastMacroRadius, radius);
+            greatestMacroRadius = std::max(greatestMacroRadius, radius);
+            ++macroRimVertices;
+        }
+        require(macroRimVertices > 24 && greatestMacroRadius - leastMacroRadius > 0.20,
+                "layered macroform must break the cylinder beyond local perimeter noise");
         for (float amplitude : {0.04f, 0.08f, 0.12f, 0.16f, 0.2f, 0.28f})
         {
             auto trial = production;
@@ -114,6 +159,8 @@ int main()
         auto productionSettled = evaluate(production, production.finalResolution);
         auto replayedProduction = deserialize(serialize(production));
         require(replayedProduction.layers[0].beddingTilt == production.layers[0].beddingTilt &&
+                    replayedProduction.layers[0].macroAxisAsymmetry ==
+                        production.layers[0].macroAxisAsymmetry &&
                     meshHash(evaluate(replayedProduction, production.finalResolution).mesh) ==
                         meshHash(productionSettled.mesh),
                 "inclined bedding survives recipe serialization and exact regeneration");
@@ -174,6 +221,7 @@ int main()
         wideStrata.thickness = 0.3f;
         wideStrata.spacing = wideStrata.jitter = wideStrata.lateral = wideStrata.layerScale = 0;
         wideStrata.beddingTilt = 0.25f;
+        wideStrata.macroAxisAsymmetry = 0.42f;
         wideBedding.layers = {widen, widenAgain, wideStrata};
         auto wideSource = evaluate(wideBedding, 12, 1);
         auto wideStack = evaluate(wideBedding, 12);

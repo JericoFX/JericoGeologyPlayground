@@ -79,6 +79,7 @@ struct Layer
     float thickness{0.36f}, spacing{0.06f}, layerScale{0.035f}, jitter{0.15f}, lateral{0.18f};
     float perimeterAmplitude{};
     float beddingTilt{};
+    float macroAxisAsymmetry{};
     bool shapeOuterCaps{false};
     int iterations{3};
     float relaxStrength{0.25f};
