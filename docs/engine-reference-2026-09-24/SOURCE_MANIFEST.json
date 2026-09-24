@@ -600,6 +600,30 @@
     "bytes": 33949
   },
   {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPARSE_SDF_CLIFF_SHOWCASE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPARSE_SDF_CLIFF_SHOWCASE.md",
+    "sha256": "A6770D150D7ED3425D7FA511B551E2453CB8F1AAF3272594597BF8C7F4516C84",
+    "bytes": 5978
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPARSE_SDF_ROCK_FAMILY_SHOWCASE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPARSE_SDF_ROCK_FAMILY_SHOWCASE.md",
+    "sha256": "F03138C6D25730040167F8D0C56B8AEB72ABD09ED2C27E19680A053DD416BA23",
+    "bytes": 7201
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPONZA_SECOND_WALL_ADVANCED_ROCK_STAMPS_SHOWCASE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPONZA_SECOND_WALL_ADVANCED_ROCK_STAMPS_SHOWCASE.md",
+    "sha256": "CFCF67EA08A0AC2FE636018125699FF1CC0236819338D387CB23C3895D83D506",
+    "bytes": 8153
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPONZA_WALL_GEOLOGY_LAYER_VISUAL_SHOWCASE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPONZA_WALL_GEOLOGY_LAYER_VISUAL_SHOWCASE.md",
+    "sha256": "4938E9521D0F441A5538065708E4999B1DF6E375F38739DFA581CA4D812734B3",
+    "bytes": 7320
+  },
+  {
     "source": "F:\\JericoEngine\\docs\\JERICO_ADAPTIVE_REMESH_FEATURE_EDGES_RESEARCH.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\JERICO_ADAPTIVE_REMESH_FEATURE_EDGES_RESEARCH.md",
     "sha256": "ABF4FC0A70B52407E97B8C8845ECFE7C82C31DD34189A9C2BF7F23B36475DBB9",
@@ -936,10 +960,40 @@
     "bytes": 11470
   },
   {
+    "source": "F:\\JericoEngine\\Research\\SmartRemesh3GPL\\README.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Research\\SmartRemesh3GPL\\README.md",
+    "sha256": "8F34AB3FFC42F3830694C10D3B4EB1DA23D890A0A3761B81DAFF0ED6EBB6B007",
+    "bytes": 1033
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\BACKEND_COMPLETENESS_AUDIT.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\BACKEND_COMPLETENESS_AUDIT.md",
     "sha256": "0B6058D4E3AC053ADF356220F3B8AE572B03E011CE9C6D908F3A14B0673E21E2",
     "bytes": 21696
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\evidence\\OWN_NODE_LIBRARY_VISUAL_ACCEPTANCE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\OWN_NODE_LIBRARY_VISUAL_ACCEPTANCE.md",
+    "sha256": "7098A63C74BB898AEDE68ABB18DC88C16268321D2BC66D1EA1B7C820360AC5F6",
+    "bytes": 4854
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\evidence\\PRIVATE_ADDON_CONTROLS_20260908.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\PRIVATE_ADDON_CONTROLS_20260908.md",
+    "sha256": "C61B138FEB63360EC5CD51AC8C67237779D2FBDF800DDAB240035B2F36C99941",
+    "bytes": 7372
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\evidence\\ROCK_V2_STATUS_20260908.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\ROCK_V2_STATUS_20260908.md",
+    "sha256": "79927DC13766C70587897888B8A0455C42C2B765F2D6DF6A756EAF1306D1C1FF",
+    "bytes": 7226
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\evidence\\TRANSFORMER_EDGE_WORKFLOW.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\TRANSFORMER_EDGE_WORKFLOW.md",
+    "sha256": "8D863B3301BB9BB79394A1E0B692D0779CA048CAF2A8F88271A9B7A365BAAE8B",
+    "bytes": 6197
   },
   {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\FAMILY_MIX_IMPLEMENTATION.md",
@@ -996,6 +1050,18 @@
     "bytes": 5159
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_ADDON_SUITE_M10_5.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_ADDON_SUITE_M10_5.md",
+    "sha256": "9CB4A98B616AC9283D73983A2D34E4E793872CE97C32354AD4208DE051D19958",
+    "bytes": 21069
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_REFERENCE_TECHNIQUE_AUDIT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_REFERENCE_TECHNIQUE_AUDIT.md",
+    "sha256": "5B59AF6FBFC4F51B18A96DDF9DC36AA2A125C2109F0069399F05B54BAF469165",
+    "bytes": 67100
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\REFERENCE_AUDIT.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\REFERENCE_AUDIT.md",
     "sha256": "C6420A34F14B8A7F3EC7C7B5DE93FBD5E3B1CBFC9C699E85A4451777AC078D26",
@@ -1018,5 +1084,11 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\USER_VISUAL_TARGETS_20260910.md",
     "sha256": "BFCED23D68B79A71726721417C34B336AD162BA8C86C77A2EB95A4AB9C71773A",
     "bytes": 33380
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\GeologyPreview\\README.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\GeologyPreview\\README.md",
+    "sha256": "93CADDD7F6BA6CC6E137DD564E0E80DFCBE14BA09F9C2D5B7718B6B5BEF3357C",
+    "bytes": 5517
   }
 ]
