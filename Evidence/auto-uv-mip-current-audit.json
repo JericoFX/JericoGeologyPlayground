@@ -1,0 +1,3203 @@
+{
+  "scope": "fixed-UV normal angle, scalar-map difference, and region mismatch from exported automatic-UV mips; not moving-runtime or perceptual Beauty",
+  "scriptSha256": "54b207b8a77884e66fc414b15d76a94313be95c7c97f6b4f38127d79fe985a6f",
+  "automaticUvSamplesPerTriangle": 4,
+  "cases": [
+    {
+      "family": "rock-10",
+      "lod": "lod-0",
+      "lowTriangles": 3856,
+      "sampledUvs": 15424,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.10481258035851057,
+          "p95AngleDegrees": 0.7449154570640205,
+          "p99AngleDegrees": 1.8578651177282546,
+          "maximumAngleDegrees": 11.678756012462303,
+          "fractionOver10Degrees": 6.483402489626556e-05,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.20963646085370213,
+          "p95AngleDegrees": 1.3335925670747295,
+          "p99AngleDegrees": 2.7243297770784,
+          "maximumAngleDegrees": 15.183066241609296,
+          "fractionOver10Degrees": 6.483402489626556e-05,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.32601027588289877,
+          "p95AngleDegrees": 1.7992722554029037,
+          "p99AngleDegrees": 3.3998374491083427,
+          "maximumAngleDegrees": 19.307258818020394,
+          "fractionOver10Degrees": 0.00025933609958506224,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.034618083214822244,
+            "p95AbsoluteDifference": 0.18049094479622732
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0649788166770128,
+            "p95AbsoluteDifference": 0.2885353551354874
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0912722566375431,
+            "p95AbsoluteDifference": 0.34161359802865404
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.013603357887750647,
+            "p95AbsoluteDifference": 0.06784620088965662
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020640950890316177,
+            "p95AbsoluteDifference": 0.09550110313407317
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.024124517332956424,
+            "p95AbsoluteDifference": 0.10418178073209576
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.015588334699133384,
+            "p95AbsoluteDifference": 0.10247781027220335
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.030061000885684572,
+            "p95AbsoluteDifference": 0.21546202235851417
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04407495330217553,
+            "p95AbsoluteDifference": 0.30991504105948836
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004948649035345696,
+            "p95AbsoluteDifference": 0.018656210488138716
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01181294356340562,
+            "p95AbsoluteDifference": 0.06274440132786878
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.024403438551583737,
+            "p95AbsoluteDifference": 0.11601038049093652
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0040160721638130385,
+            "p95AbsoluteDifference": 0.020096329464832585
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.007910612413541412,
+            "p95AbsoluteDifference": 0.03989883506320385
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.012254385320855496,
+            "p95AbsoluteDifference": 0.05796588125653768
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0003272609063156304,
+            "p95AbsoluteDifference": 0.002034166037289607
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0006001019914117028,
+            "p95AbsoluteDifference": 0.0030175664593629944
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0009069424668175853,
+            "p95AbsoluteDifference": 0.003736563824229818
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-10",
+      "lod": "lod-1",
+      "lowTriangles": 3634,
+      "sampledUvs": 14536,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.11377741424121976,
+          "p95AngleDegrees": 0.8045163760356397,
+          "p99AngleDegrees": 2.132348743574437,
+          "maximumAngleDegrees": 14.646416345993718,
+          "fractionOver10Degrees": 0.00034397358282883876,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.22948651091841593,
+          "p95AngleDegrees": 1.4215634662368497,
+          "p99AngleDegrees": 3.377462200702745,
+          "maximumAngleDegrees": 16.486275857882074,
+          "fractionOver10Degrees": 0.001100715465052284,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.3548150105138468,
+          "p95AngleDegrees": 1.8203558053990372,
+          "p99AngleDegrees": 4.3391136818943785,
+          "maximumAngleDegrees": 17.682232334353063,
+          "fractionOver10Degrees": 0.0017198679141441936,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.03782979906546019,
+            "p95AbsoluteDifference": 0.1912842071240234
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.06971848724741297,
+            "p95AbsoluteDifference": 0.2978187739697373
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.09649278862026518,
+            "p95AbsoluteDifference": 0.35950143284810976
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.015072697654055698,
+            "p95AbsoluteDifference": 0.09145566738380675
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.02294171943885106,
+            "p95AbsoluteDifference": 0.1294696872249273
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.02674816158197199,
+            "p95AbsoluteDifference": 0.14516773184664536
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.016255314297779478,
+            "p95AbsoluteDifference": 0.1146144595207958
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.031064370672226466,
+            "p95AbsoluteDifference": 0.2212201803186848
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04596759882131501,
+            "p95AbsoluteDifference": 0.31268536611280745
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0046421462483365325,
+            "p95AbsoluteDifference": 0.013114877672124929
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.011203425597308274,
+            "p95AbsoluteDifference": 0.052801598487364085
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.02427931770619821,
+            "p95AbsoluteDifference": 0.11408990335046434
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00422445652323307,
+            "p95AbsoluteDifference": 0.021465200543695804
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008269359076490566,
+            "p95AbsoluteDifference": 0.03953431792001984
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.012827333632456138,
+            "p95AbsoluteDifference": 0.05802994436007615
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0003092175407001134,
+            "p95AbsoluteDifference": 0.0018748195556576783
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0005987835068952128,
+            "p95AbsoluteDifference": 0.00300905470754586
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0009032044754560966,
+            "p95AbsoluteDifference": 0.0036890043221765333
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-10",
+      "lod": "lod-2",
+      "lowTriangles": 3596,
+      "sampledUvs": 14384,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.11759919289391964,
+          "p95AngleDegrees": 0.8594770136564772,
+          "p99AngleDegrees": 2.1057293360162297,
+          "maximumAngleDegrees": 13.137359494149475,
+          "fractionOver10Degrees": 0.00013904338153503893,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.22734791270882893,
+          "p95AngleDegrees": 1.506504462203823,
+          "p99AngleDegrees": 3.431432689732997,
+          "maximumAngleDegrees": 17.582659998223285,
+          "fractionOver10Degrees": 0.0002085650723025584,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.35230606248384005,
+          "p95AngleDegrees": 1.971858943003557,
+          "p99AngleDegrees": 3.9431823699417112,
+          "maximumAngleDegrees": 18.0821333712984,
+          "fractionOver10Degrees": 0.0002085650723025584,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.04017582126668695,
+            "p95AbsoluteDifference": 0.206935517574436
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.07201198927970093,
+            "p95AbsoluteDifference": 0.3122144651702659
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.09748209661058763,
+            "p95AbsoluteDifference": 0.36747994469194084
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.01611023513177912,
+            "p95AbsoluteDifference": 0.09870564914975842
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.024441530709085533,
+            "p95AbsoluteDifference": 0.1425278175026426
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.028590486696814136,
+            "p95AbsoluteDifference": 0.15796973752635757
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.019263212004797456,
+            "p95AbsoluteDifference": 0.13498095708932803
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.03626654858461287,
+            "p95AbsoluteDifference": 0.24833633894844262
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05047969958508314,
+            "p95AbsoluteDifference": 0.3234963382917811
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004958050212318939,
+            "p95AbsoluteDifference": 0.01520997212419637
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.012005376441121415,
+            "p95AbsoluteDifference": 0.055120263391188015
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.025644327398970754,
+            "p95AbsoluteDifference": 0.12588571738382914
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004821140564635178,
+            "p95AbsoluteDifference": 0.024541588903581078
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.009032287027249624,
+            "p95AbsoluteDifference": 0.042469941105410455
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.013463968657704047,
+            "p95AbsoluteDifference": 0.060719910892386965
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0003280208594481193,
+            "p95AbsoluteDifference": 0.00193601455162063
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.000603937292025974,
+            "p95AbsoluteDifference": 0.0029808094869390594
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0009376364618737835,
+            "p95AbsoluteDifference": 0.0037507720995527748
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-0",
+      "lowTriangles": 19200,
+      "sampledUvs": 76800,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.30160949776323154,
+          "p95AngleDegrees": 3.140213900650162,
+          "p99AngleDegrees": 8.009038230491228,
+          "maximumAngleDegrees": 40.92447626815965,
+          "fractionOver10Degrees": 0.00609375,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.802767092329848,
+          "p95AngleDegrees": 6.968888925653755,
+          "p99AngleDegrees": 14.826636274053051,
+          "maximumAngleDegrees": 60.43783994062805,
+          "fractionOver10Degrees": 0.024830729166666666,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.5289064673065123,
+          "p95AngleDegrees": 10.576195018079082,
+          "p99AngleDegrees": 21.008391953877474,
+          "maximumAngleDegrees": 67.30799299277359,
+          "fractionOver10Degrees": 0.05579427083333333,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004162284628783758,
+            "p95AbsoluteDifference": 0.018582084784172264
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.010155528934899936,
+            "p95AbsoluteDifference": 0.047188185931430364
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017875670340404368,
+            "p95AbsoluteDifference": 0.07609416136788091
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.003375930321346089,
+            "p95AbsoluteDifference": 0.015816286756623596
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008349388691205502,
+            "p95AbsoluteDifference": 0.04060686065362142
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.014928520013971538,
+            "p95AbsoluteDifference": 0.06655275620971153
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.05297052209305146,
+            "p95AbsoluteDifference": 0.21096457718685072
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.12689452671878906,
+            "p95AbsoluteDifference": 0.40718620643825076
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.19184909074807308,
+            "p95AbsoluteDifference": 0.5151532782981283
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.04092653325045031,
+            "p95AbsoluteDifference": 0.22108141090696548
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.09080682432245683,
+            "p95AbsoluteDifference": 0.4067430621626124
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.13053677599412644,
+            "p95AbsoluteDifference": 0.5397776250328022
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.019955059512309498,
+            "p95AbsoluteDifference": 0.12507849222670003
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.041685346852526915,
+            "p95AbsoluteDifference": 0.2241524396146776
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.06162994378303728,
+            "p95AbsoluteDifference": 0.2821066100312611
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0054887113209048,
+            "p95AbsoluteDifference": 0.02244226662294241
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.014932722963233308,
+            "p95AbsoluteDifference": 0.05630962124833278
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03699262899638246,
+            "p95AbsoluteDifference": 0.11879400529534766
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0055025926158330666,
+            "p95AbsoluteDifference": 0.024523747854339174
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.014041469923916043,
+            "p95AbsoluteDifference": 0.05730992486631719
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.024009240110156684,
+            "p95AbsoluteDifference": 0.08973026331692215
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0006217580549556984,
+            "p95AbsoluteDifference": 0.0023417378917147806
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001174099418777693,
+            "p95AbsoluteDifference": 0.003826585594429431
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0017914775110609335,
+            "p95AbsoluteDifference": 0.004762680214319475
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-1",
+      "lowTriangles": 12288,
+      "sampledUvs": 49152,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.2867173100385817,
+          "p95AngleDegrees": 2.93186141432201,
+          "p99AngleDegrees": 7.178901137561496,
+          "maximumAngleDegrees": 51.52724809604825,
+          "fractionOver10Degrees": 0.004903157552083333,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.8096907146007596,
+          "p95AngleDegrees": 6.926828033173136,
+          "p99AngleDegrees": 14.302796211017,
+          "maximumAngleDegrees": 65.66640855111507,
+          "fractionOver10Degrees": 0.023396809895833332,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.6776321128706373,
+          "p95AngleDegrees": 10.956087320798765,
+          "p99AngleDegrees": 20.782614364895,
+          "maximumAngleDegrees": 64.66825831203461,
+          "fractionOver10Degrees": 0.060709635416666664,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.003812671760726447,
+            "p95AbsoluteDifference": 0.01644014307141041
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.009962392681870583,
+            "p95AbsoluteDifference": 0.04584072677984983
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017935433136092808,
+            "p95AbsoluteDifference": 0.0774525433725152
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0030873705605261753,
+            "p95AbsoluteDifference": 0.013759055025944041
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008194162276400218,
+            "p95AbsoluteDifference": 0.03979002651176341
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.014948392523379456,
+            "p95AbsoluteDifference": 0.06755088073785963
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.05043932421190111,
+            "p95AbsoluteDifference": 0.20435545073925915
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.12692682280797282,
+            "p95AbsoluteDifference": 0.40128194536978173
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.19506177024217233,
+            "p95AbsoluteDifference": 0.5173683382252242
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.039403009153296545,
+            "p95AbsoluteDifference": 0.21411486888393788
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.09156052826328946,
+            "p95AbsoluteDifference": 0.4047065311750416
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.13483660450381138,
+            "p95AbsoluteDifference": 0.5517568858924754
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.01913146281793607,
+            "p95AbsoluteDifference": 0.12155722489474936
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.04094294661481333,
+            "p95AbsoluteDifference": 0.22548410474123048
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.061900966481947504,
+            "p95AbsoluteDifference": 0.2919769135563683
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.005115594499172326,
+            "p95AbsoluteDifference": 0.02030511026589268
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.014102649647935879,
+            "p95AbsoluteDifference": 0.05383556470854417
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03583500755915502,
+            "p95AbsoluteDifference": 0.117141922740882
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.005110095393535355,
+            "p95AbsoluteDifference": 0.022869582583152765
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.013653152362552929,
+            "p95AbsoluteDifference": 0.055784522305544024
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.023845086154989037,
+            "p95AbsoluteDifference": 0.08879237960672229
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0005934555591732841,
+            "p95AbsoluteDifference": 0.002272617301148106
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0011134108648728144,
+            "p95AbsoluteDifference": 0.0037158627863248636
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0017367494524085827,
+            "p95AbsoluteDifference": 0.004989537931846735
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-2",
+      "lowTriangles": 9408,
+      "sampledUvs": 37632,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.2791608721933053,
+          "p95AngleDegrees": 2.724441312404264,
+          "p99AngleDegrees": 6.774249345947933,
+          "maximumAngleDegrees": 34.65553010521983,
+          "fractionOver10Degrees": 0.004464285714285714,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.8122391141893756,
+          "p95AngleDegrees": 6.931069086910726,
+          "p99AngleDegrees": 13.819189248020123,
+          "maximumAngleDegrees": 50.57183846837634,
+          "fractionOver10Degrees": 0.022799744897959183,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.7948730861549342,
+          "p95AngleDegrees": 11.477479275965813,
+          "p99AngleDegrees": 20.409424749147803,
+          "maximumAngleDegrees": 67.30350232986672,
+          "fractionOver10Degrees": 0.06773490646258504,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0034609929511186647,
+            "p95AbsoluteDifference": 0.014745594640396513
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.009416005043923778,
+            "p95AbsoluteDifference": 0.042081612557818296
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.01753557516200716,
+            "p95AbsoluteDifference": 0.07597449604183992
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0027898236710915177,
+            "p95AbsoluteDifference": 0.012398708928216644
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.007680487828956403,
+            "p95AbsoluteDifference": 0.036490357426368955
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.014533086978125687,
+            "p95AbsoluteDifference": 0.06540223284768858
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.047718276931550355,
+            "p95AbsoluteDifference": 0.19370088361988885
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.12290130301756552,
+            "p95AbsoluteDifference": 0.3928283046451212
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.1928549985090399,
+            "p95AbsoluteDifference": 0.517922869946527
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.03778771415847236,
+            "p95AbsoluteDifference": 0.2078913806312171
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.08991113437892496,
+            "p95AbsoluteDifference": 0.4007690419411836
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.1343773291870119,
+            "p95AbsoluteDifference": 0.547213450919341
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.017756062523065493,
+            "p95AbsoluteDifference": 0.11321958520095314
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.038633816242742584,
+            "p95AbsoluteDifference": 0.2160559409820058
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05946446256392613,
+            "p95AbsoluteDifference": 0.27854113981245765
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004623710467513445,
+            "p95AbsoluteDifference": 0.01793853633060886
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.013176795121633611,
+            "p95AbsoluteDifference": 0.05054888370614778
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03405678593337572,
+            "p95AbsoluteDifference": 0.11262362761296532
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004819517333552672,
+            "p95AbsoluteDifference": 0.021818905350721923
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.013200537959757647,
+            "p95AbsoluteDifference": 0.054486252728911645
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.02366374016685686,
+            "p95AbsoluteDifference": 0.08812467300252476
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0006208580374500183,
+            "p95AbsoluteDifference": 0.0022821086952828007
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0011670806717258226,
+            "p95AbsoluteDifference": 0.0037604743256872764
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.001818565821633133,
+            "p95AbsoluteDifference": 0.005140541164660937
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-0",
+      "lowTriangles": 1058,
+      "sampledUvs": 4232,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.14143108300497337,
+          "p95AngleDegrees": 0.31946201054890044,
+          "p99AngleDegrees": 0.47882925811734056,
+          "maximumAngleDegrees": 3.05490096934047,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.22452174728548246,
+          "p95AngleDegrees": 0.612126204320129,
+          "p99AngleDegrees": 1.5162643552858985,
+          "maximumAngleDegrees": 7.668392811900434,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.39510629219798377,
+          "p95AngleDegrees": 1.544378768750833,
+          "p99AngleDegrees": 3.61907222178941,
+          "maximumAngleDegrees": 9.901816733869499,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 5.209759579388393e-05,
+            "p95AbsoluteDifference": 0.00015716514696239236
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00011282859749061663,
+            "p95AbsoluteDifference": 0.0008258548464016313
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0002202801361646442,
+            "p95AbsoluteDifference": 0.001768364473131191
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 1.5219182454747162e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 3.092042445468195e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 5.5479906949631216e-05,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0020080136815271254,
+            "p95AbsoluteDifference": 0.00671892892546575
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0064616365204686966,
+            "p95AbsoluteDifference": 0.0232546362223752
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017272260476756222,
+            "p95AbsoluteDifference": 0.0577289524775304
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 5.062900338675369e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.000171022859318698,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0003597057235744142,
+            "p95AbsoluteDifference": 0.000351654211526459
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00035048384177698347,
+            "p95AbsoluteDifference": 0.0018171642150834892
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0007204615970635722,
+            "p95AbsoluteDifference": 0.0028618494301746508
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0012353382195163312,
+            "p95AbsoluteDifference": 0.003917581404981746
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.000387147728862101,
+            "p95AbsoluteDifference": 0.0017827226915486994
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0008510778683622016,
+            "p95AbsoluteDifference": 0.0028336386587105872
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0014707900651125116,
+            "p95AbsoluteDifference": 0.0039355355700539715
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-1",
+      "lowTriangles": 672,
+      "sampledUvs": 2688,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.13769098831261556,
+          "p95AngleDegrees": 0.3180482077967382,
+          "p99AngleDegrees": 0.5412387050690975,
+          "maximumAngleDegrees": 4.72275212063524,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.21805107998082446,
+          "p95AngleDegrees": 0.573993614595707,
+          "p99AngleDegrees": 1.4115131970035855,
+          "maximumAngleDegrees": 5.913586278232476,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.38353639765659076,
+          "p95AngleDegrees": 1.561720646146713,
+          "p99AngleDegrees": 3.6584446104100006,
+          "maximumAngleDegrees": 11.956420689124352,
+          "fractionOver10Degrees": 0.0003720238095238095,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 5.42208542178721e-05,
+            "p95AbsoluteDifference": 0.0002293006861926504
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00010878153369634457,
+            "p95AbsoluteDifference": 0.0007038559132528411
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.00020615451567295505,
+            "p95AbsoluteDifference": 0.001706661149567249
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 2.134745124450748e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 3.459196584332103e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 6.701926100452713e-05,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0019791821528971697,
+            "p95AbsoluteDifference": 0.006534288092795988
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0061774367930161715,
+            "p95AbsoluteDifference": 0.022229516636545998
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017810308445721897,
+            "p95AbsoluteDifference": 0.05729938441359859
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 5.980614569298437e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00015772573299886416,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0003877828544008298,
+            "p95AbsoluteDifference": 0.00010346371524368559
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0003269702363066278,
+            "p95AbsoluteDifference": 0.0017925871158584812
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0006749928820610725,
+            "p95AbsoluteDifference": 0.0026709961735344218
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0012355175828653137,
+            "p95AbsoluteDifference": 0.00392156862745098
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.000445043276258161,
+            "p95AbsoluteDifference": 0.001859986699498989
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0009446188415383064,
+            "p95AbsoluteDifference": 0.0029189238828810494
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.001562022449856903,
+            "p95AbsoluteDifference": 0.004065827140578883
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-2",
+      "lowTriangles": 588,
+      "sampledUvs": 2352,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.13233884901114223,
+          "p95AngleDegrees": 0.30113425686274387,
+          "p99AngleDegrees": 0.35685513663774177,
+          "maximumAngleDegrees": 2.8111921751109867,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.20927311161522869,
+          "p95AngleDegrees": 0.45282412741503036,
+          "p99AngleDegrees": 0.6140843306734557,
+          "maximumAngleDegrees": 4.059755080121725,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.31197176446309755,
+          "p95AngleDegrees": 0.7895263094856138,
+          "p99AngleDegrees": 1.1967429972741828,
+          "maximumAngleDegrees": 4.901361057881393,
+          "fractionOver10Degrees": 0.0,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 4.181259933433276e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 9.364836298406203e-05,
+            "p95AbsoluteDifference": 0.0003693012185762817
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0001591214149055657,
+            "p95AbsoluteDifference": 0.0012799761286764444
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 1.3166392546779984e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 2.850970399818201e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 4.9730884019999307e-05,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001736986199285696,
+            "p95AbsoluteDifference": 0.005666093095234252
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.005520966171138873,
+            "p95AbsoluteDifference": 0.02012909111954168
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.016154615610637482,
+            "p95AbsoluteDifference": 0.05083682898527598
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 3.91475878340766e-05,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0001227570568456685,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0003270591604493914,
+            "p95AbsoluteDifference": 0.00032811558518132654
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0,
+            "p95AbsoluteDifference": 0.0
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00025039990560638047,
+            "p95AbsoluteDifference": 0.0014480029562719708
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0005720075810057885,
+            "p95AbsoluteDifference": 0.0025469336889664533
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0009844890037027708,
+            "p95AbsoluteDifference": 0.0033345054177676874
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00039911811000643306,
+            "p95AbsoluteDifference": 0.0018432828903144453
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0008334390460226688,
+            "p95AbsoluteDifference": 0.0026391753395014635
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0013579443870261143,
+            "p95AbsoluteDifference": 0.0035904663684321386
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-0",
+      "lowTriangles": 18432,
+      "sampledUvs": 73728,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.627433732599765,
+          "p95AngleDegrees": 8.761593822430413,
+          "p99AngleDegrees": 18.04910880890741,
+          "maximumAngleDegrees": 66.26709426213081,
+          "fractionOver10Degrees": 0.039130316840277776,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 1.7219828935292623,
+          "p95AngleDegrees": 16.21690643489775,
+          "p99AngleDegrees": 27.060315776398525,
+          "maximumAngleDegrees": 77.277535049681,
+          "fractionOver10Degrees": 0.12239583333333333,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 2.603068507172905,
+          "p95AngleDegrees": 19.971192359588695,
+          "p99AngleDegrees": 31.255536418975634,
+          "maximumAngleDegrees": 83.62063646268783,
+          "fractionOver10Degrees": 0.17970106336805555,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.009618162295727964,
+            "p95AbsoluteDifference": 0.04325716817876645
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01965506474900735,
+            "p95AbsoluteDifference": 0.0803158724745751
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.031195630816520423,
+            "p95AbsoluteDifference": 0.1187786636347229
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.007922190733782962,
+            "p95AbsoluteDifference": 0.03696444200068654
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.016359232660591517,
+            "p95AbsoluteDifference": 0.06890949886251128
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.026262590871130337,
+            "p95AbsoluteDifference": 0.10135146445270156
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.1007830052678918,
+            "p95AbsoluteDifference": 0.3627860844371767
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.17346787183206402,
+            "p95AbsoluteDifference": 0.4936334326115611
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.20719208676942838,
+            "p95AbsoluteDifference": 0.5334298459378031
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.08591278029442125,
+            "p95AbsoluteDifference": 0.3617846803798114
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.14720890887468718,
+            "p95AbsoluteDifference": 0.5020778338985866
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.17620712558471727,
+            "p95AbsoluteDifference": 0.563809572908163
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.05255433275281301,
+            "p95AbsoluteDifference": 0.2651193879853876
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.09100935959382445,
+            "p95AbsoluteDifference": 0.3754042940532326
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.11757091767329102,
+            "p95AbsoluteDifference": 0.42580590479062774
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.007283788638882623,
+            "p95AbsoluteDifference": 0.031696402276871816
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020854488048129224,
+            "p95AbsoluteDifference": 0.08006006690008415
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04532062452451454,
+            "p95AbsoluteDifference": 0.15741889016148533
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.012461143555944191,
+            "p95AbsoluteDifference": 0.05739373333992974
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.024247863101026612,
+            "p95AbsoluteDifference": 0.09929239609063323
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03341704430599918,
+            "p95AbsoluteDifference": 0.1294367747643786
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0006676566853164211,
+            "p95AbsoluteDifference": 0.0025884785371668197
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0011536125651842167,
+            "p95AbsoluteDifference": 0.00392156862745098
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0016064466229687721,
+            "p95AbsoluteDifference": 0.004624265961557043
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-1",
+      "lowTriangles": 10368,
+      "sampledUvs": 41472,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.7428572634844762,
+          "p95AngleDegrees": 8.625311880971338,
+          "p99AngleDegrees": 16.887290150384757,
+          "maximumAngleDegrees": 57.47960799312804,
+          "fractionOver10Degrees": 0.037085262345679014,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 2.101379869288185,
+          "p95AngleDegrees": 15.986941090181682,
+          "p99AngleDegrees": 26.123315904490717,
+          "maximumAngleDegrees": 65.20866812271355,
+          "fractionOver10Degrees": 0.13059413580246915,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 3.3802924493983033,
+          "p95AngleDegrees": 20.484524354237227,
+          "p99AngleDegrees": 31.482698322769064,
+          "maximumAngleDegrees": 72.47996112508065,
+          "fractionOver10Degrees": 0.21067226080246915,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.010011658848617997,
+            "p95AbsoluteDifference": 0.04475300726787382
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.02034186465418488,
+            "p95AbsoluteDifference": 0.08198865125962122
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03230489830013934,
+            "p95AbsoluteDifference": 0.12023692128005377
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.008241985651073163,
+            "p95AbsoluteDifference": 0.037820925905235635
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.016888869695971098,
+            "p95AbsoluteDifference": 0.069485187428219
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.027092809742673786,
+            "p95AbsoluteDifference": 0.10135694051451499
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.1025885573537081,
+            "p95AbsoluteDifference": 0.37065861039022285
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.17608882489371805,
+            "p95AbsoluteDifference": 0.5000044335357675
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.21018546355799916,
+            "p95AbsoluteDifference": 0.5375574087908594
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.08721073548230215,
+            "p95AbsoluteDifference": 0.3701362942597561
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.14882081724465912,
+            "p95AbsoluteDifference": 0.5098125457364546
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.17787815259614864,
+            "p95AbsoluteDifference": 0.5720011704575514
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0518845531595716,
+            "p95AbsoluteDifference": 0.26637483676843987
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.08933280839199922,
+            "p95AbsoluteDifference": 0.3738725853260199
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.11770455225271338,
+            "p95AbsoluteDifference": 0.43048093177579067
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.008288407325207478,
+            "p95AbsoluteDifference": 0.03523692305371315
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.023305123948161404,
+            "p95AbsoluteDifference": 0.08780345266981
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.049446820096166424,
+            "p95AbsoluteDifference": 0.17012461774311471
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.01322075944323509,
+            "p95AbsoluteDifference": 0.06160381309287278
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.025317504146314132,
+            "p95AbsoluteDifference": 0.1052016594434281
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03502261071809758,
+            "p95AbsoluteDifference": 0.1365154106964873
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0008518758736312036,
+            "p95AbsoluteDifference": 0.0027594296715993736
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001473655270826566,
+            "p95AbsoluteDifference": 0.0041796157551956025
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.002074106865040102,
+            "p95AbsoluteDifference": 0.0057273627577289245
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-2",
+      "lowTriangles": 7200,
+      "sampledUvs": 28800,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.6660382315694707,
+          "p95AngleDegrees": 9.79547455390941,
+          "p99AngleDegrees": 19.424315041466322,
+          "maximumAngleDegrees": 55.49454432834094,
+          "fractionOver10Degrees": 0.04829861111111111,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 2.0038873000563093,
+          "p95AngleDegrees": 20.39495503650401,
+          "p99AngleDegrees": 32.673809862503454,
+          "maximumAngleDegrees": 67.50335819933949,
+          "fractionOver10Degrees": 0.16486111111111112,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 3.619754141609558,
+          "p95AngleDegrees": 26.803410898532587,
+          "p99AngleDegrees": 39.87021048551307,
+          "maximumAngleDegrees": 67.18377633880161,
+          "fractionOver10Degrees": 0.25829861111111113,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.009184399279335216,
+            "p95AbsoluteDifference": 0.04103515228683437
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01950866472785216,
+            "p95AbsoluteDifference": 0.07855804103477992
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03236273459749632,
+            "p95AbsoluteDifference": 0.11945522303190566
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.007504568009066919,
+            "p95AbsoluteDifference": 0.03490362578535033
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.016162917686206167,
+            "p95AbsoluteDifference": 0.06628118206931279
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.027095619048498824,
+            "p95AbsoluteDifference": 0.09985439804988634
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.09665122947340082,
+            "p95AbsoluteDifference": 0.35581305778337136
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.1728344510870144,
+            "p95AbsoluteDifference": 0.4958324957316062
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.2104288578287684,
+            "p95AbsoluteDifference": 0.5357977225999365
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.08573573518255874,
+            "p95AbsoluteDifference": 0.36514645745877317
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.15145902478858173,
+            "p95AbsoluteDifference": 0.5138318656443933
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.18340632362033074,
+            "p95AbsoluteDifference": 0.5752183830884282
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.04484221196656223,
+            "p95AbsoluteDifference": 0.23898989900206294
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.07629484804430321,
+            "p95AbsoluteDifference": 0.33304905630223675
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.10034731553754897,
+            "p95AbsoluteDifference": 0.3849090761401747
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006892499507182452,
+            "p95AbsoluteDifference": 0.02890620515170509
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020663768060157985,
+            "p95AbsoluteDifference": 0.07726654893757817
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.047370459083216285,
+            "p95AbsoluteDifference": 0.16305385156043156
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.012583031496473917,
+            "p95AbsoluteDifference": 0.058381212239425294
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.025002117678060074,
+            "p95AbsoluteDifference": 0.10341595741445675
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03546807151871467,
+            "p95AbsoluteDifference": 0.13626061175978094
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0009103792476939747,
+            "p95AbsoluteDifference": 0.0028074053089763417
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0016663913091732854,
+            "p95AbsoluteDifference": 0.004761461218152122
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.002400062008993349,
+            "p95AbsoluteDifference": 0.006784350457597197
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-0",
+      "lowTriangles": 8894,
+      "sampledUvs": 35576,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.17238137819098004,
+          "p95AngleDegrees": 0.49819231219195487,
+          "p99AngleDegrees": 1.095693935634597,
+          "maximumAngleDegrees": 20.43463208519709,
+          "fractionOver10Degrees": 5.621767483696874e-05,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.3761544960989481,
+          "p95AngleDegrees": 1.4817010989801545,
+          "p99AngleDegrees": 3.4956025551837167,
+          "maximumAngleDegrees": 30.384797142417895,
+          "fractionOver10Degrees": 0.0011805711715763437,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.9211256279076158,
+          "p95AngleDegrees": 3.4258644754738095,
+          "p99AngleDegrees": 6.776440164357572,
+          "maximumAngleDegrees": 35.1789233445846,
+          "fractionOver10Degrees": 0.0035979311895659996,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0009020078480713412,
+            "p95AbsoluteDifference": 0.00254604328331291
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002094069298489582,
+            "p95AbsoluteDifference": 0.006364343583332169
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.004727363875320506,
+            "p95AbsoluteDifference": 0.016690412437157076
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00036707763498296025,
+            "p95AbsoluteDifference": 0.00196078431372549
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0008286396739651655,
+            "p95AbsoluteDifference": 0.0034966163583687584
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0016527907041368195,
+            "p95AbsoluteDifference": 0.006633504526118778
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.005311592792855109,
+            "p95AbsoluteDifference": 0.01622848955254736
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.018607525699783276,
+            "p95AbsoluteDifference": 0.06140943325203005
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04807825263785427,
+            "p95AbsoluteDifference": 0.14615350461428028
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0021246789802585333,
+            "p95AbsoluteDifference": 0.006534412510851486
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00629541356792163,
+            "p95AbsoluteDifference": 0.026250980171336744
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.012968978552113616,
+            "p95AbsoluteDifference": 0.06536093102660617
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.005071227061206493,
+            "p95AbsoluteDifference": 0.022052277544143555
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.016153641815434352,
+            "p95AbsoluteDifference": 0.08700342792546828
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.03580156057634606,
+            "p95AbsoluteDifference": 0.20361073887542547
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0009077838175009482,
+            "p95AbsoluteDifference": 0.003547219669117647
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.003930899082608278,
+            "p95AbsoluteDifference": 0.022330546329322496
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.011597913733546126,
+            "p95AbsoluteDifference": 0.06912385193261834
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0013419816158584778,
+            "p95AbsoluteDifference": 0.003644539328182445
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.004006423833132782,
+            "p95AbsoluteDifference": 0.015659820610540134
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.00894703336794922,
+            "p95AbsoluteDifference": 0.04159554356234772
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0007228237883875711,
+            "p95AbsoluteDifference": 0.002573020884287247
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001209550743972641,
+            "p95AbsoluteDifference": 0.0036332906315139557
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.001872781659508983,
+            "p95AbsoluteDifference": 0.005197792107519847
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-1",
+      "lowTriangles": 6558,
+      "sampledUvs": 26232,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.17379222916094933,
+          "p95AngleDegrees": 0.5815128324891801,
+          "p99AngleDegrees": 1.8492562092880394,
+          "maximumAngleDegrees": 12.457060458982394,
+          "fractionOver10Degrees": 0.00015248551387618176,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.38909772088014666,
+          "p95AngleDegrees": 1.8560912297774217,
+          "p99AngleDegrees": 4.62354329779554,
+          "maximumAngleDegrees": 25.13700114696118,
+          "fractionOver10Degrees": 0.0014867337602927722,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.0320224159930529,
+          "p95AngleDegrees": 4.220983161367902,
+          "p99AngleDegrees": 8.186517941690648,
+          "maximumAngleDegrees": 29.57049340792396,
+          "fractionOver10Degrees": 0.005146386093321135,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0009770380303813283,
+            "p95AbsoluteDifference": 0.0027170020522088636
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002287134645818976,
+            "p95AbsoluteDifference": 0.0073995699516814575
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0048880956213609985,
+            "p95AbsoluteDifference": 0.017849309941449
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00041516560412663636,
+            "p95AbsoluteDifference": 0.00196078431372549
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0009341236129988586,
+            "p95AbsoluteDifference": 0.0038285768508920263
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0017991651669001952,
+            "p95AbsoluteDifference": 0.007471140178280483
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006186722152798487,
+            "p95AbsoluteDifference": 0.021487129479800676
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020614645216913634,
+            "p95AbsoluteDifference": 0.07716679034630493
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04966623553153842,
+            "p95AbsoluteDifference": 0.17033227707238977
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0028229007632290743,
+            "p95AbsoluteDifference": 0.008633273387928096
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.007715888119597433,
+            "p95AbsoluteDifference": 0.03496898739231754
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.015174040808540293,
+            "p95AbsoluteDifference": 0.08107088125389869
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006209153704565347,
+            "p95AbsoluteDifference": 0.02786662689866393
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.018649320739198158,
+            "p95AbsoluteDifference": 0.10882671759590459
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0393239673306593,
+            "p95AbsoluteDifference": 0.23086744118342897
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001103025235928503,
+            "p95AbsoluteDifference": 0.004474684771369485
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.004633960744193832,
+            "p95AbsoluteDifference": 0.02586471929146272
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.012671067376187733,
+            "p95AbsoluteDifference": 0.07419438006783749
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0017065009192603392,
+            "p95AbsoluteDifference": 0.004921815435963535
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0049578120638298796,
+            "p95AbsoluteDifference": 0.02135350706044502
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.010695649033602561,
+            "p95AbsoluteDifference": 0.05107295863865074
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0007959155179701556,
+            "p95AbsoluteDifference": 0.0025644911673077695
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0013882486110342789,
+            "p95AbsoluteDifference": 0.00392117452859084
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.002304967258667708,
+            "p95AbsoluteDifference": 0.006728216408059675
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-2",
+      "lowTriangles": 5334,
+      "sampledUvs": 21336,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.169396744543376,
+          "p95AngleDegrees": 0.643440043560714,
+          "p99AngleDegrees": 2.309946220963488,
+          "maximumAngleDegrees": 13.852622988284217,
+          "fractionOver10Degrees": 0.00018747656542932134,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.3791105951781881,
+          "p95AngleDegrees": 2.201234159685729,
+          "p99AngleDegrees": 5.777231615383038,
+          "maximumAngleDegrees": 23.665517328273452,
+          "fractionOver10Degrees": 0.0024371953505811774,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.0595333698062084,
+          "p95AngleDegrees": 4.758660066166773,
+          "p99AngleDegrees": 9.23098320775172,
+          "maximumAngleDegrees": 36.68949558378953,
+          "fractionOver10Degrees": 0.007639670041244845,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0010082839313248835,
+            "p95AbsoluteDifference": 0.002805979111615349
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002422726949262529,
+            "p95AbsoluteDifference": 0.008613625769311423
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.005078801510700203,
+            "p95AbsoluteDifference": 0.020036537602886876
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00043222214030906483,
+            "p95AbsoluteDifference": 0.0020171339351994296
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001007389289649716,
+            "p95AbsoluteDifference": 0.004097103920217955
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0019252864357214227,
+            "p95AbsoluteDifference": 0.008591183051058103
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006865503947278098,
+            "p95AbsoluteDifference": 0.024738536604712077
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.02203328096532177,
+            "p95AbsoluteDifference": 0.09229878787882626
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0514270242979929,
+            "p95AbsoluteDifference": 0.186663854281426
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.003079483421516708,
+            "p95AbsoluteDifference": 0.010427760675677336
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00855808355903384,
+            "p95AbsoluteDifference": 0.041267177158759695
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.016611560449923148,
+            "p95AbsoluteDifference": 0.09317799487311611
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006892714219548858,
+            "p95AbsoluteDifference": 0.033098197147631625
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020276248338266127,
+            "p95AbsoluteDifference": 0.1261860742034208
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04107406537125897,
+            "p95AbsoluteDifference": 0.23690278805589318
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0014121273468606194,
+            "p95AbsoluteDifference": 0.005717921216045434
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0056685952103641786,
+            "p95AbsoluteDifference": 0.028926024360476046
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.015243394403784277,
+            "p95AbsoluteDifference": 0.08283764028765468
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0019225786695483197,
+            "p95AbsoluteDifference": 0.006176434032348322
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.005615208766470179,
+            "p95AbsoluteDifference": 0.025074105719635125
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.01217939013857182,
+            "p95AbsoluteDifference": 0.057524514225226045
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0008429785124311772,
+            "p95AbsoluteDifference": 0.0026064571077883967
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0014842319861182512,
+            "p95AbsoluteDifference": 0.004098646919810543
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0025185012845175348,
+            "p95AbsoluteDifference": 0.0074823333974645785
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-9",
+      "lod": "lod-0",
+      "lowTriangles": 11658,
+      "sampledUvs": 46632,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.16490175674401492,
+          "p95AngleDegrees": 2.351649952371696,
+          "p99AngleDegrees": 14.319507747133787,
+          "maximumAngleDegrees": 117.13804294693831,
+          "fractionOver10Degrees": 0.014282038085434894,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.3366710477546335,
+          "p95AngleDegrees": 8.309039107596154,
+          "p99AngleDegrees": 28.57558353479991,
+          "maximumAngleDegrees": 154.18161375053185,
+          "fractionOver10Degrees": 0.0386215474352376,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.9773667615931096,
+          "p95AngleDegrees": 18.49507899570289,
+          "p99AngleDegrees": 38.98875674942122,
+          "maximumAngleDegrees": 149.71660390904924,
+          "fractionOver10Degrees": 0.13600102933607822,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0016526405630779807,
+            "p95AbsoluteDifference": 0.003951244570395346
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0038790874060668306,
+            "p95AbsoluteDifference": 0.01363670381711925
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.008021143272657658,
+            "p95AbsoluteDifference": 0.03031434801031374
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0007599060964133251,
+            "p95AbsoluteDifference": 0.00234522954545408
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0016292565150373285,
+            "p95AbsoluteDifference": 0.005960586213486927
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0032165660404191387,
+            "p95AbsoluteDifference": 0.013889362095525368
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006047755432839896,
+            "p95AbsoluteDifference": 0.024321131553561096
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01851953463003878,
+            "p95AbsoluteDifference": 0.08121757759828149
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04288403024020059,
+            "p95AbsoluteDifference": 0.1763354250511566
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0030435167223177807,
+            "p95AbsoluteDifference": 0.011837671252876167
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008232581834071278,
+            "p95AbsoluteDifference": 0.046436418320318945
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017000978915386024,
+            "p95AbsoluteDifference": 0.10657012413051209
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001331573194122477,
+            "p95AbsoluteDifference": 4.320384668045889e-05
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002460775328765741,
+            "p95AbsoluteDifference": 0.004400860980263923
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.00453191455251658,
+            "p95AbsoluteDifference": 0.016042894376004556
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004761017178657486,
+            "p95AbsoluteDifference": 0.0155040106251658
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01710788224165553,
+            "p95AbsoluteDifference": 0.062413980498187055
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04703983957679508,
+            "p95AbsoluteDifference": 0.16091679989961855
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0028488442584472546,
+            "p95AbsoluteDifference": 0.00790849240898789
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.007789432680130544,
+            "p95AbsoluteDifference": 0.027875385138854392
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.018202742145811062,
+            "p95AbsoluteDifference": 0.06790862120827963
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0006846073215618192,
+            "p95AbsoluteDifference": 0.0028153814941726833
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0008743035336714822,
+            "p95AbsoluteDifference": 0.003365782694100101
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0009872175353640687,
+            "p95AbsoluteDifference": 0.003594077247555605
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-9",
+      "lod": "lod-1",
+      "lowTriangles": 10008,
+      "sampledUvs": 40032,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.1939217600294037,
+          "p95AngleDegrees": 3.2491819191152227,
+          "p99AngleDegrees": 21.86029988130299,
+          "maximumAngleDegrees": 131.63330144568835,
+          "fractionOver10Degrees": 0.02130795363709033,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.4563059323892068,
+          "p95AngleDegrees": 10.393820247925127,
+          "p99AngleDegrees": 35.90270076360081,
+          "maximumAngleDegrees": 136.4582522424198,
+          "fractionOver10Degrees": 0.05278277378097522,
+          "unpaintedInteriorSamples": 0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.570919147353754,
+          "p95AngleDegrees": 21.087357716190322,
+          "p99AngleDegrees": 43.03217456481781,
+          "maximumAngleDegrees": 146.9314687966884,
+          "fractionOver10Degrees": 0.16619204636290968,
+          "unpaintedInteriorSamples": 0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0022090457243640394,
+            "p95AbsoluteDifference": 0.005444178830178252
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.004940206911448644,
+            "p95AbsoluteDifference": 0.018344545629617924
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.009671524666939782,
+            "p95AbsoluteDifference": 0.03761674180402909
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0008099658165597729,
+            "p95AbsoluteDifference": 0.002453095670424208
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0017948822447364163,
+            "p95AbsoluteDifference": 0.006365732430318768
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.003434032705004005,
+            "p95AbsoluteDifference": 0.015054214032910162
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.007385811895244608,
+            "p95AbsoluteDifference": 0.030961465610244834
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.021602120240123562,
+            "p95AbsoluteDifference": 0.09827231240391783
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04766017958288851,
+            "p95AbsoluteDifference": 0.18804150217061077
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0034999258168615212,
+            "p95AbsoluteDifference": 0.014232610025978521
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.009137098205472897,
+            "p95AbsoluteDifference": 0.05005835198544908
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.018485018306071584,
+            "p95AbsoluteDifference": 0.11526617806271852
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001255873019144813,
+            "p95AbsoluteDifference": 0.0017784241360313039
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002783473649938858,
+            "p95AbsoluteDifference": 0.0087390540627872
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.005087274702550902,
+            "p95AbsoluteDifference": 0.02625290944322517
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.005546627743179689,
+            "p95AbsoluteDifference": 0.01860318215458458
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01927688353051354,
+            "p95AbsoluteDifference": 0.07038363227240504
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05316361282603046,
+            "p95AbsoluteDifference": 0.174375608971503
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.003060802896695415,
+            "p95AbsoluteDifference": 0.009455781895574578
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008661648470046307,
+            "p95AbsoluteDifference": 0.033661260398049994
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.020406362378582274,
+            "p95AbsoluteDifference": 0.07563019643663238
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0006683942944587369,
+            "p95AbsoluteDifference": 0.002755818944150471
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0009171201608518378,
+            "p95AbsoluteDifference": 0.003396542617698091
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0011335903511716764,
+            "p95AbsoluteDifference": 0.003804741594855546
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    }
+  ]
+}

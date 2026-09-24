@@ -79,6 +79,8 @@ try
                 tipOnly.value() == pack.tips.front(),
             "official RBrush container and selective tip read preserve exact IR");
     auto packedAt = std::chrono::steady_clock::now();
+    require(!decoded.value().presets.front().sdfDefaults.compatible,
+            "imported RBrush keeps editable SDF defaults opt-in");
     auto field = makeRBrushLocalField(decoded.value().tips.front(),
                                       decoded.value().presets.front(), assetGuid,
                                       {}, 4, 4, 1, 0.25);

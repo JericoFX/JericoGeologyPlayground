@@ -1056,6 +1056,12 @@
     "bytes": 5159
   },
   {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_ADDON_REUSE_DIRECTIVE_20260908.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_ADDON_REUSE_DIRECTIVE_20260908.md",
+    "sha256": "64A2C9E3653E5BD2358DE676576AC82E4C7EEF6ADDC5E77D9DD7535541E92B12",
+    "bytes": 9077
+  },
+  {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_ADDON_SUITE_M10_5.md",
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_ADDON_SUITE_M10_5.md",
     "sha256": "9CB4A98B616AC9283D73983A2D34E4E793872CE97C32354AD4208DE051D19958",
@@ -1066,6 +1072,12 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PRIVATE_PREVIEW_EXECUTION.md",
     "sha256": "1CCC9BA0B28B66EDF7A1A02CF6EC28C6D29E15879CA1DE6BBFB4F7E597F68624",
     "bytes": 19269
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PROCEDURAL_ASSET_CATALOG_RESEARCH.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\PROCEDURAL_ASSET_CATALOG_RESEARCH.md",
+    "sha256": "AFC89E141CBE44042DE5B8313FCD937AD9ACB70E1935C0ABF249EECAE55B8F8A",
+    "bytes": 17316
   },
   {
     "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\PRIVATE_REFERENCE_TECHNIQUE_AUDIT.md",
