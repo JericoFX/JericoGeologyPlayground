@@ -36,4 +36,6 @@ struct SurfaceFeatureFields
 };
 SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeatureSettings &settings = {},
                                      const Jerico::CancellationToken *cancel = nullptr);
+std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
+                                         double lambda, const Jerico::CancellationToken *cancel = nullptr);
 } // namespace Playground

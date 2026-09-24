@@ -163,7 +163,9 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
         !std::isfinite(settings.wireRadius) || settings.wireRadius <= 0 ||
         settings.wireRadius > 100 ||
         !std::isfinite(settings.curvatureScale) || settings.curvatureScale <= 0 ||
-        settings.curvatureScale > 100 || !std::isfinite(settings.thicknessRange) ||
+        settings.curvatureScale > 100 || !std::isfinite(settings.curvatureRelaxation) ||
+        settings.curvatureRelaxation < 0 || settings.curvatureRelaxation > 1 ||
+        !std::isfinite(settings.thicknessRange) ||
         settings.thicknessRange <= 0 || settings.thicknessRange > 1000 ||
         !std::isfinite(settings.heightRange) || settings.heightRange <= 0 ||
         settings.heightRange > 1000)
@@ -224,6 +226,14 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
                                         .ambientSamples = int(settings.featureSamples),
                                         .thicknessRadius = settings.thicknessRange},
                                        cancel);
+    std::vector<double> relaxedCurvature;
+    const auto *bakeCurvature = &sourceFields.signedDihedralCurvature;
+    if (settings.specialistMaps && settings.curvatureRelaxation > 0)
+    {
+        relaxedCurvature = relaxSignedCurvature(
+            high.mesh, sourceFields.signedDihedralCurvature, settings.curvatureRelaxation, cancel);
+        bakeCurvature = &relaxedCurvature;
+    }
     auto columns = unsigned(std::ceil(std::sqrt(double(targets.size()))));
     auto tile = settings.resolution / columns;
     if (!settings.automaticUv && settings.chartLayout.empty() && tile < 2 * settings.padding + 4)
@@ -274,6 +284,9 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
         result.regionRgba.resize(result.rgba.size());
         result.heightRgba.resize(result.rgba.size());
     }
+    std::vector<std::uint8_t> rawCurvatureRgba;
+    if (settings.specialistMaps && settings.automaticUv && settings.curvatureRelaxation > 0)
+        rawCurvatureRgba.resize(result.rgba.size());
     for (std::size_t i = 0; i < result.rgba.size(); i += 4)
     {
         result.rgba[i] = 128;
@@ -574,9 +587,18 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
                     };
                     gray(result.ambientRgba, interpolate(sourceFields.ambientOcclusion));
                     gray(result.contactRgba, interpolate(sourceFields.contactOcclusion));
-                    const auto signedCurvature = interpolate(sourceFields.signedDihedralCurvature);
+                    const auto sourceSignedCurvature = interpolate(sourceFields.signedDihedralCurvature);
+                    auto signedCurvature = settings.curvatureRelaxation > 0
+                        ? interpolate(*bakeCurvature) : sourceSignedCurvature;
+                    if (sourceSignedCurvature == 0 ||
+                        (sourceSignedCurvature > 0 && signedCurvature < 0) ||
+                        (sourceSignedCurvature < 0 && signedCurvature > 0))
+                        signedCurvature = 0;
                     gray(result.curvatureRgba,
                          0.5 + 0.5 * std::tanh(signedCurvature * settings.curvatureScale));
+                    if (!rawCurvatureRgba.empty())
+                        gray(rawCurvatureRgba,
+                             0.5 + 0.5 * std::tanh(sourceSignedCurvature * settings.curvatureScale));
                     auto smoothMask = [](double x, double a, double b)
                     {
                         auto t = std::clamp((x - a) / (b - a), 0.0, 1.0);
@@ -704,7 +726,26 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
             };
             buildChain(result.ambientRgba, result.specialistMips.ambient);
             buildChain(result.contactRgba, result.specialistMips.contact);
-            buildChain(result.curvatureRgba, result.specialistMips.curvature);
+            if (rawCurvatureRgba.empty())
+                buildChain(result.curvatureRgba, result.specialistMips.curvature);
+            else
+            {
+                const auto *candidateSource = &result.curvatureRgba;
+                unsigned size = settings.resolution;
+                for (unsigned level = 1; level < settings.automaticUvMipCount; ++level)
+                {
+                    auto candidateNext = downsampleSpecialist(*candidateSource, size, false, cancel);
+                    auto rawNext = downsampleSpecialist(rawCurvatureRgba, size, false, cancel);
+                    for (std::size_t at = 0; at < candidateNext.size(); at += 4)
+                        if ((rawNext[at] > 128 && candidateNext[at] < 128) ||
+                            (rawNext[at] < 128 && candidateNext[at] > 128))
+                            candidateNext[at] = candidateNext[at + 1] = candidateNext[at + 2] = 128;
+                    result.specialistMips.curvature.push_back(std::move(candidateNext));
+                    rawCurvatureRgba = std::move(rawNext);
+                    candidateSource = &result.specialistMips.curvature.back();
+                    size /= 2;
+                }
+            }
             buildChain(result.cavityRgba, result.specialistMips.cavity);
             buildChain(result.edgeRgba, result.specialistMips.edge);
             buildChain(result.wireRgba, result.specialistMips.wire);
@@ -846,6 +887,7 @@ void exportNormalBake(const NormalBake &bake, const std::filesystem::path &direc
         {"featureSamples", bake.settings.featureSamples},
         {"curvatureMapping", "0.5 + 0.5*tanh(signedCurvature*curvatureScale)"},
         {"curvatureScale", bake.settings.curvatureScale},
+        {"curvatureRelaxation", bake.settings.curvatureRelaxation},
         {"thicknessMapping", "clamp(inwardFirstHit/thicknessRange,0,1); miss=0"},
         {"thicknessRange", bake.settings.thicknessRange},
         {"heightMapping", "0.5 + 0.5*clamp(dot(highHit-lowPoint,lowFaceNormal)/heightRange,-1,1)"},

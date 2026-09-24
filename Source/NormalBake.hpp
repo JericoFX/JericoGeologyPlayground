@@ -32,6 +32,7 @@ struct NormalBakeSettings
     double wireRadius{0.1};
     unsigned featureSamples{16};
     double curvatureScale{0.25};
+    double curvatureRelaxation{0};
     double thicknessRange{2};
     double heightRange{0.25};
     std::vector<NormalBakeChart> chartLayout;

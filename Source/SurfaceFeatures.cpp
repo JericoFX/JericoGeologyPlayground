@@ -34,6 +34,85 @@ Vec3d unit(Vec3d p)
     return D::multiply(p, 1 / size);
 }
 } // namespace
+std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
+                                         double lambda, const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    if (!std::isfinite(lambda) || lambda < 0 || lambda > 1 || raw.size() != mesh.positions.size() ||
+        mesh.indices.empty() || mesh.indices.size() % 3 ||
+        (!mesh.triangleRegions.empty() && mesh.triangleRegions.size() != mesh.indices.size() / 3))
+        throw std::runtime_error("Curvature relaxation input or weight invalid");
+    for (auto value : raw)
+        if (!std::isfinite(value))
+            throw std::runtime_error("Curvature relaxation source non-finite");
+    if (lambda == 0)
+        return raw;
+
+    struct Edge
+    {
+        std::uint32_t firstFace{}, secondFace{};
+        unsigned count{};
+    };
+    std::map<std::pair<std::uint32_t, std::uint32_t>, Edge> edges;
+    std::vector<Jerico::Guid> vertexRegion(mesh.positions.size());
+    std::vector<bool> assigned(mesh.positions.size()), mixed(mesh.positions.size());
+    for (std::size_t face = 0; face < mesh.indices.size() / 3; ++face)
+    {
+        if ((face & 255) == 0)
+            check(cancel);
+        for (int corner = 0; corner < 3; ++corner)
+        {
+            auto a = mesh.indices[3 * face + corner];
+            auto b = mesh.indices[3 * face + (corner + 1) % 3];
+            if (a >= mesh.positions.size() || b >= mesh.positions.size())
+                throw std::runtime_error("Curvature relaxation index out of range");
+            if (!mesh.triangleRegions.empty())
+            {
+                if (assigned[a] && vertexRegion[a] != mesh.triangleRegions[face])
+                    mixed[a] = true;
+                else if (!assigned[a])
+                    vertexRegion[a] = mesh.triangleRegions[face];
+                assigned[a] = true;
+            }
+            auto key = std::minmax(a, b);
+            auto &edge = edges[{key.first, key.second}];
+            if (edge.count++ == 0)
+                edge.firstFace = std::uint32_t(face);
+            else if (edge.count == 2)
+                edge.secondFace = std::uint32_t(face);
+            else
+                throw std::runtime_error("Curvature relaxation non-manifold edge");
+        }
+    }
+    std::vector<double> weighted(mesh.positions.size()), total(mesh.positions.size());
+    for (const auto &[key, edge] : edges)
+    {
+        if (edge.count != 2 || mixed[key.first] || mixed[key.second] ||
+            (!mesh.triangleRegions.empty() &&
+             mesh.triangleRegions[edge.firstFace] != mesh.triangleRegions[edge.secondFace]))
+            continue;
+        if (!((raw[key.first] > 0 && raw[key.second] > 0) ||
+              (raw[key.first] < 0 && raw[key.second] < 0)))
+            continue;
+        auto distance = length(D::subtract(mesh.positions[key.first], mesh.positions[key.second]));
+        if (!(distance > 0) || !std::isfinite(distance))
+            throw std::runtime_error("Curvature relaxation edge length invalid");
+        auto weight = 1 / distance;
+        weighted[key.first] += weight * raw[key.second];
+        weighted[key.second] += weight * raw[key.first];
+        total[key.first] += weight;
+        total[key.second] += weight;
+    }
+    auto relaxed = raw;
+    for (std::size_t i = 0; i < relaxed.size(); ++i)
+        if (total[i] > 0)
+        {
+            relaxed[i] = (1 - lambda) * raw[i] + lambda * weighted[i] / total[i];
+            if (!std::isfinite(relaxed[i]))
+                throw std::runtime_error("Curvature relaxation result non-finite");
+        }
+    return relaxed;
+}
 SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeatureSettings &settings,
                                      const Jerico::CancellationToken *cancel)
 {

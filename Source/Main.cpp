@@ -513,7 +513,8 @@ BakePreview buildBakePreview(const Recipe &recipe, float lowError, unsigned text
                              double projectionDistance, const Jerico::CancellationToken *cancel = nullptr,
                              NormalProjection projection = NormalProjection::ClosestSurface,
                              int lowResolution = 0, const AdaptiveBakeLayout *layout = nullptr,
-                             double edgeRadius = 0.02, bool automaticUv = false)
+                             double edgeRadius = 0.02, bool automaticUv = false,
+                             double curvatureRelaxation = 0)
 {
     BakePreview preview;
     preview.recipe = recipe;
@@ -557,6 +558,7 @@ BakePreview buildBakePreview(const Recipe &recipe, float lowError, unsigned text
                                 .edgeRadius = edgeRadius,
                                 .featureSamples = 16,
                                 .curvatureScale = 0.25,
+                                .curvatureRelaxation = curvatureRelaxation,
                                 .thicknessRange = 4,
                                 .chartLayout = layout ? layout->charts : std::vector<NormalBakeChart>{},
                                 .automaticUv = automaticUv},
@@ -683,12 +685,14 @@ void captureNormalBakes(Renderer &renderer, const std::filesystem::path &evidenc
     std::cout << report.dump(2) << '\n';
 }
 void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &evidence,
-                         bool automaticUv = false, int familyFilter = -1)
+                         bool automaticUv = false, int familyFilter = -1,
+                         double curvatureRelaxation = 0)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
     report["scope"] = "C++ high source projected independently to three low-mesh LODs per rock family";
     report["automaticUv"] = automaticUv;
+    report["curvatureRelaxation"] = curvatureRelaxation;
     report["imageSize"] = {1280, 960};
     report["textureResolution"] = 2048;
     Camera camera;
@@ -719,7 +723,8 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                 auto preview = buildBakePreview(recipe, float(error), 2048, projectionDistance,
                                                 nullptr, NormalProjection::ClosestSurface,
                                                 lowResolution, nullptr,
-                                                family == 8 ? 0.1 : 0.02, automaticUv);
+                                                family == 8 ? 0.1 : 0.02, automaticUv,
+                                                curvatureRelaxation);
                 auto triangles = preview.bake.low.mesh.indices.size() / 3;
                 if (triangles >= previousTriangles)
                     throw std::runtime_error("LOD does not reduce triangle count");
@@ -1046,7 +1051,7 @@ struct Build
 int run(int argc, char **argv)
 {
     bool smoke = false, featureSmoke = false, angularProfileSmoke = false, rockLodSmoke = false,
-         autoUvRockLodSmoke = false,
+         autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
          edgeRadiusSmoke = false, regeneratedLodSmoke = false, angularLod2Smoke = false,
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
@@ -1063,6 +1068,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--angular-profiles-test" ||
             std::string(argv[i]) == "--rock-lod-bakes-test" ||
             std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test" ||
+            std::string(argv[i]) == "--curvature-relaxation-bakes-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1082,6 +1088,7 @@ int run(int argc, char **argv)
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
             rockLodSmoke = std::string(argv[i]) == "--rock-lod-bakes-test";
             autoUvRockLodSmoke = std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test";
+            curvatureRelaxationSmoke = std::string(argv[i]) == "--curvature-relaxation-bakes-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -1695,10 +1702,10 @@ int run(int argc, char **argv)
                 window.requestClose();
                 continue;
             }
-            if (rockLodSmoke || autoUvRockLodSmoke)
+            if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke)
             {
-                captureRockLodBakes(renderer, evidence, autoUvRockLodSmoke,
-                                    automaticUvRockLodFamily);
+                captureRockLodBakes(renderer, evidence, autoUvRockLodSmoke || curvatureRelaxationSmoke,
+                                    automaticUvRockLodFamily, curvatureRelaxationSmoke ? 0.5 : 0);
                 window.requestClose();
                 continue;
             }

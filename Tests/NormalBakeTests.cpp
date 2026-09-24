@@ -91,6 +91,33 @@ int main()
                     automaticSpecialist.regionRgba.size() == automaticSpecialist.rgba.size() &&
                     automaticSpecialist.heightRgba.size() == automaticSpecialist.rgba.size(),
                 "Ucupaint-guided specialist maps use the automatic UV coverage");
+        auto roughPlane = high;
+        for (auto &position : roughPlane.mesh.positions)
+            if (std::abs(position.x) < 1e-12 && std::abs(position.y) < 1e-12)
+                position.z = 0.08;
+        normals(roughPlane);
+        auto rawSettings = automaticSettings;
+        rawSettings.projection = NormalProjection::ClosestSurface;
+        auto rawBake = bakeNormals(roughPlane, roughPlane, rawSettings);
+        auto relaxedSettings = rawSettings;
+        relaxedSettings.curvatureRelaxation = 0.5;
+        auto relaxedBake = bakeNormals(roughPlane, roughPlane, relaxedSettings);
+        require(rawBake.curvatureRgba != relaxedBake.curvatureRgba &&
+                    rawBake.rgba == relaxedBake.rgba &&
+                    rawBake.ambientRgba == relaxedBake.ambientRgba &&
+                    rawBake.contactRgba == relaxedBake.contactRgba &&
+                    rawBake.regionRgba == relaxedBake.regionRgba,
+                "optional source curvature relaxation changes only curvature-derived bake maps");
+        for (std::size_t pixel = 0; pixel < rawBake.rgba.size(); pixel += 4)
+            if (rawBake.rgba[pixel + 3])
+                require((rawBake.curvatureRgba[pixel] <= 129 ||
+                         relaxedBake.curvatureRgba[pixel] >= 127) &&
+                            (rawBake.curvatureRgba[pixel] >= 127 ||
+                             relaxedBake.curvatureRgba[pixel] <= 129),
+                        "relaxed bake cannot swap convex and concave source polarity");
+        relaxedSettings.curvatureRelaxation = 1.1;
+        rejects([&] { bakeNormals(roughPlane, roughPlane, relaxedSettings); },
+                "bake rejects curvature relaxation outside unit interval");
         for (std::size_t pixel = 0; pixel < automaticSpecialist.rgba.size(); pixel += 4)
             if (automaticSpecialist.rgba[pixel + 3])
                 require(automaticSpecialist.ambientRgba[pixel + 3] == 255 &&

@@ -1,0 +1,737 @@
+{
+  "scope": "paired source-field relaxation diagnostic; identical high/low geometry and UV; texture-space variation is not perceptual Beauty or moving-runtime acceptance",
+  "scriptSha256": "ff8f66cd622541da6d52f5c3800ace7f17066ce54e66c560c5aa1350ff4e411a",
+  "cases": [
+    {
+      "family": "rock-10",
+      "lod": "lod-0",
+      "highHash": 11750237061285492936,
+      "lowHash": 14075266775463162209,
+      "baseBakeCpuMs": 19182.7893,
+      "candidateBakeCpuMs": 19135.6371,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.2738007481975423,
+          "meanAbsoluteDifference": 0.005319016605002451,
+          "p95AbsoluteDifference": 0.027450980392156862,
+          "baseSpatialVariation": 0.009592923614088008,
+          "candidateSpatialVariation": 0.009200625196979142,
+          "baseFractionAboveHalf": 0.5953942958288811,
+          "candidateFractionAboveHalf": 0.5965746288966024,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.011085777253779181,
+          "meanAbsoluteDifference": 0.001992265975650869,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0009616598690990264,
+          "candidateSpatialVariation": 0.0008077223471194794,
+          "baseFractionAboveHalf": 0.0014217445857231366,
+          "candidateFractionAboveHalf": 0.0035592609600606467
+        },
+        "convex-edge": {
+          "changedFraction": 0.004853173247506046,
+          "meanAbsoluteDifference": 8.017356686408666e-05,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.002927368784637679,
+          "candidateSpatialVariation": 0.0029557524066926113,
+          "baseFractionAboveHalf": 0.06354245123554148,
+          "candidateFractionAboveHalf": 0.06357630229710631
+        }
+      }
+    },
+    {
+      "family": "rock-10",
+      "lod": "lod-1",
+      "highHash": 11750237061285492936,
+      "lowHash": 16378930977620567661,
+      "baseBakeCpuMs": 21380.1853,
+      "candidateBakeCpuMs": 21714.5231,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.29312716145562756,
+          "meanAbsoluteDifference": 0.006128371485465329,
+          "p95AbsoluteDifference": 0.03529411764705882,
+          "baseSpatialVariation": 0.009895362167032308,
+          "candidateSpatialVariation": 0.009435108702609673,
+          "baseFractionAboveHalf": 0.5775774941262617,
+          "candidateFractionAboveHalf": 0.5792464941348859,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.011928586183686099,
+          "meanAbsoluteDifference": 0.0015540404501716521,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0012440534686931344,
+          "candidateSpatialVariation": 0.0010608981902128572,
+          "baseFractionAboveHalf": 0.002928963597812066,
+          "candidateFractionAboveHalf": 0.0026373814112659964
+        },
+        "convex-edge": {
+          "changedFraction": 0.005417679161853165,
+          "meanAbsoluteDifference": 0.00017243370090645982,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0024884020400699155,
+          "candidateSpatialVariation": 0.0025059788410082225,
+          "baseFractionAboveHalf": 0.02315573240311771,
+          "candidateFractionAboveHalf": 0.023221851744010553
+        }
+      }
+    },
+    {
+      "family": "rock-10",
+      "lod": "lod-2",
+      "highHash": 11750237061285492936,
+      "lowHash": 13483279071932170471,
+      "baseBakeCpuMs": 22939.3264,
+      "candidateBakeCpuMs": 23313.5253,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.32142602705944096,
+          "meanAbsoluteDifference": 0.006932268574926393,
+          "p95AbsoluteDifference": 0.03137254901960784,
+          "baseSpatialVariation": 0.010704136412198613,
+          "candidateSpatialVariation": 0.010240749603442631,
+          "baseFractionAboveHalf": 0.5654828776001871,
+          "candidateFractionAboveHalf": 0.5668436483663796,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.021410218848867183,
+          "meanAbsoluteDifference": 0.0017583061401114973,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.001547205271595777,
+          "candidateSpatialVariation": 0.0013097062601926549,
+          "baseFractionAboveHalf": 0.006668957100732026,
+          "candidateFractionAboveHalf": 0.005975082044612878
+        },
+        "convex-edge": {
+          "changedFraction": 0.006181642662777144,
+          "meanAbsoluteDifference": 0.00020282285459748432,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0028835035114604143,
+          "candidateSpatialVariation": 0.002902686462362927,
+          "baseFractionAboveHalf": 0.03629017129776978,
+          "candidateFractionAboveHalf": 0.03635171793093709
+        }
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-0",
+      "highHash": 1926877097746912218,
+      "lowHash": 11167452081913723578,
+      "baseBakeCpuMs": 11445.2882,
+      "candidateBakeCpuMs": 11614.7011,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.8038338257719062,
+          "meanAbsoluteDifference": 0.046196762716422334,
+          "p95AbsoluteDifference": 0.19607843137254902,
+          "baseSpatialVariation": 0.04203649193370887,
+          "candidateSpatialVariation": 0.040369025539310634,
+          "baseFractionAboveHalf": 0.598321453687951,
+          "candidateFractionAboveHalf": 0.5760663248609141,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.17507061638764393,
+          "meanAbsoluteDifference": 0.023640910725330776,
+          "p95AbsoluteDifference": 0.13725490196078433,
+          "baseSpatialVariation": 0.024977505585477504,
+          "candidateSpatialVariation": 0.023506932084918192,
+          "baseFractionAboveHalf": 0.08695993259819565,
+          "candidateFractionAboveHalf": 0.08155107705948024
+        },
+        "convex-edge": {
+          "changedFraction": 0.22880452316240724,
+          "meanAbsoluteDifference": 0.04139209501495429,
+          "p95AbsoluteDifference": 0.30196078431372547,
+          "baseSpatialVariation": 0.01699852144303594,
+          "candidateSpatialVariation": 0.011950521018380882,
+          "baseFractionAboveHalf": 0.07590547964600126,
+          "candidateFractionAboveHalf": 0.04115223663046682
+        }
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-1",
+      "highHash": 1926877097746912218,
+      "lowHash": 9500227900644078659,
+      "baseBakeCpuMs": 10445.9509,
+      "candidateBakeCpuMs": 10669.8914,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.7898389782206714,
+          "meanAbsoluteDifference": 0.044630254645976454,
+          "p95AbsoluteDifference": 0.19215686274509805,
+          "baseSpatialVariation": 0.040211827639551875,
+          "candidateSpatialVariation": 0.03871639280596685,
+          "baseFractionAboveHalf": 0.5981951691220493,
+          "candidateFractionAboveHalf": 0.5763125379243996,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.16864955227312844,
+          "meanAbsoluteDifference": 0.02177947304392177,
+          "p95AbsoluteDifference": 0.11764705882352941,
+          "baseSpatialVariation": 0.024023204697800667,
+          "candidateSpatialVariation": 0.022501157699021314,
+          "baseFractionAboveHalf": 0.08997160975517737,
+          "candidateFractionAboveHalf": 0.08557451282726146
+        },
+        "convex-edge": {
+          "changedFraction": 0.22702898625581583,
+          "meanAbsoluteDifference": 0.041421139190773004,
+          "p95AbsoluteDifference": 0.30196078431372547,
+          "baseSpatialVariation": 0.016421073274564966,
+          "candidateSpatialVariation": 0.011742158402014298,
+          "baseFractionAboveHalf": 0.0825414591445019,
+          "candidateFractionAboveHalf": 0.047341777496116046
+        }
+      }
+    },
+    {
+      "family": "rock-11",
+      "lod": "lod-2",
+      "highHash": 1926877097746912218,
+      "lowHash": 11603711056143483059,
+      "baseBakeCpuMs": 10257.9825,
+      "candidateBakeCpuMs": 10424.6496,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.8025214485856513,
+          "meanAbsoluteDifference": 0.044166736163753086,
+          "p95AbsoluteDifference": 0.1843137254901961,
+          "baseSpatialVariation": 0.03841104485518195,
+          "candidateSpatialVariation": 0.036882868988446296,
+          "baseFractionAboveHalf": 0.5997295902463571,
+          "candidateFractionAboveHalf": 0.5789508032861355,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.16768925462568987,
+          "meanAbsoluteDifference": 0.020812416646642583,
+          "p95AbsoluteDifference": 0.11372549019607843,
+          "baseSpatialVariation": 0.02243880780767546,
+          "candidateSpatialVariation": 0.020996808523195336,
+          "baseFractionAboveHalf": 0.08162527511122522,
+          "candidateFractionAboveHalf": 0.0774626479890153
+        },
+        "convex-edge": {
+          "changedFraction": 0.22595143616002694,
+          "meanAbsoluteDifference": 0.04098062434700731,
+          "p95AbsoluteDifference": 0.30196078431372547,
+          "baseSpatialVariation": 0.014990115958207728,
+          "candidateSpatialVariation": 0.010373593766943814,
+          "baseFractionAboveHalf": 0.07749356177476044,
+          "candidateFractionAboveHalf": 0.040796321946469344
+        }
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-0",
+      "highHash": 12614439437733294282,
+      "lowHash": 15348194532329691083,
+      "baseBakeCpuMs": 5574.4093,
+      "candidateBakeCpuMs": 5679.3004,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.9544394116339321,
+          "meanAbsoluteDifference": 0.02839593301432658,
+          "p95AbsoluteDifference": 0.07450980392156863,
+          "baseSpatialVariation": 0.00954182883583382,
+          "candidateSpatialVariation": 0.008037605307546236,
+          "baseFractionAboveHalf": 0.7580755380012792,
+          "candidateFractionAboveHalf": 0.7468398200065874,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.0174535159627526,
+          "meanAbsoluteDifference": 0.00038795141777176427,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.00013741006517693216,
+          "candidateSpatialVariation": 5.207837010387831e-05,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        },
+        "convex-edge": {
+          "changedFraction": 0.0,
+          "meanAbsoluteDifference": 0.0,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0,
+          "candidateSpatialVariation": 0.0,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        }
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-1",
+      "highHash": 12614439437733294282,
+      "lowHash": 5806793454232741432,
+      "baseBakeCpuMs": 5346.5762,
+      "candidateBakeCpuMs": 5438.2416,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.9569101761444255,
+          "meanAbsoluteDifference": 0.030150501768654924,
+          "p95AbsoluteDifference": 0.08235294117647059,
+          "baseSpatialVariation": 0.00965410424290161,
+          "candidateSpatialVariation": 0.008106011045327712,
+          "baseFractionAboveHalf": 0.7582383790657653,
+          "candidateFractionAboveHalf": 0.7477764779275761,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.016991439918525895,
+          "meanAbsoluteDifference": 0.00042316603108949035,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.00011859223054415669,
+          "candidateSpatialVariation": 3.9063534420224134e-05,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        },
+        "convex-edge": {
+          "changedFraction": 0.0,
+          "meanAbsoluteDifference": 0.0,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0,
+          "candidateSpatialVariation": 0.0,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        }
+      }
+    },
+    {
+      "family": "rock-12",
+      "lod": "lod-2",
+      "highHash": 12614439437733294282,
+      "lowHash": 9049429820146610649,
+      "baseBakeCpuMs": 4816.2906,
+      "candidateBakeCpuMs": 4901.3373,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.9517771521447755,
+          "meanAbsoluteDifference": 0.027750300976825133,
+          "p95AbsoluteDifference": 0.07450980392156863,
+          "baseSpatialVariation": 0.008656226363914611,
+          "candidateSpatialVariation": 0.0072690549671591866,
+          "baseFractionAboveHalf": 0.7495276843904913,
+          "candidateFractionAboveHalf": 0.7353822271901526,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.016758956427494136,
+          "meanAbsoluteDifference": 0.0003289928196942371,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.00010001857487819166,
+          "candidateSpatialVariation": 3.3935929031998846e-05,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        },
+        "convex-edge": {
+          "changedFraction": 7.808482901569778e-07,
+          "meanAbsoluteDifference": 3.0621501574783446e-09,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 6.140582472088817e-09,
+          "candidateSpatialVariation": 0.0,
+          "baseFractionAboveHalf": 0.0,
+          "candidateFractionAboveHalf": 0.0
+        }
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-0",
+      "highHash": 5093114658443750950,
+      "lowHash": 6674352002536610346,
+      "baseBakeCpuMs": 13122.282,
+      "candidateBakeCpuMs": 13448.3396,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.6910858611477461,
+          "meanAbsoluteDifference": 0.032074109106630035,
+          "p95AbsoluteDifference": 0.17254901960784313,
+          "baseSpatialVariation": 0.05029294183279564,
+          "candidateSpatialVariation": 0.04893598538191067,
+          "baseFractionAboveHalf": 0.5666789252984342,
+          "candidateFractionAboveHalf": 0.5533668966216901,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.08195994386392073,
+          "meanAbsoluteDifference": 0.0210415609888066,
+          "p95AbsoluteDifference": 0.058823529411764705,
+          "baseSpatialVariation": 0.03660288286223749,
+          "candidateSpatialVariation": 0.03557459018547875,
+          "baseFractionAboveHalf": 0.12149699029454533,
+          "candidateFractionAboveHalf": 0.12374327888809983
+        },
+        "convex-edge": {
+          "changedFraction": 0.21042321869399072,
+          "meanAbsoluteDifference": 0.04990136069983775,
+          "p95AbsoluteDifference": 0.3843137254901961,
+          "baseSpatialVariation": 0.029312379360547716,
+          "candidateSpatialVariation": 0.02537433501801991,
+          "baseFractionAboveHalf": 0.12188461668526597,
+          "candidateFractionAboveHalf": 0.09022395252105103
+        }
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-1",
+      "highHash": 5093114658443750950,
+      "lowHash": 10176659298820879081,
+      "baseBakeCpuMs": 11519.5231,
+      "candidateBakeCpuMs": 11718.6234,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.6774337697388669,
+          "meanAbsoluteDifference": 0.032885780084424214,
+          "p95AbsoluteDifference": 0.1803921568627451,
+          "baseSpatialVariation": 0.04910230317760939,
+          "candidateSpatialVariation": 0.04783659642271468,
+          "baseFractionAboveHalf": 0.5702693516147906,
+          "candidateFractionAboveHalf": 0.5538242416453312,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.0790501669073605,
+          "meanAbsoluteDifference": 0.018588100739005325,
+          "p95AbsoluteDifference": 0.043137254901960784,
+          "baseSpatialVariation": 0.035527446158022294,
+          "candidateSpatialVariation": 0.034777202567917824,
+          "baseFractionAboveHalf": 0.12447154457796282,
+          "candidateFractionAboveHalf": 0.12346663374741691
+        },
+        "convex-edge": {
+          "changedFraction": 0.20982766434540862,
+          "meanAbsoluteDifference": 0.04640683471001981,
+          "p95AbsoluteDifference": 0.3607843137254902,
+          "baseSpatialVariation": 0.02864809888097352,
+          "candidateSpatialVariation": 0.024708635618963762,
+          "baseFractionAboveHalf": 0.13168432694226392,
+          "candidateFractionAboveHalf": 0.09470893520882867
+        }
+      }
+    },
+    {
+      "family": "rock-5",
+      "lod": "lod-2",
+      "highHash": 5093114658443750950,
+      "lowHash": 1888092843182655006,
+      "baseBakeCpuMs": 10875.481,
+      "candidateBakeCpuMs": 11071.9993,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.7411714009957976,
+          "meanAbsoluteDifference": 0.03335992379303564,
+          "p95AbsoluteDifference": 0.17254901960784313,
+          "baseSpatialVariation": 0.04550825024083349,
+          "candidateSpatialVariation": 0.04407659209092736,
+          "baseFractionAboveHalf": 0.577488137989343,
+          "candidateFractionAboveHalf": 0.5624685207937108,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.07567063085836101,
+          "meanAbsoluteDifference": 0.016814499392265092,
+          "p95AbsoluteDifference": 0.03529411764705882,
+          "baseSpatialVariation": 0.03233078530373482,
+          "candidateSpatialVariation": 0.031236630566425307,
+          "baseFractionAboveHalf": 0.0869471820890742,
+          "candidateFractionAboveHalf": 0.08525494605594065
+        },
+        "convex-edge": {
+          "changedFraction": 0.20749413894846322,
+          "meanAbsoluteDifference": 0.046599693687222964,
+          "p95AbsoluteDifference": 0.3686274509803922,
+          "baseSpatialVariation": 0.022648923759453855,
+          "candidateSpatialVariation": 0.01912828040569876,
+          "baseFractionAboveHalf": 0.09764300922701276,
+          "candidateFractionAboveHalf": 0.05510895141633828
+        }
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-0",
+      "highHash": 11901763614008258559,
+      "lowHash": 12244607560334983867,
+      "baseBakeCpuMs": 4764.8526,
+      "candidateBakeCpuMs": 4823.9807,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.5530434238168929,
+          "meanAbsoluteDifference": 0.019446547085780586,
+          "p95AbsoluteDifference": 0.0784313725490196,
+          "baseSpatialVariation": 0.018002838161819804,
+          "candidateSpatialVariation": 0.016754652594942684,
+          "baseFractionAboveHalf": 0.6070556193412522,
+          "candidateFractionAboveHalf": 0.5921014223599279,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.06908272971946233,
+          "meanAbsoluteDifference": 0.0022132240398919935,
+          "p95AbsoluteDifference": 0.00784313725490196,
+          "baseSpatialVariation": 0.005619985802831662,
+          "candidateSpatialVariation": 0.005158675730657312,
+          "baseFractionAboveHalf": 0.03066479737441715,
+          "candidateFractionAboveHalf": 0.030383472839279505
+        },
+        "convex-edge": {
+          "changedFraction": 0.1299156703265649,
+          "meanAbsoluteDifference": 0.009368786379642148,
+          "p95AbsoluteDifference": 0.058823529411764705,
+          "baseSpatialVariation": 0.011500630953649215,
+          "candidateSpatialVariation": 0.010045726609823773,
+          "baseFractionAboveHalf": 0.08355169475822588,
+          "candidateFractionAboveHalf": 0.07699239112317446
+        }
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-1",
+      "highHash": 11901763614008258559,
+      "lowHash": 17143435401045846404,
+      "baseBakeCpuMs": 4762.1138,
+      "candidateBakeCpuMs": 4910.1018,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.554602144046585,
+          "meanAbsoluteDifference": 0.01970119138794951,
+          "p95AbsoluteDifference": 0.0784313725490196,
+          "baseSpatialVariation": 0.018129388790304297,
+          "candidateSpatialVariation": 0.016885334290342717,
+          "baseFractionAboveHalf": 0.6016758962102405,
+          "candidateFractionAboveHalf": 0.5862827833593075,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.07283311055124707,
+          "meanAbsoluteDifference": 0.0024191634384702933,
+          "p95AbsoluteDifference": 0.00784313725490196,
+          "baseSpatialVariation": 0.005723497185026297,
+          "candidateSpatialVariation": 0.005245069697077192,
+          "baseFractionAboveHalf": 0.03240462976081212,
+          "candidateFractionAboveHalf": 0.0319446925504545
+        },
+        "convex-edge": {
+          "changedFraction": 0.13067350001950626,
+          "meanAbsoluteDifference": 0.009674455524566963,
+          "p95AbsoluteDifference": 0.058823529411764705,
+          "baseSpatialVariation": 0.011531470602660325,
+          "candidateSpatialVariation": 0.010075887447212006,
+          "baseFractionAboveHalf": 0.0863265184601138,
+          "candidateFractionAboveHalf": 0.079311654685713
+        }
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-2",
+      "highHash": 11901763614008258559,
+      "lowHash": 7200223194218595769,
+      "baseBakeCpuMs": 4848.6832,
+      "candidateBakeCpuMs": 4884.9108,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.5573261481889162,
+          "meanAbsoluteDifference": 0.02018058338429839,
+          "p95AbsoluteDifference": 0.0784313725490196,
+          "baseSpatialVariation": 0.018153094909353736,
+          "candidateSpatialVariation": 0.017004225459803946,
+          "baseFractionAboveHalf": 0.6083312468238509,
+          "candidateFractionAboveHalf": 0.59314783775771,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.06832163000073825,
+          "meanAbsoluteDifference": 0.002252673529595964,
+          "p95AbsoluteDifference": 0.00784313725490196,
+          "baseSpatialVariation": 0.005538770438323324,
+          "candidateSpatialVariation": 0.005105344077875881,
+          "baseFractionAboveHalf": 0.03141482529763521,
+          "candidateFractionAboveHalf": 0.03090820386883778
+        },
+        "convex-edge": {
+          "changedFraction": 0.14021890576802362,
+          "meanAbsoluteDifference": 0.010711720351711244,
+          "p95AbsoluteDifference": 0.07058823529411765,
+          "baseSpatialVariation": 0.011609815240458506,
+          "candidateSpatialVariation": 0.010165580420983276,
+          "baseFractionAboveHalf": 0.08935559863552045,
+          "candidateFractionAboveHalf": 0.08315622415869399
+        }
+      }
+    },
+    {
+      "family": "rock-9",
+      "lod": "lod-0",
+      "highHash": 18330131349438008082,
+      "lowHash": 4246975193773503108,
+      "baseBakeCpuMs": 6556.5899,
+      "candidateBakeCpuMs": 6678.4473,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.5635716625741242,
+          "meanAbsoluteDifference": 0.022808864187678284,
+          "p95AbsoluteDifference": 0.10196078431372549,
+          "baseSpatialVariation": 0.010424609785257962,
+          "candidateSpatialVariation": 0.009500832823196068,
+          "baseFractionAboveHalf": 0.46614009619729163,
+          "candidateFractionAboveHalf": 0.45281704180805227,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.1505835254373811,
+          "meanAbsoluteDifference": 0.014429611420907554,
+          "p95AbsoluteDifference": 0.09019607843137255,
+          "baseSpatialVariation": 0.004556790437042977,
+          "candidateSpatialVariation": 0.003047640159294065,
+          "baseFractionAboveHalf": 0.034262145133481005,
+          "candidateFractionAboveHalf": 0.01515042222816651
+        },
+        "convex-edge": {
+          "changedFraction": 0.015096322522408799,
+          "meanAbsoluteDifference": 0.001942829654661384,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0014177491101380689,
+          "candidateSpatialVariation": 0.001201621319828406,
+          "baseFractionAboveHalf": 0.0054415287374631445,
+          "candidateFractionAboveHalf": 0.00426536106043438
+        }
+      }
+    },
+    {
+      "family": "rock-9",
+      "lod": "lod-1",
+      "highHash": 18330131349438008082,
+      "lowHash": 17777018368194027313,
+      "baseBakeCpuMs": 8295.1173,
+      "candidateBakeCpuMs": 8459.5758,
+      "maps": {
+        "signed-curvature": {
+          "changedFraction": 0.5393308956216165,
+          "meanAbsoluteDifference": 0.021818423066823845,
+          "p95AbsoluteDifference": 0.09803921568627451,
+          "baseSpatialVariation": 0.010310206011782234,
+          "candidateSpatialVariation": 0.009406858777691146,
+          "baseFractionAboveHalf": 0.5022224332795138,
+          "candidateFractionAboveHalf": 0.4899729319023649,
+          "signFlipFraction": 0.0,
+          "mipSignFlipFraction": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          }
+        },
+        "cavity": {
+          "changedFraction": 0.14435036565675752,
+          "meanAbsoluteDifference": 0.013328564059302132,
+          "p95AbsoluteDifference": 0.08235294117647059,
+          "baseSpatialVariation": 0.004304506978939498,
+          "candidateSpatialVariation": 0.0029244022271538933,
+          "baseFractionAboveHalf": 0.032297939025548485,
+          "candidateFractionAboveHalf": 0.015009972457023459
+        },
+        "convex-edge": {
+          "changedFraction": 0.013472314559787254,
+          "meanAbsoluteDifference": 0.0016254062076915485,
+          "p95AbsoluteDifference": 0.0,
+          "baseSpatialVariation": 0.0014993435766363858,
+          "candidateSpatialVariation": 0.0012880722136807208,
+          "baseFractionAboveHalf": 0.004586855351885269,
+          "candidateFractionAboveHalf": 0.0036451704815272106
+        }
+      }
+    }
+  ]
+}

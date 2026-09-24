@@ -1114,5 +1114,29 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\GeologyPreview\\README.md",
     "sha256": "93CADDD7F6BA6CC6E137DD564E0E80DFCBE14BA09F9C2D5B7718B6B5BEF3357C",
     "bytes": 5517
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\m8-layered-openvdb-geology-task21-cliff-wall-target.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\m8-layered-openvdb-geology-task21-cliff-wall-target.md",
+    "sha256": "4FAA89C290EAD50B543EA8869D49C84F90BD0894D8013DC8BA2E702EAD4D0575",
+    "bytes": 2967
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\OWN_NODE_LIBRARY_IMPLEMENTATION_PLAN.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\OWN_NODE_LIBRARY_IMPLEMENTATION_PLAN.md",
+    "sha256": "3A16DBFE346C0C2D56EE086647ED791FB7D60D152A48E1BCC1B3C33E3D9FCC8C",
+    "bytes": 15436
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\m8-geology-gpu-heightfield-erosion-provenance.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\m8-geology-gpu-heightfield-erosion-provenance.md",
+    "sha256": "0C3B9395BE04011C5253C15A2DCA5A1035838D0168EAF9F90826412B6AC17E69",
+    "bytes": 2848
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_GEOLOGY_CLASSIFIED_LOD1_SOURCE_FREE_VERTICAL_CLOSURE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_GEOLOGY_CLASSIFIED_LOD1_SOURCE_FREE_VERTICAL_CLOSURE.md",
+    "sha256": "F052D7E90FEE7BB62FAF2CEF4D189CE39AA18A66B2A92266022D10A2A13871F0",
+    "bytes": 6853
   }
 ]

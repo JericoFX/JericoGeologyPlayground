@@ -34,6 +34,27 @@ TriangleMesh crease(double z)
     m.indices = {0, 1, 2, 1, 0, 3};
     return m;
 }
+TriangleMesh splitRegionGrid()
+{
+    TriangleMesh mesh;
+    Jerico::Guid left{}, right{};
+    left.bytes[0] = std::byte{1};
+    right.bytes[0] = std::byte{2};
+    for (int y = 0; y < 3; ++y)
+        for (int x = -2; x <= 2; ++x)
+            mesh.positions.push_back({double(x), double(y), 0});
+    for (int y = 0; y < 2; ++y)
+        for (int x = -2; x < 2; ++x)
+        {
+            auto a = std::uint32_t(y * 5 + x + 2);
+            auto b = a + 1;
+            auto c = a + 5;
+            auto d = c + 1;
+            mesh.indices.insert(mesh.indices.end(), {a, b, d, a, d, c});
+            mesh.triangleRegions.insert(mesh.triangleRegions.end(), 2, x < 0 ? left : right);
+        }
+    return mesh;
+}
 int main()
 {
     try
@@ -69,6 +90,30 @@ int main()
         auto larger = surfaceFeatures(scaled, settings);
         require(std::abs(larger.signedDihedralCurvature[0] * 3 - convex.signedDihedralCurvature[0]) < 1e-10,
                 "curvature has inverse-length units");
+        auto regions = splitRegionGrid();
+        std::vector<double> raw(regions.positions.size());
+        for (int y = 0; y < 3; ++y)
+            for (int x = -2; x <= 2; ++x)
+                raw[y * 5 + x + 2] = x == 0 ? 1000 : x > 0 ? -7 : 0;
+        raw[6] = 10;
+        raw[1] = raw[5] = raw[11] = 1;
+        auto originalRaw = raw;
+        auto relaxed = relaxSignedCurvature(regions, raw, 0.5);
+        require(relaxed[6] > 0 && relaxed[6] < 10 && relaxed[8] == -7 && relaxed[7] == 1000 &&
+                    raw == originalRaw,
+                "one-pass curvature relaxation reduces same-region spike without crossing semantic seam");
+        auto unprotected = regions;
+        unprotected.triangleRegions.clear();
+        require(relaxSignedCurvature(unprotected, raw, 0.5)[6] > relaxed[6],
+                "semantic region guard changes the stencil at a shared-vertex seam");
+        auto opposite = raw;
+        opposite[2] = opposite[7] = opposite[12] = -1000;
+        require(relaxSignedCurvature(unprotected, opposite, 0.5)[6] > 0,
+                "curvature relaxation must not turn convex source into a concave mask");
+        require(relaxSignedCurvature(regions, raw, 0) == raw,
+                "disabled curvature relaxation is an exact identity");
+        rejects([&] { relaxSignedCurvature(regions, raw, -0.1); },
+                "curvature relaxation rejects negative mixing weight");
 
         Recipe planeRecipe;
         planeRecipe.base = Base::Plane;
