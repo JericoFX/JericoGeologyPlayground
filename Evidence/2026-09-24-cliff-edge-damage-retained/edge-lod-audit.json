@@ -1,0 +1,49 @@
+{
+  "scope": "experimental family 8 only; full package retained locally outside Git",
+  "proofSha256": "413402aab4340944a5112823d3da718a128e38982f2cbe49074aff0319a8fae6",
+  "uvAuditScriptSha256": "25a24306d86d0df371e8b6abaeddb9f58f3c3453c2d9f17ef0d7f3c3995316fb",
+  "lods": [
+    {
+      "lod": 0,
+      "status": "BAKED",
+      "highTriangles": 17488,
+      "lowTriangles": 9606,
+      "sampledSurfaceError": 0.030597290408193492,
+      "errorBudget": 0.04,
+      "projectionMisses": 0,
+      "backfaces": 0,
+      "bakeCpuMs": 4628.8098,
+      "uvUnpaintedInteriorSamples": 0,
+      "fabricatedRegionIds": 0,
+      "specialistMipAlphaMismatches": 0
+    },
+    {
+      "lod": 1,
+      "status": "BAKED",
+      "highTriangles": 17488,
+      "lowTriangles": 7144,
+      "sampledSurfaceError": 0.05032536746688436,
+      "errorBudget": 0.06,
+      "projectionMisses": 0,
+      "backfaces": 0,
+      "bakeCpuMs": 4684.074,
+      "uvUnpaintedInteriorSamples": 0,
+      "fabricatedRegionIds": 0,
+      "specialistMipAlphaMismatches": 0
+    },
+    {
+      "lod": 2,
+      "status": "BAKED_WITH_MISSES",
+      "highTriangles": 17488,
+      "lowTriangles": 5736,
+      "sampledSurfaceError": 0.055516480318274775,
+      "errorBudget": 0.08,
+      "projectionMisses": 41,
+      "backfaces": 0,
+      "bakeCpuMs": 4565.795,
+      "uvUnpaintedInteriorSamples": 32,
+      "fabricatedRegionIds": 0,
+      "specialistMipAlphaMismatches": 0
+    }
+  ]
+}

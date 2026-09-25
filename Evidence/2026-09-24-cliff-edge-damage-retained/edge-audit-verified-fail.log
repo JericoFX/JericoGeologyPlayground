@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\RockLodBakeAudit.py", line 132, in <module>
+    output = audit(Path(sys.argv[1]),
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\RockLodBakeAudit.py", line 109, in audit
+    assert mip_audit["unpaintedInteriorSamples"] == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

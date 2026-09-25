@@ -1,0 +1,13 @@
+Test project F:/JericoGeologyPlayground/build-surface
+    Start 15: Playground.Surface
+1/1 Test #15: Playground.Surface ...............***Failed    0.21 sec
+Surface displacement folds face 3262 at operation 4; orientation ratio=-0.178843, shortest edge=0.062767, minimum altitude=0.051764; reduce depth or improve input sampling
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.23 sec
+
+The following tests FAILED:
+	 15 - Playground.Surface (Failed)
+Errors while running CTest

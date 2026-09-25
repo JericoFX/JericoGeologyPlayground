@@ -43,7 +43,8 @@ enum class Kind
     LayerSettle,
     CliffCutLoop,
     FractureShear,
-    FractureQuadrants
+    FractureQuadrants,
+    CliffDrainage
 };
 enum class Mask
 {

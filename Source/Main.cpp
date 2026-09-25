@@ -687,7 +687,8 @@ void captureNormalBakes(Renderer &renderer, const std::filesystem::path &evidenc
 void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &evidence,
                          bool automaticUv = false, int familyFilter = -1,
                          double curvatureRelaxation = 0, bool angularFracture = false,
-                         bool angularFourBlocks = false)
+                         bool angularFourBlocks = false, bool cliffDrainage = false,
+                         bool cliffEdgeDamage = false)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
@@ -696,6 +697,8 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     report["curvatureRelaxation"] = curvatureRelaxation;
     report["angularFracture"] = angularFracture;
     report["angularFourBlocks"] = angularFourBlocks;
+    report["cliffDrainage"] = cliffDrainage;
+    report["cliffEdgeDamage"] = cliffEdgeDamage;
     report["imageSize"] = {1280, 960};
     report["textureResolution"] = 2048;
     Camera camera;
@@ -719,6 +722,38 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
             auto blocks = defaultLayer(Kind::FractureQuadrants);
             blocks.seed = 123;
             recipe.layers.insert(recipe.layers.end() - 1, blocks);
+        }
+        if ((cliffDrainage || cliffEdgeDamage) && family == 8)
+        {
+            recipe.version = 13;
+            if (cliffEdgeDamage)
+            {
+                auto damage = defaultLayer(Kind::DamageDecal);
+                damage.amplitude = 0.15f;
+                damage.direction = {0, 0, 1};
+                damage.translation = {0.45f, 0.15f, -0.15f};
+                damage.projectorRadius = {1.8f, 1.4f};
+                damage.featureRadius = 1;
+                damage.threshold = 0.55f;
+                damage.width = 0.45f;
+                damage.damageLip = 0;
+                damage.solidAlongNormals = false;
+                recipe.layers.insert(recipe.layers.begin() + 4, damage);
+                for (auto &layer : recipe.layers)
+                    if (layer.kind == Kind::CliffCutLoop)
+                    {
+                        layer.profile = 1;
+                        layer.width = 0.35f;
+                    }
+            }
+            auto drainage = defaultLayer(Kind::CliffDrainage);
+            drainage.seed = 123;
+            if (cliffEdgeDamage)
+            {
+                drainage.amplitude = 0.30f;
+                drainage.width = 0.22f;
+            }
+            recipe.layers.insert(recipe.layers.begin() + (cliffEdgeDamage ? 5 : 4), drainage);
         }
         double baseError = family == 10 ? 0.005 : family == 11 ? 0.02 :
                            family == 5 ? 0.08 : 0.04;
@@ -1070,6 +1105,8 @@ int run(int argc, char **argv)
     bool smoke = false, featureSmoke = false, angularProfileSmoke = false, rockLodSmoke = false,
          autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
          angularFractureSmoke = false, angularFourBlocksSmoke = false,
+         cliffDrainageSmoke = false,
+         cliffEdgeDamageSmoke = false,
          edgeRadiusSmoke = false, regeneratedLodSmoke = false, angularLod2Smoke = false,
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
@@ -1089,6 +1126,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--curvature-relaxation-bakes-test" ||
             std::string(argv[i]) == "--angular-fracture-bakes-test" ||
             std::string(argv[i]) == "--angular-four-block-bakes-test" ||
+            std::string(argv[i]) == "--cliff-drainage-bakes-test" ||
+            std::string(argv[i]) == "--cliff-edge-damage-bakes-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1111,6 +1150,8 @@ int run(int argc, char **argv)
             curvatureRelaxationSmoke = std::string(argv[i]) == "--curvature-relaxation-bakes-test";
             angularFractureSmoke = std::string(argv[i]) == "--angular-fracture-bakes-test";
             angularFourBlocksSmoke = std::string(argv[i]) == "--angular-four-block-bakes-test";
+            cliffDrainageSmoke = std::string(argv[i]) == "--cliff-drainage-bakes-test";
+            cliffEdgeDamageSmoke = std::string(argv[i]) == "--cliff-edge-damage-bakes-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -1725,15 +1766,19 @@ int run(int argc, char **argv)
                 continue;
             }
             if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke ||
-                angularFractureSmoke || angularFourBlocksSmoke)
+                angularFractureSmoke || angularFourBlocksSmoke || cliffDrainageSmoke ||
+                cliffEdgeDamageSmoke)
             {
                 captureRockLodBakes(renderer, evidence,
                                     autoUvRockLodSmoke || curvatureRelaxationSmoke ||
-                                        angularFractureSmoke || angularFourBlocksSmoke,
+                                        angularFractureSmoke || angularFourBlocksSmoke ||
+                                        cliffDrainageSmoke || cliffEdgeDamageSmoke,
+                                    cliffDrainageSmoke || cliffEdgeDamageSmoke ? 8 :
                                     angularFractureSmoke || angularFourBlocksSmoke ? 10 :
                                         automaticUvRockLodFamily,
                                     curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke,
-                                    angularFourBlocksSmoke);
+                                    angularFourBlocksSmoke, cliffDrainageSmoke,
+                                    cliffEdgeDamageSmoke);
                 window.requestClose();
                 continue;
             }

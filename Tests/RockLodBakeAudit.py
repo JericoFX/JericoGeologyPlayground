@@ -18,10 +18,15 @@ MAPS = (
 
 
 def audit(root: Path, require_automatic_uv: bool = False,
-          require_specialist_mips: bool = False) -> dict:
+          require_specialist_mips: bool = False,
+          expected_families: set[int] | None = None,
+          cliff_drainage: bool = False, cliff_edge_damage: bool = False) -> dict:
     proof = json.loads((root / "rock-lod-bakes-proof.json").read_text())
     result = {"families": [], "completeBakes": 0, "bakesWithMisses": 0, "rejectedLods": 0}
-    assert {case["family"] for case in proof["cases"]} == {5, 8, 9, 10, 11, 12}
+    assert proof.get("cliffDrainage", False) is cliff_drainage
+    assert proof.get("cliffEdgeDamage", False) is cliff_edge_damage
+    assert {case["family"] for case in proof["cases"]} == (
+        {5, 8, 9, 10, 11, 12} if expected_families is None else expected_families)
     for case in proof["cases"]:
         family = case["family"]
         assert [lod["lod"] for lod in case["lods"]] == [0, 1, 2]
@@ -118,10 +123,17 @@ def audit(root: Path, require_automatic_uv: bool = False,
 
 
 if __name__ == "__main__":
-    require_specialist_mips = "--require-specialist-mips" in sys.argv[3:]
+    options = sys.argv[3:]
+    require_specialist_mips = "--require-specialist-mips" in options
+    family = int(options[options.index("--family") + 1]) if "--family" in options else None
+    cliff_drainage = "--cliff-drainage" in options
+    cliff_edge_damage = "--cliff-edge-damage" in options
+    assert not (cliff_drainage and cliff_edge_damage)
     output = audit(Path(sys.argv[1]),
-                   "--require-auto-uv" in sys.argv[3:] or require_specialist_mips,
-                   require_specialist_mips)
+                   "--require-auto-uv" in options or require_specialist_mips,
+                   require_specialist_mips,
+                   {family} if family is not None else None,
+                   cliff_drainage, cliff_edge_damage)
     target = Path(sys.argv[2])
     target.write_text(json.dumps(output, indent=2) + "\n")
     print(f"PASS: {output['completeBakes']} complete, "

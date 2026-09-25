@@ -1,0 +1,13 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 15: Playground.Surface
+1/1 Test #15: Playground.Surface ...............***Failed    0.14 sec
+legacy v10 cut profile keeps its previous geometry after roundtrip
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.16 sec
+
+The following tests FAILED:
+	 15 - Playground.Surface (Failed)
+Errors while running CTest

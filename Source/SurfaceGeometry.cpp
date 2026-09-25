@@ -91,8 +91,45 @@ MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *canc
     document.brushes.push_back(wall);
     return bspSource(document, std::span<const Jerico::Guid>(&id, 1), subdivisions, cancel);
 }
+void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
+                   const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    const auto count = surface.mesh.positions.size();
+    const auto side = std::size_t(std::llround(std::sqrt(double(count))));
+    if (surface.closedSolid || side < 5 || side > 65 || side * side != count ||
+        surface.field.size() != count ||
+        surface.mesh.indices.size() != 6 * (side - 1) * (side - 1) ||
+        surface.mesh.triangleRegions.size() != 2 * (side - 1) * (side - 1))
+        throw std::runtime_error("Cliff drainage requires an open plane grid");
+    auto [minY, maxY] = std::minmax_element(surface.mesh.positions.begin(), surface.mesh.positions.end(),
+                                           [](const auto &a, const auto &b) { return a.y < b.y; });
+    auto [minX, maxX] = std::minmax_element(surface.mesh.positions.begin(), surface.mesh.positions.end(),
+                                           [](const auto &a, const auto &b) { return a.x < b.x; });
+    const double height = maxY->y - minY->y;
+    if (height <= 0 || layer.translation[0] - layer.lateral - 2 * layer.width <= minX->x ||
+        layer.translation[0] + layer.lateral + 2 * layer.width >= maxX->x)
+        throw std::runtime_error("Cliff drainage must stay inside the source surface");
+    for (std::size_t i = 0; i < count; ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        auto &p = surface.mesh.positions[i];
+        const double center = layer.translation[0] + layer.lateral *
+            std::sin(2 * std::numbers::pi * layer.frequency * (p.y - minY->y) / height + layer.phase);
+        const double dx = (p.x - center) / layer.width;
+        const double corridor = std::exp(-0.5 * dx * dx);
+        const double weak = 0.5 + 0.5 * std::sin(2 * std::numbers::pi *
+                                                 layer.thicknessFrequency * p.y + layer.phase);
+        const double retreat = layer.amplitude * (0.6 + 0.4 * weak) * corridor;
+        p.z -= retreat;
+        if (showField)
+            surface.field[i] = float(retreat / layer.amplitude);
+    }
+    normals(surface);
+}
 void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &layer, int operation, bool showField,
-                  const Jerico::CancellationToken *cancel)
+                  bool softEdgeProfile, const Jerico::CancellationToken *cancel)
 {
     check(cancel);
     if (surface.closedSolid || surface.mesh.positions.empty() ||
@@ -261,7 +298,15 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
         }
         auto &p = surface.mesh.positions[selectedVertex[i]];
         auto [u, v] = coordinates(p);
-        p.z += -layer.amplitude - 0.3 * p.z + layer.lateral * v;
+        double depth = layer.amplitude;
+        if (softEdgeProfile && layer.profile == 1)
+        {
+            const double inside = std::clamp((contour(u, v) - std::hypot(u, v)) / layer.width,
+                                             0.0, 1.0);
+            const double falloff = inside * inside * (3 - 2 * inside);
+            depth *= 0.35 + 0.65 * falloff;
+        }
+        p.z += -depth - 0.3 * p.z + layer.lateral * v;
         if (showField)
             surface.field[selectedVertex[i]] = 1;
         if (showField && selectedVertex[i] != i)

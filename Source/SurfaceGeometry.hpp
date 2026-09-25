@@ -11,5 +11,8 @@ MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Gu
 MeshResult solidifySurface(const MeshResult &source, const Layer &layer,
                            const Jerico::CancellationToken *cancel = nullptr);
 void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &layer, int operation,
-                  bool showField, const Jerico::CancellationToken *cancel = nullptr);
+                  bool showField, bool softEdgeProfile,
+                  const Jerico::CancellationToken *cancel = nullptr);
+void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
+                   const Jerico::CancellationToken *cancel = nullptr);
 } // namespace Playground

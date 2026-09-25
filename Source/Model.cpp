@@ -366,7 +366,8 @@ const char *name(Kind kind)
                                   "Layer settling",
                                   "Cliff cut loop",
                                   "Grounded fracture shear",
-                                  "Connected four-block chisel"};
+                                  "Connected four-block chisel",
+                                  "Cliff drainage incision"};
     return names[int(kind)];
 }
 Layer defaultLayer(Kind kind)
@@ -458,6 +459,16 @@ Layer defaultLayer(Kind kind)
         l.projectorRotation = 18;
         l.distortion = 0.16f;
         l.lateral = 0.1f;
+    }
+    if (kind == Kind::CliffDrainage)
+    {
+        l.amplitude = 0.16f;
+        l.width = 0.30f;
+        l.translation[0] = -1.5f;
+        l.lateral = 0.22f;
+        l.frequency = 1;
+        l.thicknessFrequency = 2.2f;
+        l.phase = 0.25f;
     }
     return l;
 }
@@ -668,7 +679,7 @@ void validate(const Recipe &r)
         if (!ok)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
-    require((r.version == 10 || r.version == 11 || r.version == 12) &&
+    require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -678,7 +689,11 @@ void validate(const Recipe &r)
     for (auto &l : r.layers)
     {
         finiteJson(layerJson(l));
-        require(int(l.kind) >= 0 && int(l.kind) < 22 && int(l.mask) >= 0 && int(l.mask) < 16);
+        require(int(l.kind) >= 0 && int(l.kind) < 23 && int(l.mask) >= 0 && int(l.mask) < 16);
+        if (l.kind == Kind::CliffDrainage)
+            require(r.version >= 13 && l.mask == Mask::None && l.amplitude >= 0.01f &&
+                    l.amplitude <= 0.5f && l.width >= 0.1f && l.width <= 1 &&
+                    l.frequency <= 4 && l.lateral <= 1);
         if (l.kind == Kind::FractureShear)
             require(r.version >= 11 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.3f &&
@@ -708,7 +723,8 @@ void validate(const Recipe &r)
             require(l.kind != Kind::Transform && l.kind != Kind::Layers && l.kind != Kind::Planes &&
                     l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
                     l.kind != Kind::LayerSettle && l.kind != Kind::CliffCutLoop &&
-                    l.kind != Kind::FractureShear && l.kind != Kind::FractureQuadrants);
+                    l.kind != Kind::FractureShear && l.kind != Kind::FractureQuadrants &&
+                    l.kind != Kind::CliffDrainage);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 && l.profile < 3);
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
@@ -963,7 +979,12 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         }
         if (l.kind == Kind::CliffCutLoop)
         {
-            cliffCutLoop(result, warp, l, int(stage), int(stage) == fieldLayer, cancel);
+            cliffCutLoop(result, warp, l, int(stage), int(stage) == fieldLayer, recipe.version >= 13, cancel);
+            continue;
+        }
+        if (l.kind == Kind::CliffDrainage)
+        {
+            cliffDrainage(result, l, int(stage) == fieldLayer, cancel);
             continue;
         }
         if (l.kind == Kind::Reduce)
@@ -1257,7 +1278,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                                    dot(n, damageProjector.normal) > 0;
                 value = front ? sample.softMask : 0;
                 auto displacement = front ? (sample.indentation + sample.lipDisplacement) * mask : 0;
-                result.mesh.positions[i] = add(p, mul(n, displacement));
+                const auto direction = recipe.version >= 13 && !l.solidAlongNormals ? damageProjector.normal : n;
+                result.mesh.positions[i] = add(p, mul(direction, displacement));
             }
             else if (l.kind == Kind::EdgeBreakup)
             {
@@ -1393,7 +1415,8 @@ Recipe deserialize(const std::string &text)
     int inputVersion = j.at("version");
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
-        inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12)
+        inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
+        inputVersion != 13)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1426,6 +1449,8 @@ Recipe deserialize(const std::string &text)
             throw std::runtime_error("Grounded fracture shear requires recipe v11");
         if (inputVersion < 12 && l.kind == Kind::FractureQuadrants)
             throw std::runtime_error("Four-block chisel requires recipe v12");
+        if (inputVersion < 13 && l.kind == Kind::CliffDrainage)
+            throw std::runtime_error("Cliff drainage requires recipe v13");
         if (inputVersion < 7 && a.value("perimeterAmplitude", 0.0f) != 0)
             throw std::runtime_error("Independent stratum perimeter requires recipe v7");
         if (inputVersion < 8 && a.contains("maskAxis") &&

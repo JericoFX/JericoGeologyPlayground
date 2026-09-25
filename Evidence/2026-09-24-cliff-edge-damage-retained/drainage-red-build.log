@@ -1,0 +1,18 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  AutoUv.cpp
+  LayerFormation.cpp
+  MeshReduction.cpp
+  Model.cpp
+  NormalBake.cpp
+  RBrushInterop.cpp
+  RockAddonMath.cpp
+  SolidGeometry.cpp
+  SurfaceFeatures.cpp
+  SurfaceGeometry.cpp
+  Generando código...
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundModel.lib
+  SurfaceTests.cpp
+F:\JericoGeologyPlayground\Tests\SurfaceTests.cpp(51,44): error C2838: 'CliffDrainage': nombre completo no válido en la declaración de miembro [F:\JericoGeologyPlayground\build-surface\PlaygroundSurfaceTests.vcxproj]
+F:\JericoGeologyPlayground\Tests\SurfaceTests.cpp(51,44): error C2065: 'CliffDrainage': identificador no declarado [F:\JericoGeologyPlayground\build-surface\PlaygroundSurfaceTests.vcxproj]
+F:\JericoGeologyPlayground\Tests\SurfaceTests.cpp(52,9): error C3536: 'drainage': no se puede usar antes de inicializarse [F:\JericoGeologyPlayground\build-surface\PlaygroundSurfaceTests.vcxproj]
