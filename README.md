@@ -76,6 +76,8 @@ El experimento separado `--cliff-nonharmonic-bakes-test Evidence/cliff-nonharmon
 
 `--cliff-macro-warp-bakes-test Evidence/cliff-macro` ensaya el vector FBM nativo que precede al RBrush con mayor desplazamiento lateral y vertical. El candidato retenido `Evidence/2026-09-25-cliff-macro-warp035-retained/` usa amplitud 0,35 y conserva high, tres LOD, mapas y capturas Vulkan; cambia la silueta sin alterar la región del corte. Es experimental y no modifica el preset por defecto.
 
+`--cliff-eroded-rim-bakes-test Evidence/cliff-eroded-rim` prueba un perfil v14 opt-in: el RBrush con alfa CC0 conserva el corte seleccionable y retrae el perímetro en ejes locales mediante ruido no armónico. Incluye tres LOD high→low, UV automática y los mapas/bakes habituales. El resultado verificado y su límite visual están en `Evidence/2026-09-25-cliff-eroded-rim.md`; sigue siendo un experimento, no un cliff natural aprobado.
+
 Los campos de transformación se interpretan según la operación: Transform, envelope y DamageDecal tienen coordenadas propias; las operaciones de ruido usan Frequency y Coordinate XYZ. `meshHash` prueba posiciones e índices: no es un hash de materiales/metadatos. El stack conserva GUID por triángulo y un catálogo de regiones.
 
 ## CPU, GPU y mediciones

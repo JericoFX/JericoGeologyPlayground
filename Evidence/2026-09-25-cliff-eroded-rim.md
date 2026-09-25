@@ -1,0 +1,19 @@
+# Cliff eroded-rim experiment (2026-09-25)
+
+Status: **PASS for the opt-in geometry/bake contract; PARTIAL for geological Beauty**.
+
+Reference: `E:\este\mods\CascadesDemoSecrets\CascadesDemoSecrets.pdf`, SHA-256 `200ED1D0886663F1BA76C890F3956A8924F3CF6823B5DB7080BADEB7517A4C09`. Pages 18, 20 and 26–27 discuss fractal octaves, nonharmonic frequency ratios and rotating sampling domains to avoid obvious repetition. Pages 9 and 12–17 show bounded combinations of implicit fields useful as a future shape study. The PDF does not specify a geomorphological erosion algorithm; pages 73–77 and 120–121 discuss water/wetness rendering. This experiment uses the noise concepts independently in native C++; it copies no PDF code or shader and adds no dependency.
+
+The existing v13 RBrush cliff remained the comparison. New recipe v14/profile 3 is opt-in via `--cliff-eroded-rim-bakes-test` or the playground's **RBrush push + eroded rim** option. It keeps the v13 selectable cut region, CC0 RBrush alpha and negative-Z push, then retreats only the outer 18% of the source grid along its **local, possibly transformed** inward grid directions. Retreat is capped to 40% of the local border band projected onto the pre-push grid direction, so a narrow wall cannot fold because the brush depth inflated a 3D span. Two differently oriented three-octave fields use lacunarity 1.87; a smooth envelope leaves the selected center unchanged. Version 13 recipes retain their earlier output. Tests cover a 90-degree rotated wall and a 0.3-unit wall with no inverted front triangles.
+
+The RED `Playground.Surface` test initially failed with `Recipe parameter outside Playground limits`; after implementation it passes. A narrow-plane regression then exposed a folded triangle and drove the local-width cap. The native Vulkan package at [`2026-09-25-cliff-eroded-rim-bounded-retained`](2026-09-25-cliff-eroded-rim-bounded-retained) generates a high source and contains three reduced lows, automatic UV, 2048² normal/AO/contact/cavity/edge and other maps with four mip levels, material captures and recipe metadata. [`RockLodBakeAudit.py`](../Tests/RockLodBakeAudit.py) checks that this package actually uses v14/profile 3 and reports 3 complete LODs, zero misses/backfaces and zero rejected LODs. [`BakeReplayAudit.py`](../Tests/BakeReplayAudit.py) found 171/171 artifacts identical across two same-binary runs, excluding CPU timing fields in JSON. Release build and CTest 17/17 passed; full logs and audit JSON are retained alongside this note.
+
+| LOD | Baseline tris | New tris | Sampled error / budget | New bake CPU ms |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 14,024 | 13,324 | 0.01457 / 0.02 | 4,719.7 |
+| 1 | 11,794 | 11,178 | 0.02140 / 0.03 | 4,647.2 |
+| 2 | 10,020 | 9,490 | 0.03233 / 0.04 | 4,381.1 |
+
+Baseline is the same-camera triplanar run `2026-09-25-cliff-triplanar-projected-candidate` (16,896 high triangles; bake CPU 4,961.1/4,794.8/4,833.6 ms). The reduced triangle/sample counts explain some CPU difference; one run is not a production performance claim, and no GPU timing or memory budget was measured. In the 1280×960 high-material view, a simple foreground mask (max RGB >70) changes by 30,470 pixels; the central ROI `[350:560,450:800]` remains mask-identical. Original-resolution inspection confirms a less straight outer rim, but it still reads as a cut-out wall panel with a smooth central groove. Natural cliff macroform and the cut's geological detail remain **unaccepted**. No Engine files, Blender or OpenVDB were used.
+
+Views: [baseline high](2026-09-25-cliff-triplanar-projected-candidate/rock-8/lod-0/high-material.png), [new high](2026-09-25-cliff-eroded-rim-bounded-retained/rock-8/lod-0/high-material.png), [new LOD2 low](2026-09-25-cliff-eroded-rim-bounded-retained/rock-8/lod-2/low-material.png).

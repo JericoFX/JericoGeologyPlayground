@@ -272,6 +272,93 @@ int main()
         auto macroSolid = evaluate(macroRecipe, 64);
         require(macroSolid.closedSolid && PA::validateClosedMesh(macroSolid.mesh).hasValue(),
                 "macro-warped RBrush cliff remains a closed solid");
+        auto erodedRecipe = macroRecipe;
+        erodedRecipe.version = 14;
+        erodedRecipe.layers[4].profile = 3;
+        const auto erodedOpen = evaluate(erodedRecipe, 64, 4);
+        const auto macroOpen = evaluate(macroRecipe, 64, 4);
+        require(erodedOpen.mesh.indices == macroOpen.mesh.indices &&
+                    erodedOpen.mesh.triangleRegions == macroOpen.mesh.triangleRegions,
+                "eroded outline retains topology and selectable cut identity");
+        double inwardBoundary = 0, centerShift = 0;
+        constexpr std::size_t cliffSide = 65;
+        for (std::size_t i = 0; i < erodedOpen.mesh.positions.size(); ++i)
+        {
+            const auto x = i % cliffSide, y = i / cliffSide;
+            const auto a = macroOpen.mesh.positions[i], b = erodedOpen.mesh.positions[i];
+            if (x == 0) inwardBoundary = std::max(inwardBoundary, b.x - a.x);
+            if (x == 64) inwardBoundary = std::max(inwardBoundary, a.x - b.x);
+            if (y == 0) inwardBoundary = std::max(inwardBoundary, b.y - a.y);
+            if (y == 64) inwardBoundary = std::max(inwardBoundary, a.y - b.y);
+            if (x >= 16 && x <= 48 && y >= 16 && y <= 48)
+                centerShift = std::max(centerShift, std::hypot(a.x - b.x, a.y - b.y));
+        }
+        require(inwardBoundary > 0.1 && centerShift < 1e-10,
+                "geological edge retreat breaks the panel outline without moving the selected center");
+        const auto erodedSolid = evaluate(erodedRecipe, 64);
+        require(erodedSolid.closedSolid && PA::validateClosedMesh(erodedSolid.mesh).hasValue(),
+                "eroded cliff remains a closed solid");
+        require(meshHash(erodedSolid.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(erodedRecipe)), 64).mesh),
+                "eroded rim recipe replays deterministically after serialization");
+        auto unsupportedRim = erodedRecipe;
+        unsupportedRim.version = 13;
+        bool rejectsOldRim = false;
+        try { evaluate(unsupportedRim, 64); }
+        catch (const std::exception &) { rejectsOldRim = true; }
+        require(rejectsOldRim, "old recipe version rejects new cliff rim profile");
+        Recipe rotatedRim;
+        rotatedRim.base = Base::Plane;
+        rotatedRim.version = 14;
+        auto yaw = defaultLayer(Kind::Transform);
+        yaw.rotation = {0, 0, 90};
+        auto rotatedCut = defaultLayer(Kind::CliffCutLoop);
+        rotatedCut.translation = {0, 0, 0};
+        rotatedCut.projectorRadius = {0.8f, 0.6f};
+        rotatedCut.profile = 2;
+        rotatedRim.layers = {yaw, rotatedCut};
+        const auto rotatedBefore = evaluate(rotatedRim, 64);
+        rotatedRim.layers[1].profile = 3;
+        const auto rotatedAfter = evaluate(rotatedRim, 64);
+        const auto edgeIndex = std::size_t(32 * 65);
+        const auto edgeBefore = rotatedBefore.mesh.positions[edgeIndex];
+        const auto edgeAfter = rotatedAfter.mesh.positions[edgeIndex];
+        require(std::abs(edgeAfter.x - edgeBefore.x) < 1e-6 &&
+                    edgeAfter.y - edgeBefore.y > 0.02,
+                "rotated cliff rim retreats along its local grid direction");
+        auto smallRim = rotatedRim;
+        smallRim.planeSize = {0.3f, 0.3f};
+        smallRim.layers[0].rotation = {0, 0, 0};
+        smallRim.layers[1].projectorRadius = {0.1f, 0.1f};
+        smallRim.layers[1].distortion = 0;
+        const auto smallAfter = evaluate(smallRim, 64);
+        smallRim.layers[1].profile = 2;
+        const auto smallBefore = evaluate(smallRim, 64);
+        double smallBorderShift = 0;
+        for (std::size_t i = 0; i < smallAfter.mesh.positions.size(); ++i)
+        {
+            const auto x = i % cliffSide, y = i / cliffSide;
+            if (x != 0 && x != 64 && y != 0 && y != 64)
+                continue;
+            const auto a = smallBefore.mesh.positions[i], b = smallAfter.mesh.positions[i];
+            smallBorderShift = std::max(smallBorderShift, std::hypot(a.x - b.x, a.y - b.y));
+        }
+        require(smallBorderShift > 0.001 && smallBorderShift < 0.04,
+                "small cliff rim retreat scales to the local border width");
+        for (std::size_t t = 0; t < smallAfter.mesh.indices.size(); t += 3)
+        {
+            const auto a = smallAfter.mesh.positions[smallAfter.mesh.indices[t]],
+                       b = smallAfter.mesh.positions[smallAfter.mesh.indices[t + 1]],
+                       c = smallAfter.mesh.positions[smallAfter.mesh.indices[t + 2]];
+            const double area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+            if (area <= 1e-12)
+                throw std::runtime_error("small eroded cliff folds triangle " +
+                                         std::to_string(t / 3) + " area=" +
+                                         std::to_string(area) + " a=" +
+                                         std::to_string(a.x) + "," + std::to_string(a.y) +
+                                         " b=" + std::to_string(b.x) + "," + std::to_string(b.y) +
+                                         " c=" + std::to_string(c.x) + "," + std::to_string(c.y));
+        }
         double alphaDifference = 0;
         for (std::size_t i = 0; i < pushed.mesh.positions.size(); ++i)
             alphaDifference = std::max(alphaDifference,

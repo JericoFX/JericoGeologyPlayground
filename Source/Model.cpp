@@ -680,7 +680,8 @@ void validate(const Recipe &r)
         if (!ok)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
-    require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13) &&
+    require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
+             r.version == 14) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -718,7 +719,8 @@ void validate(const Recipe &r)
         if (l.kind == Kind::CliffCutLoop)
             require(l.mask == Mask::None && l.amplitude > 0 && l.amplitude <= 2 &&
                     l.alphaSource >= 0 && l.alphaSource <= 1 &&
-                    (l.alphaSource == 0 || (r.version >= 13 && l.profile == 2)) &&
+                    (l.alphaSource == 0 || (r.version >= 13 && l.profile >= 2)) &&
+                    (l.profile != 3 || r.version >= 14) &&
                     l.projectorRadius[0] >= 0.1f && l.projectorRadius[0] <= 5 &&
                     l.projectorRadius[1] >= 0.1f && l.projectorRadius[1] <= 5 &&
                     std::abs(l.projectorRotation) <= 360 && l.distortion <= 0.3f);
@@ -729,7 +731,8 @@ void validate(const Recipe &r)
                     l.kind != Kind::FractureShear && l.kind != Kind::FractureQuadrants &&
                     l.kind != Kind::CliffDrainage);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
-        require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 && l.profile < 3);
+        require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
+                l.profile < (l.kind == Kind::CliffCutLoop ? 4 : 3));
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
                 l.distortion <= 4 && std::abs(l.solidOffset) <= 1);
         require(std::abs(l.amplitude) <= 5 && l.frequency >= 0.01f && l.frequency <= 100 && l.octaves >= 1 &&
@@ -1397,7 +1400,7 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
     smoothMatchedLayerSeams(result);
     const bool smoothPushBoundary = recipe.version >= 13 && std::any_of(
         recipe.layers.begin(), recipe.layers.end(), [](const Layer &layer)
-        { return layer.enabled && layer.kind == Kind::CliffCutLoop && layer.profile == 2; });
+        { return layer.enabled && layer.kind == Kind::CliffCutLoop && layer.profile >= 2; });
     renderNormals(result, smoothPushBoundary, cancel);
     result.stages = std::move(timings);
     result.milliseconds =
@@ -1437,7 +1440,7 @@ Recipe deserialize(const std::string &text)
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
-        inputVersion != 13)
+        inputVersion != 13 && inputVersion != 14)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

@@ -327,7 +327,7 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     {
         const double angle = std::atan2(v, u), seed = double(layer.seed % 1000) * 0.019;
         double detail = 0;
-        if (softEdgeProfile && layer.profile == 2)
+        if (softEdgeProfile && layer.profile >= 2)
         {
             const double x = std::cos(angle), y = std::sin(angle);
             const double broad = PA::evaluateGeologyFbmReference(
@@ -432,9 +432,10 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     }
     if (connectedVertices != boundary.size())
         throw std::runtime_error("Cliff cut loop contains disconnected joints");
-    if (softEdgeProfile && layer.profile == 2)
+    if (softEdgeProfile && layer.profile >= 2)
     {
         // RBrush-style push: deform the existing surface, never duplicate an overlay shell.
+        const auto rimBasis = layer.profile == 3 ? surface.mesh.positions : std::vector<Vec3d>{};
         const auto id = Solid::region(layer.seed, 0x434c494646000000ULL ^ std::uint64_t(operation));
         surface.regions.push_back({id, parent, SurfaceRole::CutLoop, operation, -1});
         for (std::size_t q = 0; q < selected.size(); ++q)
@@ -459,6 +460,69 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
                    std::clamp(0.85 + 0.15 * strata, 0.7, 1.0);
             if (showField)
                 surface.field[i] = float(falloff);
+        }
+        if (layer.profile == 3)
+        {
+            // Retreat only the outer grid band. A non-harmonic octave ratio and
+            // differently oriented domains avoid a periodic scallop at the rim.
+            const auto beforeRim = surface.mesh.positions;
+            auto edgeWeight = [](double unit)
+            {
+                const double distance = std::min(unit, 1.0 - unit);
+                const double t = std::clamp(1.0 - distance / 0.18, 0.0, 1.0);
+                return t * t * (3.0 - 2.0 * t);
+            };
+            const auto bandSteps = std::max<std::size_t>(1, std::size_t(0.18 * double(n)));
+            for (std::size_t i = 0; i < surface.mesh.positions.size(); ++i)
+            {
+                if ((i & 255) == 0)
+                    check(cancel);
+                auto &p = surface.mesh.positions[i];
+                const auto original = beforeRim[i];
+                const double u = double(i % side) / double(n);
+                const double v = double(i / side) / double(n);
+                const double wx = edgeWeight(u), wy = edgeWeight(v);
+                auto retreatToward = [&](std::size_t neighbor, std::size_t bandNeighbor,
+                                         double desired, double weight)
+                {
+                    const auto basis = rimBasis[i], target = rimBasis[neighbor],
+                               far = rimBasis[bandNeighbor];
+                    const double dx = target.x - basis.x, dy = target.y - basis.y,
+                                 dz = target.z - basis.z;
+                    const double length = std::sqrt(dx * dx + dy * dy + dz * dz);
+                    if (length < 1e-8)
+                        throw std::runtime_error("Cliff rim has a degenerate local grid direction");
+                    const double sx = far.x - basis.x, sy = far.y - basis.y,
+                                 sz = far.z - basis.z;
+                    const double bandWidth = std::max(0.0, (sx * dx + sy * dy + sz * dz) / length);
+                    const double distance = std::min(desired, 0.4 * bandWidth) * weight;
+                    p.x += distance * dx / length;
+                    p.y += distance * dy / length;
+                    p.z += distance * dz / length;
+                };
+                if (wx > 0)
+                {
+                    const double noise = PA::evaluateGeologyFbmReference(
+                        {0.83 * original.y + 0.17 * original.z,
+                         0.31 * original.y - 0.23 * original.z, 1.37},
+                        layer.seed ^ 0x49e367abU, 3, 1.87, 0.5);
+                    const double field = std::clamp(0.5 + 0.5 * noise, 0.0, 1.0);
+                    retreatToward(u < 0.5 ? i + 1 : i - 1,
+                                  u < 0.5 ? i + bandSteps : i - bandSteps,
+                                  0.55 * field * field, wx);
+                }
+                if (wy > 0)
+                {
+                    const double noise = PA::evaluateGeologyFbmReference(
+                        {0.61 * original.x - 0.19 * original.z,
+                         0.47 * original.x + 0.11 * original.z, -2.11},
+                        layer.seed ^ 0x8c125df3U, 3, 1.87, 0.5);
+                    const double field = std::clamp(0.5 + 0.5 * noise, 0.0, 1.0);
+                    retreatToward(v < 0.5 ? i + side : i - side,
+                                  v < 0.5 ? i + bandSteps * side : i - bandSteps * side,
+                                  0.45 * field * field, wy);
+                }
+            }
         }
         normals(surface);
         return;

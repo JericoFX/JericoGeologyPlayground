@@ -22,4 +22,6 @@ El [ensayo de boca-garganta-cámara](Evidence/2026-09-25-cave-profile-rejected.m
 
 La [variante axial con reducción desde la macroforma high](Evidence/2026-09-25-cave-axial-lods.md) resolvió ese fallo técnico: tres LOD decrecientes conservan boca/garganta/interior, seis paquetes de bakes tienen cero misses y 266 artefactos de dos corridas con el mismo binario coinciden. Es opt-in; la Beauty sigue mostrando un bloque perforado, por lo que aún falta una caverna natural.
 
+El [perfil opt-in v14 de borde erosionado del cliff](Evidence/2026-09-25-cliff-eroded-rim.md), inspirado sólo en conceptos de ruido del PDF `CascadesDemoSecrets`, retrae la malla según los ejes locales, conserva selección/UV y pasó tres LOD con bakes sin misses y 171 artefactos repetibles. La captura original muestra un borde menos recto, pero todavía una pared recortada y una hendidura suave; la Beauty del cliff continúa **PARTIAL**.
+
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.
