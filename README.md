@@ -68,6 +68,8 @@ La corrida retenida está en `Evidence/2026-09-25-cave-forms-rock-material/`. Es
 
 La variante posterior en `Evidence/2026-09-25-cave-faceted-relief-retained/` usa un brush exterior convexo facetado sólo para el arco, aumenta su relieve high a 0,12 y ensaya una proyección triplanar de mayor escala en las dos formas. El túnel cuadrado conserva el contorno BSP original como control. Esta variante es la referencia visual vigente; la primera corrida queda para comparar la silueta y el tiling.
 
+El experimento separado `--cliff-nonharmonic-bakes-test Evidence/cliff-nonharmonic` conserva el cliff con alfa RBrush y cambia sólo la lacunaridad de su `CliffCutLoop` de 2 a 1,87. Los tres LOD y bakes se generan, pero la diferencia visual medida es mínima; no es un nuevo preset aprobado.
+
 Los campos de transformación se interpretan según la operación: Transform, envelope y DamageDecal tienen coordenadas propias; las operaciones de ruido usan Frequency y Coordinate XYZ. `meshHash` prueba posiciones e índices: no es un hash de materiales/metadatos. El stack conserva GUID por triángulo y un catálogo de regiones.
 
 ## CPU, GPU y mediciones

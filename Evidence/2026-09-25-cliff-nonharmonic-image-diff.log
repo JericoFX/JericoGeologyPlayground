@@ -1,0 +1,4 @@
+high mean_abs_RGB 0.0506201171875 changed_pixels 40933
+lod2 mean_abs_RGB 0.11276150173611112 changed_pixels 85454
+high foreground_pixels 330884 mean_abs_RGB_foreground 0.18798733090750838 changed_foreground_fraction 0.12370800643125687
+lod2 foreground_pixels 330884 mean_abs_RGB_foreground 0.4187610562412608 changed_foreground_fraction 0.25825969221842093

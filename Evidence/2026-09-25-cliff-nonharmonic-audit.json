@@ -1,0 +1,204 @@
+{
+  "families": [
+    {
+      "family": 8,
+      "lods": [
+        {
+          "lod": 0,
+          "status": "BAKED",
+          "lowTriangles": 14000,
+          "misses": 0,
+          "maps": {
+            "normal.png": {
+              "mean": 127.79,
+              "brightFraction": 0.6065
+            },
+            "ambient-occlusion.png": {
+              "mean": 13.23,
+              "brightFraction": 0.0001
+            },
+            "contact-occlusion.png": {
+              "mean": 1.55,
+              "brightFraction": 0.0
+            },
+            "signed-curvature.png": {
+              "mean": 140.94,
+              "brightFraction": 0.6083
+            },
+            "cavity.png": {
+              "mean": 10.5,
+              "brightFraction": 0.0326
+            },
+            "convex-edge.png": {
+              "mean": 28.85,
+              "brightFraction": 0.0939
+            },
+            "crease-distance-mask.png": {
+              "mean": 96.88,
+              "brightFraction": 0.3776
+            },
+            "thickness.png": {
+              "mean": 45.21,
+              "brightFraction": 0.0161
+            },
+            "region-id.png": {
+              "mean": 157.7,
+              "brightFraction": 0.5931
+            },
+            "signed-height.png": {
+              "mean": 127.71,
+              "brightFraction": 0.7065
+            }
+          },
+          "specialistMips": {
+            "unpaintedInteriorSamples": 0,
+            "fabricatedRegionIds": 0,
+            "maskPeakByLevel": {
+              "cavity": [
+                255,
+                255,
+                255
+              ],
+              "convex-edge": [
+                255,
+                255,
+                255
+              ]
+            }
+          }
+        },
+        {
+          "lod": 1,
+          "status": "BAKED",
+          "lowTriangles": 11860,
+          "misses": 0,
+          "maps": {
+            "normal.png": {
+              "mean": 127.67,
+              "brightFraction": 0.588
+            },
+            "ambient-occlusion.png": {
+              "mean": 13.24,
+              "brightFraction": 0.0001
+            },
+            "contact-occlusion.png": {
+              "mean": 1.54,
+              "brightFraction": 0.0
+            },
+            "signed-curvature.png": {
+              "mean": 140.87,
+              "brightFraction": 0.6077
+            },
+            "cavity.png": {
+              "mean": 10.53,
+              "brightFraction": 0.0326
+            },
+            "convex-edge.png": {
+              "mean": 28.91,
+              "brightFraction": 0.0943
+            },
+            "crease-distance-mask.png": {
+              "mean": 95.89,
+              "brightFraction": 0.3734
+            },
+            "thickness.png": {
+              "mean": 45.34,
+              "brightFraction": 0.0164
+            },
+            "region-id.png": {
+              "mean": 157.44,
+              "brightFraction": 0.5914
+            },
+            "signed-height.png": {
+              "mean": 127.69,
+              "brightFraction": 0.6814
+            }
+          },
+          "specialistMips": {
+            "unpaintedInteriorSamples": 0,
+            "fabricatedRegionIds": 0,
+            "maskPeakByLevel": {
+              "cavity": [
+                255,
+                255,
+                255
+              ],
+              "convex-edge": [
+                255,
+                255,
+                255
+              ]
+            }
+          }
+        },
+        {
+          "lod": 2,
+          "status": "BAKED",
+          "lowTriangles": 10188,
+          "misses": 0,
+          "maps": {
+            "normal.png": {
+              "mean": 127.8,
+              "brightFraction": 0.5842
+            },
+            "ambient-occlusion.png": {
+              "mean": 13.34,
+              "brightFraction": 0.0001
+            },
+            "contact-occlusion.png": {
+              "mean": 1.55,
+              "brightFraction": 0.0
+            },
+            "signed-curvature.png": {
+              "mean": 140.48,
+              "brightFraction": 0.6047
+            },
+            "cavity.png": {
+              "mean": 10.55,
+              "brightFraction": 0.0326
+            },
+            "convex-edge.png": {
+              "mean": 28.8,
+              "brightFraction": 0.0942
+            },
+            "crease-distance-mask.png": {
+              "mean": 94.98,
+              "brightFraction": 0.3698
+            },
+            "thickness.png": {
+              "mean": 45.36,
+              "brightFraction": 0.0162
+            },
+            "region-id.png": {
+              "mean": 157.2,
+              "brightFraction": 0.5905
+            },
+            "signed-height.png": {
+              "mean": 127.67,
+              "brightFraction": 0.6647
+            }
+          },
+          "specialistMips": {
+            "unpaintedInteriorSamples": 0,
+            "fabricatedRegionIds": 0,
+            "maskPeakByLevel": {
+              "cavity": [
+                255,
+                255,
+                255
+              ],
+              "convex-edge": [
+                255,
+                255,
+                255
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "completeBakes": 3,
+  "bakesWithMisses": 0,
+  "rejectedLods": 0
+}

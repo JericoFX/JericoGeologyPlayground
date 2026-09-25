@@ -239,6 +239,14 @@ int main()
                 std::abs(alphaPush.mesh.positions[i].z - pushed.mesh.positions[i].z));
         require(alphaDifference > 0.005 && alphaDifference < alphaRecipe.layers[4].amplitude,
                 "officially imported RBrush alpha measurably modulates the push");
+        auto nonharmonicCliff = alphaRecipe;
+        nonharmonicCliff.layers[4].lacunarity = 1.87f;
+        auto nonharmonicPush = evaluate(nonharmonicCliff, 32, 4);
+        require(meshHash(nonharmonicPush.mesh) != meshHash(alphaPush.mesh),
+                "cliff push contour responds to authored octave lacunarity");
+        require(meshHash(nonharmonicPush.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(nonharmonicCliff)), 32, 4).mesh),
+                "nonharmonic cliff contour replays deterministically");
         require(serialize(deserialize(serialize(alphaRecipe))) == serialize(alphaRecipe),
                 "RBrush alpha choice survives recipe roundtrip");
         auto pushSolid = evaluate(alphaRecipe, 32);
