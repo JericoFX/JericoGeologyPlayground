@@ -1,0 +1,116 @@
+{
+  "family": 8,
+  "referenceMapsExact": [
+    "normal",
+    "ambient-occlusion",
+    "contact-occlusion",
+    "signed-curvature",
+    "cavity",
+    "convex-edge",
+    "crease-distance-mask",
+    "thickness",
+    "region-id",
+    "signed-height"
+  ],
+  "modes": {
+    "normal": {
+      "low-mips": {
+        "spatial": {
+          "mean": 0.7559061646461487,
+          "p95": 2.2950754165649414,
+          "p99": 5.488661766052246
+        },
+        "temporalChange": {
+          "mean": 0.1362534612417221,
+          "p95": 0.44936954975128174,
+          "p99": 0.6339647173881531
+        },
+        "temporalResidual": {
+          "mean": 0.1405031681060791,
+          "p95": 0.4489338994026184,
+          "p99": 0.6293178796768188
+        },
+        "neighborDetail": {
+          "high": {
+            "mean": 3.0230610370635986,
+            "p95": 7.277932167053223,
+            "p99": 18.81600570678711
+          },
+          "low": {
+            "mean": 3.0156431198120117,
+            "p95": 7.324666500091553,
+            "p99": 19.472877502441406
+          },
+          "meanRetention": 0.9975462231292583
+        }
+      },
+      "low-no-normal-mips": {
+        "spatial": {
+          "mean": 0.3583533763885498,
+          "p95": 1.0638564825057983,
+          "p99": 2.8308348655700684
+        },
+        "temporalChange": {
+          "mean": 0.14023691415786743,
+          "p95": 0.44936954975128174,
+          "p99": 0.6355060935020447
+        },
+        "temporalResidual": {
+          "mean": 0.1292041689157486,
+          "p95": 0.4484977722167969,
+          "p99": 0.625575602054596
+        },
+        "neighborDetail": {
+          "high": {
+            "mean": 3.0230610370635986,
+            "p95": 7.277932167053223,
+            "p99": 18.81600570678711
+          },
+          "low": {
+            "mean": 3.045396089553833,
+            "p95": 7.423486709594727,
+            "p99": 19.157224655151367
+          },
+          "meanRetention": 1.0073882241266054
+        }
+      }
+    },
+    "material": {
+      "low-mips": {
+        "spatial": {
+          "mean": 2.965343713760376,
+          "p95": 13.666666984558105,
+          "p99": 22.0
+        },
+        "temporalChange": {
+          "mean": 0.17559762299060822,
+          "p95": 0.6666666865348816,
+          "p99": 1.0
+        },
+        "temporalResidual": {
+          "mean": 0.17636406421661377,
+          "p95": 0.6666666865348816,
+          "p99": 1.0
+        }
+      },
+      "low-no-normal-mips": {
+        "spatial": {
+          "mean": 2.9430298805236816,
+          "p95": 13.666666984558105,
+          "p99": 22.0
+        },
+        "temporalChange": {
+          "mean": 0.17685353755950928,
+          "p95": 0.6666666865348816,
+          "p99": 1.0
+        },
+        "temporalResidual": {
+          "mean": 0.17662625014781952,
+          "p95": 0.6666666865348816,
+          "p99": 1.0
+        }
+      }
+    }
+  },
+  "limit": "Five tiny yaw steps and rasterized high are diagnostic; these metrics do not establish temporal Beauty or justify a new filter by themselves."
+}

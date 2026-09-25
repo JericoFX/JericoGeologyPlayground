@@ -1073,6 +1073,10 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
             renderer.capture(evidence / (name + "-material-" + std::to_string(i) + ".png"));
             renderer.draw(1280, 960, view, 1);
             renderer.capture(evidence / (name + "-normal-" + std::to_string(i) + ".png"));
+            renderer.draw(1280, 960, view, 6);
+            renderer.capture(evidence / (name + "-depth-" + std::to_string(i) + ".png"));
+            renderer.draw(1280, 960, view, 7);
+            renderer.capture(evidence / (name + "-primitive-" + std::to_string(i) + ".png"));
         }
     };
     renderer.upload(preview.high);
@@ -1090,6 +1094,13 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     preview.bake.normalMips = std::move(savedMips);
     nlohmann::json report = {{"family", family}, {"adapter", renderer.adapter()},
                              {"imageSize", {1280, 960}}, {"textureResolution", 2048},
+                             {"reprojectionVersion", 1},
+                             {"depthEncoding", "linear-view-24-bit-rgb"},
+                             {"depthEncodingMaxMeters", 100.0},
+                             {"primitiveEncoding", "triangle-index-plus-one-24-bit-rgb"},
+                             {"projectionScale", 2.4},
+                             {"cameraYaw", camera.yaw}, {"cameraPitch", camera.pitch},
+                             {"cameraTarget", camera.target},
                              {"normalMipLevels", preview.bake.normalMips.size() + 1},
                              {"yawOffsets", offsets}, {"cameraDistance", camera.distance},
                              {"highHash", preview.bake.highHash},

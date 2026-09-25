@@ -58,7 +58,18 @@ VOut VSMain(VIn input) {
  o.Position=float4(dot(q,right)*scale/Camera.w,dot(q,up)*scale,(depth-0.05)*100.0/99.95,depth);
  o.Normal=input.Normal;o.World=input.Position;o.Field=input.Field;o.UV=input.UV;o.Tangent=input.Tangent;o.Bitangent=input.Bitangent;return o;
 }
-float4 PSMain(VOut input):SV_TARGET {
+float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
+ if(Target.w>5.5 && Target.w<7.5){
+  uint packed;
+  if(Target.w<6.5){
+   float cy=cos(Camera.x),sy=sin(Camera.x),cp=cos(Camera.y),sp=sin(Camera.y);
+   float3 forward=float3(sy*cp,sp,cy*cp);
+   float viewDepth=dot(input.World-Target.xyz,forward)+Camera.z;
+   packed=(uint)round(saturate(viewDepth/100.0)*16777215.0);
+  }else packed=primitiveId+1u;
+  return float4(float3(float((packed>>16)&255u),float((packed>>8)&255u),
+                       float(packed&255u))/255.0,1.0);
+ }
  if(Target.w>3.5 && Target.w<4.5){float v=NormalMap.Sample(NormalMap_sampler,float2(input.UV.x,1-input.UV.y)).r;return float4(v,v,v,1);}
  float3 n=normalize(input.Normal);
  if(Range.z>0.5) {
@@ -548,7 +559,9 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
     auto *color = r.color->GetDefaultView(TEXTURE_VIEW_RENDER_TARGET);
     auto *depth = r.depth->GetDefaultView(TEXTURE_VIEW_DEPTH_STENCIL);
     r.context->SetRenderTargets(1, &color, depth, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
-    const float clear[] = {0.055f, 0.068f, 0.086f, 1};
+    const bool diagnostic = mode == 6 || mode == 7;
+    const float clear[] = {diagnostic ? 0.0f : 0.055f, diagnostic ? 0.0f : 0.068f,
+                           diagnostic ? 0.0f : 0.086f, diagnostic ? 0.0f : 1.0f};
     r.context->ClearRenderTarget(color, clear, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
     r.context->ClearDepthStencil(depth, CLEAR_DEPTH_FLAG, 1, 0, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
     if (r.vertices)

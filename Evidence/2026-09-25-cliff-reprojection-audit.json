@@ -1,0 +1,189 @@
+{
+  "family": 8,
+  "transitions": 4,
+  "stationary": {
+    "eligible": 78840,
+    "matched": 78840,
+    "normalChangeDegrees": {
+      "mean": 0.0062017845921218395,
+      "p95": 0.019290396943688393,
+      "p99": 0.023141324520111084
+    },
+    "linearRenderedColorChange": {
+      "mean": 1.6349635088694418e-16,
+      "p95": 1.1379786002407855e-15,
+      "p99": 2.943500478080896e-15
+    }
+  },
+  "variants": {
+    "high": {
+      "eligible": 315364,
+      "matched": 310279,
+      "perTransition": [
+        {
+          "eligible": 78853,
+          "inside": 78853,
+          "samePrimitive": 77546,
+          "matched": 77546
+        },
+        {
+          "eligible": 78842,
+          "inside": 78842,
+          "samePrimitive": 77517,
+          "matched": 77517
+        },
+        {
+          "eligible": 78840,
+          "inside": 78840,
+          "samePrimitive": 77608,
+          "matched": 77608
+        },
+        {
+          "eligible": 78829,
+          "inside": 78829,
+          "samePrimitive": 77608,
+          "matched": 77608
+        }
+      ],
+      "normalChangeDegrees": {
+        "mean": 0.11808747053146362,
+        "p95": 0.44532510638237,
+        "p99": 0.6059454083442688
+      },
+      "linearRenderedColorChange": {
+        "mean": 0.0005688279634341598,
+        "p95": 0.0018744139233604074,
+        "p99": 0.002775605535134673
+      }
+    },
+    "low-mips": {
+      "eligible": 315347,
+      "matched": 311188,
+      "perTransition": [
+        {
+          "eligible": 78849,
+          "inside": 78849,
+          "samePrimitive": 77830,
+          "matched": 77829
+        },
+        {
+          "eligible": 78839,
+          "inside": 78839,
+          "samePrimitive": 77690,
+          "matched": 77689
+        },
+        {
+          "eligible": 78835,
+          "inside": 78835,
+          "samePrimitive": 77826,
+          "matched": 77824
+        },
+        {
+          "eligible": 78824,
+          "inside": 78824,
+          "samePrimitive": 77848,
+          "matched": 77846
+        }
+      ],
+      "normalChangeDegrees": {
+        "mean": 0.1176375299692154,
+        "p95": 0.4443306624889374,
+        "p99": 0.5942411422729492
+      },
+      "linearRenderedColorChange": {
+        "mean": 0.0005926302983425558,
+        "p95": 0.0018722827080637217,
+        "p99": 0.002779898699373007
+      }
+    },
+    "low-no-normal-mips": {
+      "eligible": 315347,
+      "matched": 311188,
+      "perTransition": [
+        {
+          "eligible": 78849,
+          "inside": 78849,
+          "samePrimitive": 77830,
+          "matched": 77829
+        },
+        {
+          "eligible": 78839,
+          "inside": 78839,
+          "samePrimitive": 77690,
+          "matched": 77689
+        },
+        {
+          "eligible": 78835,
+          "inside": 78835,
+          "samePrimitive": 77826,
+          "matched": 77824
+        },
+        {
+          "eligible": 78824,
+          "inside": 78824,
+          "samePrimitive": 77848,
+          "matched": 77846
+        }
+      ],
+      "normalChangeDegrees": {
+        "mean": 0.12525075674057007,
+        "p95": 0.4464303255081177,
+        "p99": 0.6220760345458984
+      },
+      "linearRenderedColorChange": {
+        "mean": 0.0005978361004963517,
+        "p95": 0.0018918077694252133,
+        "p99": 0.0028087024111300707
+      }
+    }
+  },
+  "shared": {
+    "low-mips": {
+      "pixels": 308397,
+      "normalTemporalResidualDegrees": {
+        "mean": 0.11013878881931305,
+        "p95": 0.4300221800804138,
+        "p99": 0.5456862449645996
+      },
+      "linearRenderedColorTemporalResidual": {
+        "mean": 0.000453109503723681,
+        "p95": 0.0015308615984395146,
+        "p99": 0.0022435274440795183
+      },
+      "normalSpatialDegrees": {
+        "mean": 0.7435593605041504,
+        "p95": 2.288242816925049,
+        "p99": 5.3968095779418945
+      },
+      "linearRenderedColorSpatial": {
+        "mean": 0.00805584341287613,
+        "p95": 0.03558849170804024,
+        "p99": 0.0619373545050621
+      }
+    },
+    "low-no-normal-mips": {
+      "pixels": 308397,
+      "normalTemporalResidualDegrees": {
+        "mean": 0.10475323349237442,
+        "p95": 0.42791739106178284,
+        "p99": 0.5409345626831055
+      },
+      "linearRenderedColorTemporalResidual": {
+        "mean": 0.0004542323586065322,
+        "p95": 0.0015388528117910028,
+        "p99": 0.0022634619381278753
+      },
+      "normalSpatialDegrees": {
+        "mean": 0.3509538471698761,
+        "p95": 1.050902009010315,
+        "p99": 2.725943088531494
+      },
+      "linearRenderedColorSpatial": {
+        "mean": 0.007990889251232147,
+        "p95": 0.035304225981235504,
+        "p99": 0.062072642147541046
+      }
+    }
+  },
+  "limit": "Mode-5 color includes lighting and view-dependent specular; visibility is matched within each mesh, then high/low depth at the starting pixel. Five tiny yaw steps and one light remain a diagnostic, not representative Beauty acceptance."
+}
