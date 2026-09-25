@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\CaveBakeAudit.py", line 41, in <module>
+    result = audit(Path(sys.argv[1]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\CaveBakeAudit.py", line 22, in audit
+    assert lod["sampledSurfaceError"] <= 0.15
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

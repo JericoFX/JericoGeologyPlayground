@@ -1,0 +1,12 @@
+{
+  "front": {
+    "silhouetteIou": 0.6951320248902063,
+    "changedMaskPixels": 139878
+  },
+  "oblique": {
+    "silhouetteIou": 0.7401991804101441,
+    "changedMaskPixels": 119061
+  },
+  "squareControlIdentical": true,
+  "limit": "Silhouette change is not proof of natural-cave Beauty."
+}

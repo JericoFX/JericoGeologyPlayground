@@ -1,0 +1,21 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 16: Playground.BspSource
+1/1 Test #16: Playground.BspSource .............***Failed    0.17 sec
+translated BSP sampled source error 3.9968e-15 layered error 5.77663e-15
+cave topology 1 volume 53.4318 V/E/F 672/2016/1344 Euler 0
+cave topology 0 volume 60.12 V/E/F 256/768/512 Euler 0
+cave passage right wall mouth/throat/chamber 1.59339/1.30344/1.56112
+degenerate cave face subdivision 2 triangle 134 area-squared 2.23857e-18
+  -1.39086,-0.100161,-0.643473
+  -1.39086,-0.100159,-0.64351
+  -1.39085,-0.100124,-0.643473
+geological cave has no degenerate face at any sampled LOD
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.19 sec
+
+The following tests FAILED:
+	 16 - Playground.BspSource (Failed)
+Errors while running CTest
