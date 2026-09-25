@@ -54,6 +54,8 @@ La corrección posterior de la misma variante hizo claramente visibles **ambas p
 
 La [prueba de erosión de juntas por capa de pizarra](Evidence/2026-09-25-slate-layer-joints-rejected.md) se rechazó: respetó los contactos, pero el primer campo excedió los tres errores high→low y el segundo aún rechazó LOD1 (0,034 frente a 0,03 m), con diferencias visuales pequeñas. El código experimental se retiró; la fuente tabular v16 continúa como control. No elevar los presupuestos ni ajustar mips para ocultar una macrofractura insuficiente.
 
+El [ensayo de fractura de la fuente antes de las capas](Evidence/2026-09-25-slate-source-cap-guard.md) encontró tapas con los mismos vértices, pero triangulaciones distintas. El perfil de horizontes fracturados ahora rechaza esa entrada antes de formar contactos potencialmente abiertos. La pizarra retenida conserva 164 artefactos de bake idénticos y CTest 17/17; sigue faltando una macrofractura visual compatible con los contactos y los tres LOD.
+
 La [revalidación RBrush contra el checkout actual del Engine](Evidence/2026-09-25-rbrush-current-engine-compatibility.md) pasó los dos tests Release de interoperabilidad/roundtrip del alpha CC0 y fijó hashes de los inputs del Engine. Eso verifica el adaptador matemático y el contenedor local, no el stamp/editor/cook/runtime real de M8.
 
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.

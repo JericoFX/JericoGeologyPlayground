@@ -8,6 +8,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <string>
 #include <stdexcept>
 #include <tuple>
 using namespace Playground;
@@ -278,6 +279,26 @@ int main()
             require(contactTriangles(cubeStack, k, 1) ==
                         contactTriangles(cubeStack, k + 1, 2),
                     "cube source must retain exact contact triangles before slate authoring");
+        auto shearedSourceStack = cubeSourceStack;
+        shearedSourceStack.layers.insert(shearedSourceStack.layers.begin(),
+                                         defaultLayer(Kind::FractureShear));
+        bool rejectedShearedSource = false;
+        try
+        {
+            (void)evaluate(shearedSourceStack, shearedSourceStack.finalResolution);
+        }
+        catch (const std::runtime_error &error)
+        {
+            rejectedShearedSource = std::string(error.what()).find("Source cap triangulation") !=
+                                    std::string::npos;
+        }
+        require(rejectedShearedSource,
+                "coherent layers must reject source caps whose triangles cannot share a horizon");
+        auto singleShearedSlab = shearedSourceStack;
+        singleShearedSlab.layers[1].count = 1;
+        auto singleSlab = evaluate(singleShearedSlab, singleShearedSlab.finalResolution);
+        require(PA::validateClosedMesh(singleSlab.mesh).hasValue(),
+                "a single source-fractured slab has no interlayer contact to reject");
         for (int k = 0; k + 1 < fracturedRecipe.layers[0].count; ++k)
             require(contactTriangles(fracturedStack, k, 1) ==
                         contactTriangles(fracturedStack, k + 1, 2),

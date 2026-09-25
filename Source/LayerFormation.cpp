@@ -422,6 +422,28 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
     if (std::find(sourceContacts.begin(), sourceContacts.end(), 1) == sourceContacts.end() ||
         std::find(sourceContacts.begin(), sourceContacts.end(), 2) == sourceContacts.end())
         sourceContacts.clear();
+    if (layer.profile == 2 && layer.count > 1 && !sourceContacts.empty())
+    {
+        using Point = std::array<long long, 2>;
+        using Triangle = std::array<Point, 3>;
+        std::multiset<Triangle> top, bottom;
+        for (std::size_t t = 0; t < sourceContacts.size(); ++t)
+        {
+            if (sourceContacts[t] == 0)
+                continue;
+            Triangle triangle;
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto p = source.mesh.positions[source.mesh.indices[3 * t + corner]];
+                triangle[corner] = {std::llround(D::dot(p, u) * 1e8),
+                                    std::llround(D::dot(p, v) * 1e8)};
+            }
+            std::sort(triangle.begin(), triangle.end());
+            (sourceContacts[t] == 1 ? top : bottom).insert(triangle);
+        }
+        if (top != bottom)
+            throw std::runtime_error("Source cap triangulation cannot form exact shared horizons");
+    }
     for (int k = 0; k < layer.count; ++k)
     {
         for (auto i : source.mesh.indices)
