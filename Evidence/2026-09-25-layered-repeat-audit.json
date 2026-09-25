@@ -1,0 +1,15 @@
+{
+  "sameBinaryRequired": true,
+  "excludedTimingFields": [
+    "bakeCpuMs",
+    "cpuMs"
+  ],
+  "identicalArtifacts": 171,
+  "byExtension": {
+    ".png": 158,
+    ".json": 10,
+    ".obj": 3
+  },
+  "canonicalPackageSha256": "81c4846e0ec83229f18cbadeaa2a050954e43d4beb2aa25704ae596d27b57a60",
+  "note": "Compare only runs from the same binary and inputs; CPU time is excluded."
+}
