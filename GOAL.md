@@ -50,6 +50,8 @@ El [ensayo opt-in de primeros momentos de normales](Evidence/2026-09-25-rock-nor
 
 El [relieve opt-in del túnel cuadrado](Evidence/2026-09-25-square-tunnel-wall-relief.md) desplaza la malla de sus cuatro paredes interiores con C++ nativo, conserva las bocas y el exterior, y pasa tres LOD high→low con los seis paquetes de UV/bakes de arco y túnel sin misses. Hay capturas originales y 287 artefactos reproducibles; la Beauty sigue **PARTIAL** por estiramiento visible del material y falta de iluminación interior. No altera el control previo ni JericoEngine.
 
+La corrección posterior de la misma variante hizo claramente visibles **ambas paredes laterales sin material**: cizalla asimétrica y estratos de macroescala sobre la malla BSP, con LOD 7/6/5 que conservan el error high→low bajo 0,15 m. El arco continúa idéntico al control. El detalle y la iluminación Beauty siguen pendientes; no se declara aceptación visual final.
+
 La [prueba de erosión de juntas por capa de pizarra](Evidence/2026-09-25-slate-layer-joints-rejected.md) se rechazó: respetó los contactos, pero el primer campo excedió los tres errores high→low y el segundo aún rechazó LOD1 (0,034 frente a 0,03 m), con diferencias visuales pequeñas. El código experimental se retiró; la fuente tabular v16 continúa como control. No elevar los presupuestos ni ajustar mips para ocultar una macrofractura insuficiente.
 
 La [revalidación RBrush contra el checkout actual del Engine](Evidence/2026-09-25-rbrush-current-engine-compatibility.md) pasó los dos tests Release de interoperabilidad/roundtrip del alpha CC0 y fijó hashes de los inputs del Engine. Eso verifica el adaptador matemático y el contenedor local, no el stamp/editor/cook/runtime real de M8.

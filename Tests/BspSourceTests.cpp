@@ -199,7 +199,7 @@ int main()
             return Vec3d{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
                          u.x * v.y - u.y * v.x};
         };
-        for (int subdivisions : {2, 3, 4, 6, 8})
+        for (int subdivisions : {2, 3, 4, 5, 6, 7, 8})
         {
             const auto before = caveSource(CaveForm::SquareTunnel, subdivisions);
             const auto after = squareTunnelReliefSource(subdivisions);
@@ -236,6 +236,7 @@ int main()
                             "square exterior faces retain native host-face identities");
             }
             double maximumInteriorShift = 0;
+            double leftWallShift = 0, rightWallShift = 0;
             std::size_t changedInterior = 0;
             for (std::size_t i = 0; i < before.mesh.positions.size(); ++i)
             {
@@ -248,16 +249,23 @@ int main()
                 else if (std::abs(a.z) < 1.0 && shift > 0.01)
                 {
                     maximumInteriorShift = std::max(maximumInteriorShift, shift);
+                    if (a.x < -0.6)
+                        leftWallShift = std::max(leftWallShift, std::abs(a.x - b.x));
+                    if (a.x > 0.6)
+                        rightWallShift = std::max(rightWallShift, std::abs(a.x - b.x));
                     ++changedInterior;
                 }
-                require(shift < 0.16, "square wall relief remains inside geometric bake budget");
+                require(shift < 0.28, "square wall relief stays within its bounded sculpt range");
             }
             std::cout << "square relief subdivisions " << subdivisions << " changed "
                       << changedInterior << " maximum " << maximumInteriorShift
+                      << " left/right " << leftWallShift << '/' << rightWallShift
                       << " interior triangles " << interiorTriangles << '\n';
-            if (subdivisions == 8 || subdivisions == 3)
-                require(changedInterior > 4 && maximumInteriorShift > 0.035,
-                        "square high and LOD2 interior walls have visible mesh displacement");
+            if (subdivisions == 8 || subdivisions == 5)
+                require(changedInterior > 4 && maximumInteriorShift >
+                            (subdivisions == 8 ? 0.20 : 0.14) &&
+                            leftWallShift > 0.10 && rightWallShift > 0.10,
+                        "square high and LOD2 deform both interior side walls");
             for (std::size_t triangle = 0; triangle < before.mesh.indices.size(); triangle += 3)
             {
                 const auto x = faceNormal(before.mesh, triangle),

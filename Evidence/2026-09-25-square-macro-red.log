@@ -1,0 +1,6 @@
+translated BSP sampled source error 3.9968e-15 layered error 5.77663e-15
+cave topology 1 volume 53.4318 V/E/F 672/2016/1344 Euler 0
+cave topology 0 volume 60.12 V/E/F 256/768/512 Euler 0
+square relief subdivisions 2 changed 7 maximum 0.078074 interior triangles 32
+square relief subdivisions 3 changed 21 maximum 0.101365 interior triangles 72
+square high and LOD2 interior walls have visible macroform displacement

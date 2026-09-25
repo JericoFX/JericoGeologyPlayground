@@ -311,8 +311,14 @@ MeshResult squareTunnelReliefSource(int subdivisions, const Jerico::Cancellation
             {3.7 * p.x - 1.2, 3.1 * p.y + 0.5, 3.3 * p.z + 1.1},
             0x25cb49dfU, 2, 1.87, 0.5);
         const double ridge = std::sin(2.8 * p.z + 1.7 * p.y + 0.8 * broad);
+        const double side = std::abs(n.x);
+        const double shear = std::tanh((p.z - 0.35 * p.y -
+                                        (n.x < 0 ? -0.2 : 0.2)) / 0.95);
+        const double bedding = std::sin(1.2 * p.z + 0.9 * p.y +
+                                        (n.x < 0 ? -0.7 : 0.7));
         const double distance = axial * wall *
-            std::clamp(0.21 * broad + 0.045 * fine + 0.035 * ridge, -0.15, 0.15);
+            std::clamp(0.21 * broad + 0.045 * fine + 0.035 * ridge +
+                       side * (0.15 * shear + 0.08 * bedding), -0.27, 0.27);
         p.x += n.x * distance;
         p.y += n.y * distance;
         p.z += n.z * distance;

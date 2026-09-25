@@ -1,0 +1,37 @@
+{
+  "sameBinaryReplayPngObj": 277,
+  "squarePngObjUnchangedAfterCameraFix": 140,
+  "archPngObjUnchangedFromPreMacroControl": 137,
+  "lods": [
+    {
+      "lod": 0,
+      "subdivisions": 7,
+      "triangles": 1568,
+      "sampledSurfaceError": 0.06410611484208267,
+      "misses": 0,
+      "backfaces": 0,
+      "uvActiveAreaFraction": 0.631770955359177,
+      "bakeCpuMs": 890.1152
+    },
+    {
+      "lod": 1,
+      "subdivisions": 6,
+      "triangles": 1152,
+      "sampledSurfaceError": 0.08548173980042593,
+      "misses": 0,
+      "backfaces": 0,
+      "uvActiveAreaFraction": 0.6313296617876369,
+      "bakeCpuMs": 838.4867
+    },
+    {
+      "lod": 2,
+      "subdivisions": 5,
+      "triangles": 800,
+      "sampledSurfaceError": 0.10496764825291541,
+      "misses": 0,
+      "backfaces": 0,
+      "uvActiveAreaFraction": 0.631251828887843,
+      "bakeCpuMs": 795.089
+    }
+  ]
+}

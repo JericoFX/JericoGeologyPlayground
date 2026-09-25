@@ -1205,6 +1205,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
     Camera interior = entrance;
     interior.distance = 1.8f;
     interior.target = {0, -0.5f, -0.4f};
+    Camera squareInterior = interior;
+    squareInterior.distance = 1.2f;
     report["entranceCamera"] = {{"yaw", entrance.yaw}, {"pitch", entrance.pitch},
                                 {"distance", entrance.distance}, {"target", entrance.target}};
     for (auto [form, name] : {std::pair{blindChamber ? CaveForm::BlindArch : CaveForm::Arch,
@@ -1232,8 +1234,10 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
         for (int lod = 0; lod < 3; ++lod)
         {
             const bool reducedArch = axialFeatureReduced && form != CaveForm::SquareTunnel;
-            const int subdivisions = reducedArch ? 0 : lod == 0 ? 6 : lod == 1 ? 4 :
-                                     squareWallRelief && form == CaveForm::SquareTunnel ? 3 : 2;
+            const int subdivisions = reducedArch ? 0 :
+                                     squareWallRelief && form == CaveForm::SquareTunnel ?
+                                         (lod == 0 ? 7 : lod == 1 ? 6 : 5) :
+                                     lod == 0 ? 6 : lod == 1 ? 4 : 2;
             const double reductionBudget = lod == 0 ? 0.01 : lod == 1 ? 0.05 : 0.10;
             double macroReductionError = 0;
             MeshResult low;
@@ -1256,7 +1260,9 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
             low.sampledReductionError = sampledBidirectionalMeshError(high.mesh, low.mesh);
             if ((reducedArch || squareWallRelief && form == CaveForm::SquareTunnel) &&
                 low.sampledReductionError > 0.15)
-                throw std::runtime_error("Axial cave LOD exceeds the high-to-low surface error gate");
+                throw std::runtime_error(std::string(name) + " LOD" + std::to_string(lod) +
+                                         " exceeds the high-to-low surface error gate: " +
+                                         std::to_string(low.sampledReductionError));
             const auto triangles = low.mesh.indices.size() / 3;
             if (!low.closedSolid || triangles >= previousTriangles)
                 throw std::runtime_error(std::string(name) + " LOD is not a reduced closed solid");
@@ -1298,11 +1304,21 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(formDirectory / "high.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(formDirectory / "high-entrance-material.png");
+                if (squareWallRelief && form == CaveForm::SquareTunnel)
+                {
+                    renderer.draw(1280, 960, entrance, 0);
+                    renderer.capture(formDirectory / "high-entrance-geometry.png");
+                }
                 if (blindChamber && form == CaveForm::BlindArch ||
                     squareWallRelief && form == CaveForm::SquareTunnel)
                 {
-                    renderer.draw(1280, 960, interior, 5);
+                    renderer.draw(1280, 960, form == CaveForm::SquareTunnel ? squareInterior : interior, 5);
                     renderer.capture(formDirectory / "high-interior-material.png");
+                    if (squareWallRelief && form == CaveForm::SquareTunnel)
+                    {
+                        renderer.draw(1280, 960, squareInterior, 0);
+                        renderer.capture(formDirectory / "high-interior-geometry.png");
+                    }
                 }
             }
             renderer.upload(bake.low, &bake);
@@ -1318,10 +1334,15 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(directory / "low-oblique-material.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(directory / "low-entrance-material.png");
+                if (squareWallRelief && form == CaveForm::SquareTunnel)
+                {
+                    renderer.draw(1280, 960, entrance, 0);
+                    renderer.capture(directory / "low-entrance-geometry.png");
+                }
                 if (blindChamber && form == CaveForm::BlindArch ||
                     squareWallRelief && form == CaveForm::SquareTunnel)
                 {
-                    renderer.draw(1280, 960, interior, 5);
+                    renderer.draw(1280, 960, form == CaveForm::SquareTunnel ? squareInterior : interior, 5);
                     renderer.capture(directory / "low-interior-material.png");
                 }
             }
