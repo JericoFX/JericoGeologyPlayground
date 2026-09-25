@@ -978,6 +978,58 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     }
     std::cout << report.dump(2) << '\n';
 }
+void captureSlateTemporal(Renderer &renderer, const std::filesystem::path &evidence)
+{
+    auto recipe = preset(13);
+    for (auto &layer : recipe.layers)
+        layer.seed = 123;
+    auto preview = buildBakePreview(recipe, 0.04f, 2048, 0.2, nullptr,
+                                    NormalProjection::ClosestSurface, 14, nullptr, 0.02, true);
+    if (preview.bake.misses || preview.bake.backfaceHits)
+        throw std::runtime_error("Slate temporal reference has incomplete high-to-low bake");
+    exportNormalBake(preview.bake, evidence / "bake");
+    const auto appearance = materialAppearance(recipe, 0);
+    const auto diffuse = materialDiffuse(appearance);
+    Camera camera;
+    camera.distance = 11.6f;
+    constexpr std::array offsets{-0.001f, -0.0005f, 0.0f, 0.0005f, 0.001f};
+    auto captureSequence = [&](const std::string &name)
+    {
+        for (std::size_t i = 0; i < offsets.size(); ++i)
+        {
+            auto view = camera;
+            view.yaw += offsets[i];
+            renderer.draw(1280, 960, view, 5);
+            renderer.capture(evidence / (name + "-material-" + std::to_string(i) + ".png"));
+            renderer.draw(1280, 960, view, 1);
+            renderer.capture(evidence / (name + "-normal-" + std::to_string(i) + ".png"));
+        }
+    };
+    renderer.upload(preview.high);
+    renderer.uploadMaterial(nullptr, diffuse, true, appearance);
+    captureSequence("high");
+    renderer.upload(preview.bake.low, &preview.bake);
+    renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+    const auto mippedBufferBytes = renderer.bufferBytes();
+    captureSequence("low-mips");
+    auto savedMips = std::move(preview.bake.normalMips);
+    renderer.upload(preview.bake.low, &preview.bake);
+    renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+    const auto unmippedBufferBytes = renderer.bufferBytes();
+    captureSequence("low-no-normal-mips");
+    preview.bake.normalMips = std::move(savedMips);
+    nlohmann::json report = {{"imageSize", {1280, 960}}, {"textureResolution", 2048},
+                             {"normalMipLevels", preview.bake.normalMips.size() + 1},
+                             {"yawOffsets", offsets}, {"cameraDistance", camera.distance},
+                             {"highHash", preview.bake.highHash}, {"lowHash", preview.bake.lowHash},
+                             {"samples", preview.bake.samples}, {"misses", preview.bake.misses},
+                             {"backfaces", preview.bake.backfaceHits},
+                             {"bakeCpuMs", preview.bake.milliseconds},
+                             {"mippedBufferBytes", mippedBufferBytes},
+                             {"unmippedBufferBytes", unmippedBufferBytes}};
+    std::ofstream(evidence / "slate-temporal-proof.json") << report.dump(2) << '\n';
+    std::cout << report.dump(2) << '\n';
+}
 void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                       bool geologicalMacro, bool axialFeatureReduced)
 {
@@ -1362,7 +1414,7 @@ int run(int argc, char **argv)
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
-         caveGeologySmoke = false, caveAxialSmoke = false;
+         caveGeologySmoke = false, caveAxialSmoke = false, slateTemporalSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1391,6 +1443,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--layered-material-no-mips-test" ||
             std::string(argv[i]) == "--layered-horizon-fracture-bakes-test" ||
             std::string(argv[i]) == "--layered-slate-source-bakes-test" ||
+            std::string(argv[i]) == "--slate-temporal-bake-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1429,6 +1482,7 @@ int run(int argc, char **argv)
             layeredMaterialNoMipsSmoke = std::string(argv[i]) == "--layered-material-no-mips-test";
             layeredHorizonFractureSmoke = std::string(argv[i]) == "--layered-horizon-fracture-bakes-test";
             layeredSlateSourceSmoke = std::string(argv[i]) == "--layered-slate-source-bakes-test";
+            slateTemporalSmoke = std::string(argv[i]) == "--slate-temporal-bake-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -2115,6 +2169,12 @@ int run(int argc, char **argv)
             if (angularProfileSmoke)
             {
                 captureAngularProfiles(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (slateTemporalSmoke)
+            {
+                captureSlateTemporal(renderer, evidence);
                 window.requestClose();
                 continue;
             }

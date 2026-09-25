@@ -1,0 +1,76 @@
+{
+  "proof": {
+    "backfaces": 0,
+    "bakeCpuMs": 7492.4913,
+    "cameraDistance": 11.600000381469727,
+    "highHash": 8460640916055808124,
+    "imageSize": [
+      1280,
+      960
+    ],
+    "lowHash": 13349061252869708182,
+    "mippedBufferBytes": 128640340,
+    "misses": 0,
+    "normalMipLevels": 4,
+    "samples": 1618659,
+    "textureResolution": 2048,
+    "unmippedBufferBytes": 123135316,
+    "yawOffsets": [
+      -0.0010000000474974513,
+      -0.0005000000237487257,
+      0.0,
+      0.0005000000237487257,
+      0.0010000000474974513
+    ]
+  },
+  "modes": {
+    "material": {
+      "low-mips": {
+        "meanSpatialMae": 4.118104934692383,
+        "meanTemporalResidualMae": 0.3091392144560814,
+        "meanTemporalChangeMae": 0.19777075201272964,
+        "pairResidualMae": [
+          0.30531206727027893,
+          0.3142077624797821,
+          0.3085685670375824,
+          0.30846846103668213
+        ]
+      },
+      "low-no-normal-mips": {
+        "meanSpatialMae": 3.7164947032928466,
+        "meanTemporalResidualMae": 0.31619568914175034,
+        "meanTemporalChangeMae": 0.22314247116446495,
+        "pairResidualMae": [
+          0.31733405590057373,
+          0.31702640652656555,
+          0.3125072419643402,
+          0.31791505217552185
+        ]
+      }
+    },
+    "normal": {
+      "low-mips": {
+        "meanSpatialMae": 4.579881000518799,
+        "meanTemporalResidualMae": 0.2993732839822769,
+        "meanTemporalChangeMae": 0.16981499642133713,
+        "pairResidualMae": [
+          0.28798702359199524,
+          0.31516018509864807,
+          0.2977307438850403,
+          0.2966151833534241
+        ]
+      },
+      "low-no-normal-mips": {
+        "meanSpatialMae": 2.5354796409606934,
+        "meanTemporalResidualMae": 0.2977098077535629,
+        "meanTemporalChangeMae": 0.24101999029517174,
+        "pairResidualMae": [
+          0.2912692725658417,
+          0.3106040060520172,
+          0.29498910903930664,
+          0.2939768433570862
+        ]
+      }
+    }
+  }
+}

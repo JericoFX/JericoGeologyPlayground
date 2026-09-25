@@ -1,0 +1,24 @@
+{
+  "backfaces": 0,
+  "bakeCpuMs": 7492.4913,
+  "cameraDistance": 11.600000381469727,
+  "highHash": 8460640916055808124,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "lowHash": 13349061252869708182,
+  "mippedBufferBytes": 128640340,
+  "misses": 0,
+  "normalMipLevels": 4,
+  "samples": 1618659,
+  "textureResolution": 2048,
+  "unmippedBufferBytes": 123135316,
+  "yawOffsets": [
+    -0.0010000000474974513,
+    -0.0005000000237487257,
+    0.0,
+    0.0005000000237487257,
+    0.0010000000474974513
+  ]
+}
