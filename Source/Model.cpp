@@ -363,7 +363,8 @@ const char *name(Kind kind)
                                   "Surface damage / wear",
                                   "Oriented damage decal",
                                   "Layer settling",
-                                  "Cliff cut loop"};
+                                  "Cliff cut loop",
+                                  "Grounded fracture shear"};
     return names[int(kind)];
 }
 Layer defaultLayer(Kind kind)
@@ -378,6 +379,11 @@ Layer defaultLayer(Kind kind)
     {
         l.count = 10;
         l.amplitude = 0.24f;
+    }
+    if (kind == Kind::FractureShear)
+    {
+        l.direction = {0.8f, 0, 0.6f};
+        l.amplitude = 0.12f;
     }
     if (kind == Kind::SharedWarp)
     {
@@ -655,7 +661,8 @@ void validate(const Recipe &r)
         if (!ok)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
-    require(r.version == 10 && int(r.base) >= 0 && int(r.base) < 6 && r.layers.size() <= 24);
+    require((r.version == 10 || r.version == 11) && int(r.base) >= 0 && int(r.base) < 6 &&
+            r.layers.size() <= 24);
     for (auto x : r.planeSize)
         require(std::isfinite(x) && x >= 0.1f && x <= 100);
     require(r.previewResolution >= 4 && r.previewResolution <= 64 && r.finalResolution >= 4 &&
@@ -663,7 +670,11 @@ void validate(const Recipe &r)
     for (auto &l : r.layers)
     {
         finiteJson(layerJson(l));
-        require(int(l.kind) >= 0 && int(l.kind) < 20 && int(l.mask) >= 0 && int(l.mask) < 16);
+        require(int(l.kind) >= 0 && int(l.kind) < 21 && int(l.mask) >= 0 && int(l.mask) < 16);
+        if (l.kind == Kind::FractureShear)
+            require(r.version >= 11 && l.mask == Mask::None && l.amplitude >= 0.01f &&
+                    l.amplitude <= 0.3f &&
+                    std::hypot(double(l.direction[0]), double(l.direction[2])) > 1e-8);
         if (l.kind == Kind::LayerSettle)
             require(l.mask == Mask::None);
         require(l.featureRadius >= 0.001f && l.featureRadius <= 10 && l.featureAngle >= 1 &&
@@ -684,7 +695,8 @@ void validate(const Recipe &r)
         if (int(l.mask) >= int(Mask::Curvature))
             require(l.kind != Kind::Transform && l.kind != Kind::Layers && l.kind != Kind::Planes &&
                     l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
-                    l.kind != Kind::LayerSettle && l.kind != Kind::CliffCutLoop);
+                    l.kind != Kind::LayerSettle && l.kind != Kind::CliffCutLoop &&
+                    l.kind != Kind::FractureShear);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 && l.profile < 3);
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
@@ -981,13 +993,14 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             result = std::move(next);
             continue;
         }
-        if (l.kind == Kind::Planes || l.kind == Kind::Envelope)
+        if (l.kind == Kind::Planes || l.kind == Kind::Envelope || l.kind == Kind::FractureShear)
         {
             if (!result.closedSolid)
                 throw std::runtime_error("Solid operation requires Solidify before an open surface");
             MeshResult next;
             next.mesh = l.kind == Kind::Planes ? Solid::planes(result.mesh, l, cancel)
-                                               : Solid::envelope(result.mesh, l, cancel);
+                        : l.kind == Kind::FractureShear ? Solid::fractureShear(result.mesh, l, cancel)
+                                                       : Solid::envelope(result.mesh, l, cancel);
             next.hardRegions = true;
             next.sourceSelection = result.sourceSelection;
             next.sourceRevision = result.sourceRevision;
@@ -1000,7 +1013,9 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                     next.regions.push_back(
                         {id,
                          {},
-                         l.kind == Kind::Planes ? SurfaceRole::PlaneCut : SurfaceRole::EnvelopeCut,
+                         l.kind == Kind::Planes ? SurfaceRole::PlaneCut
+                         : l.kind == Kind::FractureShear ? SurfaceRole::FractureCut
+                                                          : SurfaceRole::EnvelopeCut,
                          int(stage),
                          -1});
             std::vector<Vec3d> nextWarp;
@@ -1356,8 +1371,10 @@ Recipe deserialize(const std::string &text)
     int inputVersion = j.at("version");
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
-        inputVersion != 9 && inputVersion != 10)
+        inputVersion != 9 && inputVersion != 10 && inputVersion != 11)
         throw std::runtime_error("Unsupported recipe version");
+    if (inputVersion == 11)
+        r.version = 11;
     r.base = static_cast<Base>(j.at("base").get<int>());
     r.previewResolution = j.at("previewResolution");
     r.finalResolution = j.at("finalResolution");
@@ -1383,6 +1400,8 @@ Recipe deserialize(const std::string &text)
             throw std::runtime_error("Layer settling requires recipe v6");
         if (inputVersion < 10 && l.kind == Kind::CliffCutLoop)
             throw std::runtime_error("Cliff cut loop requires recipe v10");
+        if (inputVersion < 11 && l.kind == Kind::FractureShear)
+            throw std::runtime_error("Grounded fracture shear requires recipe v11");
         if (inputVersion < 7 && a.value("perimeterAmplitude", 0.0f) != 0)
             throw std::runtime_error("Independent stratum perimeter requires recipe v7");
         if (inputVersion < 8 && a.contains("maskAxis") &&

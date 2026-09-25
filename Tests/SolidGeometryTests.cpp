@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <map>
 #include <set>
 #include <stdexcept>
 
@@ -58,6 +59,118 @@ int main()
             }
             require(foundCut, "interior cap region present");
         }
+        auto shear = defaultLayer(Kind::Planes);
+        shear.direction = {0.8f, 0, 0.6f};
+        shear.amplitude = 0.12f;
+        auto groundedPieces = Solid::fractureShear(mesh, shear, nullptr);
+        require(PA::validateClosedMesh(groundedPieces).hasValue(),
+                "sheared fracture must retain two closed solids");
+        require(std::abs(volume(groundedPieces) - 8) < 1e-8,
+                "sheared fracture conserves solid volume");
+        require(groundedPieces.positions.size() > mesh.positions.size() &&
+                    groundedPieces.triangleRegions.size() == groundedPieces.indices.size() / 3,
+                "sheared fracture retains both pieces and classified faces");
+        std::vector<std::uint32_t> parents(groundedPieces.positions.size());
+        for (std::uint32_t i = 0; i < parents.size(); ++i)
+            parents[i] = i;
+        auto root = [&](std::uint32_t i)
+        {
+            while (parents[i] != i)
+                i = parents[i];
+            return i;
+        };
+        for (std::size_t t = 0; t < groundedPieces.indices.size(); t += 3)
+        {
+            const auto a = root(groundedPieces.indices[t]);
+            parents[root(groundedPieces.indices[t + 1])] = a;
+            parents[root(groundedPieces.indices[t + 2])] = a;
+        }
+        struct Piece
+        {
+            double floor{1e20}, minPlane{1e20}, maxPlane{-1e20};
+            double supportArea{};
+            unsigned cutFaces{};
+        };
+        std::map<std::uint32_t, Piece> pieces;
+        const auto shearNormalLength = std::hypot(double(shear.direction[0]), double(shear.direction[2]));
+        const auto shearNormalX = double(shear.direction[0]) / shearNormalLength;
+        const auto shearNormalZ = double(shear.direction[2]) / shearNormalLength;
+        const auto shearCutId = Solid::region(shear.seed, PA::hashTriangleMesh(mesh) ^ 0x50000U);
+        double shearPlaneOffset = 0;
+        bool foundShearCut = false;
+        for (std::size_t face = 0; face < groundedPieces.triangleRegions.size(); ++face)
+            if (groundedPieces.triangleRegions[face] == shearCutId)
+            {
+                const auto p = groundedPieces.positions[groundedPieces.indices[3 * face]];
+                shearPlaneOffset = shearNormalX * p.x + shearNormalZ * p.z;
+                foundShearCut = true;
+                break;
+            }
+        require(foundShearCut, "fracture plane remains identifiable");
+        for (std::uint32_t i = 0; i < groundedPieces.positions.size(); ++i)
+        {
+            const auto p = groundedPieces.positions[i];
+            auto &piece = pieces[root(i)];
+            piece.floor = std::min(piece.floor, p.y);
+            const auto signedPlane = shearNormalX * p.x + shearNormalZ * p.z - shearPlaneOffset;
+            piece.minPlane = std::min(piece.minPlane, signedPlane);
+            piece.maxPlane = std::max(piece.maxPlane, signedPlane);
+        }
+        for (std::size_t face = 0; face < groundedPieces.triangleRegions.size(); ++face)
+        {
+            auto &piece = pieces[root(groundedPieces.indices[3 * face])];
+            if (groundedPieces.triangleRegions[face] == shearCutId)
+                ++piece.cutFaces;
+            const auto a = groundedPieces.positions[groundedPieces.indices[3 * face]];
+            const auto b = groundedPieces.positions[groundedPieces.indices[3 * face + 1]];
+            const auto c = groundedPieces.positions[groundedPieces.indices[3 * face + 2]];
+            if (std::abs(a.y + 1) < 1e-7 && std::abs(b.y + 1) < 1e-7 &&
+                std::abs(c.y + 1) < 1e-7)
+                piece.supportArea += 0.5 * std::abs((b.x - a.x) * (c.z - a.z) -
+                                                    (b.z - a.z) * (c.x - a.x));
+        }
+        require(pieces.size() == 2, "fracture has exactly two disconnected solids");
+        unsigned negativeParts = 0, positiveParts = 0;
+        for (const auto &[id, piece] : pieces)
+        {
+            require(std::abs(piece.floor + 1) < 1e-10 && piece.supportArea > 1e-5 &&
+                        piece.cutFaces > 0,
+                    "both fracture pieces have floor support area and retain a cut face");
+            negativeParts += piece.maxPlane <= 1e-9;
+            positiveParts += piece.minPlane >= -1e-9;
+        }
+        require(negativeParts == 1 && positiveParts == 1,
+                "the cut pieces remain in opposite halfspaces without volume overlap");
+        require(PA::hashTriangleMesh(groundedPieces) ==
+                    PA::hashTriangleMesh(Solid::fractureShear(mesh, shear, nullptr)),
+                "sheared fracture is deterministic");
+        Recipe shearRecipe;
+        shearRecipe.version = 11;
+        shearRecipe.layers = {defaultLayer(Kind::FractureShear)};
+        auto recipeOutput = evaluate(shearRecipe, 4);
+        require(PA::validateClosedMesh(recipeOutput.mesh).hasValue(),
+                "recipe fracture remains a closed source");
+        bool hasFractureRegion = false;
+        for (const auto &region : recipeOutput.regions)
+            hasFractureRegion |= region.role == SurfaceRole::FractureCut;
+        require(hasFractureRegion &&
+                    PA::hashTriangleMesh(recipeOutput.mesh) ==
+                        PA::hashTriangleMesh(evaluate(deserialize(serialize(shearRecipe)), 4).mesh),
+                "recipe v11 preserves the fracture cut and deterministic geometry");
+        shearRecipe.version = 10;
+        bool rejectedOldVersion = false;
+        try { validate(shearRecipe); } catch (const std::exception &) { rejectedOldVersion = true; }
+        require(rejectedOldVersion, "fracture shear cannot be encoded in recipe v10");
+        shearRecipe.version = 11;
+        shearRecipe.layers[0].amplitude = 0;
+        bool rejectedZeroSlip = false;
+        try { validate(shearRecipe); } catch (const std::exception &) { rejectedZeroSlip = true; }
+        require(rejectedZeroSlip, "fracture shear rejects coincident caps at zero slip");
+        shear.amplitude = 0;
+        rejectedZeroSlip = false;
+        try { Solid::fractureShear(mesh, shear, nullptr); }
+        catch (const std::exception &) { rejectedZeroSlip = true; }
+        require(rejectedZeroSlip, "direct fracture shear rejects zero slip");
         auto subdivided = PA::subdivideClosedMesh(halves.value().negative, 3, 10000, cancellation.token());
         require(subdivided.hasValue(), "native subdivision");
         require(std::abs(volume(subdivided.value()) - 4) < 1e-9, "subdivision preserves volume");

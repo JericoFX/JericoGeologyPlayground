@@ -1138,5 +1138,41 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_GEOLOGY_CLASSIFIED_LOD1_SOURCE_FREE_VERTICAL_CLOSURE.md",
     "sha256": "F052D7E90FEE7BB62FAF2CEF4D189CE39AA18A66B2A92266022D10A2A13871F0",
     "bytes": 6853
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_LIVE_GEOLOGY_PREVIEW.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_LIVE_GEOLOGY_PREVIEW.md",
+    "sha256": "98F5FC6C869E7676CF9A6C155930BBF95C71022605AE905487106643A6252DE2",
+    "bytes": 7383
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_GEOLOGY_CLASSIFIED_DENSE_COLLISION_JOLT_SURFACE_PROPERTIES_CLOSURE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_GEOLOGY_CLASSIFIED_DENSE_COLLISION_JOLT_SURFACE_PROPERTIES_CLOSURE.md",
+    "sha256": "8594971237A3040CA7FBBE320C6B82CD3C2E801877B87D00A33E1EF2ABAEA869",
+    "bytes": 6734
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPONZA_SECOND_WALL_ROCK_STAMPS_SOURCE_INVENTORY.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPONZA_SECOND_WALL_ROCK_STAMPS_SOURCE_INVENTORY.md",
+    "sha256": "8A85D65E92A809E1047B91D9058BB70CCF16422147E34584269C26DC4D8B5712",
+    "bytes": 4360
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPONZA_WALL_GEOLOGY_SOURCE_INVENTORY.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPONZA_WALL_GEOLOGY_SOURCE_INVENTORY.md",
+    "sha256": "827F3ED5B29689F8A873B4F3C72839E1E9205E0BC2B97D570850FD7CB9040868",
+    "bytes": 4560
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\plans\\2026-09-05-f4-geology-shader-cache.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\plans\\2026-09-05-f4-geology-shader-cache.md",
+    "sha256": "50A5642A87475DC0FADEFD402E80DCDEC6CF6E455FD809E4C67F31C1DE326995",
+    "bytes": 1740
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\evidence\\reference-documents\\rockform_1.4.1.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\reference-documents\\rockform_1.4.1.md",
+    "sha256": "D95A1C12D9829804EE72E199879BAEA4AC09C9953A102543284B017EC880D252",
+    "bytes": 40729
   }
 ]

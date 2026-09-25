@@ -686,13 +686,14 @@ void captureNormalBakes(Renderer &renderer, const std::filesystem::path &evidenc
 }
 void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &evidence,
                          bool automaticUv = false, int familyFilter = -1,
-                         double curvatureRelaxation = 0)
+                         double curvatureRelaxation = 0, bool angularFracture = false)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
     report["scope"] = "C++ high source projected independently to three low-mesh LODs per rock family";
     report["automaticUv"] = automaticUv;
     report["curvatureRelaxation"] = curvatureRelaxation;
+    report["angularFracture"] = angularFracture;
     report["imageSize"] = {1280, 960};
     report["textureResolution"] = 2048;
     Camera camera;
@@ -703,6 +704,13 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
         auto recipe = preset(family);
         for (auto &layer : recipe.layers)
             layer.seed = 123;
+        if (angularFracture && family == 10)
+        {
+            recipe.version = 11;
+            auto shear = defaultLayer(Kind::FractureShear);
+            shear.seed = 123;
+            recipe.layers.insert(recipe.layers.end() - 1, shear);
+        }
         double baseError = family == 10 ? 0.005 : family == 11 ? 0.02 :
                            family == 5 ? 0.08 : 0.04;
         auto projectionDistance = family == 5 || family == 11 ? 0.2 : 0.15;
@@ -1052,6 +1060,7 @@ int run(int argc, char **argv)
 {
     bool smoke = false, featureSmoke = false, angularProfileSmoke = false, rockLodSmoke = false,
          autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
+         angularFractureSmoke = false,
          edgeRadiusSmoke = false, regeneratedLodSmoke = false, angularLod2Smoke = false,
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
@@ -1069,6 +1078,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--rock-lod-bakes-test" ||
             std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test" ||
             std::string(argv[i]) == "--curvature-relaxation-bakes-test" ||
+            std::string(argv[i]) == "--angular-fracture-bakes-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1089,6 +1099,7 @@ int run(int argc, char **argv)
             rockLodSmoke = std::string(argv[i]) == "--rock-lod-bakes-test";
             autoUvRockLodSmoke = std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test";
             curvatureRelaxationSmoke = std::string(argv[i]) == "--curvature-relaxation-bakes-test";
+            angularFractureSmoke = std::string(argv[i]) == "--angular-fracture-bakes-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -1702,10 +1713,13 @@ int run(int argc, char **argv)
                 window.requestClose();
                 continue;
             }
-            if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke)
+            if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke ||
+                angularFractureSmoke)
             {
-                captureRockLodBakes(renderer, evidence, autoUvRockLodSmoke || curvatureRelaxationSmoke,
-                                    automaticUvRockLodFamily, curvatureRelaxationSmoke ? 0.5 : 0);
+                captureRockLodBakes(renderer, evidence,
+                                    autoUvRockLodSmoke || curvatureRelaxationSmoke || angularFractureSmoke,
+                                    angularFractureSmoke ? 10 : automaticUvRockLodFamily,
+                                    curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke);
                 window.requestClose();
                 continue;
             }

@@ -1,0 +1,45 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFracture": true,
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 10,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 46615.8354,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.005,
+          "highHash": 7228625195831691131,
+          "highTriangles": 46082,
+          "lod": 0,
+          "lowHash": 2936929640437922362,
+          "lowTriangles": 4830,
+          "misses": 0,
+          "sampledSurfaceError": 0.003385336172249665,
+          "samples": 1699354,
+          "status": "BAKED"
+        },
+        {
+          "lod": 1,
+          "reason": "Automatic UV collapsed packed island triangle 29 on axis 4 area2=0 worldArea2=2.8406576733191823e-09",
+          "status": "REJECTED"
+        },
+        {
+          "lod": 2,
+          "reason": "Automatic UV collapsed packed island triangle 4224 on axis 1 area2=0 worldArea2=2.4465806793549507e-13",
+          "status": "REJECTED"
+        }
+      ]
+    }
+  ],
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

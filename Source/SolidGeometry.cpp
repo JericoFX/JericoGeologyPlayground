@@ -87,6 +87,120 @@ TriangleMesh planes(const TriangleMesh &mesh, const Layer &layer, const Jerico::
     }
     return tessellate(std::move(result), layer, cancel);
 }
+TriangleMesh fractureShear(const TriangleMesh &mesh, const Layer &layer,
+                           const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    validate(mesh);
+    if (!std::isfinite(layer.amplitude) || layer.amplitude < 0.01f || layer.amplitude > 0.3f ||
+        !std::isfinite(layer.direction[0]) || !std::isfinite(layer.direction[1]) ||
+        !std::isfinite(layer.direction[2]))
+        throw std::runtime_error("Fracture shear parameters invalid");
+    Vec3d normal{layer.direction[0], 0, layer.direction[2]};
+    auto length = std::sqrt(D::lengthSquared(normal));
+    if (!(length > 1e-8))
+        throw std::runtime_error("Fracture shear needs a horizontal plane normal");
+    normal = D::multiply(normal, 1 / length);
+    const Vec3d tangent{-normal.z, 0, normal.x};
+    auto bounds = D::emptyBounds();
+    for (auto p : mesh.positions)
+        D::include(bounds, p);
+    const auto center = D::multiply(D::add(bounds.minimum, bounds.maximum), 0.5);
+    const auto targetOffset = D::dot(center, normal);
+    std::vector<double> projections;
+    projections.reserve(mesh.positions.size());
+    for (auto p : mesh.positions)
+        projections.push_back(D::dot(p, normal));
+    std::sort(projections.begin(), projections.end());
+    const auto projectionSpan = projections.back() - projections.front();
+    double cutOffset = targetOffset, bestGap = -1;
+    for (std::size_t i = 1; i < projections.size(); ++i)
+    {
+        const auto gap = projections[i] - projections[i - 1];
+        const auto midpoint = 0.5 * (projections[i] + projections[i - 1]);
+        if (midpoint < targetOffset - 0.12 * projectionSpan ||
+            midpoint > targetOffset + 0.12 * projectionSpan)
+            continue;
+        if (gap > bestGap || (gap == bestGap &&
+                              std::abs(midpoint - targetOffset) <
+                                  std::abs(cutOffset - targetOffset)))
+        {
+            cutOffset = midpoint;
+            bestGap = gap;
+        }
+    }
+    if (!(bestGap > 0))
+        throw std::runtime_error("Fracture shear has no central plane gap");
+    const auto cutId = region(layer.seed, PA::hashTriangleMesh(mesh) ^ 0x50000U);
+    Jerico::CancellationSource cancellation;
+    auto split = PA::splitClosedMeshByPlane(
+        mesh, {normal, cutOffset, cutId, 240000},
+        cancel ? *cancel : cancellation.token());
+    if (!split.hasValue())
+        throw std::runtime_error(split.error().code + ": " + split.error().cause);
+    auto negative = std::move(split.value().negative);
+    auto positive = std::move(split.value().positive);
+    if (negative.positions.size() + positive.positions.size() > 240000)
+        throw std::runtime_error("Fracture shear exceeds 240,000 vertices");
+    double minT = 1e20, maxT = -1e20;
+    for (std::size_t face = 0; face < positive.triangleRegions.size(); ++face)
+        if (positive.triangleRegions[face] == cutId)
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto p = positive.positions[positive.indices[3 * face + corner]];
+                const auto t = D::dot(p, tangent);
+                minT = std::min(minT, t);
+                maxT = std::max(maxT, t);
+            }
+    if (!(maxT > minT))
+        throw std::runtime_error("Fracture shear cut has no contact span");
+    const auto diameter = std::max(bounds.maximum.x - bounds.minimum.x,
+                                   bounds.maximum.z - bounds.minimum.z);
+    const auto slip = std::min(double(layer.amplitude) * diameter, 0.25 * (maxT - minT)) *
+                      (random(layer.seed + 0x50000U) < 0.5 ? -1.0 : 1.0);
+    auto settle = [&](TriangleMesh &part, double shear)
+    {
+        double low = 1e20;
+        for (auto p : part.positions)
+            low = std::min(low, p.y);
+        for (auto &p : part.positions)
+        {
+            p = D::add(p, D::multiply(tangent, shear));
+            p.y += bounds.minimum.y - low;
+        }
+    };
+    settle(negative, 0);
+    settle(positive, slip);
+    const auto supportArea = [&](const TriangleMesh &part)
+    {
+        double floor = 1e20, area = 0;
+        for (auto p : part.positions)
+            floor = std::min(floor, p.y);
+        const auto tolerance = 1e-7 * diameter;
+        for (std::size_t face = 0; face < part.indices.size() / 3; ++face)
+        {
+            const auto a = part.positions[part.indices[3 * face]];
+            const auto b = part.positions[part.indices[3 * face + 1]];
+            const auto c = part.positions[part.indices[3 * face + 2]];
+            if (a.y > floor + tolerance || b.y > floor + tolerance || c.y > floor + tolerance)
+                continue;
+            area += 0.5 * std::abs((b.x - a.x) * (c.z - a.z) -
+                                   (b.z - a.z) * (c.x - a.x));
+        }
+        return area;
+    };
+    if (supportArea(negative) <= 1e-5 * diameter * diameter ||
+        supportArea(positive) <= 1e-5 * diameter * diameter)
+        throw std::runtime_error("Fracture shear piece has no positive floor support");
+    TriangleMesh result = std::move(negative);
+    const auto vertexOffset = std::uint32_t(result.positions.size());
+    result.positions.insert(result.positions.end(), positive.positions.begin(), positive.positions.end());
+    result.triangleRegions.insert(result.triangleRegions.end(), positive.triangleRegions.begin(),
+                                  positive.triangleRegions.end());
+    for (auto index : positive.indices)
+        result.indices.push_back(vertexOffset + index);
+    return validate(result);
+}
 TriangleMesh envelope(const TriangleMesh &mesh, const Layer &layer, const Jerico::CancellationToken *cancel)
 {
     check(cancel);

@@ -6,6 +6,8 @@
 #include <map>
 #include <numbers>
 #include <queue>
+#include <sstream>
+#include <iomanip>
 #include <stdexcept>
 
 namespace Playground
@@ -160,7 +162,22 @@ bool validateIslandOverlap(const TriangleMesh &mesh, const Island &island,
         }
         face.area = std::abs(orient(face.points[0], face.points[1], face.points[2])) * 0.5;
         if (!validProjectedTriangle(face.points))
-            throw std::runtime_error("Automatic UV collapsed projected triangle");
+        {
+            std::ostringstream detail;
+            detail << std::setprecision(17) << "Automatic UV collapsed "
+                   << (cornerUv ? "packed" : "world") << " island triangle "
+                   << island.faces[i] << " on axis " << island.axis
+                   << " area2=" << 2 * face.area;
+            if (cornerUv)
+            {
+                std::array<Point2, 3> world;
+                for (int corner = 0; corner < 3; ++corner)
+                    world[corner] = project(
+                        mesh.positions[mesh.indices[3 * island.faces[i] + corner]], island.axis);
+                detail << " worldArea2=" << std::abs(orient(world[0], world[1], world[2]));
+            }
+            throw std::runtime_error(detail.str());
+        }
         minimumU = std::min(minimumU, face.minU);
         minimumV = std::min(minimumV, face.minV);
         maximumU = std::max(maximumU, face.maxU);
@@ -466,7 +483,10 @@ AutoUvPlan planAutomaticUv(const TriangleMesh &mesh, const AutoUvSettings &setti
             auto area2 = (uv[1][0] - uv[0][0]) * (uv[2][1] - uv[0][1]) -
                          (uv[1][1] - uv[0][1]) * (uv[2][0] - uv[0][0]);
             if (!validProjectedTriangle(uv))
-                throw std::runtime_error("Automatic UV collapsed projected triangle");
+                throw std::runtime_error("Automatic UV collapsed packed triangle " +
+                                         std::to_string(t) + " on axis " +
+                                         std::to_string(island.axis) + " area2=" +
+                                         std::to_string(area2));
             if (std::abs(area2) < 2)
                 ++plan.subpixelTriangles;
             activePixels += std::abs(area2) * 0.5;
