@@ -925,6 +925,13 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                                                "Evidence/cc0-references/rock_06-diff-1k.jpg");
                     renderer.upload(preview.high);
                     renderer.uploadMaterial(nullptr, diffuse, !layeredMaterialNoMips, appearance);
+                    if (layeredSlateSource && lod == 2)
+                    {
+                        auto farCamera = camera;
+                        farCamera.distance *= 2;
+                        renderer.draw(1280, 960, farCamera, 5);
+                        renderer.capture(directory / "high-material-far.png");
+                    }
                     renderer.draw(1280, 960, camera, 5);
                     renderer.capture(directory / "high-material.png");
                     if (layeredSlateSource && lod == 0)

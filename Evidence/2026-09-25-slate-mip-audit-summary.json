@@ -1,0 +1,296 @@
+{
+  "status": "REJECTED for production; diagnostic only",
+  "audits": {
+    "fiveMipPadding4": {
+      "sourceSha256": "4c014ff59175d00f1a0c1a52b65e699fff02443a88091fa1d6f91f8eadeb4fd0",
+      "cases": [
+        {
+          "lod": "lod-0",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 10.408718973207431
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 15.66047619808261
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 20.6392272774958
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 6080,
+              "p95AngleDegrees": 26.958182935006604
+            }
+          ]
+        },
+        {
+          "lod": "lod-1",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 9.957153796058648
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 15.810886075204651
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 20.17600103507017
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 2255,
+              "p95AngleDegrees": 26.086783066665582
+            }
+          ]
+        },
+        {
+          "lod": "lod-2",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 9.978344271825385
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 16.18752528065362
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 20.977560903640327
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 1268,
+              "p95AngleDegrees": 25.942191982648378
+            }
+          ]
+        }
+      ]
+    },
+    "fiveMipPadding16": {
+      "sourceSha256": "222cae0ffab8c453cca69f0308244198646ada181be6eb84db5d243257808676",
+      "cases": [
+        {
+          "lod": "lod-0",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 11.0761584976193
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 4914,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 17.240971326898585
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 6473,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 23.224021700987066
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 4531,
+              "crossIslandBilinearSamples": 4850,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 29.172440802738265
+            }
+          ]
+        },
+        {
+          "lod": "lod-1",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 10.322167764400165
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 2504,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 16.444220230998862
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 3754,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 21.3348724909679
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 2932,
+              "crossIslandBilinearSamples": 1708,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 27.30410868370978
+            }
+          ]
+        },
+        {
+          "lod": "lod-2",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 10.188440756766958
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 1936,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 16.73351633204884
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 2669,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 21.905236748170186
+            },
+            {
+              "level": 4,
+              "mixedIslandTexels": 2122,
+              "crossIslandBilinearSamples": 907,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 27.07963413229456
+            }
+          ]
+        }
+      ]
+    },
+    "lod2At1024": {
+      "sourceSha256": "8829fd918372c5ff83813b1c710ce2d06f65a2226ae5a00f2ce4fbabe5e9d42c",
+      "cases": [
+        {
+          "lod": "lod-0",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 9.263205503213216
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 14.846297062847848
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 19.05041425738775
+            }
+          ]
+        },
+        {
+          "lod": "lod-1",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 8.858167574598497
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 15.162316016701013
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 19.47421556646744
+            }
+          ]
+        },
+        {
+          "lod": "lod-2",
+          "mips": [
+            {
+              "level": 1,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 13.029684972657602
+            },
+            {
+              "level": 2,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 18.640204465686008
+            },
+            {
+              "level": 3,
+              "mixedIslandTexels": 0,
+              "crossIslandBilinearSamples": 0,
+              "emptyGutterBilinearSamples": 0,
+              "p95AngleDegrees": 24.291973427742427
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

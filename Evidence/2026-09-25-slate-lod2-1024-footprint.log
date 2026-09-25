@@ -1,0 +1,19 @@
+{
+  "path": "Evidence\\2026-09-25-slate-lod2-1024-candidate\\rock-11\\lod-2\\low.obj",
+  "resolution": 1024,
+  "distance": 11.6,
+  "faces": 9408,
+  "frontFaces": 4708,
+  "all": {
+    "p50": 1.0883680109433163,
+    "p95": 2.6662528727278656,
+    "fractionAreaAboveMip3": 0.02889296940671348,
+    "fractionAreaAboveMip4": 0.008703870939678376
+  },
+  "front": {
+    "p50": 1.0861427246932458,
+    "p95": 2.7016264886224706,
+    "fractionAreaAboveMip3": 0.030335898326779055,
+    "fractionAreaAboveMip4": 0.010280235837847294
+  }
+}

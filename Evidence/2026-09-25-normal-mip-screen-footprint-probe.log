@@ -1,0 +1,57 @@
+{
+  "path": "Evidence\\2026-09-25-layered-slate-source-candidate\\rock-11\\lod-2\\low.obj",
+  "resolution": 2048,
+  "distance": 11.6,
+  "faces": 9408,
+  "frontFaces": 4708,
+  "all": {
+    "p50": 2.4450003107321727,
+    "p95": 4.022878755425569,
+    "fractionAreaAboveMip3": 0.2570977866493904,
+    "fractionAreaAboveMip4": 0.05147271222441801
+  },
+  "front": {
+    "p50": 2.4427706262230324,
+    "p95": 4.058259242083504,
+    "fractionAreaAboveMip3": 0.25629742737153244,
+    "fractionAreaAboveMip4": 0.05363429055562126
+  }
+}
+{
+  "path": "Evidence\\2026-09-25-cliff-eroded-rim-bounded-retained\\rock-8\\lod-2\\low.obj",
+  "resolution": 2048,
+  "distance": 20.0,
+  "faces": 9490,
+  "frontFaces": 4744,
+  "all": {
+    "p50": 1.5906994574075966,
+    "p95": 2.9244154311515285,
+    "fractionAreaAboveMip3": 0.042599395126947694,
+    "fractionAreaAboveMip4": 0.006695680473442182
+  },
+  "front": {
+    "p50": 1.5621213376035818,
+    "p95": 3.056818799848173,
+    "fractionAreaAboveMip3": 0.054292733520967765,
+    "fractionAreaAboveMip4": 0.010088949519571733
+  }
+}
+{
+  "path": "Evidence\\2026-09-25-cave-axial-candidate\\arch\\lod-2\\low.obj",
+  "resolution": 1024,
+  "distance": 10.5,
+  "faces": 1618,
+  "frontFaces": 826,
+  "all": {
+    "p50": -0.8143745032271168,
+    "p95": 0.7404702268858876,
+    "fractionAreaAboveMip3": 0.0011702259564519812,
+    "fractionAreaAboveMip4": 0.0004869249521128212
+  },
+  "front": {
+    "p50": -0.9851747390025186,
+    "p95": 0.7720482084408099,
+    "fractionAreaAboveMip3": 0.0013349649078758107,
+    "fractionAreaAboveMip4": 0.0006441464497744763
+  }
+}

@@ -1,0 +1,4 @@
+Evidence\2026-09-25-slate-far-baseline\rock-11\lod-2 near meanRGBMAE 5.1693315505981445 p95PixelMAE 16.33333396911621 objectPixels 111523
+Evidence\2026-09-25-slate-far-baseline\rock-11\lod-2 -far meanRGBMAE 4.336771011352539 p95PixelMAE 13.0 objectPixels 27246
+Evidence\2026-09-25-slate-far-lod2-1024\rock-11\lod-2 near meanRGBMAE 5.503166198730469 p95PixelMAE 17.66666603088379 objectPixels 111523
+Evidence\2026-09-25-slate-far-lod2-1024\rock-11\lod-2 -far meanRGBMAE 4.886919021606445 p95PixelMAE 15.666666984558105 objectPixels 27246
