@@ -1,0 +1,13 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 8: Playground.NativeSolid
+1/1 Test #8: Playground.NativeSolid ...........***Failed    0.05 sec
+Surface feature non-manifold or inconsistent winding at edge 8,13 count=3 face=31
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.07 sec
+
+The following tests FAILED:
+	  8 - Playground.NativeSolid (Failed)
+Errors while running CTest

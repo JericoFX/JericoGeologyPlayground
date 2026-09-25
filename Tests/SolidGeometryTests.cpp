@@ -1,4 +1,5 @@
 #include "SolidGeometry.hpp"
+#include "SurfaceFeatures.hpp"
 #include <Jerico/Jobs/Cancellation.hpp>
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 #include <algorithm>
@@ -171,6 +172,79 @@ int main()
         try { Solid::fractureShear(mesh, shear, nullptr); }
         catch (const std::exception &) { rejectedZeroSlip = true; }
         require(rejectedZeroSlip, "direct fracture shear rejects zero slip");
+        shear.amplitude = 0.12f;
+        auto fourBlocks = Solid::fractureQuadrants(mesh, shear, nullptr);
+        require(PA::validateClosedMesh(fourBlocks).hasValue(),
+                "four-block fracture remains closed");
+        require(surfaceFeatures(fourBlocks, {.contact = false}).signedDihedralCurvature.size() ==
+                    fourBlocks.positions.size(),
+                "four-block mass has manifold feature edges");
+        require(volume(fourBlocks) > 4 && volume(fourBlocks) < 7.9,
+                "four-block fracture removes bounded upper material");
+        std::vector<std::uint32_t> blockParents(fourBlocks.positions.size());
+        for (std::uint32_t i = 0; i < blockParents.size(); ++i)
+            blockParents[i] = i;
+        auto blockRoot = [&](std::uint32_t i)
+        {
+            while (blockParents[i] != i)
+                i = blockParents[i];
+            return i;
+        };
+        for (std::size_t t = 0; t < fourBlocks.indices.size(); t += 3)
+        {
+            const auto a = blockRoot(fourBlocks.indices[t]);
+            blockParents[blockRoot(fourBlocks.indices[t + 1])] = a;
+            blockParents[blockRoot(fourBlocks.indices[t + 2])] = a;
+        }
+        std::map<std::uint32_t, double> blockAreas;
+        for (std::size_t t = 0; t < fourBlocks.indices.size(); t += 3)
+        {
+            const auto a = fourBlocks.positions[fourBlocks.indices[t]];
+            const auto b = fourBlocks.positions[fourBlocks.indices[t + 1]];
+            const auto c = fourBlocks.positions[fourBlocks.indices[t + 2]];
+            auto &area = blockAreas[blockRoot(fourBlocks.indices[t])];
+            if (std::abs(a.y + 1) < 1e-7 && std::abs(b.y + 1) < 1e-7 &&
+                std::abs(c.y + 1) < 1e-7)
+                area += 0.5 * std::abs((b.x - a.x) * (c.z - a.z) -
+                                       (b.z - a.z) * (c.x - a.x));
+        }
+        require(blockAreas.size() == 1, "four chiseled blocks join into one closed mass");
+        for (const auto &[id, area] : blockAreas)
+            require(area > 1e-5, "every block has positive ground support area");
+        const auto blockSourceHash = PA::hashTriangleMesh(mesh);
+        for (std::uint64_t block = 0; block < 4; ++block)
+        {
+            const auto capId = Solid::region(shear.seed, blockSourceHash ^ (0x62000U + block));
+            require(std::find(fourBlocks.triangleRegions.begin(), fourBlocks.triangleRegions.end(),
+                              capId) != fourBlocks.triangleRegions.end(),
+                    "all four independently chiseled top faces remain exposed");
+        }
+        require(PA::hashTriangleMesh(fourBlocks) ==
+                    PA::hashTriangleMesh(Solid::fractureQuadrants(mesh, shear, nullptr)),
+                "four-block fracture is deterministic");
+        Jerico::CancellationSource stoppedBlocks;
+        stoppedBlocks.requestCancellation();
+        bool cancelledBlocks = false;
+        auto stoppedToken = stoppedBlocks.token();
+        try { Solid::fractureQuadrants(mesh, shear, &stoppedToken); }
+        catch (const std::exception &) { cancelledBlocks = true; }
+        require(cancelledBlocks, "four-block fracture never publishes after cancellation");
+        Recipe blockRecipe;
+        blockRecipe.version = 12;
+        blockRecipe.layers = {defaultLayer(Kind::FractureQuadrants)};
+        auto blockOutput = evaluate(blockRecipe, 4);
+        require(PA::hashTriangleMesh(blockOutput.mesh) ==
+                    PA::hashTriangleMesh(evaluate(deserialize(serialize(blockRecipe)), 4).mesh),
+                "recipe v12 round-trips deterministic four-block geometry");
+        unsigned chiselRegions = 0;
+        for (const auto &region : blockOutput.regions)
+            chiselRegions += region.role == SurfaceRole::BlockChisel;
+        require(chiselRegions == 4, "four chiseled faces have classified recipe identity");
+        blockRecipe.version = 11;
+        bool rejectedOldBlockVersion = false;
+        try { validate(blockRecipe); }
+        catch (const std::exception &) { rejectedOldBlockVersion = true; }
+        require(rejectedOldBlockVersion, "four-block recipe requires v12");
         auto subdivided = PA::subdivideClosedMesh(halves.value().negative, 3, 10000, cancellation.token());
         require(subdivided.hasValue(), "native subdivision");
         require(std::abs(volume(subdivided.value()) - 4) < 1e-9, "subdivision preserves volume");

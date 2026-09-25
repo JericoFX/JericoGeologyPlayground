@@ -8,6 +8,8 @@ TriangleMesh validate(const TriangleMesh &mesh);
 TriangleMesh planes(const TriangleMesh &mesh, const Layer &layer, const Jerico::CancellationToken *cancel);
 TriangleMesh fractureShear(const TriangleMesh &mesh, const Layer &layer,
                            const Jerico::CancellationToken *cancel);
+TriangleMesh fractureQuadrants(const TriangleMesh &mesh, const Layer &layer,
+                              const Jerico::CancellationToken *cancel);
 TriangleMesh envelope(const TriangleMesh &mesh, const Layer &layer, const Jerico::CancellationToken *cancel);
 void transferSamples(const MeshResult &source, const std::vector<Vec3d> &sourceWarp, MeshResult &destination,
                      std::vector<Vec3d> &destinationWarp, const Jerico::CancellationToken *cancel);

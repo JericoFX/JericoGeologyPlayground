@@ -42,7 +42,8 @@ enum class Kind
     DamageDecal,
     LayerSettle,
     CliffCutLoop,
-    FractureShear
+    FractureShear,
+    FractureQuadrants
 };
 enum class Mask
 {
@@ -124,7 +125,8 @@ enum class SurfaceRole
     SolidRim,
     CutLoop,
     CutFace,
-    FractureCut
+    FractureCut,
+    BlockChisel
 };
 struct RegionInfo
 {

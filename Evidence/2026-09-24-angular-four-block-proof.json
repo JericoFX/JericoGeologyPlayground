@@ -1,0 +1,57 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFourBlocks": true,
+  "angularFracture": false,
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 10,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 24571.4258,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.005,
+          "highHash": 15866639046548329811,
+          "highTriangles": 34352,
+          "lod": 0,
+          "lowHash": 2133569008793677883,
+          "lowTriangles": 3702,
+          "misses": 0,
+          "sampledSurfaceError": 0.0025520286391299595,
+          "samples": 1543233,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 23536.8297,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.0075,
+          "highHash": 15866639046548329811,
+          "highTriangles": 34352,
+          "lod": 1,
+          "lowHash": 9586234128709338591,
+          "lowTriangles": 3612,
+          "misses": 5,
+          "sampledSurfaceError": 0.004238264093705227,
+          "samples": 1561942,
+          "status": "BAKED_WITH_MISSES"
+        },
+        {
+          "lod": 2,
+          "reason": "LOD does not reduce triangle count",
+          "status": "REJECTED"
+        }
+      ]
+    }
+  ],
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

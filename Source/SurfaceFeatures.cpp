@@ -198,7 +198,11 @@ SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeat
             else
             {
                 if (edge.count != 2 || edge.from != to || edge.to != from)
-                    throw std::runtime_error("Surface feature non-manifold or inconsistent winding");
+                    throw std::runtime_error("Surface feature non-manifold or inconsistent winding at edge " +
+                                             std::to_string(key.first) + "," +
+                                             std::to_string(key.second) + " count=" +
+                                             std::to_string(edge.count) + " face=" +
+                                             std::to_string(t / 3));
                 auto tangent = unit(D::subtract(mesh.positions[edge.to], mesh.positions[edge.from]));
                 auto nf = faceNormals[edge.face], ng = faceNormals[t / 3];
                 auto theta =
