@@ -1,0 +1,118 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "axialFeatureReduced": false,
+  "blindChamber": false,
+  "entranceCamera": {
+    "distance": 5.0,
+    "pitch": -0.019999999552965164,
+    "target": [
+      0.0,
+      -0.5,
+      0.0
+    ],
+    "yaw": 0.0
+  },
+  "forms": [
+    {
+      "form": "arch",
+      "highHash": 1842549840819709216,
+      "highTriangles": 5376,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1321.4521,
+          "lod": 0,
+          "lowHash": 1401428151276193186,
+          "misses": 0,
+          "sampledSurfaceError": 0.10063702866826725,
+          "samples": 535904,
+          "subdivisions": 6,
+          "triangles": 3024,
+          "uvActiveAreaFraction": 0.5109989993869805,
+          "uvIslands": 44
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1155.9141,
+          "lod": 1,
+          "lowHash": 2669992736766901196,
+          "misses": 0,
+          "sampledSurfaceError": 0.10112335108916229,
+          "samples": 561160,
+          "subdivisions": 4,
+          "triangles": 1344,
+          "uvActiveAreaFraction": 0.5351030543709923,
+          "uvIslands": 33
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 968.4392,
+          "lod": 2,
+          "lowHash": 7353997264590895577,
+          "misses": 0,
+          "sampledSurfaceError": 0.11341705598596666,
+          "samples": 560946,
+          "subdivisions": 2,
+          "triangles": 336,
+          "uvActiveAreaFraction": 0.5349235313674263,
+          "uvIslands": 25
+        }
+      ]
+    },
+    {
+      "form": "square",
+      "highHash": 4360970343999400875,
+      "highTriangles": 2048,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 895.4388,
+          "lod": 0,
+          "lowHash": 18280619999710621092,
+          "misses": 0,
+          "sampledSurfaceError": 0.06410611484208267,
+          "samples": 662443,
+          "subdivisions": 7,
+          "triangles": 1568,
+          "uvActiveAreaFraction": 0.631770955359177,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 843.0926,
+          "lod": 1,
+          "lowHash": 15531563557742858636,
+          "misses": 0,
+          "sampledSurfaceError": 0.08548173980042593,
+          "samples": 661961,
+          "subdivisions": 6,
+          "triangles": 1152,
+          "uvActiveAreaFraction": 0.6313296617876369,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 796.341,
+          "lod": 2,
+          "lowHash": 16716995952421080664,
+          "misses": 0,
+          "sampledSurfaceError": 0.10496764825291541,
+          "samples": 661875,
+          "subdivisions": 5,
+          "triangles": 800,
+          "uvActiveAreaFraction": 0.631251828887843,
+          "uvIslands": 10
+        }
+      ]
+    }
+  ],
+  "geologicalMacro": true,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "BSP subtractive arch and square through-tunnels with high-to-low bakes",
+  "squareInteriorRelief": true,
+  "squareWallRelief": false,
+  "textureResolution": 1024
+}

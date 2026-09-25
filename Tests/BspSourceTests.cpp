@@ -262,10 +262,20 @@ int main()
                       << " left/right " << leftWallShift << '/' << rightWallShift
                       << " interior triangles " << interiorTriangles << '\n';
             if (subdivisions == 8 || subdivisions == 5)
+            {
                 require(changedInterior > 4 && maximumInteriorShift >
                             (subdivisions == 8 ? 0.20 : 0.14) &&
                             leftWallShift > 0.10 && rightWallShift > 0.10,
                         "square high and LOD2 deform both interior side walls");
+                require(PA::hashTriangleMesh(geologicalCaveSource(CaveForm::SquareTunnel,
+                                                                    subdivisions).mesh) ==
+                            PA::hashTriangleMesh(after.mesh),
+                        "geological square tunnel must use its sculpted interior walls");
+                require(PA::hashTriangleMesh(axialCaveSource(CaveForm::SquareTunnel,
+                                                               subdivisions).mesh) ==
+                            PA::hashTriangleMesh(after.mesh),
+                        "axial square tunnel must retain its sculpted interior walls");
+            }
             for (std::size_t triangle = 0; triangle < before.mesh.indices.size(); triangle += 3)
             {
                 const auto x = faceNormal(before.mesh, triangle),
@@ -291,8 +301,8 @@ int main()
                         "geological cave warp does not invert a face at any sampled LOD");
             }
         }
-        require(PA::hashTriangleMesh(geologicalCaveSource(CaveForm::SquareTunnel, 4).mesh) == squareHash,
-                "square tunnel remains the undeformed control");
+        require(PA::hashTriangleMesh(geologicalCaveSource(CaveForm::SquareTunnel, 4).mesh) != squareHash,
+                "geological square tunnel must not remain the undeformed BSP control");
         require(PA::hashTriangleMesh(cliff.mesh) ==
                     PA::hashTriangleMesh(evaluateSource(deserialize(serialize(recipe)), input, 12).mesh),
                 "BSP evaluation deterministic");

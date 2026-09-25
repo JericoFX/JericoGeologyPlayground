@@ -1,0 +1,8 @@
+geological square tunnel must use its sculpted interior walls
+translated BSP sampled source error 3.9968e-15 layered error 5.77663e-15
+cave topology 1 volume 53.4318 V/E/F 672/2016/1344 Euler 0
+cave topology 0 volume 60.12 V/E/F 256/768/512 Euler 0
+square relief subdivisions 2 changed 6 maximum 0.0637496 left/right 0.0637496/0.0631481 interior triangles 32
+square relief subdivisions 3 changed 21 maximum 0.188173 left/right 0.188173/0.165893 interior triangles 72
+square relief subdivisions 4 changed 43 maximum 0.239033 left/right 0.239033/0.200918 interior triangles 128
+square relief subdivisions 5 changed 74 maximum 0.27 left/right 0.27/0.220729 interior triangles 200

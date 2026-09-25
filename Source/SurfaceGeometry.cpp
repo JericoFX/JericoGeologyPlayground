@@ -212,9 +212,9 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
 MeshResult geologicalCaveSource(CaveForm form, int subdivisions,
                                 const Jerico::CancellationToken *cancel)
 {
-    auto source = caveSource(form, subdivisions, cancel);
     if (form == CaveForm::SquareTunnel)
-        return source;
+        return squareTunnelReliefSource(subdivisions, cancel);
+    auto source = caveSource(form, subdivisions, cancel);
     Recipe recipe;
     auto macro = defaultLayer(Kind::VectorNoise);
     macro.seed = 123;

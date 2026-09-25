@@ -1189,6 +1189,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                              {"axialFeatureReduced", axialFeatureReduced},
                              {"blindChamber", blindChamber},
                              {"squareWallRelief", squareWallRelief},
+                             {"squareInteriorRelief", geologicalMacro || squareWallRelief},
                              {"textureResolution", 1024}, {"imageSize", {1280, 960}},
                              {"forms", nlohmann::json::array()}};
     Camera camera;
@@ -1213,6 +1214,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                                       "arch"},
                               std::pair{CaveForm::SquareTunnel, "square"}})
     {
+        const bool sculptSquare = form == CaveForm::SquareTunnel &&
+                                  (geologicalMacro || squareWallRelief);
         auto macroHigh = squareWallRelief && form == CaveForm::SquareTunnel ?
                          squareTunnelReliefSource(8) :
                          axialFeatureReduced ? axialCaveSource(form, 8) :
@@ -1235,7 +1238,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
         {
             const bool reducedArch = axialFeatureReduced && form != CaveForm::SquareTunnel;
             const int subdivisions = reducedArch ? 0 :
-                                     squareWallRelief && form == CaveForm::SquareTunnel ?
+                                     sculptSquare ?
                                          (lod == 0 ? 7 : lod == 1 ? 6 : 5) :
                                      lod == 0 ? 6 : lod == 1 ? 4 : 2;
             const double reductionBudget = lod == 0 ? 0.01 : lod == 1 ? 0.05 : 0.10;
@@ -1258,7 +1261,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                                          geologicalMacro ? geologicalCaveSource(form, subdivisions) :
                                          caveSource(form, subdivisions);
             low.sampledReductionError = sampledBidirectionalMeshError(high.mesh, low.mesh);
-            if ((reducedArch || squareWallRelief && form == CaveForm::SquareTunnel) &&
+            if ((reducedArch || sculptSquare) &&
                 low.sampledReductionError > 0.15)
                 throw std::runtime_error(std::string(name) + " LOD" + std::to_string(lod) +
                                          " exceeds the high-to-low surface error gate: " +
@@ -1279,7 +1282,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                                                .curvatureScale = 0.25,
                                                .thicknessRange = 4,
                                                .automaticUv = true});
-            bake.lowStrategy = squareWallRelief && form == CaveForm::SquareTunnel ?
+            bake.lowStrategy = sculptSquare ?
                                "bsp-regenerated-interior-relief" :
                                reducedArch ? "native-feature-reduction" :
                                geologicalMacro && form == CaveForm::Arch ?
@@ -1304,17 +1307,17 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(formDirectory / "high.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(formDirectory / "high-entrance-material.png");
-                if (squareWallRelief && form == CaveForm::SquareTunnel)
+                if (sculptSquare)
                 {
                     renderer.draw(1280, 960, entrance, 0);
                     renderer.capture(formDirectory / "high-entrance-geometry.png");
                 }
                 if (blindChamber && form == CaveForm::BlindArch ||
-                    squareWallRelief && form == CaveForm::SquareTunnel)
+                    sculptSquare)
                 {
                     renderer.draw(1280, 960, form == CaveForm::SquareTunnel ? squareInterior : interior, 5);
                     renderer.capture(formDirectory / "high-interior-material.png");
-                    if (squareWallRelief && form == CaveForm::SquareTunnel)
+                    if (sculptSquare)
                     {
                         renderer.draw(1280, 960, squareInterior, 0);
                         renderer.capture(formDirectory / "high-interior-geometry.png");
@@ -1334,13 +1337,13 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(directory / "low-oblique-material.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(directory / "low-entrance-material.png");
-                if (squareWallRelief && form == CaveForm::SquareTunnel)
+                if (sculptSquare)
                 {
                     renderer.draw(1280, 960, entrance, 0);
                     renderer.capture(directory / "low-entrance-geometry.png");
                 }
                 if (blindChamber && form == CaveForm::BlindArch ||
-                    squareWallRelief && form == CaveForm::SquareTunnel)
+                    sculptSquare)
                 {
                     renderer.draw(1280, 960, form == CaveForm::SquareTunnel ? squareInterior : interior, 5);
                     renderer.capture(directory / "low-interior-material.png");
