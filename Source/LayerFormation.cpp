@@ -237,11 +237,13 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
         auto local = D::subtract(p, sourceCenter);
         Vec3d q{D::dot(local, u) * layer.thicknessFrequency, 0,
                 D::dot(local, v) * layer.thicknessFrequency};
-        double shared = PA::evaluateGeologyFbmReference(q, layer.seed + 0x58e571U, 2, 2, 0.5);
+        double shared = PA::evaluateGeologyFbmReference(q, layer.seed + 0x58e571U, 2,
+                                                         layer.lacunarity, 0.5);
         std::array<double, 12> values{};
         for (int k = 0; k < layer.count; ++k)
         {
-            double local = PA::evaluateGeologyFbmReference(q, layer.seed + k * 71 + 0xa8192U, 2, 2, 0.5);
+            double local = PA::evaluateGeologyFbmReference(q, layer.seed + k * 71 + 0xa8192U, 2,
+                                                            layer.lacunarity, 0.5);
             double signal = layer.thicknessCorrelation * shared + (1 - layer.thicknessCorrelation) * local;
             values[k] = std::clamp(layer.thickness * (1 + layer.jitter * signal),
                                    double(layer.minimumThickness), double(layer.maximumThickness));
@@ -348,7 +350,8 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                                    0.35 * std::sin(1.7 * height / std::max(1.0, maximumRadius) + seedAngle);
                 const auto slope = x * std::cos(angle) + y * std::sin(angle);
                 const auto undulation = 0.2 * PA::evaluateGeologyFbmReference(
-                    {x * 0.75, 0, y * 0.75}, layer.seed + 0xbedd1a7U, 2, 2, 0.5);
+                    {x * 0.75, 0, y * 0.75}, layer.seed + 0xbedd1a7U, 2,
+                    layer.lacunarity, 0.5);
                 values[k] = D::add(point, D::multiply(d, layer.beddingTilt * (slope + undulation)));
             }
             cursor += thickness[k] + layer.spacing;

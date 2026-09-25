@@ -1,0 +1,451 @@
+
+{
+  "triangles": 2160,
+  "samples": 69120,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      172,
+      90,
+      42
+    ],
+    "convex-edge": [
+      255,
+      255,
+      245
+    ]
+  }
+}
+arch lod-0 exit=0
+{
+  "triangles": 960,
+  "samples": 30720,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      172,
+      90,
+      42
+    ],
+    "convex-edge": [
+      255,
+      255,
+      245
+    ]
+  }
+}
+arch lod-1 exit=0
+{
+  "triangles": 240,
+  "samples": 7680,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      254,
+      250,
+      249
+    ],
+    "convex-edge": [
+      255,
+      245,
+      245
+    ]
+  }
+}
+arch lod-2 exit=0
+{
+  "triangles": 1152,
+  "samples": 36864,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      141,
+      108,
+      55
+    ],
+    "convex-edge": [
+      255,
+      229,
+      229
+    ]
+  }
+}
+square lod-0 exit=0
+{
+  "triangles": 512,
+  "samples": 16384,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      141,
+      108,
+      76
+    ],
+    "convex-edge": [
+      255,
+      255,
+      255
+    ]
+  }
+}
+square lod-1 exit=0
+{
+  "triangles": 128,
+  "samples": 4096,
+  "unpaintedInteriorSamples": 0,
+  "worstUnpaintedTriangles": [],
+  "blueBelow64Samples": 0,
+  "specialistAlphaMismatches": {
+    "ambient-occlusion": 0,
+    "contact-occlusion": 0,
+    "signed-curvature": 0,
+    "cavity": 0,
+    "convex-edge": 0,
+    "crease-distance-mask": 0,
+    "thickness": 0,
+    "region-id": 0,
+    "signed-height": 0
+  },
+  "normalMipDimensions": [
+    [
+      512,
+      512
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      128,
+      128
+    ]
+  ],
+  "specialistMipAlphaMismatches": {
+    "ambient-occlusion:1": 0,
+    "contact-occlusion:1": 0,
+    "signed-curvature:1": 0,
+    "cavity:1": 0,
+    "convex-edge:1": 0,
+    "crease-distance-mask:1": 0,
+    "thickness:1": 0,
+    "region-id:1": 0,
+    "signed-height:1": 0,
+    "ambient-occlusion:2": 0,
+    "contact-occlusion:2": 0,
+    "signed-curvature:2": 0,
+    "cavity:2": 0,
+    "convex-edge:2": 0,
+    "crease-distance-mask:2": 0,
+    "thickness:2": 0,
+    "region-id:2": 0,
+    "signed-height:2": 0,
+    "ambient-occlusion:3": 0,
+    "contact-occlusion:3": 0,
+    "signed-curvature:3": 0,
+    "cavity:3": 0,
+    "convex-edge:3": 0,
+    "crease-distance-mask:3": 0,
+    "thickness:3": 0,
+    "region-id:3": 0,
+    "signed-height:3": 0
+  },
+  "fabricatedRegionIds": 0,
+  "maskPeakByLevel": {
+    "cavity": [
+      170,
+      108,
+      98
+    ],
+    "convex-edge": [
+      255,
+      229,
+      229
+    ]
+  }
+}
+square lod-2 exit=0

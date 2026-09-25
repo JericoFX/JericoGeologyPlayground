@@ -4,6 +4,9 @@
 #include <span>
 namespace Playground
 {
+enum class CaveForm { Arch, SquareTunnel };
+MeshResult caveSource(CaveForm form, int subdivisions,
+                      const Jerico::CancellationToken *cancel = nullptr);
 MeshResult planeSource(std::array<float, 2> size, int resolution);
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel = nullptr);
 MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Guid> selected,

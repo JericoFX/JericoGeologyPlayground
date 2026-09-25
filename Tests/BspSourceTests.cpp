@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 using namespace Playground;
 void require(bool v, const char *m)
@@ -68,6 +69,47 @@ int main()
                 "source identity survives stack");
         require(PA::hashDocument(document) == originalHash,
                 "original BSP document and unselected brush remain unchanged");
+        std::uint64_t archHash = 0, squareHash = 0;
+        for (auto form : {CaveForm::Arch, CaveForm::SquareTunnel})
+        {
+            auto cave = caveSource(form, 4);
+            require(cave.closedSolid && PA::validateClosedMesh(cave.mesh).hasValue(),
+                    "subtractive cave source remains a closed solid");
+            require(cave.sourceSelection.size() == 2 && !cave.regions.empty(),
+                    "cave retains additive and cutter BSP identities");
+            auto volume = 0.0;
+            for (std::size_t t = 0; t < cave.mesh.indices.size(); t += 3)
+            {
+                auto p = cave.mesh.positions[cave.mesh.indices[t]],
+                     q = cave.mesh.positions[cave.mesh.indices[t + 1]],
+                     r = cave.mesh.positions[cave.mesh.indices[t + 2]];
+                volume += (p.x * (q.y * r.z - q.z * r.y) +
+                           p.y * (q.z * r.x - q.x * r.z) +
+                           p.z * (q.x * r.y - q.y * r.x)) / 6.0;
+            }
+            require(std::abs(volume) > 40 && std::abs(volume) < 70,
+                    "cave cutter removes a substantial through-passage from the 72-unit rock block");
+            std::set<std::pair<std::uint32_t, std::uint32_t>> edges;
+            for (std::size_t t = 0; t < cave.mesh.indices.size(); t += 3)
+                for (int edge = 0; edge < 3; ++edge)
+                {
+                    auto a = cave.mesh.indices[t + edge], b = cave.mesh.indices[t + (edge + 1) % 3];
+                    edges.insert(std::minmax(a, b));
+                }
+            const auto euler = std::int64_t(cave.mesh.positions.size()) -
+                               std::int64_t(edges.size()) +
+                               std::int64_t(cave.mesh.indices.size() / 3);
+            std::cout << "cave topology " << int(form == CaveForm::Arch) << " volume " << volume
+                      << " V/E/F "
+                      << cave.mesh.positions.size() << '/' << edges.size() << '/'
+                      << cave.mesh.indices.size() / 3 << " Euler " << euler << '\n';
+            require(euler == 0, "cave opening has through-tunnel topology, not a sealed pocket");
+            const auto hash = PA::hashTriangleMesh(cave.mesh);
+            require(hash == PA::hashTriangleMesh(caveSource(form, 4).mesh),
+                    "cave geometry and cut regions replay deterministically");
+            (form == CaveForm::Arch ? archHash : squareHash) = hash;
+        }
+        require(archHash != squareHash, "arched cave and square tunnel have different geometry");
         require(PA::hashTriangleMesh(cliff.mesh) ==
                     PA::hashTriangleMesh(evaluateSource(deserialize(serialize(recipe)), input, 12).mesh),
                 "BSP evaluation deterministic");

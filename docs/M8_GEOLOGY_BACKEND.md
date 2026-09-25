@@ -144,6 +144,14 @@ El experimento v13 actual usa píxeles de un alfa CC0 importado mediante el cont
 
 ## Trabajo restante transferido al slice M8
 
+### Prueba standalone de entradas de caverna (2026-09-25)
+
+`Source/SurfaceGeometry.cpp::caveSource` usa el BSP C++ admitido como referencia por el Playground: un brush Add rectangular y otro Subtract con sección de arco convexo o caja. El cutter sobresale de las caras delantera y trasera; queda un piso de 0,3 unidades. `Tests/BspSourceTests.cpp` exige sólido cerrado, reducción de volumen, selección estable de ambos GUID, hashes deterministas y característica de Euler 0 para el túnel pasante. La solución no usa OpenVDB ni Blender.
+
+La corrida `../Evidence/2026-09-25-cave-forms-rock-material/` conserva high, tres low regenerados, UV automática, mapas normal/AO/contact/cavity/edge/curvature/crease/thickness/region/height y capturas Vulkan de ambos tipos. El high lleva ruido de normales nativo suave (seed 123, lacunaridad 1,87); los LOD usan la misma construcción BSP a subdivisiones 6/4/2. Se midieron 2160/960/240 triángulos para el arco y 1152/512/128 para el cuadrado. Los seis bakes a 1024² tuvieron cero misses y backfaces; `../Evidence/2026-09-25-cave-auto-uv-audit.log` registra cero interiores UV sin pintar y cero IDs de región fabricados en los mips. El error superficial muestreado máximo fue 0,0193 unidades; tiempos de bake medidos de 0,68 a 1,27 segundos por LOD en esta máquina. El material triplanar CC0 se repite demasiado y el exterior sigue siendo un bloque plano; la forma **no** supera aún aceptación Beauty de caverna natural.
+
+La lacunaridad `Layer.lacunarity` también controla ahora los FBM internos de espesor compartido y ondulación del estrato y el contorno/estrías del cliff perfil 2; el default 2 preserva recetas previas. `Tests/ModelTests.cpp` fija que un cambio aislado de lacunaridad modifica el hash de capas coherentes y que el replay permanece determinista. Aún falta comparar visualmente varias semillas/materiales con referencias reales antes de elegir un nuevo preset geológico.
+
 Lo siguiente sigue pendiente de integración productiva M8, aunque la matemática standalone puede continuar por la instrucción vigente del owner. No confundir kernels aislados con sistemas completos. Las referencias viven en `F:/JericoEngine/docs/research/`; localizar por los nombres indicados y resolver alcance/autoridad en el único slice activo antes de implementar.
 
 | Pendiente | Código o referencia de partida | Entrega/prueba que falta en M8 |

@@ -152,6 +152,53 @@ MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Gu
     normals(result);
     return result;
 }
+MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::CancellationToken *cancel)
+{
+    const auto massId = Solid::region(0xca7eU, 1);
+    const auto tunnelId = Solid::region(0xca7eU, form == CaveForm::Arch ? 2 : 3);
+    const std::array<double, 16> identity{
+        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+    PA::BrushNode mass{massId, PA::BrushBoolean::Add, PA::BoxBrush{{3, 2, 1.5}}, identity};
+    PA::BrushNode cutter{tunnelId, PA::BrushBoolean::Subtract, {}, identity};
+    if (form == CaveForm::SquareTunnel)
+    {
+        cutter.shape = PA::BoxBrush{{0.9, 1.1, 2.0}};
+        cutter.localTransform[13] = -0.6;
+    }
+    else if (form == CaveForm::Arch)
+    {
+        constexpr int segments = 8;
+        constexpr double radius = 1.15, spring = -0.45, bottom = -1.7, depth = 2.0;
+        std::vector<std::array<double, 2>> contour{{-radius, bottom}, {radius, bottom},
+                                                    {radius, spring}};
+        for (int step = 1; step < segments; ++step)
+        {
+            const double angle = std::numbers::pi * step / segments;
+            contour.push_back({radius * std::cos(angle), spring + radius * std::sin(angle)});
+        }
+        contour.push_back({-radius, spring});
+        PA::ConvexBrush arch;
+        const auto count = std::uint32_t(contour.size());
+        for (double z : {-depth, depth})
+            for (auto [x, y] : contour)
+                arch.vertices.push_back({x, y, z});
+        std::vector<std::uint32_t> front, back;
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            front.push_back(count - 1 - i);
+            back.push_back(count + i);
+            arch.faces.push_back({i, (i + 1) % count, count + (i + 1) % count, count + i});
+        }
+        arch.faces.push_back(std::move(front));
+        arch.faces.push_back(std::move(back));
+        cutter.shape = std::move(arch);
+    }
+    else
+        throw std::runtime_error("Unknown cave form");
+    PA::BspDocument document{Solid::region(0xca7eU, 4), 1, {mass, cutter}};
+    const std::array selected{massId, tunnelId};
+    return bspSource(document, selected, subdivisions, cancel);
+}
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel)
 {
     auto id = Solid::region(0, 0x60000);
@@ -230,9 +277,11 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
         {
             const double x = std::cos(angle), y = std::sin(angle);
             const double broad = PA::evaluateGeologyFbmReference(
-                {2.1 * x + 3.7, 2.1 * y - 1.8, 0.25}, layer.seed ^ 0x719be431U, 3, 2, 0.5);
+                {2.1 * x + 3.7, 2.1 * y - 1.8, 0.25}, layer.seed ^ 0x719be431U, 3,
+                layer.lacunarity, 0.5);
             const double fine = PA::evaluateGeologyFbmReference(
-                {4.3 * x - 2.4, 4.3 * y + 1.1, 0.75}, layer.seed ^ 0x2c36d857U, 2, 2, 0.5);
+                {4.3 * x - 2.4, 4.3 * y + 1.1, 0.75}, layer.seed ^ 0x2c36d857U, 2,
+                layer.lacunarity, 0.5);
             detail = 0.55 * broad + 0.20 * fine;
         }
         return std::clamp(1.0 + layer.distortion *
@@ -347,7 +396,8 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
                                              layer.width, 0.0, 1.0);
             const double falloff = inside * inside * (3 - 2 * inside);
             const double strata = PA::evaluateGeologyFbmReference(
-                {0.8 * p.x, 0.35 * p.y, 1.1}, layer.seed ^ 0x4ae27b15U, 3, 2, 0.5);
+                {0.8 * p.x, 0.35 * p.y, 1.1}, layer.seed ^ 0x4ae27b15U, 3,
+                layer.lacunarity, 0.5);
             const double coverage = layer.alphaSource == 1 ?
                 std::clamp((sampleCliffAlpha(u, v) - 0.42) / 0.35, 0.0, 1.0) : 1.0;
             const double alpha = coverage * coverage * (3 - 2 * coverage);

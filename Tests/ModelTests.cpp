@@ -146,6 +146,28 @@ int main()
         require(rejected, "non-finite parameters rejected");
         auto cpu = PA::evaluateGeologyFbmReference({0.3, 1.7, -0.4}, 123, 4, 2, 0.5);
         require(std::isfinite(cpu), "actual engine FBM source linked and evaluated");
+        auto bedding = preset(11);
+        for (auto &layer : bedding.layers)
+        {
+            layer.seed = 123;
+            if (layer.kind == Kind::Layers)
+            {
+                layer.perimeterAmplitude = 0;
+                layer.beddingTilt = 0;
+                layer.macroAxisAsymmetry = 0;
+                layer.shapeOuterCaps = false;
+            }
+        }
+        auto harmonic = evaluate(bedding, 16);
+        for (auto &layer : bedding.layers)
+            if (layer.kind == Kind::Layers)
+                layer.lacunarity = 1.87f;
+        auto nonharmonic = evaluate(bedding, 16);
+        require(meshHash(harmonic.mesh) != meshHash(nonharmonic.mesh),
+                "coherent bedding thickness responds to authored octave lacunarity");
+        require(meshHash(nonharmonic.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(bedding)), 16).mesh),
+                "nonharmonic bedding is deterministic after recipe roundtrip");
         std::cout << "PASS: four bases, topology, deterministic recipes, disabled identity, order, "
                      "roundtrip, displacement models, structural layers, domain warp, fields, invalid input, "
                      "shared engine FBM\n";

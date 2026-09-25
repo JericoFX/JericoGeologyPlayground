@@ -2,6 +2,7 @@
 #include "MeshReduction.hpp"
 #include "NormalBake.hpp"
 #include "Renderer.hpp"
+#include "SurfaceGeometry.hpp"
 #include "SurfaceFeatures.hpp"
 #include <Jerico/Platform/Window.hpp>
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
@@ -922,6 +923,89 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     }
     std::cout << report.dump(2) << '\n';
 }
+void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
+{
+    nlohmann::json report = {{"adapter", renderer.adapter()},
+                             {"scope", "BSP subtractive arch and square through-tunnels with high-to-low bakes"},
+                             {"textureResolution", 1024}, {"imageSize", {1280, 960}},
+                             {"forms", nlohmann::json::array()}};
+    Camera camera;
+    camera.yaw = 0.12f;
+    camera.pitch = -0.14f;
+    camera.distance = 10.5f;
+    for (auto [form, name] : {std::pair{CaveForm::Arch, "arch"},
+                              std::pair{CaveForm::SquareTunnel, "square"}})
+    {
+        auto high = caveSource(form, 8);
+        Recipe detail;
+        auto noise = defaultLayer(Kind::NormalNoise);
+        noise.seed = 123;
+        noise.amplitude = 0.025f;
+        noise.frequency = 2.5f;
+        noise.lacunarity = 1.87f;
+        detail.layers = {noise};
+        high = evaluateSource(detail, high, 8);
+        auto formDirectory = evidence / name;
+        nlohmann::json formReport = {{"form", name}, {"highTriangles", high.mesh.indices.size() / 3},
+                                     {"highHash", PA::hashTriangleMesh(high.mesh)},
+                                     {"lods", nlohmann::json::array()}};
+        std::size_t previousTriangles = high.mesh.indices.size() / 3;
+        for (int lod = 0; lod < 3; ++lod)
+        {
+            const int subdivisions = lod == 0 ? 6 : lod == 1 ? 4 : 2;
+            auto low = caveSource(form, subdivisions);
+            low.sampledReductionError = sampledBidirectionalMeshError(high.mesh, low.mesh);
+            const auto triangles = low.mesh.indices.size() / 3;
+            if (!low.closedSolid || triangles >= previousTriangles)
+                throw std::runtime_error(std::string(name) + " LOD is not a reduced closed solid");
+            previousTriangles = triangles;
+            auto bake = bakeNormals(high, low, {.resolution = 1024,
+                                               .projectionDistance = 0.25,
+                                               .padding = 4,
+                                               .matchRegions = true,
+                                               .projection = NormalProjection::ClosestSurface,
+                                               .specialistMaps = true,
+                                               .featureRadius = 0.5,
+                                               .edgeRadius = 0.1,
+                                               .featureSamples = 16,
+                                               .curvatureScale = 0.25,
+                                               .thicknessRange = 4,
+                                               .automaticUv = true});
+            bake.lowStrategy = "bsp-regenerated";
+            auto directory = formDirectory / ("lod-" + std::to_string(lod));
+            exportNormalBake(bake, directory);
+            const auto diffuse = materialDiffuse(0);
+            if (lod == 0)
+            {
+                renderer.upload(high);
+                renderer.uploadMaterial(nullptr, diffuse, true, 0);
+                renderer.draw(1280, 960, camera, 5);
+                renderer.capture(formDirectory / "high-material.png");
+                renderer.draw(1280, 960, camera, 0);
+                renderer.capture(formDirectory / "high.png");
+            }
+            renderer.upload(bake.low, &bake);
+            renderer.uploadMaterial(&bake, diffuse, true, 0);
+            renderer.draw(1280, 960, camera, 5);
+            renderer.capture(directory / "low-material.png");
+            renderer.draw(1280, 960, camera, 0);
+            renderer.capture(directory / "low-normal.png");
+            formReport["lods"].push_back({{"lod", lod}, {"subdivisions", subdivisions},
+                                           {"triangles", triangles}, {"sampledSurfaceError", low.sampledReductionError},
+                                           {"samples", bake.samples}, {"misses", bake.misses},
+                                           {"backfaces", bake.backfaceHits}, {"bakeCpuMs", bake.milliseconds},
+                                           {"uvIslands", bake.automaticUvIslandCount},
+                                           {"uvActiveAreaFraction", bake.automaticUvActiveAreaFraction},
+                                           {"lowHash", bake.lowHash}});
+            report["forms"].push_back(formReport);
+            std::ofstream(evidence / "cave-forms-proof.json") << report.dump(2) << '\n';
+            report["forms"].erase(report["forms"].end() - 1);
+        }
+        report["forms"].push_back(std::move(formReport));
+        std::ofstream(evidence / "cave-forms-proof.json") << report.dump(2) << '\n';
+    }
+    std::cout << report.dump(2) << '\n';
+}
 void captureEdgeRadiusSweep(Renderer &renderer, const std::filesystem::path &evidence)
 {
     nlohmann::json report;
@@ -1173,7 +1257,7 @@ int run(int argc, char **argv)
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
-         adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false;
+         adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1210,7 +1294,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--normal-bake-low10-orbit-test" ||
             std::string(argv[i]) == "--normal-bake-adaptive-test" ||
             std::string(argv[i]) == "--normal-bake-adaptive-orbit-test" ||
-            std::string(argv[i]) == "--auto-uv-bake-test")
+            std::string(argv[i]) == "--auto-uv-bake-test" ||
+            std::string(argv[i]) == "--cave-forms-bakes-test")
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
@@ -1241,6 +1326,7 @@ int run(int argc, char **argv)
             adaptiveBakeSmoke = std::string(argv[i]) == "--normal-bake-adaptive-test";
             adaptiveOrbitSmoke = std::string(argv[i]) == "--normal-bake-adaptive-orbit-test";
             automaticUvBakeSmoke = std::string(argv[i]) == "--auto-uv-bake-test";
+            caveFormsSmoke = std::string(argv[i]) == "--cave-forms-bakes-test";
             if (std::string(argv[i]) == "--normal-bake-3072-test")
                 scaleTextureResolution = 3072;
             smoke = true;
@@ -1900,6 +1986,12 @@ int run(int argc, char **argv)
             if (angularProfileSmoke)
             {
                 captureAngularProfiles(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (caveFormsSmoke)
+            {
+                captureCaveForms(renderer, evidence);
                 window.requestClose();
                 continue;
             }

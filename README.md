@@ -60,6 +60,12 @@ La resolución significa subdivisiones por cara de la primitiva, **no vóxeles**
 
 El contrato, las matemáticas, la semántica de regiones y los límites para un consumidor sin UI están en `BACKEND_CONTRACT.md`. La evidencia v3 vive en `Evidence/surface-v3`; v2 y v1 permanecen en `Evidence/backend-v2` y `Evidence/baseline-v1`. La investigación acotada está en `docs/NODE_MATH_RESEARCH_2026_09_15.md`. Recetas reutilizables, importación de heightmap y aplicación de RBrush para M8 están especificados en `docs/M8_GEOLOGY_BACKEND.md`; la matemática de bake de altura, la proyección RBrush local y un pack derivado de imagen CC0 se probaron en el Playground.
 
+## Arco y túnel de prueba
+
+`build/Release/JericoGeologyPlayground.exe --cave-forms-bakes-test Evidence/cave-forms` genera dos cortes BSP sustractivos en un bloque de roca: un arco facetado y un túnel cuadrado. Ambos atraviesan el bloque en Z y conservan 0,3 unidades de piso. `Source/SurfaceGeometry.cpp` construye los brushes con la biblioteca C++ del Engine; la fuente y los GUID de los dos brushes se conservan en el resultado. El high a subdivisión 8 recibe FBM nativo suave con lacunaridad 1,87; los LOD 6/4/2 se regeneran desde los mismos brushes. Cada low recibe UV automática y proyección del high de normal, AO, contacto, curvatura, cavity, borde convexo, crease, espesor, región y altura, con mips. Las imágenes `high-material.png` y `lod-*/low-material.png` son capturas Vulkan a 1280×960 con textura CC0 de roca.
+
+La corrida retenida está en `Evidence/2026-09-25-cave-forms-rock-material/`. Es una comparación geométrica de entradas cavernosas, no una caverna natural terminada: el bloque exterior y la repetición triplanar del diffuse todavía se leen artificiales. No se usó OpenVDB ni se modificó el Engine.
+
 Los campos de transformación se interpretan según la operación: Transform, envelope y DamageDecal tienen coordenadas propias; las operaciones de ruido usan Frequency y Coordinate XYZ. `meshHash` prueba posiciones e índices: no es un hash de materiales/metadatos. El stack conserva GUID por triángulo y un catálogo de regiones.
 
 ## CPU, GPU y mediciones
