@@ -157,6 +157,62 @@ int main()
         unsettledRecipe.layers.back().enabled = false;
         auto productionRaw = evaluate(unsettledRecipe, production.finalResolution);
         auto productionSettled = evaluate(production, production.finalResolution);
+        auto horizonVariation = [&](const MeshResult &stack)
+        {
+            std::vector<std::vector<double>> radii(production.layers[0].count);
+            for (std::size_t i = 0; i < macroSource.mesh.positions.size(); ++i)
+            {
+                const auto sourcePoint = macroSource.mesh.positions[i];
+                if (sourcePoint.y < 0.99 || std::hypot(sourcePoint.x, sourcePoint.z) < 0.99)
+                    continue;
+                for (int k = 0; k < production.layers[0].count; ++k)
+                {
+                    const auto p = stack.mesh.positions[k * macroSource.mesh.positions.size() + i];
+                    radii[k].push_back(std::hypot(p.x, p.z));
+                }
+            }
+            double total = 0;
+            for (int k = 1; k < production.layers[0].count; ++k)
+            {
+                const auto &a = radii[k - 1], &b = radii[k];
+                double ma = 0, mb = 0, ab = 0, aa = 0, bb = 0;
+                for (std::size_t i = 0; i < a.size(); ++i)
+                {
+                    ma += a[i];
+                    mb += b[i];
+                }
+                ma /= a.size();
+                mb /= b.size();
+                for (std::size_t i = 0; i < a.size(); ++i)
+                {
+                    const auto x = a[i] - ma, y = b[i] - mb;
+                    ab += x * y;
+                    aa += x * x;
+                    bb += y * y;
+                }
+                total += ab / std::sqrt(aa * bb);
+            }
+            return total / (production.layers[0].count - 1);
+        };
+        auto fracturedRecipe = production;
+        fracturedRecipe.version = 15;
+        fracturedRecipe.layers[0].profile = 2;
+        auto legacyFractured = fracturedRecipe;
+        legacyFractured.version = 14;
+        require(rejectsInvalidMacro(legacyFractured),
+                "fractured horizon profile must not change legacy recipe output");
+        auto fracturedStack = evaluate(fracturedRecipe, fracturedRecipe.finalResolution);
+        const auto baselineContourCorrelation = horizonVariation(productionSettled);
+        const auto fracturedContourCorrelation = horizonVariation(fracturedStack);
+        require(fracturedContourCorrelation + 0.08 < baselineContourCorrelation,
+                "independent horizon fracture must reduce adjacent contour repetition");
+        std::cout << "horizon correlation baseline=" << baselineContourCorrelation
+                  << " fractured=" << fracturedContourCorrelation << '\n';
+        require(PA::validateClosedMesh(fracturedStack.mesh).hasValue(),
+                "independent horizon fracture must retain a closed mesh");
+        require(meshHash(fracturedStack.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(fracturedRecipe)), fracturedRecipe.finalResolution).mesh),
+                "independent horizon fracture must replay through version 15 serialization");
         auto replayedProduction = deserialize(serialize(production));
         require(replayedProduction.layers[0].beddingTilt == production.layers[0].beddingTilt &&
                     replayedProduction.layers[0].macroAxisAsymmetry ==
@@ -188,6 +244,10 @@ int main()
             }
             return triangles;
         };
+        for (int k = 0; k + 1 < fracturedRecipe.layers[0].count; ++k)
+            require(contactTriangles(fracturedStack, k, 1) ==
+                        contactTriangles(fracturedStack, k + 1, 2),
+                    "fractured horizons must remain complete shared contacts");
         auto inclinedBedding = production;
         inclinedBedding.layers[0].jitter = 0;
         inclinedBedding.layers[0].perimeterAmplitude = 0;

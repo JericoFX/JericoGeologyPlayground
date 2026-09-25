@@ -98,7 +98,7 @@ struct Layer
     float envelopeRoundness{0.25f};
     int cutSubdivisions{2};
     float phase{}, profileSharpness{2}, distortion{0.2f};
-    int profile{0};       // operation-specific profile; cliff 0 classic, 1 soft, 2 push
+    int profile{0};       // operation-specific profile; cliff 0 classic, 1 soft, 2 push; layers 2 fractured horizons
     int alphaSource{0};   // 0 analytic, 1 pinned CC0 cliff RBrush tip
     float solidOffset{0}; // -1 back, 0 centered, 1 front
     bool solidAlongNormals{true};

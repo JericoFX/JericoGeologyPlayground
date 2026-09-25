@@ -681,7 +681,7 @@ void validate(const Recipe &r)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
-             r.version == 14) &&
+             r.version == 14 || r.version == 15) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -752,6 +752,8 @@ void validate(const Recipe &r)
                 l.maximumThickness <= 3);
         if (l.coherentLayers)
             require(l.thickness >= l.minimumThickness && l.thickness <= l.maximumThickness);
+        if (l.kind == Kind::Layers && l.profile == 2)
+            require(r.version >= 15 && l.coherentLayers && l.perimeterAmplitude > 0);
         require(l.perimeterAmplitude >= 0 && l.perimeterAmplitude <= 0.3f);
         require(l.beddingTilt >= 0 && l.beddingTilt <= 0.25f);
         require(l.macroAxisAsymmetry >= 0 && l.macroAxisAsymmetry <= 0.45f);
@@ -1440,7 +1442,7 @@ Recipe deserialize(const std::string &text)
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
-        inputVersion != 13 && inputVersion != 14)
+        inputVersion != 13 && inputVersion != 14 && inputVersion != 15)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

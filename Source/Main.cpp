@@ -243,6 +243,8 @@ bool editLayer(Layer &l)
             {
                 change |= slider("Perimeter frequency", l.frequency, 0.1f, 12);
                 change |= ImGui::Checkbox("Shape outer top/base", &l.shapeOuterCaps);
+                change |= ImGui::Combo("Horizon contour", &l.profile,
+                                       "Shared polygon\0Shared polygon (legacy 1)\0Independent fractured horizons\0");
             }
             change |= ImGui::SliderFloat3("Drift bias", l.driftBias.data(), -1, 1);
         }
@@ -721,7 +723,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                          bool layeredOcclusion = false,
                          bool layeredMaterial = false, bool layeredMaterialNoMips = false,
                          bool cliffNonharmonic = false, bool cliffMacroWarp = false,
-                         bool cliffErodedRim = false)
+                         bool cliffErodedRim = false, bool layeredHorizonFracture = false)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
@@ -739,6 +741,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     report["cliffNonharmonic"] = cliffNonharmonic;
     report["cliffMacroWarp"] = cliffMacroWarp;
     report["cliffErodedRim"] = cliffErodedRim;
+    report["layeredHorizonFracture"] = layeredHorizonFracture;
     report["imageSize"] = {1280, 960};
     report["textureResolution"] = 2048;
     Camera camera;
@@ -762,6 +765,13 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
             auto blocks = defaultLayer(Kind::FractureQuadrants);
             blocks.seed = 123;
             recipe.layers.insert(recipe.layers.end() - 1, blocks);
+        }
+        if (layeredHorizonFracture && family == 11)
+        {
+            recipe.version = 15;
+            for (auto &layer : recipe.layers)
+                if (layer.kind == Kind::Layers)
+                    layer.profile = 2;
         }
         if ((cliffDrainage || cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim) && family == 8)
         {
@@ -817,7 +827,9 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                            family == 5 ? 0.08 : 0.04;
         auto projectionDistance = family == 5 || family == 11 ? 0.2 : 0.15;
         std::size_t previousTriangles = std::numeric_limits<std::size_t>::max();
-        nlohmann::json familyReport = {{"family", family}, {"lods", nlohmann::json::array()}};
+        nlohmann::json familyReport = {{"family", family}, {"lods", nlohmann::json::array()},
+                                       {"defaultMaterialAppearance", materialAppearance(recipe, 0)},
+                                       {"defaultMaterialDiffuse", materialDiffuse(materialAppearance(recipe, 0)).filename().string()}};
         auto familyDirectory = evidence / ("rock-" + std::to_string(family));
         camera.distance = family == 8 || family == 9 ? 10.0f : 5.8f;
         for (int lod = 0; lod < 3; ++lod)
@@ -901,12 +913,14 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                     renderer.draw(1280, 960, camera, 4);
                     renderer.capture(directory / map.name);
                 }
-                if (layeredMaterial || cliffRBrushAlpha)
+                if (layeredMaterial || cliffRBrushAlpha || layeredHorizonFracture)
                 {
-                    const auto diffuse = std::filesystem::path(PLAYGROUND_ROOT) /
-                        (cliffRBrushAlpha ? "Evidence/cc0-references/cliff_side-diff-1k.jpg" :
-                                          "Evidence/cc0-references/rock_06-diff-1k.jpg");
-                    const int appearance = cliffRBrushAlpha ? 1 : 0;
+                    const int appearance = layeredHorizonFracture ? materialAppearance(recipe, 0) :
+                                           cliffRBrushAlpha ? 1 : 0;
+                    const auto diffuse = layeredHorizonFracture ? materialDiffuse(appearance) :
+                        std::filesystem::path(PLAYGROUND_ROOT) /
+                            (cliffRBrushAlpha ? "Evidence/cc0-references/cliff_side-diff-1k.jpg" :
+                                               "Evidence/cc0-references/rock_06-diff-1k.jpg");
                     renderer.upload(preview.high);
                     renderer.uploadMaterial(nullptr, diffuse, !layeredMaterialNoMips, appearance);
                     renderer.draw(1280, 960, camera, 5);
@@ -1323,7 +1337,7 @@ int run(int argc, char **argv)
          cliffErodedRimSmoke = false,
          layeredOcclusionSmoke = false,
          layeredMaterialBaselineSmoke = false, layeredMaterialCandidateSmoke = false,
-         layeredMaterialNoMipsSmoke = false,
+         layeredMaterialNoMipsSmoke = false, layeredHorizonFractureSmoke = false,
          edgeRadiusSmoke = false, regeneratedLodSmoke = false, angularLod2Smoke = false,
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
@@ -1356,6 +1370,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--layered-material-baseline-test" ||
             std::string(argv[i]) == "--layered-material-candidate-test" ||
             std::string(argv[i]) == "--layered-material-no-mips-test" ||
+            std::string(argv[i]) == "--layered-horizon-fracture-bakes-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1392,6 +1407,7 @@ int run(int argc, char **argv)
             layeredMaterialBaselineSmoke = std::string(argv[i]) == "--layered-material-baseline-test";
             layeredMaterialCandidateSmoke = std::string(argv[i]) == "--layered-material-candidate-test";
             layeredMaterialNoMipsSmoke = std::string(argv[i]) == "--layered-material-no-mips-test";
+            layeredHorizonFractureSmoke = std::string(argv[i]) == "--layered-horizon-fracture-bakes-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -1752,6 +1768,9 @@ int run(int argc, char **argv)
                     recipe.layers[selected].profile > 0)
                     recipe.version = std::max(recipe.version,
                                               recipe.layers[selected].profile == 3 ? 14 : 13);
+                if (recipe.layers[selected].kind == Kind::Layers &&
+                    recipe.layers[selected].profile == 2)
+                    recipe.version = std::max(recipe.version, 15);
                 anyChange = true;
             }
         }
@@ -2086,7 +2105,7 @@ int run(int argc, char **argv)
                 cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke || cliffMacroWarpSmoke ||
                 cliffErodedRimSmoke || layeredOcclusionSmoke ||
                 layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
-                layeredMaterialNoMipsSmoke)
+                layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke)
             {
                 captureRockLodBakes(renderer, evidence,
                                     autoUvRockLodSmoke || curvatureRelaxationSmoke ||
@@ -2094,11 +2113,12 @@ int run(int argc, char **argv)
                                         cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke ||
                                         cliffMacroWarpSmoke || cliffErodedRimSmoke || layeredOcclusionSmoke ||
                                         layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
-                                        layeredMaterialNoMipsSmoke,
+                                        layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke,
                                     cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke ||
                                     cliffMacroWarpSmoke || cliffErodedRimSmoke ? 8 :
                                     layeredOcclusionSmoke || layeredMaterialBaselineSmoke ||
-                                        layeredMaterialCandidateSmoke || layeredMaterialNoMipsSmoke ? 11 :
+                                        layeredMaterialCandidateSmoke || layeredMaterialNoMipsSmoke ||
+                                        layeredHorizonFractureSmoke ? 11 :
                                     angularFractureSmoke || angularFourBlocksSmoke ? 10 :
                                         automaticUvRockLodFamily,
                                     curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke,
@@ -2107,9 +2127,9 @@ int run(int argc, char **argv)
                                     cliffRBrushAlphaSmoke || cliffNonharmonicSmoke || cliffMacroWarpSmoke || cliffErodedRimSmoke,
                                     layeredOcclusionSmoke || layeredMaterialCandidateSmoke,
                                     layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
-                                        layeredMaterialNoMipsSmoke,
+                                    layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke,
                                     layeredMaterialNoMipsSmoke, cliffNonharmonicSmoke,
-                                    cliffMacroWarpSmoke, cliffErodedRimSmoke);
+                                    cliffMacroWarpSmoke, cliffErodedRimSmoke, layeredHorizonFractureSmoke);
                 window.requestClose();
                 continue;
             }

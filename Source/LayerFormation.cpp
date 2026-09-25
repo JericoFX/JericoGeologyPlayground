@@ -219,13 +219,20 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
             macroAxes[boundary] = {1, 0, 1};
             continue;
         }
-        const auto phase = 2 * 3.141592653589793 * random(layer.seed + 0x5e71acU) +
-                           0.25 * (2 * random(layer.seed + 0xa571acU +
-                                              std::uint32_t(boundary) * 1907U) - 1);
+        const auto commonPhase = 2 * 3.141592653589793 * random(layer.seed + 0x5e71acU);
+        const auto localPhase = 2 * 3.141592653589793 *
+            random(layer.seed + 0xa571acU + std::uint32_t(boundary) * 1907U);
+        const auto phase = layer.profile == 2
+            ? commonPhase + 0.1 * std::remainder(localPhase - commonPhase,
+                                                  2 * 3.141592653589793)
+            : commonPhase + 0.25 * (2 * random(layer.seed + 0xa571acU +
+                                                 std::uint32_t(boundary) * 1907U) - 1);
         const auto c = std::cos(phase), s = std::sin(phase);
-        const auto stretch = 1 + 0.12 * layer.macroAxisAsymmetry *
+        const auto asymmetry = layer.profile == 2 ? 0.5 * layer.macroAxisAsymmetry
+                                                  : layer.macroAxisAsymmetry;
+        const auto stretch = 1 + 0.12 * asymmetry *
                                 random(layer.seed + 0x62ad18U + std::uint32_t(boundary) * 1907U);
-        const auto squash = 1 - layer.macroAxisAsymmetry *
+        const auto squash = 1 - asymmetry *
                                 (0.8 + 0.2 * random(layer.seed + 0x71d88aU +
                                                     std::uint32_t(boundary) * 1907U));
         macroAxes[boundary] = {stretch * c * c + squash * s * s,
@@ -279,12 +286,31 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
             for (int boundary = 1; boundary < layer.count; ++boundary)
             {
                 auto facetSeed = layer.seed + 0xa73e29d1U + std::uint32_t(boundary) * 1907U;
-                auto localFirst = 2 * random(facetSeed + std::uint32_t(facet) * 4127U) - 1;
-                auto localNext = 2 * random(facetSeed +
-                                            std::uint32_t((facet + 1) % facetCount) * 4127U) - 1;
-                auto localFacet = localFirst + (localNext - localFirst) * facetFraction;
-                boundaryOffset[boundary] = layer.perimeterAmplitude *
-                    (0.35 * sharedFacet + 0.65 * localFacet);
+                if (layer.profile == 2)
+                {
+                    // Each horizon has its own low-frequency fracture polygon. Its two
+                    // neighboring slabs still evaluate this same boundary, so contact is exact.
+                    const auto localCount = 7 + int(random(facetSeed + 0x513cU) * 6);
+                    const auto phase = random(facetSeed + 0x851dU);
+                    const auto position = (angle + 3.141592653589793) * localCount /
+                                              (2 * 3.141592653589793) + phase;
+                    const auto localIndex = int(std::floor(position)) % localCount;
+                    const auto t = position - std::floor(position);
+                    const auto a = 2 * random(facetSeed + std::uint32_t(localIndex) * 4127U) - 1;
+                    const auto b = 2 * random(facetSeed +
+                                              std::uint32_t((localIndex + 1) % localCount) * 4127U) - 1;
+                    boundaryOffset[boundary] = layer.perimeterAmplitude *
+                        (0.12 * sharedFacet + 0.88 * (a + (b - a) * t));
+                }
+                else
+                {
+                    auto localFirst = 2 * random(facetSeed + std::uint32_t(facet) * 4127U) - 1;
+                    auto localNext = 2 * random(facetSeed +
+                                                std::uint32_t((facet + 1) % facetCount) * 4127U) - 1;
+                    auto localFacet = localFirst + (localNext - localFirst) * facetFraction;
+                    boundaryOffset[boundary] = layer.perimeterAmplitude *
+                        (0.35 * sharedFacet + 0.65 * localFacet);
+                }
             }
             if (layer.shapeOuterCaps)
             {
