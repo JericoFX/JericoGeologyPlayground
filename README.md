@@ -70,6 +70,8 @@ La variante posterior en `Evidence/2026-09-25-cave-faceted-relief-retained/` usa
 
 El experimento separado `--cliff-nonharmonic-bakes-test Evidence/cliff-nonharmonic` conserva el cliff con alfa RBrush y cambia sólo la lacunaridad de su `CliffCutLoop` de 2 a 1,87. Los tres LOD y bakes se generan, pero la diferencia visual medida es mínima; no es un nuevo preset aprobado.
 
+`--cliff-macro-warp-bakes-test Evidence/cliff-macro` ensaya el vector FBM nativo que precede al RBrush con mayor desplazamiento lateral y vertical. El candidato retenido `Evidence/2026-09-25-cliff-macro-warp035-retained/` usa amplitud 0,35 y conserva high, tres LOD, mapas y capturas Vulkan; cambia la silueta sin alterar la región del corte. Es experimental y no modifica el preset por defecto.
+
 Los campos de transformación se interpretan según la operación: Transform, envelope y DamageDecal tienen coordenadas propias; las operaciones de ruido usan Frequency y Coordinate XYZ. `meshHash` prueba posiciones e índices: no es un hash de materiales/metadatos. El stack conserva GUID por triángulo y un catálogo de regiones.
 
 ## CPU, GPU y mediciones

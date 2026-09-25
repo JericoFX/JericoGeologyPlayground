@@ -233,6 +233,45 @@ int main()
         require(alphaPush.mesh.indices == pushed.mesh.indices &&
                     alphaPush.mesh.triangleRegions == pushed.mesh.triangleRegions,
                 "CC0 alpha changes relief without changing topology or selection");
+        auto macroRecipe = alphaRecipe;
+        auto &macro = macroRecipe.layers.front();
+        require(macro.kind == Kind::VectorNoise, "cliff macroform starts with native vector FBM");
+        macro.amplitude = 0.35f;
+        macro.frequency = 0.6f;
+        macro.octaves = 3;
+        macro.coordinateScale = {0.7f, 0.55f, 1};
+        macro.outputScale = {0.8f, 0.6f, 1};
+        auto originalMacro = evaluate(alphaRecipe, 64, 0);
+        auto shapedMacro = evaluate(macroRecipe, 64, 0);
+        require(shapedMacro.mesh.indices == originalMacro.mesh.indices &&
+                    shapedMacro.mesh.triangleRegions == originalMacro.mesh.triangleRegions,
+                "macro warp retains the grid topology and region identity");
+        double planarShift = 0;
+        for (std::size_t i = 0; i < shapedMacro.mesh.positions.size(); ++i)
+        {
+            auto a = originalMacro.mesh.positions[i], b = shapedMacro.mesh.positions[i];
+            planarShift = std::max(planarShift, std::hypot(a.x - b.x, a.y - b.y));
+        }
+        require(planarShift > 0.08, "macro warp visibly changes the cliff silhouette in object space");
+        for (std::size_t t = 0; t < shapedMacro.mesh.indices.size(); t += 3)
+        {
+            auto normal = [&](const auto &mesh)
+            {
+                auto p = mesh.positions[mesh.indices[t]],
+                     q = mesh.positions[mesh.indices[t + 1]],
+                     r = mesh.positions[mesh.indices[t + 2]];
+                return Vec3d{(q.y - p.y) * (r.z - p.z) - (q.z - p.z) * (r.y - p.y),
+                             (q.z - p.z) * (r.x - p.x) - (q.x - p.x) * (r.z - p.z),
+                             (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x)};
+            };
+            auto a = normal(originalMacro.mesh), b = normal(shapedMacro.mesh);
+            require(a.x * b.x + a.y * b.y + a.z * b.z >
+                        0.05 * (a.x * a.x + a.y * a.y + a.z * a.z),
+                    "macro warp does not reverse a high-resolution front triangle");
+        }
+        auto macroSolid = evaluate(macroRecipe, 64);
+        require(macroSolid.closedSolid && PA::validateClosedMesh(macroSolid.mesh).hasValue(),
+                "macro-warped RBrush cliff remains a closed solid");
         double alphaDifference = 0;
         for (std::size_t i = 0; i < pushed.mesh.positions.size(); ++i)
             alphaDifference = std::max(alphaDifference,

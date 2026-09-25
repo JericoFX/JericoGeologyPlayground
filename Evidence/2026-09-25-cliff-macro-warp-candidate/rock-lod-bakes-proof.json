@@ -1,0 +1,65 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFourBlocks": false,
+  "angularFracture": false,
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 8,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4828.3425,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.02,
+          "highHash": 7716690206586438111,
+          "highTriangles": 16896,
+          "lod": 0,
+          "lowHash": 11704477249450359065,
+          "lowTriangles": 14128,
+          "misses": 0,
+          "sampledSurfaceError": 0.01625045091433385,
+          "samples": 1613137,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4698.9805,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.03,
+          "highHash": 7716690206586438111,
+          "highTriangles": 16896,
+          "lod": 1,
+          "lowHash": 14773102673298259639,
+          "lowTriangles": 11990,
+          "misses": 0,
+          "sampledSurfaceError": 0.0214292605084207,
+          "samples": 1576344,
+          "status": "BAKED"
+        },
+        {
+          "lod": 2,
+          "reason": "LOD does not reduce triangle count",
+          "status": "REJECTED"
+        }
+      ]
+    }
+  ],
+  "cliffDrainage": false,
+  "cliffEdgeDamage": false,
+  "cliffMacroWarp": true,
+  "cliffNonharmonic": false,
+  "cliffRBrushAlpha": true,
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "layeredMaterial": false,
+  "layeredMaterialNoMips": false,
+  "layeredOcclusion": false,
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}
