@@ -1,0 +1,9 @@
+{
+  "scope": "cross-build regression of PNG and OBJ artifacts; not a same-binary replay",
+  "reference": "Evidence\\square-relief-2026-09-25",
+  "candidate": "Evidence\\square-provenance-2026-09-25",
+  "comparedArtifacts": 274,
+  "missing": 0,
+  "changed": 0,
+  "canonicalArtifactSha256": "348a4dd5caf9e4029d34a788f2ff623b9c5ab4abb4a949a68a07a0036402a2a2"
+}

@@ -260,19 +260,21 @@ MeshResult squareTunnelReliefSource(int subdivisions, const Jerico::Cancellation
 {
     auto source = caveSource(CaveForm::SquareTunnel, subdivisions, cancel);
     std::vector<Vec3d> cutterNormals(source.mesh.positions.size());
+    const auto cutterId = Solid::region(0xca7eU, 3);
+    std::set<Jerico::Guid> cutterFaceIds;
+    for (std::uint64_t face = 0; face < 6; ++face)
+        cutterFaceIds.insert(PA::deriveFaceRegionGuid(cutterId, face));
+    std::size_t interiorFaces = 0;
     for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
     {
         if ((t & 767) == 0)
             check(cancel);
+        if (!cutterFaceIds.contains(source.mesh.triangleRegions[t / 3]))
+            continue;
         const auto a = source.mesh.positions[source.mesh.indices[t]],
                    b = source.mesh.positions[source.mesh.indices[t + 1]],
                    c = source.mesh.positions[source.mesh.indices[t + 2]];
-        const Vec3d center{(a.x + b.x + c.x) / 3.0,
-                           (a.y + b.y + c.y) / 3.0,
-                           (a.z + b.z + c.z) / 3.0};
-        if (std::abs(center.x) >= 1.0 || center.y <= -1.8 || center.y >= 0.6 ||
-            std::abs(center.z) >= 1.49)
-            continue;
+        ++interiorFaces;
         const Vec3d u{b.x - a.x, b.y - a.y, b.z - a.z},
                     v{c.x - a.x, c.y - a.y, c.z - a.z};
         const Vec3d n{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
@@ -285,6 +287,8 @@ MeshResult squareTunnelReliefSource(int subdivisions, const Jerico::Cancellation
             sum.z += n.z;
         }
     }
+    if (!interiorFaces)
+        throw std::runtime_error("Square tunnel has no interior cutter faces");
     for (std::size_t i = 0; i < source.mesh.positions.size(); ++i)
     {
         if ((i & 255) == 0)

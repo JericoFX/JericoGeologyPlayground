@@ -208,6 +208,10 @@ int main()
                         after.mesh.triangleRegions == before.mesh.triangleRegions &&
                         after.sourceSelection == before.sourceSelection,
                     "square wall relief preserves closed BSP mesh and host/cutter identities");
+            const auto cutterId = Solid::region(0xca7eU, 3);
+            std::set<Jerico::Guid> cutterFaceIds;
+            for (std::uint64_t face = 0; face < 6; ++face)
+                cutterFaceIds.insert(PA::deriveFaceRegionGuid(cutterId, face));
             std::vector<bool> interiorVertex(before.mesh.positions.size());
             std::size_t interiorTriangles = 0;
             for (std::size_t t = 0; t < before.mesh.indices.size(); t += 3)
@@ -222,9 +226,14 @@ int main()
                     std::abs(center.z) < 1.49)
                 {
                     ++interiorTriangles;
+                    require(cutterFaceIds.contains(after.mesh.triangleRegions[t / 3]),
+                            "square interior faces retain native derived cutter-face identities");
                     for (int k = 0; k < 3; ++k)
                         interiorVertex[before.mesh.indices[t + k]] = true;
                 }
+                else
+                    require(!cutterFaceIds.contains(after.mesh.triangleRegions[t / 3]),
+                            "square exterior faces retain native host-face identities");
             }
             double maximumInteriorShift = 0;
             std::size_t changedInterior = 0;
