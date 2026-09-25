@@ -459,8 +459,13 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
                 bool covered = settings.automaticUv
                     ? u >= -1e-9 && v >= -1e-9 && u + v <= 1 + 1e-9
                     : u >= 0 && v >= 0 && u + v <= 1;
+                // Long, thin charts can cover several pixels while containing no pixel center.
                 bool conservative = settings.automaticUv && !covered &&
-                    std::abs(pixelDet) < 4 &&
+                    (std::abs(pixelDet) < 4 ||
+                     std::min(std::max({pixelUv[0][0], pixelUv[1][0], pixelUv[2][0]}) -
+                                  std::min({pixelUv[0][0], pixelUv[1][0], pixelUv[2][0]}),
+                              std::max({pixelUv[0][1], pixelUv[1][1], pixelUv[2][1]}) -
+                                  std::min({pixelUv[0][1], pixelUv[1][1], pixelUv[2][1]})) < 1) &&
                     triangleTouchesPixel(pixelUv, x0 + x + 0.5, y0 + y + 0.5);
                 if (conservative)
                 {

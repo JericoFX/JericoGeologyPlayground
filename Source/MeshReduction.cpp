@@ -2,6 +2,7 @@
 #include "SolidGeometry.hpp"
 #include <TriangleBvh.hpp>
 #include <algorithm>
+#include <limits>
 #include <manifold/manifold.h>
 #include <map>
 #include <numeric>
@@ -55,6 +56,37 @@ double directedError(const TriangleMesh &source, const TriangleMesh &target,
             maximum = std::max(maximum, bvh.closest(p, 1e-12).distance);
     }
     return maximum;
+}
+bool preservesFacing(const TriangleMesh &source, const TriangleMesh &candidate,
+                     const Jerico::CancellationToken *cancel)
+{
+    auto cross = [](Vec3d a, Vec3d b) -> Vec3d
+    {
+        return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
+                a.x * b.y - a.y * b.x};
+    };
+    auto high = tree(source);
+    const auto &highTriangles = high.triangles();
+    for (std::size_t t = 0; t < candidate.indices.size(); t += 3)
+    {
+        if ((t % 768) == 0)
+            check(cancel);
+        auto a = candidate.positions[candidate.indices[t]],
+             b = candidate.positions[candidate.indices[t + 1]],
+             c = candidate.positions[candidate.indices[t + 2]];
+        auto lowNormal = cross(D::subtract(b, a), D::subtract(c, a));
+        auto centroid = D::multiply(D::add(D::add(a, b), c), 1.0 / 3);
+        auto closest = high.closest(centroid, 1e-12);
+        if (closest.ambiguous)
+            continue;
+        const auto &face = highTriangles[closest.owner];
+        auto highNormal = cross(D::subtract(face.second, face.first),
+                                D::subtract(face.third, face.first));
+        if (D::dot(lowNormal, highNormal) <
+            -0.5 * std::sqrt(D::lengthSquared(lowNormal) * D::lengthSquared(highNormal)))
+            return false;
+    }
+    return true;
 }
 } // namespace
 double sampledBidirectionalMeshError(const TriangleMesh &a, const TriangleMesh &b,
@@ -136,6 +168,11 @@ TriangleMesh reductionCandidate(const TriangleMesh &source, double tolerance, do
         after(result.triangleRegions.begin(), result.triangleRegions.end());
     if (before != after)
         throw std::runtime_error("Reduction removed a protected surface region");
+    if (!preservesFacing(source, result, cancel))
+    {
+        sampledError = std::numeric_limits<double>::infinity();
+        return result;
+    }
     sampledError = sampledBidirectionalMeshError(source, result, cancel);
     return result;
 }

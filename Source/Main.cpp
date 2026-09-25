@@ -38,6 +38,25 @@ LRESULT CALLBACK inputProc(HWND window, UINT message, WPARAM wparam, LPARAM lpar
         ImGui_ImplWin32_WndProcHandler(window, message, wparam, lparam);
     return CallWindowProcW(previousProc, window, message, wparam, lparam);
 }
+int materialAppearance(const Recipe &recipe, int choice)
+{
+    if (choice > 0)
+        return choice - 1;
+    if (recipe.base == Base::Plane || recipe.base == Base::BspWall)
+        return 1;
+    if (std::any_of(recipe.layers.begin(), recipe.layers.end(), [](const Layer &layer)
+                    { return layer.kind == Kind::Layers || layer.kind == Kind::StrataRelief; }))
+        return 2;
+    if (std::any_of(recipe.layers.begin(), recipe.layers.end(), [](const Layer &layer)
+                    { return layer.kind == Kind::Planes || layer.kind == Kind::FractureQuadrants; }))
+        return 3;
+    return 0;
+}
+std::filesystem::path materialDiffuse(int appearance)
+{
+    return std::filesystem::path(PLAYGROUND_ROOT) / "Evidence/cc0-references" /
+        (appearance == 1 || appearance == 2 ? "cliff_side-diff-1k.jpg" : "rock_06-diff-1k.jpg");
+}
 std::filesystem::path chooseFile(HWND owner, bool saveFile)
 {
     wchar_t filename[MAX_PATH] = L"GeologyRecipe.json";
@@ -143,6 +162,10 @@ bool editLayer(Layer &l)
         change |= slider("Contour irregularity", l.distortion, 0, 0.3f);
         change |= slider("Inset depth", l.amplitude, 0.01f, 1.5f);
         change |= slider("Interior tilt", l.lateral, 0, 0.5f);
+        change |= ImGui::Combo("Loop edge", &l.profile, "Classic\0Soft\0RBrush push\0");
+        if (l.profile == 2)
+            change |= ImGui::Combo("Brush alpha", &l.alphaSource,
+                                    "Analytic only\0Poly Haven cliff_side CC0\0");
     }
     else if (l.kind == Kind::Reduce)
     {
@@ -692,7 +715,8 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                          bool automaticUv = false, int familyFilter = -1,
                          double curvatureRelaxation = 0, bool angularFracture = false,
                          bool angularFourBlocks = false, bool cliffDrainage = false,
-                         bool cliffEdgeDamage = false, bool layeredOcclusion = false,
+                         bool cliffEdgeDamage = false, bool cliffRBrushAlpha = false,
+                         bool layeredOcclusion = false,
                          bool layeredMaterial = false, bool layeredMaterialNoMips = false)
 {
     nlohmann::json report;
@@ -704,6 +728,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     report["angularFourBlocks"] = angularFourBlocks;
     report["cliffDrainage"] = cliffDrainage;
     report["cliffEdgeDamage"] = cliffEdgeDamage;
+    report["cliffRBrushAlpha"] = cliffRBrushAlpha;
     report["layeredOcclusion"] = layeredOcclusion;
     report["layeredMaterial"] = layeredMaterial;
     report["layeredMaterialNoMips"] = layeredMaterialNoMips;
@@ -731,10 +756,10 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
             blocks.seed = 123;
             recipe.layers.insert(recipe.layers.end() - 1, blocks);
         }
-        if ((cliffDrainage || cliffEdgeDamage) && family == 8)
+        if ((cliffDrainage || cliffEdgeDamage || cliffRBrushAlpha) && family == 8)
         {
             recipe.version = 13;
-            if (cliffEdgeDamage)
+            if (cliffEdgeDamage || cliffRBrushAlpha)
             {
                 auto damage = defaultLayer(Kind::DamageDecal);
                 damage.amplitude = 0.15f;
@@ -750,20 +775,21 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                 for (auto &layer : recipe.layers)
                     if (layer.kind == Kind::CliffCutLoop)
                     {
-                        layer.profile = 1;
+                        layer.profile = cliffRBrushAlpha ? 2 : 1;
+                        layer.alphaSource = cliffRBrushAlpha ? 1 : 0;
                         layer.width = 0.35f;
                     }
             }
             auto drainage = defaultLayer(Kind::CliffDrainage);
             drainage.seed = 123;
-            if (cliffEdgeDamage)
+            if (cliffEdgeDamage || cliffRBrushAlpha)
             {
                 drainage.amplitude = 0.30f;
                 drainage.width = 0.22f;
             }
-            recipe.layers.insert(recipe.layers.begin() + (cliffEdgeDamage ? 5 : 4), drainage);
+            recipe.layers.insert(recipe.layers.begin() + (cliffEdgeDamage || cliffRBrushAlpha ? 5 : 4), drainage);
         }
-        double baseError = family == 10 ? 0.005 : family == 11 ? 0.02 :
+        double baseError = family == 10 ? 0.005 : family == 11 || (family == 8 && cliffRBrushAlpha) ? 0.02 :
                            family == 5 ? 0.08 : 0.04;
         auto projectionDistance = family == 5 || family == 11 ? 0.2 : 0.15;
         std::size_t previousTriangles = std::numeric_limits<std::size_t>::max();
@@ -851,16 +877,18 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                     renderer.draw(1280, 960, camera, 4);
                     renderer.capture(directory / map.name);
                 }
-                if (layeredMaterial)
+                if (layeredMaterial || cliffRBrushAlpha)
                 {
                     const auto diffuse = std::filesystem::path(PLAYGROUND_ROOT) /
-                        "Evidence/cc0-references/rock_06-diff-1k.jpg";
+                        (cliffRBrushAlpha ? "Evidence/cc0-references/cliff_side-diff-1k.jpg" :
+                                          "Evidence/cc0-references/rock_06-diff-1k.jpg");
+                    const int appearance = cliffRBrushAlpha ? 1 : 0;
                     renderer.upload(preview.high);
-                    renderer.uploadMaterial(nullptr, diffuse, !layeredMaterialNoMips);
+                    renderer.uploadMaterial(nullptr, diffuse, !layeredMaterialNoMips, appearance);
                     renderer.draw(1280, 960, camera, 5);
                     renderer.capture(directory / "high-material.png");
                     renderer.upload(preview.bake.low, &preview.bake);
-                    renderer.uploadMaterial(&preview.bake, diffuse, !layeredMaterialNoMips);
+                    renderer.uploadMaterial(&preview.bake, diffuse, !layeredMaterialNoMips, appearance);
                     renderer.draw(1280, 960, camera, 5);
                     renderer.capture(directory / "low-material.png");
                     if (lod == 2)
@@ -1132,11 +1160,12 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
-    bool smoke = false, featureSmoke = false, angularProfileSmoke = false, rockLodSmoke = false,
+    bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
+         angularProfileSmoke = false, rockLodSmoke = false,
          autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
          angularFractureSmoke = false, angularFourBlocksSmoke = false,
          cliffDrainageSmoke = false,
-         cliffEdgeDamageSmoke = false,
+         cliffEdgeDamageSmoke = false, cliffRBrushAlphaSmoke = false,
          layeredOcclusionSmoke = false,
          layeredMaterialBaselineSmoke = false, layeredMaterialCandidateSmoke = false,
          layeredMaterialNoMipsSmoke = false,
@@ -1152,7 +1181,9 @@ int run(int argc, char **argv)
     int automaticUvFamily = -1;
     int automaticUvRockLodFamily = -1;
     for (int i = 1; i < argc; ++i)
-        if (std::string(argv[i]) == "--smoke-test" || std::string(argv[i]) == "--surface-features-test" ||
+        if (std::string(argv[i]) == "--smoke-test" ||
+            std::string(argv[i]) == "--material-gallery-test" ||
+            std::string(argv[i]) == "--surface-features-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
             std::string(argv[i]) == "--rock-lod-bakes-test" ||
             std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test" ||
@@ -1161,6 +1192,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--angular-four-block-bakes-test" ||
             std::string(argv[i]) == "--cliff-drainage-bakes-test" ||
             std::string(argv[i]) == "--cliff-edge-damage-bakes-test" ||
+            std::string(argv[i]) == "--cliff-rbrush-alpha-bakes-test" ||
             std::string(argv[i]) == "--layered-occlusion-bakes-test" ||
             std::string(argv[i]) == "--layered-material-baseline-test" ||
             std::string(argv[i]) == "--layered-material-candidate-test" ||
@@ -1180,6 +1212,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--normal-bake-adaptive-orbit-test" ||
             std::string(argv[i]) == "--auto-uv-bake-test")
         {
+            materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
             rockLodSmoke = std::string(argv[i]) == "--rock-lod-bakes-test";
@@ -1189,6 +1222,7 @@ int run(int argc, char **argv)
             angularFourBlocksSmoke = std::string(argv[i]) == "--angular-four-block-bakes-test";
             cliffDrainageSmoke = std::string(argv[i]) == "--cliff-drainage-bakes-test";
             cliffEdgeDamageSmoke = std::string(argv[i]) == "--cliff-edge-damage-bakes-test";
+            cliffRBrushAlphaSmoke = std::string(argv[i]) == "--cliff-rbrush-alpha-bakes-test";
             layeredOcclusionSmoke = std::string(argv[i]) == "--layered-occlusion-bakes-test";
             layeredMaterialBaselineSmoke = std::string(argv[i]) == "--layered-material-baseline-test";
             layeredMaterialCandidateSmoke = std::string(argv[i]) == "--layered-material-candidate-test";
@@ -1248,8 +1282,10 @@ int run(int argc, char **argv)
     Recipe recipe = preset(0);
     MeshResult displayed = evaluate(recipe, recipe.previewResolution);
     renderer.upload(displayed);
+    renderer.uploadMaterial(nullptr, materialDiffuse(materialAppearance(recipe, 0)));
     Camera camera;
-    int selected = 0, presetIndex = 0, mode = 0, inspection = 0, addKind = 1;
+    int selected = 0, presetIndex = 0, mode = 4, inspection = 0, addKind = 1;
+    int materialChoice = 0;
     std::string error, status = "Ready", path;
     bool dirty = true, wasActive = false;
     unsigned generation = 1, frames = 0;
@@ -1266,6 +1302,11 @@ int run(int argc, char **argv)
     bool hasComparison = false;
     auto lastEdit = std::chrono::steady_clock::now();
     std::vector<Recipe> undo, redo;
+    auto bindMaterial = [&](const NormalBake *bake)
+    {
+        const int appearance = materialAppearance(recipe, materialChoice);
+        renderer.uploadMaterial(bake, materialDiffuse(appearance), true, appearance);
+    };
     auto remember = [&](const Recipe &before)
     {
         if (undo.size() >= 64)
@@ -1282,6 +1323,7 @@ int run(int argc, char **argv)
             bakedPreview.reset();
             bakeView = 0;
             renderer.upload(displayed);
+            bindMaterial(nullptr);
         }
         hasComparison = false;
         ++generation;
@@ -1324,6 +1366,7 @@ int run(int argc, char **argv)
                 {
                     displayed = std::move(next);
                     renderer.upload(displayed);
+                    bindMaterial(nullptr);
                     builtResolution = build.resolution;
                     status = "Ready";
                     error.clear();
@@ -1350,6 +1393,7 @@ int run(int argc, char **argv)
                     bakedPreview = std::make_unique<BakePreview>(std::move(ready));
                     bakeView = 2;
                     renderer.upload(bakedPreview->bake.low, &bakedPreview->bake);
+                    bindMaterial(&bakedPreview->bake);
                     status = "Low + baked high normals";
                     error.clear();
                 }
@@ -1531,7 +1575,13 @@ int run(int argc, char **argv)
         if (selected >= 0 && selected < int(recipe.layers.size()))
         {
             ImGui::TextWrapped("%s", name(recipe.layers[selected].kind));
-            anyChange |= editLayer(recipe.layers[selected]);
+            if (editLayer(recipe.layers[selected]))
+            {
+                if (recipe.layers[selected].kind == Kind::CliffCutLoop &&
+                    recipe.layers[selected].profile > 0)
+                    recipe.version = std::max(recipe.version, 13);
+                anyChange = true;
+            }
         }
         else
             ImGui::TextWrapped("Choose a base and add an operation.");
@@ -1603,7 +1653,8 @@ int run(int argc, char **argv)
                                     {
                                         auto token = cancel->token();
                                         return buildBakePreview(snapshot, tolerance, resolution, distance,
-                                                                &token, projection, lowResolution);
+                                                                &token, projection, lowResolution,
+                                                                nullptr, 0.02, true);
                                     });
             status = "Building low and baking high normals";
         }
@@ -1614,7 +1665,10 @@ int run(int argc, char **argv)
         {
             auto &b = bakedPreview->bake;
             if (ImGui::Combo("Geometry preview", &bakeView, "High\0Low\0Low + normal map\0"))
+            {
                 renderer.upload(bakeView == 0 ? bakedPreview->high : b.low, bakeView == 2 ? &b : nullptr);
+                bindMaterial(bakeView == 2 ? &b : nullptr);
+            }
             ImGui::Text("Triangles: %zu high / %zu low", bakedPreview->high.mesh.indices.size() / 3,
                         b.low.mesh.indices.size() / 3);
             ImGui::Text("Coverage: %.3f%% | Misses: %zu",
@@ -1634,7 +1688,7 @@ int run(int argc, char **argv)
                     error = e.what();
                 }
             }
-            ImGui::TextWrapped("Experimental triangle UV atlas. Preserve UVs and split normals; no "
+            ImGui::TextWrapped("Experimental automatic UV charts. Preserve UVs and split normals; no "
                                "silhouette detail is stored in a normal map.");
             ImGui::TextWrapped("Export also includes native AO, signed curvature, inward thickness and "
                                "semantic region-ID maps from the same projection coverage.");
@@ -1649,7 +1703,12 @@ int run(int argc, char **argv)
         }
         panel("Viewport", left, top, float(w) - left - right, h - top - bottom);
         ImGui::SetNextItemWidth(140);
-        ImGui::Combo("View", &mode, "Lit\0Normals\0Wireframe\0Field\0");
+        ImGui::Combo("View", &mode, "Lit\0Normals\0Wireframe\0Field\0Material\0");
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(125);
+        if (ImGui::Combo("Material", &materialChoice,
+                         "Auto\0Rock\0Cliff\0Slate\0Basalt\0"))
+            bindMaterial(bakedPreview && bakeView == 2 ? &bakedPreview->bake : nullptr);
         ImGui::SameLine();
         ImGui::SetNextItemWidth(190);
         if (ImGui::Combo("Inspect", &inspection,
@@ -1690,7 +1749,7 @@ int run(int argc, char **argv)
         auto size = ImGui::GetContentRegionAvail();
         size.x = std::max(size.x, 32.0f);
         size.y = std::max(size.y, 32.0f);
-        auto texture = renderer.draw(unsigned(size.x), unsigned(size.y), camera, mode);
+        auto texture = renderer.draw(unsigned(size.x), unsigned(size.y), camera, mode == 4 ? 5 : mode);
         ImGui::Image(reinterpret_cast<ImTextureID>(texture), size);
         if (ImGui::IsItemHovered())
         {
@@ -1771,6 +1830,44 @@ int run(int argc, char **argv)
                 {
                 }
             }
+            if (materialGallerySmoke)
+            {
+                nlohmann::json report = {{"adapter", renderer.adapter()},
+                                         {"imageSize", {1280, 960}},
+                                         {"bakedMaps", false},
+                                         {"presets", nlohmann::json::array()}};
+                for (int index = 0; index < 13; ++index)
+                {
+                    auto sample = preset(index);
+                    auto mesh = evaluate(sample, sample.finalResolution);
+                    const int appearance = materialAppearance(sample, 0);
+                    renderer.upload(mesh);
+                    renderer.uploadMaterial(nullptr, materialDiffuse(appearance), true, appearance);
+                    auto captureCamera = camera;
+                    captureCamera.distance = sample.base == Base::Plane ||
+                        sample.base == Base::BspWall ? 10.0f : 5.8f;
+                    renderer.draw(1280, 960, captureCamera, 5);
+                    renderer.capture(evidence / ("preset-" + std::to_string(index) + "-material.png"));
+                    report["presets"].push_back({{"preset", index}, {"appearance", appearance},
+                                                  {"diffuse", materialDiffuse(appearance).filename().string()},
+                                                  {"meshHash", meshHash(mesh.mesh)},
+                                                  {"generationCpuMs", mesh.milliseconds}});
+                }
+                auto sample = preset(8);
+                auto mesh = evaluate(sample, sample.finalResolution);
+                renderer.upload(mesh);
+                for (int appearance = 0; appearance < 4; ++appearance)
+                {
+                    renderer.uploadMaterial(nullptr, materialDiffuse(appearance), true, appearance);
+                    auto captureCamera = camera;
+                    captureCamera.distance = 10;
+                    renderer.draw(1280, 960, captureCamera, 5);
+                    renderer.capture(evidence / ("cliff-material-" + std::to_string(appearance) + ".png"));
+                }
+                std::ofstream(evidence / "material-gallery-proof.json") << report.dump(2) << '\n';
+                window.requestClose();
+                continue;
+            }
             if (bakeSmoke || seededBakeSmoke || scaleBakeSmoke || low10BakeSmoke ||
                 automaticUvBakeSmoke ||
                 adaptiveBakeSmoke)
@@ -1808,17 +1905,17 @@ int run(int argc, char **argv)
             }
             if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                 angularFractureSmoke || angularFourBlocksSmoke || cliffDrainageSmoke ||
-                cliffEdgeDamageSmoke || layeredOcclusionSmoke ||
+                cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || layeredOcclusionSmoke ||
                 layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                 layeredMaterialNoMipsSmoke)
             {
                 captureRockLodBakes(renderer, evidence,
                                     autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                                         angularFractureSmoke || angularFourBlocksSmoke ||
-                                        cliffDrainageSmoke || cliffEdgeDamageSmoke || layeredOcclusionSmoke ||
+                                        cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || layeredOcclusionSmoke ||
                                         layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                                         layeredMaterialNoMipsSmoke,
-                                    cliffDrainageSmoke || cliffEdgeDamageSmoke ? 8 :
+                                    cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke ? 8 :
                                     layeredOcclusionSmoke || layeredMaterialBaselineSmoke ||
                                         layeredMaterialCandidateSmoke || layeredMaterialNoMipsSmoke ? 11 :
                                     angularFractureSmoke || angularFourBlocksSmoke ? 10 :
@@ -1826,6 +1923,7 @@ int run(int argc, char **argv)
                                     curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke,
                                     angularFourBlocksSmoke, cliffDrainageSmoke,
                                     cliffEdgeDamageSmoke,
+                                    cliffRBrushAlphaSmoke,
                                     layeredOcclusionSmoke || layeredMaterialCandidateSmoke,
                                     layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                                         layeredMaterialNoMipsSmoke,

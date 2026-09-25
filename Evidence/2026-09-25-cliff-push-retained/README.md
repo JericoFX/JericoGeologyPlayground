@@ -1,0 +1,5 @@
+# Cliff push and material preview, 2026-09-25
+
+Native C++ Playground only; Engine and Blender unchanged. Full generated package (ignored by Git): `../2026-09-25-cliff-strictlod-candidate/`. The retained images are original 1280×960 Vulkan captures and 2048² bake maps. `material-gallery-proof.json` covers 13 presets and four distinct cliff appearances. `rock-lod-bakes-proof.json` and `rock-lod-bakes-audit.json` cover three high→low bakes (13,996 / 11,852 / 10,168 low triangles; 0 misses), automatic UV, normal, AO, contact, curvature, cavity, convex edge, crease, thickness, region and signed height, plus specialist mips. `rock-lod-visual-audit.json` compares same-camera high/low captures; it is a screen-space diagnostic, not Beauty acceptance.
+
+Checks: Release build exit 0 (`build.log`), CTest 17/17 (`ctest.log`), `RockLodBakeAudit.py --family 8 --cliff-rbrush-alpha --require-specialist-mips` exit 0, `RockLodVisualAudit.py` exit 0, gallery 13/13 presets and 4/4 different appearances at 1280×960. The visual result remains a regular stylized wall; realistic cliff geology, true SDF stamp, Engine integration and production performance are pending.

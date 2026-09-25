@@ -1,11 +1,18 @@
 #include "SurfaceGeometry.hpp"
 #include "SolidGeometry.hpp"
+#include <Jerico/AssetPipeline/RBrushHash.hpp>
+#include <Jerico/AssetPipeline/RBrushImageImporter.hpp>
+#include <Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp>
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
 #include <map>
 #include <numbers>
 #include <set>
+#include <sstream>
 #include <stdexcept>
 namespace Playground
 {
@@ -19,6 +26,71 @@ void check(const Jerico::CancellationToken *cancel)
 Vec3d shifted(Vec3d p, Vec3d d, double t)
 {
     return {p.x + d.x * t, p.y + d.y * t, p.z + d.z * t};
+}
+struct CliffAlphaTip
+{
+    std::uint32_t width{}, height{};
+    std::vector<std::byte> pixels;
+};
+const CliffAlphaTip &cliffAlphaTip()
+{
+    static const CliffAlphaTip tip = []
+    {
+        namespace A = Jerico::Tools::AssetPipeline;
+        const auto path = std::filesystem::path(PLAYGROUND_ROOT) /
+                          "Evidence/cc0-references/cliff_side-disp-1k.png";
+        std::ifstream file(path, std::ios::binary | std::ios::ate);
+        if (!file)
+            throw std::runtime_error("CC0 cliff RBrush alpha input is missing");
+        const auto size = file.tellg();
+        if (size <= 0 || size > 8 * 1024 * 1024)
+            throw std::runtime_error("CC0 cliff RBrush alpha size is invalid");
+        std::vector<std::byte> encoded(std::size_t(size), std::byte{0});
+        file.seekg(0);
+        file.read(reinterpret_cast<char *>(encoded.data()), size);
+        if (!file)
+            throw std::runtime_error("CC0 cliff RBrush alpha read failed");
+        std::ostringstream digest;
+        digest << std::hex << std::setfill('0');
+        for (auto byte : A::hashRBrushBytes(encoded))
+            digest << std::setw(2) << std::to_integer<unsigned>(byte);
+        if (digest.str() != "2861630bab9f8a17014915ff624be83281185b04ff3f4b64a123db60d5e160d3")
+            throw std::runtime_error("CC0 cliff RBrush alpha provenance changed");
+        Jerico::Guid assetGuid;
+        assetGuid.bytes[0] = std::byte{0x71};
+        A::RBrushImageProcessing processing;
+        processing.canvasMode = A::RBrushImageCanvasMode::PreserveOriginal;
+        processing.bitDepth = A::RBrushImageBitDepth::ForceR8;
+        processing.padding = 0;
+        auto imported = A::importRBrushImages(
+            {.assetGuid = assetGuid,
+             .sources = {{.logicalName = "cliff_side-disp-1k.png",
+                          .encodedBytes = std::move(encoded),
+                          .extractions = {{.channel = A::RBrushImageChannel::Luminance,
+                                           .presetName = "CC0 cliff push alpha",
+                                           .processing = processing}}}}});
+        if (!imported.hasValue() || imported.value().tips.size() != 1)
+            throw std::runtime_error("Official RBrush cliff alpha import failed");
+        const auto &source = imported.value().tips.front();
+        if (source.width != 1024 || source.height != 1024 ||
+            source.pixelFormat != A::RBrushPixelFormat::R8Unorm)
+            throw std::runtime_error("Official RBrush cliff alpha has unexpected dimensions");
+        return CliffAlphaTip{source.width, source.height, source.pixels};
+    }();
+    return tip;
+}
+double sampleCliffAlpha(double u, double v)
+{
+    const auto &tip = cliffAlphaTip();
+    const double x = std::clamp((u / 2.6 + 0.5) * (tip.width - 1), 0.0, double(tip.width - 1));
+    const double y = std::clamp((v / 2.6 + 0.5) * (tip.height - 1), 0.0, double(tip.height - 1));
+    const auto x0 = std::uint32_t(x), y0 = std::uint32_t(y);
+    const auto x1 = std::min(x0 + 1, tip.width - 1), y1 = std::min(y0 + 1, tip.height - 1);
+    auto pixel = [&](std::uint32_t px, std::uint32_t py)
+    { return double(std::to_integer<unsigned>(tip.pixels[py * tip.width + px])) / 255.0; };
+    const double a = std::lerp(pixel(x0, y0), pixel(x1, y0), x - x0);
+    const double b = std::lerp(pixel(x0, y1), pixel(x1, y1), x - x0);
+    return std::lerp(a, b, y - y0);
 }
 } // namespace
 MeshResult planeSource(std::array<float, 2> size, int n)
@@ -153,8 +225,19 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     auto contour = [&](double u, double v)
     {
         const double angle = std::atan2(v, u), seed = double(layer.seed % 1000) * 0.019;
-        return 1.0 + layer.distortion *
-                         (0.55 * std::sin(5 * angle + seed) + 0.30 * std::sin(9 * angle - seed));
+        double detail = 0;
+        if (softEdgeProfile && layer.profile == 2)
+        {
+            const double x = std::cos(angle), y = std::sin(angle);
+            const double broad = PA::evaluateGeologyFbmReference(
+                {2.1 * x + 3.7, 2.1 * y - 1.8, 0.25}, layer.seed ^ 0x719be431U, 3, 2, 0.5);
+            const double fine = PA::evaluateGeologyFbmReference(
+                {4.3 * x - 2.4, 4.3 * y + 1.1, 0.75}, layer.seed ^ 0x2c36d857U, 2, 2, 0.5);
+            detail = 0.55 * broad + 0.20 * fine;
+        }
+        return std::clamp(1.0 + layer.distortion *
+                         (0.55 * std::sin(5 * angle + seed) +
+                          0.30 * std::sin(9 * angle - seed) + detail), 0.7, 1.3);
     };
     std::vector<unsigned char> selected(n * n);
     std::vector<unsigned> incident(surface.mesh.positions.size()), inside(surface.mesh.positions.size());
@@ -246,6 +329,36 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     }
     if (connectedVertices != boundary.size())
         throw std::runtime_error("Cliff cut loop contains disconnected joints");
+    if (softEdgeProfile && layer.profile == 2)
+    {
+        // RBrush-style push: deform the existing surface, never duplicate an overlay shell.
+        const auto id = Solid::region(layer.seed, 0x434c494646000000ULL ^ std::uint64_t(operation));
+        surface.regions.push_back({id, parent, SurfaceRole::CutLoop, operation, -1});
+        for (std::size_t q = 0; q < selected.size(); ++q)
+            if (selected[q])
+                surface.mesh.triangleRegions[2 * q] = surface.mesh.triangleRegions[2 * q + 1] = id;
+        for (std::size_t i = 0; i < surface.mesh.positions.size(); ++i)
+        {
+            if ((i & 255) == 0)
+                check(cancel);
+            auto &p = surface.mesh.positions[i];
+            const auto [u, v] = coordinates(p);
+            const double inside = std::clamp((contour(u, v) - std::hypot(u, v)) /
+                                             layer.width, 0.0, 1.0);
+            const double falloff = inside * inside * (3 - 2 * inside);
+            const double strata = PA::evaluateGeologyFbmReference(
+                {0.8 * p.x, 0.35 * p.y, 1.1}, layer.seed ^ 0x4ae27b15U, 3, 2, 0.5);
+            const double coverage = layer.alphaSource == 1 ?
+                std::clamp((sampleCliffAlpha(u, v) - 0.42) / 0.35, 0.0, 1.0) : 1.0;
+            const double alpha = coverage * coverage * (3 - 2 * coverage);
+            p.z -= layer.amplitude * falloff * alpha *
+                   std::clamp(0.85 + 0.15 * strata, 0.7, 1.0);
+            if (showField)
+                surface.field[i] = float(falloff);
+        }
+        normals(surface);
+        return;
+    }
     for (std::size_t i = 0; i < boundaryDegree.size(); ++i)
         if (boundaryDegree[i])
         {
@@ -298,15 +411,18 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
         }
         auto &p = surface.mesh.positions[selectedVertex[i]];
         auto [u, v] = coordinates(p);
-        double depth = layer.amplitude;
-        if (softEdgeProfile && layer.profile == 1)
+        if (softEdgeProfile && layer.profile >= 1)
         {
             const double inside = std::clamp((contour(u, v) - std::hypot(u, v)) / layer.width,
                                              0.0, 1.0);
             const double falloff = inside * inside * (3 - 2 * inside);
-            depth *= 0.35 + 0.65 * falloff;
+            const double retreat = std::clamp(layer.amplitude + 0.3 * p.z - layer.lateral * v,
+                                              0.5 * layer.amplitude, 1.5 * layer.amplitude);
+            // Keep a thin real joint; a zero-width joint would collapse its selectable faces.
+            p.z -= retreat * (0.08 + 0.92 * falloff);
         }
-        p.z += -depth - 0.3 * p.z + layer.lateral * v;
+        else
+            p.z += -layer.amplitude - 0.3 * p.z + layer.lateral * v;
         if (showField)
             surface.field[selectedVertex[i]] = 1;
         if (showField && selectedVertex[i] != i)

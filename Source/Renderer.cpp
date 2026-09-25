@@ -19,6 +19,7 @@
 #include <chrono>
 #include <cmath>
 #include <imgui.h>
+#include <numeric>
 #include <stb_image_write.h>
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
@@ -78,6 +79,10 @@ float4 PSMain(VOut input):SV_TARGET {
   float3 albedo=ColorMap.Sample(ColorMap_sampler,input.World.yz*.8).rgb*weight.x+
                 ColorMap.Sample(ColorMap_sampler,input.World.xz*.8).rgb*weight.y+
                 ColorMap.Sample(ColorMap_sampler,input.World.xy*.8).rgb*weight.z;
+  if(Range.w>1.5){
+   float grey=dot(albedo,float3(.2126,.7152,.0722));
+   albedo=Range.w>2.5?grey*float3(.48,.50,.51):grey*float3(.76,.83,.87);
+  }
   albedo*=1-.18*max(contact*.6,cavity*.4);
   albedo=lerp(albedo,float3(.62,.58,.52),edge*.12);
   float3 light=normalize(float3(-.5,.85,-.7));
@@ -178,9 +183,12 @@ struct Renderer::Impl
     RefCntAutoPtr<IBuffer> constants, vertices, indices, parameters;
     RefCntAutoPtr<ITexture> color, depth, normalMap;
     std::array<RefCntAutoPtr<ITexture>, 5> materialMaps;
-    bool baked{}, material{};
+    bool baked{}, material{}, materialColorMips{};
+    int materialAppearance{};
+    std::filesystem::path materialColorPath;
+    std::size_t materialColorBytes{};
     unsigned indexCount{}, viewWidth{}, viewHeight{};
-    std::size_t bytes{};
+    std::size_t bytes{}, meshBytes{};
     float low{}, high{1};
     RefCntAutoPtr<IShader> makeShader(const char *source, const char *entry, SHADER_TYPE type)
     {
@@ -422,23 +430,32 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     r.material = false;
     for (Uint32 level = 0; level < texture.MipLevels; ++level)
         r.bytes += std::size_t(texture.Width >> level) * (texture.Height >> level) * 4;
+    r.meshBytes = r.bytes;
 }
 void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::path &diffusePath,
-                              bool useDiffuseMips)
+                              bool useDiffuseMips, int appearance)
 {
     auto &r = *impl;
     require(!bake || (r.baked && bake->settings.specialistMaps && bake->settings.automaticUv),
             "Material preview requires an uploaded automatic-UV specialist bake");
+    require(appearance >= 0 && appearance <= 3, "Unknown material appearance");
+    r.bytes = r.meshBytes;
     int width = 0, height = 0, channels = 0;
-    auto *decoded = stbi_load(diffusePath.string().c_str(), &width, &height, &channels, 4);
-    if (!decoded || width <= 0 || height <= 0 || width > 4096 || height > 4096)
+    const bool reuseColor = r.materialColorPath == diffusePath &&
+        r.materialColorMips == useDiffuseMips && bool(r.materialMaps[0]);
+    std::vector<std::uint8_t> color;
+    if (!reuseColor)
     {
+        auto *decoded = stbi_load(diffusePath.string().c_str(), &width, &height, &channels, 4);
+        if (!decoded || width <= 0 || height <= 0 || width > 4096 || height > 4096)
+        {
+            stbi_image_free(decoded);
+            throw std::runtime_error("Material preview diffuse texture could not be decoded");
+        }
+        color.assign(decoded, decoded + std::size_t(width) * height * 4);
         stbi_image_free(decoded);
-        throw std::runtime_error("Material preview diffuse texture could not be decoded");
     }
-    std::vector<std::uint8_t> color(decoded, decoded + std::size_t(width) * height * 4);
-    stbi_image_free(decoded);
-    auto diffuseMips = useDiffuseMips ? colorMips(color, unsigned(width), unsigned(height)) :
+    auto diffuseMips = !reuseColor && useDiffuseMips ? colorMips(color, unsigned(width), unsigned(height)) :
         std::vector<std::vector<std::uint8_t>>{};
     const std::vector<std::uint8_t> neutral{0, 0, 0, 255};
     const std::vector<std::uint8_t> *maps[] = {
@@ -452,6 +469,11 @@ void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::pat
     const char *names[] = {"ColorMap", "AmbientMap", "ContactMap", "CavityMap", "EdgeMap"};
     for (std::size_t i = 0; i < std::size(maps); ++i)
     {
+        if (i == 0 && reuseColor)
+        {
+            r.bytes += r.materialColorBytes;
+            continue;
+        }
         const auto size = i == 0 ? unsigned(width) : bake ? bake->resolution : 1;
         const auto mapHeight = i == 0 ? unsigned(height) : bake ? bake->resolution : 1;
         require(maps[i]->size() == std::size_t(size) * mapHeight * 4,
@@ -485,7 +507,14 @@ void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::pat
             ->Set(r.materialMaps[i]->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
         for (Uint32 level = 0; level < d.MipLevels; ++level)
             r.bytes += std::size_t(d.Width >> level) * (d.Height >> level) * 4;
+        if (i == 0)
+            r.materialColorBytes = std::size_t(width) * height * 4 +
+                std::accumulate(diffuseMips.begin(), diffuseMips.end(), std::size_t(0),
+                                [](std::size_t total, const auto &level) { return total + level.size(); });
     }
+    r.materialColorPath = diffusePath;
+    r.materialColorMips = useDiffuseMips;
+    r.materialAppearance = appearance;
     r.material = true;
 }
 void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int mode)
@@ -526,7 +555,7 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
         MapHelper<Constants> cb(r.context, r.constants, MAP_WRITE, MAP_FLAG_DISCARD);
         *cb = Constants{{camera.yaw, camera.pitch, camera.distance, float(width) / height},
                         {camera.target[0], camera.target[1], camera.target[2], float(mode)},
-                        {r.low, r.high, r.baked ? 1.0f : 0.0f, 0}};
+                        {r.low, r.high, r.baked ? 1.0f : 0.0f, float(r.materialAppearance)}};
         cb.Unmap();
         auto *pso = (mode == 2 && r.wire) ? r.wire.RawPtr() : r.solid.RawPtr();
         r.context->SetPipelineState(pso);

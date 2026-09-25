@@ -322,6 +322,7 @@ Json layerJson(const Layer &l)
                 {"cutSubdivisions", l.cutSubdivisions},
                 {"phase", l.phase},
                 {"profile", l.profile},
+                {"alphaSource", l.alphaSource},
                 {"profileSharpness", l.profileSharpness},
                 {"distortion", l.distortion},
                 {"solidOffset", l.solidOffset},
@@ -716,6 +717,8 @@ void validate(const Recipe &r)
                     l.threshold + l.width >= 0.001f);
         if (l.kind == Kind::CliffCutLoop)
             require(l.mask == Mask::None && l.amplitude > 0 && l.amplitude <= 2 &&
+                    l.alphaSource >= 0 && l.alphaSource <= 1 &&
+                    (l.alphaSource == 0 || (r.version >= 13 && l.profile == 2)) &&
                     l.projectorRadius[0] >= 0.1f && l.projectorRadius[0] <= 5 &&
                     l.projectorRadius[1] >= 0.1f && l.projectorRadius[1] <= 5 &&
                     std::abs(l.projectorRotation) <= 360 && l.distortion <= 0.3f);
@@ -862,7 +865,8 @@ void smoothMatchedLayerSeams(MeshResult &r)
                 r.normals[i] = unit(shared);
         }
 }
-void renderNormals(MeshResult &r, const Jerico::CancellationToken *cancel)
+void renderNormals(MeshResult &r, bool smoothPushBoundary,
+                   const Jerico::CancellationToken *cancel)
 {
     r.cornerNormals.clear();
     if (!r.hardRegions)
@@ -881,12 +885,26 @@ void renderNormals(MeshResult &r, const Jerico::CancellationToken *cancel)
             sum = add(sum, n);
         }
     }
+    std::set<std::uint32_t> pushVertices;
+    if (smoothPushBoundary)
+    {
+        std::set<Jerico::Guid> pushedRegions;
+        for (const auto &region : r.regions)
+            if (region.role == SurfaceRole::CutLoop)
+                pushedRegions.insert(region.id);
+        for (std::size_t t = 0; t < r.mesh.triangleRegions.size(); ++t)
+            if (pushedRegions.contains(r.mesh.triangleRegions[t]))
+                for (int corner = 0; corner < 3; ++corner)
+                    pushVertices.insert(r.mesh.indices[3 * t + corner]);
+    }
     r.cornerNormals.reserve(r.mesh.indices.size());
     for (std::size_t i = 0; i < r.mesh.indices.size(); ++i)
     {
         if ((i & 255) == 0)
             checkCancel(cancel);
-        r.cornerNormals.push_back(unit(sums.at({r.mesh.indices[i], r.mesh.triangleRegions[i / 3]})));
+        const auto vertex = r.mesh.indices[i];
+        r.cornerNormals.push_back(pushVertices.contains(vertex) ? r.normals[vertex] :
+            unit(sums.at({vertex, r.mesh.triangleRegions[i / 3]})));
     }
 }
 MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int resolution, int stopAfter,
@@ -1377,7 +1395,10 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z))
             throw std::runtime_error("Operation produced non-finite geometry");
     smoothMatchedLayerSeams(result);
-    renderNormals(result, cancel);
+    const bool smoothPushBoundary = recipe.version >= 13 && std::any_of(
+        recipe.layers.begin(), recipe.layers.end(), [](const Layer &layer)
+        { return layer.enabled && layer.kind == Kind::CliffCutLoop && layer.profile == 2; });
+    renderNormals(result, smoothPushBoundary, cancel);
     result.stages = std::move(timings);
     result.milliseconds =
         std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
@@ -1538,6 +1559,8 @@ Recipe deserialize(const std::string &text)
                 READ_OPTIONAL(projectorRotation);
                 READ_OPTIONAL(damageLip);
             }
+            if (inputVersion >= 13)
+                READ_OPTIONAL(alphaSource);
 #undef READ_OPTIONAL
         }
         l.mask = static_cast<Mask>(a.at("mask").get<int>());

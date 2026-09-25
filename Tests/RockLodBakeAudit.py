@@ -21,11 +21,13 @@ def audit(root: Path, require_automatic_uv: bool = False,
           require_specialist_mips: bool = False,
           expected_families: set[int] | None = None,
           cliff_drainage: bool = False, cliff_edge_damage: bool = False,
+          cliff_rbrush_alpha: bool = False,
           layered_occlusion: bool = False, layered_material: bool = False) -> dict:
     proof = json.loads((root / "rock-lod-bakes-proof.json").read_text())
     result = {"families": [], "completeBakes": 0, "bakesWithMisses": 0, "rejectedLods": 0}
     assert proof.get("cliffDrainage", False) is cliff_drainage
     assert proof.get("cliffEdgeDamage", False) is cliff_edge_damage
+    assert proof.get("cliffRBrushAlpha", False) is cliff_rbrush_alpha
     assert proof.get("layeredOcclusion", False) is layered_occlusion
     assert proof.get("layeredMaterial", False) is layered_material
     assert {case["family"] for case in proof["cases"]} == (
@@ -84,6 +86,10 @@ def audit(root: Path, require_automatic_uv: bool = False,
                 for view in ("high-far.png", "low-normal-far.png"):
                     with Image.open(directory / view) as image:
                         assert image.size == (1280, 960)
+            if cliff_rbrush_alpha:
+                for view in ("high-material.png", "low-material.png"):
+                    with Image.open(directory / view) as image:
+                        assert image.size == (1280, 960)
             alpha = None
             metrics = {}
             curvature_masks = {}
@@ -131,14 +137,16 @@ if __name__ == "__main__":
     family = int(options[options.index("--family") + 1]) if "--family" in options else None
     cliff_drainage = "--cliff-drainage" in options
     cliff_edge_damage = "--cliff-edge-damage" in options
+    cliff_rbrush_alpha = "--cliff-rbrush-alpha" in options
     layered_occlusion = "--layered-occlusion" in options
     layered_material = "--layered-material" in options
-    assert sum((cliff_drainage, cliff_edge_damage, layered_occlusion)) <= 1
+    assert sum((cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha, layered_occlusion)) <= 1
     output = audit(Path(sys.argv[1]),
                    "--require-auto-uv" in options or require_specialist_mips,
                    require_specialist_mips,
                    {family} if family is not None else None,
-                   cliff_drainage, cliff_edge_damage, layered_occlusion, layered_material)
+                   cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha,
+                   layered_occlusion, layered_material)
     target = Path(sys.argv[2])
     target.write_text(json.dumps(output, indent=2) + "\n")
     print(f"PASS: {output['completeBakes']} complete, "

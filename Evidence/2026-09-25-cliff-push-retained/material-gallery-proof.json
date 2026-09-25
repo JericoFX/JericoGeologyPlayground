@@ -1,0 +1,101 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "bakedMaps": false,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "presets": [
+    {
+      "appearance": 0,
+      "diffuse": "rock_06-diff-1k.jpg",
+      "generationCpuMs": 15.5141,
+      "meshHash": 7722372407671227069,
+      "preset": 0
+    },
+    {
+      "appearance": 2,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 52.6028,
+      "meshHash": 15615297612533746527,
+      "preset": 1
+    },
+    {
+      "appearance": 0,
+      "diffuse": "rock_06-diff-1k.jpg",
+      "generationCpuMs": 71.7016,
+      "meshHash": 7180237508404007986,
+      "preset": 2
+    },
+    {
+      "appearance": 2,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 56.5076,
+      "meshHash": 4970621361491278879,
+      "preset": 3
+    },
+    {
+      "appearance": 2,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 262.4325,
+      "meshHash": 12584083711287994724,
+      "preset": 4
+    },
+    {
+      "appearance": 2,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 205.1057,
+      "meshHash": 4987531853729866278,
+      "preset": 5
+    },
+    {
+      "appearance": 3,
+      "diffuse": "rock_06-diff-1k.jpg",
+      "generationCpuMs": 1028.3453,
+      "meshHash": 2720672209216731981,
+      "preset": 6
+    },
+    {
+      "appearance": 1,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 6.2567,
+      "meshHash": 1499676505577218971,
+      "preset": 7
+    },
+    {
+      "appearance": 1,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 78.6814,
+      "meshHash": 310230681386850953,
+      "preset": 8
+    },
+    {
+      "appearance": 1,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 114.5048,
+      "meshHash": 16826407062557907188,
+      "preset": 9
+    },
+    {
+      "appearance": 3,
+      "diffuse": "rock_06-diff-1k.jpg",
+      "generationCpuMs": 583.0301,
+      "meshHash": 3838881473439248507,
+      "preset": 10
+    },
+    {
+      "appearance": 2,
+      "diffuse": "cliff_side-diff-1k.jpg",
+      "generationCpuMs": 58.8017,
+      "meshHash": 3566021967926415643,
+      "preset": 11
+    },
+    {
+      "appearance": 0,
+      "diffuse": "rock_06-diff-1k.jpg",
+      "generationCpuMs": 16.8563,
+      "meshHash": 15294099887459459894,
+      "preset": 12
+    }
+  ]
+}

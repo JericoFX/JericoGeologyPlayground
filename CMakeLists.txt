@@ -28,11 +28,16 @@ target_include_directories(PlaygroundModel PRIVATE
     "${JERICO_DEPS}/_deps/manifold-build/include")
 target_link_libraries(PlaygroundModel PRIVATE "${JERICO_DEPS}/_deps/manifold-build/lib/Release/manifold.lib"
     "${JERICO_DEPS}/Tools/AssetPipeline/$<CONFIG>/JericoAssetPipeline.lib"
+    "${JERICO_DEPS}/ThirdParty/$<CONFIG>/JericoLodePng.lib"
+    "${JERICO_DEPS}/ThirdParty/$<CONFIG>/JericoTinyExr.lib"
+    "${JERICO_DEPS}/_deps/libtiff-build/libtiff/$<CONFIG>/$<IF:$<CONFIG:Debug>,tiffd,tiff>.lib"
+    "${JERICO_DEPS}/_deps/zstd-build/lib/$<CONFIG>/zstd_static.lib"
     "${JERICO_DEPS}/Tools/ProceduralAuthoring/$<CONFIG>/JericoProceduralAuthoring.lib"
     "${JERICO_DEPS}/Engine/VirtualizedWorld/$<CONFIG>/JericoVirtualizedWorldContracts.lib"
     "${JERICO_DEPS}/Engine/Core/$<CONFIG>/JericoCore.lib")
 target_compile_definitions(PlaygroundModel PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_definitions(PlaygroundModel PRIVATE MANIFOLD_PAR=-1)
+target_compile_definitions(PlaygroundModel PRIVATE PLAYGROUND_ROOT="${CMAKE_SOURCE_DIR}")
 enable_testing()
 add_executable(PlaygroundNormalBakeTests Tests/NormalBakeTests.cpp)
 target_link_libraries(PlaygroundNormalBakeTests PRIVATE PlaygroundModel)

@@ -170,6 +170,104 @@ int main()
         };
         require(meanJointDepth(edgeProfileCut) < 0.75 * meanJointDepth(cut),
                 "negative edge height profile softens the abrupt cut boundary");
+        auto jointRange = [](const MeshResult &surface)
+        {
+            const auto originalCount = 33 * 33;
+            auto joint = std::find_if(surface.regions.begin(), surface.regions.end(),
+                                      [](const auto &region) { return region.role == SurfaceRole::CutFace; });
+            require(joint != surface.regions.end(), "profile keeps selectable joint faces");
+            double smallest = 1e20, largest = -1e20;
+            int pairs = 0;
+            for (std::size_t t = 0; t < surface.mesh.triangleRegions.size(); ++t)
+            {
+                if (surface.mesh.triangleRegions[t] != joint->id)
+                    continue;
+                for (int a = 0; a < 3; ++a)
+                    for (int b = 0; b < 3; ++b)
+                    {
+                        const auto original = surface.mesh.indices[3 * t + a];
+                        const auto displaced = surface.mesh.indices[3 * t + b];
+                        if (original >= originalCount || displaced < originalCount)
+                            continue;
+                        const auto p = surface.mesh.positions[original];
+                        const auto q = surface.mesh.positions[displaced];
+                        if (std::abs(p.x - q.x) > 1e-10 || std::abs(p.y - q.y) > 1e-10)
+                            continue;
+                        const double retreat = p.z - q.z;
+                        smallest = std::min(smallest, retreat);
+                        largest = std::max(largest, retreat);
+                        ++pairs;
+                    }
+            }
+            require(pairs > 8, "profile has measurable joint vertex pairs");
+            return std::pair{smallest, largest};
+        };
+        const auto [minimumRetreat, maximumRetreat] = jointRange(edgeProfileCut);
+        require(minimumRetreat > 0.01 && maximumRetreat < 0.10,
+                "soft cut joint stays shallow and retreats inward along its entire contour");
+        auto pushRecipe = edgeProfileRecipe;
+        pushRecipe.layers[4].profile = 2;
+        const auto beforePush = evaluate(pushRecipe, 32, 3);
+        const auto pushed = evaluate(pushRecipe, 32, 4);
+        require(pushed.mesh.positions.size() == beforePush.mesh.positions.size() &&
+                    pushed.mesh.indices.size() == beforePush.mesh.indices.size(),
+                "RBrush push deforms the existing cliff without overlay vertices or triangles");
+        require(std::any_of(pushed.regions.begin(), pushed.regions.end(),
+                            [](const auto &region) { return region.role == SurfaceRole::CutLoop; }) &&
+                    std::none_of(pushed.regions.begin(), pushed.regions.end(),
+                                 [](const auto &region) { return region.role == SurfaceRole::CutFace; }),
+                "RBrush push keeps a selectable region without a hard sidewall");
+        int moved = 0, still = 0;
+        for (std::size_t i = 0; i < pushed.mesh.positions.size(); ++i)
+        {
+            const double depth = beforePush.mesh.positions[i].z - pushed.mesh.positions[i].z;
+            require(depth >= -1e-8 && depth <= pushRecipe.layers[4].amplitude + 1e-8,
+                    "brush displacement is outward and bounded");
+            moved += depth > 0.03;
+            still += std::abs(depth) < 1e-8;
+        }
+        require(moved > 8 && still > 100, "brush has a local push and leaves distant cliff untouched");
+        auto alphaRecipe = pushRecipe;
+        alphaRecipe.layers[4].alphaSource = 1;
+        const auto alphaPush = evaluate(alphaRecipe, 32, 4);
+        require(alphaPush.mesh.indices == pushed.mesh.indices &&
+                    alphaPush.mesh.triangleRegions == pushed.mesh.triangleRegions,
+                "CC0 alpha changes relief without changing topology or selection");
+        double alphaDifference = 0;
+        for (std::size_t i = 0; i < pushed.mesh.positions.size(); ++i)
+            alphaDifference = std::max(alphaDifference,
+                std::abs(alphaPush.mesh.positions[i].z - pushed.mesh.positions[i].z));
+        require(alphaDifference > 0.005 && alphaDifference < alphaRecipe.layers[4].amplitude,
+                "officially imported RBrush alpha measurably modulates the push");
+        require(serialize(deserialize(serialize(alphaRecipe))) == serialize(alphaRecipe),
+                "RBrush alpha choice survives recipe roundtrip");
+        auto pushSolid = evaluate(alphaRecipe, 32);
+        require(PA::validateClosedMesh(pushSolid.mesh).hasValue(),
+                "alpha-modulated push remains one closed solid");
+        const auto pushedRegion = std::find_if(pushSolid.regions.begin(), pushSolid.regions.end(),
+            [](const auto &region) { return region.role == SurfaceRole::CutLoop; })->id;
+        const auto sourceRegion = std::find_if(pushSolid.regions.begin(), pushSolid.regions.end(),
+            [](const auto &region) { return region.role == SurfaceRole::Source; })->id;
+        std::map<std::uint32_t, Vec3d> pushNormals, sourceNormals;
+        for (std::size_t i = 0; i < pushSolid.mesh.indices.size(); ++i)
+        {
+            const auto region = pushSolid.mesh.triangleRegions[i / 3];
+            if (region == pushedRegion)
+                pushNormals[pushSolid.mesh.indices[i]] = pushSolid.cornerNormals[i];
+            if (region == sourceRegion)
+                sourceNormals[pushSolid.mesh.indices[i]] = pushSolid.cornerNormals[i];
+        }
+        int smoothBoundary = 0;
+        for (const auto &[vertex, pushedNormal] : pushNormals)
+            if (sourceNormals.contains(vertex))
+            {
+                const auto other = sourceNormals.at(vertex);
+                require(pushedNormal.x * other.x + pushedNormal.y * other.y +
+                        pushedNormal.z * other.z > 0.999,
+                        "brush and original cliff share continuous shading at the region boundary");
+                ++smoothBoundary;
+            }
+        require(smoothBoundary > 8, "brush normal check covers a real region boundary");
         auto edgeProfileSolid = evaluate(edgeProfileRecipe, 32);
         require(edgeProfileSolid.closedSolid && PA::validateClosedMesh(edgeProfileSolid.mesh).hasValue(),
                 "softened cut remains a closed solid");
