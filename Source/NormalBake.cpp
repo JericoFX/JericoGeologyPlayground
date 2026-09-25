@@ -147,11 +147,70 @@ std::vector<std::uint8_t> downsampleSpecialist(const std::vector<std::uint8_t> &
     return next;
 }
 } // namespace
+std::vector<std::vector<std::uint8_t>> buildNormalMomentMips(
+    const std::vector<std::uint8_t> &rgba, unsigned resolution, unsigned mipCount)
+{
+    if (!resolution || rgba.size() != std::size_t(resolution) * resolution * 4 || !mipCount)
+        throw std::runtime_error("Invalid normal moment source");
+    std::vector<std::vector<std::uint8_t>> mips;
+    const auto *source = &rgba;
+    std::vector<unsigned> sourceCounts;
+    auto size = resolution;
+    for (unsigned level = 1; level < mipCount; ++level)
+    {
+        if (size < 2 || size % 2)
+            throw std::runtime_error("Normal moment mip count exceeds texture resolution");
+        const auto nextSize = size / 2;
+        std::vector<std::uint8_t> next(std::size_t(nextSize) * nextSize * 4);
+        std::vector<unsigned> nextCounts(std::size_t(nextSize) * nextSize);
+        for (unsigned y = 0; y < nextSize; ++y)
+            for (unsigned x = 0; x < nextSize; ++x)
+            {
+                Vec3d mean{};
+                unsigned painted = 0;
+                for (unsigned dy = 0; dy < 2; ++dy)
+                    for (unsigned dx = 0; dx < 2; ++dx)
+                    {
+                        const auto at = (std::size_t(2 * y + dy) * size + 2 * x + dx) * 4;
+                        if (!(*source)[at + 3])
+                            continue;
+                        const auto weight = level == 1 ? 1u : sourceCounts[at / 4];
+                        painted += weight;
+                        Vec3d sample{(*source)[at] * (2.0 / 255) - 1,
+                                     (*source)[at + 1] * (2.0 / 255) - 1,
+                                     (*source)[at + 2] * (2.0 / 255) - 1};
+                        if (level == 1)
+                        {
+                            const auto length = Projection::length(sample);
+                            sample = length > 1e-12 ? D::multiply(sample, 1 / length) : Vec3d{0, 0, 1};
+                        }
+                        mean = D::add(mean, D::multiply(sample, weight));
+                    }
+                if (painted)
+                    mean = D::multiply(mean, 1.0 / painted);
+                const auto at = (std::size_t(y) * nextSize + x) * 4;
+                auto encode = [](double value)
+                { return std::uint8_t(std::lround(std::clamp(value * 0.5 + 0.5, 0.0, 1.0) * 255)); };
+                next[at] = encode(mean.x);
+                next[at + 1] = encode(mean.y);
+                next[at + 2] = encode(mean.z);
+                next[at + 3] = painted ? 255 : 0;
+                nextCounts[std::size_t(y) * nextSize + x] = painted;
+            }
+        mips.push_back(std::move(next));
+        source = &mips.back();
+        sourceCounts = std::move(nextCounts);
+        size = nextSize;
+    }
+    return mips;
+}
 NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const NormalBakeSettings &settings,
                        const Jerico::CancellationToken *cancel)
 {
     const auto start = std::chrono::steady_clock::now();
     check(cancel);
+    if (settings.normalMomentMips && !settings.automaticUv)
+        throw std::runtime_error("Normal moment mips require automatic UVs");
     if (settings.resolution < 64 || settings.resolution > 4096 || settings.padding < 2 ||
         settings.padding > 16 || !std::isfinite(settings.projectionDistance) ||
         settings.projectionDistance <= 0 || settings.projectionDistance > 2 || int(settings.projection) < 0 ||
@@ -719,6 +778,9 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
             source = &result.normalMips.back();
             size = nextSize;
         }
+        if (settings.normalMomentMips)
+            result.normalMomentMips = buildNormalMomentMips(result.rgba, settings.resolution,
+                                                             settings.automaticUvMipCount);
         if (settings.specialistMaps)
         {
             auto buildChain = [&](const std::vector<std::uint8_t> &base,
@@ -811,6 +873,17 @@ void exportNormalBake(const NormalBake &bake, const std::filesystem::path &direc
             !stbi_write_png((directory / ("normal-mip-" + std::to_string(level + 1) + ".png")).string().c_str(),
                             int(size), int(size), 4, bake.normalMips[level].data(), int(size * 4)))
             throw std::runtime_error("Could not write normal mip map");
+    }
+    if (bake.settings.normalMomentMips &&
+        bake.normalMomentMips.size() != bake.normalMips.size())
+        throw std::runtime_error("Invalid normal moment mip count");
+    for (std::size_t level = 0; level < bake.normalMomentMips.size(); ++level)
+    {
+        const auto size = bake.resolution >> (level + 1);
+        if (!size || bake.normalMomentMips[level].size() != std::size_t(size) * size * 4 ||
+            !stbi_write_png((directory / ("normal-moment-mip-" + std::to_string(level + 1) + ".png")).string().c_str(),
+                            int(size), int(size), 4, bake.normalMomentMips[level].data(), int(size * 4)))
+            throw std::runtime_error("Could not write normal moment mip map");
     }
     auto writeMap = [&](const std::vector<std::uint8_t> &image, const char *name)
     {
@@ -946,6 +1019,8 @@ void exportNormalBake(const NormalBake &bake, const std::filesystem::path &direc
         metadata["automaticUvMarginPixels"] = bake.automaticUvMarginPixels;
         metadata["automaticUvTargetMipCount"] = bake.settings.automaticUvMipCount;
         metadata["normalMipLevels"] = bake.normalMips.size() + 1;
+        if (bake.settings.normalMomentMips)
+            metadata["normalMomentMipLevels"] = bake.normalMomentMips.size() + 1;
         metadata["specialistMipLevels"] = bake.settings.specialistMaps ?
             bake.specialistMips.ambient.size() + 1 : 0;
         metadata["specialistMipFilter"] =

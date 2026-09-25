@@ -23,7 +23,8 @@ class Renderer
     void begin(unsigned width, unsigned height);
     void upload(const MeshResult &mesh, const NormalBake *bake = nullptr,
                 const std::vector<std::uint8_t> *diagnosticMap = nullptr,
-                const std::vector<std::vector<std::uint8_t>> *diagnosticMips = nullptr);
+                const std::vector<std::vector<std::uint8_t>> *diagnosticMips = nullptr,
+                bool useNormalMoments = false);
     void uploadMaterial(const NormalBake *bake, const std::filesystem::path &diffusePath,
                         bool diffuseMips = true, int appearance = 0);
     void *draw(unsigned width, unsigned height, const Camera &camera, int mode);

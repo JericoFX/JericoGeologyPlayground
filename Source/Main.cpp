@@ -545,7 +545,8 @@ BakePreview buildBakePreview(const Recipe &recipe, float lowError, unsigned text
                              double edgeRadius = 0.02, bool automaticUv = false,
                              double curvatureRelaxation = 0,
                              std::optional<double> contactRadius = std::nullopt,
-                             std::optional<double> ambientRadius = std::nullopt)
+                             std::optional<double> ambientRadius = std::nullopt,
+                             bool normalMomentMips = false)
 {
     BakePreview preview;
     preview.recipe = recipe;
@@ -594,7 +595,8 @@ BakePreview buildBakePreview(const Recipe &recipe, float lowError, unsigned text
                                 .curvatureRelaxation = curvatureRelaxation,
                                 .thicknessRange = 4,
                                 .chartLayout = layout ? layout->charts : std::vector<NormalBakeChart>{},
-                                .automaticUv = automaticUv},
+                                .automaticUv = automaticUv,
+                                .normalMomentMips = normalMomentMips},
                                cancel);
     preview.bake.lowStrategy = lowResolution > 0 ? "recipe-regenerated" : "native-simplify";
     return preview;
@@ -1037,7 +1039,7 @@ void captureSlateTemporal(Renderer &renderer, const std::filesystem::path &evide
     std::cout << report.dump(2) << '\n';
 }
 void captureRockTemporal(Renderer &renderer, const std::filesystem::path &evidence, int family,
-                         bool biasSweep = false)
+                         bool biasSweep = false, bool momentSweep = false)
 {
     if (family != 8 && family != 11)
         throw std::runtime_error("Rock temporal capture requires signed cliff or fractured strata");
@@ -1053,7 +1055,8 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     const int lowResolution = family == 11 ? 14 : 0;
     auto preview = buildBakePreview(recipe, 0.04f, 2048, family == 11 ? 0.2 : 0.15,
                                     nullptr, NormalProjection::ClosestSurface, lowResolution,
-                                    nullptr, family == 8 ? 0.1 : 0.02, true);
+                                    nullptr, family == 8 ? 0.1 : 0.02, true,
+                                    0, std::nullopt, std::nullopt, momentSweep);
     if (preview.bake.misses || preview.bake.backfaceHits ||
         preview.bake.highHash != control.at("highHash").get<std::uint64_t>() ||
         preview.bake.lowHash != control.at("lowHash").get<std::uint64_t>())
@@ -1094,6 +1097,12 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     const auto unmippedBufferBytes = renderer.bufferBytes();
     captureSequence("low-no-normal-mips");
     preview.bake.normalMips = std::move(savedMips);
+    if (momentSweep)
+    {
+        renderer.upload(preview.bake.low, &preview.bake, nullptr, nullptr, true);
+        renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+        captureSequence("low-moments");
+    }
     if (biasSweep)
     {
         renderer.upload(preview.bake.low, &preview.bake);
@@ -1103,7 +1112,9 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
         renderer.setNormalMipBias(-1.0f);
         captureSequence("low-bias-one");
         renderer.setNormalMipBias(0.0f);
-
+    }
+    if (biasSweep || momentSweep)
+    {
         camera.distance = farDistance * 0.5f;
         renderer.upload(preview.high);
         renderer.uploadMaterial(nullptr, diffuse, true, appearance);
@@ -1118,11 +1129,20 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
         preview.bake.normalMips = std::move(nearMips);
         renderer.upload(preview.bake.low, &preview.bake);
         renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
-        renderer.setNormalMipBias(-0.5f);
-        captureSequence("near-low-bias-half");
-        renderer.setNormalMipBias(-1.0f);
-        captureSequence("near-low-bias-one");
-        renderer.setNormalMipBias(0.0f);
+        if (biasSweep)
+        {
+            renderer.setNormalMipBias(-0.5f);
+            captureSequence("near-low-bias-half");
+            renderer.setNormalMipBias(-1.0f);
+            captureSequence("near-low-bias-one");
+            renderer.setNormalMipBias(0.0f);
+        }
+        if (momentSweep)
+        {
+            renderer.upload(preview.bake.low, &preview.bake, nullptr, nullptr, true);
+            renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+            captureSequence("near-low-moments");
+        }
     }
     nlohmann::json report = {{"family", family}, {"adapter", renderer.adapter()},
                              {"imageSize", {1280, 960}}, {"textureResolution", 2048},
@@ -1143,9 +1163,15 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
                              {"bakeCpuMs", preview.bake.milliseconds},
                              {"mippedBufferBytes", mippedBufferBytes},
                              {"unmippedBufferBytes", unmippedBufferBytes}};
-    if (biasSweep)
+    if (biasSweep || momentSweep)
     {
-        report["normalMipBiasVariants"] = {{"low-bias-half", -0.5}, {"low-bias-one", -1.0}};
+        if (biasSweep)
+            report["normalMipBiasVariants"] = {{"low-bias-half", -0.5}, {"low-bias-one", -1.0}};
+        if (momentSweep)
+        {
+            report["normalMomentVariants"] = {"low-moments"};
+            report["normalMomentMipLevels"] = preview.bake.normalMomentMips.size() + 1;
+        }
         report["nearCameraDistance"] = camera.distance;
     }
     std::ofstream(evidence / "rock-temporal-proof.json") << report.dump(2) << '\n';
@@ -1567,7 +1593,8 @@ int run(int argc, char **argv)
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
          caveGeologySmoke = false, caveAxialSmoke = false, caveBlindSmoke = false,
          slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
-         cliffMipBiasSmoke = false, strataMipBiasSmoke = false;
+         cliffMipBiasSmoke = false, strataMipBiasSmoke = false,
+         cliffMomentSmoke = false, strataMomentSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1602,6 +1629,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--strata-temporal-bake-test" ||
             std::string(argv[i]) == "--cliff-mip-bias-test" ||
             std::string(argv[i]) == "--strata-mip-bias-test" ||
+            std::string(argv[i]) == "--cliff-normal-moments-test" ||
+            std::string(argv[i]) == "--strata-normal-moments-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1647,6 +1676,8 @@ int run(int argc, char **argv)
             strataTemporalSmoke = std::string(argv[i]) == "--strata-temporal-bake-test";
             cliffMipBiasSmoke = std::string(argv[i]) == "--cliff-mip-bias-test";
             strataMipBiasSmoke = std::string(argv[i]) == "--strata-mip-bias-test";
+            cliffMomentSmoke = std::string(argv[i]) == "--cliff-normal-moments-test";
+            strataMomentSmoke = std::string(argv[i]) == "--strata-normal-moments-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -2347,11 +2378,13 @@ int run(int argc, char **argv)
                 window.requestClose();
                 continue;
             }
-            if (cliffTemporalSmoke || strataTemporalSmoke || cliffMipBiasSmoke || strataMipBiasSmoke)
+            if (cliffTemporalSmoke || strataTemporalSmoke || cliffMipBiasSmoke || strataMipBiasSmoke ||
+                cliffMomentSmoke || strataMomentSmoke)
             {
                 captureRockTemporal(renderer, evidence,
-                                    cliffTemporalSmoke || cliffMipBiasSmoke ? 8 : 11,
-                                    cliffMipBiasSmoke || strataMipBiasSmoke);
+                                    cliffTemporalSmoke || cliffMipBiasSmoke || cliffMomentSmoke ? 8 : 11,
+                                    cliffMipBiasSmoke || strataMipBiasSmoke,
+                                    cliffMomentSmoke || strataMomentSmoke);
                 window.requestClose();
                 continue;
             }

@@ -1,0 +1,688 @@
+{
+  "family": 11,
+  "unchangedBakePng": 40,
+  "unchangedControlCaptures": 120,
+  "momentShortening": [
+    {
+      "level": 1,
+      "meanClampedLength": 0.9985842704772949,
+      "fractionBelow0_99": 0.01342266569774073,
+      "fractionAbove1_001FromUnorm": 0.34558720496368156
+    },
+    {
+      "level": 2,
+      "meanClampedLength": 0.9974709153175354,
+      "fractionBelow0_99": 0.04088506808941174,
+      "fractionAbove1_001FromUnorm": 0.3471460261800175
+    },
+    {
+      "level": 3,
+      "meanClampedLength": 0.9952232241630554,
+      "fractionBelow0_99": 0.10811317219411655,
+      "fractionAbove1_001FromUnorm": 0.32949222409593404
+    }
+  ],
+  "far": {
+    "family": 11,
+    "transitions": 4,
+    "cameraDistance": 11.600000381469727,
+    "stationary": {
+      "eligible": 28725,
+      "matched": 28725,
+      "normalChangeDegrees": {
+        "mean": 0.0064726159907877445,
+        "p95": 0.01987571455538273,
+        "p99": 0.023889636620879173
+      },
+      "linearRenderedColorChange": {
+        "mean": 7.478561755660095e-17,
+        "p95": 4.3021142204224816e-16,
+        "p99": 1.915134717478395e-15
+      }
+    },
+    "variants": {
+      "high": {
+        "eligible": 114893,
+        "matched": 112854,
+        "perTransition": [
+          {
+            "eligible": 28720,
+            "inside": 28720,
+            "samePrimitive": 28244,
+            "matched": 28244
+          },
+          {
+            "eligible": 28723,
+            "inside": 28723,
+            "samePrimitive": 28190,
+            "matched": 28190
+          },
+          {
+            "eligible": 28725,
+            "inside": 28725,
+            "samePrimitive": 28211,
+            "matched": 28211
+          },
+          {
+            "eligible": 28725,
+            "inside": 28725,
+            "samePrimitive": 28209,
+            "matched": 28209
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.12660349905490875,
+          "p95": 0.45041149854660034,
+          "p99": 0.7422049045562744
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.00046007780474610627,
+          "p95": 0.001682749716565013,
+          "p99": 0.002445149002596736
+        }
+      },
+      "low-mips": {
+        "eligible": 114531,
+        "matched": 113336,
+        "perTransition": [
+          {
+            "eligible": 28629,
+            "inside": 28629,
+            "samePrimitive": 28322,
+            "matched": 28322
+          },
+          {
+            "eligible": 28630,
+            "inside": 28630,
+            "samePrimitive": 28335,
+            "matched": 28334
+          },
+          {
+            "eligible": 28634,
+            "inside": 28634,
+            "samePrimitive": 28349,
+            "matched": 28349
+          },
+          {
+            "eligible": 28638,
+            "inside": 28638,
+            "samePrimitive": 28331,
+            "matched": 28331
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.10384812206029892,
+          "p95": 0.4399174451828003,
+          "p99": 0.5747595429420471
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.00048728729598224163,
+          "p95": 0.0016205026768147945,
+          "p99": 0.0023189536295831203
+        }
+      },
+      "low-no-normal-mips": {
+        "eligible": 114531,
+        "matched": 113336,
+        "perTransition": [
+          {
+            "eligible": 28629,
+            "inside": 28629,
+            "samePrimitive": 28322,
+            "matched": 28322
+          },
+          {
+            "eligible": 28630,
+            "inside": 28630,
+            "samePrimitive": 28335,
+            "matched": 28334
+          },
+          {
+            "eligible": 28634,
+            "inside": 28634,
+            "samePrimitive": 28349,
+            "matched": 28349
+          },
+          {
+            "eligible": 28638,
+            "inside": 28638,
+            "samePrimitive": 28331,
+            "matched": 28331
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.13801971077919006,
+          "p95": 0.4701579809188843,
+          "p99": 0.8531523942947388
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0005085420561954379,
+          "p95": 0.0016624863492324948,
+          "p99": 0.002413930604234338
+        }
+      },
+      "low-moments": {
+        "eligible": 114531,
+        "matched": 113336,
+        "perTransition": [
+          {
+            "eligible": 28629,
+            "inside": 28629,
+            "samePrimitive": 28322,
+            "matched": 28322
+          },
+          {
+            "eligible": 28630,
+            "inside": 28630,
+            "samePrimitive": 28335,
+            "matched": 28334
+          },
+          {
+            "eligible": 28634,
+            "inside": 28634,
+            "samePrimitive": 28349,
+            "matched": 28349
+          },
+          {
+            "eligible": 28638,
+            "inside": 28638,
+            "samePrimitive": 28331,
+            "matched": 28331
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.10419782251119614,
+          "p95": 0.44033709168434143,
+          "p99": 0.5718621611595154
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0004872904100921005,
+          "p95": 0.0016181316459551454,
+          "p99": 0.002317455830052495
+        }
+      }
+    },
+    "shared": {
+      "low-mips": {
+        "pixels": 110732,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 27699,
+            "mean": 0.12968824803829193,
+            "p95": 0.4406316578388214,
+            "p99": 0.6213757991790771
+          },
+          {
+            "pixels": 27660,
+            "mean": 0.13157649338245392,
+            "p95": 0.4409886598587036,
+            "p99": 0.6188436150550842
+          },
+          {
+            "pixels": 27696,
+            "mean": 0.12975384294986725,
+            "p95": 0.4399823546409607,
+            "p99": 0.6126182675361633
+          },
+          {
+            "pixels": 27677,
+            "mean": 0.12984788417816162,
+            "p95": 0.43935513496398926,
+            "p99": 0.6128917932510376
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.13021622598171234,
+          "p95": 0.4402855932712555,
+          "p99": 0.6171185374259949
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.0004427173698786646,
+          "p95": 0.0014381359796971083,
+          "p99": 0.002047634916380048
+        },
+        "normalSpatialDegrees": {
+          "mean": 2.4268360137939453,
+          "p95": 8.567533493041992,
+          "p99": 16.077194213867188
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.0071802749298512936,
+          "p95": 0.025178339332342148,
+          "p99": 0.04425184801220894
+        }
+      },
+      "low-no-normal-mips": {
+        "pixels": 110732,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 27699,
+            "mean": 0.135873943567276,
+            "p95": 0.4433257579803467,
+            "p99": 0.6917016506195068
+          },
+          {
+            "pixels": 27660,
+            "mean": 0.135547935962677,
+            "p95": 0.4448908269405365,
+            "p99": 0.6936149001121521
+          },
+          {
+            "pixels": 27696,
+            "mean": 0.135771244764328,
+            "p95": 0.44520315527915955,
+            "p99": 0.6858237981796265
+          },
+          {
+            "pixels": 27677,
+            "mean": 0.13648441433906555,
+            "p95": 0.4445973038673401,
+            "p99": 0.6972112059593201
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.13591942191123962,
+          "p95": 0.44455114006996155,
+          "p99": 0.6928348541259766
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.0004482179938349873,
+          "p95": 0.0014525940641760826,
+          "p99": 0.0020857255440205336
+        },
+        "normalSpatialDegrees": {
+          "mean": 1.272774577140808,
+          "p95": 5.0843682289123535,
+          "p99": 12.060076713562012
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.006665726192295551,
+          "p95": 0.023839183151721954,
+          "p99": 0.042947862297296524
+        }
+      },
+      "low-moments": {
+        "pixels": 110732,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 27699,
+            "mean": 0.1301269829273224,
+            "p95": 0.43993645906448364,
+            "p99": 0.6171030402183533
+          },
+          {
+            "pixels": 27660,
+            "mean": 0.1299475133419037,
+            "p95": 0.43866029381752014,
+            "p99": 0.6145907640457153
+          },
+          {
+            "pixels": 27696,
+            "mean": 0.1304217129945755,
+            "p95": 0.4403753876686096,
+            "p99": 0.6151512861251831
+          },
+          {
+            "pixels": 27677,
+            "mean": 0.13058795034885406,
+            "p95": 0.43982285261154175,
+            "p99": 0.614710807800293
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.1302710771560669,
+          "p95": 0.43962961435317993,
+          "p99": 0.6155605316162109
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.0004428477550391108,
+          "p95": 0.0014348417753353715,
+          "p99": 0.002049434697255492
+        },
+        "normalSpatialDegrees": {
+          "mean": 2.411686658859253,
+          "p95": 8.494294166564941,
+          "p99": 15.955220222473145
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.007166927680373192,
+          "p95": 0.02516970783472061,
+          "p99": 0.044159647077322006
+        }
+      }
+    },
+    "limit": "Mode-5 color includes lighting and view-dependent specular; visibility is matched within each mesh, then high/low depth at the starting pixel. Five tiny yaw steps and one light remain a diagnostic, not representative Beauty acceptance."
+  },
+  "near": {
+    "family": 11,
+    "transitions": 4,
+    "cameraDistance": 5.800000190734863,
+    "stationary": {
+      "eligible": 120346,
+      "matched": 120346,
+      "normalChangeDegrees": {
+        "mean": 0.006464191246777773,
+        "p95": 0.019872896373271942,
+        "p99": 0.023855678737163544
+      },
+      "linearRenderedColorChange": {
+        "mean": 1.6199168950037552e-16,
+        "p95": 1.0870934135718386e-15,
+        "p99": 2.544261027513238e-15
+      }
+    },
+    "variants": {
+      "near-high": {
+        "eligible": 481379,
+        "matched": 472718,
+        "perTransition": [
+          {
+            "eligible": 120339,
+            "inside": 120339,
+            "samePrimitive": 118243,
+            "matched": 118243
+          },
+          {
+            "eligible": 120341,
+            "inside": 120341,
+            "samePrimitive": 118115,
+            "matched": 118115
+          },
+          {
+            "eligible": 120346,
+            "inside": 120346,
+            "samePrimitive": 118168,
+            "matched": 118168
+          },
+          {
+            "eligible": 120353,
+            "inside": 120353,
+            "samePrimitive": 118192,
+            "matched": 118192
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.1275819092988968,
+          "p95": 0.4472469687461853,
+          "p99": 0.6434093713760376
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0007567667053081095,
+          "p95": 0.0020392315927892923,
+          "p99": 0.0031808153726160526
+        }
+      },
+      "near-low-mips": {
+        "eligible": 479761,
+        "matched": 474801,
+        "perTransition": [
+          {
+            "eligible": 119938,
+            "inside": 119938,
+            "samePrimitive": 118671,
+            "matched": 118671
+          },
+          {
+            "eligible": 119940,
+            "inside": 119940,
+            "samePrimitive": 118634,
+            "matched": 118634
+          },
+          {
+            "eligible": 119941,
+            "inside": 119941,
+            "samePrimitive": 118732,
+            "matched": 118732
+          },
+          {
+            "eligible": 119942,
+            "inside": 119942,
+            "samePrimitive": 118764,
+            "matched": 118764
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.12137307226657867,
+          "p95": 0.43246743083000183,
+          "p99": 0.6023280620574951
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0007794583216309547,
+          "p95": 0.001995048951357603,
+          "p99": 0.0031341335270553827
+        }
+      },
+      "near-low-no-normal-mips": {
+        "eligible": 479761,
+        "matched": 474801,
+        "perTransition": [
+          {
+            "eligible": 119938,
+            "inside": 119938,
+            "samePrimitive": 118671,
+            "matched": 118671
+          },
+          {
+            "eligible": 119940,
+            "inside": 119940,
+            "samePrimitive": 118634,
+            "matched": 118634
+          },
+          {
+            "eligible": 119941,
+            "inside": 119941,
+            "samePrimitive": 118732,
+            "matched": 118732
+          },
+          {
+            "eligible": 119942,
+            "inside": 119942,
+            "samePrimitive": 118764,
+            "matched": 118764
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.13680024445056915,
+          "p95": 0.44879502058029175,
+          "p99": 0.7574592232704163
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0007876305026002228,
+          "p95": 0.0020088322926312685,
+          "p99": 0.0031778940465301275
+        }
+      },
+      "near-low-moments": {
+        "eligible": 479761,
+        "matched": 474801,
+        "perTransition": [
+          {
+            "eligible": 119938,
+            "inside": 119938,
+            "samePrimitive": 118671,
+            "matched": 118671
+          },
+          {
+            "eligible": 119940,
+            "inside": 119940,
+            "samePrimitive": 118634,
+            "matched": 118634
+          },
+          {
+            "eligible": 119941,
+            "inside": 119941,
+            "samePrimitive": 118732,
+            "matched": 118732
+          },
+          {
+            "eligible": 119942,
+            "inside": 119942,
+            "samePrimitive": 118764,
+            "matched": 118764
+          }
+        ],
+        "normalChangeDegrees": {
+          "mean": 0.1212475597858429,
+          "p95": 0.43210679292678833,
+          "p99": 0.6016199588775635
+        },
+        "linearRenderedColorChange": {
+          "mean": 0.0007797839934937656,
+          "p95": 0.001994060818105936,
+          "p99": 0.003134318394586444
+        }
+      }
+    },
+    "shared": {
+      "near-low-mips": {
+        "pixels": 464018,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 116046,
+            "mean": 0.11906925588846207,
+            "p95": 0.4124067425727844,
+            "p99": 0.5910967588424683
+          },
+          {
+            "pixels": 115878,
+            "mean": 0.11803256720304489,
+            "p95": 0.4110122323036194,
+            "p99": 0.588487446308136
+          },
+          {
+            "pixels": 116022,
+            "mean": 0.11864481121301651,
+            "p95": 0.4110937714576721,
+            "p99": 0.5866828560829163
+          },
+          {
+            "pixels": 116072,
+            "mean": 0.11883073300123215,
+            "p95": 0.41201916337013245,
+            "p99": 0.5872180461883545
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.11864457279443741,
+          "p95": 0.4116448760032654,
+          "p99": 0.5886892676353455
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.000535615487024188,
+          "p95": 0.0015856981044635177,
+          "p99": 0.0024739885702729225
+        },
+        "normalSpatialDegrees": {
+          "mean": 1.55051851272583,
+          "p95": 6.10876989364624,
+          "p99": 13.397360801696777
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.008799757808446884,
+          "p95": 0.03266657888889313,
+          "p99": 0.05703660473227501
+        }
+      },
+      "near-low-no-normal-mips": {
+        "pixels": 464018,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 116046,
+            "mean": 0.12383601069450378,
+            "p95": 0.41943758726119995,
+            "p99": 0.6541867256164551
+          },
+          {
+            "pixels": 115878,
+            "mean": 0.1232261136174202,
+            "p95": 0.41782236099243164,
+            "p99": 0.6590481400489807
+          },
+          {
+            "pixels": 116022,
+            "mean": 0.12360049784183502,
+            "p95": 0.4178732633590698,
+            "p99": 0.6537635326385498
+          },
+          {
+            "pixels": 116072,
+            "mean": 0.12383107095956802,
+            "p95": 0.4185515344142914,
+            "p99": 0.6545413732528687
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.12362357974052429,
+          "p95": 0.4183990955352783,
+          "p99": 0.6552767157554626
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.0005377341294661164,
+          "p95": 0.0015916054835543036,
+          "p99": 0.0024974667467176914
+        },
+        "normalSpatialDegrees": {
+          "mean": 1.3168675899505615,
+          "p95": 5.39565896987915,
+          "p99": 13.049442291259766
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.00872793234884739,
+          "p95": 0.03251442685723305,
+          "p99": 0.056918609887361526
+        }
+      },
+      "near-low-moments": {
+        "pixels": 464018,
+        "perTransitionNormalResidualDegrees": [
+          {
+            "pixels": 116046,
+            "mean": 0.11891888082027435,
+            "p95": 0.4123893976211548,
+            "p99": 0.590688169002533
+          },
+          {
+            "pixels": 115878,
+            "mean": 0.11778192222118378,
+            "p95": 0.41094669699668884,
+            "p99": 0.5866274237632751
+          },
+          {
+            "pixels": 116022,
+            "mean": 0.11861925572156906,
+            "p95": 0.4107533395290375,
+            "p99": 0.5840244293212891
+          },
+          {
+            "pixels": 116072,
+            "mean": 0.11888758093118668,
+            "p95": 0.4122077524662018,
+            "p99": 0.5874904990196228
+          }
+        ],
+        "normalTemporalResidualDegrees": {
+          "mean": 0.11855220049619675,
+          "p95": 0.4116005599498749,
+          "p99": 0.5868182182312012
+        },
+        "linearRenderedColorTemporalResidual": {
+          "mean": 0.0005355319590307772,
+          "p95": 0.0015835699159651995,
+          "p99": 0.00247542979195714
+        },
+        "normalSpatialDegrees": {
+          "mean": 1.5467652082443237,
+          "p95": 6.09161901473999,
+          "p99": 13.358170509338379
+        },
+        "linearRenderedColorSpatial": {
+          "mean": 0.008798404596745968,
+          "p95": 0.03268523886799812,
+          "p99": 0.057033006101846695
+        }
+      }
+    },
+    "limit": "Mode-5 color includes lighting and view-dependent specular; visibility is matched within each mesh, then high/low depth at the starting pixel. Five tiny yaw steps and one light remain a diagnostic, not representative Beauty acceptance."
+  },
+  "limit": "Normal-length roughness widening is an opt-in GGX approximation; these micro-orbits are not scene Beauty acceptance."
+}

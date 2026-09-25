@@ -1,0 +1,13 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 1: Playground.NormalBake
+1/1 Test #1: Playground.NormalBake ............***Failed    0.04 sec
+base RGB normals are unitized before accumulating their first moment
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.06 sec
+
+The following tests FAILED:
+	  1 - Playground.NormalBake (Failed)
+Errors while running CTest

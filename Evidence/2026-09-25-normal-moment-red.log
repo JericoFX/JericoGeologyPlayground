@@ -1,0 +1,7 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  NormalBake.cpp
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  NormalBakeTests.cpp
+NormalBakeTests.obj : error LNK2019: símbolo externo "class std::vector<class std::vector<unsigned char,class std::allocator<unsigned char> >,class std::allocator<class std::vector<unsigned char,class std::allocator<unsigned char> > > > __cdecl Playground::buildNormalMomentMips(class std::vector<unsigned char,class std::allocator<unsigned char> > const &,unsigned int,unsigned int)" (?buildNormalMomentMips@Playground@@YA?AV?$vector@V?$vector@EV?$allocator@E@std@@@std@@V?$allocator@V?$vector@EV?$allocator@E@std@@@std@@@2@@std@@AEBV?$vector@EV?$allocator@E@std@@@3@II@Z) sin resolver al que se hace referencia en la función main [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]
+F:\JericoGeologyPlayground\build\Release\PlaygroundNormalBakeTests.exe : fatal error LNK1120: 1 externos sin resolver [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]

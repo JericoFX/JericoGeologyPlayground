@@ -143,7 +143,8 @@ def surface_delta(first: dict, second: dict, camera0: dict, camera1: dict) -> di
 
 def audit(root: Path, near: bool = False) -> dict:
     proof = json.loads((root / "rock-temporal-proof.json").read_text())
-    variants = VARIANTS + tuple(proof.get("normalMipBiasVariants", {}))
+    variants = (VARIANTS + tuple(proof.get("normalMipBiasVariants", {})) +
+                tuple(proof.get("normalMomentVariants", ())))
     if near:
         variants = tuple("near-" + variant for variant in variants)
     high_name = variants[0]

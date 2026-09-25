@@ -39,12 +39,66 @@ int main()
                 "bake returns texture and target corner UVs");
         auto automaticSettings = settings;
         automaticSettings.automaticUv = true;
+        auto invalidMoments = settings;
+        invalidMoments.normalMomentMips = true;
+        rejects([&] { bakeNormals(high, low, invalidMoments); },
+                "moment mips require an automatic UV atlas with a defined mip chain");
         auto automaticFlat = bakeNormals(high, low, automaticSettings);
         require(automaticFlat.normalMips.size() == 3 &&
                     automaticFlat.normalMips[0].size() == 64 * 64 * 4 &&
                     automaticFlat.normalMips[1].size() == 32 * 32 * 4 &&
                     automaticFlat.normalMips[2].size() == 16 * 16 * 4,
                 "automatic UV normal bake produces the three requested filtered mip levels");
+        std::vector<std::uint8_t> normalBlock(4 * 4 * 4);
+        auto paint = [&](unsigned x, unsigned y, std::uint8_t nx, std::uint8_t nz)
+        {
+            const auto at = (y * 4 + x) * 4;
+            normalBlock[at] = nx;
+            normalBlock[at + 1] = 128;
+            normalBlock[at + 2] = nz;
+            normalBlock[at + 3] = 255;
+        };
+        for (unsigned y = 0; y < 2; ++y)
+            for (unsigned x = 0; x < 2; ++x)
+            {
+                paint(x, y, x ? 37 : 218, 218);
+                paint(x + 2, y, 128, 255);
+            }
+        const auto moments = buildNormalMomentMips(normalBlock, 4, 2);
+        require(moments.size() == 1 && moments[0].size() == 2 * 2 * 4,
+                "normal moments retain the requested mip dimensions");
+        require(std::abs(int(moments[0][0]) - 128) <= 1 &&
+                    std::abs(int(moments[0][2]) - 218) <= 1 && moments[0][3] == 255 &&
+                    moments[0][4 + 2] == 255 && moments[0][4 + 3] == 255 &&
+                    moments[0][8 + 3] == 0,
+                "mixed normals retain cosine-length variance, flat and empty texels keep their coverage");
+        std::vector<std::uint8_t> roundedBlock(4 * 4 * 4);
+        for (std::size_t pixel = 0; pixel < roundedBlock.size(); pixel += 4)
+        {
+            roundedBlock[pixel] = roundedBlock[pixel + 1] = roundedBlock[pixel + 2] = 255;
+            roundedBlock[pixel + 3] = 255;
+        }
+        const auto roundedMoments = buildNormalMomentMips(roundedBlock, 4, 2);
+        require(roundedMoments[0][0] < 210 && roundedMoments[0][1] < 210 &&
+                    roundedMoments[0][2] < 210,
+                "base RGB normals are unitized before accumulating their first moment");
+        std::vector<std::uint8_t> partialBlock(4 * 4 * 4);
+        auto partialPaint = [&](unsigned x, unsigned y, std::uint8_t nx, std::uint8_t nz)
+        {
+            const auto at = (y * 4 + x) * 4;
+            partialBlock[at] = nx;
+            partialBlock[at + 1] = 128;
+            partialBlock[at + 2] = nz;
+            partialBlock[at + 3] = 255;
+        };
+        partialPaint(0, 0, 255, 128);
+        for (unsigned y = 0; y < 2; ++y)
+            for (unsigned x = 2; x < 4; ++x)
+                partialPaint(x, y, 128, 255);
+        const auto partialMoments = buildNormalMomentMips(partialBlock, 4, 3);
+        require(std::abs(int(partialMoments[1][0]) - 153) <= 2 &&
+                    std::abs(int(partialMoments[1][2]) - 230) <= 2,
+                "second-level moments weight one covered texel against four covered texels");
         require(automaticFlat.cornerUV != flat.cornerUV &&
                     automaticFlat.samples > flat.samples && automaticFlat.misses == 0 &&
                     automaticFlat.automaticUvIslandCount == 1 &&
@@ -99,6 +153,23 @@ int main()
         auto rawSettings = automaticSettings;
         rawSettings.projection = NormalProjection::ClosestSurface;
         auto rawBake = bakeNormals(roughPlane, roughPlane, rawSettings);
+        auto momentSettings = rawSettings;
+        momentSettings.normalMomentMips = true;
+        const auto momentBake = bakeNormals(roughPlane, roughPlane, momentSettings);
+        require(momentBake.rgba == rawBake.rgba &&
+                    momentBake.normalMips == rawBake.normalMips &&
+                    momentBake.ambientRgba == rawBake.ambientRgba &&
+                    momentBake.normalMomentMips.size() == rawBake.normalMips.size(),
+                "opt-in normal moments preserve every existing base and normalized mip");
+        for (std::size_t level = 0; level < momentBake.normalMomentMips.size(); ++level)
+        {
+            const auto &moment = momentBake.normalMomentMips[level];
+            const auto &normal = momentBake.normalMips[level];
+            require(moment.size() == normal.size(), "moment mip dimensions match normal mip");
+            for (std::size_t pixel = 0; pixel < moment.size(); pixel += 4)
+                require(moment[pixel + 3] == normal[pixel + 3],
+                        "moment mips preserve normal atlas coverage");
+        }
         auto relaxedSettings = rawSettings;
         relaxedSettings.curvatureRelaxation = 0.5;
         auto relaxedBake = bakeNormals(roughPlane, roughPlane, relaxedSettings);

@@ -40,6 +40,7 @@ struct NormalBakeSettings
     std::vector<NormalBakeChart> chartLayout;
     bool automaticUv{false};
     unsigned automaticUvMipCount{4};
+    bool normalMomentMips{false};
 };
 struct NormalBake
 {
@@ -53,6 +54,7 @@ struct NormalBake
     std::vector<Vec3d> cornerTangents, cornerBitangents;
     std::vector<std::uint8_t> rgba;
     std::vector<std::vector<std::uint8_t>> normalMips;
+    std::vector<std::vector<std::uint8_t>> normalMomentMips;
     std::vector<std::uint8_t> ambientRgba, contactRgba, curvatureRgba, cavityRgba;
     std::vector<std::uint8_t> edgeRgba, wireRgba, thicknessRgba, regionRgba, heightRgba;
     SpecialistMipChains specialistMips;
@@ -68,5 +70,7 @@ struct NormalBake
 };
 NormalBake bakeNormals(const MeshResult &high, const MeshResult &low, const NormalBakeSettings &settings = {},
                        const Jerico::CancellationToken *cancel = nullptr);
+std::vector<std::vector<std::uint8_t>> buildNormalMomentMips(
+    const std::vector<std::uint8_t> &rgba, unsigned resolution, unsigned mipCount);
 void exportNormalBake(const NormalBake &bake, const std::filesystem::path &directory);
 } // namespace Playground

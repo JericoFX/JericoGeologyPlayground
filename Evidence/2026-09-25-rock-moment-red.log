@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\RockMomentAudit.py", line 65, in <module>
+    result = verify(Path(sys.argv[1]), Path(sys.argv[2]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\RockMomentAudit.py", line 20, in verify
+    assert proof["normalMomentVariants"] == ["low-moments"]
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'normalMomentVariants'

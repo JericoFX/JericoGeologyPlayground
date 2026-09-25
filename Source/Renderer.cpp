@@ -73,8 +73,10 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
  }
  if(Target.w>3.5 && Target.w<4.5){float v=NormalMap.Sample(NormalMap_sampler,float2(input.UV.x,1-input.UV.y)).r;return float4(v,v,v,1);}
  float3 n=normalize(input.Normal);
+ float normalLength=1;
  if(Range.z>0.5) {
   float3 mapped=NormalMap.SampleBias(NormalMap_sampler,float2(input.UV.x,1-input.UV.y),NormalBias.x).xyz*2-1;
+  normalLength=saturate(length(mapped));
   float3 t=normalize(input.Tangent-n*dot(input.Tangent,n));
   float3 b=cross(n,t)*sign(dot(cross(n,t),input.Bitangent));
   n=normalize(t*mapped.x+b*mapped.y+n*mapped.z);
@@ -106,6 +108,8 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
   float nl=saturate(dot(n,light)),nv=saturate(dot(n,viewDirection));
   float nh=saturate(dot(n,halfVector)),vh=saturate(dot(viewDirection,halfVector));
   float roughness=lerp(.82,.68,edge*.35);
+  if(NormalBias.y>0.5 && Range.z>0.5)
+   roughness=sqrt(saturate(roughness*roughness+max(0,1-normalLength)));
   float a=roughness*roughness,a2=a*a;
   float d=a2/(3.14159265*pow(nh*nh*(a2-1)+1,2)+.00001);
   float k=pow(roughness+1,2)/8;
@@ -204,6 +208,7 @@ struct Renderer::Impl
     std::size_t bytes{}, meshBytes{};
     float low{}, high{1};
     float normalMipBias{};
+    bool normalMomentMode{};
     RefCntAutoPtr<IShader> makeShader(const char *source, const char *entry, SHADER_TYPE type)
     {
         ShaderCreateInfo ci;
@@ -346,7 +351,8 @@ void Renderer::begin(unsigned width, unsigned height)
 }
 void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
                       const std::vector<std::uint8_t> *diagnosticMap,
-                      const std::vector<std::vector<std::uint8_t>> *diagnosticMips)
+                      const std::vector<std::vector<std::uint8_t>> *diagnosticMips,
+                      bool useNormalMoments)
 {
     auto &r = *impl;
     std::vector<Vertex> vertices;
@@ -412,7 +418,10 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     texture.Name = "Playground baked texture";
     texture.Type = RESOURCE_DIM_TEX_2D;
     texture.Width = texture.Height = bake ? bake->resolution : 1;
-    const auto *mips = diagnosticMap ? diagnosticMips : bake ? &bake->normalMips : nullptr;
+    if (useNormalMoments && (!bake || diagnosticMap || bake->normalMomentMips.empty()))
+        throw std::runtime_error("Normal moment mode requires moment mips in the bake");
+    const auto *mips = diagnosticMap ? diagnosticMips : bake ?
+        (useNormalMoments ? &bake->normalMomentMips : &bake->normalMips) : nullptr;
     std::size_t maxMipCount = 0;
     for (auto dimension = texture.Width; dimension > 1; dimension >>= 1)
         ++maxMipCount;
@@ -441,6 +450,7 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     r.binding->GetVariableByName(SHADER_TYPE_PIXEL, "NormalMap")
         ->Set(r.normalMap->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
     r.baked = bake != nullptr && diagnosticMap == nullptr;
+    r.normalMomentMode = useNormalMoments;
     r.material = false;
     for (Uint32 level = 0; level < texture.MipLevels; ++level)
         r.bytes += std::size_t(texture.Width >> level) * (texture.Height >> level) * 4;
@@ -572,7 +582,7 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
         *cb = Constants{{camera.yaw, camera.pitch, camera.distance, float(width) / height},
                         {camera.target[0], camera.target[1], camera.target[2], float(mode)},
                         {r.low, r.high, r.baked ? 1.0f : 0.0f, float(r.materialAppearance)},
-                        {r.normalMipBias, 0.0f, 0.0f, 0.0f}};
+                        {r.normalMipBias, r.normalMomentMode ? 1.0f : 0.0f, 0.0f, 0.0f}};
         cb.Unmap();
         auto *pso = (mode == 2 && r.wire) ? r.wire.RawPtr() : r.solid.RawPtr();
         r.context->SetPipelineState(pso);

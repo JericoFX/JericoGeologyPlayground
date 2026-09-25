@@ -1,0 +1,43 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "backfaces": 0,
+  "bakeCpuMs": 9431.354,
+  "cameraDistance": 11.600000381469727,
+  "cameraPitch": -0.2800000011920929,
+  "cameraTarget": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "cameraYaw": 0.5,
+  "depthEncoding": "linear-view-24-bit-rgb",
+  "depthEncodingMaxMeters": 100.0,
+  "family": 11,
+  "highHash": 7747384389557885801,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "lowHash": 13640440784242252497,
+  "mippedBufferBytes": 128640340,
+  "misses": 0,
+  "nearCameraDistance": 5.800000190734863,
+  "normalMipLevels": 4,
+  "normalMomentMipLevels": 4,
+  "normalMomentVariants": [
+    "low-moments"
+  ],
+  "primitiveEncoding": "triangle-index-plus-one-24-bit-rgb",
+  "projectionScale": 2.4,
+  "reprojectionVersion": 1,
+  "samples": 1818692,
+  "textureResolution": 2048,
+  "unmippedBufferBytes": 123135316,
+  "yawOffsets": [
+    -0.0010000000474974513,
+    -0.0005000000237487257,
+    0.0,
+    0.0005000000237487257,
+    0.0010000000474974513
+  ]
+}
