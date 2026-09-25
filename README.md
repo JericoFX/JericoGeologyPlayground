@@ -1,6 +1,6 @@
 # Jerico Geology Playground
 
-Laboratorio independiente en C++20, Diligent/Vulkan e ImGui para experimentar con las operaciones identificadas en la review de addons de Blender. El [Goal local](GOAL.md) enlaza la [copia verificable de 170 documentos de referencia del Engine](docs/engine-reference-2026-09-24/README.md) y su manifiesto SHA-256; el Engine se mantiene en lectura y Blender no se ejecuta.
+Laboratorio independiente en C++20, Diligent/Vulkan e ImGui para experimentar con las operaciones identificadas en la review de addons de Blender. El [Goal local](GOAL.md) enlaza la [copia verificable de 280 documentos de referencia del Engine](docs/engine-reference-2026-09-24/README.md) y su manifiesto SHA-256; el Engine se mantiene en lectura y Blender no se ejecuta.
 
 ## Abrir
 

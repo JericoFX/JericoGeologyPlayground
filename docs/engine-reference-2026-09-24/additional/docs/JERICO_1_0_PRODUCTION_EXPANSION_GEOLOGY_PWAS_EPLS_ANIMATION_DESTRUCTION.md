@@ -1,0 +1,1163 @@
+# JericoEngine 1.0 — Production Expansion: Geology, PWAS, EPLS, Animation and Destruction
+
+**Status:** Proposed production-direction document  
+**Purpose:** Consolidate the current JericoEngine 1.0 production scope around the systems that are already part of the engine foundation, while strengthening the integration between Geology, PWAS, EPLS, Animation, Sequencer, Jolt and asset cooking.
+
+---
+
+# 0. Executive decision
+
+JericoEngine 1.0 must not ship with its major authoring systems existing only as disconnected proof-of-concept islands.
+
+The following families are already part of the JericoEngine 1.0 product boundary and must reach a coherent, productive, connected state before the 1.0 production freeze:
+
+- JericoBSP;
+- Terrain;
+- Geology / volumetric structural authoring;
+- Generate Game Mesh;
+- PWAS;
+- EPLS;
+- Animation;
+- IK / rigging;
+- Sequencer;
+- Jolt physics;
+- breakable / destruction integration;
+- asset import, cook and runtime formats.
+
+The goal is not to endlessly enlarge 1.0.
+
+The goal is to ensure that systems already admitted by 1.0 form one usable production pipeline.
+
+The high-level target becomes:
+
+```text
+BSP / Terrain / Imported Mesh
+            ↓
+         Geology
+            ↓
+   Generate Game Mesh
+            ↓
+   Semantic / Derived Fields
+       ↓              ↓
+     PWAS            EPLS
+       ↓              ↓
+   placed geometry   surface history
+            \        /
+             \      /
+              World
+                ↓
+          Animation / Sequencer
+                ↓
+              Jolt
+                ↓
+        Breakables / Debris
+                ↓
+            Cook / .epak
+```
+
+---
+
+# 1. Important scope rule
+
+Do not interpret this document as permission to create unrelated new engine families.
+
+The rule is:
+
+```text
+Already admitted system
+    + missing production integration
+    + missing usability
+    + missing interoperability
+    = valid 1.0 closure work
+```
+
+But:
+
+```text
+completely new top-level runtime family
+or unrelated research feature
+    = post-1.0 unless explicitly admitted
+```
+
+Every added capability must close a real production loop.
+
+No placeholder systems.
+
+No "will integrate later".
+
+No second parallel authority for a problem already owned by an existing system.
+
+---
+
+# 2. Geology must be a first-class 1.0 production system
+
+Geology is no longer a toy rock generator.
+
+It must become the reusable structural geometry system capable of consuming:
+
+- JericoBSP regions;
+- Terrain regions where volumetric replacement is required;
+- explicit procedural volumes;
+- splines;
+- imported meshes when the admitted bridge exists.
+
+The intended authored-space workflow remains:
+
+```text
+Designer BSP / Gameplay Space
+            ↓
+Geology Source Region
+            ↓
+Structural Operators
+            ↓
+Weathering / Carving
+            ↓
+Controlled Detail
+            ↓
+Surface Extraction
+            ↓
+Generate Game Mesh
+```
+
+The designer authors the space.
+
+Jerico authors the geology around that space.
+
+---
+
+# 3. Geology output must be richer than `Mesh generate()`
+
+The final result of Geology must not be only a triangle mesh.
+
+Conceptually, Geology should be capable of producing:
+
+```text
+GeologyResult
+{
+    final geometry
+    stable regions / chunks
+    source region identity
+    material / structural classifications
+
+    slope
+    surface normal
+    curvature
+    concavity
+    convexity
+    cavity
+    fracture influence
+    strata / material class
+    durability
+    erosion potential
+    debris potential
+    talus potential
+
+    dirty bounds
+    collision dirty bounds
+    navigation dirty bounds
+    deterministic recipe identity
+    provenance
+}
+```
+
+Exact names must follow repository reality.
+
+Do not create a duplicate environmental-field system if an existing Jerico field abstraction already owns these channels.
+
+---
+
+# 4. Generate Game Mesh must segment Geology intelligently
+
+Do not generate one enormous monolithic cave mesh whenever the source region is large.
+
+The final geometry path should support stable chunk/region partitioning suitable for:
+
+- culling;
+- LOD;
+- streaming;
+- local recook;
+- local collision;
+- navigation invalidation;
+- PWAS;
+- EPLS;
+- destruction;
+- source provenance.
+
+Conceptual result:
+
+```text
+Tunnel_A
+│
+├── GeoChunk_000
+│   ├── stable source identity
+│   ├── surface classification
+│   ├── geology fields
+│   ├── material regions
+│   ├── collision
+│   └── LOD / streaming data
+│
+├── GeoChunk_001
+├── GeoChunk_002
+└── GeoChunk_003
+```
+
+Chunking must preserve seams and semantic continuity.
+
+Never split blindly every fixed number of meters if that destroys important boundaries.
+
+---
+
+# 5. PWAS must be productive in 1.0
+
+PWAS is the single procedural object-placement / assembly authority.
+
+For 1.0 it must be strong enough to consume real fields generated by Terrain, Geology, Water and EPLS.
+
+PWAS should support practical field-driven placement such as:
+
+```text
+Place SmallRockSet
+
+Conditions:
+    slope > threshold
+    concavity > threshold
+    debrisPotential > threshold
+    distanceToFloor < threshold
+```
+
+or:
+
+```text
+Place CaveDebris
+
+Inputs:
+    fractureInfluence
+    rockfallPotential
+    colluvium / talus field
+    floor orientation
+```
+
+Required direction:
+
+- deterministic placement;
+- partial regeneration;
+- include/exclude masks;
+- NoGenerate;
+- manual Lock / Remove;
+- preservation of authored hero/manual content;
+- stable instance provenance;
+- field-driven rules;
+- preview / diff / apply / undo;
+- source-free cooked output.
+
+---
+
+# 6. PWAS provenance is a high-value 1.0 feature
+
+Jerico should be able to answer:
+
+```text
+Why is this rock here?
+```
+
+Example:
+
+```text
+Generated by: CaveDebrisPreset
+Rule: TalusRock
+Source region: Tunnel_A / GeoChunk_014
+
+Slope: 0.73
+Concavity: 0.62
+FractureInfluence: 0.81
+DebrisPotential: 0.94
+Seed: 0x...
+Locked: false
+```
+
+This is not cosmetic.
+
+Procedural systems become difficult to debug without explainability.
+
+PWAS should preserve enough stable provenance to explain generated instances.
+
+---
+
+# 7. EPLS must be productive in 1.0
+
+EPLS remains the environmental history / surface-state authority.
+
+EPLS should consume fields from:
+
+- Geology;
+- Terrain;
+- Water;
+- PWAS;
+- materials;
+- environment.
+
+Examples:
+
+```text
+Moisture + sheltered concavity
+    → wetness / moss tendency
+
+Water proximity + metal
+    → corrosion tendency
+
+Smoke exposure + ceiling orientation
+    → soot
+
+Fracture + moisture
+    → darker wet fracture treatment
+
+Traffic / repeated contact
+    → dirt / mud / wear
+```
+
+EPLS may output:
+
+- material parameter changes;
+- masks;
+- decals;
+- vertex / surface data;
+- environmental classifications.
+
+---
+
+# 8. EPLS must never become a second placement system
+
+Hard rule:
+
+```text
+EPLS decides environmental state.
+PWAS places physical objects.
+```
+
+Example:
+
+```text
+Geology
+    ↓
+Cavity / moisture / temperature fields
+    ↓
+EPLS
+    ↓
+FungusSuitability = 0.93
+    ↓
+PWAS
+    ↓
+places physical mushrooms
+```
+
+Other examples:
+
+```text
+Frost field
+    → EPLS
+    → physical icicle request
+    → PWAS placement
+```
+
+```text
+Rockfall / debris potential
+    → EPLS/PWAS context
+    → PWAS places small debris
+```
+
+No duplicated object-scatter runtime inside EPLS.
+
+---
+
+# 9. Geology → PWAS → EPLS is a mandatory integration path
+
+The production chain should conceptually support:
+
+```text
+BSP
+ ↓
+Geology
+ ↓
+Game Mesh + Structural / Environmental Fields
+ ↓
+PWAS
+ ↓
+placed rocks / debris / vegetation / props
+ ↓
+EPLS
+ ↓
+wetness / dirt / frost / moss / rust / soot / damage
+```
+
+The systems communicate through Jerico-owned typed data.
+
+No subsystem reaches directly into another subsystem's private implementation.
+
+---
+
+# 10. Animation must be production-capable in 1.0
+
+Jerico 1.0 already admits:
+
+- skeleton runtime;
+- animation runtime;
+- blending;
+- IK / rigging paths;
+- Sequencer;
+- cameras;
+- typed events.
+
+Therefore 1.0 should close with a practical animation workflow rather than only minimal foundations.
+
+High-value 1.0 capabilities:
+
+- robust animation import;
+- retarget workflow;
+- root-motion extraction and inspection;
+- animation layers;
+- additive animation;
+- bone masks / bone filters;
+- contact / foot IK;
+- hand IK / object targets;
+- constraints;
+- animation events;
+- pose preview;
+- runtime animation compression / cook;
+- Sequencer integration;
+- first-person and third-person compatible boundaries.
+
+The goal is not Motion Matching in 1.0.
+
+The goal is to make the conventional animation stack genuinely productive.
+
+---
+
+# 11. Cascadeur / external animation workflow
+
+Jerico should remain engine-authoritative.
+
+An external animation tool may produce source animation, but Jerico owns:
+
+- imported canonical skeleton data;
+- canonical animation data;
+- retarget;
+- root motion;
+- contacts;
+- events;
+- runtime cook.
+
+Conceptual path:
+
+```text
+Cascadeur / DCC
+      ↓
+FBX / glTF / admitted interchange
+      ↓
+Jerico Import
+      ↓
+Retarget
+      ↓
+Root Motion
+      ↓
+Contact / IK cleanup
+      ↓
+.ranim
+```
+
+Do not require a dedicated Cascadeur bridge for 1.0 unless real production workflow proves it necessary.
+
+---
+
+# 12. Sequencer should be strong enough for real Penumbra scenes
+
+1.0 should be capable of authoring a real cinematic/gameplay sequence using the same generic systems.
+
+Example:
+
+```text
+Sequence
+├── Camera
+├── Character
+├── Animation
+├── Audio / Dialogue
+├── VFX
+├── Material / Environment Property
+└── Gameplay Event
+```
+
+High-value production requirements:
+
+- camera tracks;
+- character bindings;
+- animation clips/layers;
+- typed events;
+- audio synchronization;
+- VFX synchronization;
+- material/environment tracks;
+- scrub/preview;
+- safe cancellation and restoration.
+
+Advanced Shot/Take editorial systems may remain later work.
+
+---
+
+# 13. Destruction should become a first-class admitted 1.0 integration
+
+Jerico 1.0 already admits:
+
+- destruction chunks in Generate Game Mesh where appropriate;
+- breakable / destruction integration in Jolt.
+
+The preferred architecture is not:
+
+```text
+Jolt magically fractures arbitrary meshes
+```
+
+The preferred architecture is:
+
+```text
+Jerico decides how geometry breaks.
+Jolt simulates how broken pieces move.
+```
+
+---
+
+# 14. Jerico Structural Geometry Math
+
+Geology and destruction should reuse the same structural mathematics whenever possible.
+
+Do not create:
+
+```text
+GeologyFractureMath
++
+DestructionFractureMath
+```
+
+as unrelated systems.
+
+Prefer:
+
+```text
+Jerico Structural Geometry Math
+            ↓
+      ┌─────┴─────┐
+      ↓           ↓
+   Geology    Destruction
+```
+
+Reusable structural concepts may include:
+
+- JointSet;
+- FractureCells;
+- anisotropic Voronoi;
+- DirectedCrack;
+- implicit blocks;
+- durability;
+- structural masks;
+- adjacency / region identity.
+
+---
+
+# 15. Destruction authoring pipeline
+
+Conceptual production path:
+
+```text
+Mesh / BSP / Geology
+        ↓
+Structural analysis / fracture authoring
+        ↓
+JointSet
+FractureCells
+DirectedCrack
+Voronoi
+Durability
+        ↓
+Generate destruction chunks
+        ↓
+Build adjacency / bond graph
+        ↓
+Generate collision
+        ↓
+Cook destruction data
+        ↓
+Runtime
+        ↓
+Jolt
+```
+
+The exact fracture method depends on the asset.
+
+---
+
+# 16. Bond graph
+
+Pre-fractured destruction should know which chunks are connected.
+
+Conceptual example:
+
+```text
+Chunk_001 ↔ Chunk_002  strength = 0.80
+Chunk_002 ↔ Chunk_003  strength = 0.25
+Chunk_003 ↔ Chunk_004  strength = 0.70
+```
+
+Impact flow:
+
+```text
+Explosion / impact
+        ↓
+evaluate force / stress against bonds
+        ↓
+break admitted bonds
+        ↓
+separated chunks become independent bodies
+        ↓
+Jolt simulates movement
+```
+
+This produces interactive destruction without requiring arbitrary runtime remeshing every frame.
+
+---
+
+# 17. Durability should connect Geology and Destruction
+
+Geology P1 introduces durability as a first-class field.
+
+That same field can contribute to destruction resistance.
+
+Example:
+
+```text
+Strata
+Fracture Proximity
+Material
+Painted Structural Mask
+        ↓
+Durability Graph
+        ↓
+ ┌───────────────┬─────────────────┐
+ ↓               ↓
+Weathering    Bond Strength
+```
+
+This makes the same structural reality influence:
+
+- erosion;
+- rockfall;
+- cracks;
+- destruction;
+- material response.
+
+Do not use unrelated random strength values when an existing structural field can provide meaningful input.
+
+---
+
+# 18. Rockfall integration
+
+Rockfall is a natural bridge between Geology and runtime physics.
+
+Conceptual flow:
+
+```text
+Weathering
+    ↓
+support weakened
+    ↓
+unsupported component detected
+    ↓
+Rockfall
+    ↓
+large fragment becomes Jolt rigid body
+```
+
+This may exist as:
+
+- offline authoring / cook;
+- triggered gameplay state;
+- bounded runtime activation.
+
+Do not require full continuous structural simulation for 1.0.
+
+---
+
+# 19. Colluvium integration
+
+Material that falls should not disappear conceptually.
+
+Large fragments:
+
+```text
+Geology / Rockfall
+    ↓
+Jolt bodies
+```
+
+Small debris / gravel:
+
+```text
+Geology
+    ↓
+DebrisPotential / TalusPotential / Colluvium field
+    ↓
+PWAS
+    ↓
+small rocks / gravel / rubble placement
+```
+
+Surface aging:
+
+```text
+Colluvium / debris region
+    ↓
+EPLS
+    ↓
+dust / wetness / moss / dirt tendencies
+```
+
+This creates a coherent bridge:
+
+```text
+Geology
+→ Rockfall
+→ Jolt
+→ PWAS
+→ EPLS
+```
+
+---
+
+# 20. Imported mesh structural operators are important for destruction
+
+Imported meshes should eventually be able to consume structural operators.
+
+Example:
+
+```text
+ImportedBuilding.glb
+        ↓
+Imported Mesh Structural Bridge
+        ↓
+JointSet
+DirectedCrack
+Durability
+        ↓
+Destruction chunks
+        ↓
+Jolt
+```
+
+The same bridge also enables:
+
+```text
+Imported cliff
+    ↓
+cuts / cracks / weathering
+```
+
+Do not build two separate imported-mesh conversion systems if one structural bridge can support both Geology and destruction.
+
+---
+
+# 21. Alembic import should be treated as baked geometry animation, not runtime physics
+
+Alembic is useful for precomputed geometry-cache animation.
+
+Good use cases:
+
+- cinematic destruction;
+- large scripted collapse;
+- previs;
+- deterministic set pieces;
+- complex external DCC simulations;
+- geometry deformation that does not need gameplay-authoritative physics.
+
+Conceptual pipeline:
+
+```text
+Houdini / Blender / DCC
+        ↓
+Alembic (.abc)
+        ↓
+Jerico Import
+        ↓
+Canonical Geometry Cache
+        ↓
+Jerico cooked runtime format
+```
+
+The Jerico runtime should not use `.abc` directly as shipping truth.
+
+Alembic is a source/interchange format.
+
+---
+
+# 22. Two destruction modes
+
+Jerico should conceptually support two different destruction categories.
+
+## 22.1 Interactive destruction
+
+```text
+Prefractured chunks
+    ↓
+bond graph
+    ↓
+Jolt
+    ↓
+result depends on gameplay
+```
+
+Use for:
+
+- breakable walls;
+- crates;
+- destructible cover;
+- rockfall;
+- physics-driven collapse pieces.
+
+## 22.2 Baked destruction
+
+```text
+Alembic / geometry cache
+    ↓
+Jerico cache player
+    ↓
+deterministic playback
+```
+
+Use for:
+
+- cinematic building collapse;
+- scripted mine collapse;
+- large complex destruction;
+- non-interactive sequences.
+
+---
+
+# 23. Hybrid destruction
+
+Jerico should allow a future hybrid workflow:
+
+```text
+Baked collapse begins
+        ↓
+Alembic / geometry-cache animation
+        ↓
+at selected frame / event
+        ↓
+selected chunks become Jolt rigid bodies
+        ↓
+gameplay continues physically
+```
+
+This is highly useful for cinematic-to-gameplay transitions.
+
+It is not mandatory for the first destruction vertical.
+
+---
+
+# 24. Runtime physics boundary
+
+Jolt remains the single physics authority.
+
+Jolt should own:
+
+- rigid-body simulation;
+- collision;
+- constraints;
+- impulses;
+- sleeping;
+- debris body motion;
+- contact.
+
+Jerico structural authoring should own:
+
+- fracture pattern;
+- chunks;
+- bond graph;
+- durability;
+- break thresholds;
+- cook identity;
+- provenance.
+
+Do not duplicate Jolt physics.
+
+Do not require Jolt to become a geometry-fracture solver.
+
+---
+
+# 25. Minimum destruction 1.0 vertical
+
+Do not make destruction an infinite research project.
+
+A valid first production vertical is:
+
+```text
+1. Import or author a wall.
+2. Create a deterministic fracture pattern.
+3. Generate stable destruction chunks.
+4. Generate per-chunk collision.
+5. Build a simple bond graph.
+6. Cook destruction data.
+7. Load source-free runtime data.
+8. Apply a gameplay explosion / impulse.
+9. Break only bonds exceeding the admitted condition.
+10. Convert separated chunks into Jolt bodies.
+11. Simulate debris.
+12. Sleep / clean up according to policy.
+13. Preserve deterministic authoring identity.
+14. Provide debug visualization.
+```
+
+If this works end-to-end, destruction integration is real.
+
+Runtime arbitrary fracture can remain later research.
+
+---
+
+# 26. Minimum Alembic 1.0 vertical
+
+A narrow Alembic vertical may be admitted if production needs it:
+
+```text
+1. Import one Alembic geometry-cache asset.
+2. Convert it to Jerico canonical cache data.
+3. Preserve timing / frame information.
+4. Preview in JericoEditor.
+5. Bind playback to Sequencer.
+6. Cook to Jerico-owned runtime data.
+7. Ship without source `.abc`.
+```
+
+Do not attempt to support every Alembic feature in the first slice.
+
+---
+
+# 27. Editor requirements
+
+Before production freeze, the admitted workflows must be reachable through JericoEditor.
+
+Expected authoring areas:
+
+```text
+Geology
+    stack / inspector / gizmos / preview
+
+PWAS
+    rules / graph / field preview / provenance
+
+EPLS
+    environmental layers / masks / preview
+
+Animation
+    import / retarget / IK / layers / events
+
+Sequencer
+    camera / character / audio / VFX / events
+
+Destruction
+    fracture preview
+    chunks
+    bonds
+    collision
+    Jolt preview
+```
+
+No feature should be declared complete only because a standalone test executable can exercise it.
+
+---
+
+# 28. Shared "Why?" / provenance direction
+
+Procedural systems should increasingly be explainable.
+
+Examples:
+
+```text
+Why is this rock here?
+→ PWAS provenance
+
+Why is this surface wet?
+→ EPLS field/layer reason
+
+Why is this cavity here?
+→ Geology stage
+
+Why did this chunk break?
+→ destruction bond / force / durability
+
+Why is this asset rebuilding?
+→ asset dependency / cook reason
+```
+
+This should reuse common diagnostics/provenance infrastructure where practical.
+
+---
+
+# 29. Recommended 1.0 production chain
+
+```text
+                    WORLD AUTHORING
+
+JericoBSP / Terrain / Imported Mesh
+                ↓
+             Geology
+                ↓
+        Generate Game Mesh
+                ↓
+      chunks / regions / fields
+          ↓             ↓
+        PWAS           EPLS
+          ↓             ↓
+     physical props   surface state
+          \             /
+           \           /
+            WORLD RESULT
+
+                    CHARACTER
+
+External animation source
+        ↓
+Jerico Import / Retarget
+        ↓
+Animation / IK / Root Motion
+        ↓
+Sequencer / Gameplay
+
+                    PHYSICS
+
+Structural Geometry Math
+        ↓
+Destruction Chunks / Bonds
+        ↓
+Jolt
+
+                    SHIPPING
+
+Canonical assets
+        ↓
+Cook
+        ↓
+Jerico-owned runtime formats
+        ↓
+.epak
+```
+
+---
+
+# 30. What remains post-1.0
+
+Do not pull every possible future idea into the 1.0 finish line.
+
+Reasonable post-1.0 candidates include:
+
+- runtime arbitrary fracture/remeshing;
+- large-scale structural stress simulation;
+- full dynamic building collapse simulation;
+- Motion Matching if not necessary for the first production game;
+- advanced Shot/Take editorial workflow;
+- generalized live DCC bridges;
+- highly advanced destruction material solvers;
+- machine-learning-assisted authoring;
+- full world-history simulation.
+
+The 1.0 rule is:
+
+> close strong production loops, not every imaginable future system.
+
+---
+
+# 31. Proposed Definition of Done additions / emphasis
+
+Before declaring JericoEngine 1.0 Production Complete, verify:
+
+## Geology
+
+- structural operators are productive;
+- BSP/region workflow is usable;
+- generated geometry can become game mesh;
+- semantic/derived fields survive into downstream systems.
+
+## PWAS
+
+- field-driven placement works;
+- deterministic partial regeneration works;
+- manual locks/removes are preserved;
+- provenance can explain generated content.
+
+## EPLS
+
+- environmental layers consume real world/geology fields;
+- material/mask/decal outputs work;
+- physical-object requests route through PWAS.
+
+## Animation
+
+- imported animation can be retargeted;
+- root motion is inspectable;
+- IK/contact workflows are usable;
+- animation layers/bone masks are production-ready enough for the first game;
+- cooked runtime animation is source-free.
+
+## Sequencer
+
+- real camera/character/audio/VFX/gameplay sequences can be authored and cooked.
+
+## Destruction
+
+- one complete prefractured/Jolt vertical works;
+- destruction chunks are deterministic;
+- collision is generated;
+- bond breakage can activate Jolt rigid bodies;
+- source-free runtime data ships.
+
+## Alembic, if admitted
+
+- one geometry-cache asset can import, preview, sequence and cook;
+- runtime never requires source `.abc`.
+
+---
+
+# 32. Core architectural conclusion
+
+JericoEngine already has the foundations of a large engine.
+
+The next production step is not to create more isolated systems.
+
+The next step is to connect the existing authorities into coherent pipelines.
+
+The most important integration chains are:
+
+```text
+Geology
+    → Generate Game Mesh
+    → PWAS
+    → EPLS
+```
+
+```text
+Geology Structural Math
+    → Destruction
+    → Jolt
+```
+
+```text
+External Animation
+    → Jerico Animation
+    → IK / Retarget / Root Motion
+    → Sequencer
+```
+
+```text
+External Geometry Cache
+    → Jerico Import
+    → Sequencer
+    → Cooked Runtime Cache
+```
+
+The objective for 1.0 is therefore:
+
+> **A production-complete engine whose major systems already cooperate, so normal game development can begin without immediately reopening fundamental engine architecture.**

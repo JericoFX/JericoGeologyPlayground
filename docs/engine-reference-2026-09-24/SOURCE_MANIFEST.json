@@ -1174,5 +1174,509 @@
     "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\evidence\\reference-documents\\rockform_1.4.1.md",
     "sha256": "D95A1C12D9829804EE72E199879BAEA4AC09C9953A102543284B017EC880D252",
     "bytes": 40729
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_AUTHORED_MATERIAL_WITNESS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_AUTHORED_MATERIAL_WITNESS.md",
+    "sha256": "F5FFA94FCB5F98BA50D728CDEB483EF8F1424647D82534F0FD8BE2B216B6BDBC",
+    "bytes": 7864
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_DENSE_WORKING_MESH.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_DENSE_WORKING_MESH.md",
+    "sha256": "4376B41BABE1E0DE120956006812E6062799B99C610EE1BFE379412EEBF6B386",
+    "bytes": 81924
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_FOUR_REGION_TRIANGULATION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_FOUR_REGION_TRIANGULATION.md",
+    "sha256": "9B1EF174860FF7C8F76F5C393F2B7C9FC8E3CF87730D00A2A1D6981F020A03B7",
+    "bytes": 3914
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_HEIGHTMAP_REFERENCE_COMPARISON.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_HEIGHTMAP_REFERENCE_COMPARISON.md",
+    "sha256": "C15801BD8F1AE5CA5F061C2B3FDB504F261BAB6EF2F294BCF91CFD7D34302CBB",
+    "bytes": 7263
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_HUNT_SHOWDOWN_VISUAL_REFERENCES.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_HUNT_SHOWDOWN_VISUAL_REFERENCES.md",
+    "sha256": "3FDE01928C123FB5283FA125C4FA9477128FF50A4208BD0EC7DA286ECCBDB3D5",
+    "bytes": 3290
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_NATIVE_CONSTRAINED_FIT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_NATIVE_CONSTRAINED_FIT.md",
+    "sha256": "655FD994CED8B8476B9D84F26242E5862DBA27694231AAE8AF3FBA787479E061",
+    "bytes": 8030
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_PLANECUT_SAMPLED_AB.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_PLANECUT_SAMPLED_AB.md",
+    "sha256": "24A2E3B09B5F53CDE0F24CD98AB5261365402E0CB6C300E9DF03A397CFEB2732",
+    "bytes": 9876
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_POST_CUT_WEATHERING.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_POST_CUT_WEATHERING.md",
+    "sha256": "9B47BD48019C029AE841C933208A97F04E937E3576E455455463E39FDC62F7AD",
+    "bytes": 12278
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_POST_CUT_WEATHERING_RED.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_POST_CUT_WEATHERING_RED.md",
+    "sha256": "7149562126E76DD5AE1B153686221CDA0D06D6E4E1FD1FDBF1C0DFD5547FDE48",
+    "bytes": 8428
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_REGION_BORDER_CONFORMANCE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_REGION_BORDER_CONFORMANCE.md",
+    "sha256": "62EA2FF09AA0C432FD68962B1C35A809B3633202137FC005712B310A772CACF3",
+    "bytes": 7059
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_SAMPLED_CONTOUR_REPAIR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_SAMPLED_CONTOUR_REPAIR.md",
+    "sha256": "B5814127DDE1217DC7EF1D451F3E48719B3D8CB10B0D383A09F01816ECA51ACC",
+    "bytes": 10961
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_SHADER_CACHE_WIP.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_SHADER_CACHE_WIP.md",
+    "sha256": "8297504FC7B514035BBB97F3012433195E53379BD98A66F6952861448EE11F1D",
+    "bytes": 2308
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STEPPED_LAYERED_BOUNDARY.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STEPPED_LAYERED_BOUNDARY.md",
+    "sha256": "11591CB20AC1E358F941709546AC1182571BF9FC86A8A1CC42FAB6482FC7D7C8",
+    "bytes": 6635
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STEPPED_REGION_RECOVERY.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STEPPED_REGION_RECOVERY.md",
+    "sha256": "BF165AF1D60FA5BE34D17DD11FE3CA58C76BB55B911E358A226D84191FA45D3E",
+    "bytes": 6984
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STRUCTURAL_AUTHORING.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STRUCTURAL_AUTHORING.md",
+    "sha256": "10D4158FF86441CB4B4B0D3CDC78BA27D6B4675974A04AE044D362EAEC36B8F0",
+    "bytes": 31557
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STRUCTURAL_EXPORT_COVERAGE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STRUCTURAL_EXPORT_COVERAGE.md",
+    "sha256": "15E861F2672C3101F2DCFAC1C240C6A57177BDE09BD8271A6E180B9262D1E1DB",
+    "bytes": 11451
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STRUCTURAL_FORM_ABLATION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STRUCTURAL_FORM_ABLATION.md",
+    "sha256": "8B99B3776E7032AAE52A1BB433301660C6440B372E38BDE914BD92903F9A3799",
+    "bytes": 7640
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_F4_STRUCTURAL_SOURCE_BLOCKER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_F4_STRUCTURAL_SOURCE_BLOCKER.md",
+    "sha256": "D5F16A70825B8CB048C286999D425B6A3BE067C3DF18488DD020706121CD97D1",
+    "bytes": 6712
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_PHYSICAL_MATERIAL_DESTRUCTION_F_GEOLOGY_BRIDGE_AUDIT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_PHYSICAL_MATERIAL_DESTRUCTION_F_GEOLOGY_BRIDGE_AUDIT.md",
+    "sha256": "AE3875E7895F39747AF23ECBBC0E0ACE5B8C7ABC9AF5AB9F5B5DDCF361AF6C2E",
+    "bytes": 94549
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_ABR_ID_RESOLUTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_ABR_ID_RESOLUTION.md",
+    "sha256": "AE43FEC4964660B25D958AD0453BDDE6C8639A742D8FB83EA483812F7FD6A6B3",
+    "bytes": 4827
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_ABR_INSPECT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_ABR_INSPECT.md",
+    "sha256": "9B299AAFD4008D9A4B8439B66CD82C590B433D4B3EE688AB917D8AD5A0FC095F",
+    "bytes": 6237
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_ABR_SAMPLE_DECODE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_ABR_SAMPLE_DECODE.md",
+    "sha256": "1BA1BCE7BDC1FD02F8C63933815AFEF204A8E9272B9942EEA5FF6448DECB68E3",
+    "bytes": 8627
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_ADD_SOURCE_TO_PACK.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_ADD_SOURCE_TO_PACK.md",
+    "sha256": "C0B452DD30865F7E4CF29FB788EBF9B9B6471C8E326FA2CC6E89F8FDDE85B990",
+    "bytes": 2887
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_BINARY_CONTAINER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_BINARY_CONTAINER.md",
+    "sha256": "1AE86C7FFD5CC5EFC24EC453B1914A09A44E7A00872E1C6E95885EFFAA7FBB3E",
+    "bytes": 7396
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_BRUSH_ENGINE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_BRUSH_ENGINE.md",
+    "sha256": "C001E2BD46129C76D315F6AFE3C7C0637EC92A93DD4473E8559B2AC33009F273",
+    "bytes": 5532
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_BRUSH_LIBRARY_CATALOG.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_BRUSH_LIBRARY_CATALOG.md",
+    "sha256": "C01D7A3A266B7D5E3216B954BEEE3FD8B593C422CBAFDF7DFB2B38ACDF28B2D8",
+    "bytes": 7393
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_BRUSH_POSE_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_BRUSH_POSE_EDITOR.md",
+    "sha256": "B6B1AB36DFE07AF9BF368A9E4BEF535B0A04C0AD99FB243EE2559DD9440A4EEA",
+    "bytes": 4003
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_CANONICAL_IR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_CANONICAL_IR.md",
+    "sha256": "FC96541C6DD187F487309EB2B12AC5C6E7E93697F07C1C9488F043506B42C508",
+    "bytes": 6167
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_COLOR_DYNAMICS_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_COLOR_DYNAMICS_EDITOR.md",
+    "sha256": "7973B08505E33248209F945201684430130EDDFDB68925BBEE88EFCFE392722F",
+    "bytes": 4243
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_COMPRESSION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_COMPRESSION.md",
+    "sha256": "D858D8CEF4CC7494C32370C02B562F61E9D08017B5E52A418F3052930D57A37A",
+    "bytes": 8171
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_CREATE_EMPTY_PACK.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_CREATE_EMPTY_PACK.md",
+    "sha256": "DB97FBDCD79B79D24FE878A077770847816AC0674080BDBDE3B2EB0C8DEF5AA7",
+    "bytes": 2886
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_DECAL_INSTANCE_SCATTER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_DECAL_INSTANCE_SCATTER.md",
+    "sha256": "39BE1D7C79630D88B4152B93F7E6DBB4E1C1300CF67772EBD9E495FB314B49E1",
+    "bytes": 5940
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_DERIVED_2D_SDF.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_DERIVED_2D_SDF.md",
+    "sha256": "B4714AA09603AE66A75E829E2C57C29C439B5E49D715BE582B1042C02D1715E4",
+    "bytes": 6677
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_DUAL_BRUSH_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_DUAL_BRUSH_EDITOR.md",
+    "sha256": "AC80F899AEC137EF5A1509DCE141D9EF977450447BAA6FCA4D2B49CC9ADAD3A4",
+    "bytes": 4287
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_DUPLICATE_PRESET.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_DUPLICATE_PRESET.md",
+    "sha256": "0BB75AD44D3F418A6B3B348A5151B0CB5A5C0806D91354EC4F3D9A9A25E9DA3D",
+    "bytes": 3613
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS.md",
+    "sha256": "44017E23952559C07A74B9A927295874566992B0D97F06740B1FD6D91673360F",
+    "bytes": 4412
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS_AUTHORING_TRANSACTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS_AUTHORING_TRANSACTION.md",
+    "sha256": "B9CF816B45A02DF88805DB4C75ECCC83842D6B3F805AE31A21B98A3DEE06179C",
+    "bytes": 2871
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS_BRUSH_RASTER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS_BRUSH_RASTER.md",
+    "sha256": "190A8EBC6061AE91C12181D6F985DF14BBCB36F5496284F086510DA5206EAB2F",
+    "bytes": 5041
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS_MASK_COMPOSITION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS_MASK_COMPOSITION.md",
+    "sha256": "C78C67826EC4558105B5FF832B15E3C5C380199532D1A4A7C9AFFC26B66D0428",
+    "bytes": 3509
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS_REGION_SCOPE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS_REGION_SCOPE.md",
+    "sha256": "109139299FFC6C5006CBBDEE5D7659ABFB049B337E16D10CD6989385F436F571",
+    "bytes": 3820
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EPLS_WORKBENCH.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EPLS_WORKBENCH.md",
+    "sha256": "B5D194C760FC50BB16AC84F8A3D8D1F7F64A8758D8EBF3D4DE0338F5E749A7EA",
+    "bytes": 3867
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_EXTRACT_SELECTED_PRESETS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_EXTRACT_SELECTED_PRESETS.md",
+    "sha256": "F70224DBA04CFA827BAB97D8BF32399F61129EC3C4BF127792C3953061385F92",
+    "bytes": 3275
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_GENERIC_DESCRIPTOR_PARSER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_GENERIC_DESCRIPTOR_PARSER.md",
+    "sha256": "0548376B445BEC4E64DF818B6243CB6364CBE4DDAE3D23C9945D4F2F2FCFE437",
+    "bytes": 6038
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_IMAGE_CHANNEL_EXTRACTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_IMAGE_CHANNEL_EXTRACTION.md",
+    "sha256": "53564E221E4CACBF44974EA045CF27A203AB08BB72A52146EA7A16E0117AAD22",
+    "bytes": 8855
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_IMAGE_IMPORT_PROCESSING.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_IMAGE_IMPORT_PROCESSING.md",
+    "sha256": "F643BCB011F155FD42E342DBA77EA3AAA2756E77A68725B58FB06998F948A711",
+    "bytes": 9733
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_IMAGE_IMPORTER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_IMAGE_IMPORTER.md",
+    "sha256": "1A4630FAF119F0EEF1289105B0F22D2F4F863D387D51A35D1F08A247BCA85610",
+    "bytes": 9141
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_LIBRARY_ADMITTED_PREVIEW.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_LIBRARY_ADMITTED_PREVIEW.md",
+    "sha256": "BC7D2CD01DBFFC80BADC68286094E70157AB6D15FA6C48C89E6946131FD87BB9",
+    "bytes": 8010
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_LIBRARY_SORT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_LIBRARY_SORT.md",
+    "sha256": "4173042434A5CA03954B9254608571412A72940854B80BF93B39429C07557303",
+    "bytes": 3344
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_MATERIAL_HEIGHT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_MATERIAL_HEIGHT.md",
+    "sha256": "473AF096551F076D0DB91DC8C6B442A14C254DC8E89C6A662D69C803AECA6063",
+    "bytes": 12054
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_MATERIAL_PAINT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_MATERIAL_PAINT.md",
+    "sha256": "9E5EC29A5EAECBDFBDEC0D56D2B63FDC932F2083C05970DD21ADC61A00E2DE61",
+    "bytes": 5679
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_MERGE_PACKS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_MERGE_PACKS.md",
+    "sha256": "D0049287DE3AC9B7255DD6E6DA80857650483687764740B8A5D4222C7898F5FD",
+    "bytes": 3104
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_MISC_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_MISC_EDITOR.md",
+    "sha256": "4E164E553952CF73AD8B536E34ED1960C9D4D6CB29F2A7AA1F81F9440DD6D408",
+    "bytes": 4437
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_PACK_METADATA_MANAGEMENT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_PACK_METADATA_MANAGEMENT.md",
+    "sha256": "C44939524B295146ACECB3666F6398D2C1968F51FF2732EEA1DEE2D3ED427ABD",
+    "bytes": 10054
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_PRESET_TAGS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_PRESET_TAGS.md",
+    "sha256": "DA354361C9072EE5462F958983DE7B27365A7CB3AFA98599610841A03BD91C9A",
+    "bytes": 3507
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_RESOURCE_AUTHORING_HINTS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_RESOURCE_AUTHORING_HINTS.md",
+    "sha256": "53F6AEAFEED55C3A060111D3E8657DAC3AB1FFEB4D3EA61F1644E256022C9761",
+    "bytes": 3106
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_RUNTIME_DYNAMIC_DERIVATIVE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_RUNTIME_DYNAMIC_DERIVATIVE.md",
+    "sha256": "571CAF110BB50997FFA39CAFC4B9AF433D179FAEB3055ED889BF11BF7BB3231B",
+    "bytes": 3701
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_SEMANTIC_MAPPER.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_SEMANTIC_MAPPER.md",
+    "sha256": "F1B0AB98000B1D83697E7C1B0F7523AE1D873118EFB7F68070CAB0ED73BFDF55",
+    "bytes": 4872
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_SHIPPING_VALIDATOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_SHIPPING_VALIDATOR.md",
+    "sha256": "BEBFCB0D3B8B281EDF2D2CC997B323B54230B5DEDDEFE17857D24ED7CA5B105F",
+    "bytes": 5961
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_SOURCE_MANIFEST_DUPLICATE_DETECTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_SOURCE_MANIFEST_DUPLICATE_DETECTION.md",
+    "sha256": "39A5ADDAF6D38DBDC47B77217C0B459DA1C2DC62000DE07CFA4477ABE1851078",
+    "bytes": 5769
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_STATIC_SURFACE_PAINT_COOK.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_STATIC_SURFACE_PAINT_COOK.md",
+    "sha256": "E6D9FFC344C8370DDD80246CD6A2AF8E265DF438FD5CC6765159FA310269D867",
+    "bytes": 5553
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_SURFACE_PAINTER_ROUGHNESS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_SURFACE_PAINTER_ROUGHNESS.md",
+    "sha256": "7A6E410EBDEBE9D385FDC23E9E9A023C2448F481321EB039E531BE54C83FF67A",
+    "bytes": 5025
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN.md",
+    "sha256": "D696872FEEF6B72CC7FD6026953076FBBD2FD827CF9610F03AE8C2E7FB784D3B",
+    "bytes": 8212
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN_ADAPTIVE_PAGE_COOK.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN_ADAPTIVE_PAGE_COOK.md",
+    "sha256": "68CA58D4A4DC08A36193D4974971B9E784C0576183259E4C46AEFF1678CECB5A",
+    "bytes": 4693
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN_AUTHORING_TRANSACTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN_AUTHORING_TRANSACTION.md",
+    "sha256": "70CA336BD61A1DF2EDD1B338E85A7AD4361F94D06F1A3B9382EA5A698E22FB52",
+    "bytes": 7135
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN_C04_VIEWPORT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN_C04_VIEWPORT.md",
+    "sha256": "55BED822036617371FBA2955F0728D57826A927D022A46942A9A28B986A36A35",
+    "bytes": 5582
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN_EDITOR_PREVIEW.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN_EDITOR_PREVIEW.md",
+    "sha256": "CA3A08E316C95651CCCA4D6C0DEAADA1C6DEE81B26D5DF9D1CA9CD601D45331C",
+    "bytes": 6488
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TERRAIN_VULKAN_MATERIAL.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TERRAIN_VULKAN_MATERIAL.md",
+    "sha256": "D32304581CEC584B644A74C547EF66B40158EEC2FE62566C2CB5ECD9378C038F",
+    "bytes": 4672
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TEST_CANVAS.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TEST_CANVAS.md",
+    "sha256": "A8B5462260EF34C9F4D931722ACAD505A7604D10E73FEE266AA9454992473E7C",
+    "bytes": 4184
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TEXTURE_PAINT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TEXTURE_PAINT.md",
+    "sha256": "2E4F3EE21EF23C5966EB0F180A6A712627F2C35F3447F0410A6750999232F3B8",
+    "bytes": 5144
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TEXTURE_SETTINGS_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TEXTURE_SETTINGS_EDITOR.md",
+    "sha256": "AF483FBE948ED51B0A8A99A94DE8551CF49062B77D06EE6DB93554D6AC33B568",
+    "bytes": 3573
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TIP_SHAPE_SCATTER_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TIP_SHAPE_SCATTER_EDITOR.md",
+    "sha256": "5B80A8309E43C7689ED5A2949EA14BEA53F14B2D5F7C669AD884790F3C88AAC4",
+    "bytes": 4121
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TRANSACTIONAL_IMPORT_CONSUME.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TRANSACTIONAL_IMPORT_CONSUME.md",
+    "sha256": "5E816FE26D56EBD8DD2A4566658667F777F90A350BEF63E294D6A031429017A8",
+    "bytes": 6864
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_TRANSFER_RESPONSE_CURVES_EDITOR.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_TRANSFER_RESPONSE_CURVES_EDITOR.md",
+    "sha256": "501CDB6A61ACE5CDB508497F1834A65E7890D7AC05366878425747AF43DD26B6",
+    "bytes": 4251
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_RBRUSH_UPDATE_REIMPORT.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_RBRUSH_UPDATE_REIMPORT.md",
+    "sha256": "CE57582AE801FCEB9E722D463D4A656974A58E7C6731433075DD68E51149ABDE",
+    "bytes": 7563
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SMART_REMESH_RESEARCH_HANDOFF.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SMART_REMESH_RESEARCH_HANDOFF.md",
+    "sha256": "B4F6B90852B9BB0067A2CF21E1FF1C0D390CB9F981C5A29BFEA143EA168B854E",
+    "bytes": 3264
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\evidence\\M8_SPARSE_SDF_CAVE_TUNNEL_SHOWCASE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\evidence\\M8_SPARSE_SDF_CAVE_TUNNEL_SHOWCASE.md",
+    "sha256": "630C7E16EB4D8A2C756050C2F3F9CF8B948E435BAAC2B70D1C6EF36851CFF27A",
+    "bytes": 9821
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\JERICO_1_0_PRODUCTION_EXPANSION_GEOLOGY_PWAS_EPLS_ANIMATION_DESTRUCTION.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\JERICO_1_0_PRODUCTION_EXPANSION_GEOLOGY_PWAS_EPLS_ANIMATION_DESTRUCTION.md",
+    "sha256": "F4541A56E9762AD15227473E7E8CBE81284F6E874AEAC4DBECCDD8F2E9D5BB4F",
+    "bytes": 22328
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\plans\\2026-08-14-m8-rbrush-derived-2d-sdf.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\plans\\2026-08-14-m8-rbrush-derived-2d-sdf.md",
+    "sha256": "D2878872840EE8770A93E26E2B43826469F116494E8774C1A90F8EBE23654E8D",
+    "bytes": 8578
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\plans\\2026-09-16-smart-remesh-3-research-port.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\plans\\2026-09-16-smart-remesh-3-research-port.md",
+    "sha256": "DE7D8EAB0529F01AC3EF9744B2F39C5516561C6A2A0134CD894A359DE42E6FC9",
+    "bytes": 4563
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-07-30-material-mask-layer-authoring-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-07-30-material-mask-layer-authoring-design.md",
+    "sha256": "9A79D225CD9A4CF13C47864679D537495A4F6C3597F90552368B72F178E184FE",
+    "bytes": 14662
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-12-m8-rbrush-brush-engine-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-12-m8-rbrush-brush-engine-design.md",
+    "sha256": "338E1E98EBA5CFDFEE9BE0E780E942088DA5DFFC4316EC993066FA57AED3A6CC",
+    "bytes": 8013
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-13-m8-rbrush-material-height-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-13-m8-rbrush-material-height-design.md",
+    "sha256": "4B1E18821B1BA25DD410C8207DDF571DBA8F62AE6E9957335DE9C8BB626D5CCC",
+    "bytes": 10229
+  },
+  {
+    "source": "F:\\JericoEngine\\docs\\superpowers\\specs\\2026-08-13-m8-rbrush-material-paint-design.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\docs\\superpowers\\specs\\2026-08-13-m8-rbrush-material-paint-design.md",
+    "sha256": "BF07AF607BC7C15B1C26C66271A97CA5E0F45ACD062A68A568763C73F5D830FF",
+    "bytes": 17001
+  },
+  {
+    "source": "F:\\JericoEngine\\Tools\\BlenderWorker\\ADDON_TEMPLATE.md",
+    "copy": "F:\\JericoGeologyPlayground\\docs\\engine-reference-2026-09-24\\additional\\Tools\\BlenderWorker\\ADDON_TEMPLATE.md",
+    "sha256": "B8B160AE33F96A52E67DE4164EF0EB4BD56A2FEB85132C10CE030DE98CB1F519",
+    "bytes": 11934
   }
 ]
