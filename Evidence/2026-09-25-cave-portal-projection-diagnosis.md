@@ -1,0 +1,14 @@
+# Diagnóstico de las franjas del portal — 2026-09-25
+
+Estado: **dos hipótesis descartadas con captura; Beauty sigue PARTIAL**. Se usó el mismo high del túnel cuadrado, cámara, AO, textura CC0 y binario Release recompilado para cada cambio. El [control](2026-09-25-cave-selected-final/square/high-pbr-ao.png) conserva la proyección triplanar de escala 0,22. Ningún experimento tocó el Engine; ambas variantes de código se retiraron después de medirlas. Las fuentes vuelven al estado previo al ensayo.
+
+1. [Normal geométrica para pesos triplanares](2026-09-25-cave-triplanar-geometric/square/high-pbr-ao.png): sustituir temporalmente `pow(abs(n),4)` por `pow(abs(normalize(cross(ddx(World),ddy(World)))),4)` mantuvo las coordenadas `World` y la normal de iluminación. Cambió la mezcla en el borde, pero no redujo las franjas de ambas paredes.
+2. [Frecuencia de material 0,8 en lugar de 0,22](2026-09-25-cave-material-scale/square/high-pbr-ao.png): el patrón exterior se repite más y las franjas interiores siguen. Tampoco se retuvo.
+
+La [medición reproducible](2026-09-25-cave-portal-projection-audit.json) usa los dos ROI de pared del PNG 1280×960: izquierda x=350..469,y=320..769 y derecha x=810..929,y=320..769. Gradiente RGB medio horizontal/vertical: control izquierda 7,24/2,36, derecha 6,02/1,94; normal geométrica 7,30/2,42 y 6,10/2,00; frecuencia 0,8 7,71/2,46 y 6,35/2,08. Ninguna relación de anisotropía mejora materialmente. La métrica no es un score perceptual completo; la inspección de las imágenes originales confirma la lectura.
+
+Los tres reportes de corrida conservaron exactamente el mismo hash high del túnel (`8741513369168632482`) y del arco (`9941929112304674542`), por lo que la geometría no cambió entre comparaciones.
+
+El albedo se samplea en coordenadas mundiales en `Source/Renderer.cpp`, no con las UV del bake. Por eso cambiar el unwrap de ZenUV no ataca estas franjas. La pared lateral entra en profundidad desde una abertura frontal estrecha y comprime su patrón de roca en pantalla; además, el rim BSP se conserva recto por la selección que bloquea los vértices compartidos con el exterior. La siguiente prueba útil es **geométrica**: un perfil de entrada con transición/bevel realmente mallado, manteniendo piso, exterior, GUID y clearance, con prueba RED de continuidad, orientación y LOD antes de otro bake PBR. El arco necesita macroforma y material coherente, no sólo un cambio global de escala.
+
+En paralelo, el `CliffCutLoop` perfil 2–4 marca la región por centros de celdas, desplaza vértices con un falloff radial unitless que pronto se satura y retorna sin generar caras `CutFace`. Esto explica como hipótesis de código el parche liso del cliff; sus bakes válidos no demuestran Beauty. El siguiente experimento de cliff debe comprobar distancia de borde en metros y relieve interior no plano dentro de la misma malla, sin apilar piezas.

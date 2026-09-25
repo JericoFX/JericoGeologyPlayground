@@ -1,0 +1,162 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "axialFeatureReduced": true,
+  "blindChamber": true,
+  "entranceCamera": {
+    "distance": 5.0,
+    "pitch": -0.019999999552965164,
+    "target": [
+      0.0,
+      -0.5,
+      0.0
+    ],
+    "yaw": 3.1415927410125732
+  },
+  "forms": [
+    {
+      "form": "arch",
+      "highHash": 9941929112304674542,
+      "highPbrBakeMisses": 0,
+      "highPbrBakeSamples": 294141,
+      "highTriangles": 5120,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1519.2077,
+          "lod": 0,
+          "lowHash": 7853209956344703819,
+          "macroReductionError": 0.0065993267216026144,
+          "misses": 0,
+          "reductionBudget": 0.01,
+          "sampledSurfaceError": 0.088276697413202,
+          "samples": 429953,
+          "subdivisions": 0,
+          "triangles": 4438,
+          "uvActiveAreaFraction": 0.40983649319933396,
+          "uvIslands": 127
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1332.3606,
+          "lod": 1,
+          "lowHash": 12838917435998244580,
+          "macroReductionError": 0.0358399072652278,
+          "misses": 0,
+          "reductionBudget": 0.05,
+          "sampledSurfaceError": 0.09557288416615072,
+          "samples": 430222,
+          "subdivisions": 0,
+          "triangles": 2372,
+          "uvActiveAreaFraction": 0.4100096230705152,
+          "uvIslands": 123
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1293.9316,
+          "lod": 2,
+          "lowHash": 7122847909841635422,
+          "macroReductionError": 0.07228558583810733,
+          "misses": 0,
+          "reductionBudget": 0.1,
+          "sampledSurfaceError": 0.10559830201794648,
+          "samples": 421899,
+          "subdivisions": 0,
+          "triangles": 1698,
+          "uvActiveAreaFraction": 0.4021478511137238,
+          "uvIslands": 122
+        }
+      ],
+      "selectedFaceCount": 24,
+      "selectedFaceGuids": [
+        "0189693855F70A58F1596DCB5E795A34",
+        "05D0C5F64F30794DCD84D88A30444EC1",
+        "09B330EFFE7CB950E92FA613B5F3AB3C",
+        "2084304160E65479105434D46968A455",
+        "24CB8CFF5A1FC36EEC7F9F933B3398E2",
+        "28ADF7F9096C0371082A6D1CC0E2F55D",
+        "3F7EF74A6BD59E9A2F4EFBDD7457EE76",
+        "43C65408650F0D8F0B7A669C4622E303",
+        "47A8BF02145B4D9227253425CBD23F7E",
+        "5E79BE5376C4E8BB4E49C2E67F473897",
+        "66A3860B1F4A97B3461FFB2ED6C1899F",
+        "6AEAE2C9188406A82A752DA551122D24",
+        "7314AA80C109B5A0224B65EDA88C7E2C",
+        "859E4D142A39E1D46D4489EF8A3682B8",
+        "89E5A9D2237350C9496FF4AE5C017745",
+        "920F7189CBF8FFC141462CF6B37BC84D",
+        "A499141D35292BF58C3F50F89525CCD9",
+        "A8E070DB2E629AEA686ABBB766F0C166",
+        "B10A3892D6E849E26040F3FFBE6B126E",
+        "C393DB2640187616AB3A1801A01516FA",
+        "C7DB37E43951E50B876582C071E00B87",
+        "D004FF9BE1D794037F3BBB08C95A5C8F",
+        "E28EA22F4B07C037CA34DF0AAB04611B",
+        "E6D5FEED44412F2CAE8A1181255504A0"
+      ]
+    },
+    {
+      "form": "square",
+      "highHash": 8741513369168632482,
+      "highPbrBakeMisses": 0,
+      "highPbrBakeSamples": 660316,
+      "highTriangles": 2048,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 887.3144,
+          "lod": 0,
+          "lowHash": 4185328994907529327,
+          "misses": 0,
+          "sampledSurfaceError": 0.052920852129603936,
+          "samples": 660228,
+          "subdivisions": 7,
+          "triangles": 1568,
+          "uvActiveAreaFraction": 0.6298357948628988,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 837.0653,
+          "lod": 1,
+          "lowHash": 2923429303583356937,
+          "misses": 0,
+          "sampledSurfaceError": 0.07120461277475665,
+          "samples": 660447,
+          "subdivisions": 6,
+          "triangles": 1152,
+          "uvActiveAreaFraction": 0.6300228971900766,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 795.6221,
+          "lod": 2,
+          "lowHash": 15531387076613895593,
+          "misses": 0,
+          "sampledSurfaceError": 0.05735676996645929,
+          "samples": 660169,
+          "subdivisions": 5,
+          "triangles": 800,
+          "uvActiveAreaFraction": 0.6297944124220503,
+          "uvIslands": 10
+        }
+      ],
+      "selectedFaceCount": 3,
+      "selectedFaceGuids": [
+        "8DD27F4A4E8E4D6EC60A361D0A57F182",
+        "ACCD4653597D978FE504FD2615473BA3",
+        "D3F1D5140CF290A803FFC42F203685C4"
+      ]
+    }
+  ],
+  "geologicalMacro": true,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "BSP blind arch chamber and square through-tunnel with high-to-low bakes",
+  "selectedRelief": true,
+  "squareInteriorRelief": true,
+  "squareWallRelief": false,
+  "textureResolution": 1024
+}

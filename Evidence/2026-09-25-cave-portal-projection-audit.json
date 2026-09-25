@@ -1,0 +1,32 @@
+{
+  "baseline": {
+    "left": {
+      "horizontalGradient": 7.242390289449113,
+      "verticalGradient": 2.358401385795595
+    },
+    "right": {
+      "horizontalGradient": 6.019091192032368,
+      "verticalGradient": 1.935449146250928
+    }
+  },
+  "geometricNormal": {
+    "left": {
+      "horizontalGradient": 7.304737005913476,
+      "verticalGradient": 2.416400643405098
+    },
+    "right": {
+      "horizontalGradient": 6.10214130096483,
+      "verticalGradient": 2.0042811185350162
+    }
+  },
+  "higherMaterialFrequency": {
+    "left": {
+      "horizontalGradient": 7.714229691876751,
+      "verticalGradient": 2.459199455580302
+    },
+    "right": {
+      "horizontalGradient": 6.3505135387488325,
+      "verticalGradient": 2.078062360801782
+    }
+  }
+}
