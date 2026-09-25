@@ -23,7 +23,7 @@ def audit(root: Path, require_automatic_uv: bool = False,
           cliff_drainage: bool = False, cliff_edge_damage: bool = False,
           cliff_rbrush_alpha: bool = False,
           layered_occlusion: bool = False, layered_material: bool = False,
-          cliff_eroded_rim: bool = False,
+          cliff_eroded_rim: bool = False, cliff_signed_rim: bool = False,
           layered_horizon_fracture: bool = False,
           layered_slate_source: bool = False) -> dict:
     proof = json.loads((root / "rock-lod-bakes-proof.json").read_text())
@@ -32,6 +32,7 @@ def audit(root: Path, require_automatic_uv: bool = False,
     assert proof.get("cliffEdgeDamage", False) is cliff_edge_damage
     assert proof.get("cliffRBrushAlpha", False) is cliff_rbrush_alpha
     assert proof.get("cliffErodedRim", False) is cliff_eroded_rim
+    assert proof.get("cliffSignedRim", False) is cliff_signed_rim
     assert proof.get("layeredOcclusion", False) is layered_occlusion
     assert proof.get("layeredMaterial", False) is layered_material
     assert proof.get("layeredHorizonFracture", False) is layered_horizon_fracture
@@ -89,10 +90,11 @@ def audit(root: Path, require_automatic_uv: bool = False,
             assert lod["edgeRadius"] == (0.1 if family == 8 else 0.02)
             assert (directory / "low.obj").is_file()
             assert (directory / "high-recipe.json").is_file()
-            if cliff_eroded_rim:
+            if cliff_eroded_rim or cliff_signed_rim:
                 recipe = json.loads((directory / "high-recipe.json").read_text())
-                assert recipe["version"] == 14
-                assert any(layer["kind"] == 19 and layer["profile"] == 3 and
+                assert recipe["version"] == (17 if cliff_signed_rim else 14)
+                assert any(layer["kind"] == 19 and layer["profile"] ==
+                           (4 if cliff_signed_rim else 3) and
                            layer["alphaSource"] == 1 for layer in recipe["layers"])
             if layered_horizon_fracture:
                 recipe = json.loads((directory / "high-recipe.json").read_text())
@@ -172,7 +174,8 @@ if __name__ == "__main__":
     cliff_drainage = "--cliff-drainage" in options
     cliff_edge_damage = "--cliff-edge-damage" in options
     cliff_eroded_rim = "--cliff-eroded-rim" in options
-    cliff_rbrush_alpha = "--cliff-rbrush-alpha" in options or cliff_eroded_rim
+    cliff_signed_rim = "--cliff-signed-rim" in options
+    cliff_rbrush_alpha = "--cliff-rbrush-alpha" in options or cliff_eroded_rim or cliff_signed_rim
     layered_occlusion = "--layered-occlusion" in options
     layered_material = "--layered-material" in options
     layered_horizon_fracture = "--layered-horizon-fracture" in options
@@ -183,7 +186,7 @@ if __name__ == "__main__":
                    require_specialist_mips,
                    {family} if family is not None else None,
                    cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha,
-                   layered_occlusion, layered_material, cliff_eroded_rim,
+                   layered_occlusion, layered_material, cliff_eroded_rim, cliff_signed_rim,
                    layered_horizon_fracture, layered_slate_source)
     target = Path(sys.argv[2])
     target.write_text(json.dumps(output, indent=2) + "\n")

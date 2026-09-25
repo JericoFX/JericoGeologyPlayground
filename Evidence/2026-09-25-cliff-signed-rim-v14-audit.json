@@ -1,0 +1,9 @@
+{
+  "baseline": "Evidence\\2026-09-25-cliff-eroded-rim-bounded-retained",
+  "regenerated": "Evidence\\2026-09-25-cliff-signed-rim-v14-regression",
+  "pngObjCompared": 161,
+  "missing": [],
+  "changed": [],
+  "sameBinary": false,
+  "note": "Current binary versus retained prior binary; byte equality confirms no change in v14 visual/mesh outputs, but does not cover metadata/timing."
+}

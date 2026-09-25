@@ -307,6 +307,58 @@ int main()
         try { evaluate(unsupportedRim, 64); }
         catch (const std::exception &) { rejectsOldRim = true; }
         require(rejectsOldRim, "old recipe version rejects new cliff rim profile");
+        auto signedRim = erodedRecipe;
+        signedRim.version = 17;
+        signedRim.layers[4].profile = 4;
+        const auto signedOpen = evaluate(signedRim, 64, 4);
+        require(signedOpen.mesh.indices == macroOpen.mesh.indices &&
+                    signedOpen.mesh.triangleRegions == macroOpen.mesh.triangleRegions,
+                "signed cliff rim retains topology and selectable cut identity");
+        double inward = 0, outward = 0, signedCenterShift = 0;
+        for (std::size_t i = 0; i < signedOpen.mesh.positions.size(); ++i)
+        {
+            const auto x = i % cliffSide, y = i / cliffSide;
+            const auto a = macroOpen.mesh.positions[i], b = signedOpen.mesh.positions[i];
+            if (x == 0) { inward = std::max(inward, b.x - a.x); outward = std::max(outward, a.x - b.x); }
+            if (x == 64) { inward = std::max(inward, a.x - b.x); outward = std::max(outward, b.x - a.x); }
+            if (y == 0) { inward = std::max(inward, b.y - a.y); outward = std::max(outward, a.y - b.y); }
+            if (y == 64) { inward = std::max(inward, a.y - b.y); outward = std::max(outward, b.y - a.y); }
+            if (x >= 16 && x <= 48 && y >= 16 && y <= 48)
+                signedCenterShift = std::max(signedCenterShift, std::hypot(a.x - b.x, a.y - b.y));
+        }
+        require(inward > 0.08 && outward > 0.08 && signedCenterShift < 1e-10,
+                "signed cliff rim makes both recesses and outcrops without moving its center");
+        for (std::size_t t = 0; t < signedOpen.mesh.indices.size(); t += 3)
+        {
+            const auto a = signedOpen.mesh.positions[signedOpen.mesh.indices[t]],
+                       b = signedOpen.mesh.positions[signedOpen.mesh.indices[t + 1]],
+                       c = signedOpen.mesh.positions[signedOpen.mesh.indices[t + 2]];
+            const double area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+            if (area <= 1e-12)
+            {
+                const auto aa = macroOpen.mesh.positions[macroOpen.mesh.indices[t]],
+                           bb = macroOpen.mesh.positions[macroOpen.mesh.indices[t + 1]],
+                           cc = macroOpen.mesh.positions[macroOpen.mesh.indices[t + 2]];
+                const double previousArea = (bb.x - aa.x) * (cc.y - aa.y) -
+                                            (bb.y - aa.y) * (cc.x - aa.x);
+                throw std::runtime_error("signed cliff rim folds triangle " +
+                                         std::to_string(t / 3) + " area=" +
+                                         std::to_string(area) + " previous=" +
+                                         std::to_string(previousArea));
+            }
+        }
+        const auto signedSolid = evaluate(signedRim, 64);
+        require(signedSolid.closedSolid && PA::validateClosedMesh(signedSolid.mesh).hasValue(),
+                "signed cliff rim remains a closed solid");
+        require(meshHash(signedSolid.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(signedRim)), 64).mesh),
+                "signed cliff rim recipe replays deterministically");
+        auto oldSignedRim = signedRim;
+        oldSignedRim.version = 16;
+        bool rejectsOldSignedRim = false;
+        try { evaluate(oldSignedRim, 64); }
+        catch (const std::exception &) { rejectsOldSignedRim = true; }
+        require(rejectsOldSignedRim, "old recipe version rejects signed cliff rim profile");
         Recipe rotatedRim;
         rotatedRim.base = Base::Plane;
         rotatedRim.version = 14;

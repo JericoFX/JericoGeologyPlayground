@@ -164,7 +164,8 @@ bool editLayer(Layer &l)
         change |= slider("Inset depth", l.amplitude, 0.01f, 1.5f);
         change |= slider("Interior tilt", l.lateral, 0, 0.5f);
         change |= ImGui::Combo("Loop edge", &l.profile,
-                               "Classic\0Soft\0RBrush push\0RBrush push + eroded rim\0");
+                               "Classic\0Soft\0RBrush push\0RBrush push + eroded rim\0"
+                               "RBrush push + signed rim\0");
         if (l.profile >= 2)
             change |= ImGui::Combo("Brush alpha", &l.alphaSource,
                                     "Analytic only\0Poly Haven cliff_side CC0\0");
@@ -724,7 +725,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                          bool layeredMaterial = false, bool layeredMaterialNoMips = false,
                          bool cliffNonharmonic = false, bool cliffMacroWarp = false,
                          bool cliffErodedRim = false, bool layeredHorizonFracture = false,
-                         bool layeredSlateSource = false)
+                         bool layeredSlateSource = false, bool cliffSignedRim = false)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
@@ -742,6 +743,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     report["cliffNonharmonic"] = cliffNonharmonic;
     report["cliffMacroWarp"] = cliffMacroWarp;
     report["cliffErodedRim"] = cliffErodedRim;
+    report["cliffSignedRim"] = cliffSignedRim;
     report["layeredHorizonFracture"] = layeredHorizonFracture;
     report["layeredSlateSource"] = layeredSlateSource;
     report["imageSize"] = {1280, 960};
@@ -775,10 +777,11 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                 if (layer.kind == Kind::Layers)
                     layer.profile = 2;
         }
-        if ((cliffDrainage || cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim) && family == 8)
+        if ((cliffDrainage || cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim ||
+             cliffSignedRim) && family == 8)
         {
-            recipe.version = cliffErodedRim ? 14 : 13;
-            if (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim)
+            recipe.version = cliffSignedRim ? 17 : cliffErodedRim ? 14 : 13;
+            if (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim || cliffSignedRim)
             {
                 auto damage = defaultLayer(Kind::DamageDecal);
                 damage.amplitude = 0.15f;
@@ -794,27 +797,29 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                 for (auto &layer : recipe.layers)
                     if (layer.kind == Kind::CliffCutLoop)
                     {
-                        layer.profile = cliffErodedRim ? 3 : cliffRBrushAlpha ? 2 : 1;
-                        layer.alphaSource = cliffRBrushAlpha || cliffErodedRim ? 1 : 0;
+                        layer.profile = cliffSignedRim ? 4 : cliffErodedRim ? 3 :
+                                        cliffRBrushAlpha ? 2 : 1;
+                        layer.alphaSource = cliffRBrushAlpha || cliffErodedRim || cliffSignedRim ? 1 : 0;
                         layer.width = 0.35f;
                     }
             }
             auto drainage = defaultLayer(Kind::CliffDrainage);
             drainage.seed = 123;
-            if (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim)
+            if (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim || cliffSignedRim)
             {
                 drainage.amplitude = 0.30f;
                 drainage.width = 0.22f;
             }
             recipe.layers.insert(recipe.layers.begin() +
-                                     (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim ? 5 : 4),
+                                     (cliffEdgeDamage || cliffRBrushAlpha || cliffErodedRim ||
+                                      cliffSignedRim ? 5 : 4),
                                  drainage);
         }
         if (cliffNonharmonic && family == 8)
             for (auto &layer : recipe.layers)
                 if (layer.kind == Kind::CliffCutLoop)
                     layer.lacunarity = 1.87f;
-        if ((cliffMacroWarp || cliffErodedRim) && family == 8)
+        if ((cliffMacroWarp || cliffErodedRim || cliffSignedRim) && family == 8)
             for (auto &layer : recipe.layers)
                 if (layer.kind == Kind::VectorNoise)
                 {
@@ -825,7 +830,7 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                     layer.outputScale = {0.8f, 0.6f, 1};
                 }
         double baseError = family == 10 ? 0.005 : family == 11 ||
-                           (family == 8 && (cliffRBrushAlpha || cliffErodedRim)) ? 0.02 :
+                           (family == 8 && (cliffRBrushAlpha || cliffErodedRim || cliffSignedRim)) ? 0.02 :
                            family == 5 ? 0.08 : 0.04;
         auto projectionDistance = family == 5 || family == 11 ? 0.2 : 0.15;
         std::size_t previousTriangles = std::numeric_limits<std::size_t>::max();
@@ -1415,7 +1420,7 @@ int run(int argc, char **argv)
          cliffDrainageSmoke = false,
          cliffEdgeDamageSmoke = false, cliffRBrushAlphaSmoke = false,
          cliffNonharmonicSmoke = false, cliffMacroWarpSmoke = false,
-         cliffErodedRimSmoke = false,
+         cliffErodedRimSmoke = false, cliffSignedRimSmoke = false,
          layeredOcclusionSmoke = false,
          layeredMaterialBaselineSmoke = false, layeredMaterialCandidateSmoke = false,
          layeredMaterialNoMipsSmoke = false, layeredHorizonFractureSmoke = false,
@@ -1448,6 +1453,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--cliff-nonharmonic-bakes-test" ||
             std::string(argv[i]) == "--cliff-macro-warp-bakes-test" ||
             std::string(argv[i]) == "--cliff-eroded-rim-bakes-test" ||
+            std::string(argv[i]) == "--cliff-signed-rim-bakes-test" ||
             std::string(argv[i]) == "--layered-occlusion-bakes-test" ||
             std::string(argv[i]) == "--layered-material-baseline-test" ||
             std::string(argv[i]) == "--layered-material-candidate-test" ||
@@ -1487,6 +1493,7 @@ int run(int argc, char **argv)
             cliffNonharmonicSmoke = std::string(argv[i]) == "--cliff-nonharmonic-bakes-test";
             cliffMacroWarpSmoke = std::string(argv[i]) == "--cliff-macro-warp-bakes-test";
             cliffErodedRimSmoke = std::string(argv[i]) == "--cliff-eroded-rim-bakes-test";
+            cliffSignedRimSmoke = std::string(argv[i]) == "--cliff-signed-rim-bakes-test";
             layeredOcclusionSmoke = std::string(argv[i]) == "--layered-occlusion-bakes-test";
             layeredMaterialBaselineSmoke = std::string(argv[i]) == "--layered-material-baseline-test";
             layeredMaterialCandidateSmoke = std::string(argv[i]) == "--layered-material-candidate-test";
@@ -1856,6 +1863,7 @@ int run(int argc, char **argv)
                 if (recipe.layers[selected].kind == Kind::CliffCutLoop &&
                     recipe.layers[selected].profile > 0)
                     recipe.version = std::max(recipe.version,
+                                              recipe.layers[selected].profile == 4 ? 17 :
                                               recipe.layers[selected].profile == 3 ? 14 : 13);
                 if (recipe.layers[selected].kind == Kind::Layers &&
                     recipe.layers[selected].profile == 2)
@@ -2198,7 +2206,7 @@ int run(int argc, char **argv)
             if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                 angularFractureSmoke || angularFourBlocksSmoke || cliffDrainageSmoke ||
                 cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke || cliffMacroWarpSmoke ||
-                cliffErodedRimSmoke || layeredOcclusionSmoke ||
+                cliffErodedRimSmoke || cliffSignedRimSmoke || layeredOcclusionSmoke ||
                 layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                 layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke || layeredSlateSourceSmoke)
             {
@@ -2206,12 +2214,13 @@ int run(int argc, char **argv)
                                     autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                                         angularFractureSmoke || angularFourBlocksSmoke ||
                                         cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke ||
-                                        cliffMacroWarpSmoke || cliffErodedRimSmoke || layeredOcclusionSmoke ||
+                                        cliffMacroWarpSmoke || cliffErodedRimSmoke || cliffSignedRimSmoke ||
+                                        layeredOcclusionSmoke ||
                                         layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                                         layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke ||
                                         layeredSlateSourceSmoke,
                                     cliffDrainageSmoke || cliffEdgeDamageSmoke || cliffRBrushAlphaSmoke || cliffNonharmonicSmoke ||
-                                    cliffMacroWarpSmoke || cliffErodedRimSmoke ? 8 :
+                                    cliffMacroWarpSmoke || cliffErodedRimSmoke || cliffSignedRimSmoke ? 8 :
                                     layeredOcclusionSmoke || layeredMaterialBaselineSmoke ||
                                         layeredMaterialCandidateSmoke || layeredMaterialNoMipsSmoke ||
                                         layeredHorizonFractureSmoke || layeredSlateSourceSmoke ? 11 :
@@ -2220,7 +2229,8 @@ int run(int argc, char **argv)
                                     curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke,
                                     angularFourBlocksSmoke, cliffDrainageSmoke,
                                     cliffEdgeDamageSmoke,
-                                    cliffRBrushAlphaSmoke || cliffNonharmonicSmoke || cliffMacroWarpSmoke || cliffErodedRimSmoke,
+                                    cliffRBrushAlphaSmoke || cliffNonharmonicSmoke || cliffMacroWarpSmoke ||
+                                    cliffErodedRimSmoke || cliffSignedRimSmoke,
                                     layeredOcclusionSmoke || layeredMaterialCandidateSmoke,
                                     layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
                                     layeredMaterialNoMipsSmoke || layeredHorizonFractureSmoke ||
@@ -2228,7 +2238,7 @@ int run(int argc, char **argv)
                                     layeredMaterialNoMipsSmoke, cliffNonharmonicSmoke,
                                     cliffMacroWarpSmoke, cliffErodedRimSmoke,
                                     layeredHorizonFractureSmoke || layeredSlateSourceSmoke,
-                                    layeredSlateSourceSmoke);
+                                    layeredSlateSourceSmoke, cliffSignedRimSmoke);
                 window.requestClose();
                 continue;
             }

@@ -435,7 +435,7 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     if (softEdgeProfile && layer.profile >= 2)
     {
         // RBrush-style push: deform the existing surface, never duplicate an overlay shell.
-        const auto rimBasis = layer.profile == 3 ? surface.mesh.positions : std::vector<Vec3d>{};
+        const auto rimBasis = layer.profile >= 3 ? surface.mesh.positions : std::vector<Vec3d>{};
         const auto id = Solid::region(layer.seed, 0x434c494646000000ULL ^ std::uint64_t(operation));
         surface.regions.push_back({id, parent, SurfaceRole::CutLoop, operation, -1});
         for (std::size_t q = 0; q < selected.size(); ++q)
@@ -461,11 +461,12 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
             if (showField)
                 surface.field[i] = float(falloff);
         }
-        if (layer.profile == 3)
+        if (layer.profile >= 3)
         {
-            // Retreat only the outer grid band. A non-harmonic octave ratio and
-            // differently oriented domains avoid a periodic scallop at the rim.
+            // Shape only the outer grid band. Non-harmonic, rotated domains
+            // avoid a periodic scallop at the rim.
             const auto beforeRim = surface.mesh.positions;
+            const bool signedRim = layer.profile == 4;
             auto edgeWeight = [](double unit)
             {
                 const double distance = std::min(unit, 1.0 - unit);
@@ -495,32 +496,93 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
                     const double sx = far.x - basis.x, sy = far.y - basis.y,
                                  sz = far.z - basis.z;
                     const double bandWidth = std::max(0.0, (sx * dx + sy * dy + sz * dz) / length);
-                    const double distance = std::min(desired, 0.4 * bandWidth) * weight;
+                    const double distance = (signedRim ?
+                        std::clamp(desired, -0.4 * bandWidth, 0.4 * bandWidth) :
+                        std::min(desired, 0.4 * bandWidth)) * weight;
                     p.x += distance * dx / length;
                     p.y += distance * dy / length;
                     p.z += distance * dz / length;
                 };
                 if (wx > 0)
                 {
+                    const auto sample = signedRim ?
+                        beforeRim[(i / side) * side + (u < 0.5 ? 0 : n)] : original;
                     const double noise = PA::evaluateGeologyFbmReference(
-                        {0.83 * original.y + 0.17 * original.z,
-                         0.31 * original.y - 0.23 * original.z, 1.37},
+                        {0.83 * sample.y + 0.17 * sample.z,
+                         0.31 * sample.y - 0.23 * sample.z, 1.37},
                         layer.seed ^ 0x49e367abU, 3, 1.87, 0.5);
                     const double field = std::clamp(0.5 + 0.5 * noise, 0.0, 1.0);
                     retreatToward(u < 0.5 ? i + 1 : i - 1,
                                   u < 0.5 ? i + bandSteps : i - bandSteps,
-                                  0.55 * field * field, wx);
+                                  signedRim ? 0.55 * std::clamp(1.6 * noise, -1.0, 1.0) :
+                                              0.55 * field * field, wx);
                 }
                 if (wy > 0)
                 {
+                    const auto sample = signedRim ?
+                        beforeRim[(v < 0.5 ? 0 : n) * side + i % side] : original;
                     const double noise = PA::evaluateGeologyFbmReference(
-                        {0.61 * original.x - 0.19 * original.z,
-                         0.47 * original.x + 0.11 * original.z, -2.11},
+                        {0.61 * sample.x - 0.19 * sample.z,
+                         0.47 * sample.x + 0.11 * sample.z, -2.11},
                         layer.seed ^ 0x8c125df3U, 3, 1.87, 0.5);
                     const double field = std::clamp(0.5 + 0.5 * noise, 0.0, 1.0);
                     retreatToward(v < 0.5 ? i + side : i - side,
                                   v < 0.5 ? i + bandSteps * side : i - bandSteps * side,
-                                  0.45 * field * field, wy);
+                                  signedRim ? 0.45 * std::clamp(1.6 * noise, -1.0, 1.0) :
+                                              0.45 * field * field, wy);
+                }
+            }
+            if (signedRim)
+            {
+                auto validScale = [&](double scale)
+                {
+                    auto position = [&](std::uint32_t index)
+                    {
+                        const auto &a = beforeRim[index], &b = surface.mesh.positions[index];
+                        return Vec3d{a.x + scale * (b.x - a.x),
+                                     a.y + scale * (b.y - a.y), a.z + scale * (b.z - a.z)};
+                    };
+                    auto face = [](Vec3d a, Vec3d b, Vec3d c)
+                    {
+                        const Vec3d u{b.x - a.x, b.y - a.y, b.z - a.z};
+                        const Vec3d v{c.x - a.x, c.y - a.y, c.z - a.z};
+                        return Vec3d{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                                     u.x * v.y - u.y * v.x};
+                    };
+                    for (std::size_t t = 0; t < surface.mesh.indices.size(); t += 3)
+                    {
+                        const auto a = surface.mesh.indices[t], b = surface.mesh.indices[t + 1],
+                                   c = surface.mesh.indices[t + 2];
+                        const auto old = face(beforeRim[a], beforeRim[b], beforeRim[c]);
+                        const auto now = face(position(a), position(b), position(c));
+                        const double oldArea2 = old.x * old.x + old.y * old.y + old.z * old.z;
+                        const double orientation = old.x * now.x + old.y * now.y + old.z * now.z;
+                        if (orientation <= 0.05 * oldArea2 ||
+                            (std::abs(old.z) > 1e-8 && old.z * now.z <= 0.05 * old.z * old.z))
+                            return false;
+                    }
+                    return true;
+                };
+                double scale = 1;
+                if (!validScale(scale))
+                {
+                    double low = 0, high = 1;
+                    for (int step = 0; step < 12; ++step)
+                    {
+                        const double mid = 0.5 * (low + high);
+                        if (validScale(mid)) low = mid;
+                        else high = mid;
+                    }
+                    scale = low;
+                }
+                if (scale < 0.25)
+                    throw std::runtime_error("Signed cliff rim cannot preserve face orientation");
+                for (std::size_t i = 0; i < surface.mesh.positions.size(); ++i)
+                {
+                    auto &p = surface.mesh.positions[i];
+                    const auto &a = beforeRim[i];
+                    p = {a.x + scale * (p.x - a.x), a.y + scale * (p.y - a.y),
+                         a.z + scale * (p.z - a.z)};
                 }
             }
         }

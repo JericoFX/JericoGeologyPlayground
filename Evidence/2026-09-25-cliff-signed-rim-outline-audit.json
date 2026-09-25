@@ -1,0 +1,14 @@
+{
+  "changedSilhouettePixels": 39496,
+  "silhouetteIouAgainstBaseline": 0.8841834251162681,
+  "largestInwardEdgeShiftPixels": 5,
+  "largestOutwardEdgeShiftPixels": 519,
+  "centerRoiChangedMaskPixels": 0,
+  "lod2LowVsHighSilhouetteIou": 0.9997327883390006,
+  "imageSha256": {
+    "baselineHigh": "df56b04db0e2b3f857fcbfb2dc2832219af30f1520c41fdc044e657bc4dfd131",
+    "candidateHigh": "41e46c875ba9149b6c80972458d0a379dc3a06443e022d6fa6b5fc51ef0a3808",
+    "candidateLow": "f6749238d0583cb31ec6e218a550d29b6fd01fbe5e63b91789f3c4e3b53c860d"
+  },
+  "limit": "Silhouette change and high-low agreement do not prove geological Beauty."
+}

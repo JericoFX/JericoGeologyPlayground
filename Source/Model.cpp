@@ -689,7 +689,7 @@ void validate(const Recipe &r)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
-             r.version == 14 || r.version == 15 || r.version == 16) &&
+             r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -729,6 +729,7 @@ void validate(const Recipe &r)
                     l.alphaSource >= 0 && l.alphaSource <= 1 &&
                     (l.alphaSource == 0 || (r.version >= 13 && l.profile >= 2)) &&
                     (l.profile != 3 || r.version >= 14) &&
+                    (l.profile != 4 || r.version >= 17) &&
                     l.projectorRadius[0] >= 0.1f && l.projectorRadius[0] <= 5 &&
                     l.projectorRadius[1] >= 0.1f && l.projectorRadius[1] <= 5 &&
                     std::abs(l.projectorRotation) <= 360 && l.distortion <= 0.3f);
@@ -740,7 +741,7 @@ void validate(const Recipe &r)
                     l.kind != Kind::CliffDrainage);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
-                l.profile < (l.kind == Kind::CliffCutLoop ? 4 : 3));
+                l.profile < (l.kind == Kind::CliffCutLoop ? 5 : 3));
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
                 l.distortion <= 4 && std::abs(l.solidOffset) <= 1);
         require(std::abs(l.amplitude) <= 5 && l.frequency >= 0.01f && l.frequency <= 100 && l.octaves >= 1 &&
@@ -1452,7 +1453,8 @@ Recipe deserialize(const std::string &text)
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
-        inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16)
+        inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
+        inputVersion != 17)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

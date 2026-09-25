@@ -1,0 +1,49 @@
+{
+  "metric": "same-camera 1280x960 foreground RGB MAE; threshold mean RGB > 40",
+  "limit": "screen-space diagnostic, not perceptual or M8 Beauty acceptance",
+  "scriptSha256": "749351bacd273b85d605bbf94af22e357d1681cd785ad29893d1fcfd1e28bd12",
+  "numpyVersion": "2.3.5",
+  "pillowVersion": "12.3.0",
+  "cases": [
+    {
+      "family": 8,
+      "lod": 0,
+      "near": {
+        "highSha256": "5c0868b78c5674cad2d4408d1f29d3f013068685c0e402451f9fd8d0bd259664",
+        "lowSha256": "492833faa0e15c6a4cfa9b9e826ebb433c8babeab5566694d42e1c0aae8a6ae9",
+        "commonPixels": 340580,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.2217022031545639
+      }
+    },
+    {
+      "family": 8,
+      "lod": 1,
+      "near": {
+        "highSha256": "5c0868b78c5674cad2d4408d1f29d3f013068685c0e402451f9fd8d0bd259664",
+        "lowSha256": "7671a19f42f791aa64538666105c9ee994aaf20c69f9165eafb2896338ba31f4",
+        "commonPixels": 340580,
+        "silhouetteIou": 1.0,
+        "foregroundRgbMae": 0.2839636504650116
+      }
+    },
+    {
+      "family": 8,
+      "lod": 2,
+      "near": {
+        "highSha256": "5c0868b78c5674cad2d4408d1f29d3f013068685c0e402451f9fd8d0bd259664",
+        "lowSha256": "fbbd0add65e3d13de81aac8fa248520b9148c5903226028862fa9b36c40d8095",
+        "commonPixels": 340570,
+        "silhouetteIou": 0.999970638322861,
+        "foregroundRgbMae": 0.3668457567691803
+      },
+      "far": {
+        "highSha256": "8389c90ca39a9ff844114b66476c26c9a798136a1c458ef3ba266b613be198d7",
+        "lowSha256": "b59aee16a9961c77a75c7c01cd0c0923304d2d03d525f04a0686180eee57b3d9",
+        "commonPixels": 80957,
+        "silhouetteIou": 0.9999629446640316,
+        "foregroundRgbMae": 0.6531039476394653
+      }
+    }
+  ]
+}
