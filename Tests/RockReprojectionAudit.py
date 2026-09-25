@@ -141,20 +141,25 @@ def surface_delta(first: dict, second: dict, camera0: dict, camera1: dict) -> di
             "samePrimitive": same_primitive_count, "matched": int(same.sum())}
 
 
-def audit(root: Path) -> dict:
+def audit(root: Path, near: bool = False) -> dict:
     proof = json.loads((root / "rock-temporal-proof.json").read_text())
+    variants = VARIANTS + tuple(proof.get("normalMipBiasVariants", {}))
+    if near:
+        variants = tuple("near-" + variant for variant in variants)
+    high_name = variants[0]
     assert proof["reprojectionVersion"] == 1 and proof["depthEncoding"] == "linear-view-24-bit-rgb"
     assert proof["primitiveEncoding"] == "triangle-index-plus-one-24-bit-rgb"
     size = proof["imageSize"]
     assert size == [1280, 960] and proof["projectionScale"] == 2.4
     cameras = [{"yaw": proof["cameraYaw"] + offset, "pitch": proof["cameraPitch"],
-                "distance": proof["cameraDistance"], "target": proof["cameraTarget"],
+                "distance": proof["nearCameraDistance" if near else "cameraDistance"],
+                "target": proof["cameraTarget"],
                 "size": size, "aspect": size[0] / size[1], "scale": proof["projectionScale"]}
                for offset in proof["yawOffsets"]]
     assert len(cameras) == 5
     frames = {variant: [load_frame(root, variant, i, proof["depthEncodingMaxMeters"])
-                        for i in range(5)] for variant in VARIANTS}
-    stationary = surface_delta(frames["high"][2], frames["high"][2], cameras[2], cameras[2])
+                        for i in range(5)] for variant in variants}
+    stationary = surface_delta(frames[high_name][2], frames[high_name][2], cameras[2], cameras[2])
     valid_normal = stationary["normal"][np.isfinite(stationary["normal"])]
     valid_material = stationary["material"][np.isfinite(stationary["material"])]
     stationary_normal = summary([valid_normal])
@@ -163,14 +168,15 @@ def audit(root: Path) -> dict:
     assert stationary_normal["mean"] < 0.02 and stationary_material["mean"] < 1e-6
     temporal = {variant: [surface_delta(frames[variant][i], frames[variant][i + 1],
                                         cameras[i], cameras[i + 1]) for i in range(4)]
-                for variant in VARIANTS}
+                for variant in variants}
     result = {"family": proof["family"], "transitions": 4,
+              "cameraDistance": cameras[0]["distance"],
               "stationary": {"eligible": stationary["eligible"],
                              "matched": stationary["matched"],
                              "normalChangeDegrees": stationary_normal,
                              "linearRenderedColorChange": stationary_material},
               "variants": {}}
-    for variant in VARIANTS:
+    for variant in variants:
         sequence = temporal[variant]
         assert all(entry["matched"] >= 10000 and
                    entry["matched"] >= 0.95 * entry["eligible"] for entry in sequence), variant
@@ -185,30 +191,35 @@ def audit(root: Path) -> dict:
             "linearRenderedColorChange": summary([entry["material"][np.isfinite(entry["material"])]
                                                    for entry in sequence])}
     result["shared"] = {}
-    for variant in VARIANTS[1:]:
+    for variant in variants[1:]:
         paired = []
         for i in range(4):
-            high, low = temporal["high"][i], temporal[variant][i]
+            high, low = temporal[high_name][i], temporal[variant][i]
             common = np.isfinite(high["normal"]) & np.isfinite(low["normal"])
-            common &= np.abs(frames["high"][i]["depth"] -
+            common &= np.abs(frames[high_name][i]["depth"] -
                              frames[variant][i]["depth"]) <= 0.05
             assert common.sum() >= 10000, (variant, i)
             paired.append((i, common))
         assert sum(mask.sum() for _, mask in paired) >= 0.90 * min(
-            result["variants"]["high"]["eligible"], result["variants"][variant]["eligible"])
+            result["variants"][high_name]["eligible"], result["variants"][variant]["eligible"])
         result["shared"][variant] = {
             "pixels": int(sum(mask.sum() for _, mask in paired)),
+            "perTransitionNormalResidualDegrees": [
+                {"pixels": int(mask.sum()), **summary([
+                    np.abs(temporal[variant][i]["normal"][mask] -
+                           temporal[high_name][i]["normal"][mask])])}
+                for i, mask in paired],
             "normalTemporalResidualDegrees": summary([
-                np.abs(temporal[variant][i]["normal"][mask] - temporal["high"][i]["normal"][mask])
+                np.abs(temporal[variant][i]["normal"][mask] - temporal[high_name][i]["normal"][mask])
                 for i, mask in paired]),
             "linearRenderedColorTemporalResidual": summary([
-                np.abs(temporal[variant][i]["material"][mask] - temporal["high"][i]["material"][mask])
+                np.abs(temporal[variant][i]["material"][mask] - temporal[high_name][i]["material"][mask])
                 for i, mask in paired]),
             "normalSpatialDegrees": summary([
-                angle(frames["high"][i]["normal"], frames[variant][i]["normal"])[mask]
+                angle(frames[high_name][i]["normal"], frames[variant][i]["normal"])[mask]
                 for i, mask in paired]),
             "linearRenderedColorSpatial": summary([
-                np.abs(frames["high"][i]["material"] - frames[variant][i]["material"])
+                np.abs(frames[high_name][i]["material"] - frames[variant][i]["material"])
                 .mean(axis=2)[mask] for i, mask in paired])}
     result["limit"] = ("Mode-5 color includes lighting and view-dependent specular; visibility "
                        "is matched within each mesh, then high/low depth at the starting pixel. "

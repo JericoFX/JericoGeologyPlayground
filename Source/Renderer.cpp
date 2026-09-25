@@ -40,9 +40,10 @@ struct Constants
     float camera[4];
     float target[4];
     float range[4];
+    float normalBias[4];
 };
 const char *shader = R"(
-cbuffer Constants {float4 Camera;float4 Target;float4 Range;};
+cbuffer Constants {float4 Camera;float4 Target;float4 Range;float4 NormalBias;};
 Texture2D NormalMap; SamplerState NormalMap_sampler;
 Texture2D ColorMap; SamplerState ColorMap_sampler;
 Texture2D AmbientMap; SamplerState AmbientMap_sampler;
@@ -73,7 +74,7 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
  if(Target.w>3.5 && Target.w<4.5){float v=NormalMap.Sample(NormalMap_sampler,float2(input.UV.x,1-input.UV.y)).r;return float4(v,v,v,1);}
  float3 n=normalize(input.Normal);
  if(Range.z>0.5) {
-  float3 mapped=NormalMap.Sample(NormalMap_sampler,float2(input.UV.x,1-input.UV.y)).xyz*2-1;
+  float3 mapped=NormalMap.SampleBias(NormalMap_sampler,float2(input.UV.x,1-input.UV.y),NormalBias.x).xyz*2-1;
   float3 t=normalize(input.Tangent-n*dot(input.Tangent,n));
   float3 b=cross(n,t)*sign(dot(cross(n,t),input.Bitangent));
   n=normalize(t*mapped.x+b*mapped.y+n*mapped.z);
@@ -202,6 +203,7 @@ struct Renderer::Impl
     unsigned indexCount{}, viewWidth{}, viewHeight{};
     std::size_t bytes{}, meshBytes{};
     float low{}, high{1};
+    float normalMipBias{};
     RefCntAutoPtr<IShader> makeShader(const char *source, const char *entry, SHADER_TYPE type)
     {
         ShaderCreateInfo ci;
@@ -569,7 +571,8 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
         MapHelper<Constants> cb(r.context, r.constants, MAP_WRITE, MAP_FLAG_DISCARD);
         *cb = Constants{{camera.yaw, camera.pitch, camera.distance, float(width) / height},
                         {camera.target[0], camera.target[1], camera.target[2], float(mode)},
-                        {r.low, r.high, r.baked ? 1.0f : 0.0f, float(r.materialAppearance)}};
+                        {r.low, r.high, r.baked ? 1.0f : 0.0f, float(r.materialAppearance)},
+                        {r.normalMipBias, 0.0f, 0.0f, 0.0f}};
         cb.Unmap();
         auto *pso = (mode == 2 && r.wire) ? r.wire.RawPtr() : r.solid.RawPtr();
         r.context->SetPipelineState(pso);
@@ -627,6 +630,12 @@ void Renderer::capture(const std::filesystem::path &path)
         stbi_write_png(path.string().c_str(), desc.Width, desc.Height, 4, mapped.pData, int(mapped.Stride));
     r.context->UnmapTextureSubresource(staging, 0, 0);
     require(ok != 0, "Capture write failed");
+}
+void Renderer::setNormalMipBias(float bias)
+{
+    require(std::isfinite(bias) && bias >= -2.0f && bias <= 0.0f,
+            "Normal mip bias must be finite and between -2 and zero");
+    impl->normalMipBias = bias;
 }
 GpuComparison Renderer::compareFbm(const MeshResult &mesh, const Layer &layer)
 {

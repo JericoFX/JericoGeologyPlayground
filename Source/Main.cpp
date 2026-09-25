@@ -1036,7 +1036,8 @@ void captureSlateTemporal(Renderer &renderer, const std::filesystem::path &evide
     std::ofstream(evidence / "slate-temporal-proof.json") << report.dump(2) << '\n';
     std::cout << report.dump(2) << '\n';
 }
-void captureRockTemporal(Renderer &renderer, const std::filesystem::path &evidence, int family)
+void captureRockTemporal(Renderer &renderer, const std::filesystem::path &evidence, int family,
+                         bool biasSweep = false)
 {
     if (family != 8 && family != 11)
         throw std::runtime_error("Rock temporal capture requires signed cliff or fractured strata");
@@ -1062,6 +1063,7 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     const auto diffuse = materialDiffuse(appearance);
     Camera camera;
     camera.distance = family == 8 ? 20.0f : 11.6f;
+    const auto farDistance = camera.distance;
     constexpr std::array offsets{-0.001f, -0.0005f, 0.0f, 0.0005f, 0.001f};
     auto captureSequence = [&](const std::string &name)
     {
@@ -1092,6 +1094,36 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     const auto unmippedBufferBytes = renderer.bufferBytes();
     captureSequence("low-no-normal-mips");
     preview.bake.normalMips = std::move(savedMips);
+    if (biasSweep)
+    {
+        renderer.upload(preview.bake.low, &preview.bake);
+        renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+        renderer.setNormalMipBias(-0.5f);
+        captureSequence("low-bias-half");
+        renderer.setNormalMipBias(-1.0f);
+        captureSequence("low-bias-one");
+        renderer.setNormalMipBias(0.0f);
+
+        camera.distance = farDistance * 0.5f;
+        renderer.upload(preview.high);
+        renderer.uploadMaterial(nullptr, diffuse, true, appearance);
+        captureSequence("near-high");
+        renderer.upload(preview.bake.low, &preview.bake);
+        renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+        captureSequence("near-low-mips");
+        auto nearMips = std::move(preview.bake.normalMips);
+        renderer.upload(preview.bake.low, &preview.bake);
+        renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+        captureSequence("near-low-no-normal-mips");
+        preview.bake.normalMips = std::move(nearMips);
+        renderer.upload(preview.bake.low, &preview.bake);
+        renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+        renderer.setNormalMipBias(-0.5f);
+        captureSequence("near-low-bias-half");
+        renderer.setNormalMipBias(-1.0f);
+        captureSequence("near-low-bias-one");
+        renderer.setNormalMipBias(0.0f);
+    }
     nlohmann::json report = {{"family", family}, {"adapter", renderer.adapter()},
                              {"imageSize", {1280, 960}}, {"textureResolution", 2048},
                              {"reprojectionVersion", 1},
@@ -1102,7 +1134,7 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
                              {"cameraYaw", camera.yaw}, {"cameraPitch", camera.pitch},
                              {"cameraTarget", camera.target},
                              {"normalMipLevels", preview.bake.normalMips.size() + 1},
-                             {"yawOffsets", offsets}, {"cameraDistance", camera.distance},
+                             {"yawOffsets", offsets}, {"cameraDistance", farDistance},
                              {"highHash", preview.bake.highHash},
                              {"lowHash", preview.bake.lowHash},
                              {"samples", preview.bake.samples},
@@ -1111,6 +1143,11 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
                              {"bakeCpuMs", preview.bake.milliseconds},
                              {"mippedBufferBytes", mippedBufferBytes},
                              {"unmippedBufferBytes", unmippedBufferBytes}};
+    if (biasSweep)
+    {
+        report["normalMipBiasVariants"] = {{"low-bias-half", -0.5}, {"low-bias-one", -1.0}};
+        report["nearCameraDistance"] = camera.distance;
+    }
     std::ofstream(evidence / "rock-temporal-proof.json") << report.dump(2) << '\n';
     std::cout << report.dump(2) << '\n';
 }
@@ -1529,7 +1566,8 @@ int run(int argc, char **argv)
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
          caveGeologySmoke = false, caveAxialSmoke = false, caveBlindSmoke = false,
-         slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false;
+         slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
+         cliffMipBiasSmoke = false, strataMipBiasSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1562,6 +1600,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--slate-temporal-bake-test" ||
             std::string(argv[i]) == "--cliff-temporal-bake-test" ||
             std::string(argv[i]) == "--strata-temporal-bake-test" ||
+            std::string(argv[i]) == "--cliff-mip-bias-test" ||
+            std::string(argv[i]) == "--strata-mip-bias-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1605,6 +1645,8 @@ int run(int argc, char **argv)
             slateTemporalSmoke = std::string(argv[i]) == "--slate-temporal-bake-test";
             cliffTemporalSmoke = std::string(argv[i]) == "--cliff-temporal-bake-test";
             strataTemporalSmoke = std::string(argv[i]) == "--strata-temporal-bake-test";
+            cliffMipBiasSmoke = std::string(argv[i]) == "--cliff-mip-bias-test";
+            strataMipBiasSmoke = std::string(argv[i]) == "--strata-mip-bias-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -2305,9 +2347,11 @@ int run(int argc, char **argv)
                 window.requestClose();
                 continue;
             }
-            if (cliffTemporalSmoke || strataTemporalSmoke)
+            if (cliffTemporalSmoke || strataTemporalSmoke || cliffMipBiasSmoke || strataMipBiasSmoke)
             {
-                captureRockTemporal(renderer, evidence, cliffTemporalSmoke ? 8 : 11);
+                captureRockTemporal(renderer, evidence,
+                                    cliffTemporalSmoke || cliffMipBiasSmoke ? 8 : 11,
+                                    cliffMipBiasSmoke || strataMipBiasSmoke);
                 window.requestClose();
                 continue;
             }

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\RockMipBiasAudit.py", line 53, in <module>
+    result = verify(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\RockMipBiasAudit.py", line 23, in verify
+    assert proof["normalMipBiasVariants"] == EXPECTED_BIASES
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'normalMipBiasVariants'

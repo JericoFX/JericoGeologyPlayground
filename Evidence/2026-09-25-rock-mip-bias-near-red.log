@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\RockMipBiasAudit.py", line 69, in <module>
+    result = verify(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\RockMipBiasAudit.py", line 24, in verify
+    assert proof["nearCameraDistance"] == proof["cameraDistance"] * 0.5
+           ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'nearCameraDistance'

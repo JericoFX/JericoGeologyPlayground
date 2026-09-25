@@ -29,6 +29,7 @@ class Renderer
     void *draw(unsigned width, unsigned height, const Camera &camera, int mode);
     void present();
     void capture(const std::filesystem::path &path);
+    void setNormalMipBias(float bias);
     GpuComparison compareFbm(const MeshResult &mesh, const Layer &layer);
     std::size_t bufferBytes() const;
     std::string adapter() const;
