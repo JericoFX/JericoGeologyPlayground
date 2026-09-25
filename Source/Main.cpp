@@ -1043,6 +1043,13 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
     camera.yaw = 0.12f;
     camera.pitch = -0.14f;
     camera.distance = 10.5f;
+    Camera entrance = camera;
+    entrance.yaw = 0;
+    entrance.pitch = -0.02f;
+    entrance.distance = 5.0f;
+    entrance.target = {0, -0.5f, 0};
+    report["entranceCamera"] = {{"yaw", entrance.yaw}, {"pitch", entrance.pitch},
+                                {"distance", entrance.distance}, {"target", entrance.target}};
     for (auto [form, name] : {std::pair{CaveForm::Arch, "arch"},
                               std::pair{CaveForm::SquareTunnel, "square"}})
     {
@@ -1123,6 +1130,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 }
                 renderer.draw(1280, 960, camera, 0);
                 renderer.capture(formDirectory / "high.png");
+                renderer.draw(1280, 960, entrance, 5);
+                renderer.capture(formDirectory / "high-entrance-material.png");
             }
             renderer.upload(bake.low, &bake);
             renderer.uploadMaterial(&bake, diffuse, true, 4);
@@ -1135,6 +1144,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 oblique.pitch = -0.22f;
                 renderer.draw(1280, 960, oblique, 5);
                 renderer.capture(directory / "low-oblique-material.png");
+                renderer.draw(1280, 960, entrance, 5);
+                renderer.capture(directory / "low-entrance-material.png");
             }
             renderer.draw(1280, 960, camera, 0);
             renderer.capture(directory / "low-normal.png");

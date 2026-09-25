@@ -22,6 +22,8 @@ El [ensayo de boca-garganta-cámara](Evidence/2026-09-25-cave-profile-rejected.m
 
 La [variante axial con reducción desde la macroforma high](Evidence/2026-09-25-cave-axial-lods.md) resolvió ese fallo técnico: tres LOD decrecientes conservan boca/garganta/interior, seis paquetes de bakes tienen cero misses y 266 artefactos de dos corridas con el mismo binario coinciden. Es opt-in; la Beauty sigue mostrando un bloque perforado, por lo que aún falta una caverna natural.
 
+Las [vistas cercanas del arco y el túnel cuadrado](Evidence/2026-09-25-cave-entrance-view.md) muestran la sección interior high/LOD2 con el mismo material y los seis bakes previos válidos; 270 PNG/OBJ coinciden entre dos corridas. El arco sigue sin cámara profunda ni iluminación interior y permanece **PARTIAL** como caverna natural.
+
 El [perfil opt-in v14 de borde erosionado del cliff](Evidence/2026-09-25-cliff-eroded-rim.md), inspirado sólo en conceptos de ruido del PDF `CascadesDemoSecrets`, retrae la malla según los ejes locales, conserva selección/UV y pasó tres LOD con bakes sin misses y 171 artefactos repetibles. La captura original muestra un borde menos recto, pero todavía una pared recortada y una hendidura suave; la Beauty del cliff continúa **PARTIAL**.
 
 El [perfil opt-in v15 de horizontes fracturados](Evidence/2026-09-25-layered-fractured-horizons.md) redujo la repetición radial entre capas del preset 11 de 0,902 a 0,671 sin perder contactos exactos. Tres LOD high→low con material automático, UV y mapas pasaron sin misses; 172 artefactos fueron idénticos en replay. Sigue **PARTIAL** en Beauty: todavía se percibe un bloque estratificado con un saliente lateral. Este perfil no es el default del preset ni está en el Engine.
