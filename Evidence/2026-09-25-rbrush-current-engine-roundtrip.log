@@ -1,0 +1,1 @@
+PASS CC0 PNG -> canonical RBrush pack -> container -> local field; tip=1024x1024 inside=803853 presetThreshold08Inside=31009 tipHash=7152dc7834efab33f09c9efb9a3abf088a7a30d6beec6851efe009da9c236f45 packBytes=230186 importMs=34.1263 roundtripMs=181.146 fieldMs=44.222 thresholdGateMs=80.4899 preview524288SamplesMs=0

@@ -1,0 +1,9 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 4: Playground.RBrushInterop
+1/2 Test #4: Playground.RBrushInterop ..........   Passed    0.04 sec
+    Start 5: Playground.RBrushImageRoundtrip
+2/2 Test #5: Playground.RBrushImageRoundtrip ...   Passed    0.38 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.46 sec

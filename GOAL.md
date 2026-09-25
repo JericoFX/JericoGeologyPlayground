@@ -52,4 +52,6 @@ El [relieve opt-in del túnel cuadrado](Evidence/2026-09-25-square-tunnel-wall-r
 
 La [prueba de erosión de juntas por capa de pizarra](Evidence/2026-09-25-slate-layer-joints-rejected.md) se rechazó: respetó los contactos, pero el primer campo excedió los tres errores high→low y el segundo aún rechazó LOD1 (0,034 frente a 0,03 m), con diferencias visuales pequeñas. El código experimental se retiró; la fuente tabular v16 continúa como control. No elevar los presupuestos ni ajustar mips para ocultar una macrofractura insuficiente.
 
+La [revalidación RBrush contra el checkout actual del Engine](Evidence/2026-09-25-rbrush-current-engine-compatibility.md) pasó los dos tests Release de interoperabilidad/roundtrip del alpha CC0 y fijó hashes de los inputs del Engine. Eso verifica el adaptador matemático y el contenedor local, no el stamp/editor/cook/runtime real de M8.
+
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.

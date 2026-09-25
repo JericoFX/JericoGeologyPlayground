@@ -1,0 +1,4 @@
+RBrush -> Engine rockfall detached voxels: masked=1 unmasked=2 inverted=1
+RBrush shader-float emulation max weight delta 8.19946e-08 over 131072 point/depth samples
+RBrush 257x257 derive ms 2.6624, 65536 sample ms 2.6791
+PASS canonical RBrush tip, Engine mask SDF and local-field projection

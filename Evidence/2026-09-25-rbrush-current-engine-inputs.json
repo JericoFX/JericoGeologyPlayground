@@ -1,0 +1,33 @@
+{
+  "engineHead": "e7fdd3f18acc6a13c83b5ef5f92c295dfa7e4591",
+  "linkedEngineSources": [
+    {
+      "path": "Tools/AssetPipeline/Source/RBrushImageImporter.cpp",
+      "sha256": "ab5698bd237ec05556d90af883fe3efc0e15caf7c99cb1f13be2bc9d586f545a",
+      "bytes": 50001
+    },
+    {
+      "path": "Tools/AssetPipeline/Source/RBrushHash.cpp",
+      "sha256": "e08bb1dde39c5c81f0a70b2bd3f995eca345cf4e3a5f718953cae7a478fc88e9",
+      "bytes": 1859
+    },
+    {
+      "path": "Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp",
+      "sha256": "06660df6b662e537daeaae0d2f2ddd6519aa999311552fbbd6dc3e306ba707ed",
+      "bytes": 19963
+    },
+    {
+      "path": "Tools/ProceduralAuthoring/Source/SolidEvaluatorManifold.cpp",
+      "sha256": "d8f7252c2f8c3d76cb0f639df8e9be00d56a1a61112142d5a94ea12efa3247b3",
+      "bytes": 74745
+    },
+    {
+      "path": "Tools/AssetPipeline/Include/Jerico/AssetPipeline/RBrushImageImporter.hpp",
+      "sha256": "ab3976e90ea408a4f2513efe9c258c7a057cfb0fc4f8884d9e09bd248495098b",
+      "bytes": 852
+    }
+  ],
+  "linkedEngineSourceDirtyPaths": [],
+  "playgroundRoot": "F:\\JericoGeologyPlayground",
+  "result": "RBrushInterop and RBrushImageRoundtrip Release tests PASS"
+}
