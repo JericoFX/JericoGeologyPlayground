@@ -1,0 +1,93 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFourBlocks": false,
+  "angularFracture": false,
+  "automaticUv": true,
+  "cases": [
+    {
+      "family": 8,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4961.1288,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.02,
+          "highHash": 2791068279845878686,
+          "highTriangles": 16896,
+          "lod": 0,
+          "lowHash": 13026438587015765275,
+          "lowTriangles": 14024,
+          "misses": 0,
+          "sampledSurfaceError": 0.014569669565541381,
+          "samples": 1717266,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4794.7741,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.1,
+          "errorBudget": 0.03,
+          "highHash": 2791068279845878686,
+          "highTriangles": 16896,
+          "lod": 1,
+          "lowHash": 6010024385877019253,
+          "lowTriangles": 11794,
+          "misses": 0,
+          "sampledSurfaceError": 0.023425550694073313,
+          "samples": 1675639,
+          "status": "BAKED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 4833.6292,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.1,
+          "errorBudget": 0.04,
+          "highHash": 2791068279845878686,
+          "highTriangles": 16896,
+          "lod": 2,
+          "lowHash": 807133521197786637,
+          "lowTriangles": 10020,
+          "misses": 0,
+          "sampledSurfaceError": 0.03164146742862761,
+          "samples": 1698390,
+          "status": "BAKED"
+        }
+      ]
+    }
+  ],
+  "cliffDrainage": false,
+  "cliffEdgeDamage": false,
+  "cliffMacroWarp": true,
+  "cliffNonharmonic": false,
+  "cliffRBrushAlpha": true,
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "layeredMaterial": false,
+  "layeredMaterialNoMips": false,
+  "layeredOcclusion": false,
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

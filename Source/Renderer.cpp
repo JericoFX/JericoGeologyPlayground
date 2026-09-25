@@ -74,7 +74,7 @@ float4 PSMain(VOut input):SV_TARGET {
   float contact=ContactMap.Sample(ContactMap_sampler,uv).r;
   float cavity=CavityMap.Sample(CavityMap_sampler,uv).r;
   float edge=EdgeMap.Sample(EdgeMap_sampler,uv).r;
-  float3 weight=pow(abs(normalize(input.Normal)),4);
+  float3 weight=pow(abs(n),4);
   weight/=max(weight.x+weight.y+weight.z,0.00001);
   float materialScale=Range.w>3.5?.22:.8;
   float3 albedo=ColorMap.Sample(ColorMap_sampler,input.World.yz*materialScale).rgb*weight.x+
