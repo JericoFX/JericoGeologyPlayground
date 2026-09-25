@@ -249,7 +249,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 3:
         raise SystemExit("usage: BakeMipAudit.py <bake-root> <output-json>")
     root = Path(sys.argv[1])
-    auto_folders = sorted(root.glob("rock-*/lod-*/bake.json"))
+    auto_folders = sorted(root.glob("*/lod-*/bake.json"))
     cases = ([audit_auto_uv(path.parent) for path in auto_folders] if auto_folders else
              [audit(folder) for folder in sorted(root.glob("normal-bake-*")) if folder.is_dir()])
     if not cases:

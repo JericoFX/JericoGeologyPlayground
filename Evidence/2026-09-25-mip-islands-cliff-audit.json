@@ -1,0 +1,793 @@
+{
+  "scope": "fixed-UV normal angle, scalar-map difference, region mismatch, and inter-island footprint audit from exported automatic-UV mips; not moving-runtime or perceptual Beauty",
+  "scriptSha256": "2a6fc0e1a0c4c9374f37b31d18aba6d5bae8c224e9c9cd0a9ef90656c5ae9b86",
+  "automaticUvSamplesPerTriangle": 4,
+  "cases": [
+    {
+      "family": "rock-8",
+      "lod": "lod-0",
+      "lowTriangles": 13324,
+      "sampledUvs": 53296,
+      "islandInteriorSamples": 43510,
+      "islandMarginSamples": 9786,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.16644653944786283,
+          "p95AngleDegrees": 0.5517651043097939,
+          "islandInteriorP95AngleDegrees": 0.45408725675838496,
+          "islandMarginP95AngleDegrees": 1.0836998255781052,
+          "p99AngleDegrees": 1.5029938046776221,
+          "maximumAngleDegrees": 27.308549670387386,
+          "fractionOver10Degrees": 0.00015010507355148604,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.35651546710696014,
+          "p95AngleDegrees": 1.9132143221027587,
+          "islandInteriorP95AngleDegrees": 1.3233574557177479,
+          "islandMarginP95AngleDegrees": 4.204971206132024,
+          "p99AngleDegrees": 5.02171206686355,
+          "maximumAngleDegrees": 33.81403423254004,
+          "fractionOver10Degrees": 0.002082707895526869,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 0.8042744013104894,
+          "p95AngleDegrees": 4.94190134579358,
+          "islandInteriorP95AngleDegrees": 3.2459591847007725,
+          "islandMarginP95AngleDegrees": 10.077571228693621,
+          "p99AngleDegrees": 10.994061999992413,
+          "maximumAngleDegrees": 46.64374438981296,
+          "fractionOver10Degrees": 0.012608826178324827,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0009600147857827026,
+            "p95AbsoluteDifference": 0.0026083710594856017,
+            "islandInteriorP95Difference": 0.0024558142929819544,
+            "islandMarginP95Difference": 0.0037400357522938956
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.002312551911106395,
+            "p95AbsoluteDifference": 0.007398733984040983,
+            "islandInteriorP95Difference": 0.006046882979231555,
+            "islandMarginP95Difference": 0.013458830320974308
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.005634100485052911,
+            "p95AbsoluteDifference": 0.019489624252966284,
+            "islandInteriorP95Difference": 0.015649403121141287,
+            "islandMarginP95Difference": 0.03221982419866828
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00042061447738362296,
+            "p95AbsoluteDifference": 0.00196078431372549,
+            "islandInteriorP95Difference": 0.00196078431372549,
+            "islandMarginP95Difference": 0.002395196256303975
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0008831199466850841,
+            "p95AbsoluteDifference": 0.0036965117996969102,
+            "islandInteriorP95Difference": 0.003370821105856174,
+            "islandMarginP95Difference": 0.005187248960368486
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0019246699749691104,
+            "p95AbsoluteDifference": 0.00775630725790337,
+            "islandInteriorP95Difference": 0.00667905945471812,
+            "islandMarginP95Difference": 0.011644560595599613
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.004763659745293084,
+            "p95AbsoluteDifference": 0.016666666666666666,
+            "islandInteriorP95Difference": 0.014273362629899913,
+            "islandMarginP95Difference": 0.027763361766766498
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.019109225754523076,
+            "p95AbsoluteDifference": 0.06626857953590076,
+            "islandInteriorP95Difference": 0.057652932264606396,
+            "islandMarginP95Difference": 0.10071082310704
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05395737136084314,
+            "p95AbsoluteDifference": 0.16921669016979007,
+            "islandInteriorP95Difference": 0.15595987454850538,
+            "islandMarginP95Difference": 0.2156210694087122
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0020950449880101345,
+            "p95AbsoluteDifference": 0.009942728592776284,
+            "islandInteriorP95Difference": 0.006710066009705467,
+            "islandMarginP95Difference": 0.024277995377433758
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0071854759689432175,
+            "p95AbsoluteDifference": 0.03887005121369205,
+            "islandInteriorP95Difference": 0.026090473328470323,
+            "islandMarginP95Difference": 0.08285068108580876
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.016902450543209883,
+            "p95AbsoluteDifference": 0.09645688055117356,
+            "islandInteriorP95Difference": 0.06470680305141521,
+            "islandMarginP95Difference": 0.1775540032521148
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0055467401228746945,
+            "p95AbsoluteDifference": 0.030035705035367566,
+            "islandInteriorP95Difference": 0.021725027403239484,
+            "islandMarginP95Difference": 0.06276166453165334
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.01920046535259025,
+            "p95AbsoluteDifference": 0.10666946794912756,
+            "islandInteriorP95Difference": 0.0843420475091739,
+            "islandMarginP95Difference": 0.17998573597650175
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.04577285196857432,
+            "p95AbsoluteDifference": 0.23162202608544094,
+            "islandInteriorP95Difference": 0.20087781103752267,
+            "islandMarginP95Difference": 0.31112679399086807
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001480073584417503,
+            "p95AbsoluteDifference": 0.006084086674355586,
+            "islandInteriorP95Difference": 0.003617110786156034,
+            "islandMarginP95Difference": 0.015191170432180847
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.006030495555839053,
+            "p95AbsoluteDifference": 0.031860195278361564,
+            "islandInteriorP95Difference": 0.021310590761282812,
+            "islandMarginP95Difference": 0.06471919258401777
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.017096979277831,
+            "p95AbsoluteDifference": 0.0963530546200744,
+            "islandInteriorP95Difference": 0.07060464144960571,
+            "islandMarginP95Difference": 0.16230574056104408
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001009094192793774,
+            "p95AbsoluteDifference": 0.002677773961833879,
+            "islandInteriorP95Difference": 0.0024815432774915394,
+            "islandMarginP95Difference": 0.004335983627813631
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00284747552994792,
+            "p95AbsoluteDifference": 0.009121491718222421,
+            "islandInteriorP95Difference": 0.006772150999804214,
+            "islandMarginP95Difference": 0.0187167148873271
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.006975634623826767,
+            "p95AbsoluteDifference": 0.02638790931851317,
+            "islandInteriorP95Difference": 0.02067942098237347,
+            "islandMarginP95Difference": 0.045577903015674014
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0007711837963327205,
+            "p95AbsoluteDifference": 0.0028359098015499043,
+            "islandInteriorP95Difference": 0.002769567452225026,
+            "islandMarginP95Difference": 0.0031175588770327987
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001070731945322126,
+            "p95AbsoluteDifference": 0.003485242893395893,
+            "islandInteriorP95Difference": 0.003448889239940554,
+            "islandMarginP95Difference": 0.003583470254645639
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0013088675909269233,
+            "p95AbsoluteDifference": 0.0038691303240792714,
+            "islandInteriorP95Difference": 0.003910952052055706,
+            "islandMarginP95Difference": 0.003679478401567858
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-1",
+      "lowTriangles": 11178,
+      "sampledUvs": 44712,
+      "islandInteriorSamples": 34945,
+      "islandMarginSamples": 9767,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.18744636326838493,
+          "p95AngleDegrees": 0.694000057892505,
+          "islandInteriorP95AngleDegrees": 0.5404319662770422,
+          "islandMarginP95AngleDegrees": 1.220097624749496,
+          "p99AngleDegrees": 1.8656634569939892,
+          "maximumAngleDegrees": 23.681057073361135,
+          "fractionOver10Degrees": 0.0004696725711218465,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.43514689405373813,
+          "p95AngleDegrees": 2.3284433179908497,
+          "islandInteriorP95AngleDegrees": 1.6459360371831462,
+          "islandMarginP95AngleDegrees": 4.358921086061468,
+          "p99AngleDegrees": 5.638656778669275,
+          "maximumAngleDegrees": 30.60424861547097,
+          "fractionOver10Degrees": 0.00257201646090535,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.1081275952923144,
+          "p95AngleDegrees": 5.65285343036207,
+          "islandInteriorP95AngleDegrees": 3.839848027005754,
+          "islandMarginP95AngleDegrees": 10.17202884100247,
+          "p99AngleDegrees": 11.70485640644847,
+          "maximumAngleDegrees": 49.138006532216366,
+          "fractionOver10Degrees": 0.015186079799606369,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0010294237194971793,
+            "p95AbsoluteDifference": 0.0027619260062484406,
+            "islandInteriorP95Difference": 0.0025510541130514676,
+            "islandMarginP95Difference": 0.00418487312868533
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0025088562176972962,
+            "p95AbsoluteDifference": 0.008063927390435589,
+            "islandInteriorP95Difference": 0.006430192870063952,
+            "islandMarginP95Difference": 0.013739714461584823
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.005980368194791707,
+            "p95AbsoluteDifference": 0.020731913967465505,
+            "islandInteriorP95Difference": 0.016205277738455832,
+            "islandMarginP95Difference": 0.033625293135962436
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0004563239529474738,
+            "p95AbsoluteDifference": 0.0020121743926243456,
+            "islandInteriorP95Difference": 0.00196078431372549,
+            "islandMarginP95Difference": 0.0024821038733010502
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0009596506836556873,
+            "p95AbsoluteDifference": 0.003931253410538534,
+            "islandInteriorP95Difference": 0.0034614828634349716,
+            "islandMarginP95Difference": 0.005390225681974992
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.002049425304324181,
+            "p95AbsoluteDifference": 0.008111185820728782,
+            "islandInteriorP95Difference": 0.0068571375675479,
+            "islandMarginP95Difference": 0.012028449903266245
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0054441030973659274,
+            "p95AbsoluteDifference": 0.019258147198747615,
+            "islandInteriorP95Difference": 0.01608802434584557,
+            "islandMarginP95Difference": 0.03188056520216038
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.020561785138864842,
+            "p95AbsoluteDifference": 0.07108685745889035,
+            "islandInteriorP95Difference": 0.05982035112731579,
+            "islandMarginP95Difference": 0.10570644682782152
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05580050083081246,
+            "p95AbsoluteDifference": 0.17565627133653436,
+            "islandInteriorP95Difference": 0.15856305914993402,
+            "islandMarginP95Difference": 0.22267475603881642
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.002394684533544362,
+            "p95AbsoluteDifference": 0.011478432685824576,
+            "islandInteriorP95Difference": 0.007259336208540018,
+            "islandMarginP95Difference": 0.02626128029229247
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00795950273531591,
+            "p95AbsoluteDifference": 0.04444059526605986,
+            "islandInteriorP95Difference": 0.02805497504277693,
+            "islandMarginP95Difference": 0.08973129761259555
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.018401828313241657,
+            "p95AbsoluteDifference": 0.10357240041621159,
+            "islandInteriorP95Difference": 0.06883575800676378,
+            "islandMarginP95Difference": 0.18379490852642671
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006360618722682294,
+            "p95AbsoluteDifference": 0.03388411038489321,
+            "islandInteriorP95Difference": 0.0241920378844083,
+            "islandMarginP95Difference": 0.06424701951555999
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.02122604844595213,
+            "p95AbsoluteDifference": 0.11680849674228555,
+            "islandInteriorP95Difference": 0.09052564588397181,
+            "islandMarginP95Difference": 0.18419362377398532
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.049292762229852655,
+            "p95AbsoluteDifference": 0.24276832096632386,
+            "islandInteriorP95Difference": 0.2076319448272627,
+            "islandMarginP95Difference": 0.3170543534510287
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001841563323162226,
+            "p95AbsoluteDifference": 0.007896581566654404,
+            "islandInteriorP95Difference": 0.0044740130259728166,
+            "islandMarginP95Difference": 0.017459842701620567
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.006921515528386714,
+            "p95AbsoluteDifference": 0.03714400409817279,
+            "islandInteriorP95Difference": 0.023774014115059607,
+            "islandMarginP95Difference": 0.06842767268785042
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.019277907180542467,
+            "p95AbsoluteDifference": 0.10501934741121928,
+            "islandInteriorP95Difference": 0.0730298219235985,
+            "islandMarginP95Difference": 0.16997345074151252
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.001120325756325243,
+            "p95AbsoluteDifference": 0.002881205341505915,
+            "islandInteriorP95Difference": 0.002605237773820461,
+            "islandMarginP95Difference": 0.004876523043594497
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.003164221329168986,
+            "p95AbsoluteDifference": 0.010317457822943528,
+            "islandInteriorP95Difference": 0.007553987027894606,
+            "islandMarginP95Difference": 0.019068720544632475
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.007724913419052403,
+            "p95AbsoluteDifference": 0.029409965692326116,
+            "islandInteriorP95Difference": 0.022100059501986544,
+            "islandMarginP95Difference": 0.047288261391156515
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.000774691853151524,
+            "p95AbsoluteDifference": 0.002729166219517127,
+            "islandInteriorP95Difference": 0.002659432476057724,
+            "islandMarginP95Difference": 0.0029579983085425846
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0011690109606269225,
+            "p95AbsoluteDifference": 0.0035929258418379005,
+            "islandInteriorP95Difference": 0.003571963846391322,
+            "islandMarginP95Difference": 0.0036375841687505354
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0015928773811397145,
+            "p95AbsoluteDifference": 0.004350438793853999,
+            "islandInteriorP95Difference": 0.004521037677937766,
+            "islandMarginP95Difference": 0.0039013146651297004
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "family": "rock-8",
+      "lod": "lod-2",
+      "lowTriangles": 9490,
+      "sampledUvs": 37960,
+      "islandInteriorSamples": 28394,
+      "islandMarginSamples": 9566,
+      "baseUnpaintedInteriorSamples": 0,
+      "mips": [
+        {
+          "mip": 1,
+          "medianAngleDegrees": 0.1997248348667349,
+          "p95AngleDegrees": 0.8162480485309583,
+          "islandInteriorP95AngleDegrees": 0.6232434246876102,
+          "islandMarginP95AngleDegrees": 1.3567931638165633,
+          "p99AngleDegrees": 2.223497620901161,
+          "maximumAngleDegrees": 22.194386917147376,
+          "fractionOver10Degrees": 0.0003951527924130664,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 2,
+          "medianAngleDegrees": 0.4968194122482548,
+          "p95AngleDegrees": 2.72443947825216,
+          "islandInteriorP95AngleDegrees": 1.9088817881098488,
+          "islandMarginP95AngleDegrees": 4.691217136215334,
+          "p99AngleDegrees": 6.2043783451908165,
+          "maximumAngleDegrees": 32.6091509470586,
+          "fractionOver10Degrees": 0.0033983140147523707,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        },
+        {
+          "mip": 3,
+          "medianAngleDegrees": 1.339763907195914,
+          "p95AngleDegrees": 6.209655819762463,
+          "islandInteriorP95AngleDegrees": 4.4904953128240415,
+          "islandMarginP95AngleDegrees": 10.346062345110875,
+          "p99AngleDegrees": 12.516460040700236,
+          "maximumAngleDegrees": 42.218557940726676,
+          "fractionOver10Degrees": 0.017966280295047418,
+          "unpaintedInteriorSamples": 0,
+          "mixedIslandTexels": 0,
+          "crossIslandBilinearSamples": 0,
+          "emptyGutterBilinearSamples": 0,
+          "meanEmptyGutterWeight": 0.0,
+          "p95EmptyGutterWeight": 0.0,
+          "maximumEmptyGutterWeight": 0.0
+        }
+      ],
+      "specialistMips": {
+        "ambient-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0010884009712673953,
+            "p95AbsoluteDifference": 0.0028993071118962044,
+            "islandInteriorP95Difference": 0.0026510314229423837,
+            "islandMarginP95Difference": 0.0043147552505651415
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0026839080142890483,
+            "p95AbsoluteDifference": 0.008890265469899867,
+            "islandInteriorP95Difference": 0.006804046383511762,
+            "islandMarginP95Difference": 0.014712078085288264
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.006302718443995984,
+            "p95AbsoluteDifference": 0.022237632421056093,
+            "islandInteriorP95Difference": 0.01697900821963283,
+            "islandMarginP95Difference": 0.033847588480850885
+          }
+        ],
+        "contact-occlusion": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.00047090397069949675,
+            "p95AbsoluteDifference": 0.002043653878379913,
+            "islandInteriorP95Difference": 0.00196078431372549,
+            "islandMarginP95Difference": 0.0025075613283643537
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.001000752750177664,
+            "p95AbsoluteDifference": 0.004046197370650997,
+            "islandInteriorP95Difference": 0.003506331360496165,
+            "islandMarginP95Difference": 0.005663867908365586
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.002111555637046074,
+            "p95AbsoluteDifference": 0.008491065931755153,
+            "islandInteriorP95Difference": 0.006908308815995049,
+            "islandMarginP95Difference": 0.012319978387209881
+          }
+        ],
+        "signed-curvature": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.006049509246838483,
+            "p95AbsoluteDifference": 0.022291819483978206,
+            "islandInteriorP95Difference": 0.018358144218217246,
+            "islandMarginP95Difference": 0.032510567671306494
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.021796702262953552,
+            "p95AbsoluteDifference": 0.07565505412972144,
+            "islandInteriorP95Difference": 0.06296844512127567,
+            "islandMarginP95Difference": 0.10774832069770021
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05761970207965515,
+            "p95AbsoluteDifference": 0.18233118556683492,
+            "islandInteriorP95Difference": 0.1631335697337263,
+            "islandMarginP95Difference": 0.22280206708385766
+          }
+        ],
+        "cavity": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0027485967469048273,
+            "p95AbsoluteDifference": 0.01347095253259121,
+            "islandInteriorP95Difference": 0.008146900859291761,
+            "islandMarginP95Difference": 0.02780840017641031
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.008805854227231884,
+            "p95AbsoluteDifference": 0.048795880383057724,
+            "islandInteriorP95Difference": 0.030490513075312968,
+            "islandMarginP95Difference": 0.09068905779260746
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.019945187928940525,
+            "p95AbsoluteDifference": 0.1132300696678428,
+            "islandInteriorP95Difference": 0.07227336181143437,
+            "islandMarginP95Difference": 0.18674912681960912
+          }
+        ],
+        "convex-edge": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.007112883301402216,
+            "p95AbsoluteDifference": 0.038258271380220796,
+            "islandInteriorP95Difference": 0.026320424470103188,
+            "islandMarginP95Difference": 0.07012441639091384
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.022822454948822884,
+            "p95AbsoluteDifference": 0.1255191076876772,
+            "islandInteriorP95Difference": 0.09593445210831741,
+            "islandMarginP95Difference": 0.18784789611849656
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.05249929465764079,
+            "p95AbsoluteDifference": 0.25716455276966976,
+            "islandInteriorP95Difference": 0.21538145784423351,
+            "islandMarginP95Difference": 0.3241552274506616
+          }
+        ],
+        "crease-distance-mask": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0021983114470668624,
+            "p95AbsoluteDifference": 0.00986479684282504,
+            "islandInteriorP95Difference": 0.005811756608780992,
+            "islandMarginP95Difference": 0.019292275642586627
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.00801838407213229,
+            "p95AbsoluteDifference": 0.04219405791902439,
+            "islandInteriorP95Difference": 0.027213266407049394,
+            "islandMarginP95Difference": 0.06987636215926614
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.02094020623029338,
+            "p95AbsoluteDifference": 0.11179913535690891,
+            "islandInteriorP95Difference": 0.07873717010576892,
+            "islandMarginP95Difference": 0.16532970970287314
+          }
+        ],
+        "thickness": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0012595611982241341,
+            "p95AbsoluteDifference": 0.003138982433661378,
+            "islandInteriorP95Difference": 0.0027500563212275245,
+            "islandMarginP95Difference": 0.005207476173253551
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.003515504107886811,
+            "p95AbsoluteDifference": 0.011764259213714351,
+            "islandInteriorP95Difference": 0.008917142539536205,
+            "islandMarginP95Difference": 0.01950138365553393
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.008259606874079093,
+            "p95AbsoluteDifference": 0.031180498250346377,
+            "islandInteriorP95Difference": 0.02473409699073858,
+            "islandMarginP95Difference": 0.045436052176649123
+          }
+        ],
+        "signed-height": [
+          {
+            "mip": 1,
+            "meanAbsoluteDifference": 0.0008317579792931066,
+            "p95AbsoluteDifference": 0.0027501776621742372,
+            "islandInteriorP95Difference": 0.0026565518832820305,
+            "islandMarginP95Difference": 0.0029974904882264916
+          },
+          {
+            "mip": 2,
+            "meanAbsoluteDifference": 0.0013142150623977617,
+            "p95AbsoluteDifference": 0.003783104840446921,
+            "islandInteriorP95Difference": 0.003790754873570059,
+            "islandMarginP95Difference": 0.003767385654945803
+          },
+          {
+            "mip": 3,
+            "meanAbsoluteDifference": 0.0019341073546007776,
+            "p95AbsoluteDifference": 0.005530222265324303,
+            "islandInteriorP95Difference": 0.005774473764038134,
+            "islandMarginP95Difference": 0.004401935579891266
+          }
+        ],
+        "region-id": [
+          {
+            "mip": 1,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 2,
+            "regionMismatchFraction": 0.0
+          },
+          {
+            "mip": 3,
+            "regionMismatchFraction": 0.0
+          }
+        ]
+      }
+    }
+  ]
+}
