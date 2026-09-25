@@ -1,0 +1,22 @@
+{
+  "scope": "same-binary slate joint-erosion candidate vs v16 tabular slate control; rejected experiment",
+  "control": "Evidence/slate-joints-control-2026-09-25",
+  "candidate": "Evidence/slate-joints-scaled-2026-09-25",
+  "views": {
+    "high-material.png": {
+      "objectPixels": 111523,
+      "objectMeanAbsRgb": 2.2474795931481997,
+      "objectFractionChangedGt20": 0.02006760937205778
+    },
+    "high-material-side.png": {
+      "objectPixels": 102488,
+      "objectMeanAbsRgb": 1.1944195092758827,
+      "objectFractionChangedGt20": 0.008205838732339396
+    },
+    "high-material-back.png": {
+      "objectPixels": 116276,
+      "objectMeanAbsRgb": 1.2180128888735995,
+      "objectFractionChangedGt20": 0.007697203206164642
+    }
+  }
+}

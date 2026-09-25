@@ -1,0 +1,15 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 10: Playground.Thickness
+1/1 Test #10: Playground.Thickness .............***Failed    0.65 sec
+horizon correlation baseline=0.901583 fractured=0.671257
+slate source aspect baseline=1.2846 cube=2.13394
+Recipe parameter outside Playground limits
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.67 sec
+
+The following tests FAILED:
+	 10 - Playground.Thickness (Failed)
+Errors while running CTest

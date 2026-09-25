@@ -1,0 +1,50 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFourBlocks": false,
+  "angularFracture": false,
+  "automaticUv": true,
+  "cases": [
+    {
+      "defaultMaterialAppearance": 2,
+      "defaultMaterialDiffuse": "cliff_side-diff-1k.jpg",
+      "family": 11,
+      "lods": [
+        {
+          "lod": 0,
+          "reason": "Regenerated low exceeds the selected sampled surface error: 0.040407",
+          "status": "REJECTED"
+        },
+        {
+          "lod": 1,
+          "reason": "Regenerated low exceeds the selected sampled surface error: 0.051846",
+          "status": "REJECTED"
+        },
+        {
+          "lod": 2,
+          "reason": "Regenerated low exceeds the selected sampled surface error: 0.058659",
+          "status": "REJECTED"
+        }
+      ]
+    }
+  ],
+  "cliffDrainage": false,
+  "cliffEdgeDamage": false,
+  "cliffErodedRim": false,
+  "cliffMacroWarp": false,
+  "cliffNonharmonic": false,
+  "cliffRBrushAlpha": false,
+  "cliffSignedRim": false,
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "layeredHorizonFracture": true,
+  "layeredJointErosion": true,
+  "layeredMaterial": true,
+  "layeredMaterialNoMips": false,
+  "layeredOcclusion": false,
+  "layeredSlateSource": true,
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}

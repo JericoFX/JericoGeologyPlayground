@@ -1,0 +1,89 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "angularFourBlocks": false,
+  "angularFracture": false,
+  "automaticUv": true,
+  "cases": [
+    {
+      "defaultMaterialAppearance": 2,
+      "defaultMaterialDiffuse": "cliff_side-diff-1k.jpg",
+      "family": 11,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 7992.1404,
+          "diagnosticMipMaps": {},
+          "edgeRadius": 0.02,
+          "errorBudget": 0.02,
+          "highHash": 8200485378070104931,
+          "highTriangles": 27648,
+          "lod": 0,
+          "lowHash": 1567695766722252182,
+          "lowTriangles": 19200,
+          "misses": 0,
+          "sampledSurfaceError": 0.018514319415438508,
+          "samples": 1128845,
+          "status": "BAKED"
+        },
+        {
+          "lod": 1,
+          "reason": "Regenerated low exceeds the selected sampled surface error: 0.034069",
+          "status": "REJECTED"
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 7383.7075,
+          "diagnosticMipMaps": {
+            "ao": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "cavity": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "contact": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            },
+            "convex-edge": {
+              "bytesAddedEstimate": 5505024,
+              "levels": 4
+            }
+          },
+          "edgeRadius": 0.02,
+          "errorBudget": 0.04,
+          "highHash": 8200485378070104931,
+          "highTriangles": 27648,
+          "lod": 2,
+          "lowHash": 16450853237293599681,
+          "lowTriangles": 9408,
+          "misses": 0,
+          "sampledSurfaceError": 0.027555362506159652,
+          "samples": 1554590,
+          "status": "BAKED"
+        }
+      ]
+    }
+  ],
+  "cliffDrainage": false,
+  "cliffEdgeDamage": false,
+  "cliffErodedRim": false,
+  "cliffMacroWarp": false,
+  "cliffNonharmonic": false,
+  "cliffRBrushAlpha": false,
+  "cliffSignedRim": false,
+  "curvatureRelaxation": 0.0,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "layeredHorizonFracture": true,
+  "layeredJointErosion": true,
+  "layeredMaterial": true,
+  "layeredMaterialNoMips": false,
+  "layeredOcclusion": false,
+  "layeredSlateSource": true,
+  "scope": "C++ high source projected independently to three low-mesh LODs per rock family",
+  "textureResolution": 2048
+}
