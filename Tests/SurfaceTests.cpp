@@ -227,6 +227,36 @@ int main()
             still += std::abs(depth) < 1e-8;
         }
         require(moved > 8 && still > 100, "brush has a local push and leaves distant cliff untouched");
+        auto metricRecipe = pushRecipe;
+        metricRecipe.version = 18;
+        metricRecipe.layers[4].profile = 5;
+        const auto metricPush = evaluate(metricRecipe, 32, 4);
+        require(metricPush.mesh.indices == pushed.mesh.indices &&
+                    metricPush.mesh.triangleRegions == pushed.mesh.triangleRegions,
+                "metric geological push preserves the same selectable grid topology");
+        double minimumCore = 1e20, maximumCore = -1e20;
+        int coreSamples = 0;
+        for (std::size_t i = 0; i < metricPush.mesh.positions.size(); ++i)
+        {
+            const auto a = beforePush.mesh.positions[i], b = metricPush.mesh.positions[i];
+            const double depth = a.z - b.z;
+            if (std::hypot((a.x - 0.45) / 1.45, (a.y - 0.15) / 1.0) < 0.4)
+            {
+                minimumCore = std::min(minimumCore, depth);
+                maximumCore = std::max(maximumCore, depth);
+                ++coreSamples;
+            }
+            if (std::abs(a.x) > 2.8 || std::abs(a.y) > 1.8)
+                require(std::abs(depth) < 1e-10,
+                        "metric geological push leaves the distant cliff fixed");
+        }
+        require(coreSamples > 20 && maximumCore - minimumCore > 0.08,
+                "metric geological push gives the selected core non-flat relief");
+        require(PA::validateClosedMesh(evaluate(metricRecipe, 32).mesh).hasValue(),
+                "metric geological push remains a closed solid after solidify");
+        require(meshHash(evaluate(metricRecipe, 32).mesh) ==
+                    meshHash(evaluate(deserialize(serialize(metricRecipe)), 32).mesh),
+                "metric geological push replays after serialization");
         auto alphaRecipe = pushRecipe;
         alphaRecipe.layers[4].alphaSource = 1;
         const auto alphaPush = evaluate(alphaRecipe, 32, 4);

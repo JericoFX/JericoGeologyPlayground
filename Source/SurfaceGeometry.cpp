@@ -636,7 +636,8 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
     if (softEdgeProfile && layer.profile >= 2)
     {
         // RBrush-style push: deform the existing surface, never duplicate an overlay shell.
-        const auto rimBasis = layer.profile >= 3 ? surface.mesh.positions : std::vector<Vec3d>{};
+        const auto rimBasis = layer.profile == 3 || layer.profile == 4 ?
+                              surface.mesh.positions : std::vector<Vec3d>{};
         const auto id = Solid::region(layer.seed, 0x434c494646000000ULL ^ std::uint64_t(operation));
         surface.regions.push_back({id, parent, SurfaceRole::CutLoop, operation, -1});
         for (std::size_t q = 0; q < selected.size(); ++q)
@@ -648,21 +649,49 @@ void cliffCutLoop(MeshResult &surface, std::vector<Vec3d> &warp, const Layer &la
                 check(cancel);
             auto &p = surface.mesh.positions[i];
             const auto [u, v] = coordinates(p);
-            const double inside = std::clamp((contour(u, v) - std::hypot(u, v)) /
-                                             layer.width, 0.0, 1.0);
-            const double falloff = inside * inside * (3 - 2 * inside);
+            double interior = std::clamp((contour(u, v) - std::hypot(u, v)) /
+                                         layer.width, 0.0, 1.0);
+            if (layer.profile == 5)
+            {
+                double distance = std::numeric_limits<double>::infinity();
+                for (const auto &[first, second] : boundary)
+                {
+                    const auto &a = surface.mesh.positions[first], &b = surface.mesh.positions[second];
+                    const double dx = b.x - a.x, dy = b.y - a.y;
+                    if (dx * dx + dy * dy <= 1e-16)
+                        throw std::runtime_error("Metric cliff boundary has a degenerate edge");
+                    const double t = std::clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) /
+                                                (dx * dx + dy * dy), 0.0, 1.0);
+                    distance = std::min(distance, std::hypot(p.x - (a.x + t * dx),
+                                                              p.y - (a.y + t * dy)));
+                }
+                interior = inside[i] ? std::clamp(distance / layer.width, 0.0, 1.0) : 0.0;
+            }
+            const double falloff = interior * interior * (3 - 2 * interior);
             const double strata = PA::evaluateGeologyFbmReference(
                 {0.8 * p.x, 0.35 * p.y, 1.1}, layer.seed ^ 0x4ae27b15U, 3,
                 layer.lacunarity, 0.5);
             const double coverage = layer.alphaSource == 1 ?
                 std::clamp((sampleCliffAlpha(u, v) - 0.42) / 0.35, 0.0, 1.0) : 1.0;
             const double alpha = coverage * coverage * (3 - 2 * coverage);
-            p.z -= layer.amplitude * falloff * alpha *
-                   std::clamp(0.85 + 0.15 * strata, 0.7, 1.0);
+            double geology = std::clamp(0.85 + 0.15 * strata, 0.7, 1.0);
+            if (layer.profile == 5)
+            {
+                const double broad = PA::evaluateGeologyFbmReference(
+                    {0.73 * p.x + 1.9, 0.41 * p.y - 0.7, 0.37},
+                    layer.seed ^ 0x3af914bdU, 3, layer.lacunarity, 0.5);
+                const double fine = PA::evaluateGeologyFbmReference(
+                    {2.1 * p.x - 0.8, 1.6 * p.y + 1.3, -0.4},
+                    layer.seed ^ 0x294d5f17U, 2, layer.lacunarity, 0.5);
+                const double ridge = 2.0 * std::pow(1.0 - std::abs(fine), 2.0) - 1.0;
+                geology = std::clamp(0.55 + 1.4 *
+                    (0.55 * broad + 0.25 * fine + 0.2 * ridge), 0.12, 1.5);
+            }
+            p.z -= layer.amplitude * falloff * alpha * geology;
             if (showField)
                 surface.field[i] = float(falloff);
         }
-        if (layer.profile >= 3)
+        if (layer.profile == 3 || layer.profile == 4)
         {
             // Shape only the outer grid band. Non-harmonic, rotated domains
             // avoid a periodic scallop at the rim.

@@ -25,7 +25,8 @@ def audit(root: Path, require_automatic_uv: bool = False,
           layered_occlusion: bool = False, layered_material: bool = False,
           cliff_eroded_rim: bool = False, cliff_signed_rim: bool = False,
           layered_horizon_fracture: bool = False,
-          layered_slate_source: bool = False) -> dict:
+          layered_slate_source: bool = False,
+          cliff_metric_relief: bool = False) -> dict:
     proof = json.loads((root / "rock-lod-bakes-proof.json").read_text())
     result = {"families": [], "completeBakes": 0, "bakesWithMisses": 0, "rejectedLods": 0}
     assert proof.get("cliffDrainage", False) is cliff_drainage
@@ -33,6 +34,7 @@ def audit(root: Path, require_automatic_uv: bool = False,
     assert proof.get("cliffRBrushAlpha", False) is cliff_rbrush_alpha
     assert proof.get("cliffErodedRim", False) is cliff_eroded_rim
     assert proof.get("cliffSignedRim", False) is cliff_signed_rim
+    assert proof.get("cliffMetricRelief", False) is cliff_metric_relief
     assert proof.get("layeredOcclusion", False) is layered_occlusion
     assert proof.get("layeredMaterial", False) is layered_material
     assert proof.get("layeredHorizonFracture", False) is layered_horizon_fracture
@@ -175,7 +177,9 @@ if __name__ == "__main__":
     cliff_edge_damage = "--cliff-edge-damage" in options
     cliff_eroded_rim = "--cliff-eroded-rim" in options
     cliff_signed_rim = "--cliff-signed-rim" in options
-    cliff_rbrush_alpha = "--cliff-rbrush-alpha" in options or cliff_eroded_rim or cliff_signed_rim
+    cliff_metric_relief = "--cliff-metric-relief" in options
+    cliff_rbrush_alpha = ("--cliff-rbrush-alpha" in options or cliff_eroded_rim or
+                          cliff_signed_rim or cliff_metric_relief)
     layered_occlusion = "--layered-occlusion" in options
     layered_material = "--layered-material" in options
     layered_horizon_fracture = "--layered-horizon-fracture" in options
@@ -187,7 +191,7 @@ if __name__ == "__main__":
                    {family} if family is not None else None,
                    cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha,
                    layered_occlusion, layered_material, cliff_eroded_rim, cliff_signed_rim,
-                   layered_horizon_fracture, layered_slate_source)
+                   layered_horizon_fracture, layered_slate_source, cliff_metric_relief)
     target = Path(sys.argv[2])
     target.write_text(json.dumps(output, indent=2) + "\n")
     print(f"PASS: {output['completeBakes']} complete, "
