@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <set>
 #include <stdexcept>
 using namespace Playground;
@@ -301,6 +302,134 @@ int main()
                         "geological cave warp does not invert a face at any sampled LOD");
             }
         }
+        const auto squareBase = caveSource(CaveForm::SquareTunnel, 8);
+        const auto cutterId = Solid::region(0xca7eU, 3);
+        std::set<Jerico::Guid> cutterFaces;
+        for (std::uint64_t face = 0; face < 6; ++face)
+            cutterFaces.insert(PA::deriveFaceRegionGuid(cutterId, face));
+        std::set<Jerico::Guid> roofAndWalls;
+        for (std::size_t t = 0; t < squareBase.mesh.indices.size(); t += 3)
+        {
+            const auto id = squareBase.mesh.triangleRegions[t / 3];
+            if (!cutterFaces.contains(id))
+                continue;
+            const auto p = squareBase.mesh.positions[squareBase.mesh.indices[t]],
+                       q = squareBase.mesh.positions[squareBase.mesh.indices[t + 1]],
+                       r = squareBase.mesh.positions[squareBase.mesh.indices[t + 2]];
+            const auto center = Vec3d{(p.x + q.x + r.x) / 3,
+                                      (p.y + q.y + r.y) / 3,
+                                      (p.z + q.z + r.z) / 3};
+            if (std::abs(center.x) > 0.85 || center.y > 0.45)
+                roofAndWalls.insert(id);
+        }
+        require(roofAndWalls.size() == 3, "square cutter exposes two walls and one roof GUID");
+        const std::vector<Jerico::Guid> selectedFaces(roofAndWalls.begin(), roofAndWalls.end());
+        const auto squareSelected = selectedGeologicalRelief(squareBase, selectedFaces, 0.24, 123);
+        require(PA::validateClosedMesh(squareSelected.mesh).hasValue() &&
+                    squareSelected.mesh.indices == squareBase.mesh.indices &&
+                    squareSelected.mesh.triangleRegions == squareBase.mesh.triangleRegions,
+                "selected roof and walls preserve a closed mesh and face identities");
+        std::map<Jerico::Guid, double> selectedShift;
+        for (auto id : selectedFaces)
+            selectedShift[id] = 0;
+        for (std::size_t t = 0; t < squareBase.mesh.indices.size(); t += 3)
+        {
+            const auto id = squareBase.mesh.triangleRegions[t / 3];
+            const auto oldNormal = faceNormal(squareBase.mesh, 3 * (t / 3));
+            const auto newNormal = faceNormal(squareSelected.mesh, 3 * (t / 3));
+            require(oldNormal.x * newNormal.x + oldNormal.y * newNormal.y +
+                        oldNormal.z * newNormal.z > 0,
+                    "selected roof and walls do not fold or invert at shared edges");
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto index = squareBase.mesh.indices[t + corner];
+                const auto a = squareBase.mesh.positions[index], b = squareSelected.mesh.positions[index];
+                const auto shift = std::sqrt((a.x - b.x) * (a.x - b.x) +
+                                             (a.y - b.y) * (a.y - b.y) +
+                                             (a.z - b.z) * (a.z - b.z));
+                if (roofAndWalls.contains(id))
+                    selectedShift[id] = std::max(selectedShift[id], shift);
+                else
+                    require(shift < 1e-10,
+                            "unselected floor, exterior and portal edge remain exactly fixed");
+            }
+        }
+        for (auto [id, shift] : selectedShift)
+            require(shift > 0.025, "each selected roof and wall face must move visibly");
+        for (std::size_t t = 0; t < squareSelected.mesh.indices.size(); t += 3)
+        {
+            if (!cutterFaces.contains(squareSelected.mesh.triangleRegions[t / 3]))
+                continue;
+            Vec3d minimum{1e9, 1e9, 1e9}, maximum{-1e9, -1e9, -1e9};
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto p = squareSelected.mesh.positions[squareSelected.mesh.indices[t + corner]];
+                minimum.x = std::min(minimum.x, p.x);
+                minimum.y = std::min(minimum.y, p.y);
+                minimum.z = std::min(minimum.z, p.z);
+                maximum.x = std::max(maximum.x, p.x);
+                maximum.y = std::max(maximum.y, p.y);
+                maximum.z = std::max(maximum.z, p.z);
+            }
+            require(maximum.x < -0.6 || minimum.x > 0.6 ||
+                        maximum.y < -1.55 || minimum.y > 0.1 ||
+                        maximum.z < -1.2 || minimum.z > 1.2,
+                    "no full interior triangle bounds invade the protected playable corridor");
+        }
+        const auto squareLowBase = caveSource(CaveForm::SquareTunnel, 5);
+        const auto squareLowSelected = selectedGeologicalRelief(squareLowBase,
+                                                                 selectedFaces, 0.24, 123);
+        require(PA::validateClosedMesh(squareLowSelected.mesh).hasValue(),
+                "selected roof and walls remain closed at LOD2 density");
+        for (std::size_t t = 0; t < squareLowBase.mesh.indices.size(); t += 3)
+            if (!roofAndWalls.contains(squareLowBase.mesh.triangleRegions[t / 3]))
+                for (int corner = 0; corner < 3; ++corner)
+                {
+                    const auto index = squareLowBase.mesh.indices[t + corner];
+                    const auto a = squareLowBase.mesh.positions[index],
+                               b = squareLowSelected.mesh.positions[index];
+                    require(std::abs(a.x - b.x) + std::abs(a.y - b.y) +
+                                std::abs(a.z - b.z) < 1e-10,
+                            "unselected floor and adjacent edge remain fixed at LOD2");
+                }
+        std::set<Jerico::Guid> archFaceSet;
+        const auto archAllBase = caveSource(CaveForm::Arch, 8);
+        archFaceSet.insert(archAllBase.mesh.triangleRegions.begin(),
+                           archAllBase.mesh.triangleRegions.end());
+        const std::vector<Jerico::Guid> archFaces(archFaceSet.begin(), archFaceSet.end());
+        const auto archAll = selectedGeologicalRelief(archAllBase, archFaces, 0.18, 123);
+        require(PA::validateClosedMesh(archAll.mesh).hasValue() &&
+                    archAll.mesh.indices == archAllBase.mesh.indices &&
+                    archAll.mesh.triangleRegions == archAllBase.mesh.triangleRegions,
+                "whole-arch geology preserves connected BSP topology and face IDs");
+        std::map<Jerico::Guid, double> archShift;
+        for (auto id : archFaces)
+            archShift[id] = 0;
+        for (std::size_t t = 0; t < archAllBase.mesh.indices.size(); t += 3)
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto index = archAllBase.mesh.indices[t + corner];
+                const auto a = archAllBase.mesh.positions[index], b = archAll.mesh.positions[index];
+                const auto shift = std::sqrt((a.x - b.x) * (a.x - b.x) +
+                                             (a.y - b.y) * (a.y - b.y) +
+                                             (a.z - b.z) * (a.z - b.z));
+                archShift[archAllBase.mesh.triangleRegions[t / 3]] =
+                    std::max(archShift[archAllBase.mesh.triangleRegions[t / 3]], shift);
+            }
+        for (auto [id, shift] : archShift)
+            require(shift > 0.005, "all arch surface regions receive geometric relief");
+        for (std::size_t t = 0; t < archAllBase.mesh.indices.size(); t += 3)
+        {
+            const auto oldNormal = faceNormal(archAllBase.mesh, t),
+                       newNormal = faceNormal(archAll.mesh, t);
+            require(oldNormal.x * newNormal.x + oldNormal.y * newNormal.y +
+                        oldNormal.z * newNormal.z > 0,
+                    "whole-arch relief does not invert a face or shared edge");
+        }
+        require(PA::hashTriangleMesh(archAll.mesh) ==
+                    PA::hashTriangleMesh(selectedGeologicalRelief(archAllBase,
+                                                                    archFaces, 0.18, 123).mesh),
+                "whole-arch selected relief replays deterministically");
         require(PA::hashTriangleMesh(geologicalCaveSource(CaveForm::SquareTunnel, 4).mesh) != squareHash,
                 "geological square tunnel must not remain the undeformed BSP control");
         require(PA::hashTriangleMesh(cliff.mesh) ==

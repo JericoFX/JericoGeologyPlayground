@@ -326,6 +326,134 @@ MeshResult squareTunnelReliefSource(int subdivisions, const Jerico::Cancellation
     normals(source);
     return source;
 }
+MeshResult selectedGeologicalRelief(MeshResult source,
+                                   std::span<const Jerico::Guid> selectedRegions,
+                                   double amplitude, std::uint32_t seed,
+                                   const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    if (!std::isfinite(amplitude) || amplitude <= 0 || amplitude > 1 ||
+        selectedRegions.empty())
+        throw std::runtime_error("Selected geology needs face GUIDs and finite amplitude in (0, 1]");
+    std::set<Jerico::Guid> selection(selectedRegions.begin(), selectedRegions.end());
+    if (selection.size() != selectedRegions.size())
+        throw std::runtime_error("Selected geology has duplicate face GUIDs");
+    const auto &mesh = source.mesh;
+    std::set<Jerico::Guid> found;
+    std::vector<Vec3d> selectedNormals(mesh.positions.size());
+    std::vector<unsigned char> protectedVertex(mesh.positions.size());
+    for (std::size_t t = 0; t < mesh.indices.size(); t += 3)
+    {
+        if ((t & 767) == 0)
+            check(cancel);
+        const auto id = mesh.triangleRegions[t / 3];
+        if (!selection.contains(id))
+        {
+            for (int corner = 0; corner < 3; ++corner)
+                protectedVertex[mesh.indices[t + corner]] = 1;
+            continue;
+        }
+        found.insert(id);
+        const auto a = mesh.positions[mesh.indices[t]],
+                   b = mesh.positions[mesh.indices[t + 1]],
+                   c = mesh.positions[mesh.indices[t + 2]];
+        const Vec3d u{b.x - a.x, b.y - a.y, b.z - a.z},
+                    v{c.x - a.x, c.y - a.y, c.z - a.z};
+        const Vec3d n{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                      u.x * v.y - u.y * v.x};
+        for (int corner = 0; corner < 3; ++corner)
+        {
+            auto &sum = selectedNormals[mesh.indices[t + corner]];
+            sum.x += n.x;
+            sum.y += n.y;
+            sum.z += n.z;
+        }
+    }
+    if (found != selection)
+        throw std::runtime_error("Selected geology references an absent face GUID");
+    std::vector<Vec3d> displacements(mesh.positions.size());
+    const bool hasProtected = std::any_of(protectedVertex.begin(), protectedVertex.end(),
+                                          [](unsigned char value) { return value != 0; });
+    for (std::size_t i = 0; i < mesh.positions.size(); ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        if (protectedVertex[i])
+            continue;
+        const auto &p = mesh.positions[i], &sum = selectedNormals[i];
+        const double length = std::sqrt(sum.x * sum.x + sum.y * sum.y + sum.z * sum.z);
+        if (length <= 1e-12)
+            continue;
+        double distance = 1;
+        if (hasProtected)
+            for (std::size_t j = 0; j < mesh.positions.size(); ++j)
+                if (protectedVertex[j])
+                {
+                    const auto &q = mesh.positions[j];
+                    const double dx = p.x - q.x, dy = p.y - q.y, dz = p.z - q.z;
+                    distance = std::min(distance, std::sqrt(dx * dx + dy * dy + dz * dz));
+                }
+        const double unit = std::clamp(distance / 0.45, 0.0, 1.0);
+        const double mask = unit * unit * (3.0 - 2.0 * unit);
+        const double broad = PA::evaluateGeologyFbmReference(
+            {0.83 * p.x + 1.7, 0.69 * p.y - 0.8, 0.91 * p.z + 0.4},
+            seed, 3, 1.87, 0.5);
+        const double fine = PA::evaluateGeologyFbmReference(
+            {2.7 * p.x - 0.6, 2.3 * p.y + 1.1, 2.5 * p.z - 0.7},
+            seed ^ 0x3f47a5d1U, 2, 1.87, 0.5);
+        const double ridge = 2.0 * std::pow(1.0 - std::abs(fine), 2.0) - 1.0;
+        const double signedField = std::clamp(0.62 * broad + 0.25 * fine +
+                                                 0.13 * ridge, -1.0, 1.0);
+        const double strength = amplitude * mask * signedField / length;
+        displacements[i] = {sum.x * strength, sum.y * strength, sum.z * strength};
+    }
+    auto preservesFaces = [&](double scale)
+    {
+        for (std::size_t t = 0; t < mesh.indices.size(); t += 3)
+        {
+            auto a = mesh.positions[mesh.indices[t]],
+                 b = mesh.positions[mesh.indices[t + 1]],
+                 c = mesh.positions[mesh.indices[t + 2]];
+            const auto oldU = Vec3d{b.x - a.x, b.y - a.y, b.z - a.z},
+                       oldV = Vec3d{c.x - a.x, c.y - a.y, c.z - a.z};
+            const auto oldN = Vec3d{oldU.y * oldV.z - oldU.z * oldV.y,
+                                    oldU.z * oldV.x - oldU.x * oldV.z,
+                                    oldU.x * oldV.y - oldU.y * oldV.x};
+            const auto da = displacements[mesh.indices[t]],
+                       db = displacements[mesh.indices[t + 1]],
+                       dc = displacements[mesh.indices[t + 2]];
+            a = shifted(a, da, scale);
+            b = shifted(b, db, scale);
+            c = shifted(c, dc, scale);
+            const auto u = Vec3d{b.x - a.x, b.y - a.y, b.z - a.z},
+                       v = Vec3d{c.x - a.x, c.y - a.y, c.z - a.z};
+            const auto n = Vec3d{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                                 u.x * v.y - u.y * v.x};
+            const double oldArea2 = oldN.x * oldN.x + oldN.y * oldN.y + oldN.z * oldN.z;
+            if (oldN.x * n.x + oldN.y * n.y + oldN.z * n.z <= 0.05 * oldArea2)
+                return false;
+        }
+        return true;
+    };
+    double scale = 1;
+    if (!preservesFaces(scale))
+    {
+        double low = 0, high = 1;
+        for (int step = 0; step < 12; ++step)
+        {
+            const double mid = 0.5 * (low + high);
+            if (preservesFaces(mid)) low = mid;
+            else high = mid;
+        }
+        scale = low;
+    }
+    if (scale < 0.25)
+        throw std::runtime_error("Selected geology cannot preserve face orientation");
+    for (std::size_t i = 0; i < mesh.positions.size(); ++i)
+        source.mesh.positions[i] = shifted(mesh.positions[i], displacements[i], scale);
+    normals(source);
+    return source;
+}
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel)
 {
     auto id = Solid::region(0, 0x60000);

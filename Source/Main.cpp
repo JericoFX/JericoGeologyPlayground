@@ -2,8 +2,10 @@
 #include "MeshReduction.hpp"
 #include "NormalBake.hpp"
 #include "Renderer.hpp"
+#include "SolidGeometry.hpp"
 #include "SurfaceGeometry.hpp"
 #include "SurfaceFeatures.hpp"
+#include <Jerico/Core/Guid.hpp>
 #include <Jerico/Platform/Window.hpp>
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 #include <Windows.h>
@@ -20,6 +22,7 @@
 #include <numbers>
 #include <optional>
 #include <random>
+#include <set>
 #include <thread>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
@@ -1177,9 +1180,39 @@ void captureRockTemporal(Renderer &renderer, const std::filesystem::path &eviden
     std::ofstream(evidence / "rock-temporal-proof.json") << report.dump(2) << '\n';
     std::cout << report.dump(2) << '\n';
 }
+std::vector<Jerico::Guid> caveReliefFaceSelection(const MeshResult &source, CaveForm form)
+{
+    std::set<Jerico::Guid> selected;
+    if (form != CaveForm::SquareTunnel)
+        selected.insert(source.mesh.triangleRegions.begin(), source.mesh.triangleRegions.end());
+    else
+    {
+        const auto cutterId = Solid::region(0xca7eU, 3);
+        std::set<Jerico::Guid> cutterFaces;
+        for (std::uint64_t face = 0; face < 6; ++face)
+            cutterFaces.insert(PA::deriveFaceRegionGuid(cutterId, face));
+        for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
+        {
+            const auto id = source.mesh.triangleRegions[t / 3];
+            if (!cutterFaces.contains(id))
+                continue;
+            const auto a = source.mesh.positions[source.mesh.indices[t]],
+                       b = source.mesh.positions[source.mesh.indices[t + 1]],
+                       c = source.mesh.positions[source.mesh.indices[t + 2]];
+            const double x = (a.x + b.x + c.x) / 3.0,
+                         y = (a.y + b.y + c.y) / 3.0;
+            if (std::abs(x) > 0.85 || y > 0.45)
+                selected.insert(id);
+        }
+    }
+    if (selected.empty() ||
+        (form == CaveForm::SquareTunnel && selected.size() != 3))
+        throw std::runtime_error("Cave relief selection has missing roof or wall regions");
+    return {selected.begin(), selected.end()};
+}
 void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                       bool geologicalMacro, bool axialFeatureReduced, bool blindChamber = false,
-                      bool squareWallRelief = false)
+                      bool squareWallRelief = false, bool selectedRelief = false)
 {
     nlohmann::json report = {{"adapter", renderer.adapter()},
                              {"scope", blindChamber ?
@@ -1190,6 +1223,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                              {"blindChamber", blindChamber},
                              {"squareWallRelief", squareWallRelief},
                              {"squareInteriorRelief", geologicalMacro || squareWallRelief},
+                             {"selectedRelief", selectedRelief},
                              {"textureResolution", 1024}, {"imageSize", {1280, 960}},
                              {"forms", nlohmann::json::array()}};
     Camera camera;
@@ -1216,10 +1250,21 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
     {
         const bool sculptSquare = form == CaveForm::SquareTunnel &&
                                   (geologicalMacro || squareWallRelief);
-        auto macroHigh = squareWallRelief && form == CaveForm::SquareTunnel ?
-                         squareTunnelReliefSource(8) :
-                         axialFeatureReduced ? axialCaveSource(form, 8) :
-                         geologicalMacro ? geologicalCaveSource(form, 8) : caveSource(form, 8);
+        std::vector<Jerico::Guid> selectedFaces;
+        MeshResult macroHigh;
+        if (selectedRelief)
+        {
+            auto basis = form == CaveForm::SquareTunnel ? caveSource(form, 8) :
+                         axialCaveSource(form, 8);
+            selectedFaces = caveReliefFaceSelection(basis, form);
+            macroHigh = selectedGeologicalRelief(std::move(basis), selectedFaces,
+                                                form == CaveForm::SquareTunnel ? 0.24 : 0.18, 123);
+        }
+        else
+            macroHigh = squareWallRelief && form == CaveForm::SquareTunnel ?
+                        squareTunnelReliefSource(8) :
+                        axialFeatureReduced ? axialCaveSource(form, 8) :
+                        geologicalMacro ? geologicalCaveSource(form, 8) : caveSource(form, 8);
         auto high = macroHigh;
         Recipe detail;
         auto noise = defaultLayer(Kind::NormalNoise);
@@ -1228,11 +1273,16 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
         noise.frequency = 2.5f;
         noise.lacunarity = 1.87f;
         detail.layers = {noise};
-        high = evaluateSource(detail, high, 8);
+        if (!(selectedRelief && form == CaveForm::SquareTunnel))
+            high = evaluateSource(detail, high, 8);
         auto formDirectory = evidence / name;
         nlohmann::json formReport = {{"form", name}, {"highTriangles", high.mesh.indices.size() / 3},
                                      {"highHash", PA::hashTriangleMesh(high.mesh)},
+                                     {"selectedFaceCount", selectedFaces.size()},
                                      {"lods", nlohmann::json::array()}};
+        formReport["selectedFaceGuids"] = nlohmann::json::array();
+        for (auto id : selectedFaces)
+            formReport["selectedFaceGuids"].push_back(Jerico::formatGuid(id));
         std::size_t previousTriangles = high.mesh.indices.size() / 3;
         for (int lod = 0; lod < 3; ++lod)
         {
@@ -1256,10 +1306,14 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 normals(low);
             }
             else
-                low = squareWallRelief && form == CaveForm::SquareTunnel ?
-                                         squareTunnelReliefSource(subdivisions) :
-                                         geologicalMacro ? geologicalCaveSource(form, subdivisions) :
-                                         caveSource(form, subdivisions);
+                if (selectedRelief && form == CaveForm::SquareTunnel)
+                    low = selectedGeologicalRelief(caveSource(form, subdivisions),
+                                                   selectedFaces, 0.24, 123);
+                else
+                    low = squareWallRelief && form == CaveForm::SquareTunnel ?
+                                             squareTunnelReliefSource(subdivisions) :
+                                             geologicalMacro ? geologicalCaveSource(form, subdivisions) :
+                                             caveSource(form, subdivisions);
             low.sampledReductionError = sampledBidirectionalMeshError(high.mesh, low.mesh);
             if ((reducedArch || sculptSquare) &&
                 low.sampledReductionError > 0.15)
@@ -1277,12 +1331,17 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                                                .projection = NormalProjection::ClosestSurface,
                                                .specialistMaps = true,
                                                .featureRadius = 0.5,
+                                               .ambientRadius = selectedRelief ?
+                                                   std::optional<double>{3.0} : std::nullopt,
                                                .edgeRadius = 0.1,
-                                               .featureSamples = 16,
+                                               .featureSamples = selectedRelief ? 48u : 16u,
                                                .curvatureScale = 0.25,
                                                .thicknessRange = 4,
                                                .automaticUv = true});
-            bake.lowStrategy = sculptSquare ?
+            bake.lowStrategy = selectedRelief && form == CaveForm::SquareTunnel ?
+                               "bsp-selected-roof-walls" :
+                               selectedRelief ? "native-feature-reduction-selected-all" :
+                               sculptSquare ?
                                "bsp-regenerated-interior-relief" :
                                reducedArch ? "native-feature-reduction" :
                                geologicalMacro && form == CaveForm::Arch ?
@@ -1290,6 +1349,29 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
             auto directory = formDirectory / ("lod-" + std::to_string(lod));
             exportNormalBake(bake, directory);
             const auto diffuse = materialDiffuse(0);
+            auto capturePbrAoPair = [&](NormalBake &surfaceBake,
+                                        const std::filesystem::path &output,
+                                        const char *prefix)
+            {
+                auto ambient = surfaceBake.ambientRgba;
+                auto ambientMips = surfaceBake.specialistMips.ambient;
+                auto clearAmbient = [](std::vector<std::uint8_t> &pixels)
+                {
+                    for (std::size_t pixel = 0; pixel < pixels.size(); pixel += 4)
+                        pixels[pixel] = pixels[pixel + 1] = pixels[pixel + 2] = 0;
+                };
+                clearAmbient(surfaceBake.ambientRgba);
+                for (auto &mip : surfaceBake.specialistMips.ambient)
+                    clearAmbient(mip);
+                renderer.uploadMaterial(&surfaceBake, diffuse, true, 4);
+                renderer.draw(1280, 960, entrance, 5);
+                renderer.capture(output / (std::string(prefix) + "-pbr-no-ao.png"));
+                surfaceBake.ambientRgba = std::move(ambient);
+                surfaceBake.specialistMips.ambient = std::move(ambientMips);
+                renderer.uploadMaterial(&surfaceBake, diffuse, true, 4);
+                renderer.draw(1280, 960, entrance, 5);
+                renderer.capture(output / (std::string(prefix) + "-pbr-ao.png"));
+            };
             if (lod == 0)
             {
                 renderer.upload(high);
@@ -1307,6 +1389,11 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(formDirectory / "high.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(formDirectory / "high-entrance-material.png");
+                if (selectedRelief && form != CaveForm::SquareTunnel)
+                {
+                    renderer.draw(1280, 960, entrance, 0);
+                    renderer.capture(formDirectory / "high-entrance-geometry.png");
+                }
                 if (sculptSquare)
                 {
                     renderer.draw(1280, 960, entrance, 0);
@@ -1322,10 +1409,29 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                         renderer.draw(1280, 960, squareInterior, 0);
                         renderer.capture(formDirectory / "high-interior-geometry.png");
                     }
+                    if (selectedRelief && form != CaveForm::SquareTunnel)
+                    {
+                        renderer.draw(1280, 960, interior, 0);
+                        renderer.capture(formDirectory / "high-interior-geometry.png");
+                    }
+                }
+                if (selectedRelief)
+                {
+                    auto highBake = bakeNormals(high, high, bake.settings);
+                    if (highBake.misses || highBake.backfaceHits)
+                        throw std::runtime_error("High PBR self-bake misses the cave surface");
+                    exportNormalBake(highBake, formDirectory / "high-pbr-bake");
+                    formReport["highPbrBakeSamples"] = highBake.samples;
+                    formReport["highPbrBakeMisses"] = highBake.misses;
+                    renderer.upload(highBake.low, &highBake);
+                    capturePbrAoPair(highBake, formDirectory, "high");
                 }
             }
             renderer.upload(bake.low, &bake);
-            renderer.uploadMaterial(&bake, diffuse, true, 4);
+            if (selectedRelief && lod == 0)
+                capturePbrAoPair(bake, directory, "low");
+            else
+                renderer.uploadMaterial(&bake, diffuse, true, 4);
             renderer.draw(1280, 960, camera, 5);
             renderer.capture(directory / "low-material.png");
             if (lod == 2)
@@ -1338,6 +1444,11 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(directory / "low-entrance-material.png");
                 if (sculptSquare)
+                {
+                    renderer.draw(1280, 960, entrance, 0);
+                    renderer.capture(directory / "low-entrance-geometry.png");
+                }
+                if (selectedRelief && form != CaveForm::SquareTunnel)
                 {
                     renderer.draw(1280, 960, entrance, 0);
                     renderer.capture(directory / "low-entrance-geometry.png");
@@ -1628,7 +1739,7 @@ int run(int argc, char **argv)
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
          caveGeologySmoke = false, caveAxialSmoke = false, caveBlindSmoke = false,
-         caveSquareReliefSmoke = false,
+         caveSquareReliefSmoke = false, caveSelectedReliefSmoke = false,
          slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
          cliffMipBiasSmoke = false, strataMipBiasSmoke = false,
          cliffMomentSmoke = false, strataMomentSmoke = false;
@@ -1686,7 +1797,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--cave-geology-bakes-test" ||
             std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
             std::string(argv[i]) == "--cave-blind-chamber-bakes-test" ||
-            std::string(argv[i]) == "--cave-square-relief-bakes-test")
+            std::string(argv[i]) == "--cave-square-relief-bakes-test" ||
+            std::string(argv[i]) == "--cave-selected-relief-bakes-test")
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
@@ -1734,17 +1846,22 @@ int run(int argc, char **argv)
                              std::string(argv[i]) == "--cave-geology-bakes-test" ||
                              std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
                              std::string(argv[i]) == "--cave-blind-chamber-bakes-test" ||
-                             std::string(argv[i]) == "--cave-square-relief-bakes-test";
+                             std::string(argv[i]) == "--cave-square-relief-bakes-test" ||
+                             std::string(argv[i]) == "--cave-selected-relief-bakes-test";
             caveGeologySmoke = std::string(argv[i]) == "--cave-geology-bakes-test" ||
                                std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
                                std::string(argv[i]) == "--cave-blind-chamber-bakes-test" ||
-                               std::string(argv[i]) == "--cave-square-relief-bakes-test";
+                               std::string(argv[i]) == "--cave-square-relief-bakes-test" ||
+                               std::string(argv[i]) == "--cave-selected-relief-bakes-test";
             caveAxialSmoke = std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
                              std::string(argv[i]) == "--cave-blind-chamber-bakes-test" ||
-                             std::string(argv[i]) == "--cave-square-relief-bakes-test";
+                             std::string(argv[i]) == "--cave-square-relief-bakes-test" ||
+                             std::string(argv[i]) == "--cave-selected-relief-bakes-test";
             caveBlindSmoke = std::string(argv[i]) == "--cave-blind-chamber-bakes-test" ||
-                             std::string(argv[i]) == "--cave-square-relief-bakes-test";
+                             std::string(argv[i]) == "--cave-square-relief-bakes-test" ||
+                             std::string(argv[i]) == "--cave-selected-relief-bakes-test";
             caveSquareReliefSmoke = std::string(argv[i]) == "--cave-square-relief-bakes-test";
+            caveSelectedReliefSmoke = std::string(argv[i]) == "--cave-selected-relief-bakes-test";
             if (std::string(argv[i]) == "--normal-bake-3072-test")
                 scaleTextureResolution = 3072;
             smoke = true;
@@ -2434,7 +2551,7 @@ int run(int argc, char **argv)
             if (caveFormsSmoke)
             {
                 captureCaveForms(renderer, evidence, caveGeologySmoke, caveAxialSmoke,
-                                 caveBlindSmoke, caveSquareReliefSmoke);
+                                 caveBlindSmoke, caveSquareReliefSmoke, caveSelectedReliefSmoke);
                 window.requestClose();
                 continue;
             }

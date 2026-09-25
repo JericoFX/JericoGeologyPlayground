@@ -1,0 +1,18 @@
+{
+  "arch": {
+    "meanAoByte": 29.964619549515096,
+    "p90AoByte": 98.0,
+    "pbrDarkeningByte": 5.840059757232666,
+    "surfacePixelsDarkenedOver5Fraction": 0.4104961830506431,
+    "highMeanAoByte": 32.36290878880663,
+    "highPbrDarkeningByte": 5.890642166137695
+  },
+  "square": {
+    "meanAoByte": 14.598052073369837,
+    "p90AoByte": 76.0,
+    "pbrDarkeningByte": 2.3977694511413574,
+    "surfacePixelsDarkenedOver5Fraction": 0.20445495440399017,
+    "highMeanAoByte": 14.5536084477844,
+    "highPbrDarkeningByte": 2.404080629348755
+  }
+}

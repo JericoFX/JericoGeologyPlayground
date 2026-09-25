@@ -62,6 +62,8 @@ El contrato, las matemáticas, la semántica de regiones y los límites para un 
 
 ## Arco y túnel de prueba
 
+`build/Release/JericoGeologyPlayground.exe --cave-selected-relief-bakes-test Evidence/cave-selected` prueba relieve nativo seleccionable por GUID en la misma malla BSP: techo y dos paredes del túnel cuadrado, o todas las caras del arco. Exporta tres LOD por forma, UV y mapas high→low, más bake de AO high y capturas PBR comparables con/sin AO. `Tests/CaveBakeAudit.py`, `Tests/CaveSelectedPbrAudit.py` y `Tests/CaveDeterminismAudit.py` auditan esa prueba; los resultados y sus límites visuales están en `Evidence/2026-09-25-cave-selected-pbr.md`.
+
 `build/Release/JericoGeologyPlayground.exe --cave-forms-bakes-test Evidence/cave-forms` genera dos cortes BSP sustractivos en roca: un arco facetado y un túnel cuadrado. Ambos atraviesan la masa en Z y conservan 0,3 unidades de piso. `Source/SurfaceGeometry.cpp` construye los brushes con la biblioteca C++ del Engine; la fuente y los GUID de los dos brushes se conservan en el resultado. El high a subdivisión 8 recibe FBM nativo con lacunaridad 1,87 (amplitud 0,12 en arco y 0,025 en cuadrado); los LOD 6/4/2 se regeneran desde los mismos brushes. Cada low recibe UV automática y proyección del high de normal, AO, contacto, curvatura, cavity, borde convexo, crease, espesor, región y altura, con mips. Las imágenes `high-material.png` y `lod-*/low-material.png` son capturas Vulkan a 1280×960 con textura CC0 de roca.
 
 La corrida retenida está en `Evidence/2026-09-25-cave-forms-rock-material/`. Es una comparación geométrica de entradas cavernosas, no una caverna natural terminada: el bloque exterior y la repetición triplanar del diffuse todavía se leen artificiales. No se usó OpenVDB ni se modificó el Engine.
