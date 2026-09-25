@@ -1,0 +1,208 @@
+{
+  "base": 0,
+  "finalResolution": 24,
+  "layers": [
+    {
+      "alphaSource": 0,
+      "amplitude": 0.07999999821186066,
+      "beddingTilt": 0.10000000149011612,
+      "coherentLayers": true,
+      "contactSamples": 16,
+      "coordinateScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "count": 4,
+      "cutSubdivisions": 2,
+      "damageLip": 0.02500000037252903,
+      "direction": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "distortion": 0.20000000298023224,
+      "driftBias": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "driftCorrelation": 0.8500000238418579,
+      "enabled": true,
+      "envelopeRoundness": 0.25,
+      "envelopeShape": 0,
+      "featureAngle": 30.0,
+      "featureRadius": 0.30000001192092896,
+      "frequency": 3.0,
+      "iterations": 3,
+      "jitter": 0.550000011920929,
+      "kind": 4,
+      "lacunarity": 2.0,
+      "lateral": 0.0,
+      "layerScale": 0.0,
+      "macroAxisAsymmetry": 0.41999998688697815,
+      "mask": 0,
+      "maskAxis": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maskHigh": 0.5,
+      "maskInvert": false,
+      "maskLow": -0.5,
+      "maximumThickness": 0.800000011920929,
+      "minimumThickness": 0.07999999821186066,
+      "octaves": 3,
+      "outputScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "perimeterAmplitude": 0.1599999964237213,
+      "phase": 0.0,
+      "profile": 2,
+      "profileSharpness": 2.0,
+      "projectorRadius": [
+        0.6000000238418579,
+        0.44999998807907104
+      ],
+      "projectorRotation": 0.0,
+      "randomness": 1.0,
+      "reductionError": 0.019999999552965164,
+      "relaxStrength": 0.25,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotationDrift": 0.0,
+      "roughness": 0.5,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "scaleDrift": 0.0,
+      "seed": 123,
+      "shapeOuterCaps": true,
+      "solidAlongNormals": true,
+      "solidOffset": 0.0,
+      "spacing": 0.0,
+      "thickness": 0.20000000298023224,
+      "thicknessCorrelation": 0.44999998807907104,
+      "thicknessFrequency": 2.299999952316284,
+      "threshold": 0.10000000149011612,
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "voronoiMode": 2,
+      "width": 0.1599999964237213
+    },
+    {
+      "alphaSource": 0,
+      "amplitude": 0.07999999821186066,
+      "beddingTilt": 0.0,
+      "coherentLayers": false,
+      "contactSamples": 16,
+      "coordinateScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "count": 4,
+      "cutSubdivisions": 2,
+      "damageLip": 0.02500000037252903,
+      "direction": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "distortion": 0.20000000298023224,
+      "driftBias": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "driftCorrelation": 0.8500000238418579,
+      "enabled": true,
+      "envelopeRoundness": 0.25,
+      "envelopeShape": 0,
+      "featureAngle": 30.0,
+      "featureRadius": 0.30000001192092896,
+      "frequency": 2.0,
+      "iterations": 3,
+      "jitter": 0.15000000596046448,
+      "kind": 18,
+      "lacunarity": 2.0,
+      "lateral": 0.18000000715255737,
+      "layerScale": 0.03500000014901161,
+      "macroAxisAsymmetry": 0.0,
+      "mask": 0,
+      "maskAxis": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maskHigh": 0.5,
+      "maskInvert": false,
+      "maskLow": -0.5,
+      "maximumThickness": 0.800000011920929,
+      "minimumThickness": 0.07999999821186066,
+      "octaves": 3,
+      "outputScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "perimeterAmplitude": 0.0,
+      "phase": 0.0,
+      "profile": 0,
+      "profileSharpness": 2.0,
+      "projectorRadius": [
+        0.6000000238418579,
+        0.44999998807907104
+      ],
+      "projectorRotation": 0.0,
+      "randomness": 1.0,
+      "reductionError": 0.019999999552965164,
+      "relaxStrength": 0.25,
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotationDrift": 0.0,
+      "roughness": 0.5,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "scaleDrift": 0.0,
+      "seed": 123,
+      "shapeOuterCaps": false,
+      "solidAlongNormals": true,
+      "solidOffset": 0.0,
+      "spacing": 0.05999999865889549,
+      "thickness": 0.36000001430511475,
+      "thicknessCorrelation": 0.800000011920929,
+      "thicknessFrequency": 0.800000011920929,
+      "threshold": 0.10000000149011612,
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "voronoiMode": 2,
+      "width": 0.1599999964237213
+    }
+  ],
+  "planeSize": [
+    6.0,
+    4.0
+  ],
+  "previewResolution": 16,
+  "version": 16
+}

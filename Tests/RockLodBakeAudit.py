@@ -24,7 +24,8 @@ def audit(root: Path, require_automatic_uv: bool = False,
           cliff_rbrush_alpha: bool = False,
           layered_occlusion: bool = False, layered_material: bool = False,
           cliff_eroded_rim: bool = False,
-          layered_horizon_fracture: bool = False) -> dict:
+          layered_horizon_fracture: bool = False,
+          layered_slate_source: bool = False) -> dict:
     proof = json.loads((root / "rock-lod-bakes-proof.json").read_text())
     result = {"families": [], "completeBakes": 0, "bakesWithMisses": 0, "rejectedLods": 0}
     assert proof.get("cliffDrainage", False) is cliff_drainage
@@ -34,6 +35,7 @@ def audit(root: Path, require_automatic_uv: bool = False,
     assert proof.get("layeredOcclusion", False) is layered_occlusion
     assert proof.get("layeredMaterial", False) is layered_material
     assert proof.get("layeredHorizonFracture", False) is layered_horizon_fracture
+    assert proof.get("layeredSlateSource", False) is layered_slate_source
     assert {case["family"] for case in proof["cases"]} == (
         {5, 8, 9, 10, 11, 12} if expected_families is None else expected_families)
     for case in proof["cases"]:
@@ -94,9 +96,17 @@ def audit(root: Path, require_automatic_uv: bool = False,
                            layer["alphaSource"] == 1 for layer in recipe["layers"])
             if layered_horizon_fracture:
                 recipe = json.loads((directory / "high-recipe.json").read_text())
-                assert recipe["version"] == 15
+                assert recipe["version"] == (16 if layered_slate_source else 15)
                 assert any(layer["kind"] == 4 and layer["profile"] == 2
                            for layer in recipe["layers"])
+                if layered_slate_source:
+                    assert recipe["base"] == 0
+                    assert any(layer["kind"] == 4 and abs(layer["thickness"] - 0.2) < 1e-6
+                               for layer in recipe["layers"])
+                    if lod["lod"] == 0:
+                        for view in ("high-material-side.png", "high-material-back.png"):
+                            with Image.open(directory / view) as image:
+                                assert image.size == (1280, 960)
             for view in ("high.png", "low.png", "low-normal.png",
                          "low-ao.png", "low-contact.png", "low-cavity.png",
                          "low-convex-edge.png"):
@@ -166,6 +176,7 @@ if __name__ == "__main__":
     layered_occlusion = "--layered-occlusion" in options
     layered_material = "--layered-material" in options
     layered_horizon_fracture = "--layered-horizon-fracture" in options
+    layered_slate_source = "--layered-slate-source" in options
     assert sum((cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha, layered_occlusion)) <= 1
     output = audit(Path(sys.argv[1]),
                    "--require-auto-uv" in options or require_specialist_mips,
@@ -173,7 +184,7 @@ if __name__ == "__main__":
                    {family} if family is not None else None,
                    cliff_drainage, cliff_edge_damage, cliff_rbrush_alpha,
                    layered_occlusion, layered_material, cliff_eroded_rim,
-                   layered_horizon_fracture)
+                   layered_horizon_fracture, layered_slate_source)
     target = Path(sys.argv[2])
     target.write_text(json.dumps(output, indent=2) + "\n")
     print(f"PASS: {output['completeBakes']} complete, "

@@ -1,0 +1,21 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  JericoGeologyPlayground.vcxproj -> F:\JericoGeologyPlayground\build\Release\JericoGeologyPlayground.exe
+  PlaygroundDriftTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundDriftTests.exe
+  PlaygroundEdgeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundEdgeTests.exe
+  PlaygroundEnvelopeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundEnvelopeTests.exe
+  PlaygroundNormalBakeTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundNormalBakeTests.exe
+  PlaygroundAutoUvTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundAutoUvTests.exe
+  PlaygroundBspSourceTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundBspSourceTests.exe
+  PlaygroundBackendTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundBackendTests.exe
+  PlaygroundRBrushImageRoundtripTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRBrushImageRoundtripTests.exe
+  PlaygroundRBrushInteropTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRBrushInteropTests.exe
+  PlaygroundRockAddonMathTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundRockAddonMathTests.exe
+  PlaygroundSharedWarpTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSharedWarpTests.exe
+  PlaygroundReductionTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundReductionTests.exe
+  PlaygroundSolidTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSolidTests.exe
+  PlaygroundSurfaceFeatureTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSurfaceFeatureTests.exe
+  PlaygroundThicknessTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundThicknessTests.exe
+  PlaygroundTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundTests.exe
+  PlaygroundSurfaceTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundSurfaceTests.exe

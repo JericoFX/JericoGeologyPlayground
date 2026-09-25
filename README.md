@@ -4,7 +4,7 @@ Laboratorio independiente en C++20, Diligent/Vulkan e ImGui para experimentar co
 
 ## Abrir
 
-Ejecutar `build-surface/Release/JericoGeologyPlayground.exe` o `Run.cmd`.
+Ejecutar `build/Release/JericoGeologyPlayground.exe` o `Run.cmd`.
 
 La compilación vigente está en **build/Release**; los otros árboles conservan pruebas históricas. Para probar el cliff, elegir `Plane cliff`, `Solid cliff` o `BSP geology` en Presets y pulsar `Fit`. El estado verificable más reciente está en `Evidence/2026-09-24-geology-math-checkpoint.md`.
 
@@ -13,9 +13,9 @@ La compilación vigente está en **build/Release**; los otros árboles conservan
 3. Ajustar parámetros y seed en el derecho. Durante la edición se genera una vista previa; al terminar se reconstruye la resolución final.
 4. `Inspect` permite ver el resultado final, hasta la operación seleccionada o su campo/máscara. `View` ofrece Lit, Normals, Wireframe y Field.
 5. Arrastrar con botón izquierdo para orbitar, medio/derecho para desplazar, rueda para zoom. `Fit` encuadra la geometría actual.
-6. `Save` escribe recetas JSON propias, versión 9. `Load` acepta v1–v9 y migra recetas antiguas a v9 al guardar. `Undo`/`Redo` recuperan estados de la receta; la cámara no forma parte de ella.
+6. `Save` escribe la versión de la receta activa en JSON. `Load` acepta v1–v16; las v1–v9 se migran a v10 y las v10–v16 conservan su versión. `Undo`/`Redo` recuperan estados de la receta; la cámara no forma parte de ella.
 
-Los trece presets son recetas del mismo stack y todos sus parámetros son editables. Incluyen Plane cliff, Solid cliff, BSP geology, Angular wear, Layered rock v9 y Crater rock. `Reset layer` recupera los valores iniciales de esa operación; `Reset recipe` crea una receta vacía. El preset sedimentario usa resolución final 32 para respetar el presupuesto después de los cortes y la subdivisión.
+Los catorce presets son recetas del mismo stack y todos sus parámetros son editables. Incluyen Plane cliff, Solid cliff, BSP geology, Angular wear, Layered rock v9, Crater rock y Slate source experiment. `Reset layer` recupera los valores iniciales de esa operación; `Reset recipe` crea una receta vacía. El preset sedimentario usa resolución final 32 para respetar el presupuesto después de los cortes y la subdivisión.
 
 ## Código real del engine utilizado
 
@@ -173,6 +173,8 @@ El viewport abre en **Material** y deja elegir Auto/Rock/Cliff/Slate/Basalt; Aut
 `--layered-material-baseline-test <directorio>` y `--layered-material-candidate-test <directorio>` añaden capturas Vulkan 1280×960 high/low y LOD2 lejano sobre la misma roca 11. El modo material es sólo diagnóstico: diffuse CC0 `rock_06` por proyección triplanar, normal high→low, luz fija Lambert/GGX, AO sobre luz ambiente y contacto/cavity/edge como variaciones sutiles de color. Diffuse se filtra con mips calculados en luz lineal; los mapas de datos siguen en formato lineal. `--layered-material-no-mips-test <directorio>` reproduce el baseline sin mips de color para comparar exactamente el filtro. `Tests/MaterialPreviewAudit.py` compara las variantes y verifica el SHA de la textura en `Evidence/cc0-references/manifest.json`; `Tests/MaterialColorMipAudit.py` mide el efecto de los mips. No es un material PBR de producción ni aceptación visual de la roca o del Engine.
 
 `--layered-horizon-fracture-bakes-test <directorio>` ensaya sólo la familia 11 con receta v15/profile 2, UV automática, tres LOD high→low y el **material automático** de pizarra (`cliff_side`, appearance 2). El selector `Horizon contour` permite comparar el perfil legacy y los horizontes independientes; el preset sigue en su valor original. [Resultado, métricas y Beauty parcial](Evidence/2026-09-25-layered-fractured-horizons.md).
+
+El preset 13 y `--layered-slate-source-bakes-test <directorio>` prueban la fuente tabular v16: Cube con caps coincidentes, perfil 2 y espesor 0.20. El material automático, tres vistas high originales, UV y diez mapas por cada low LOD quedan en la [evidencia](Evidence/2026-09-25-layered-slate-source.md). Es una variante opt-in con Beauty aún parcial.
 
 `--regenerated-lod-sweep-test <directorio>` examina candidatos low de BSP (9), angular (10) y cráter (12) regenerando la misma receta a menor resolución, con presupuestos geométricos intactos. El cráter a resolución 7 pasó como nuevo LOD2 (588 triángulos, diez bakes, cero misses). BSP y angular mantienen sus límites pendientes; ver `Evidence/2026-09-24-regenerated-lod-expanded-audit.json` y el checkpoint para la evidencia.
 

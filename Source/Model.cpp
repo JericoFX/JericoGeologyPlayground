@@ -87,7 +87,7 @@ Vec3d rotate(Vec3d p, std::array<float, 3> degrees)
     p = {p.x * std::cos(r.y) + p.z * std::sin(r.y), p.y, -p.x * std::sin(r.y) + p.z * std::cos(r.y)};
     return {p.x * std::cos(r.z) - p.y * std::sin(r.z), p.x * std::sin(r.z) + p.y * std::cos(r.z), p.z};
 }
-MeshResult primitive(Base type, int n)
+MeshResult primitive(Base type, int n, bool matchedCubeCaps = false)
 {
     MeshResult result;
     std::map<std::tuple<long long, long long, long long>, std::uint32_t> ids;
@@ -139,7 +139,7 @@ MeshResult primitive(Base type, int n)
             {
                 auto a = grid[y * (n + 1) + x], b = grid[y * (n + 1) + x + 1],
                      c = grid[(y + 1) * (n + 1) + x], d = grid[(y + 1) * (n + 1) + x + 1];
-                if (type == Base::Cylinder && normal.y < 0)
+                if ((type == Base::Cylinder || (type == Base::Cube && matchedCubeCaps)) && normal.y < 0)
                 {
                     // Mirrored cap coordinates need the opposite local diagonal to share world-space facets.
                     triangle(a, b, c);
@@ -671,6 +671,14 @@ Recipe preset(int index)
         crater.damageLip = 0.035f;
         r.layers = {vector, macro, crater, fine};
     }
+    if (index == 13)
+    {
+        r = preset(11);
+        r.version = 16;
+        r.base = Base::Cube;
+        r.layers[0].profile = 2;
+        r.layers[0].thickness = 0.20f;
+    }
     return r;
 }
 void validate(const Recipe &r)
@@ -681,7 +689,7 @@ void validate(const Recipe &r)
             throw std::runtime_error("Recipe parameter outside Playground limits");
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
-             r.version == 14 || r.version == 15) &&
+             r.version == 14 || r.version == 15 || r.version == 16) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -753,7 +761,8 @@ void validate(const Recipe &r)
         if (l.coherentLayers)
             require(l.thickness >= l.minimumThickness && l.thickness <= l.maximumThickness);
         if (l.kind == Kind::Layers && l.profile == 2)
-            require(r.version >= 15 && l.coherentLayers && l.perimeterAmplitude > 0);
+            require(r.version >= (r.base == Base::Cube ? 16 : 15) && l.coherentLayers &&
+                    l.perimeterAmplitude > 0);
         require(l.perimeterAmplitude >= 0 && l.perimeterAmplitude <= 0.3f);
         require(l.beddingTilt >= 0 && l.beddingTilt <= 0.25f);
         require(l.macroAxisAsymmetry >= 0 && l.macroAxisAsymmetry <= 0.45f);
@@ -923,7 +932,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
     auto result = source ? *source
                          : (recipe.base == Base::BspWall ? bspWallSource(resolution, cancel)
                             : recipe.base == Base::Plane ? planeSource(recipe.planeSize, resolution)
-                                                         : primitive(recipe.base, resolution));
+                                                         : primitive(recipe.base, resolution,
+                                                                     recipe.version >= 16));
     if (source)
     {
         if (result.mesh.positions.empty() || result.mesh.positions.size() > 240000 ||
@@ -1442,7 +1452,7 @@ Recipe deserialize(const std::string &text)
     if (inputVersion != 1 && inputVersion != 2 && inputVersion != 3 && inputVersion != 4 &&
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
-        inputVersion != 13 && inputVersion != 14 && inputVersion != 15)
+        inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

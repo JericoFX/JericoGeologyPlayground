@@ -244,6 +244,40 @@ int main()
             }
             return triangles;
         };
+        auto cubeSourceStack = preset(13);
+        cubeSourceStack.layers.back().enabled = false;
+        auto legacyCubeSourceStack = cubeSourceStack;
+        legacyCubeSourceStack.version = 15;
+        require(rejectsInvalidMacro(legacyCubeSourceStack),
+                "legacy cube cap diagonals cannot claim exact fractured-horizon contact");
+        auto cubeStack = evaluate(cubeSourceStack, cubeSourceStack.finalResolution);
+        auto widthHeightRatio = [](const MeshResult &stack)
+        {
+            double minX = 1e30, maxX = -1e30, minY = 1e30, maxY = -1e30;
+            for (const auto &p : stack.mesh.positions)
+            {
+                minX = std::min(minX, p.x);
+                maxX = std::max(maxX, p.x);
+                minY = std::min(minY, p.y);
+                maxY = std::max(maxY, p.y);
+            }
+            return (maxX - minX) / (maxY - minY);
+        };
+        std::cout << "slate source aspect baseline=" << widthHeightRatio(fracturedStack)
+                  << " cube=" << widthHeightRatio(cubeStack) << '\n';
+        require(widthHeightRatio(cubeStack) > 2.0 &&
+                    widthHeightRatio(cubeStack) > widthHeightRatio(fracturedStack) + 0.3,
+                "slate source must be a broad tabular mass, not a tall block");
+        require(PA::validateClosedMesh(cubeStack.mesh).hasValue(),
+                "slate cube source must remain closed");
+        require(meshHash(cubeStack.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(cubeSourceStack)),
+                                      cubeSourceStack.finalResolution).mesh),
+                "slate cube source must replay after serialization");
+        for (int k = 0; k + 1 < cubeSourceStack.layers[0].count; ++k)
+            require(contactTriangles(cubeStack, k, 1) ==
+                        contactTriangles(cubeStack, k + 1, 2),
+                    "cube source must retain exact contact triangles before slate authoring");
         for (int k = 0; k + 1 < fracturedRecipe.layers[0].count; ++k)
             require(contactTriangles(fracturedStack, k, 1) ==
                         contactTriangles(fracturedStack, k + 1, 2),
