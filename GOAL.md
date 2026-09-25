@@ -18,6 +18,8 @@ La [prueba de proyección triplanar](Evidence/2026-09-25-triplanar-projection.md
 
 El [arco cavernoso con macrodeformación XYZ](Evidence/2026-09-25-cave-geology-macro.md) es un experimento opt-in con tres LOD, seis bakes válidos entre arco y control cuadrado, y vistas frontales/oblicuas. Cambia volumen y silueta, pero aún parece un bloque perforado; no se acepta como caverna natural.
 
-El [ensayo de boca-garganta-cámara](Evidence/2026-09-25-cave-profile-rejected.md) quedó rechazado: los cortes BSP solapados crearon una cara degenerada en LOD2 y el perfil axial suave perdió la garganta/cámara en los LOD bajos, con hasta 65.874 misses de proyección. Sigue vigente la variante anterior; el próximo intento requiere conservar secciones axiales en cada LOD antes del bake.
+El [ensayo de boca-garganta-cámara](Evidence/2026-09-25-cave-profile-rejected.md) quedó rechazado: los cortes BSP solapados crearon una cara degenerada en LOD2 y el perfil axial suave perdió la garganta/cámara en los LOD bajos, con hasta 65.874 misses de proyección. Ese intento mostró que las secciones axiales deben sobrevivir en cada LOD antes del bake.
+
+La [variante axial con reducción desde la macroforma high](Evidence/2026-09-25-cave-axial-lods.md) resolvió ese fallo técnico: tres LOD decrecientes conservan boca/garganta/interior, seis paquetes de bakes tienen cero misses y 266 artefactos de dos corridas con el mismo binario coinciden. Es opt-in; la Beauty sigue mostrando un bloque perforado, por lo que aún falta una caverna natural.
 
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.

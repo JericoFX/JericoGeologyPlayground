@@ -1,0 +1,9 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  Model.cpp
+  SurfaceGeometry.cpp
+  Generando código...
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  ReductionTests.cpp
+ReductionTests.obj : error LNK2019: símbolo externo "struct Playground::MeshResult __cdecl Playground::axialCaveSource(enum Playground::CaveForm,int,class Jerico::CancellationToken const *)" (?axialCaveSource@Playground@@YA?AUMeshResult@1@W4CaveForm@1@HPEBVCancellationToken@Jerico@@@Z) sin resolver al que se hace referencia en la función main [F:\JericoGeologyPlayground\build\PlaygroundReductionTests.vcxproj]
+F:\JericoGeologyPlayground\build\Release\PlaygroundReductionTests.exe : fatal error LNK1120: 1 externos sin resolver [F:\JericoGeologyPlayground\build\PlaygroundReductionTests.vcxproj]

@@ -1,0 +1,17 @@
+PASS quality gate: cube 6912 -> 12, cliff 17488 -> 16340, sampled error 0.00761636
+cliff limit 0.005: 17488 -> 17308, sampled error 0.00206036
+cliff limit 0.02: 17488 -> 13288, sampled error 0.0132393
+cliff limit 0.05: 17488 -> 11882, sampled error 0.0171631
+profiled cave high wall mouth/throat/chamber 1.47336/1.18167/1.58912
+  station 1.3 right wall 1.48324
+  station 0.2 right wall 1.17967
+  station -0.7 right wall 1.59222
+profiled cave reduction 0.01 5376 -> 4018 sampled 0.00802854 detailed 0.0960065
+  station 1.3 right wall 1.4802
+  station 0.2 right wall 1.17967
+  station -0.7 right wall 1.59325
+profiled cave reduction 0.05 5376 -> 2724 sampled 0.0166989 detailed 0.107182
+  station 1.3 right wall 1.47705
+  station 0.2 right wall 1.16529
+  station -0.7 right wall 1.60217
+profiled cave reduction 0.1 5376 -> 1618 sampled 0.0744781 detailed 0.108148

@@ -224,6 +224,35 @@ MeshResult geologicalCaveSource(CaveForm form, int subdivisions,
     recipe.layers = {macro};
     return evaluateSource(recipe, source, std::max(4, subdivisions), -1, -1, cancel);
 }
+MeshResult axialCaveSource(CaveForm form, int subdivisions,
+                           const Jerico::CancellationToken *cancel)
+{
+    auto source = geologicalCaveSource(form, subdivisions, cancel);
+    if (form == CaveForm::SquareTunnel)
+        return source;
+    auto bell = [](double z, double center, double radius)
+    {
+        const double q = (z - center) / radius;
+        return std::exp(-q * q);
+    };
+    for (std::size_t i = 0; i < source.mesh.positions.size(); ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        auto &p = source.mesh.positions[i];
+        const double axial = std::clamp(p.z / 1.5, -1.0, 1.0);
+        const double mouth = std::clamp((axial - 0.35) / 0.65, 0.0, 1.0);
+        const double flare = mouth * mouth * (3.0 - 2.0 * mouth);
+        const double throat = bell(axial, 0.2, 0.28);
+        const double chamber = bell(axial, -0.55, 0.48);
+        const double width = 1.0 + 0.30 * flare - 0.22 * throat + 0.32 * chamber;
+        const double height = 1.0 + 0.10 * flare - 0.08 * throat + 0.15 * chamber;
+        p.x = p.x * width + 0.10 * std::sin(std::numbers::pi * (axial + 1.0) * 0.5);
+        p.y = -0.5 + (p.y + 0.5) * height;
+    }
+    normals(source);
+    return source;
+}
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel)
 {
     auto id = Solid::region(0, 0x60000);

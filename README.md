@@ -70,6 +70,8 @@ La variante posterior en `Evidence/2026-09-25-cave-faceted-relief-retained/` usa
 
 `build/Release/JericoGeologyPlayground.exe --cave-geology-bakes-test Evidence/cave-geology` ensaya una macrodeformación vectorial XYZ sólo en el arco y conserva el túnel cuadrado como control. Guarda vistas frontales y oblicuas con material, tres LOD y diez mapas con UV/mips. `Evidence/2026-09-25-cave-geology-macro.md` registra la prueba y por qué aún no se acepta como caverna natural.
 
+`build/Release/JericoGeologyPlayground.exe --cave-axial-lods-bakes-test Evidence/cave-axial` añade boca/garganta/interior a esa macroforma y reduce sus LOD desde la malla macro high antes del detalle fino. El bake high→low, UV y mapas pasan; `Evidence/2026-09-25-cave-axial-lods.md` conserva capturas y el límite visual pendiente.
+
 El experimento separado `--cliff-nonharmonic-bakes-test Evidence/cliff-nonharmonic` conserva el cliff con alfa RBrush y cambia sólo la lacunaridad de su `CliffCutLoop` de 2 a 1,87. Los tres LOD y bakes se generan, pero la diferencia visual medida es mínima; no es un nuevo preset aprobado.
 
 `--cliff-macro-warp-bakes-test Evidence/cliff-macro` ensaya el vector FBM nativo que precede al RBrush con mayor desplazamiento lateral y vertical. El candidato retenido `Evidence/2026-09-25-cliff-macro-warp035-retained/` usa amplitud 0,35 y conserva high, tres LOD, mapas y capturas Vulkan; cambia la silueta sin alterar la región del corte. Es experimental y no modifica el preset por defecto.
