@@ -940,7 +940,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
         Recipe detail;
         auto noise = defaultLayer(Kind::NormalNoise);
         noise.seed = 123;
-        noise.amplitude = 0.025f;
+        noise.amplitude = form == CaveForm::Arch ? 0.12f : 0.025f;
         noise.frequency = 2.5f;
         noise.lacunarity = 1.87f;
         detail.layers = {noise};
@@ -978,14 +978,14 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
             if (lod == 0)
             {
                 renderer.upload(high);
-                renderer.uploadMaterial(nullptr, diffuse, true, 0);
+                renderer.uploadMaterial(nullptr, diffuse, true, 4);
                 renderer.draw(1280, 960, camera, 5);
                 renderer.capture(formDirectory / "high-material.png");
                 renderer.draw(1280, 960, camera, 0);
                 renderer.capture(formDirectory / "high.png");
             }
             renderer.upload(bake.low, &bake);
-            renderer.uploadMaterial(&bake, diffuse, true, 0);
+            renderer.uploadMaterial(&bake, diffuse, true, 4);
             renderer.draw(1280, 960, camera, 5);
             renderer.capture(directory / "low-material.png");
             renderer.draw(1280, 960, camera, 0);

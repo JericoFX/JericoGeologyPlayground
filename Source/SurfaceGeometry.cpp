@@ -160,6 +160,24 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
     PA::BrushNode mass{massId, PA::BrushBoolean::Add, PA::BoxBrush{{3, 2, 1.5}}, identity};
     PA::BrushNode cutter{tunnelId, PA::BrushBoolean::Subtract, {}, identity};
+    auto extrude = [](const std::vector<std::array<double, 2>> &contour, double depth)
+    {
+        PA::ConvexBrush brush;
+        const auto count = std::uint32_t(contour.size());
+        for (double z : {-depth, depth})
+            for (auto [x, y] : contour)
+                brush.vertices.push_back({x, y, z});
+        std::vector<std::uint32_t> front, back;
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            front.push_back(count - 1 - i);
+            back.push_back(count + i);
+            brush.faces.push_back({i, (i + 1) % count, count + (i + 1) % count, count + i});
+        }
+        brush.faces.push_back(std::move(front));
+        brush.faces.push_back(std::move(back));
+        return brush;
+    };
     if (form == CaveForm::SquareTunnel)
     {
         cutter.shape = PA::BoxBrush{{0.9, 1.1, 2.0}};
@@ -167,6 +185,9 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
     }
     else if (form == CaveForm::Arch)
     {
+        mass.shape = extrude({{-2.8, -2}, {2.65, -2}, {3, -1.5}, {3, 0.9},
+                              {2.35, 1.75}, {1.5, 2}, {-1.9, 2}, {-2.75, 1.35},
+                              {-3, 0.2}, {-3, -1.25}}, 1.5);
         constexpr int segments = 8;
         constexpr double radius = 1.15, spring = -0.45, bottom = -1.7, depth = 2.0;
         std::vector<std::array<double, 2>> contour{{-radius, bottom}, {radius, bottom},
@@ -177,21 +198,7 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
             contour.push_back({radius * std::cos(angle), spring + radius * std::sin(angle)});
         }
         contour.push_back({-radius, spring});
-        PA::ConvexBrush arch;
-        const auto count = std::uint32_t(contour.size());
-        for (double z : {-depth, depth})
-            for (auto [x, y] : contour)
-                arch.vertices.push_back({x, y, z});
-        std::vector<std::uint32_t> front, back;
-        for (std::uint32_t i = 0; i < count; ++i)
-        {
-            front.push_back(count - 1 - i);
-            back.push_back(count + i);
-            arch.faces.push_back({i, (i + 1) % count, count + (i + 1) % count, count + i});
-        }
-        arch.faces.push_back(std::move(front));
-        arch.faces.push_back(std::move(back));
-        cutter.shape = std::move(arch);
+        cutter.shape = extrude(contour, depth);
     }
     else
         throw std::runtime_error("Unknown cave form");

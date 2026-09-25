@@ -1,0 +1,4 @@
+translated BSP sampled source error 3.9968e-15 layered error 5.77663e-15
+cave topology 1 volume 53.4318 V/E/F 672/2016/1344 Euler 0
+cave topology 0 volume 60.12 V/E/F 256/768/512 Euler 0
+PASS real engine BSP selection -> geology: GUIDs, revision, source immutability, unselected isolation, translated layered shape, round trip, invalid input

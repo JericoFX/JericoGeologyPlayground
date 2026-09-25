@@ -88,7 +88,24 @@ int main()
                            p.z * (q.x * r.y - q.y * r.x)) / 6.0;
             }
             require(std::abs(volume) > 40 && std::abs(volume) < 70,
-                    "cave cutter removes a substantial through-passage from the 72-unit rock block");
+                    "cave cutter removes a substantial through-passage from the rock mass");
+            if (form == CaveForm::Arch)
+            {
+                bool slopedExterior = false;
+                for (std::size_t t = 0; t < cave.mesh.indices.size(); t += 3)
+                {
+                    auto p = cave.mesh.positions[cave.mesh.indices[t]],
+                         q = cave.mesh.positions[cave.mesh.indices[t + 1]],
+                         r = cave.mesh.positions[cave.mesh.indices[t + 2]];
+                    const auto x = (p.x + q.x + r.x) / 3.0;
+                    const auto y = (p.y + q.y + r.y) / 3.0;
+                    if (x > 2.0 && y > 1.0 &&
+                        std::abs(cave.normals[cave.mesh.indices[t]].x) > 0.1 &&
+                        std::abs(cave.normals[cave.mesh.indices[t]].y) > 0.1)
+                        slopedExterior = true;
+                }
+                require(slopedExterior, "cave arch has a faceted rock silhouette outside its entrance");
+            }
             std::set<std::pair<std::uint32_t, std::uint32_t>> edges;
             for (std::size_t t = 0; t < cave.mesh.indices.size(); t += 3)
                 for (int edge = 0; edge < 3; ++edge)

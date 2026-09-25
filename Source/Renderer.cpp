@@ -76,10 +76,11 @@ float4 PSMain(VOut input):SV_TARGET {
   float edge=EdgeMap.Sample(EdgeMap_sampler,uv).r;
   float3 weight=pow(abs(normalize(input.Normal)),4);
   weight/=max(weight.x+weight.y+weight.z,0.00001);
-  float3 albedo=ColorMap.Sample(ColorMap_sampler,input.World.yz*.8).rgb*weight.x+
-                ColorMap.Sample(ColorMap_sampler,input.World.xz*.8).rgb*weight.y+
-                ColorMap.Sample(ColorMap_sampler,input.World.xy*.8).rgb*weight.z;
-  if(Range.w>1.5){
+  float materialScale=Range.w>3.5?.22:.8;
+  float3 albedo=ColorMap.Sample(ColorMap_sampler,input.World.yz*materialScale).rgb*weight.x+
+                ColorMap.Sample(ColorMap_sampler,input.World.xz*materialScale).rgb*weight.y+
+                ColorMap.Sample(ColorMap_sampler,input.World.xy*materialScale).rgb*weight.z;
+  if(Range.w>1.5 && Range.w<3.5){
    float grey=dot(albedo,float3(.2126,.7152,.0722));
    albedo=Range.w>2.5?grey*float3(.48,.50,.51):grey*float3(.76,.83,.87);
   }
@@ -438,7 +439,7 @@ void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::pat
     auto &r = *impl;
     require(!bake || (r.baked && bake->settings.specialistMaps && bake->settings.automaticUv),
             "Material preview requires an uploaded automatic-UV specialist bake");
-    require(appearance >= 0 && appearance <= 3, "Unknown material appearance");
+    require(appearance >= 0 && appearance <= 4, "Unknown material appearance");
     r.bytes = r.meshBytes;
     int width = 0, height = 0, channels = 0;
     const bool reuseColor = r.materialColorPath == diffusePath &&
