@@ -155,7 +155,8 @@ MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Gu
 MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::CancellationToken *cancel)
 {
     const auto massId = Solid::region(0xca7eU, 1);
-    const auto tunnelId = Solid::region(0xca7eU, form == CaveForm::Arch ? 2 : 3);
+    const auto tunnelId = Solid::region(0xca7eU, form == CaveForm::Arch ? 2 :
+                                      form == CaveForm::BlindArch ? 5 : 3);
     const std::array<double, 16> identity{
         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
     PA::BrushNode mass{massId, PA::BrushBoolean::Add, PA::BoxBrush{{3, 2, 1.5}}, identity};
@@ -183,7 +184,7 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
         cutter.shape = PA::BoxBrush{{0.9, 1.1, 2.0}};
         cutter.localTransform[13] = -0.6;
     }
-    else if (form == CaveForm::Arch)
+    else if (form == CaveForm::Arch || form == CaveForm::BlindArch)
     {
         mass.shape = extrude({{-2.8, -2}, {2.65, -2}, {3, -1.5}, {3, 0.9},
                               {2.35, 1.75}, {1.5, 2}, {-1.9, 2}, {-2.75, 1.35},
@@ -199,6 +200,8 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
         }
         contour.push_back({-radius, spring});
         cutter.shape = extrude(contour, depth);
+        if (form == CaveForm::BlindArch)
+            cutter.localTransform[14] = 0.9;
     }
     else
         throw std::runtime_error("Unknown cave form");

@@ -17,6 +17,7 @@
 #include <imgui.h>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <numbers>
 #include <optional>
 #include <random>
 #include <thread>
@@ -1036,26 +1037,35 @@ void captureSlateTemporal(Renderer &renderer, const std::filesystem::path &evide
     std::cout << report.dump(2) << '\n';
 }
 void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
-                      bool geologicalMacro, bool axialFeatureReduced)
+                      bool geologicalMacro, bool axialFeatureReduced, bool blindChamber = false)
 {
     nlohmann::json report = {{"adapter", renderer.adapter()},
-                             {"scope", "BSP subtractive arch and square through-tunnels with high-to-low bakes"},
+                             {"scope", blindChamber ?
+                                 "BSP blind arch chamber and square through-tunnel with high-to-low bakes" :
+                                 "BSP subtractive arch and square through-tunnels with high-to-low bakes"},
                              {"geologicalMacro", geologicalMacro},
                              {"axialFeatureReduced", axialFeatureReduced},
+                             {"blindChamber", blindChamber},
                              {"textureResolution", 1024}, {"imageSize", {1280, 960}},
                              {"forms", nlohmann::json::array()}};
     Camera camera;
     camera.yaw = 0.12f;
     camera.pitch = -0.14f;
     camera.distance = 10.5f;
+    if (blindChamber)
+        camera.yaw = float(std::numbers::pi);
     Camera entrance = camera;
-    entrance.yaw = 0;
+    entrance.yaw = blindChamber ? float(std::numbers::pi) : 0;
     entrance.pitch = -0.02f;
     entrance.distance = 5.0f;
     entrance.target = {0, -0.5f, 0};
+    Camera interior = entrance;
+    interior.distance = 1.8f;
+    interior.target = {0, -0.5f, -0.4f};
     report["entranceCamera"] = {{"yaw", entrance.yaw}, {"pitch", entrance.pitch},
                                 {"distance", entrance.distance}, {"target", entrance.target}};
-    for (auto [form, name] : {std::pair{CaveForm::Arch, "arch"},
+    for (auto [form, name] : {std::pair{blindChamber ? CaveForm::BlindArch : CaveForm::Arch,
+                                      "arch"},
                               std::pair{CaveForm::SquareTunnel, "square"}})
     {
         auto macroHigh = axialFeatureReduced ? axialCaveSource(form, 8) :
@@ -1064,7 +1074,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
         Recipe detail;
         auto noise = defaultLayer(Kind::NormalNoise);
         noise.seed = 123;
-        noise.amplitude = form == CaveForm::Arch ? 0.12f : 0.025f;
+        noise.amplitude = form == CaveForm::SquareTunnel ? 0.025f : 0.12f;
         noise.frequency = 2.5f;
         noise.lacunarity = 1.87f;
         detail.layers = {noise};
@@ -1076,7 +1086,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
         std::size_t previousTriangles = high.mesh.indices.size() / 3;
         for (int lod = 0; lod < 3; ++lod)
         {
-            const bool reducedArch = axialFeatureReduced && form == CaveForm::Arch;
+            const bool reducedArch = axialFeatureReduced && form != CaveForm::SquareTunnel;
             const int subdivisions = reducedArch ? 0 : lod == 0 ? 6 : lod == 1 ? 4 : 2;
             const double reductionBudget = lod == 0 ? 0.01 : lod == 1 ? 0.05 : 0.10;
             double macroReductionError = 0;
@@ -1137,6 +1147,11 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(formDirectory / "high.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(formDirectory / "high-entrance-material.png");
+                if (blindChamber && form == CaveForm::BlindArch)
+                {
+                    renderer.draw(1280, 960, interior, 5);
+                    renderer.capture(formDirectory / "high-interior-material.png");
+                }
             }
             renderer.upload(bake.low, &bake);
             renderer.uploadMaterial(&bake, diffuse, true, 4);
@@ -1151,6 +1166,11 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                 renderer.capture(directory / "low-oblique-material.png");
                 renderer.draw(1280, 960, entrance, 5);
                 renderer.capture(directory / "low-entrance-material.png");
+                if (blindChamber && form == CaveForm::BlindArch)
+                {
+                    renderer.draw(1280, 960, interior, 5);
+                    renderer.capture(directory / "low-interior-material.png");
+                }
             }
             renderer.draw(1280, 960, camera, 0);
             renderer.capture(directory / "low-normal.png");
@@ -1430,7 +1450,8 @@ int run(int argc, char **argv)
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
-         caveGeologySmoke = false, caveAxialSmoke = false, slateTemporalSmoke = false;
+         caveGeologySmoke = false, caveAxialSmoke = false, caveBlindSmoke = false,
+         slateTemporalSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1477,7 +1498,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--auto-uv-bake-test" ||
             std::string(argv[i]) == "--cave-forms-bakes-test" ||
             std::string(argv[i]) == "--cave-geology-bakes-test" ||
-            std::string(argv[i]) == "--cave-axial-lods-bakes-test")
+            std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
+            std::string(argv[i]) == "--cave-blind-chamber-bakes-test")
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
@@ -1517,10 +1539,14 @@ int run(int argc, char **argv)
             automaticUvBakeSmoke = std::string(argv[i]) == "--auto-uv-bake-test";
             caveFormsSmoke = std::string(argv[i]) == "--cave-forms-bakes-test" ||
                              std::string(argv[i]) == "--cave-geology-bakes-test" ||
-                             std::string(argv[i]) == "--cave-axial-lods-bakes-test";
+                             std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
+                             std::string(argv[i]) == "--cave-blind-chamber-bakes-test";
             caveGeologySmoke = std::string(argv[i]) == "--cave-geology-bakes-test" ||
-                               std::string(argv[i]) == "--cave-axial-lods-bakes-test";
-            caveAxialSmoke = std::string(argv[i]) == "--cave-axial-lods-bakes-test";
+                               std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
+                               std::string(argv[i]) == "--cave-blind-chamber-bakes-test";
+            caveAxialSmoke = std::string(argv[i]) == "--cave-axial-lods-bakes-test" ||
+                             std::string(argv[i]) == "--cave-blind-chamber-bakes-test";
+            caveBlindSmoke = std::string(argv[i]) == "--cave-blind-chamber-bakes-test";
             if (std::string(argv[i]) == "--normal-bake-3072-test")
                 scaleTextureResolution = 3072;
             smoke = true;
@@ -2199,7 +2225,8 @@ int run(int argc, char **argv)
             }
             if (caveFormsSmoke)
             {
-                captureCaveForms(renderer, evidence, caveGeologySmoke, caveAxialSmoke);
+                captureCaveForms(renderer, evidence, caveGeologySmoke, caveAxialSmoke,
+                                 caveBlindSmoke);
                 window.requestClose();
                 continue;
             }

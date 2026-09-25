@@ -1,0 +1,18 @@
+# Arco ciego con cámara visible — 2026-09-25
+
+Estado: **PASS para la variante opt-in BSP, LOD y bakes; PARTIAL para Beauty de caverna natural**. `--cave-blind-chamber-bakes-test` conserva el arco pasante y el túnel cuadrado previos. La variante `BlindArch` usa un único cutter convexo con la misma sección arqueada, desplazado 0,9 m en +Z: abre la boca en el frente y termina en −1,1 m dentro de la masa. Esto evita los cortes BSP solapados que produjeron una cara degenerada en el [ensayo rechazado](2026-09-25-cave-profile-rejected.md). Se aplica el perfil axial boca/garganta/cámara y se reducen los LOD desde la macroforma high, antes del detalle fino, en C++ nativo.
+
+La prueba RED `Playground.BspSource` falló con `Unknown cave form`. La implementación pasó el gate de malla cerrada, dos GUID exactos host/cutter, pared de fondo, característica de Euler 2 para un bolsillo en vez de 0 para un túnel pasante y área mínima de cara >10⁻⁶ m². `Playground.Reduction` conservó boca, garganta y cámara en high y los tres low: error de sección ≤0,15 m, triángulos decrecientes y mallas cerradas. La cámara de entrada se colocó en +Z porque la boca ensanchada está en ese lado; también hay vista desde cerca del interior. El control cuadrado conserva sus hashes de high y tres low.
+
+El [paquete Vulkan original](2026-09-25-blind-arch-candidate/cave-forms-proof.json) usa 1280×960, UV automática 1024², normal, AO, contacto, curvature, cavity, convex edge, crease, thickness, region ID y height, con mips. La [auditoría de seis bakes](2026-09-25-blind-arch-audit.json) confirmó cero misses/backfaces, cero interiores UV sin pintar y cero IDs de región fabricados. El [audit visual](2026-09-25-blind-arch-visual-audit.json) midió RGB medio 89,37 en el centro de la entrada del arco frente a 17,67 en el túnel cuadrado, con la misma cámara: la pared final está visible. El RGB MAE high↔LOD2 fue 10,77 en la entrada y 8,22 en el interior, sobre 255 niveles. [272 PNG/OBJ](2026-09-25-blind-arch-replay-audit.json) coincidieron en dos corridas del mismo binario. El arco pasante y el cuadrado anteriores conservaron [270 PNG/OBJ idénticos](2026-09-25-blind-arch-through-replay-audit.json) con el binario nuevo.
+
+| Arco ciego | Triángulos | Error high↔low | Misses | Bake CPU observado |
+| --- | ---: | ---: | ---: | ---: |
+| High | 5.120 | — | — | — |
+| LOD0 | 3.832 | 0,08867 | 0 | 1.299 ms |
+| LOD1 | 2.804 | 0,08867 | 0 | 1.204 ms |
+| LOD2 | 1.642 | 0,13098 | 0 | 1.167 ms |
+
+La corrida anterior del arco pasante tenía 5.376 triángulos high y bakes de aproximadamente 1,23–1,37 s. Estos tiempos de una corrida no establecen mejora de rendimiento ni presupuesto GPU/memoria. Build Release y CTest 17/17 pasaron; la última ampliación del test BSP (área mínima de cara) volvió a pasar focalmente. El material CC0 mantiene la procedencia y hash del [manifiesto](cc0-references/manifest.json); no se descargaron assets nuevos. No se modificó JericoEngine ni se usó Blender/OpenVDB.
+
+Inspección visual a resolución original: [entrada high](2026-09-25-blind-arch-candidate/arch/high-entrance-material.png), [entrada LOD2](2026-09-25-blind-arch-candidate/arch/lod-2/low-entrance-material.png), [interior high](2026-09-25-blind-arch-candidate/arch/high-interior-material.png), [interior LOD2](2026-09-25-blind-arch-candidate/arch/lod-2/low-interior-material.png) y [control cuadrado](2026-09-25-blind-arch-candidate/square/high-entrance-material.png). La pared final y las laderas se ven, pero la masa sigue pareciendo un bloque excavado con fondo bastante plano. Faltan macroforma natural, continuidad con terreno, fractura/estratificación interior creíble, iluminación de escena y pruebas de colisión/navegación; esta prueba no equivale a integración M8.

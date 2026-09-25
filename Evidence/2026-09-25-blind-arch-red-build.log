@@ -1,0 +1,8 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  Model.cpp
+  SurfaceGeometry.cpp
+  Generando código...
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  BspSourceTests.cpp
+  PlaygroundBspSourceTests.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundBspSourceTests.exe

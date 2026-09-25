@@ -1,0 +1,122 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "axialFeatureReduced": true,
+  "blindChamber": true,
+  "entranceCamera": {
+    "distance": 5.0,
+    "pitch": -0.019999999552965164,
+    "target": [
+      0.0,
+      -0.5,
+      0.0
+    ],
+    "yaw": 3.1415927410125732
+  },
+  "forms": [
+    {
+      "form": "arch",
+      "highHash": 2008121983086335975,
+      "highTriangles": 5120,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1299.1528,
+          "lod": 0,
+          "lowHash": 14968401794495744749,
+          "macroReductionError": 0.006766466578130417,
+          "misses": 0,
+          "reductionBudget": 0.01,
+          "sampledSurfaceError": 0.08867458132411297,
+          "samples": 426981,
+          "subdivisions": 0,
+          "triangles": 3832,
+          "uvActiveAreaFraction": 0.4070280501842057,
+          "uvIslands": 132
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1203.7618,
+          "lod": 1,
+          "lowHash": 8456019276548468201,
+          "macroReductionError": 0.016698883833550712,
+          "misses": 0,
+          "reductionBudget": 0.05,
+          "sampledSurfaceError": 0.08867458132411296,
+          "samples": 436716,
+          "subdivisions": 0,
+          "triangles": 2804,
+          "uvActiveAreaFraction": 0.41621548092440014,
+          "uvIslands": 124
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 1167.4935,
+          "lod": 2,
+          "lowHash": 9650339203847508352,
+          "macroReductionError": 0.08338738358644203,
+          "misses": 0,
+          "reductionBudget": 0.1,
+          "sampledSurfaceError": 0.13098167008120565,
+          "samples": 422740,
+          "subdivisions": 0,
+          "triangles": 1642,
+          "uvActiveAreaFraction": 0.40291010154607587,
+          "uvIslands": 118
+        }
+      ]
+    },
+    {
+      "form": "square",
+      "highHash": 13217093405694463310,
+      "highTriangles": 2048,
+      "lods": [
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 837.6088,
+          "lod": 0,
+          "lowHash": 12344876120376170877,
+          "misses": 0,
+          "sampledSurfaceError": 0.0192525771055613,
+          "samples": 661188,
+          "subdivisions": 6,
+          "triangles": 1152,
+          "uvActiveAreaFraction": 0.630590744018549,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 771.9869,
+          "lod": 1,
+          "lowHash": 3223701627554700435,
+          "misses": 0,
+          "sampledSurfaceError": 0.0192525771055613,
+          "samples": 661188,
+          "subdivisions": 4,
+          "triangles": 512,
+          "uvActiveAreaFraction": 0.6305907440185563,
+          "uvIslands": 10
+        },
+        {
+          "backfaces": 0,
+          "bakeCpuMs": 679.3777,
+          "lod": 2,
+          "lowHash": 5065888693514843719,
+          "misses": 0,
+          "sampledSurfaceError": 0.0192525771055613,
+          "samples": 661188,
+          "subdivisions": 2,
+          "triangles": 128,
+          "uvActiveAreaFraction": 0.6305907440185547,
+          "uvIslands": 10
+        }
+      ]
+    }
+  ],
+  "geologicalMacro": true,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "scope": "BSP blind arch chamber and square through-tunnel with high-to-low bakes",
+  "textureResolution": 1024
+}

@@ -1,0 +1,62 @@
+{
+  "forms": [
+    {
+      "form": "arch",
+      "highTriangles": 5120,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3832,
+          "sampledSurfaceError": 0.08867458132411297,
+          "uvIslands": 132,
+          "bakeCpuMs": 1299.1528
+        },
+        {
+          "lod": 1,
+          "triangles": 2804,
+          "sampledSurfaceError": 0.08867458132411296,
+          "uvIslands": 124,
+          "bakeCpuMs": 1203.7618
+        },
+        {
+          "lod": 2,
+          "triangles": 1642,
+          "sampledSurfaceError": 0.13098167008120565,
+          "uvIslands": 118,
+          "bakeCpuMs": 1167.4935
+        }
+      ]
+    },
+    {
+      "form": "square",
+      "highTriangles": 2048,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 1152,
+          "sampledSurfaceError": 0.0192525771055613,
+          "uvIslands": 10,
+          "bakeCpuMs": 837.6088
+        },
+        {
+          "lod": 1,
+          "triangles": 512,
+          "sampledSurfaceError": 0.0192525771055613,
+          "uvIslands": 10,
+          "bakeCpuMs": 771.9869
+        },
+        {
+          "lod": 2,
+          "triangles": 128,
+          "sampledSurfaceError": 0.0192525771055613,
+          "uvIslands": 10,
+          "bakeCpuMs": 679.3777
+        }
+      ]
+    }
+  ],
+  "completeBakes": 6,
+  "bakesWithMisses": 0,
+  "unpaintedUvSamples": 0,
+  "fabricatedRegionIds": 0
+}

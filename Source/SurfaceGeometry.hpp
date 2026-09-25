@@ -4,7 +4,7 @@
 #include <span>
 namespace Playground
 {
-enum class CaveForm { Arch, SquareTunnel };
+enum class CaveForm { Arch, SquareTunnel, BlindArch };
 MeshResult caveSource(CaveForm form, int subdivisions,
                       const Jerico::CancellationToken *cancel = nullptr);
 MeshResult geologicalCaveSource(CaveForm form, int subdivisions,

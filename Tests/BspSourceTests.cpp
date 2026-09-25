@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <set>
 #include <stdexcept>
 using namespace Playground;
@@ -126,6 +127,44 @@ int main()
                     "cave geometry and cut regions replay deterministically");
             (form == CaveForm::Arch ? archHash : squareHash) = hash;
         }
+        const auto blind = caveSource(CaveForm::BlindArch, 8);
+        require(blind.closedSolid && PA::validateClosedMesh(blind.mesh).hasValue(),
+                "blind arch chamber remains a closed rock solid");
+        require(blind.sourceSelection.size() == 2 &&
+                    blind.sourceSelection[0] == Solid::region(0xca7eU, 1) &&
+                    blind.sourceSelection[1] == Solid::region(0xca7eU, 5),
+                "blind arch retains host and selected cutter identities");
+        std::set<std::pair<std::uint32_t, std::uint32_t>> blindEdges;
+        std::size_t chamberCapFaces = 0;
+        double minimumFaceArea = std::numeric_limits<double>::max();
+        for (std::size_t t = 0; t < blind.mesh.indices.size(); t += 3)
+        {
+            const auto a = blind.mesh.positions[blind.mesh.indices[t]],
+                       b = blind.mesh.positions[blind.mesh.indices[t + 1]],
+                       c = blind.mesh.positions[blind.mesh.indices[t + 2]];
+            const Vec3d u{b.x - a.x, b.y - a.y, b.z - a.z};
+            const Vec3d v{c.x - a.x, c.y - a.y, c.z - a.z};
+            const Vec3d cross{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                              u.x * v.y - u.y * v.x};
+            minimumFaceArea = std::min(minimumFaceArea,
+                                       0.5 * std::hypot(cross.x, cross.y, cross.z));
+            if (std::abs(a.z + 1.1) < 1e-5 && std::abs(b.z + 1.1) < 1e-5 &&
+                std::abs(c.z + 1.1) < 1e-5 &&
+                std::abs((a.x + b.x + c.x) / 3.0) < 1.0)
+                ++chamberCapFaces;
+            for (int edge = 0; edge < 3; ++edge)
+            {
+                const auto i = blind.mesh.indices[t + edge],
+                           j = blind.mesh.indices[t + (edge + 1) % 3];
+                blindEdges.insert(std::minmax(i, j));
+            }
+        }
+        require(chamberCapFaces > 2, "blind arch ends in a visible inner wall");
+        require(minimumFaceArea > 1e-6, "blind arch has no near-degenerate BSP seam");
+        require(std::int64_t(blind.mesh.positions.size()) -
+                    std::int64_t(blindEdges.size()) +
+                    std::int64_t(blind.mesh.indices.size() / 3) == 2,
+                "blind arch is one connected pocket rather than a through-tunnel");
         require(archHash != squareHash, "arched cave and square tunnel have different geometry");
         const auto archBase = caveSource(CaveForm::Arch, 4);
         const auto archGeology = geologicalCaveSource(CaveForm::Arch, 4);

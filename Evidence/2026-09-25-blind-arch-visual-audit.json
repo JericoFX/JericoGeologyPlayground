@@ -1,0 +1,12 @@
+{
+  "sameCameraCenterRoi": {
+    "archMeanRgb": 89.37153625488281,
+    "squareMeanRgb": 17.66666603088379
+  },
+  "highVsLod2RgbMae": {
+    "entrance": 10.767037391662598,
+    "interior": 8.219550132751465
+  },
+  "squareGeometryAndLodsUnchanged": true,
+  "limit": "Static color and center-wall visibility do not prove natural-cave Beauty, runtime lighting, or collision/navigation."
+}
