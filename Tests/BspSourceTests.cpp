@@ -199,6 +199,67 @@ int main()
             return Vec3d{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
                          u.x * v.y - u.y * v.x};
         };
+        for (int subdivisions : {2, 3, 4, 6, 8})
+        {
+            const auto before = caveSource(CaveForm::SquareTunnel, subdivisions);
+            const auto after = squareTunnelReliefSource(subdivisions);
+            require(after.closedSolid && PA::validateClosedMesh(after.mesh).hasValue() &&
+                        after.mesh.indices == before.mesh.indices &&
+                        after.mesh.triangleRegions == before.mesh.triangleRegions &&
+                        after.sourceSelection == before.sourceSelection,
+                    "square wall relief preserves closed BSP mesh and host/cutter identities");
+            std::vector<bool> interiorVertex(before.mesh.positions.size());
+            std::size_t interiorTriangles = 0;
+            for (std::size_t t = 0; t < before.mesh.indices.size(); t += 3)
+            {
+                const auto a = before.mesh.positions[before.mesh.indices[t]];
+                const auto b = before.mesh.positions[before.mesh.indices[t + 1]];
+                const auto c = before.mesh.positions[before.mesh.indices[t + 2]];
+                const auto center = Vec3d{(a.x + b.x + c.x) / 3.0,
+                                          (a.y + b.y + c.y) / 3.0,
+                                          (a.z + b.z + c.z) / 3.0};
+                if (std::abs(center.x) < 1.0 && center.y > -1.8 && center.y < 0.6 &&
+                    std::abs(center.z) < 1.49)
+                {
+                    ++interiorTriangles;
+                    for (int k = 0; k < 3; ++k)
+                        interiorVertex[before.mesh.indices[t + k]] = true;
+                }
+            }
+            double maximumInteriorShift = 0;
+            std::size_t changedInterior = 0;
+            for (std::size_t i = 0; i < before.mesh.positions.size(); ++i)
+            {
+                const auto a = before.mesh.positions[i], b = after.mesh.positions[i];
+                const auto shift = std::sqrt((a.x - b.x) * (a.x - b.x) +
+                                             (a.y - b.y) * (a.y - b.y) +
+                                             (a.z - b.z) * (a.z - b.z));
+                if (!interiorVertex[i] || std::abs(a.z) > 1.49)
+                    require(shift < 1e-10, "square relief leaves exterior and portal rims fixed");
+                else if (std::abs(a.z) < 1.0 && shift > 0.01)
+                {
+                    maximumInteriorShift = std::max(maximumInteriorShift, shift);
+                    ++changedInterior;
+                }
+                require(shift < 0.16, "square wall relief remains inside geometric bake budget");
+            }
+            std::cout << "square relief subdivisions " << subdivisions << " changed "
+                      << changedInterior << " maximum " << maximumInteriorShift
+                      << " interior triangles " << interiorTriangles << '\n';
+            if (subdivisions == 8 || subdivisions == 3)
+                require(changedInterior > 4 && maximumInteriorShift > 0.035,
+                        "square high and LOD2 interior walls have visible mesh displacement");
+            for (std::size_t triangle = 0; triangle < before.mesh.indices.size(); triangle += 3)
+            {
+                const auto x = faceNormal(before.mesh, triangle),
+                           y = faceNormal(after.mesh, triangle);
+                require(x.x * y.x + x.y * y.y + x.z * y.z > 0,
+                        "square wall relief does not invert a face");
+            }
+            require(PA::hashTriangleMesh(after.mesh) ==
+                        PA::hashTriangleMesh(squareTunnelReliefSource(subdivisions).mesh),
+                    "square wall relief replays deterministically");
+        }
         for (int subdivisions : {2, 4, 6, 8})
         {
             const auto before = caveSource(CaveForm::Arch, subdivisions);

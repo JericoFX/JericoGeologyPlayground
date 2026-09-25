@@ -1,0 +1,20 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 16: Playground.BspSource
+1/1 Test #16: Playground.BspSource .............***Failed    0.19 sec
+translated BSP sampled source error 3.9968e-15 layered error 5.77663e-15
+cave topology 1 volume 53.4318 V/E/F 672/2016/1344 Euler 0
+cave topology 0 volume 60.12 V/E/F 256/768/512 Euler 0
+square relief subdivisions 2 changed 0 maximum 0 cutter triangles 0
+square relief subdivisions 4 changed 0 maximum 0 cutter triangles 0
+square relief subdivisions 6 changed 0 maximum 0 cutter triangles 0
+square relief subdivisions 8 changed 0 maximum 0 cutter triangles 0
+square high interior walls have visible mesh displacement
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.22 sec
+
+The following tests FAILED:
+	 16 - Playground.BspSource (Failed)
+Errors while running CTest

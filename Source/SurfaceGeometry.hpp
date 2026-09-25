@@ -11,6 +11,8 @@ MeshResult geologicalCaveSource(CaveForm form, int subdivisions,
                                 const Jerico::CancellationToken *cancel = nullptr);
 MeshResult axialCaveSource(CaveForm form, int subdivisions,
                            const Jerico::CancellationToken *cancel = nullptr);
+MeshResult squareTunnelReliefSource(int subdivisions,
+                                   const Jerico::CancellationToken *cancel = nullptr);
 MeshResult planeSource(std::array<float, 2> size, int resolution);
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel = nullptr);
 MeshResult bspSource(const PA::BspDocument &document, std::span<const Jerico::Guid> selected,

@@ -256,6 +256,66 @@ MeshResult axialCaveSource(CaveForm form, int subdivisions,
     normals(source);
     return source;
 }
+MeshResult squareTunnelReliefSource(int subdivisions, const Jerico::CancellationToken *cancel)
+{
+    auto source = caveSource(CaveForm::SquareTunnel, subdivisions, cancel);
+    std::vector<Vec3d> cutterNormals(source.mesh.positions.size());
+    for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
+    {
+        if ((t & 767) == 0)
+            check(cancel);
+        const auto a = source.mesh.positions[source.mesh.indices[t]],
+                   b = source.mesh.positions[source.mesh.indices[t + 1]],
+                   c = source.mesh.positions[source.mesh.indices[t + 2]];
+        const Vec3d center{(a.x + b.x + c.x) / 3.0,
+                           (a.y + b.y + c.y) / 3.0,
+                           (a.z + b.z + c.z) / 3.0};
+        if (std::abs(center.x) >= 1.0 || center.y <= -1.8 || center.y >= 0.6 ||
+            std::abs(center.z) >= 1.49)
+            continue;
+        const Vec3d u{b.x - a.x, b.y - a.y, b.z - a.z},
+                    v{c.x - a.x, c.y - a.y, c.z - a.z};
+        const Vec3d n{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                      u.x * v.y - u.y * v.x};
+        for (int k = 0; k < 3; ++k)
+        {
+            auto &sum = cutterNormals[source.mesh.indices[t + k]];
+            sum.x += n.x;
+            sum.y += n.y;
+            sum.z += n.z;
+        }
+    }
+    for (std::size_t i = 0; i < source.mesh.positions.size(); ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        auto &p = source.mesh.positions[i];
+        const auto &sum = cutterNormals[i];
+        const double length = std::sqrt(sum.x * sum.x + sum.y * sum.y + sum.z * sum.z);
+        if (length <= 1e-12)
+            continue;
+        const double rim = std::clamp((1.5 - std::abs(p.z)) / 0.45, 0.0, 1.0);
+        const double axial = rim * rim * (3.0 - 2.0 * rim);
+        if (axial <= 0)
+            continue;
+        const Vec3d n{sum.x / length, sum.y / length, sum.z / length};
+        const double wall = std::max(std::abs(n.x), 0.7 * std::abs(n.y));
+        const double broad = PA::evaluateGeologyFbmReference(
+            {1.1 * p.x + 2.3, 1.5 * p.y - 0.8, 1.7 * p.z + 0.4},
+            0x713a64e1U, 3, 1.87, 0.5);
+        const double fine = PA::evaluateGeologyFbmReference(
+            {3.7 * p.x - 1.2, 3.1 * p.y + 0.5, 3.3 * p.z + 1.1},
+            0x25cb49dfU, 2, 1.87, 0.5);
+        const double ridge = std::sin(2.8 * p.z + 1.7 * p.y + 0.8 * broad);
+        const double distance = axial * wall *
+            std::clamp(0.21 * broad + 0.045 * fine + 0.035 * ridge, -0.15, 0.15);
+        p.x += n.x * distance;
+        p.y += n.y * distance;
+        p.z += n.z * distance;
+    }
+    normals(source);
+    return source;
+}
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel)
 {
     auto id = Solid::region(0, 0x60000);
