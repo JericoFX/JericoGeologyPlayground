@@ -104,6 +104,7 @@ target_include_directories(JericoGeologyPlayground PRIVATE
     "${DC}/Common/interface" "${DC}/Graphics/GraphicsEngine/interface"
     "${DC}/Graphics/GraphicsEngineVulkan/interface" "${DC}/Graphics/GraphicsAccessories/interface"
     "${DC}/Graphics/GraphicsTools/interface" "${DC}/ThirdParty/stb"
+    "${JERICO_DEPS}/_deps/stb-src"
     "${DT}/Imgui/interface" "${DT}/ThirdParty/imgui")
 target_compile_definitions(JericoGeologyPlayground PRIVATE
     PLAYGROUND_ROOT="${CMAKE_SOURCE_DIR}"

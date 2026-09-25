@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "F:\JericoGeologyPlayground\Tests\MaterialPreviewAudit.py", line 47, in <module>
+    report = audit(Path(sys.argv[1]), Path(sys.argv[2]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\MaterialPreviewAudit.py", line 14, in audit
+    assert all(proof["layeredMaterial"] is True for proof in proofs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\JericoGeologyPlayground\Tests\MaterialPreviewAudit.py", line 14, in <genexpr>
+    assert all(proof["layeredMaterial"] is True for proof in proofs)
+               ~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'layeredMaterial'

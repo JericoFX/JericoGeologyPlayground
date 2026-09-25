@@ -20,6 +20,9 @@
 #include <cmath>
 #include <imgui.h>
 #include <stb_image_write.h>
+#define STB_IMAGE_STATIC
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 #include <stdexcept>
 
 namespace Playground
@@ -40,6 +43,11 @@ struct Constants
 const char *shader = R"(
 cbuffer Constants {float4 Camera;float4 Target;float4 Range;};
 Texture2D NormalMap; SamplerState NormalMap_sampler;
+Texture2D ColorMap; SamplerState ColorMap_sampler;
+Texture2D AmbientMap; SamplerState AmbientMap_sampler;
+Texture2D ContactMap; SamplerState ContactMap_sampler;
+Texture2D CavityMap; SamplerState CavityMap_sampler;
+Texture2D EdgeMap; SamplerState EdgeMap_sampler;
 struct VIn {float3 Position:ATTRIB0;float3 Normal:ATTRIB1;float Field:ATTRIB2;float2 UV:ATTRIB3;float3 Tangent:ATTRIB4;float3 Bitangent:ATTRIB5;};
 struct VOut {float4 Position:SV_POSITION;float3 Normal:NORMAL;float3 World:TEXCOORD0;float Field:TEXCOORD1;float2 UV:TEXCOORD2;float3 Tangent:TEXCOORD3;float3 Bitangent:TEXCOORD4;};
 VOut VSMain(VIn input) {
@@ -59,6 +67,37 @@ float4 PSMain(VOut input):SV_TARGET {
   n=normalize(t*mapped.x+b*mapped.y+n*mapped.z);
  }
  if(Target.w>0.5 && Target.w<1.5)return float4(n*.5+.5,1);
+ if(Target.w>4.5 && Target.w<5.5){
+  float2 uv=float2(input.UV.x,1-input.UV.y);
+  float ao=AmbientMap.Sample(AmbientMap_sampler,uv).r;
+  float contact=ContactMap.Sample(ContactMap_sampler,uv).r;
+  float cavity=CavityMap.Sample(CavityMap_sampler,uv).r;
+  float edge=EdgeMap.Sample(EdgeMap_sampler,uv).r;
+  float3 weight=pow(abs(normalize(input.Normal)),4);
+  weight/=max(weight.x+weight.y+weight.z,0.00001);
+  float3 albedo=ColorMap.Sample(ColorMap_sampler,input.World.yz*.8).rgb*weight.x+
+                ColorMap.Sample(ColorMap_sampler,input.World.xz*.8).rgb*weight.y+
+                ColorMap.Sample(ColorMap_sampler,input.World.xy*.8).rgb*weight.z;
+  albedo*=1-.18*max(contact*.6,cavity*.4);
+  albedo=lerp(albedo,float3(.62,.58,.52),edge*.12);
+  float3 light=normalize(float3(-.5,.85,-.7));
+  float cy=cos(Camera.x),sy=sin(Camera.x),cp=cos(Camera.y),sp=sin(Camera.y);
+  float3 forward=float3(sy*cp,sp,cy*cp);
+  float3 viewDirection=normalize(Target.xyz-forward*Camera.z-input.World);
+  float3 halfVector=normalize(light+viewDirection);
+  float nl=saturate(dot(n,light)),nv=saturate(dot(n,viewDirection));
+  float nh=saturate(dot(n,halfVector)),vh=saturate(dot(viewDirection,halfVector));
+  float roughness=lerp(.82,.68,edge*.35);
+  float a=roughness*roughness,a2=a*a;
+  float d=a2/(3.14159265*pow(nh*nh*(a2-1)+1,2)+.00001);
+  float k=pow(roughness+1,2)/8;
+  float g=nv/(nv*(1-k)+k+.00001)*nl/(nl*(1-k)+k+.00001);
+  float3 fresnel=.04+(1-.04)*pow(1-vh,5);
+  float3 specular=d*g*fresnel/(4*nv*nl+.00001);
+  float3 direct=(albedo*(1-fresnel)/3.14159265+specular)*2.8*nl;
+  float3 ambient=albedo*.6*(1-.85*ao);
+  return float4(pow(saturate(direct+ambient),1.0/2.2),1);
+ }
  if(Target.w>2.5){float t=saturate((input.Field-Range.x)/max(0.00001,Range.y-Range.x));
   float3 color=lerp(float3(.07,.17,.38),float3(.1,.8,.6),saturate(t*2));color=lerp(color,float3(1,.55,.12),saturate((t-.5)*2));return float4(color,1);}
  float key=max(0,dot(n,normalize(float3(-.5,.85,-.7))));float rim=max(0,dot(n,normalize(float3(.8,.3,.6))));
@@ -85,6 +124,47 @@ void require(bool ok, const char *message)
     if (!ok)
         throw std::runtime_error(message);
 }
+std::vector<std::vector<std::uint8_t>> colorMips(const std::vector<std::uint8_t> &base,
+                                                  unsigned width, unsigned height)
+{
+    std::vector<std::vector<std::uint8_t>> chain;
+    while (width > 1 || height > 1)
+    {
+        const auto &previous = chain.empty() ? base : chain.back();
+        const auto nextWidth = std::max(1u, width / 2), nextHeight = std::max(1u, height / 2);
+        std::vector<std::uint8_t> next(std::size_t(nextWidth) * nextHeight * 4);
+        for (unsigned y = 0; y < nextHeight; ++y)
+            for (unsigned x = 0; x < nextWidth; ++x)
+            {
+                double linear[3]{};
+                for (unsigned dy = 0; dy < 2; ++dy)
+                    for (unsigned dx = 0; dx < 2; ++dx)
+                    {
+                        const auto source = 4 * (std::size_t(std::min(2 * y + dy, height - 1)) * width +
+                                                 std::min(2 * x + dx, width - 1));
+                        for (int channel = 0; channel < 3; ++channel)
+                        {
+                            const double encoded = previous[source + channel] / 255.0;
+                            linear[channel] += encoded <= 0.04045 ? encoded / 12.92 :
+                                std::pow((encoded + 0.055) / 1.055, 2.4);
+                        }
+                    }
+                const auto target = 4 * (std::size_t(y) * nextWidth + x);
+                for (int channel = 0; channel < 3; ++channel)
+                {
+                    const double value = linear[channel] * 0.25;
+                    const double encoded = value <= 0.0031308 ? 12.92 * value :
+                        1.055 * std::pow(value, 1.0 / 2.4) - 0.055;
+                    next[target + channel] = std::uint8_t(std::lround(std::clamp(encoded, 0.0, 1.0) * 255));
+                }
+                next[target + 3] = 255;
+            }
+        chain.push_back(std::move(next));
+        width = nextWidth;
+        height = nextHeight;
+    }
+    return chain;
+}
 } // namespace
 struct Renderer::Impl
 {
@@ -97,7 +177,8 @@ struct Renderer::Impl
     RefCntAutoPtr<IShaderResourceBinding> binding;
     RefCntAutoPtr<IBuffer> constants, vertices, indices, parameters;
     RefCntAutoPtr<ITexture> color, depth, normalMap;
-    bool baked{};
+    std::array<RefCntAutoPtr<ITexture>, 5> materialMaps;
+    bool baked{}, material{};
     unsigned indexCount{}, viewWidth{}, viewHeight{};
     std::size_t bytes{};
     float low{}, high{1};
@@ -165,20 +246,54 @@ Renderer::Renderer(void *window, unsigned width, unsigned height) : impl(std::ma
                               {4, 0, 3, VT_FLOAT32, false}, {5, 0, 3, VT_FLOAT32, false}};
     p.GraphicsPipeline.InputLayout.LayoutElements = layout;
     p.GraphicsPipeline.InputLayout.NumElements = 6;
-    ShaderResourceVariableDesc variable{SHADER_TYPE_PIXEL, "NormalMap",
-                                        SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC};
-    p.PSODesc.ResourceLayout.Variables = &variable;
-    p.PSODesc.ResourceLayout.NumVariables = 1;
+    ShaderResourceVariableDesc variables[] = {
+        {SHADER_TYPE_PIXEL, "NormalMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
+        {SHADER_TYPE_PIXEL, "ColorMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
+        {SHADER_TYPE_PIXEL, "AmbientMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
+        {SHADER_TYPE_PIXEL, "ContactMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
+        {SHADER_TYPE_PIXEL, "CavityMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
+        {SHADER_TYPE_PIXEL, "EdgeMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC}};
+    p.PSODesc.ResourceLayout.Variables = variables;
+    p.PSODesc.ResourceLayout.NumVariables = std::size(variables);
     SamplerDesc sampler;
     sampler.AddressU = sampler.AddressV = sampler.AddressW = TEXTURE_ADDRESS_CLAMP;
-    ImmutableSamplerDesc immutable{SHADER_TYPE_PIXEL, "NormalMap", sampler};
-    p.PSODesc.ResourceLayout.ImmutableSamplers = &immutable;
-    p.PSODesc.ResourceLayout.NumImmutableSamplers = 1;
+    SamplerDesc colorSampler = sampler;
+    colorSampler.AddressU = colorSampler.AddressV = colorSampler.AddressW = TEXTURE_ADDRESS_WRAP;
+    ImmutableSamplerDesc samplers[] = {
+        {SHADER_TYPE_PIXEL, "NormalMap", sampler},
+        {SHADER_TYPE_PIXEL, "ColorMap", colorSampler},
+        {SHADER_TYPE_PIXEL, "AmbientMap", sampler},
+        {SHADER_TYPE_PIXEL, "ContactMap", sampler},
+        {SHADER_TYPE_PIXEL, "CavityMap", sampler},
+        {SHADER_TYPE_PIXEL, "EdgeMap", sampler}};
+    p.PSODesc.ResourceLayout.ImmutableSamplers = samplers;
+    p.PSODesc.ResourceLayout.NumImmutableSamplers = std::size(samplers);
     r.device->CreateGraphicsPipelineState(p, &r.solid);
     require(bool(r.solid), "Graphics pipeline failed");
     r.solid->GetStaticVariableByName(SHADER_TYPE_VERTEX, "Constants")->Set(r.constants);
     r.solid->GetStaticVariableByName(SHADER_TYPE_PIXEL, "Constants")->Set(r.constants);
     r.solid->CreateShaderResourceBinding(&r.binding, true);
+    const char *names[] = {"ColorMap", "AmbientMap", "ContactMap", "CavityMap", "EdgeMap"};
+    for (std::size_t i = 0; i < std::size(names); ++i)
+    {
+        const std::uint8_t neutral[4] = {i == 0 ? std::uint8_t(180) : std::uint8_t(0),
+                                         i == 0 ? std::uint8_t(170) : std::uint8_t(0),
+                                         i == 0 ? std::uint8_t(150) : std::uint8_t(0), 255};
+        TextureDesc d;
+        d.Name = names[i];
+        d.Type = RESOURCE_DIM_TEX_2D;
+        d.Width = d.Height = 1;
+        d.MipLevels = 1;
+        d.Format = i == 0 ? TEX_FORMAT_RGBA8_UNORM_SRGB : TEX_FORMAT_RGBA8_UNORM;
+        d.Usage = USAGE_IMMUTABLE;
+        d.BindFlags = BIND_SHADER_RESOURCE;
+        TextureSubResData subresource{neutral, 4};
+        TextureData initial{&subresource, 1};
+        r.device->CreateTexture(d, &initial, &r.materialMaps[i]);
+        require(bool(r.materialMaps[i]), "Material fallback texture allocation failed");
+        r.binding->GetVariableByName(SHADER_TYPE_PIXEL, names[i])
+            ->Set(r.materialMaps[i]->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+    }
     if (r.device->GetDeviceInfo().Features.WireframeFill == DEVICE_FEATURE_STATE_ENABLED)
     {
         p.GraphicsPipeline.RasterizerDesc.FillMode = FILL_MODE_WIREFRAME;
@@ -304,12 +419,79 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     r.binding->GetVariableByName(SHADER_TYPE_PIXEL, "NormalMap")
         ->Set(r.normalMap->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
     r.baked = bake != nullptr && diagnosticMap == nullptr;
+    r.material = false;
     for (Uint32 level = 0; level < texture.MipLevels; ++level)
         r.bytes += std::size_t(texture.Width >> level) * (texture.Height >> level) * 4;
+}
+void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::path &diffusePath,
+                              bool useDiffuseMips)
+{
+    auto &r = *impl;
+    require(!bake || (r.baked && bake->settings.specialistMaps && bake->settings.automaticUv),
+            "Material preview requires an uploaded automatic-UV specialist bake");
+    int width = 0, height = 0, channels = 0;
+    auto *decoded = stbi_load(diffusePath.string().c_str(), &width, &height, &channels, 4);
+    if (!decoded || width <= 0 || height <= 0 || width > 4096 || height > 4096)
+    {
+        stbi_image_free(decoded);
+        throw std::runtime_error("Material preview diffuse texture could not be decoded");
+    }
+    std::vector<std::uint8_t> color(decoded, decoded + std::size_t(width) * height * 4);
+    stbi_image_free(decoded);
+    auto diffuseMips = useDiffuseMips ? colorMips(color, unsigned(width), unsigned(height)) :
+        std::vector<std::vector<std::uint8_t>>{};
+    const std::vector<std::uint8_t> neutral{0, 0, 0, 255};
+    const std::vector<std::uint8_t> *maps[] = {
+        &color, bake ? &bake->ambientRgba : &neutral, bake ? &bake->contactRgba : &neutral,
+        bake ? &bake->cavityRgba : &neutral, bake ? &bake->edgeRgba : &neutral};
+    const std::vector<std::vector<std::uint8_t>> *mips[] = {
+        &diffuseMips, bake ? &bake->specialistMips.ambient : nullptr,
+        bake ? &bake->specialistMips.contact : nullptr,
+        bake ? &bake->specialistMips.cavity : nullptr,
+        bake ? &bake->specialistMips.edge : nullptr};
+    const char *names[] = {"ColorMap", "AmbientMap", "ContactMap", "CavityMap", "EdgeMap"};
+    for (std::size_t i = 0; i < std::size(maps); ++i)
+    {
+        const auto size = i == 0 ? unsigned(width) : bake ? bake->resolution : 1;
+        const auto mapHeight = i == 0 ? unsigned(height) : bake ? bake->resolution : 1;
+        require(maps[i]->size() == std::size_t(size) * mapHeight * 4,
+                "Material preview map dimensions mismatch");
+        TextureDesc d;
+        d.Name = names[i];
+        d.Type = RESOURCE_DIM_TEX_2D;
+        d.Width = size;
+        d.Height = mapHeight;
+        d.MipLevels = mips[i] ? Uint32(mips[i]->size() + 1) : 1;
+        d.Format = i == 0 ? TEX_FORMAT_RGBA8_UNORM_SRGB : TEX_FORMAT_RGBA8_UNORM;
+        d.Usage = USAGE_IMMUTABLE;
+        d.BindFlags = BIND_SHADER_RESOURCE;
+        std::vector<TextureSubResData> levels(d.MipLevels);
+        levels[0].pData = maps[i]->data();
+        levels[0].Stride = size * 4;
+        for (Uint32 level = 1; level < d.MipLevels; ++level)
+        {
+            const auto mipWidth = std::max(1u, d.Width >> level);
+            const auto mipHeight = std::max(1u, d.Height >> level);
+            require((*mips[i])[level - 1].size() == std::size_t(mipWidth) * mipHeight * 4,
+                    "Material preview mip dimensions mismatch");
+            levels[level].pData = (*mips[i])[level - 1].data();
+            levels[level].Stride = mipWidth * 4;
+        }
+        TextureData initial{levels.data(), d.MipLevels};
+        r.materialMaps[i].Release();
+        r.device->CreateTexture(d, &initial, &r.materialMaps[i]);
+        require(bool(r.materialMaps[i]), "Material preview texture allocation failed");
+        r.binding->GetVariableByName(SHADER_TYPE_PIXEL, names[i])
+            ->Set(r.materialMaps[i]->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+        for (Uint32 level = 0; level < d.MipLevels; ++level)
+            r.bytes += std::size_t(d.Width >> level) * (d.Height >> level) * 4;
+    }
+    r.material = true;
 }
 void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int mode)
 {
     auto &r = *impl;
+    require(mode != 5 || r.material, "Material preview needs baked maps and diffuse texture");
     width = std::max(32U, width);
     height = std::max(32U, height);
     if (width != r.viewWidth || height != r.viewHeight)

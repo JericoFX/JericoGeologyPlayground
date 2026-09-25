@@ -692,7 +692,8 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                          bool automaticUv = false, int familyFilter = -1,
                          double curvatureRelaxation = 0, bool angularFracture = false,
                          bool angularFourBlocks = false, bool cliffDrainage = false,
-                         bool cliffEdgeDamage = false, bool layeredOcclusion = false)
+                         bool cliffEdgeDamage = false, bool layeredOcclusion = false,
+                         bool layeredMaterial = false, bool layeredMaterialNoMips = false)
 {
     nlohmann::json report;
     report["adapter"] = renderer.adapter();
@@ -704,6 +705,8 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     report["cliffDrainage"] = cliffDrainage;
     report["cliffEdgeDamage"] = cliffEdgeDamage;
     report["layeredOcclusion"] = layeredOcclusion;
+    report["layeredMaterial"] = layeredMaterial;
+    report["layeredMaterialNoMips"] = layeredMaterialNoMips;
     report["imageSize"] = {1280, 960};
     report["textureResolution"] = 2048;
     Camera camera;
@@ -847,6 +850,26 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
                                     automaticUv ? map.mips : nullptr);
                     renderer.draw(1280, 960, camera, 4);
                     renderer.capture(directory / map.name);
+                }
+                if (layeredMaterial)
+                {
+                    const auto diffuse = std::filesystem::path(PLAYGROUND_ROOT) /
+                        "Evidence/cc0-references/rock_06-diff-1k.jpg";
+                    renderer.upload(preview.high);
+                    renderer.uploadMaterial(nullptr, diffuse, !layeredMaterialNoMips);
+                    renderer.draw(1280, 960, camera, 5);
+                    renderer.capture(directory / "high-material.png");
+                    renderer.upload(preview.bake.low, &preview.bake);
+                    renderer.uploadMaterial(&preview.bake, diffuse, !layeredMaterialNoMips);
+                    renderer.draw(1280, 960, camera, 5);
+                    renderer.capture(directory / "low-material.png");
+                    if (lod == 2)
+                    {
+                        auto farCamera = camera;
+                        farCamera.distance *= 2;
+                        renderer.draw(1280, 960, farCamera, 5);
+                        renderer.capture(directory / "low-material-far.png");
+                    }
                 }
                 familyReport["lods"].push_back({{"lod", lod},
                     {"status", preview.bake.misses ? "BAKED_WITH_MISSES" : "BAKED"},
@@ -1115,6 +1138,8 @@ int run(int argc, char **argv)
          cliffDrainageSmoke = false,
          cliffEdgeDamageSmoke = false,
          layeredOcclusionSmoke = false,
+         layeredMaterialBaselineSmoke = false, layeredMaterialCandidateSmoke = false,
+         layeredMaterialNoMipsSmoke = false,
          edgeRadiusSmoke = false, regeneratedLodSmoke = false, angularLod2Smoke = false,
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
@@ -1137,6 +1162,9 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--cliff-drainage-bakes-test" ||
             std::string(argv[i]) == "--cliff-edge-damage-bakes-test" ||
             std::string(argv[i]) == "--layered-occlusion-bakes-test" ||
+            std::string(argv[i]) == "--layered-material-baseline-test" ||
+            std::string(argv[i]) == "--layered-material-candidate-test" ||
+            std::string(argv[i]) == "--layered-material-no-mips-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1162,6 +1190,9 @@ int run(int argc, char **argv)
             cliffDrainageSmoke = std::string(argv[i]) == "--cliff-drainage-bakes-test";
             cliffEdgeDamageSmoke = std::string(argv[i]) == "--cliff-edge-damage-bakes-test";
             layeredOcclusionSmoke = std::string(argv[i]) == "--layered-occlusion-bakes-test";
+            layeredMaterialBaselineSmoke = std::string(argv[i]) == "--layered-material-baseline-test";
+            layeredMaterialCandidateSmoke = std::string(argv[i]) == "--layered-material-candidate-test";
+            layeredMaterialNoMipsSmoke = std::string(argv[i]) == "--layered-material-no-mips-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -1777,19 +1808,28 @@ int run(int argc, char **argv)
             }
             if (rockLodSmoke || autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                 angularFractureSmoke || angularFourBlocksSmoke || cliffDrainageSmoke ||
-                cliffEdgeDamageSmoke || layeredOcclusionSmoke)
+                cliffEdgeDamageSmoke || layeredOcclusionSmoke ||
+                layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
+                layeredMaterialNoMipsSmoke)
             {
                 captureRockLodBakes(renderer, evidence,
                                     autoUvRockLodSmoke || curvatureRelaxationSmoke ||
                                         angularFractureSmoke || angularFourBlocksSmoke ||
-                                        cliffDrainageSmoke || cliffEdgeDamageSmoke || layeredOcclusionSmoke,
+                                        cliffDrainageSmoke || cliffEdgeDamageSmoke || layeredOcclusionSmoke ||
+                                        layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
+                                        layeredMaterialNoMipsSmoke,
                                     cliffDrainageSmoke || cliffEdgeDamageSmoke ? 8 :
-                                    layeredOcclusionSmoke ? 11 :
+                                    layeredOcclusionSmoke || layeredMaterialBaselineSmoke ||
+                                        layeredMaterialCandidateSmoke || layeredMaterialNoMipsSmoke ? 11 :
                                     angularFractureSmoke || angularFourBlocksSmoke ? 10 :
                                         automaticUvRockLodFamily,
                                     curvatureRelaxationSmoke ? 0.5 : 0, angularFractureSmoke,
                                     angularFourBlocksSmoke, cliffDrainageSmoke,
-                                    cliffEdgeDamageSmoke, layeredOcclusionSmoke);
+                                    cliffEdgeDamageSmoke,
+                                    layeredOcclusionSmoke || layeredMaterialCandidateSmoke,
+                                    layeredMaterialBaselineSmoke || layeredMaterialCandidateSmoke ||
+                                        layeredMaterialNoMipsSmoke,
+                                    layeredMaterialNoMipsSmoke);
                 window.requestClose();
                 continue;
             }

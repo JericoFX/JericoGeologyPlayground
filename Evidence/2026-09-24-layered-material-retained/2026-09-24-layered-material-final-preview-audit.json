@@ -1,0 +1,46 @@
+{
+  "diffuseSha256": "0f9f0fc0438f99cdd9e33cfadc9ba01c527f74c1085fdac425e06e6a808a7736",
+  "lods": [
+    {
+      "lod": 0,
+      "views": {
+        "low-material.png": {
+          "foregroundPixels": 115882,
+          "silhouetteIoU": 1.0,
+          "foregroundRgbMae": 0.07374,
+          "highToLowRgbMaeBaseline": 4.06088,
+          "highToLowRgbMaeCandidate": 4.08526
+        }
+      }
+    },
+    {
+      "lod": 1,
+      "views": {
+        "low-material.png": {
+          "foregroundPixels": 115624,
+          "silhouetteIoU": 1.0,
+          "foregroundRgbMae": 0.07353,
+          "highToLowRgbMaeBaseline": 4.62187,
+          "highToLowRgbMaeCandidate": 4.64224
+        }
+      }
+    },
+    {
+      "lod": 2,
+      "views": {
+        "low-material.png": {
+          "foregroundPixels": 115573,
+          "silhouetteIoU": 1.0,
+          "foregroundRgbMae": 0.07255,
+          "highToLowRgbMaeBaseline": 4.97683,
+          "highToLowRgbMaeCandidate": 4.99704
+        },
+        "low-material-far.png": {
+          "foregroundPixels": 28510,
+          "silhouetteIoU": 1.0,
+          "foregroundRgbMae": 0.08128
+        }
+      }
+    }
+  ]
+}

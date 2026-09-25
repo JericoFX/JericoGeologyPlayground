@@ -1,0 +1,22 @@
+{
+  "views": [
+    {
+      "lod": 0,
+      "capture": "low-material.png",
+      "foregroundPixels": 115878,
+      "silhouetteIoU": 0.99997,
+      "neighborRgbDeltaUnfiltered": 16.65336,
+      "neighborRgbDeltaFiltered": 7.28751,
+      "foregroundRgbMae": 9.53181
+    },
+    {
+      "lod": 2,
+      "capture": "low-material-far.png",
+      "foregroundPixels": 28510,
+      "silhouetteIoU": 1.0,
+      "neighborRgbDeltaUnfiltered": 20.88828,
+      "neighborRgbDeltaFiltered": 7.68384,
+      "foregroundRgbMae": 12.84214
+    }
+  ]
+}
