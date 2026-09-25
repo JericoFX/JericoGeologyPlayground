@@ -127,6 +127,55 @@ int main()
             (form == CaveForm::Arch ? archHash : squareHash) = hash;
         }
         require(archHash != squareHash, "arched cave and square tunnel have different geometry");
+        const auto archBase = caveSource(CaveForm::Arch, 4);
+        const auto archGeology = geologicalCaveSource(CaveForm::Arch, 4);
+        require(archGeology.closedSolid && PA::validateClosedMesh(archGeology.mesh).hasValue(),
+                "geological arch stays a closed through-passage");
+        require(archGeology.mesh.indices == archBase.mesh.indices &&
+                    archGeology.mesh.triangleRegions == archBase.mesh.triangleRegions &&
+                    archGeology.sourceSelection == archBase.sourceSelection,
+                "geological deformation preserves cave topology and BSP selection");
+        double exteriorDepthChange = 0;
+        std::size_t exteriorCount = 0;
+        for (std::size_t i = 0; i < archBase.mesh.positions.size(); ++i)
+            if (archBase.mesh.positions[i].z > 1.49 &&
+                std::abs(archBase.mesh.positions[i].x) > 1.4)
+            {
+                exteriorDepthChange += std::abs(archGeology.mesh.positions[i].z -
+                                                archBase.mesh.positions[i].z);
+                ++exteriorCount;
+            }
+        require(exteriorCount > 10 && exteriorDepthChange / exteriorCount > 0.05,
+                "geological arch has volumetric exterior relief, not a flat perforated slab");
+        require(PA::hashTriangleMesh(archGeology.mesh) ==
+                    PA::hashTriangleMesh(geologicalCaveSource(CaveForm::Arch, 4).mesh),
+                "geological arch replays deterministically");
+        auto faceNormal = [](const TriangleMesh &mesh, std::size_t triangle)
+        {
+            const auto a = mesh.positions[mesh.indices[triangle]],
+                       b = mesh.positions[mesh.indices[triangle + 1]],
+                       c = mesh.positions[mesh.indices[triangle + 2]];
+            const auto u = Vec3d{b.x - a.x, b.y - a.y, b.z - a.z};
+            const auto v = Vec3d{c.x - a.x, c.y - a.y, c.z - a.z};
+            return Vec3d{u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z,
+                         u.x * v.y - u.y * v.x};
+        };
+        for (int subdivisions : {2, 4, 6, 8})
+        {
+            const auto before = caveSource(CaveForm::Arch, subdivisions);
+            const auto after = geologicalCaveSource(CaveForm::Arch, subdivisions);
+            require(PA::validateClosedMesh(after.mesh).hasValue(),
+                    "each geological arch LOD remains closed");
+            for (std::size_t triangle = 0; triangle < before.mesh.indices.size(); triangle += 3)
+            {
+                const auto x = faceNormal(before.mesh, triangle),
+                           y = faceNormal(after.mesh, triangle);
+                require(x.x * y.x + x.y * y.y + x.z * y.z > 0,
+                        "geological cave warp does not invert a face at any sampled LOD");
+            }
+        }
+        require(PA::hashTriangleMesh(geologicalCaveSource(CaveForm::SquareTunnel, 4).mesh) == squareHash,
+                "square tunnel remains the undeformed control");
         require(PA::hashTriangleMesh(cliff.mesh) ==
                     PA::hashTriangleMesh(evaluateSource(deserialize(serialize(recipe)), input, 12).mesh),
                 "BSP evaluation deterministic");

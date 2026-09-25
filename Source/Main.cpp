@@ -940,10 +940,12 @@ void captureRockLodBakes(Renderer &renderer, const std::filesystem::path &eviden
     }
     std::cout << report.dump(2) << '\n';
 }
-void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
+void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
+                      bool geologicalMacro)
 {
     nlohmann::json report = {{"adapter", renderer.adapter()},
                              {"scope", "BSP subtractive arch and square through-tunnels with high-to-low bakes"},
+                             {"geologicalMacro", geologicalMacro},
                              {"textureResolution", 1024}, {"imageSize", {1280, 960}},
                              {"forms", nlohmann::json::array()}};
     Camera camera;
@@ -953,7 +955,7 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
     for (auto [form, name] : {std::pair{CaveForm::Arch, "arch"},
                               std::pair{CaveForm::SquareTunnel, "square"}})
     {
-        auto high = caveSource(form, 8);
+        auto high = geologicalMacro ? geologicalCaveSource(form, 8) : caveSource(form, 8);
         Recipe detail;
         auto noise = defaultLayer(Kind::NormalNoise);
         noise.seed = 123;
@@ -970,7 +972,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
         for (int lod = 0; lod < 3; ++lod)
         {
             const int subdivisions = lod == 0 ? 6 : lod == 1 ? 4 : 2;
-            auto low = caveSource(form, subdivisions);
+            auto low = geologicalMacro ? geologicalCaveSource(form, subdivisions) :
+                                           caveSource(form, subdivisions);
             low.sampledReductionError = sampledBidirectionalMeshError(high.mesh, low.mesh);
             const auto triangles = low.mesh.indices.size() / 3;
             if (!low.closedSolid || triangles >= previousTriangles)
@@ -988,7 +991,8 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
                                                .curvatureScale = 0.25,
                                                .thicknessRange = 4,
                                                .automaticUv = true});
-            bake.lowStrategy = "bsp-regenerated";
+            bake.lowStrategy = geologicalMacro && form == CaveForm::Arch ?
+                                   "bsp-regenerated-vector-warp" : "bsp-regenerated";
             auto directory = formDirectory / ("lod-" + std::to_string(lod));
             exportNormalBake(bake, directory);
             const auto diffuse = materialDiffuse(0);
@@ -998,6 +1002,13 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
                 renderer.uploadMaterial(nullptr, diffuse, true, 4);
                 renderer.draw(1280, 960, camera, 5);
                 renderer.capture(formDirectory / "high-material.png");
+                {
+                    auto oblique = camera;
+                    oblique.yaw = 0.65f;
+                    oblique.pitch = -0.22f;
+                    renderer.draw(1280, 960, oblique, 5);
+                    renderer.capture(formDirectory / "high-oblique-material.png");
+                }
                 renderer.draw(1280, 960, camera, 0);
                 renderer.capture(formDirectory / "high.png");
             }
@@ -1005,6 +1016,14 @@ void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence)
             renderer.uploadMaterial(&bake, diffuse, true, 4);
             renderer.draw(1280, 960, camera, 5);
             renderer.capture(directory / "low-material.png");
+            if (lod == 2)
+            {
+                auto oblique = camera;
+                oblique.yaw = 0.65f;
+                oblique.pitch = -0.22f;
+                renderer.draw(1280, 960, oblique, 5);
+                renderer.capture(directory / "low-oblique-material.png");
+            }
             renderer.draw(1280, 960, camera, 0);
             renderer.capture(directory / "low-normal.png");
             formReport["lods"].push_back({{"lod", lod}, {"subdivisions", subdivisions},
@@ -1275,7 +1294,8 @@ int run(int argc, char **argv)
          bakeSmoke = false, seededBakeSmoke = false,
          orbitBakeSmoke = false, scaleBakeSmoke = false, lowSweepSmoke = false,
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
-         adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false;
+         adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
+         caveGeologySmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1315,7 +1335,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--normal-bake-adaptive-test" ||
             std::string(argv[i]) == "--normal-bake-adaptive-orbit-test" ||
             std::string(argv[i]) == "--auto-uv-bake-test" ||
-            std::string(argv[i]) == "--cave-forms-bakes-test")
+            std::string(argv[i]) == "--cave-forms-bakes-test" ||
+            std::string(argv[i]) == "--cave-geology-bakes-test")
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
@@ -1348,7 +1369,9 @@ int run(int argc, char **argv)
             adaptiveBakeSmoke = std::string(argv[i]) == "--normal-bake-adaptive-test";
             adaptiveOrbitSmoke = std::string(argv[i]) == "--normal-bake-adaptive-orbit-test";
             automaticUvBakeSmoke = std::string(argv[i]) == "--auto-uv-bake-test";
-            caveFormsSmoke = std::string(argv[i]) == "--cave-forms-bakes-test";
+            caveFormsSmoke = std::string(argv[i]) == "--cave-forms-bakes-test" ||
+                             std::string(argv[i]) == "--cave-geology-bakes-test";
+            caveGeologySmoke = std::string(argv[i]) == "--cave-geology-bakes-test";
             if (std::string(argv[i]) == "--normal-bake-3072-test")
                 scaleTextureResolution = 3072;
             smoke = true;
@@ -2013,7 +2036,7 @@ int run(int argc, char **argv)
             }
             if (caveFormsSmoke)
             {
-                captureCaveForms(renderer, evidence);
+                captureCaveForms(renderer, evidence, caveGeologySmoke);
                 window.requestClose();
                 continue;
             }

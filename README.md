@@ -68,6 +68,8 @@ La corrida retenida está en `Evidence/2026-09-25-cave-forms-rock-material/`. Es
 
 La variante posterior en `Evidence/2026-09-25-cave-faceted-relief-retained/` usa un brush exterior convexo facetado sólo para el arco, aumenta su relieve high a 0,12 y ensaya una proyección triplanar de mayor escala en las dos formas. El túnel cuadrado conserva el contorno BSP original como control. Esta variante es la referencia visual vigente; la primera corrida queda para comparar la silueta y el tiling.
 
+`build/Release/JericoGeologyPlayground.exe --cave-geology-bakes-test Evidence/cave-geology` ensaya una macrodeformación vectorial XYZ sólo en el arco y conserva el túnel cuadrado como control. Guarda vistas frontales y oblicuas con material, tres LOD y diez mapas con UV/mips. `Evidence/2026-09-25-cave-geology-macro.md` registra la prueba y por qué aún no se acepta como caverna natural.
+
 El experimento separado `--cliff-nonharmonic-bakes-test Evidence/cliff-nonharmonic` conserva el cliff con alfa RBrush y cambia sólo la lacunaridad de su `CliffCutLoop` de 2 a 1,87. Los tres LOD y bakes se generan, pero la diferencia visual medida es mínima; no es un nuevo preset aprobado.
 
 `--cliff-macro-warp-bakes-test Evidence/cliff-macro` ensaya el vector FBM nativo que precede al RBrush con mayor desplazamiento lateral y vertical. El candidato retenido `Evidence/2026-09-25-cliff-macro-warp035-retained/` usa amplitud 0,35 y conserva high, tres LOD, mapas y capturas Vulkan; cambia la silueta sin alterar la región del corte. Es experimental y no modifica el preset por defecto.

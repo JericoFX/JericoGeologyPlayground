@@ -16,4 +16,6 @@ El detalle de código, bakes, imágenes, pruebas y limitaciones está en [`Evide
 
 La [prueba de proyección triplanar](Evidence/2026-09-25-triplanar-projection.md) redujo el facetado de material del cliff LOD0/1/2 y verificó regresiones visuales de arco, túnel y estratos. Una repetición con el mismo binario confirmó [171 artefactos de bake idénticos](Evidence/2026-09-25-layered-repeat-audit.json) en estratos; la comparación antigua cruzaba versiones distintas del algoritmo de cobertura. Las siluetas y la calidad geológica general siguen pendientes.
 
+El [arco cavernoso con macrodeformación XYZ](Evidence/2026-09-25-cave-geology-macro.md) es un experimento opt-in con tres LOD, seis bakes válidos entre arco y control cuadrado, y vistas frontales/oblicuas. Cambia volumen y silueta, pero aún parece un bloque perforado; no se acepta como caverna natural.
+
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.

@@ -206,6 +206,24 @@ MeshResult caveSource(CaveForm form, int subdivisions, const Jerico::Cancellatio
     const std::array selected{massId, tunnelId};
     return bspSource(document, selected, subdivisions, cancel);
 }
+MeshResult geologicalCaveSource(CaveForm form, int subdivisions,
+                                const Jerico::CancellationToken *cancel)
+{
+    auto source = caveSource(form, subdivisions, cancel);
+    if (form == CaveForm::SquareTunnel)
+        return source;
+    Recipe recipe;
+    auto macro = defaultLayer(Kind::VectorNoise);
+    macro.seed = 123;
+    macro.amplitude = 0.45f;
+    macro.frequency = 0.55f;
+    macro.octaves = 3;
+    macro.lacunarity = 1.87f;
+    macro.coordinateScale = {0.65f, 0.7f, 0.8f};
+    macro.outputScale = {0.6f, 0.5f, 1.0f};
+    recipe.layers = {macro};
+    return evaluateSource(recipe, source, std::max(4, subdivisions), -1, -1, cancel);
+}
 MeshResult bspWallSource(int subdivisions, const Jerico::CancellationToken *cancel)
 {
     auto id = Solid::region(0, 0x60000);
