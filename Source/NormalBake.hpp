@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.hpp"
+#include <optional>
 #include <string>
 #include <vector>
 namespace Playground
@@ -27,6 +28,7 @@ struct NormalBakeSettings
     NormalProjection projection{NormalProjection::NormalRay};
     bool specialistMaps{false};
     double featureRadius{1};
+    std::optional<double> contactRadius, ambientRadius;
     double cavityRadius{0.05};
     double edgeRadius{0.02};
     double wireRadius{0.1};

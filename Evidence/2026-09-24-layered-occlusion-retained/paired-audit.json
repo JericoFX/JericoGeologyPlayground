@@ -1,0 +1,68 @@
+{
+  "family": 11,
+  "lods": [
+    {
+      "lod": 0,
+      "highHash": 1926877097746912218,
+      "lowHash": 11167452081913723578,
+      "maps": {
+        "ambient-occlusion": {
+          "coveredTexels": 2154245,
+          "meanBaseline": 0.16462,
+          "meanCandidate": 0.26114,
+          "changedFraction": 0.71496,
+          "p95AbsoluteChange": 0.26275
+        },
+        "contact-occlusion": {
+          "coveredTexels": 2154245,
+          "meanBaseline": 0.05341,
+          "meanCandidate": 0.04565,
+          "changedFraction": 0.44234,
+          "p95AbsoluteChange": 0.03529
+        }
+      }
+    },
+    {
+      "lod": 1,
+      "highHash": 1926877097746912218,
+      "lowHash": 9500227900644078659,
+      "maps": {
+        "ambient-occlusion": {
+          "coveredTexels": 2226469,
+          "meanBaseline": 0.16706,
+          "meanCandidate": 0.26432,
+          "changedFraction": 0.71889,
+          "p95AbsoluteChange": 0.26275
+        },
+        "contact-occlusion": {
+          "coveredTexels": 2226469,
+          "meanBaseline": 0.05502,
+          "meanCandidate": 0.0473,
+          "changedFraction": 0.44043,
+          "p95AbsoluteChange": 0.03922
+        }
+      }
+    },
+    {
+      "lod": 2,
+      "highHash": 1926877097746912218,
+      "lowHash": 11603711056143483059,
+      "maps": {
+        "ambient-occlusion": {
+          "coveredTexels": 2329058,
+          "meanBaseline": 0.17085,
+          "meanCandidate": 0.27139,
+          "changedFraction": 0.72804,
+          "p95AbsoluteChange": 0.26275
+        },
+        "contact-occlusion": {
+          "coveredTexels": 2329058,
+          "meanBaseline": 0.05562,
+          "meanCandidate": 0.04805,
+          "changedFraction": 0.43749,
+          "p95AbsoluteChange": 0.03529
+        }
+      }
+    }
+  ]
+}

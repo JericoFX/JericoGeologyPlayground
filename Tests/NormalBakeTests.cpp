@@ -482,6 +482,39 @@ int main()
             }
         require(curved && thick && convexEdge && regions.size() == 6,
                 "cube bake carries convexity, physical thickness and six semantic face regions");
+        Recipe occlusionPlaneRecipe;
+        occlusionPlaneRecipe.base = Base::Plane;
+        auto occlusionPlates = evaluate(occlusionPlaneRecipe, 4);
+        const auto plateVertexCount = std::uint32_t(occlusionPlates.mesh.positions.size());
+        for (std::uint32_t i = 0; i < plateVertexCount; ++i)
+        {
+            auto p = occlusionPlates.mesh.positions[i];
+            p.z += 0.08;
+            occlusionPlates.mesh.positions.push_back(p);
+        }
+        const auto plateIndices = occlusionPlates.mesh.indices;
+        for (auto i : plateIndices)
+            occlusionPlates.mesh.indices.push_back(i + plateVertexCount);
+        const auto plateRegions = occlusionPlates.mesh.triangleRegions;
+        occlusionPlates.mesh.triangleRegions.insert(occlusionPlates.mesh.triangleRegions.end(),
+                                                    plateRegions.begin(), plateRegions.end());
+        occlusionPlates.normals.clear();
+        auto independentRadiusSettings = settings;
+        auto radiusBaseline = bakeNormals(occlusionPlates, occlusionPlates, independentRadiusSettings);
+        independentRadiusSettings.ambientRadius = 0.04;
+        auto shorterAmbient = bakeNormals(occlusionPlates, occlusionPlates, independentRadiusSettings);
+        require(shorterAmbient.ambientRgba != radiusBaseline.ambientRgba &&
+                    shorterAmbient.contactRgba == radiusBaseline.contactRgba,
+                "ambient bake radius changes AO without changing short-range contact");
+        independentRadiusSettings.ambientRadius.reset();
+        independentRadiusSettings.contactRadius = 0.04;
+        auto shorterContact = bakeNormals(occlusionPlates, occlusionPlates, independentRadiusSettings);
+        require(shorterContact.contactRgba != radiusBaseline.contactRgba &&
+                    shorterContact.ambientRgba == radiusBaseline.ambientRgba,
+                "contact bake radius changes contact without changing ambient AO");
+        independentRadiusSettings.contactRadius = 0;
+        rejects([&] { bakeNormals(occlusionPlates, occlusionPlates, independentRadiusSettings); },
+                "explicit zero contact radius rejected");
         MeshResult concaveHinge;
         concaveHinge.mesh.positions = {{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         concaveHinge.mesh.indices = {0, 1, 2, 1, 0, 3};

@@ -157,6 +157,10 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
         settings.projectionDistance <= 0 || settings.projectionDistance > 2 || int(settings.projection) < 0 ||
         int(settings.projection) > 1 || !std::isfinite(settings.featureRadius) || settings.featureRadius <= 0 ||
         settings.featureRadius > 100 || settings.featureSamples < 4 || settings.featureSamples > 128 ||
+        (settings.contactRadius && (!std::isfinite(*settings.contactRadius) ||
+                                    *settings.contactRadius <= 0 || *settings.contactRadius > 100)) ||
+        (settings.ambientRadius && (!std::isfinite(*settings.ambientRadius) ||
+                                    *settings.ambientRadius <= 0 || *settings.ambientRadius > 100)) ||
         !std::isfinite(settings.cavityRadius) || settings.cavityRadius <= 0 ||
         settings.cavityRadius > 100 || !std::isfinite(settings.edgeRadius) ||
         settings.edgeRadius <= 0 || settings.edgeRadius > 100 ||
@@ -219,10 +223,10 @@ NormalBake bakeNormals(const MeshResult &highInput, const MeshResult &low, const
                                        {.contact = true,
                                         .ambient = true,
                                         .thickness = true,
-                                        .radius = settings.featureRadius * 0.25,
+                                        .radius = settings.contactRadius.value_or(settings.featureRadius * 0.25),
                                         .creaseAngleDegrees = 60,
                                         .contactSamples = int(settings.featureSamples),
-                                        .ambientRadius = settings.featureRadius,
+                                        .ambientRadius = settings.ambientRadius.value_or(settings.featureRadius),
                                         .ambientSamples = int(settings.featureSamples),
                                         .thicknessRadius = settings.thicknessRange},
                                        cancel);
@@ -880,7 +884,8 @@ void exportNormalBake(const NormalBake &bake, const std::filesystem::path &direc
         {"edgeRadius", bake.settings.edgeRadius},
         {"wireRadius", bake.settings.wireRadius},
         {"creaseAngleDegrees", 60},
-        {"contactRadius", bake.settings.featureRadius * 0.25},
+        {"contactRadius", bake.settings.contactRadius.value_or(bake.settings.featureRadius * 0.25)},
+        {"ambientRadius", bake.settings.ambientRadius.value_or(bake.settings.featureRadius)},
         {"cavityMapping", "smoothstep(0.1,0.6,concavity*cavityRadius)"},
         {"convexEdgeMapping", "smoothstep(0.15,0.65,convexity*edgeRadius)"},
         {"creaseMaskMapping", "1-smoothstep(0,wireRadius,edgeGraphDistance)"},

@@ -1,0 +1,19 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build\Release\PlaygroundModel.lib
+  NormalBakeTests.cpp
+F:\JericoGeologyPlayground\Tests\NormalBakeTests.cpp(488,35): error C2039: "ambientRadius": no es un miembro de "Playground::NormalBakeSettings" [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]
+      F:\JericoGeologyPlayground\Source\NormalBake.hpp(21,8):
+      vea la declaración de 'Playground::NormalBakeSettings'
+
+F:\JericoGeologyPlayground\Tests\NormalBakeTests.cpp(493,35): error C2039: "ambientRadius": no es un miembro de "Playground::NormalBakeSettings" [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]
+      F:\JericoGeologyPlayground\Source\NormalBake.hpp(21,8):
+      vea la declaración de 'Playground::NormalBakeSettings'
+
+F:\JericoGeologyPlayground\Tests\NormalBakeTests.cpp(494,35): error C2039: "contactRadius": no es un miembro de "Playground::NormalBakeSettings" [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]
+      F:\JericoGeologyPlayground\Source\NormalBake.hpp(21,8):
+      vea la declaración de 'Playground::NormalBakeSettings'
+
+F:\JericoGeologyPlayground\Tests\NormalBakeTests.cpp(499,35): error C2039: "contactRadius": no es un miembro de "Playground::NormalBakeSettings" [F:\JericoGeologyPlayground\build\PlaygroundNormalBakeTests.vcxproj]
+      F:\JericoGeologyPlayground\Source\NormalBake.hpp(21,8):
+      vea la declaración de 'Playground::NormalBakeSettings'
