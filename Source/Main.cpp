@@ -1036,6 +1036,73 @@ void captureSlateTemporal(Renderer &renderer, const std::filesystem::path &evide
     std::ofstream(evidence / "slate-temporal-proof.json") << report.dump(2) << '\n';
     std::cout << report.dump(2) << '\n';
 }
+void captureRockTemporal(Renderer &renderer, const std::filesystem::path &evidence, int family)
+{
+    if (family != 8 && family != 11)
+        throw std::runtime_error("Rock temporal capture requires signed cliff or fractured strata");
+    const auto reference = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence" /
+        (family == 8 ? "2026-09-25-cliff-signed-rim-candidate/rock-8/lod-2" :
+                       "2026-09-25-layered-fractured-horizons-gentle/rock-11/lod-2");
+    const auto recipe = load(reference / "high-recipe.json");
+    nlohmann::json control;
+    std::ifstream controlFile(reference / "bake.json");
+    if (!controlFile)
+        throw std::runtime_error("Could not read retained temporal bake reference");
+    controlFile >> control;
+    const int lowResolution = family == 11 ? 14 : 0;
+    auto preview = buildBakePreview(recipe, 0.04f, 2048, family == 11 ? 0.2 : 0.15,
+                                    nullptr, NormalProjection::ClosestSurface, lowResolution,
+                                    nullptr, family == 8 ? 0.1 : 0.02, true);
+    if (preview.bake.misses || preview.bake.backfaceHits ||
+        preview.bake.highHash != control.at("highHash").get<std::uint64_t>() ||
+        preview.bake.lowHash != control.at("lowHash").get<std::uint64_t>())
+        throw std::runtime_error("Temporal high-to-low bake differs from retained reference");
+    exportNormalBake(preview.bake, evidence / "bake");
+    const auto appearance = materialAppearance(recipe, 0);
+    const auto diffuse = materialDiffuse(appearance);
+    Camera camera;
+    camera.distance = family == 8 ? 20.0f : 11.6f;
+    constexpr std::array offsets{-0.001f, -0.0005f, 0.0f, 0.0005f, 0.001f};
+    auto captureSequence = [&](const std::string &name)
+    {
+        for (std::size_t i = 0; i < offsets.size(); ++i)
+        {
+            auto view = camera;
+            view.yaw += offsets[i];
+            renderer.draw(1280, 960, view, 5);
+            renderer.capture(evidence / (name + "-material-" + std::to_string(i) + ".png"));
+            renderer.draw(1280, 960, view, 1);
+            renderer.capture(evidence / (name + "-normal-" + std::to_string(i) + ".png"));
+        }
+    };
+    renderer.upload(preview.high);
+    renderer.uploadMaterial(nullptr, diffuse, true, appearance);
+    captureSequence("high");
+    renderer.upload(preview.bake.low, &preview.bake);
+    renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+    const auto mippedBufferBytes = renderer.bufferBytes();
+    captureSequence("low-mips");
+    auto savedMips = std::move(preview.bake.normalMips);
+    renderer.upload(preview.bake.low, &preview.bake);
+    renderer.uploadMaterial(&preview.bake, diffuse, true, appearance);
+    const auto unmippedBufferBytes = renderer.bufferBytes();
+    captureSequence("low-no-normal-mips");
+    preview.bake.normalMips = std::move(savedMips);
+    nlohmann::json report = {{"family", family}, {"adapter", renderer.adapter()},
+                             {"imageSize", {1280, 960}}, {"textureResolution", 2048},
+                             {"normalMipLevels", preview.bake.normalMips.size() + 1},
+                             {"yawOffsets", offsets}, {"cameraDistance", camera.distance},
+                             {"highHash", preview.bake.highHash},
+                             {"lowHash", preview.bake.lowHash},
+                             {"samples", preview.bake.samples},
+                             {"misses", preview.bake.misses},
+                             {"backfaces", preview.bake.backfaceHits},
+                             {"bakeCpuMs", preview.bake.milliseconds},
+                             {"mippedBufferBytes", mippedBufferBytes},
+                             {"unmippedBufferBytes", unmippedBufferBytes}};
+    std::ofstream(evidence / "rock-temporal-proof.json") << report.dump(2) << '\n';
+    std::cout << report.dump(2) << '\n';
+}
 void captureCaveForms(Renderer &renderer, const std::filesystem::path &evidence,
                       bool geologicalMacro, bool axialFeatureReduced, bool blindChamber = false)
 {
@@ -1451,7 +1518,7 @@ int run(int argc, char **argv)
          low10BakeSmoke = false, low10OrbitSmoke = false, adaptiveBakeSmoke = false,
          adaptiveOrbitSmoke = false, automaticUvBakeSmoke = false, caveFormsSmoke = false,
          caveGeologySmoke = false, caveAxialSmoke = false, caveBlindSmoke = false,
-         slateTemporalSmoke = false;
+         slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -1482,6 +1549,8 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--layered-horizon-fracture-bakes-test" ||
             std::string(argv[i]) == "--layered-slate-source-bakes-test" ||
             std::string(argv[i]) == "--slate-temporal-bake-test" ||
+            std::string(argv[i]) == "--cliff-temporal-bake-test" ||
+            std::string(argv[i]) == "--strata-temporal-bake-test" ||
             std::string(argv[i]) == "--edge-radius-sweep-test" ||
             std::string(argv[i]) == "--regenerated-lod-sweep-test" ||
             std::string(argv[i]) == "--angular-lod2-sweep-test" ||
@@ -1523,6 +1592,8 @@ int run(int argc, char **argv)
             layeredHorizonFractureSmoke = std::string(argv[i]) == "--layered-horizon-fracture-bakes-test";
             layeredSlateSourceSmoke = std::string(argv[i]) == "--layered-slate-source-bakes-test";
             slateTemporalSmoke = std::string(argv[i]) == "--slate-temporal-bake-test";
+            cliffTemporalSmoke = std::string(argv[i]) == "--cliff-temporal-bake-test";
+            strataTemporalSmoke = std::string(argv[i]) == "--strata-temporal-bake-test";
             edgeRadiusSmoke = std::string(argv[i]) == "--edge-radius-sweep-test";
             regeneratedLodSmoke = std::string(argv[i]) == "--regenerated-lod-sweep-test";
             angularLod2Smoke = std::string(argv[i]) == "--angular-lod2-sweep-test";
@@ -2220,6 +2291,12 @@ int run(int argc, char **argv)
             if (slateTemporalSmoke)
             {
                 captureSlateTemporal(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (cliffTemporalSmoke || strataTemporalSmoke)
+            {
+                captureRockTemporal(renderer, evidence, cliffTemporalSmoke ? 8 : 11);
                 window.requestClose();
                 continue;
             }

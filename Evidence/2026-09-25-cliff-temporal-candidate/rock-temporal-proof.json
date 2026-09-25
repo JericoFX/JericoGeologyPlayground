@@ -1,0 +1,26 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "backfaces": 0,
+  "bakeCpuMs": 4338.5065,
+  "cameraDistance": 20.0,
+  "family": 8,
+  "highHash": 15853787258975917534,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "lowHash": 3250905396549919276,
+  "mippedBufferBytes": 128950996,
+  "misses": 0,
+  "normalMipLevels": 4,
+  "samples": 1293478,
+  "textureResolution": 2048,
+  "unmippedBufferBytes": 123445972,
+  "yawOffsets": [
+    -0.0010000000474974513,
+    -0.0005000000237487257,
+    0.0,
+    0.0005000000237487257,
+    0.0010000000474974513
+  ]
+}
