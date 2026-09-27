@@ -10,4 +10,6 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
                              Jerico::Guid freshInteriorRegion,
                              std::size_t maximumTriangles=240000,
                              const Jerico::CancellationToken *cancel=nullptr);
+// Per-corner semantic mask avoids bleed at shared source/cut vertices; empty if no fresh role.
+std::vector<std::uint8_t> freshInteriorCornerMask(const MeshResult &mesh);
 }

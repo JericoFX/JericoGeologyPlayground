@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include "DamageGeometry.hpp"
 #include "MeshReduction.hpp"
 #include "NormalBake.hpp"
 #include "Renderer.hpp"
@@ -546,12 +547,28 @@ void captureSharedDamageCavity(Renderer &renderer,const std::filesystem::path &e
         renderer.upload(after);
         renderer.draw(1280,960,camera,0);
         renderer.capture(evidence/(std::string(label)+"-after.png"));
+        auto unmarked=after;
+        for (auto &region:unmarked.regions)
+            if (region.role==SurfaceRole::DamageInterior)
+                region.role=SurfaceRole::Source;
+        renderer.upload(unmarked);
+        renderer.uploadMaterial(nullptr,materialDiffuse(materialAppearance(source,0)));
+        renderer.draw(1280,960,camera,5);
+        renderer.capture(evidence/(std::string(label)+"-after-material-unmarked.png"));
+        renderer.upload(after);
+        renderer.uploadMaterial(nullptr,materialDiffuse(materialAppearance(source,0)));
+        renderer.draw(1280,960,camera,5);
+        renderer.capture(evidence/(std::string(label)+"-after-material.png"));
+        const auto freshMask=freshInteriorCornerMask(after);
+        if (std::count(freshMask.begin(),freshMask.end(),1)==0)
+            throw std::runtime_error("Damage cavity capture lost fresh material corners");
         proof["cases"].push_back({{"fixture",label},
             {"beforeHash",PA::hashTriangleMesh(before.mesh)},
             {"afterHash",PA::hashTriangleMesh(after.mesh)},
             {"beforeTriangles",before.mesh.indices.size()/3},
             {"afterTriangles",after.mesh.indices.size()/3},
             {"beforeCpuMs",before.milliseconds},{"afterCpuMs",after.milliseconds},
+            {"freshMaterialCorners",std::count(freshMask.begin(),freshMask.end(),1)},
             {"freshInteriorRegions",std::count_if(after.regions.begin(),after.regions.end(),
                 [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;})}});
     }

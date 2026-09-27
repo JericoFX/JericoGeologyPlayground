@@ -1,4 +1,5 @@
 #include "Renderer.hpp"
+#include "DamageGeometry.hpp"
 #include "NormalBake.hpp"
 #include "WebLod.hpp"
 #include <Buffer.h>
@@ -34,7 +35,7 @@ namespace
 {
 struct Vertex
 {
-    float p[3], n[3], field, uv[2], tangent[3], bitangent[3];
+    float p[3], n[3], field, uv[2], tangent[3], bitangent[3], fresh;
 };
 struct Constants
 {
@@ -58,8 +59,8 @@ Texture2D AmbientMap; SamplerState AmbientMap_sampler;
 Texture2D ContactMap; SamplerState ContactMap_sampler;
 Texture2D CavityMap; SamplerState CavityMap_sampler;
 Texture2D EdgeMap; SamplerState EdgeMap_sampler;
-struct VIn {float3 Position:ATTRIB0;float3 Normal:ATTRIB1;float Field:ATTRIB2;float2 UV:ATTRIB3;float3 Tangent:ATTRIB4;float3 Bitangent:ATTRIB5;};
-struct VOut {float4 Position:SV_POSITION;float3 Normal:NORMAL;float3 World:TEXCOORD0;float Field:TEXCOORD1;float2 UV:TEXCOORD2;float3 Tangent:TEXCOORD3;float3 Bitangent:TEXCOORD4;};
+struct VIn {float3 Position:ATTRIB0;float3 Normal:ATTRIB1;float Field:ATTRIB2;float2 UV:ATTRIB3;float3 Tangent:ATTRIB4;float3 Bitangent:ATTRIB5;float Fresh:ATTRIB6;};
+struct VOut {float4 Position:SV_POSITION;float3 Normal:NORMAL;float3 World:TEXCOORD0;float Field:TEXCOORD1;float2 UV:TEXCOORD2;float3 Tangent:TEXCOORD3;float3 Bitangent:TEXCOORD4;float Fresh:TEXCOORD5;};
 VOut VSMain(VIn input) {
  VOut o;float cy=cos(Camera.x),sy=sin(Camera.x),cp=cos(Camera.y),sp=sin(Camera.y);
  float3 right=float3(cy,0,-sy),forward=float3(sy*cp,sp,cy*cp),up=cross(forward,right);
@@ -71,7 +72,7 @@ VOut VSMain(VIn input) {
  }
  float3 q=position-Target.xyz;float depth=dot(q,forward)+Camera.z;float scale=2.4;
  o.Position=float4(dot(q,right)*scale/Camera.w,dot(q,up)*scale,(depth-0.05)*100.0/99.95,depth);
- o.Normal=input.Normal;o.World=position;o.Field=input.Field;o.UV=input.UV;o.Tangent=input.Tangent;o.Bitangent=input.Bitangent;return o;
+ o.Normal=input.Normal;o.World=position;o.Field=input.Field;o.UV=input.UV;o.Tangent=input.Tangent;o.Bitangent=input.Bitangent;o.Fresh=input.Fresh;return o;
 }
 float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
  if(Target.w>10.5 && Target.w<15.5){
@@ -212,8 +213,10 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
    float grey=dot(albedo,float3(.2126,.7152,.0722));
    albedo=Range.w>2.5?grey*float3(.48,.50,.51):grey*float3(.76,.83,.87);
   }
-  albedo*=1-.18*max(contact*.6,cavity*.4);
+  float fresh=saturate(input.Fresh);
+  albedo*=1-.18*max(contact*.6,cavity*.4)*(1-fresh);
   albedo=lerp(albedo,float3(.62,.58,.52),edge*.12);
+  albedo=lerp(albedo,saturate(albedo*float3(1.18,1.15,1.10)+float3(.065,.05,.035)),fresh*.8);
   float3 light=normalize(float3(-.5,.85,-.7));
   float cy=cos(Camera.x),sy=sin(Camera.x),cp=cos(Camera.y),sp=sin(Camera.y);
   float3 forward=float3(sy*cp,sp,cy*cp);
@@ -221,7 +224,7 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
   float3 halfVector=normalize(light+viewDirection);
   float nl=saturate(dot(n,light)),nv=saturate(dot(n,viewDirection));
   float nh=saturate(dot(n,halfVector)),vh=saturate(dot(viewDirection,halfVector));
-  float roughness=lerp(.82,.68,edge*.35);
+  float roughness=lerp(lerp(.82,.68,edge*.35),.88,fresh);
   if(NormalBias.y>0.5 && Range.z>0.5)
    roughness=sqrt(saturate(roughness*roughness+max(0,1-normalLength)));
   float a=roughness*roughness,a2=a*a;
@@ -392,9 +395,10 @@ Renderer::Renderer(void *window, unsigned width, unsigned height) : impl(std::ma
     p.GraphicsPipeline.DepthStencilDesc.DepthEnable = true;
     LayoutElement layout[] = {{0, 0, 3, VT_FLOAT32, false}, {1, 0, 3, VT_FLOAT32, false},
                               {2, 0, 1, VT_FLOAT32, false}, {3, 0, 2, VT_FLOAT32, false},
-                              {4, 0, 3, VT_FLOAT32, false}, {5, 0, 3, VT_FLOAT32, false}};
+                              {4, 0, 3, VT_FLOAT32, false}, {5, 0, 3, VT_FLOAT32, false},
+                              {6, 0, 1, VT_FLOAT32, false}};
     p.GraphicsPipeline.InputLayout.LayoutElements = layout;
-    p.GraphicsPipeline.InputLayout.NumElements = 6;
+    p.GraphicsPipeline.InputLayout.NumElements = 7;
     ShaderResourceVariableDesc variables[] = {
         {SHADER_TYPE_PIXEL, "NormalMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
         {SHADER_TYPE_PIXEL, "ColorMap", SHADER_RESOURCE_VARIABLE_TYPE_DYNAMIC},
@@ -500,9 +504,11 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     r.webBackdropIndexCount=0;
     std::vector<Vertex> vertices;
     auto indices = mesh.mesh.indices;
-    bool corners = mesh.cornerNormals.size() == mesh.mesh.indices.size();
+    const bool normalCorners=mesh.cornerNormals.size()==mesh.mesh.indices.size();
+    const auto freshMask=freshInteriorCornerMask(mesh);
+    const bool corners=normalCorners || !freshMask.empty();
     if (bake)
-        require(corners && bake->cornerUV.size() == mesh.mesh.indices.size() &&
+        require(normalCorners && bake->cornerUV.size() == mesh.mesh.indices.size() &&
                     bake->cornerTangents.size() == mesh.mesh.indices.size() &&
                     bake->cornerBitangents.size() == mesh.mesh.indices.size() &&
                     bake->rgba.size() == std::size_t(bake->resolution) * bake->resolution * 4 &&
@@ -519,11 +525,12 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     for (std::size_t i = 0; i < count; ++i)
     {
         auto source = corners ? mesh.mesh.indices[i] : i;
-        auto p = mesh.mesh.positions[source], n = corners ? mesh.cornerNormals[i] : mesh.normals[source];
+        auto p = mesh.mesh.positions[source], n = normalCorners ? mesh.cornerNormals[i] : mesh.normals[source];
         float f = mesh.field[source];
         if (corners)
             indices[i] = std::uint32_t(i);
         vertices.push_back({{float(p.x), float(p.y), float(p.z)}, {float(n.x), float(n.y), float(n.z)}, f});
+        if (!freshMask.empty()) vertices.back().fresh=float(freshMask[i]);
         if (bake)
         {
             auto &v = vertices.back();

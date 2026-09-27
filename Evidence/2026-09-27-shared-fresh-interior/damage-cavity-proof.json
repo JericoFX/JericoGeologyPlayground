@@ -1,0 +1,32 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "afterCpuMs": 189.2409,
+      "afterHash": 11062234955953315291,
+      "afterTriangles": 22868,
+      "beforeCpuMs": 10.5183,
+      "beforeHash": 4077765204543622361,
+      "beforeTriangles": 23232,
+      "fixture": "rock-cavity",
+      "freshInteriorRegions": 1,
+      "freshMaterialCorners": 1614
+    },
+    {
+      "afterCpuMs": 82.5342,
+      "afterHash": 4250360623873760076,
+      "afterTriangles": 7670,
+      "beforeCpuMs": 21.631,
+      "beforeHash": 10492466600982267816,
+      "beforeTriangles": 8096,
+      "fixture": "panel-through-hole",
+      "freshInteriorRegions": 1,
+      "freshMaterialCorners": 783
+    }
+  ],
+  "resolution": [
+    1280,
+    960
+  ],
+  "scope": "Geometric cavity and through-hole in the Playground; no Engine integration"
+}

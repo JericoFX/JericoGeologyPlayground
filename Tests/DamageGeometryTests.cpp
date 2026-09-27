@@ -115,6 +115,30 @@ int main()
     require(std::any_of(rockResult.regions.begin(),rockResult.regions.end(),
         [](const RegionInfo &r){return r.role==SurfaceRole::DamageInterior;}),
         "geology recipe must persist fresh interior lineage");
+    const auto freshMask=freshInteriorCornerMask(rockResult);
+    require(freshMask.size()==rockResult.mesh.indices.size(),
+            "fresh material mask must have one value per rendered corner");
+    const auto freshId=std::find_if(rockResult.regions.begin(),rockResult.regions.end(),
+        [](const RegionInfo &r){return r.role==SurfaceRole::DamageInterior;})->id;
+    std::size_t freshCorners=0;
+    for (std::size_t corner=0;corner<freshMask.size();++corner)
+    {
+        const auto expected=rockResult.mesh.triangleRegions[corner/3]==freshId;
+        require(freshMask[corner]==std::uint8_t(expected),
+                "fresh mask must follow region identity without bleeding to source faces");
+        freshCorners+=freshMask[corner];
+    }
+    require(freshCorners>0 && freshCorners<freshMask.size(),
+            "fresh material must affect only newly exposed faces");
+    MeshResult withoutRegions;
+    withoutRegions.mesh.indices={0,1,2};
+    require(freshInteriorCornerMask(withoutRegions).empty() &&
+            freshInteriorCornerMask(evaluate(preset(0),12)).empty(),
+            "meshes without fresh regions must skip mask allocation");
+    auto malformed=rockResult;
+    malformed.mesh.triangleRegions.pop_back();
+    reject([&]{freshInteriorCornerMask(malformed);},
+           "partial triangle region streams must be rejected");
     require(meshHash(rockResult.mesh)==meshHash(evaluate(deserialize(serialize(rockRecipe)),12).mesh),
             "geology cavity must survive save and load");
     auto legacyRecipe=rockRecipe;

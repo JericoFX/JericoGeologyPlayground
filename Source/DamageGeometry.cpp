@@ -8,6 +8,7 @@
 #include <map>
 #include <numeric>
 #include <numbers>
+#include <set>
 #include <stdexcept>
 #include <vector>
 
@@ -227,6 +228,23 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
     if (!PA::validateClosedMesh(result).hasValue())
         throw std::runtime_error("Damage cavity output is not closed");
     checkCancel();
+    return result;
+}
+std::vector<std::uint8_t> freshInteriorCornerMask(const MeshResult &mesh)
+{
+    if (!mesh.mesh.triangleRegions.empty() &&
+        mesh.mesh.triangleRegions.size()!=mesh.mesh.indices.size()/3)
+        throw std::invalid_argument("Fresh material requires a region per triangle");
+    std::set<Jerico::Guid> fresh;
+    for (const auto &region:mesh.regions)
+        if (region.role==SurfaceRole::DamageInterior)
+            fresh.insert(region.id);
+    if (fresh.empty()) return {};
+    if (mesh.mesh.triangleRegions.empty())
+        throw std::invalid_argument("Fresh material requires triangle regions");
+    std::vector<std::uint8_t> result(mesh.mesh.indices.size());
+    for (std::size_t corner=0;corner<result.size();++corner)
+        result[corner]=fresh.contains(mesh.mesh.triangleRegions[corner/3]) ? 1 : 0;
     return result;
 }
 }
