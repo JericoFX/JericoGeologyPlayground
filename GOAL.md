@@ -124,3 +124,12 @@ La ruta experimental reutiliza el baker, mipmaps, PNG y captura ya existentes de
 Una sola quad/card sólo se admite cuando un fit de plano cumple el error configurado. Telarañas de esquina/no planas deben dividirse en pocos patches o mantener ribbons. Para damage dinámico, una textura de un solo Edge ID no alcanza en cruces: la prueba debe conservar contribuyentes acotados (inicialmente K=2) o elegir fallback explícito.
 
 No es PASS por exportar un PNG. El owner debe poder alternar Mesh/Ribbon/Card en la UI normal, inspeccionar coverage/normal/distance/IDs, romper un edge y comprobar que el LOD barato aceptado no deja un hilo fantasma.
+
+
+## Preferred web path — Procedural Web Surface (2026-09-27)
+
+El owner aclaró que la telaraña normal no debe nacer como cientos/miles de tubos spline. La ruta preferida del Playground pasa a ser la directiva [`docs/PROCEDURAL_WEB_SURFACE_SHADER_2026_09_27.md`](docs/PROCEDURAL_WEB_SURFACE_SHADER_2026_09_27.md): el diseñador coloca un plano/área o anchors, un Web Graph determinista genera los strands semánticos y un baker CPU/GPU genera/cachea un Web Field/Texture para renderizar normalmente con uno o pocos cards. La geometría por strand queda para debug, LOD cercano o casos especiales.
+
+El experimento anterior de mesh-to-card sigue siendo referencia/fallback útil, pero ya no es requisito generar primero una malla pesada. La primera ruta de damage debe ser simple: `Break Edge -> mark dirty -> regenerate texture`, porque el cambio de web es event-driven; no introducir contributor tables complejas antes de medir esa regeneración.
+
+La aceptación exige comparar el card normal contra una implementación geométrica de debug, medir coste real, conservar hilos finos mediante mips generados desde el Web Graph y permitir al owner crear/editar/break webs desde la UI normal.
