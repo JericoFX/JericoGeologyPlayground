@@ -1,0 +1,808 @@
+{
+  "title": "Jerico Geology Research Sources",
+  "date": "2026-09-26",
+  "generated_from": "docs/JERICO_GEOLOGY_RESEARCH_2026_09_26.md",
+  "source_count": 80,
+  "sources": [
+    {
+      "anchor": "j01",
+      "id": "J01",
+      "title": "JericoEngine — CODEX_INDEX.md",
+      "source_label": "https://github.com/JericoFX/JericoEngine/blob/main/docs/CODEX_INDEX.md",
+      "url": "https://github.com/JericoFX/JericoEngine/blob/main/docs/CODEX_INDEX.md",
+      "scope": "Directiva de integración del Playground; no auditoría completa del código.",
+      "license_reuse": "Repositorio del usuario.",
+      "review_scope": "Lectura mediante conector GitHub, primer tramo del índice."
+    },
+    {
+      "anchor": "p01",
+      "id": "P01",
+      "title": "The PhaseTree: Multiphase Signed Distance Fields (2026)",
+      "source_label": "https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-05713515/",
+      "url": "https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-05713515/",
+      "scope": "SDF multifase; DOI 10.1145/3811379.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Ficha y resumen del autor; PDF enlazado no accesible en esta revisión."
+    },
+    {
+      "anchor": "p02",
+      "id": "P02",
+      "title": "PhaseTree — código de demostración",
+      "source_label": "https://github.com/Arches-Team/PhaseTree",
+      "url": "https://github.com/Arches-Team/PhaseTree",
+      "scope": "GLSL; demostraciones del artículo.",
+      "license_reuse": "MIT.",
+      "review_scope": "README y licencia declarada; no compilado."
+    },
+    {
+      "anchor": "p03",
+      "id": "P03",
+      "title": "Directable Weathering of Concave Rock Using Curvature Estimation (2010)",
+      "source_label": "https://scholarsarchive.byu.edu/facpub/110/",
+      "url": "https://scholarsarchive.byu.edu/facpub/110/",
+      "scope": "Meteorización volumétrica; DOI 10.1109/TVCG.2009.39.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Resumen y ficha institucional; no lectura integral del PDF."
+    },
+    {
+      "anchor": "p04",
+      "id": "P04",
+      "title": "Arches: a Framework for Modelling Complex Terrains (2009)",
+      "source_label": "https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-00463263/",
+      "url": "https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-00463263/",
+      "scope": "Terreno volumétrico y materiales; DOI 10.1111/j.1467-8659.2009.01385.x.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Ficha/resumen primario recuperado; PDF bloqueado."
+    },
+    {
+      "anchor": "p05",
+      "id": "P05",
+      "title": "Terrain Amplification using Multi-scale Erosion (2024)",
+      "source_label": "https://research.adobe.com/publication/terrain-amplification-using-multi-scale-erosion/",
+      "url": "https://research.adobe.com/publication/terrain-amplification-using-multi-scale-erosion/",
+      "scope": "Erosión multiescala de terrenos de altura; DOI 10.1145/3658200.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Ficha de investigación y repositorio asociado."
+    },
+    {
+      "anchor": "p06",
+      "id": "P06",
+      "title": "MultiScaleErosion — implementación",
+      "source_label": "https://github.com/H-Schott/MultiScaleErosion",
+      "url": "https://github.com/H-Schott/MultiScaleErosion",
+      "scope": "C++ / compute OpenGL; heightfields.",
+      "license_reuse": "MIT.",
+      "review_scope": "README y licencia declarada; no ejecutado."
+    },
+    {
+      "anchor": "p07",
+      "id": "P07",
+      "title": "Stochastic Geomorphological Transport (2026)",
+      "source_label": "https://erosiv.studio/publications/stochastic-geomorphological-transport",
+      "url": "https://erosiv.studio/publications/stochastic-geomorphological-transport",
+      "scope": "Transporte geomorfológico; DOI 10.1145/3811336.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Página de los autores y metadatos; no PDF completo."
+    },
+    {
+      "anchor": "p08",
+      "id": "P08",
+      "title": "geotransport — núcleo de integración",
+      "source_label": "https://github.com/erosiv/geotransport",
+      "url": "https://github.com/erosiv/geotransport",
+      "scope": "Herramientas del modelo de transporte.",
+      "license_reuse": "MIT.",
+      "review_scope": "README; no compilado."
+    },
+    {
+      "anchor": "p09",
+      "id": "P09",
+      "title": "soillib — erosión y transporte",
+      "source_label": "https://github.com/erosiv/soillib",
+      "url": "https://github.com/erosiv/soillib",
+      "scope": "C++ / CUDA / Python; herramientas de terreno.",
+      "license_reuse": "Licencia de la revisión a verificar antes de integrar.",
+      "review_scope": "Repositorio consultado; licencia no cerrada en esta revisión."
+    },
+    {
+      "anchor": "p10",
+      "id": "P10",
+      "title": "SubsurfaceGen (preprint, 2026)",
+      "source_label": "https://arxiv.org/html/2605.30541v1",
+      "url": "https://arxiv.org/html/2605.30541v1",
+      "scope": "Operadores cronológicos de geología del subsuelo; PyTorch.",
+      "license_reuse": "La licencia del artículo no concede por sí sola licencia del código.",
+      "review_scope": "Texto HTML del preprint consultado."
+    },
+    {
+      "anchor": "p11",
+      "id": "P11",
+      "title": "Procedural Multiscale Geometry Modeling using Implicit Functions (preprint, 2025)",
+      "source_label": "https://arxiv.org/html/2504.09553v1",
+      "url": "https://arxiv.org/html/2504.09553v1",
+      "scope": "Microestructura implícita multiescala.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Texto HTML del preprint consultado."
+    },
+    {
+      "anchor": "p12",
+      "id": "P12",
+      "title": "OcMesher — Mesh Extraction for Unbounded Scenes Using Camera-Aware Octrees (2025)",
+      "source_label": "https://github.com/princeton-vl/OcMesher",
+      "url": "https://github.com/princeton-vl/OcMesher",
+      "scope": "Extracción adaptativa dependiente de cámara.",
+      "license_reuse": "BSD-3-Clause.",
+      "review_scope": "Repositorio / ficha del proyecto; no ejecutado."
+    },
+    {
+      "anchor": "p13",
+      "id": "P13",
+      "title": "PaMO — Parallel Mesh Optimization (2025)",
+      "source_label": "https://github.com/SarahWeiii/pamo",
+      "url": "https://github.com/SarahWeiii/pamo",
+      "scope": "Remallado y simplificación GPU / CUDA; incluye integración Blender.",
+      "license_reuse": "AGPL-3.0.",
+      "review_scope": "README y licencia declarada; no ejecutado."
+    },
+    {
+      "anchor": "p14",
+      "id": "P14",
+      "title": "CuACD (repositorio 2026)",
+      "source_label": "https://github.com/eliphatfs/cuacd",
+      "url": "https://github.com/eliphatfs/cuacd",
+      "scope": "Descomposición convexa CUDA; anuncio SIGGRAPH Asia 2026.",
+      "license_reuse": "LGPL-2.1-or-later declarada en el repositorio consultado.",
+      "review_scope": "Repositorio consultado; evento anunciado, no tratado como celebrado."
+    },
+    {
+      "anchor": "p15",
+      "id": "P15",
+      "title": "Dual Contouring of Hermite Data (2002)",
+      "source_label": "https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf",
+      "url": "https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf",
+      "scope": "Hermite, QEF, octrees y preservación de características.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Texto PDF y capturas de páginas 1, 2 y 6 consultados."
+    },
+    {
+      "anchor": "p16",
+      "id": "P16",
+      "title": "Transvoxel — documentación y tesis",
+      "source_label": "https://transvoxel.org/",
+      "url": "https://transvoxel.org/",
+      "scope": "Transiciones 2:1 para mallado de tipo Marching Cubes.",
+      "license_reuse": "Comprobar licencia exacta de las tablas/código al incorporarlos.",
+      "review_scope": "Página técnica del autor consultada; tesis no leída íntegramente."
+    },
+    {
+      "anchor": "p17",
+      "id": "P17",
+      "title": "Terrain Descriptors (2025)",
+      "source_label": "https://onlinelibrary.wiley.com/doi/10.1111/cgf.70080",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/cgf.70080",
+      "scope": "Descriptores para analizar terrenos.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Ficha / resumen editorial consultado."
+    },
+    {
+      "anchor": "p18",
+      "id": "P18",
+      "title": "Terrain Synthesis and Authoring based on Iso-Contours (2026)",
+      "source_label": "https://h-schott.github.io/p/isos/",
+      "url": "https://h-schott.github.io/p/isos/",
+      "scope": "Autoría por curvas de nivel; DOI 10.1111/cgf.70389.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Página del autor consultada."
+    },
+    {
+      "anchor": "g01",
+      "id": "G01",
+      "title": "LoopStructural",
+      "source_label": "https://github.com/Loop3D/LoopStructural",
+      "url": "https://github.com/Loop3D/LoopStructural",
+      "scope": "Modelado estructural implícito en Python.",
+      "license_reuse": "MIT.",
+      "review_scope": "README y licencia declarada."
+    },
+    {
+      "anchor": "g02",
+      "id": "G02",
+      "title": "LoopStructural 1.0: time-aware geological modelling (2021)",
+      "source_label": "https://gmd.copernicus.org/articles/14/3915/2021/index.html",
+      "url": "https://gmd.copernicus.org/articles/14/3915/2021/index.html",
+      "scope": "Cronología, marcos estructurales, fallas y pliegues.",
+      "license_reuse": "No se evalúa reutilización de código.",
+      "review_scope": "Artículo / ficha editorial primaria."
+    },
+    {
+      "anchor": "g03",
+      "id": "G03",
+      "title": "GemPy",
+      "source_label": "https://github.com/gempy-project/gempy",
+      "url": "https://github.com/gempy-project/gempy",
+      "scope": "Geología implícita de subsuelo en Python.",
+      "license_reuse": "EUPL-1.2.",
+      "review_scope": "README y licencia declarada."
+    },
+    {
+      "anchor": "g04",
+      "id": "G04",
+      "title": "pySimFrac (artículo 2024 y código)",
+      "source_label": "https://github.com/lanl/pySimFrac",
+      "url": "https://github.com/lanl/pySimFrac",
+      "scope": "Superficies rugosas de fractura; DOI 10.1016/j.cageo.2024.105665.",
+      "license_reuse": "BSD-3-Clause.",
+      "review_scope": "README y referencia del artículo; no ejecutado."
+    },
+    {
+      "anchor": "g05",
+      "id": "G05",
+      "title": "dfnWorks",
+      "source_label": "https://github.com/lanl/dfnWorks",
+      "url": "https://github.com/lanl/dfnWorks",
+      "scope": "Redes discretas de fracturas, flujo y transporte.",
+      "license_reuse": "Avisos y licencias múltiples; revisar componentes.",
+      "review_scope": "README y LICENSE.md; no se considera admisión legal cerrada."
+    },
+    {
+      "anchor": "g06",
+      "id": "G06",
+      "title": "dfnWorks — licencia",
+      "source_label": "https://raw.githubusercontent.com/lanl/dfnWorks/master/LICENSE.md",
+      "url": "https://raw.githubusercontent.com/lanl/dfnWorks/master/LICENSE.md",
+      "scope": "No resumir todo el paquete como MIT/BSD.",
+      "license_reuse": "Incluye avisos LANL, LGPL-3.0+, GPL-2.0+ y condiciones adicionales.",
+      "review_scope": "Texto de licencia consultado."
+    },
+    {
+      "anchor": "g07",
+      "id": "G07",
+      "title": "Landlab",
+      "source_label": "https://github.com/landlab/landlab",
+      "url": "https://github.com/landlab/landlab",
+      "scope": "Procesos de superficie y evolución del paisaje.",
+      "license_reuse": "MIT.",
+      "review_scope": "README y licencia declarada."
+    },
+    {
+      "anchor": "g08",
+      "id": "G08",
+      "title": "Itasca — Mohr-Coulomb constitutive model",
+      "source_label": "https://docs.itascacg.com/itasca900/common/models/mohr/doc/modelmohr.html",
+      "url": "https://docs.itascacg.com/itasca900/common/models/mohr/doc/modelmohr.html",
+      "scope": "Criterios de fallo, elasticidad/plasticidad y tracción.",
+      "license_reuse": "Documentación consultable; software comercial.",
+      "review_scope": "Documentación oficial consultada."
+    },
+    {
+      "anchor": "g09",
+      "id": "G09",
+      "title": "Itasca — Mohr-Coulomb joint/contact model",
+      "source_label": "https://docs.itascacg.com/itasca900/common/contactmodel/mohr/doc/manual/cmmohr.html",
+      "url": "https://docs.itascacg.com/itasca900/common/contactmodel/mohr/doc/manual/cmmohr.html",
+      "scope": "Juntas, cohesión, fricción, dilatancia y presión de poro.",
+      "license_reuse": "Documentación consultable; no permiso para copiar software.",
+      "review_scope": "Documentación oficial consultada."
+    },
+    {
+      "anchor": "g10",
+      "id": "G10",
+      "title": "Physical Geology — Fractures, Joints, and Faults",
+      "source_label": "https://opentextbc.ca/physicalgeologyh5p/chapter/fractures-joints-and-faults/",
+      "url": "https://opentextbc.ca/physicalgeologyh5p/chapter/fractures-joints-and-faults/",
+      "scope": "Terminología y patrones estructurales.",
+      "license_reuse": "Consultar licencia del libro y de cada imagen.",
+      "review_scope": "Capítulo abierto consultado."
+    },
+    {
+      "anchor": "l01",
+      "id": "L01",
+      "title": "FastNoiseLite",
+      "source_label": "https://github.com/Auburn/FastNoiseLite",
+      "url": "https://github.com/Auburn/FastNoiseLite",
+      "scope": "Ruido y domain warping; C++ / HLSL / GLSL.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia; no benchmark local."
+    },
+    {
+      "anchor": "l02",
+      "id": "L02",
+      "title": "FastNoise2",
+      "source_label": "https://github.com/Auburn/FastNoise2",
+      "url": "https://github.com/Auburn/FastNoise2",
+      "scope": "Ruido SIMD en CPU; no es un backend GPU automático.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l03",
+      "id": "L03",
+      "title": "Eigen",
+      "source_label": "https://gitlab.com/libeigen/eigen",
+      "url": "https://gitlab.com/libeigen/eigen",
+      "scope": "Álgebra lineal, QR y SVD.",
+      "license_reuse": "Núcleo MPL-2.0; revisar componentes y versión.",
+      "review_scope": "Repositorio oficial y avisos del espejo consultados."
+    },
+    {
+      "anchor": "l04",
+      "id": "L04",
+      "title": "Eigen — avisos de licencia del espejo",
+      "source_label": "https://raw.githubusercontent.com/eigen-mirror/eigen/master/COPYING.README",
+      "url": "https://raw.githubusercontent.com/eigen-mirror/eigen/master/COPYING.README",
+      "scope": "La selección real de módulos importa.",
+      "license_reuse": "MPL-2.0 y avisos de terceros.",
+      "review_scope": "Avisos de licencia consultados."
+    },
+    {
+      "anchor": "l05",
+      "id": "L05",
+      "title": "Manifold",
+      "source_label": "https://github.com/elalish/manifold",
+      "url": "https://github.com/elalish/manifold",
+      "scope": "Booleanas sobre sólidos triangulados manifold.",
+      "license_reuse": "Apache-2.0.",
+      "review_scope": "README / licencia y condiciones de entrada."
+    },
+    {
+      "anchor": "l06",
+      "id": "L06",
+      "title": "geometry-central",
+      "source_label": "https://github.com/nmwsharp/geometry-central",
+      "url": "https://github.com/nmwsharp/geometry-central",
+      "scope": "Geometría diferencial y estructuras de malla.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l07",
+      "id": "L07",
+      "title": "libigl",
+      "source_label": "https://github.com/libigl/libigl",
+      "url": "https://github.com/libigl/libigl",
+      "scope": "Procesamiento y análisis geométrico.",
+      "license_reuse": "MPL-2.0 en núcleo; módulos/dependencias con otras licencias.",
+      "review_scope": "README / licencias declaradas."
+    },
+    {
+      "anchor": "l08",
+      "id": "L08",
+      "title": "Geogram",
+      "source_label": "https://github.com/BrunoLevy/geogram",
+      "url": "https://github.com/BrunoLevy/geogram",
+      "scope": "Geometría computacional, predicados y teselaciones.",
+      "license_reuse": "BSD-3-Clause en licencia principal.",
+      "review_scope": "README y licencia primaria consultados."
+    },
+    {
+      "anchor": "l09",
+      "id": "L09",
+      "title": "Geogram — licencia",
+      "source_label": "https://raw.githubusercontent.com/BrunoLevy/geogram/main/LICENSE",
+      "url": "https://raw.githubusercontent.com/BrunoLevy/geogram/main/LICENSE",
+      "scope": "Aviso de reutilización de código.",
+      "license_reuse": "BSD-3-Clause.",
+      "review_scope": "Texto completo consultado."
+    },
+    {
+      "anchor": "l10",
+      "id": "L10",
+      "title": "Voro++",
+      "source_label": "https://math.lbl.gov/voro++/",
+      "url": "https://math.lbl.gov/voro++/",
+      "scope": "Celdas Voronoi 3D.",
+      "license_reuse": "BSD de 3 cláusulas con avisos del proyecto.",
+      "review_scope": "Sitio de autores / licencia."
+    },
+    {
+      "anchor": "l11",
+      "id": "L11",
+      "title": "Voro++ — licencia",
+      "source_label": "https://raw.githubusercontent.com/chr1shr/voro/master/LICENSE",
+      "url": "https://raw.githubusercontent.com/chr1shr/voro/master/LICENSE",
+      "scope": "Revisar el archivo completo al fijar versión.",
+      "license_reuse": "BSD con texto adicional sobre mejoras compartidas.",
+      "review_scope": "Texto completo consultado."
+    },
+    {
+      "anchor": "l12",
+      "id": "L12",
+      "title": "CGAL — licencias",
+      "source_label": "https://www.cgal.org/license.html",
+      "url": "https://www.cgal.org/license.html",
+      "scope": "Geometría exacta y robustez; selección por módulo.",
+      "license_reuse": "GPL / LGPL / comercial según paquete.",
+      "review_scope": "Página oficial consultada."
+    },
+    {
+      "anchor": "l13",
+      "id": "L13",
+      "title": "meshoptimizer",
+      "source_label": "https://github.com/zeux/meshoptimizer",
+      "url": "https://github.com/zeux/meshoptimizer",
+      "scope": "LOD, simplificación, organización y compresión de mallas.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l14",
+      "id": "L14",
+      "title": "xatlas",
+      "source_label": "https://github.com/jpcy/xatlas",
+      "url": "https://github.com/jpcy/xatlas",
+      "scope": "Desplegado UV para bake.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l15",
+      "id": "L15",
+      "title": "CoACD",
+      "source_label": "https://github.com/SarahWeiii/CoACD",
+      "url": "https://github.com/SarahWeiii/CoACD",
+      "scope": "Descomposición convexa para colisión.",
+      "license_reuse": "MIT en repositorio consultado; fijar revisión.",
+      "review_scope": "README / licencia; no ejecución."
+    },
+    {
+      "anchor": "l16",
+      "id": "L16",
+      "title": "Jolt — arquitectura",
+      "source_label": "https://jrouwe.github.io/JoltPhysics/",
+      "url": "https://jrouwe.github.io/JoltPhysics/",
+      "scope": "Cuerpos, colisiones, proxies, restricciones de MeshShape dinámico.",
+      "license_reuse": "Código Jolt: MIT; documentación separada.",
+      "review_scope": "Documentación oficial consultada."
+    },
+    {
+      "anchor": "l17",
+      "id": "L17",
+      "title": "Jolt Physics — código",
+      "source_label": "https://github.com/jrouwe/JoltPhysics",
+      "url": "https://github.com/jrouwe/JoltPhysics",
+      "scope": "Física de cuerpos; no generador de geología.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l18",
+      "id": "L18",
+      "title": "Fidget",
+      "source_label": "https://github.com/mkeeter/fidget",
+      "url": "https://github.com/mkeeter/fidget",
+      "scope": "Implícitos; evaluación/JIT y simplificación; Rust.",
+      "license_reuse": "MPL-2.0.",
+      "review_scope": "README; candidato de investigación, no integrado."
+    },
+    {
+      "anchor": "l19",
+      "id": "L19",
+      "title": "OpenVDB / NanoVDB",
+      "source_label": "https://github.com/AcademySoftwareFoundation/openvdb",
+      "url": "https://github.com/AcademySoftwareFoundation/openvdb",
+      "scope": "Campos dispersos; no se propone reabrir su integración en Jerico.",
+      "license_reuse": "Apache-2.0 en la rama actual consultada.",
+      "review_scope": "README y nota oficial de relicenciamiento."
+    },
+    {
+      "anchor": "l20",
+      "id": "L20",
+      "title": "OpenVDB — relicenciamiento",
+      "source_label": "https://raw.githubusercontent.com/AcademySoftwareFoundation/openvdb/master/RE-LICENSE_NOTE.txt",
+      "url": "https://raw.githubusercontent.com/AcademySoftwareFoundation/openvdb/master/RE-LICENSE_NOTE.txt",
+      "scope": "No extrapolar a cualquier release histórica.",
+      "license_reuse": "De aportaciones MPL-2.0 a Apache-2.0.",
+      "review_scope": "Nota oficial consultada."
+    },
+    {
+      "anchor": "l21",
+      "id": "L21",
+      "title": "NVIDIA Warp",
+      "source_label": "https://github.com/NVIDIA/warp",
+      "url": "https://github.com/NVIDIA/warp",
+      "scope": "Prototipos CPU/CUDA desde Python.",
+      "license_reuse": "Apache-2.0; terceros a revisar.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "l22",
+      "id": "L22",
+      "title": "AMD FEMFX",
+      "source_label": "https://github.com/GPUOpen-Effects/FEMFX",
+      "url": "https://github.com/GPUOpen-Effects/FEMFX",
+      "scope": "FEM tetraédrico multihilo en CPU y fractura.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia; integración y mantenimiento no probados."
+    },
+    {
+      "anchor": "l23",
+      "id": "L23",
+      "title": "NVIDIA Blast",
+      "source_label": "https://github.com/NVIDIAGameWorks/Blast",
+      "url": "https://github.com/NVIDIAGameWorks/Blast",
+      "scope": "SDK de destrucción; estudiar separación de piezas/soporte.",
+      "license_reuse": "Revisar distribución y extensiones concretas.",
+      "review_scope": "README y enlaces de documentación; licencia no cerrada."
+    },
+    {
+      "anchor": "a01",
+      "id": "A01",
+      "title": "Cell Fracture",
+      "source_label": "https://extensions.blender.org/add-ons/cell-fracture/",
+      "url": "https://extensions.blender.org/add-ons/cell-fracture/",
+      "scope": "Prefragmentación de mallas en Blender.",
+      "license_reuse": "GPL-3.0-or-later.",
+      "review_scope": "Ficha oficial; no instalado en esta sesión."
+    },
+    {
+      "anchor": "a02",
+      "id": "A02",
+      "title": "Hydra",
+      "source_label": "https://github.com/ozikazina/Hydra",
+      "url": "https://github.com/ozikazina/Hydra",
+      "scope": "Erosión mediante mapas de altura y OpenGL.",
+      "license_reuse": "MIT declarado; README avisa de otras posibles limitaciones.",
+      "review_scope": "README; compatibilidad y admisión pendientes."
+    },
+    {
+      "anchor": "a03",
+      "id": "A03",
+      "title": "Sverchok",
+      "source_label": "https://github.com/nortikin/sverchok",
+      "url": "https://github.com/nortikin/sverchok",
+      "scope": "Laboratorio de nodos geométricos y matemáticos.",
+      "license_reuse": "GPL-3.0.",
+      "review_scope": "README / licencia; no ejecutado."
+    },
+    {
+      "anchor": "a04",
+      "id": "A04",
+      "title": "Proc-Rock",
+      "source_label": "https://github.com/acfaruk/proc-rock",
+      "url": "https://github.com/acfaruk/proc-rock",
+      "scope": "Generador independiente de rocas, recetas, materiales y LOD.",
+      "license_reuse": "GPL-3.0; README distingue los assets generados.",
+      "review_scope": "README; no ejecutado."
+    },
+    {
+      "anchor": "a05",
+      "id": "A05",
+      "title": "Blender-Rock-Generator",
+      "source_label": "https://github.com/lupin4/Blender-Rock-Generator",
+      "url": "https://github.com/lupin4/Blender-Rock-Generator",
+      "scope": "Script pequeño de rocas; atención: puede vaciar la escena.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia; solo probar en escena desechable."
+    },
+    {
+      "anchor": "a06",
+      "id": "A06",
+      "title": "Infinigen",
+      "source_label": "https://github.com/princeton-vl/infinigen",
+      "url": "https://github.com/princeton-vl/infinigen",
+      "scope": "Contenido natural procedural, Blender y generación offline.",
+      "license_reuse": "BSD-3-Clause en proyecto; dependencias se revisan aparte.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "a07",
+      "id": "A07",
+      "title": "Infinigen 2 preview — alcance",
+      "source_label": "https://github.com/princeton-vl/infinigen/blob/main/docs/source/Infinigen2.md",
+      "url": "https://github.com/princeton-vl/infinigen/blob/main/docs/source/Infinigen2.md",
+      "scope": "No confundir preview de interiores con toda la ruta Nature.",
+      "license_reuse": "Ver licencia del proyecto y subcomponentes.",
+      "review_scope": "Documentación de alcance consultada."
+    },
+    {
+      "anchor": "a08",
+      "id": "A08",
+      "title": "Material Maker",
+      "source_label": "https://github.com/RodZill4/material-maker",
+      "url": "https://github.com/RodZill4/material-maker",
+      "scope": "Materiales PBR y pintura procedural; no geometría volumétrica.",
+      "license_reuse": "MIT.",
+      "review_scope": "Repositorio del autor / licencia."
+    },
+    {
+      "anchor": "a09",
+      "id": "A09",
+      "title": "Ucupaint",
+      "source_label": "https://github.com/ucupumar/ucupaint",
+      "url": "https://github.com/ucupumar/ucupaint",
+      "scope": "Capas de textura y máscaras para Blender.",
+      "license_reuse": "GPL-3.0.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "a10",
+      "id": "A10",
+      "title": "BlenderGIS",
+      "source_label": "https://github.com/domlysz/BlenderGIS",
+      "url": "https://github.com/domlysz/BlenderGIS",
+      "scope": "Importación de datos geográficos / elevación.",
+      "license_reuse": "Verificar licencia exacta de versión y fuentes de datos.",
+      "review_scope": "README; licencia no cerrada en esta revisión."
+    },
+    {
+      "anchor": "a11",
+      "id": "A11",
+      "title": "A.N.T. Landscape — fuente histórica",
+      "source_label": "https://github.com/blender/blender-addons/tree/main/ant_landscape",
+      "url": "https://github.com/blender/blender-addons/tree/main/ant_landscape",
+      "scope": "Terrenos de altura / ruido en Blender.",
+      "license_reuse": "Verificar paquete actual y licencia de versión.",
+      "review_scope": "Fuente histórica; compatibilidad actual no comprobada."
+    },
+    {
+      "anchor": "a12",
+      "id": "A12",
+      "title": "ErosionTerrainGenerator — ficha 2026",
+      "source_label": "https://extensions.blender.org/add-ons/erosion-terrain-extension/",
+      "url": "https://extensions.blender.org/add-ons/erosion-terrain-extension/",
+      "scope": "Terreno de altura; declara Blender 5.2+.",
+      "license_reuse": "Verificar licencia de la versión antes de reutilizar.",
+      "review_scope": "Ficha oficial; versión 1 publicada 18-08-2026; no probado."
+    },
+    {
+      "anchor": "a13",
+      "id": "A13",
+      "title": "SideFX Labs",
+      "source_label": "https://github.com/sideeffects/SideFXLabs",
+      "url": "https://github.com/sideeffects/SideFXLabs",
+      "scope": "Herramientas de autoría, HDA y Python.",
+      "license_reuse": "Licencia permisiva propia; host Houdini separado.",
+      "review_scope": "README y LICENSE.md consultados."
+    },
+    {
+      "anchor": "a14",
+      "id": "A14",
+      "title": "SideFX Labs — licencia",
+      "source_label": "https://raw.githubusercontent.com/sideeffects/SideFXLabs/Development/LICENSE.md",
+      "url": "https://raw.githubusercontent.com/sideeffects/SideFXLabs/Development/LICENSE.md",
+      "scope": "No confundir con licencia de Houdini.",
+      "license_reuse": "Aviso permisivo propio de SideFX.",
+      "review_scope": "Texto de licencia consultado."
+    },
+    {
+      "anchor": "a15",
+      "id": "A15",
+      "title": "Houdini Apprentice — restricciones",
+      "source_label": "https://www.sidefx.com/faq/question/apprentice-restrictions/",
+      "url": "https://www.sidefx.com/faq/question/apprentice-restrictions/",
+      "scope": "No es sustituto gratuito de una licencia comercial de producción.",
+      "license_reuse": "No comercial; restricciones de pipeline y formatos.",
+      "review_scope": "FAQ oficial consultada."
+    },
+    {
+      "anchor": "a16",
+      "id": "A16",
+      "title": "Poly Haven — licencia",
+      "source_label": "https://polyhaven.com/license",
+      "url": "https://polyhaven.com/license",
+      "scope": "Materiales, modelos y HDRI para comparación y producción.",
+      "license_reuse": "CC0 para assets; no todo el contenido del sitio.",
+      "review_scope": "Página oficial de licencia."
+    },
+    {
+      "anchor": "a17",
+      "id": "A17",
+      "title": "ambientCG — licencia",
+      "source_label": "https://docs.ambientcg.com/license/",
+      "url": "https://docs.ambientcg.com/license/",
+      "scope": "Materiales y referencias de superficie.",
+      "license_reuse": "CC0 para assets.",
+      "review_scope": "Página oficial de licencia."
+    },
+    {
+      "anchor": "e01",
+      "id": "E01",
+      "title": "Unreal Engine — Mesh Terrain experimental",
+      "source_label": "https://dev.epicgames.com/documentation/unreal-engine/mesh-terrain-in-unreal-engine",
+      "url": "https://dev.epicgames.com/documentation/unreal-engine/mesh-terrain-in-unreal-engine",
+      "scope": "Voladizos, túneles, resolución variable y modificadores.",
+      "license_reuse": "Código/uso bajo condiciones de Epic; no asumir permiso de portado.",
+      "review_scope": "Documentación oficial actual consultada."
+    },
+    {
+      "anchor": "e02",
+      "id": "E02",
+      "title": "Unreal Engine — Landscape Heightmaps",
+      "source_label": "https://dev.epicgames.com/documentation/unreal-engine/importing-and-exporting-landscape-heightmaps-in-unreal-engine",
+      "url": "https://dev.epicgames.com/documentation/unreal-engine/importing-and-exporting-landscape-heightmaps-in-unreal-engine",
+      "scope": "Ruta Landscape clásica de mapas de altura.",
+      "license_reuse": "Documentación de referencia.",
+      "review_scope": "Documentación oficial."
+    },
+    {
+      "anchor": "e03",
+      "id": "E03",
+      "title": "Unreal Engine — Chaos Destruction Overview",
+      "source_label": "https://dev.epicgames.com/documentation/unreal-engine/destruction-overview",
+      "url": "https://dev.epicgames.com/documentation/unreal-engine/destruction-overview",
+      "scope": "Geometry Collections, clusters y conexiones.",
+      "license_reuse": "Documentación de referencia.",
+      "review_scope": "Documentación oficial."
+    },
+    {
+      "anchor": "e04",
+      "id": "E04",
+      "title": "Voxel Plugin — runtime edits and sculpting",
+      "source_label": "https://docs.voxelplugin.com/knowledgebase/blueprints/runtime-edits-and-sculpting",
+      "url": "https://docs.voxelplugin.com/knowledgebase/blueprints/runtime-edits-and-sculpting",
+      "scope": "Escultura volumétrica; límites explícitos de física de islas.",
+      "license_reuse": "Ver edición, versión y licencia comercial/gratuita aplicable.",
+      "review_scope": "Documentación oficial."
+    },
+    {
+      "anchor": "e05",
+      "id": "E05",
+      "title": "Godot Voxel Tools — smooth terrain",
+      "source_label": "https://voxel-tools.readthedocs.io/en/latest/smooth_terrain/",
+      "url": "https://voxel-tools.readthedocs.io/en/latest/smooth_terrain/",
+      "scope": "SDF, mallado suave, Transvoxel y LOD.",
+      "license_reuse": "Código del proyecto MIT.",
+      "review_scope": "Documentación oficial."
+    },
+    {
+      "anchor": "e06",
+      "id": "E06",
+      "title": "Godot Voxel Tools — generators",
+      "source_label": "https://voxel-tools.readthedocs.io/en/latest/generators/",
+      "url": "https://voxel-tools.readthedocs.io/en/latest/generators/",
+      "scope": "Generación multihilo por bloques / modificadores.",
+      "license_reuse": "MIT en código del proyecto.",
+      "review_scope": "Documentación oficial."
+    },
+    {
+      "anchor": "e07",
+      "id": "E07",
+      "title": "Godot Voxel Tools — repositorio",
+      "source_label": "https://github.com/Zylann/godot_voxel",
+      "url": "https://github.com/Zylann/godot_voxel",
+      "scope": "Arquitectura de terreno editable por bloques.",
+      "license_reuse": "MIT.",
+      "review_scope": "README / licencia."
+    },
+    {
+      "anchor": "e08",
+      "id": "E08",
+      "title": "Unity — Terrain Heightmaps",
+      "source_label": "https://docs.unity3d.com/ja/6000.0/Manual/terrain-Heightmaps.html",
+      "url": "https://docs.unity3d.com/ja/6000.0/Manual/terrain-Heightmaps.html",
+      "scope": "Terrain nativo basado en altura; no todo el universo de extensiones.",
+      "license_reuse": "Documentación de referencia.",
+      "review_scope": "Manual oficial."
+    },
+    {
+      "anchor": "e09",
+      "id": "E09",
+      "title": "Guerrilla — GPU-Based Procedural Placement in Horizon Zero Dawn (2017)",
+      "source_label": "https://www.guerrilla-games.com/read/gpu-based-procedural-placement-in-horizon-zero-dawn",
+      "url": "https://www.guerrilla-games.com/read/gpu-based-procedural-placement-in-horizon-zero-dawn",
+      "scope": "Colocación procedural GPU, no formación física de roca.",
+      "license_reuse": "Presentación de referencia.",
+      "review_scope": "Ficha oficial de la charla; no auditoría del motor actual."
+    },
+    {
+      "anchor": "e10",
+      "id": "E10",
+      "title": "GDC — Continuous World Generation in No Man’s Sky (2017)",
+      "source_label": "https://www.gdcvault.com/play/1024265/Continuous-World-Generation-in-Noby",
+      "url": "https://www.gdcvault.com/play/1024265/Continuous-World-Generation-in-Noby",
+      "scope": "Pipeline de mundo continuo, voxels, mallas y población.",
+      "license_reuse": "Presentación de referencia.",
+      "review_scope": "Ficha oficial; no análisis íntegro del video."
+    },
+    {
+      "anchor": "e11",
+      "id": "E11",
+      "title": "Houdini — fracturing geometry",
+      "source_label": "https://www.sidefx.com/docs/houdini/dyno/fracturing.html",
+      "url": "https://www.sidefx.com/docs/houdini/dyno/fracturing.html",
+      "scope": "Fractura, constraints, proxies y geometría detallada.",
+      "license_reuse": "Software comercial; documentación consultable.",
+      "review_scope": "Documentación oficial."
+    }
+  ]
+}
