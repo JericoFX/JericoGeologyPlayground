@@ -221,6 +221,37 @@ int main()
             [](const Part &part){return part.role==Role::DeckPlank;});
         require(intactBoard!=intactPier.parts.end() && intactBoard->triangleCount>12,
                 "near deck planks need bevelled edges rather than plain boxes");
+        auto bowedSpline=curvedPath();
+        bowedSpline.points[1].position.z=1.2;
+        bowedSpline.points[2].position.z=-1.2;
+        const auto bowedPier=build(bowedSpline,pier);
+        for (int side:{-1,1})
+        {
+            const auto fascia=std::find_if(bowedPier.parts.begin(),bowedPier.parts.end(),
+                [&](const Part &part){return part.role==Role::Fascia && part.side==side;});
+            require(fascia!=bowedPier.parts.end(),"bowed pier needs a side fascia");
+            for (const double fraction:{.2,.8})
+            {
+                const auto frame=Construction::frameAtDistance(bowedPier.path,
+                    bowedPier.path.lengthMeters*fraction);
+                const Vec3d expected{
+                    frame.position.x+frame.binormal.x*side*pier.widthMeters*.5-
+                        frame.normal.x*pier.boardThicknessMeters*.5,
+                    frame.position.y+frame.binormal.y*side*pier.widthMeters*.5-
+                        frame.normal.y*pier.boardThicknessMeters*.5,
+                    frame.position.z+frame.binormal.z*side*pier.widthMeters*.5-
+                        frame.normal.z*pier.boardThicknessMeters*.5};
+                double nearest=1e10;
+                for (std::size_t face=fascia->firstTriangle;
+                     face<fascia->firstTriangle+fascia->triangleCount;++face)
+                    for (int corner=0;corner<3;++corner)
+                        nearest=std::min(nearest,length(sub(
+                            bowedPier.mesh.mesh.positions[
+                                bowedPier.mesh.mesh.indices[3*face+corner]],expected)));
+                require(nearest<.25,
+                        "pier side fascia must follow the canonical curved deck edge");
+            }
+        }
         Settings crackedPier=pier;
         PathDamageRule plankCrack;
         plankCrack.id="plank-crack-0";

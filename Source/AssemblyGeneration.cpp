@@ -864,13 +864,27 @@ void buildPier(Builder &builder,bool groundSupports=true)
         builder.part(Role::Fascia,0,side,path.lengthMeters*.5,
                      fasciaCenter,[&](const Part &part)
         {
-            const auto first=Construction::frameAtDistance(path,0);
-            const auto last=Construction::frameAtDistance(path,path.lengthMeters);
-            const auto offset=[&](const Construction::PathFrame &frame)
-            {return add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.5),
-                                           mul(frame.normal,-s.boardThicknessMeters*.5)));};
-            builder.beam(offset(first),offset(last),s.boardThicknessMeters,
-                         s.beamHeightMeters,first.normal,part.state);
+            const auto count=std::clamp(std::size_t(std::ceil(path.lengthMeters/.25)),
+                                        std::size_t(8),std::size_t(64));
+            std::vector<Vec3d> points;
+            points.reserve(count+1);
+            for (std::size_t i=0;i<=count;++i)
+            {
+                const auto frame=Construction::frameAtDistance(path,
+                    path.lengthMeters*double(i)/count);
+                auto point=add(frame.position,
+                    add(mul(frame.binormal,side*s.widthMeters*.5),
+                        mul(frame.normal,-s.boardThicknessMeters*.5)));
+                if (part.state==State::Bent || part.state==State::Collapsed)
+                    point=add(point,mul(frame.normal,-.12*std::sin(
+                        std::numbers::pi*double(i)/count)));
+                if (part.state==State::Loose || part.state==State::Detached)
+                    point=add(point,mul(frame.normal,-.12));
+                points.push_back(point);
+            }
+            builder.tube(points,s.boardThicknessMeters*.5,
+                Construction::ProfileKind::Rectangle,s.boardThicknessMeters,
+                s.beamHeightMeters,0,part.state==State::Broken);
         });
         for (std::size_t i=0;groundSupports && i+1<supports.size();++i)
         {
