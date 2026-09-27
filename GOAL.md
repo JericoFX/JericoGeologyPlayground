@@ -104,6 +104,8 @@ La implementación debe conservar evidencia reproducible (capturas, métricas y 
 
 ## Nuevo slice pedido por el owner — Procedural Assemblies, Damage, Piers & Bridges (2026-09-27)
 
+**Resultado actual:** el [laboratorio de assemblies y evidencia](docs/PROCEDURAL_ASSEMBLIES_LAB_RESULTS_2026_09_27.md) implementa catorce familias en la ventana normal, con partes semánticas, selección por clic/lista, daño manual/procedural y LOD; Release, 19/19 CTest y 17 capturas Vulkan reproducibles pasaron. La revisión visual de capturas fue positiva, pero la interacción manual completa en la ventana sigue **PENDING**, al igual que Jolt opcional y Strands & Webs. Por eso este corte no se declara aceptación integral del slice ni altera el estado parcial de la Beauty geológica.
+
 El owner amplió el laboratorio de spline para probar **assemblies procedurales con partes semánticas y daño seleccionable**. La directiva completa está en [`docs/PROCEDURAL_ASSEMBLIES_DAMAGE_BRIDGES_2026_09_27.md`](docs/PROCEDURAL_ASSEMBLIES_DAMAGE_BRIDGES_2026_09_27.md).
 
 El objetivo es reutilizar `Path/Spline + Sweep + OffsetPath + RepeatAlongPath + FitCountSpacing + Stable Part IDs + Damage Selectors` para construir y romper de forma controlada tuberías con uniones, vías, barandas, muelles de madera, catwalks y puentes. Incluye tanto un puente de suspensión con cable principal parabólico/hangers como un puente de cuerda/tablas con catenaria. Las fórmulas, límites numéricos, estados de daño, pruebas requeridas, LOD y política de promoción opcional a Jolt están fijados en la directiva.
