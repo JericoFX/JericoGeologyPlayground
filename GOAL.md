@@ -8,6 +8,8 @@ El owner priorizó después **mejorar la creación geológica antes que high→l
 
 La [primera prueba v19 de estratos resistentes](Evidence/2026-09-26-cliff-strata-creation-review.md) logró repisas geométricas, cierre y replay con 17/17 tests, pero su Beauty sigue **PARTIAL** por franjas periódicas, bordes rectangulares y unión visual deficiente del corte central. El perfil permanece opt-in; el siguiente trabajo debe mejorar la macroforma antes de volver a high→low.
 
+La [prueba v20 de camas variables y perímetro local](Evidence/2026-09-26-cliff-varied-wall-review.md) redujo la repetición exacta de bancos y movió la silueta sólo cerca del borde. Pasó cierre, replay, captura Vulkan y 17/17 tests, pero la Beauty del cliff permanece **PARTIAL**: aún parece un bloque escalonado; el corte central se excluyó sólo para aislar el defecto y no está resuelto.
+
 ## Referencias durables del Goal
 
 Las copias de los documentos del Engine que corresponden a este trabajo están en [`docs/engine-reference-2026-09-24/`](docs/engine-reference-2026-09-24/README.md). [`SOURCE_MANIFEST.json`](docs/engine-reference-2026-09-24/SOURCE_MANIFEST.json) registra para cada copia la ruta original, la ruta local, los bytes y el SHA-256 verificado. Incluye la autoridad M8, el blueprint y matemáticas SDF/geología, ZenUV, SimpleBake, Ucupaint, remesh, segmentación, daño, fractura, diseños de rocas y RBrush, y evidencia matemática de estratos/LOD/coluvión/rockfall. Son referencias documentales congeladas: no sustituyen la autoridad actual del Engine ni implican que la capacidad esté implementada o aceptada.

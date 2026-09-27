@@ -690,7 +690,7 @@ void validate(const Recipe &r)
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
-             r.version == 18 || r.version == 19) &&
+             r.version == 18 || r.version == 19 || r.version == 20) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -707,6 +707,8 @@ void validate(const Recipe &r)
                     l.frequency <= 4 && l.lateral <= 1);
         if (l.kind == Kind::StrataRelief && l.profile == 3)
             require(r.version >= 19 && l.width >= 0.05f && l.width <= 0.2f);
+        if (l.kind == Kind::StrataRelief && l.profile == 4)
+            require(r.version >= 20 && l.width >= 0.05f && l.width <= 0.16f);
         if (l.kind == Kind::FractureShear)
             require(r.version >= 11 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.3f &&
@@ -746,7 +748,7 @@ void validate(const Recipe &r)
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
                 l.profile < (l.kind == Kind::CliffCutLoop ? 6 :
-                             l.kind == Kind::StrataRelief ? 4 : 3));
+                             l.kind == Kind::StrataRelief ? 5 : 3));
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
                 l.distortion <= 4 && std::abs(l.solidOffset) <= 1);
         require(std::abs(l.amplitude) <= 5 && l.frequency >= 0.01f && l.frequency <= 100 && l.octaves >= 1 &&
@@ -1333,8 +1335,20 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             {
                 double s = dot(q, unit(vec(l.direction))) * l.frequency + l.phase +
                            l.distortion * fbm(mul(q, 0.3), l);
+                if (l.profile == 4)
+                    s += l.jitter * std::sin(0.67 * s + 0.017 * double(l.seed % 997U));
                 double u = s - std::floor(s);
-                value = l.profile == 0   ? 0.5 + 0.5 * std::sin(2 * std::numbers::pi * u)
+                if (l.profile == 4)
+                {
+                    const auto bed = l.seed ^
+                                     (std::uint32_t(std::int64_t(std::floor(s))) * 0x9e3779b9U);
+                    const double start = 0.43 + 0.12 * random(bed ^ 0x2d6d44f1U);
+                    const double end = 0.76 + 0.06 * random(bed ^ 0x659c8f33U);
+                    const double resistance = 0.75 + 0.25 * random(bed ^ 0x7c3d29a5U);
+                    value = resistance * smooth((u - start) / l.width) *
+                            (1 - smooth((u - end) / l.width));
+                }
+                else value = l.profile == 0   ? 0.5 + 0.5 * std::sin(2 * std::numbers::pi * u)
                         : l.profile == 1 ? smooth(u / l.width) * (1 - smooth((u - 0.72) / 0.28))
                         : l.profile == 3 ? smooth((u - 0.55) / l.width) *
                                                (1 - smooth((u - 0.83) / l.width))
@@ -1461,7 +1475,7 @@ Recipe deserialize(const std::string &text)
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
-        inputVersion != 17 && inputVersion != 18 && inputVersion != 19)
+        inputVersion != 17 && inputVersion != 18 && inputVersion != 19 && inputVersion != 20)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

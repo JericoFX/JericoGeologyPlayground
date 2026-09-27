@@ -1759,8 +1759,67 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
     if (meshHash(after.mesh) != meshHash(evaluate(deserialize(serialize(candidate)),
                                             candidate.finalResolution).mesh))
         throw std::runtime_error("Cliff strata replay mismatch");
+    auto wallOnly = candidate;
+    wallOnly.layers.erase(std::remove_if(wallOnly.layers.begin(), wallOnly.layers.end(),
+                                         [](const Layer &layer)
+                                         { return layer.kind == Kind::CliffCutLoop; }),
+                          wallOnly.layers.end());
+    auto wallMesh = evaluate(wallOnly, wallOnly.finalResolution);
+    if (!PA::validateClosedMesh(wallMesh.mesh).hasValue() ||
+        meshHash(wallMesh.mesh) != meshHash(evaluate(deserialize(serialize(wallOnly)),
+                                                  wallOnly.finalResolution).mesh))
+        throw std::runtime_error("Uncut cliff wall failed closed replay");
+    auto variedWall = wallOnly;
+    variedWall.version = 20;
+    for (auto &layer : variedWall.layers)
+        if (layer.kind == Kind::StrataRelief)
+        {
+            layer.profile = 4;
+            layer.jitter = 0.7f;
+            layer.profileSharpness = 1;
+        }
+    auto variedMesh = evaluate(variedWall, variedWall.finalResolution);
+    if (!PA::validateClosedMesh(variedMesh.mesh).hasValue() ||
+        meshHash(variedMesh.mesh) != meshHash(evaluate(deserialize(serialize(variedWall)),
+                                                      variedWall.finalResolution).mesh))
+        throw std::runtime_error("Varied cliff wall failed closed replay");
+    auto outlinedWall = variedWall;
+    auto perimeter = defaultLayer(Kind::VectorNoise);
+    perimeter.seed = 911;
+    perimeter.amplitude = 0.3f;
+    perimeter.frequency = 0.7f;
+    perimeter.octaves = 2;
+    perimeter.outputScale = {0.8f, 0.8f, 0};
+    perimeter.mask = Mask::BoundaryProximity;
+    perimeter.maskLow = 0;
+    perimeter.maskHigh = 1;
+    perimeter.featureRadius = 0.75f;
+    outlinedWall.layers.insert(outlinedWall.layers.begin() + 1, perimeter);
+    auto outlinedMesh = evaluate(outlinedWall, outlinedWall.finalResolution);
+    if (!PA::validateClosedMesh(outlinedMesh.mesh).hasValue() ||
+        meshHash(outlinedMesh.mesh) != meshHash(evaluate(deserialize(serialize(outlinedWall)),
+                                                          outlinedWall.finalResolution).mesh))
+        throw std::runtime_error("Outlined cliff wall failed closed replay");
+    auto beforeOutline = evaluate(variedWall, variedWall.finalResolution, 0);
+    auto afterOutline = evaluate(outlinedWall, outlinedWall.finalResolution, 1);
+    if (beforeOutline.mesh.indices != afterOutline.mesh.indices)
+        throw std::runtime_error("Cliff perimeter changed the open grid");
+    double maxOutlineXY = 0, maxCenterXY = 0;
+    for (std::size_t i = 0; i < beforeOutline.mesh.positions.size(); ++i)
+    {
+        const auto a = beforeOutline.mesh.positions[i], b = afterOutline.mesh.positions[i];
+        const auto xy = std::hypot(a.x - b.x, a.y - b.y);
+        maxOutlineXY = std::max(maxOutlineXY, xy);
+        if (std::abs(a.x) < 1.5 && std::abs(a.y) < 1.0)
+            maxCenterXY = std::max(maxCenterXY, xy);
+    }
+    if (maxOutlineXY < 0.03 || maxCenterXY > 1e-9)
+        throw std::runtime_error("Cliff perimeter failed localized displacement");
     save(baseline, evidence / "baseline-recipe.json");
     save(candidate, evidence / "candidate-recipe.json");
+    save(wallOnly, evidence / "wall-only-recipe.json");
+    save(variedWall, evidence / "varied-wall-recipe.json");
+    save(outlinedWall, evidence / "outlined-wall-recipe.json");
     double maximum = 0, sum = 0;
     for (std::size_t i = 0; i < beforeRelief.mesh.positions.size(); ++i)
     {
@@ -1775,11 +1834,21 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
                             {"imageSize", {1280, 960}},
                             {"baselineHash", meshHash(before.mesh)},
                             {"candidateHash", meshHash(after.mesh)},
+                            {"wallOnlyHash", meshHash(wallMesh.mesh)},
+                            {"variedWallHash", meshHash(variedMesh.mesh)},
+                            {"outlinedWallHash", meshHash(outlinedMesh.mesh)},
                             {"triangles", after.mesh.indices.size() / 3},
+                            {"wallOnlyTriangles", wallMesh.mesh.indices.size() / 3},
+                            {"variedWallTriangles", variedMesh.mesh.indices.size() / 3},
+                            {"outlinedWallTriangles", outlinedMesh.mesh.indices.size() / 3},
+                            {"maximumPerimeterXYDisplacementM", maxOutlineXY},
+                            {"maximumCenterXYDisplacementM", maxCenterXY},
                             {"maximumReliefStageDisplacementM", maximum},
                             {"meanReliefStageDisplacementM", sum / beforeRelief.mesh.positions.size()},
                             {"baselineGenerationCpuMs", before.milliseconds},
                             {"candidateGenerationCpuMs", after.milliseconds},
+                            {"variedWallGenerationCpuMs", variedMesh.milliseconds},
+                            {"outlinedWallGenerationCpuMs", outlinedMesh.milliseconds},
                             {"gridSizeAndCutIdentityPreserved", true},
                             {"changedTriangleIndexEntries", changedIndices},
                             {"changedTriangleRegionEntries", changedTriangleRegions},
@@ -1796,11 +1865,15 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
         proof["views"].push_back({{"name", view == 0 ? "front" : "oblique"},
                                   {"yaw", camera.yaw}, {"pitch", camera.pitch},
                                   {"distance", camera.distance}});
-        for (int variant = 0; variant < 2; ++variant)
+        for (int variant = 0; variant < 5; ++variant)
         {
-            renderer.upload(variant == 0 ? before : after);
+            renderer.upload(variant == 0 ? before : variant == 1 ? after :
+                            variant == 2 ? wallMesh : variant == 3 ? variedMesh : outlinedMesh);
             renderer.uploadMaterial(nullptr, materialDiffuse(appearance), true, appearance);
-            const auto stem = std::string(variant == 0 ? "baseline" : "candidate") +
+            const auto stem = std::string(variant == 0 ? "baseline" :
+                                          variant == 1 ? "candidate" :
+                                          variant == 2 ? "wall-only" :
+                                          variant == 3 ? "varied-wall" : "outlined-wall") +
                               (view == 0 ? "-front" : "-oblique");
             for (int mode : {0, 5})
             {

@@ -100,6 +100,59 @@ int main()
         require(meshHash(bedVolume.mesh) ==
                     meshHash(evaluate(deserialize(serialize(resistantBeds)), 64).mesh),
                 "resistant beds replay after recipe serialization");
+        auto variedBeds = resistantBeds;
+        variedBeds.version = 20;
+        variedBeds.layers[0].profile = 4;
+        variedBeds.layers[0].jitter = 0.7f;
+        variedBeds.layers[0].profileSharpness = 1;
+        auto variedSurface = evaluate(variedBeds, 64, 0);
+        std::vector<Vec3d> centerLine;
+        for (const auto &p : variedSurface.mesh.positions)
+            if (std::abs(p.x) < 0.01)
+                centerLine.push_back(p);
+        std::sort(centerLine.begin(), centerLine.end(),
+                  [](const Vec3d &a, const Vec3d &b) { return a.y < b.y; });
+        std::vector<double> bedStarts, bedPeaks;
+        bool inCap = false;
+        double peak = -1;
+        for (const auto &p : centerLine)
+        {
+            if (p.z > 0 && !inCap)
+            {
+                bedStarts.push_back(p.y);
+                inCap = true;
+                peak = p.z;
+            }
+            else if (p.z > 0)
+                peak = std::max(peak, p.z);
+            else if (inCap)
+            {
+                bedPeaks.push_back(peak);
+                inCap = false;
+            }
+        }
+        if (inCap)
+            bedPeaks.push_back(peak);
+        require(bedStarts.size() >= 4 && bedPeaks.size() == bedStarts.size(),
+                "variable beds retain several resistant ledges");
+        std::vector<double> bedGaps;
+        for (std::size_t i = 1; i < bedStarts.size(); ++i)
+            bedGaps.push_back(bedStarts[i] - bedStarts[i - 1]);
+        const auto [narrowGap, wideGap] = std::minmax_element(bedGaps.begin(), bedGaps.end());
+        const auto [weakCap, strongCap] = std::minmax_element(bedPeaks.begin(), bedPeaks.end());
+        require(*wideGap - *narrowGap > 0.10 && *strongCap - *weakCap > 0.04,
+                "variable beds differ in spacing and resistance");
+        auto oldVariedBeds = variedBeds;
+        oldVariedBeds.version = 19;
+        bool rejectsOldVariedBeds = false;
+        try { validate(oldVariedBeds); }
+        catch (const std::exception &) { rejectsOldVariedBeds = true; }
+        require(rejectsOldVariedBeds, "v19 recipes reject variable-bed profile");
+        auto variedVolume = evaluate(variedBeds, 64);
+        require(variedVolume.closedSolid && PA::validateClosedMesh(variedVolume.mesh).hasValue() &&
+                    meshHash(variedVolume.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(variedBeds)), 64).mesh),
+                "variable beds close and replay after recipe serialization");
         auto cliffPreset = preset(8);
         auto drainageRecipe = cliffPreset;
         drainageRecipe.version = 13;
