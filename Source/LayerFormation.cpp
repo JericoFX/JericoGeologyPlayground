@@ -257,7 +257,8 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
         }
         return values;
     };
-    auto positions = [&](Vec3d p, const std::array<double, 12> &thickness)
+    auto positions = [&](Vec3d p, const std::array<double, 12> &thickness,
+                         double perimeterAmplitude)
     {
         std::array<Vec3d, 12> values{};
         double total = (layer.count - 1) * layer.spacing;
@@ -271,7 +272,7 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                                           ? std::clamp(radialLength / maximumRadius, 0.0, 1.0)
                                           : 0.0;
         std::array<double, 13> boundaryOffset{};
-        if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
+        if (perimeterAmplitude > 0 && radialLength > 1e-12)
         {
             auto facetCount = std::clamp(int(std::lround(layer.frequency * 4)), 6, 24);
             auto angle = std::atan2(D::dot(planar, v), D::dot(planar, u));
@@ -299,7 +300,7 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                     const auto a = 2 * random(facetSeed + std::uint32_t(localIndex) * 4127U) - 1;
                     const auto b = 2 * random(facetSeed +
                                               std::uint32_t((localIndex + 1) % localCount) * 4127U) - 1;
-                    boundaryOffset[boundary] = layer.perimeterAmplitude *
+                    boundaryOffset[boundary] = perimeterAmplitude *
                         (0.12 * sharedFacet + 0.88 * (a + (b - a) * t));
                 }
                 else
@@ -308,16 +309,16 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
                     auto localNext = 2 * random(facetSeed +
                                                 std::uint32_t((facet + 1) % facetCount) * 4127U) - 1;
                     auto localFacet = localFirst + (localNext - localFirst) * facetFraction;
-                    boundaryOffset[boundary] = layer.perimeterAmplitude *
+                    boundaryOffset[boundary] = perimeterAmplitude *
                         (0.35 * sharedFacet + 0.65 * localFacet);
                 }
             }
             if (layer.shapeOuterCaps)
             {
                 // Exposed ends weather inward relative to their neighboring contact horizons.
-                boundaryOffset[0] = std::min(0.0, boundaryOffset[1]) - 0.05 * layer.perimeterAmplitude;
+                boundaryOffset[0] = std::min(0.0, boundaryOffset[1]) - 0.05 * perimeterAmplitude;
                 boundaryOffset[layer.count] =
-                    std::min(0.0, boundaryOffset[layer.count - 1]) - 0.05 * layer.perimeterAmplitude;
+                    std::min(0.0, boundaryOffset[layer.count - 1]) - 0.05 * perimeterAmplitude;
             }
         }
         for (int k = 0; k < layer.count; ++k)
@@ -328,13 +329,13 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
             // displacement around the center can invert the source cap triangulation.
             offset *= normalizedRadius * normalizedRadius;
             double relief = 0;
-            if (layer.perimeterAmplitude > 0 && radialLength > 1e-12)
+            if (perimeterAmplitude > 0 && radialLength > 1e-12)
             {
                 auto envelope = std::sin(3.141592653589793 * normalizedHeight);
                 Vec3d q{D::dot(planar, u) * layer.frequency * 2.5,
                         (h - centerHeight) * layer.frequency * 2.5,
                         D::dot(planar, v) * layer.frequency * 2.5};
-                relief = layer.perimeterAmplitude * 0.22 * envelope * envelope *
+                relief = perimeterAmplitude * 0.22 * envelope * envelope *
                          PA::evaluateGeologyFbmReference(q, layer.seed + 0xd811a7U +
                                                          std::uint32_t(k) * 509U,
                                                          layer.octaves, layer.lacunarity,
@@ -389,12 +390,12 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
         if ((i & 255) == 0 && cancel && cancel->isCancellationRequested())
             throw std::runtime_error("Cancelled");
         auto thickness = heights(source.mesh.positions[i]);
-        auto p = positions(source.mesh.positions[i], thickness);
+        auto p = positions(source.mesh.positions[i], thickness, layer.perimeterAmplitude);
         std::array<Vec3d, 12> warped = p;
         if (D::lengthSquared(sourceWarp[i]) > 0)
         {
             auto q = D::add(source.mesh.positions[i], sourceWarp[i]);
-            warped = positions(q, heights(q));
+            warped = positions(q, heights(q), layer.perimeterAmplitude);
         }
         for (int k = 0; k < layer.count; ++k)
         {
@@ -457,6 +458,137 @@ MeshResult coherentLayerFormation(const MeshResult &source, const Layer &layer, 
             result.mesh.triangleRegions.push_back(stratum);
             if (recorded.insert(stratum).second)
                 result.regions.push_back({stratum, id, SurfaceRole::Stratum, -1, k});
+        }
+    }
+    if (layer.perimeterAmplitude > 0 && !sourceContacts.empty())
+    {
+        std::vector<Vec3d> referencePositions;
+        auto contactFacesValid = [&](double factor)
+        {
+            auto at = [&](std::size_t index)
+            {
+                const auto &full = result.mesh.positions[index];
+                return referencePositions.empty()
+                    ? full
+                    : D::add(referencePositions[index],
+                             D::multiply(D::subtract(full, referencePositions[index]), factor));
+            };
+            for (int k = 0; k < layer.count; ++k)
+                for (std::size_t t = 0; t < sourceContacts.size(); ++t)
+                {
+                    if ((t & 255) == 0 && cancel && cancel->isCancellationRequested())
+                        throw std::runtime_error("Cancelled");
+                    if (sourceContacts[t] == 0)
+                        continue;
+                    const auto ia = source.mesh.indices[3 * t];
+                    const auto ib = source.mesh.indices[3 * t + 1];
+                    const auto ic = source.mesh.indices[3 * t + 2];
+                    const auto a = at(k * count + ia), b = at(k * count + ib),
+                               c = at(k * count + ic);
+                    const auto area = D::dot(cross(D::subtract(b, a), D::subtract(c, a)), d);
+                    const auto sourceA = source.mesh.positions[ia];
+                    const auto sourceB = source.mesh.positions[ib];
+                    const auto sourceC = source.mesh.positions[ic];
+                    const auto sourceArea = D::dot(cross(D::subtract(sourceB, sourceA),
+                                                         D::subtract(sourceC, sourceA)), d);
+                    if (area * (sourceContacts[t] == 1 ? 1 : -1) <=
+                        std::abs(sourceArea) * 1e-4)
+                        return false;
+                }
+            return true;
+        };
+        if (!contactFacesValid(1))
+        {
+            referencePositions.resize(result.mesh.positions.size());
+            std::vector<Vec3d> referenceWarp(outputWarp.size());
+            for (std::size_t i = 0; i < count; ++i)
+            {
+                if ((i & 255) == 0 && cancel && cancel->isCancellationRequested())
+                    throw std::runtime_error("Cancelled");
+                const auto thickness = heights(source.mesh.positions[i]);
+                const auto rest = positions(source.mesh.positions[i], thickness, 0);
+                auto restWarped = rest;
+                if (D::lengthSquared(sourceWarp[i]) > 0)
+                {
+                    const auto q = D::add(source.mesh.positions[i], sourceWarp[i]);
+                    restWarped = positions(q, heights(q), 0);
+                }
+                for (int k = 0; k < layer.count; ++k)
+                {
+                    const auto index = k * count + i;
+                    referencePositions[index] = rest[k];
+                    referenceWarp[index] = D::subtract(restWarped[k], rest[k]);
+                }
+            }
+            if (!contactFacesValid(0))
+                throw std::runtime_error("Layer contact faces fold without perimeter displacement");
+            struct AreaCurve { double constant, linear, quadratic; };
+            std::vector<AreaCurve> contactAreas;
+            for (int k = 0; k < layer.count; ++k)
+                for (std::size_t t = 0; t < sourceContacts.size(); ++t)
+                {
+                    if ((t & 255) == 0 && cancel && cancel->isCancellationRequested())
+                        throw std::runtime_error("Cancelled");
+                    if (sourceContacts[t] == 0)
+                        continue;
+                    const auto ia = source.mesh.indices[3 * t];
+                    const auto ib = source.mesh.indices[3 * t + 1];
+                    const auto ic = source.mesh.indices[3 * t + 2];
+                    const auto a = k * count + ia, b = k * count + ib, c = k * count + ic;
+                    const auto edge = D::subtract(referencePositions[b], referencePositions[a]);
+                    const auto side = D::subtract(referencePositions[c], referencePositions[a]);
+                    const auto moveA = D::subtract(result.mesh.positions[a], referencePositions[a]);
+                    const auto moveB = D::subtract(result.mesh.positions[b], referencePositions[b]);
+                    const auto moveC = D::subtract(result.mesh.positions[c], referencePositions[c]);
+                    const auto edgeChange = D::subtract(moveB, moveA);
+                    const auto sideChange = D::subtract(moveC, moveA);
+                    const auto sourceEdge = D::subtract(source.mesh.positions[ib], source.mesh.positions[ia]);
+                    const auto sourceSide = D::subtract(source.mesh.positions[ic], source.mesh.positions[ia]);
+                    const auto threshold = 1e-4 * std::abs(D::dot(cross(sourceEdge, sourceSide), d));
+                    const auto sign = sourceContacts[t] == 1 ? 1.0 : -1.0;
+                    contactAreas.push_back({
+                        sign * D::dot(cross(edge, side), d) - threshold,
+                        sign * D::dot(D::add(cross(edgeChange, side),
+                                             cross(edge, sideChange)), d),
+                        sign * D::dot(cross(edgeChange, sideChange), d)});
+                }
+            auto validThrough = [&](double factor)
+            {
+                if (cancel && cancel->isCancellationRequested())
+                    throw std::runtime_error("Cancelled");
+                for (const auto &area : contactAreas)
+                {
+                    auto value = [&](double t)
+                    {
+                        return (area.quadratic * t + area.linear) * t + area.constant;
+                    };
+                    if (!(area.constant > 0) || !(value(factor) > 0))
+                        return false;
+                    if (area.quadratic > 0)
+                    {
+                        const auto minimum = -area.linear / (2 * area.quadratic);
+                        if (minimum > 0 && minimum < factor && !(value(minimum) > 0))
+                            return false;
+                    }
+                }
+                return true;
+            };
+            double safe = 0, unsafe = 1;
+            for (int iteration = 0; iteration < 20; ++iteration)
+            {
+                const auto candidate = 0.5 * (safe + unsafe);
+                (validThrough(candidate) ? safe : unsafe) = candidate;
+            }
+            safe *= 0.99;
+            if (!validThrough(safe))
+                throw std::runtime_error("Layer perimeter cannot preserve contact orientation");
+            for (std::size_t index = 0; index < result.mesh.positions.size(); ++index)
+            {
+                result.mesh.positions[index] = D::add(referencePositions[index],
+                    D::multiply(D::subtract(result.mesh.positions[index], referencePositions[index]), safe));
+                outputWarp[index] = D::add(referenceWarp[index],
+                    D::multiply(D::subtract(outputWarp[index], referenceWarp[index]), safe));
+            }
         }
     }
     return result;

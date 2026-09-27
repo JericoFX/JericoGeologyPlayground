@@ -1,0 +1,14 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 10: Playground.Thickness
+1/1 Test #10: Playground.Thickness .............***Failed    0.57 sec
+horizon correlation baseline=0.901583 fractured=0.671257
+Layer contact face is folded at triangle 3696 stratum 0 facing 0.159822
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.59 sec
+
+The following tests FAILED:
+	 10 - Playground.Thickness (Failed)
+Errors while running CTest

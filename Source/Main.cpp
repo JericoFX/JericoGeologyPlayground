@@ -539,6 +539,35 @@ void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &
                                    {"triangles", result.mesh.indices.size() / 3},
                                    {"cpuMs", result.milliseconds}});
     }
+    for (const auto [amplitude, seed] : {std::pair{0.16f, 1U},
+                                         std::pair{0.28f, 1U},
+                                         std::pair{0.22f, 12U},
+                                         std::pair{0.30f, 1U}})
+    {
+        auto recipe = preset(11);
+        recipe.layers[0].perimeterAmplitude = amplitude;
+        recipe.layers[0].seed = seed;
+        auto result = evaluate(recipe, recipe.finalResolution);
+        if (!PA::validateClosedMesh(result.mesh).hasValue())
+            throw std::runtime_error("Extreme layer perimeter candidate is not closed");
+        const auto label = "perimeter-" + std::to_string(int(std::lround(amplitude * 100))) +
+                           "-seed-" + std::to_string(seed);
+        save(recipe, evidence / (label + "-recipe.json"));
+        camera.distance = 4.8f;
+        renderer.upload(result);
+        for (int view = 0; view < 2; ++view)
+        {
+            camera.yaw = 0.5f + view * 1.57079632679f;
+            renderer.draw(1280, 960, camera, 0);
+            renderer.capture(evidence / (label + "-yaw-" + std::to_string(view) + ".png"));
+        }
+        proof["cases"].push_back({{"name", label},
+                                   {"meshHash", PA::hashTriangleMesh(result.mesh)},
+                                   {"vertices", result.mesh.positions.size()},
+                                   {"triangles", result.mesh.indices.size() / 3},
+                                   {"cpuMs", result.milliseconds}});
+    }
+    camera.yaw = 0.5f;
     Recipe wall;
     wall.base = Base::Plane;
     wall.planeSize = {6, 4};

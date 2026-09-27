@@ -1,0 +1,57 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "cpuMs": 7.0445,
+      "meshHash": 4165216110282567852,
+      "name": "sphere",
+      "triangles": 23232,
+      "vertices": 11618
+    },
+    {
+      "cpuMs": 13.4824,
+      "meshHash": 2225284194798470411,
+      "name": "layered",
+      "triangles": 27648,
+      "vertices": 13832
+    },
+    {
+      "cpuMs": 38.5302,
+      "meshHash": 14269263255673219044,
+      "name": "perimeter-16-seed-1",
+      "triangles": 27648,
+      "vertices": 13832
+    },
+    {
+      "cpuMs": 41.4137,
+      "meshHash": 4067631577337438133,
+      "name": "perimeter-28-seed-1",
+      "triangles": 27648,
+      "vertices": 13832
+    },
+    {
+      "cpuMs": 44.866,
+      "meshHash": 104017429548722631,
+      "name": "perimeter-22-seed-12",
+      "triangles": 27648,
+      "vertices": 13832
+    },
+    {
+      "cpuMs": 41.171,
+      "meshHash": 6121687099177138079,
+      "name": "perimeter-30-seed-1",
+      "triangles": 27648,
+      "vertices": 13832
+    },
+    {
+      "cpuMs": 2.9839,
+      "effectiveThickness": 0.2739688570658807,
+      "meshHash": 4802989769392708407,
+      "name": "solidify",
+      "requestedThickness": 3.0,
+      "triangles": 1152,
+      "vertices": 578
+    }
+  ],
+  "scope": "Extreme field and solidify displacement with joined layer contacts"
+}

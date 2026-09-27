@@ -245,6 +245,44 @@ int main()
             }
             return triangles;
         };
+        for (const auto [amplitude, seed] : {std::pair{0.28f, 1U},
+                                             std::pair{0.22f, 12U},
+                                             std::pair{0.30f, 1U}})
+        {
+            auto extreme = production;
+            extreme.layers[0].perimeterAmplitude = amplitude;
+            extreme.layers[0].seed = seed;
+            auto stack = evaluate(extreme, extreme.finalResolution);
+            require(PA::validateClosedMesh(stack.mesh).hasValue(),
+                    "extreme perimeter must retain a closed solid");
+            for (int k = 0; k + 1 < extreme.layers[0].count; ++k)
+                require(contactTriangles(stack, k, 1) == contactTriangles(stack, k + 1, 2),
+                        "extreme perimeter must retain paired contact triangles");
+            for (double shift : settleLayerStack(stack, {0, 1, 0}, nullptr))
+                require(std::abs(shift) < 1e-6,
+                        "extreme perimeter must remain supported without an extra shift");
+            require(meshHash(stack.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(extreme)), extreme.finalResolution).mesh),
+                    "extreme perimeter must replay exactly");
+        }
+        auto warpedPerimeter = production.layers[0];
+        warpedPerimeter.perimeterAmplitude = 0.28f;
+        warpedPerimeter.seed = 1;
+        std::vector<Vec3d> inputWarp(macroSource.mesh.positions.size(), {0.05, 0, 0.02});
+        std::vector<Vec3d> propagatedWarp;
+        auto warpedStack = coherentLayerFormation(macroSource, warpedPerimeter, false,
+                                                  inputWarp, propagatedWarp, nullptr);
+        require(propagatedWarp.size() == warpedStack.mesh.positions.size(),
+                "extreme perimeter must propagate upstream warp samples");
+        for (std::size_t i = 0; i < propagatedWarp.size(); ++i)
+        {
+            warpedStack.mesh.positions[i].x += propagatedWarp[i].x;
+            warpedStack.mesh.positions[i].y += propagatedWarp[i].y;
+            warpedStack.mesh.positions[i].z += propagatedWarp[i].z;
+        }
+        for (int k = 0; k + 1 < warpedPerimeter.count; ++k)
+            require(contactTriangles(warpedStack, k, 1) == contactTriangles(warpedStack, k + 1, 2),
+                    "propagated warp must keep extreme horizon triangles paired");
         auto cubeSourceStack = preset(13);
         cubeSourceStack.layers.back().enabled = false;
         auto legacyCubeSourceStack = cubeSourceStack;
@@ -539,6 +577,27 @@ int main()
                     require(std::abs(shift) < 1e-6,
                             "layered high seed sweep cannot require an extra gravity correction");
             }
+        }
+        for (unsigned seed = 0; seed < 32; ++seed)
+        {
+            auto extreme = production;
+            extreme.layers[0].seed = seed;
+            extreme.layers[0].perimeterAmplitude = 0.3f;
+            MeshResult stack;
+            try { stack = evaluate(extreme, extreme.finalResolution); }
+            catch (const std::exception &error)
+            {
+                throw std::runtime_error("extreme perimeter seed " + std::to_string(seed) +
+                                         ": " + error.what());
+            }
+            require(PA::validateClosedMesh(stack.mesh).hasValue(),
+                    "max perimeter seed sweep must retain a closed solid");
+            for (int k = 0; k + 1 < extreme.layers[0].count; ++k)
+                require(contactTriangles(stack, k, 1) == contactTriangles(stack, k + 1, 2),
+                        "max perimeter seed sweep must retain paired contact triangles");
+            for (double shift : settleLayerStack(stack, {0, 1, 0}, nullptr))
+                require(std::abs(shift) < 1e-6,
+                        "max perimeter seed sweep must remain supported");
         }
         std::vector<bool> sideVertex(productionSettled.mesh.positions.size());
         for (std::size_t t = 0; t < productionSettled.layerContactFaces.size(); ++t)
