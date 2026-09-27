@@ -70,7 +70,7 @@ void AssemblyLabUI::choosePreset(int preset)
     {settings.widthMeters=1.4;settings.sagMeters=1.0;settings.boardWidthMeters=.22;}
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
-    selectedId.clear();selectedArea=-1;dirty=true;fitCamera=true;
+    selectedId.clear();selectedArea=-1;dirty=true;fitCamera=true;movingDamageArea=false;
     damageUndo.clear();damageRedo.clear();pendingDamageEdit.reset();
 }
 void AssemblyLabUI::activate(Renderer &renderer)
@@ -459,7 +459,17 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
         uploadedView=view;
     }
-    ImGui::SameLine();ImGui::TextUnformatted("Click part; Shift+drag selected damage area");
+    if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+    {
+        ImGui::SameLine();
+        ImGui::Checkbox("Move selected damage area",&moveDamageAreaMode);
+        ImGui::SameLine();ImGui::TextUnformatted("Shift+drag also moves");
+    }
+    else
+    {
+        ImGui::SameLine();
+        ImGui::TextUnformatted("Click part; Shift+drag selected damage area");
+    }
     auto size=ImGui::GetContentRegionAvail();
     size.x=std::max(size.x,32.0f);size.y=std::max(size.y,32.0f);
     constexpr int modes[]={0,2,1,8,3,10};
@@ -484,7 +494,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     if (ImGui::IsItemHovered())
     {
         auto &io=ImGui::GetIO();
-        const bool moveArea=io.KeyShift && selectedArea>=0 &&
+        const bool moveArea=(io.KeyShift || moveDamageAreaMode) && selectedArea>=0 &&
             selectedArea<int(settings.damage.areaRules.size()) &&
             ImGui::IsMouseDown(ImGuiMouseButton_Left);
         if (moveArea)
@@ -494,7 +504,19 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
                     io.MousePos.x-origin.x,io.MousePos.y-origin.y,
                     area.projector.center,area.projector.normal))
-            {area.projector.center=*hit;dirty=true;}
+            {
+                if (!movingDamageArea)
+                {
+                    damageGrabOffset={area.projector.center.x-hit->x,
+                        area.projector.center.y-hit->y,area.projector.center.z-hit->z};
+                    movingDamageArea=true;
+                }
+                const Vec3d next{hit->x+damageGrabOffset.x,hit->y+damageGrabOffset.y,
+                    hit->z+damageGrabOffset.z};
+                if (next.x!=area.projector.center.x || next.y!=area.projector.center.y ||
+                    next.z!=area.projector.center.z)
+                {area.projector.center=next;dirty=true;}
+            }
         }
         if (!moveArea && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && view!=5)
         {
@@ -523,6 +545,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         }
         camera.distance=std::clamp(camera.distance*std::exp(-io.MouseWheel*.1f),1.0f,90.0f);
     }
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) movingDamageArea=false;
     ImGui::End();
     if (!suppressDamageHistory)
     {
