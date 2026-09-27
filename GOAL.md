@@ -4,6 +4,8 @@ Desarrollar y verificar en este playground las matemáticas nativas C++ de geolo
 
 El Goal se reanudó en este chat por instrucción del owner. El [dossier de investigación del 2026-09-26](docs/JERICO_GEOLOGY_RESEARCH_2026_09_26.md), su HTML y su catálogo de 80 fuentes llegaron por tres commits de `main` del Playground; la [revisión de entrada](Evidence/2026-09-26-geology-dossier-review.md) fija hashes, propuestas aplicables, límites y el siguiente gate. El dossier permanece **EN REVISIÓN** como referencia, sin cambiar por sí solo el alcance de implementación ni la aceptación visual.
 
+El owner priorizó después **mejorar la creación geológica antes que high→low**. La [investigación focal del cliff](Evidence/2026-09-26-cliff-creation-research.md) contrasta fuentes primarias, identifica por qué la variante actual sigue pareciendo una losa y propone un experimento opt-in de resistencia de estratos. Es una hipótesis pendiente de prueba y Beauty, no una capacidad aceptada.
+
 ## Referencias durables del Goal
 
 Las copias de los documentos del Engine que corresponden a este trabajo están en [`docs/engine-reference-2026-09-24/`](docs/engine-reference-2026-09-24/README.md). [`SOURCE_MANIFEST.json`](docs/engine-reference-2026-09-24/SOURCE_MANIFEST.json) registra para cada copia la ruta original, la ruta local, los bytes y el SHA-256 verificado. Incluye la autoridad M8, el blueprint y matemáticas SDF/geología, ZenUV, SimpleBake, Ucupaint, remesh, segmentación, daño, fractura, diseños de rocas y RBrush, y evidencia matemática de estratos/LOD/coluvión/rockfall. Son referencias documentales congeladas: no sustituyen la autoridad actual del Engine ni implican que la capacidad esté implementada o aceptada.
