@@ -45,6 +45,61 @@ int main()
         require(PA::hashTriangleMesh(volume.mesh) ==
                     PA::hashTriangleMesh(evaluate(deserialize(serialize(recipe)), 16).mesh),
                 "surface recipe round trip");
+        Recipe resistantBeds;
+        resistantBeds.version = 19;
+        resistantBeds.base = Base::Plane;
+        resistantBeds.planeSize = {6, 4};
+        auto beds = defaultLayer(Kind::StrataRelief);
+        beds.profile = 3;
+        beds.amplitude = 0.45f;
+        beds.frequency = 1.6f;
+        beds.distortion = 0;
+        beds.width = 0.12f;
+        beds.mask = Mask::None;
+        resistantBeds.layers = {beds};
+        auto shapedBeds = evaluate(resistantBeds, 64);
+        double capDepth = 0, weakDepth = 0;
+        int capCount = 0, weakCount = 0;
+        std::set<int> capBands, weakBands;
+        for (const auto &p : shapedBeds.mesh.positions)
+        {
+            if (std::abs(p.x) > 2.4)
+                continue;
+            const double s = p.y * beds.frequency;
+            const double u = s - std::floor(s);
+            if (u >= 0.66 && u <= 0.78)
+            {
+                capDepth += p.z;
+                ++capCount;
+                capBands.insert(int(std::floor(s)));
+            }
+            if (u >= 0.15 && u <= 0.4)
+            {
+                weakDepth += p.z;
+                ++weakCount;
+                weakBands.insert(int(std::floor(s)));
+            }
+        }
+        require(capCount > 50 && weakCount > 100 &&
+                    capBands.size() >= 3 && weakBands.size() >= 3 &&
+                    capDepth / capCount - weakDepth / weakCount > 0.3,
+                "resistant beds form real ledges over recessed weak beds across the wall");
+        auto oldBeds = resistantBeds;
+        oldBeds.version = 18;
+        bool rejectsOldBeds = false;
+        try { validate(oldBeds); }
+        catch (const std::exception &) { rejectsOldBeds = true; }
+        require(rejectsOldBeds, "v18 recipes reject the new resistant-bed profile");
+        auto solidBeds = defaultLayer(Kind::Solidify);
+        solidBeds.thickness = 0.7f;
+        solidBeds.solidAlongNormals = false;
+        resistantBeds.layers.push_back(solidBeds);
+        auto bedVolume = evaluate(resistantBeds, 64);
+        require(bedVolume.closedSolid && PA::validateClosedMesh(bedVolume.mesh).hasValue(),
+                "resistant beds solidify to a closed wall");
+        require(meshHash(bedVolume.mesh) ==
+                    meshHash(evaluate(deserialize(serialize(resistantBeds)), 64).mesh),
+                "resistant beds replay after recipe serialization");
         auto cliffPreset = preset(8);
         auto drainageRecipe = cliffPreset;
         drainageRecipe.version = 13;

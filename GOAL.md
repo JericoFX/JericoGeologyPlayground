@@ -4,7 +4,9 @@ Desarrollar y verificar en este playground las matemáticas nativas C++ de geolo
 
 El Goal se reanudó en este chat por instrucción del owner. El [dossier de investigación del 2026-09-26](docs/JERICO_GEOLOGY_RESEARCH_2026_09_26.md), su HTML y su catálogo de 80 fuentes llegaron por tres commits de `main` del Playground; la [revisión de entrada](Evidence/2026-09-26-geology-dossier-review.md) fija hashes, propuestas aplicables, límites y el siguiente gate. El dossier permanece **EN REVISIÓN** como referencia, sin cambiar por sí solo el alcance de implementación ni la aceptación visual.
 
-El owner priorizó después **mejorar la creación geológica antes que high→low**. La [investigación focal del cliff](Evidence/2026-09-26-cliff-creation-research.md) contrasta fuentes primarias, identifica por qué la variante actual sigue pareciendo una losa y propone un experimento opt-in de resistencia de estratos. Es una hipótesis pendiente de prueba y Beauty, no una capacidad aceptada.
+El owner priorizó después **mejorar la creación geológica antes que high→low**. La [investigación focal del cliff](Evidence/2026-09-26-cliff-creation-research.md) contrasta fuentes primarias, identifica por qué la variante actual sigue pareciendo una losa y propuso un experimento opt-in de resistencia de estratos.
+
+La [primera prueba v19 de estratos resistentes](Evidence/2026-09-26-cliff-strata-creation-review.md) logró repisas geométricas, cierre y replay con 17/17 tests, pero su Beauty sigue **PARTIAL** por franjas periódicas, bordes rectangulares y unión visual deficiente del corte central. El perfil permanece opt-in; el siguiente trabajo debe mejorar la macroforma antes de volver a high→low.
 
 ## Referencias durables del Goal
 

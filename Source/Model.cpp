@@ -690,7 +690,7 @@ void validate(const Recipe &r)
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
-             r.version == 18) &&
+             r.version == 18 || r.version == 19) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -705,6 +705,8 @@ void validate(const Recipe &r)
             require(r.version >= 13 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.5f && l.width >= 0.1f && l.width <= 1 &&
                     l.frequency <= 4 && l.lateral <= 1);
+        if (l.kind == Kind::StrataRelief && l.profile == 3)
+            require(r.version >= 19 && l.width >= 0.05f && l.width <= 0.2f);
         if (l.kind == Kind::FractureShear)
             require(r.version >= 11 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.3f &&
@@ -743,7 +745,8 @@ void validate(const Recipe &r)
                     l.kind != Kind::CliffDrainage);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
-                l.profile < (l.kind == Kind::CliffCutLoop ? 6 : 3));
+                l.profile < (l.kind == Kind::CliffCutLoop ? 6 :
+                             l.kind == Kind::StrataRelief ? 4 : 3));
         require(l.profileSharpness >= 0.25f && l.profileSharpness <= 8 && l.distortion >= 0 &&
                 l.distortion <= 4 && std::abs(l.solidOffset) <= 1);
         require(std::abs(l.amplitude) <= 5 && l.frequency >= 0.01f && l.frequency <= 100 && l.octaves >= 1 &&
@@ -1333,6 +1336,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                 double u = s - std::floor(s);
                 value = l.profile == 0   ? 0.5 + 0.5 * std::sin(2 * std::numbers::pi * u)
                         : l.profile == 1 ? smooth(u / l.width) * (1 - smooth((u - 0.72) / 0.28))
+                        : l.profile == 3 ? smooth((u - 0.55) / l.width) *
+                                               (1 - smooth((u - 0.83) / l.width))
                                          : 1 - std::abs(2 * u - 1);
                 value = std::pow(std::clamp(value, 0.0, 1.0), l.profileSharpness);
                 auto direction = openReliefDirections.empty() ? n : openReliefDirections[i];
@@ -1456,7 +1461,7 @@ Recipe deserialize(const std::string &text)
         inputVersion != 5 && inputVersion != 6 && inputVersion != 7 && inputVersion != 8 &&
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
-        inputVersion != 17 && inputVersion != 18)
+        inputVersion != 17 && inputVersion != 18 && inputVersion != 19)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;

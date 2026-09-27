@@ -1,0 +1,60 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "baselineGenerationCpuMs": 55.4875,
+  "baselineHash": 310230681386850953,
+  "candidateGenerationCpuMs": 54.7032,
+  "candidateHash": 17623155159170816676,
+  "candidateStages": [
+    {
+      "cpuMs": 1.1733,
+      "kind": "Vector displacement / FBM"
+    },
+    {
+      "cpuMs": 0.6941,
+      "kind": "Strata relief"
+    },
+    {
+      "cpuMs": 1.3474,
+      "kind": "Ridged noise"
+    },
+    {
+      "cpuMs": 0.3986,
+      "kind": "Normal displacement / FBM"
+    },
+    {
+      "cpuMs": 0.4025,
+      "kind": "Cliff cut loop"
+    },
+    {
+      "cpuMs": 44.2991,
+      "kind": "Solidify surface"
+    }
+  ],
+  "changedTriangleIndexEntries": 1284,
+  "changedTriangleRegionEntries": 584,
+  "closedAndReplay": true,
+  "gridSizeAndCutIdentityPreserved": true,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "maximumReliefStageDisplacementM": 0.26499529773372693,
+  "meanReliefStageDisplacementM": 0.2067655696286466,
+  "renderBufferBytes": 18780520,
+  "scope": "High geometry creation only; no low mesh or bake",
+  "triangles": 17488,
+  "views": [
+    {
+      "distance": 10.0,
+      "name": "front",
+      "pitch": 0.0,
+      "yaw": 0.0
+    },
+    {
+      "distance": 10.0,
+      "name": "oblique",
+      "pitch": -0.20000000298023224,
+      "yaw": 0.550000011920929
+    }
+  ]
+}

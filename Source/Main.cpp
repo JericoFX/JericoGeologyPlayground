@@ -1715,6 +1715,104 @@ void captureNormalBakeOrbit(Renderer &renderer, const std::filesystem::path &evi
     std::ofstream(evidence / "normal-bake-orbit-proof.json") << report.dump(2) << '\n';
     std::cout << report.dump(2) << '\n';
 }
+void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path &evidence)
+{
+    auto baseline = preset(8);
+    baseline.version = 19;
+    auto candidate = baseline;
+    for (auto &layer : candidate.layers)
+        if (layer.kind == Kind::StrataRelief)
+        {
+            layer.profile = 3;
+            layer.amplitude = 0.45f;
+            layer.frequency = 1.6f;
+            layer.width = 0.12f;
+            layer.mask = Mask::None;
+        }
+    auto before = evaluate(baseline, baseline.finalResolution);
+    auto after = evaluate(candidate, candidate.finalResolution);
+    auto beforeRelief = evaluate(baseline, baseline.finalResolution, 1);
+    auto afterRelief = evaluate(candidate, candidate.finalResolution, 1);
+    if (beforeRelief.mesh.indices != afterRelief.mesh.indices ||
+        beforeRelief.mesh.positions.size() != afterRelief.mesh.positions.size())
+        throw std::runtime_error("Cliff strata relief changed the open grid");
+    if (before.mesh.positions.size() != after.mesh.positions.size() ||
+        before.mesh.indices.size() != after.mesh.indices.size() ||
+        before.mesh.triangleRegions.size() != after.mesh.triangleRegions.size())
+        throw std::runtime_error("Cliff strata changed grid size");
+    std::size_t changedIndices = 0, changedTriangleRegions = 0;
+    for (std::size_t i = 0; i < before.mesh.indices.size(); ++i)
+        changedIndices += before.mesh.indices[i] != after.mesh.indices[i];
+    for (std::size_t i = 0; i < before.mesh.triangleRegions.size(); ++i)
+        changedTriangleRegions += before.mesh.triangleRegions[i] != after.mesh.triangleRegions[i];
+    std::set<Jerico::Guid> beforeCuts, afterCuts;
+    for (const auto &region : before.regions)
+        if (region.role == SurfaceRole::CutLoop)
+            beforeCuts.insert(region.id);
+    for (const auto &region : after.regions)
+        if (region.role == SurfaceRole::CutLoop)
+            afterCuts.insert(region.id);
+    if (beforeCuts.empty() || beforeCuts != afterCuts)
+        throw std::runtime_error("Cliff strata changed cut selection identity");
+    if (!PA::validateClosedMesh(after.mesh).hasValue())
+        throw std::runtime_error("Cliff strata opened the mesh");
+    if (meshHash(after.mesh) != meshHash(evaluate(deserialize(serialize(candidate)),
+                                            candidate.finalResolution).mesh))
+        throw std::runtime_error("Cliff strata replay mismatch");
+    save(baseline, evidence / "baseline-recipe.json");
+    save(candidate, evidence / "candidate-recipe.json");
+    double maximum = 0, sum = 0;
+    for (std::size_t i = 0; i < beforeRelief.mesh.positions.size(); ++i)
+    {
+        const auto a = beforeRelief.mesh.positions[i], b = afterRelief.mesh.positions[i];
+        const auto displacement = std::hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+        maximum = std::max(maximum, displacement);
+        sum += displacement;
+    }
+    const int appearance = materialAppearance(candidate, 0);
+    nlohmann::json proof = {{"scope", "High geometry creation only; no low mesh or bake"},
+                            {"adapter", renderer.adapter()},
+                            {"imageSize", {1280, 960}},
+                            {"baselineHash", meshHash(before.mesh)},
+                            {"candidateHash", meshHash(after.mesh)},
+                            {"triangles", after.mesh.indices.size() / 3},
+                            {"maximumReliefStageDisplacementM", maximum},
+                            {"meanReliefStageDisplacementM", sum / beforeRelief.mesh.positions.size()},
+                            {"baselineGenerationCpuMs", before.milliseconds},
+                            {"candidateGenerationCpuMs", after.milliseconds},
+                            {"gridSizeAndCutIdentityPreserved", true},
+                            {"changedTriangleIndexEntries", changedIndices},
+                            {"changedTriangleRegionEntries", changedTriangleRegions},
+                            {"closedAndReplay", true}};
+    for (const auto &stage : after.stages)
+        proof["candidateStages"].push_back({{"kind", name(stage.kind)},
+                                            {"cpuMs", stage.milliseconds}});
+    for (int view = 0; view < 2; ++view)
+    {
+        Camera camera;
+        camera.yaw = view == 0 ? 0.0f : 0.55f;
+        camera.pitch = view == 0 ? 0.0f : -0.2f;
+        camera.distance = 10.0f;
+        proof["views"].push_back({{"name", view == 0 ? "front" : "oblique"},
+                                  {"yaw", camera.yaw}, {"pitch", camera.pitch},
+                                  {"distance", camera.distance}});
+        for (int variant = 0; variant < 2; ++variant)
+        {
+            renderer.upload(variant == 0 ? before : after);
+            renderer.uploadMaterial(nullptr, materialDiffuse(appearance), true, appearance);
+            const auto stem = std::string(variant == 0 ? "baseline" : "candidate") +
+                              (view == 0 ? "-front" : "-oblique");
+            for (int mode : {0, 5})
+            {
+                renderer.draw(1280, 960, camera, mode);
+                renderer.capture(evidence / (stem + (mode == 5 ? "-material.png" : "-neutral.png")));
+            }
+        }
+    }
+    proof["renderBufferBytes"] = renderer.bufferBytes();
+    std::ofstream(evidence / "cliff-strata-creation-proof.json") << proof.dump(2) << '\n';
+    std::cout << proof.dump(2) << '\n';
+}
 struct Build
 {
     std::future<MeshResult> future;
@@ -1733,7 +1831,7 @@ int run(int argc, char **argv)
          cliffEdgeDamageSmoke = false, cliffRBrushAlphaSmoke = false,
          cliffNonharmonicSmoke = false, cliffMacroWarpSmoke = false,
          cliffErodedRimSmoke = false, cliffSignedRimSmoke = false,
-         cliffMetricReliefSmoke = false,
+         cliffMetricReliefSmoke = false, cliffStrataCreationSmoke = false,
          layeredOcclusionSmoke = false,
          layeredMaterialBaselineSmoke = false, layeredMaterialCandidateSmoke = false,
          layeredMaterialNoMipsSmoke = false, layeredHorizonFractureSmoke = false,
@@ -1772,6 +1870,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--cliff-eroded-rim-bakes-test" ||
             std::string(argv[i]) == "--cliff-signed-rim-bakes-test" ||
             std::string(argv[i]) == "--cliff-metric-relief-bakes-test" ||
+            std::string(argv[i]) == "--cliff-strata-creation-test" ||
             std::string(argv[i]) == "--layered-occlusion-bakes-test" ||
             std::string(argv[i]) == "--layered-material-baseline-test" ||
             std::string(argv[i]) == "--layered-material-candidate-test" ||
@@ -1822,6 +1921,7 @@ int run(int argc, char **argv)
             cliffErodedRimSmoke = std::string(argv[i]) == "--cliff-eroded-rim-bakes-test";
             cliffSignedRimSmoke = std::string(argv[i]) == "--cliff-signed-rim-bakes-test";
             cliffMetricReliefSmoke = std::string(argv[i]) == "--cliff-metric-relief-bakes-test";
+            cliffStrataCreationSmoke = std::string(argv[i]) == "--cliff-strata-creation-test";
             layeredOcclusionSmoke = std::string(argv[i]) == "--layered-occlusion-bakes-test";
             layeredMaterialBaselineSmoke = std::string(argv[i]) == "--layered-material-baseline-test";
             layeredMaterialCandidateSmoke = std::string(argv[i]) == "--layered-material-candidate-test";
@@ -2536,6 +2636,12 @@ int run(int argc, char **argv)
             if (angularProfileSmoke)
             {
                 captureAngularProfiles(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (cliffStrataCreationSmoke)
+            {
+                captureCliffStrataCreation(renderer, evidence);
                 window.requestClose();
                 continue;
             }

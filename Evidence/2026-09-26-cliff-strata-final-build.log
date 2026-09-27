@@ -1,0 +1,5 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundModel.lib
+  SurfaceTests.cpp
+  PlaygroundSurfaceTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSurfaceTests.exe
