@@ -209,7 +209,7 @@ bool editLayer(Layer &l)
         if (l.damagePathPoints.size()<maximumDamagePathPoints && ImGui::Button("Add crack point"))
         {
             auto point=l.damagePathPoints.back();
-            point[0]=std::min(5.0f,point[0]+.2f);
+            point[0]+=point[0]<4.8f?.2f:-.2f;
             l.damagePathPoints.push_back(point);
             change=true;
         }
@@ -371,7 +371,8 @@ bool editLayer(Layer &l)
     }
     if (l.kind != Kind::Layers && l.kind != Kind::Transform && l.kind != Kind::Planes &&
         l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
-        l.kind != Kind::CliffCutLoop && l.kind != Kind::DamageCavity)
+        l.kind != Kind::CliffCutLoop && l.kind != Kind::DamageCavity &&
+        l.kind != Kind::DamagePath)
     {
         ImGui::Separator();
         int mask = int(l.mask);
