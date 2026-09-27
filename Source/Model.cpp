@@ -283,6 +283,8 @@ Json layerJson(const Layer &l)
                 {"enabled", l.enabled},
                 {"seed", l.seed},
                 {"damageOperationId", l.damageOperationId},
+                {"damageBoundaryIrregularity", l.damageBoundaryIrregularity},
+                {"damageRimFraction", l.damageRimFraction},
                 {"amplitude", l.amplitude},
                 {"frequency", l.frequency},
                 {"lacunarity", l.lacunarity},
@@ -469,6 +471,8 @@ Layer defaultLayer(Kind kind)
         l.projectorRadius={.4f,.4f};
         l.direction={-.45f,.27f,-.85f};
         l.translation={-.5f,.3f,-.9f};
+        l.damageBoundaryIrregularity=.13f;
+        l.damageRimFraction=.2f;
         l.mask=Mask::None;
     }
     if (kind == Kind::CliffCutLoop)
@@ -714,7 +718,7 @@ void validate(const Recipe &r)
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
              r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21 ||
-             r.version == 22) &&
+             r.version == 22 || r.version == 23) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -734,6 +738,13 @@ void validate(const Recipe &r)
                     std::abs(l.projectorRotation)<=360 &&
                     std::hypot(double(l.direction[0]),double(l.direction[1]),
                                double(l.direction[2]))>1e-8);
+            require(l.damageBoundaryIrregularity>=0 &&
+                    l.damageBoundaryIrregularity<=.25f &&
+                    l.damageRimFraction>=0 && l.damageRimFraction<=.5f &&
+                    (l.damageBoundaryIrregularity==0 ||
+                     (l.frequency>=.1f && l.frequency<=20)) &&
+                    ((l.damageBoundaryIrregularity==0 && l.damageRimFraction==0) ||
+                     r.version>=23));
             for (const auto &previous:r.layers)
                 if (&previous!=&l && previous.kind==Kind::DamageCavity &&
                     previous.damageOperationId==l.damageOperationId)
@@ -1191,6 +1202,10 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             area.projector.rotationRadians=l.projectorRotation*std::numbers::pi/180;
             area.footprint.radius={l.projectorRadius[0],l.projectorRadius[1],1};
             area.footprint.depth=l.amplitude;
+            area.boundary.irregularity=l.damageBoundaryIrregularity;
+            area.boundary.rimFraction=l.damageRimFraction;
+            area.boundary.frequency=l.frequency;
+            area.boundary.seed=l.seed;
             Jerico::Guid fresh;
             bool uniqueFresh=false;
             for (std::uint64_t salt=0;salt<256;++salt)
@@ -1714,7 +1729,8 @@ Recipe deserialize(const std::string &text)
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
         inputVersion != 17 && inputVersion != 18 && inputVersion != 19 &&
-        inputVersion != 20 && inputVersion != 21 && inputVersion != 22)
+        inputVersion != 20 && inputVersion != 21 && inputVersion != 22 &&
+        inputVersion != 23)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1765,6 +1781,8 @@ Recipe deserialize(const std::string &text)
             throw std::runtime_error("Seed must be an unsigned 32-bit integer");
         READ(seed);
         if (a.contains("damageOperationId")) READ(damageOperationId);
+        if (a.contains("damageBoundaryIrregularity")) READ(damageBoundaryIrregularity);
+        if (a.contains("damageRimFraction")) READ(damageRimFraction);
         READ(amplitude);
         READ(frequency);
         READ(lacunarity);

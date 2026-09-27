@@ -112,6 +112,7 @@ struct Layer
     std::array<float, 2> projectorRadius{0.6f, 0.45f};
     float projectorRotation{};
     float damageLip{0.025f};
+    float damageBoundaryIrregularity{}, damageRimFraction{};
 };
 struct Recipe
 {

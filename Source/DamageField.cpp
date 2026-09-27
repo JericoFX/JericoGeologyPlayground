@@ -71,6 +71,63 @@ double structuredDamageNoise01(Vec3d position,const DamageNoiseSettings &setting
     return saturate(.5+.5*PA::evaluateGeologyFbmReference(
         q,settings.seed,settings.octaves,settings.lacunarity,settings.roughness));
 }
+double damageBoundaryRadiusScale(double angleRadians,const DamageBoundarySettings &settings)
+{
+    if (!std::isfinite(angleRadians) || !std::isfinite(settings.irregularity) ||
+        !std::isfinite(settings.frequency) || !std::isfinite(settings.rimFraction) ||
+        settings.irregularity<0 || settings.irregularity>.25 ||
+        (settings.irregularity>0 &&
+         (settings.frequency<.1 || settings.frequency>20)) ||
+        settings.rimFraction<0 || settings.rimFraction>.5)
+        throw std::invalid_argument("Damage boundary settings outside limits");
+    if (settings.irregularity==0) return 1;
+    DamageNoiseSettings noise;
+    noise.frequency=settings.frequency;
+    noise.octaves=3;
+    noise.seed=settings.seed;
+    const auto value=structuredDamageNoise01(
+        {std::cos(angleRadians),std::sin(angleRadians),0},noise);
+    return 1+settings.irregularity*std::clamp(3*(2*value-1),-1.0,1.0);
+}
+double damageCavityFloorDepth(Vec3d q,const DamageDecalSettings &footprint,
+                              const DamageBoundarySettings &boundary)
+{
+    sampleDamageDecal(q,footprint);
+    if (footprint.depth<=0)
+        throw std::invalid_argument("Damage cavity requires positive depth");
+    damageBoundaryRadiusScale(0,boundary);
+    const auto centerDepth=footprint.depth*(1+boundary.irregularity*1.3);
+    if (boundary.irregularity==0) return footprint.depth;
+    const auto angle=std::atan2(q.y/footprint.radius.y,q.x/footprint.radius.x);
+    const auto radius=damageBoundaryRadiusScale(angle,boundary);
+    const auto rho=std::hypot(q.x/footprint.radius.x,q.y/footprint.radius.y)/radius;
+    if (rho==0) return centerDepth;
+    DamageNoiseSettings noise;
+    noise.frequency=std::max(1.0,boundary.frequency*.5);
+    noise.octaves=3;
+    noise.seed=boundary.seed;
+    const auto value=structuredDamageNoise01(
+        {.55*std::cos(angle),.55*std::sin(angle),.37},noise);
+    const auto ringDepth=footprint.depth*(1+boundary.irregularity*2*(.35+.65*value));
+    if (rho<=.55) return std::lerp(centerDepth,ringDepth,rho/.55);
+    return std::lerp(ringDepth,footprint.depth,std::clamp((rho-.55)/.45,0.0,1.0));
+}
+double sampleDamageCavityField(Vec3d q,const DamageDecalSettings &footprint,
+                               const DamageBoundarySettings &boundary)
+{
+    sampleDamageDecal(q,footprint);
+    if (footprint.depth<=0)
+        throw std::invalid_argument("Damage cavity requires positive depth");
+    const auto rho=std::hypot(q.x/footprint.radius.x,q.y/footprint.radius.y);
+    const auto radius=damageBoundaryRadiusScale(
+        std::atan2(q.y/footprint.radius.y,q.x/footprint.radius.x),boundary);
+    const auto rimDepth=std::min(footprint.depth*.4,
+        std::min(footprint.radius.x,footprint.radius.y)*boundary.rimFraction);
+    const auto rim=rimDepth>0 ?
+        boundary.rimFraction*std::clamp(1+q.z/rimDepth,0.0,1.0):0;
+    return std::max(rho/(radius*(1+rim))-1,
+                    std::max(q.z,-q.z-damageCavityFloorDepth(q,footprint,boundary)));
+}
 double sampleDamageArea(const DamageArea &area,const DamageSampleContext &context)
 {
     if (!area.enabled || (!area.semanticPartId.empty() &&
@@ -91,8 +148,12 @@ double sampleDamageArea(const DamageArea &area,const DamageSampleContext &contex
         if (context.pathDistanceMeters<start || context.pathDistanceMeters>end) return 0;
     }
     normalized(area.amount);
-    const auto local=projectorCoordinates(area.projector,context.position);
+    auto local=projectorCoordinates(area.projector,context.position);
     if (std::abs(local.z)>1) return 0;
+    const auto radial=damageBoundaryRadiusScale(
+        std::atan2(local.y/area.footprint.radius.y,
+                   local.x/area.footprint.radius.x),area.boundary);
+    local.x/=radial;local.y/=radial;
     return area.amount*sampleDamageDecal(local,area.footprint).softMask;
 }
 double sampleDamageArea(const DamageArea &area,Vec3d worldPosition,

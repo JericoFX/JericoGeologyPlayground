@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <numbers>
 #include <stdexcept>
 
 using namespace Playground;
@@ -108,6 +109,30 @@ try
     require(isFreshDamageInterior(-.5,0,0,.01) &&
             !isFreshDamageInterior(.5,0,.5,.01),
             "fresh interior must be tagged at generation from host and cutter fields");
+    DamageBoundarySettings boundary;
+    boundary.irregularity=.15;boundary.rimFraction=.2;boundary.seed=42;
+    const auto boundaryRadius=damageBoundaryRadiusScale(.4,boundary);
+    require(boundaryRadius>=.85 && boundaryRadius<=1.15 &&
+            close(boundaryRadius,damageBoundaryRadiusScale(.4+2*std::numbers::pi,boundary)) &&
+            boundaryRadius!=damageBoundaryRadiusScale(2.1,boundary),
+            "shared boundary must be bounded, periodic and vary around the projector");
+    DamageDecalSettings cavityFootprint;
+    cavityFootprint.radius={.4,.4,1};cavityFootprint.depth=.3;
+    require(sampleDamageCavityField({0,0,-.1},cavityFootprint,boundary)<0 &&
+            sampleDamageCavityField({1,0,-.1},cavityFootprint,boundary)>0,
+            "shared cavity field must distinguish bounded inside and outside");
+    require(damageCavityFloorDepth({},cavityFootprint,boundary)>cavityFootprint.depth &&
+            close(damageCavityFloorDepth({.8,0,0},cavityFootprint,boundary),
+                  cavityFootprint.depth),
+            "irregular cavity floor must deepen locally and meet the outer ring");
+    boundary.irregularity=0;boundary.rimFraction=0;
+    require(close(sampleDamageCavityField({.4,0,-.1},cavityFootprint,boundary),0),
+            "legacy circular boundary must remain unchanged when opt-in controls are zero");
+    require(close(damageCavityFloorDepth({},cavityFootprint,boundary),
+                  cavityFootprint.depth),
+            "legacy cavity floor must remain planar");
+    boundary.irregularity=.3;
+    rejects([&]{damageBoundaryRadiusScale(0,boundary);});
     const std::vector<Vec3d> crackPath{{0,0,0},{1,0,0},{1,1,0}};
     require(close(pathCrackField({1,.5,.2},crackPath,.1),.1) &&
             pathCrackField({3,3,0},crackPath,.1)>1,

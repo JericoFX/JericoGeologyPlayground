@@ -182,6 +182,9 @@ bool editLayer(Layer &l)
         change |= ImGui::SliderFloat2("Ellipse radii",l.projectorRadius.data(),.02f,5);
         change |= slider("Projector rotation",l.projectorRotation,-180,180);
         change |= slider("Cavity depth",l.amplitude,.01f,2);
+        change |= slider("Boundary irregularity",l.damageBoundaryIrregularity,0,.25f);
+        change |= slider("Boundary frequency",l.frequency,.1f,20);
+        change |= slider("Soft rim width",l.damageRimFraction,0,.5f);
         ImGui::Text("Operation ID %llu",static_cast<unsigned long long>(l.damageOperationId));
     }
     else if (l.kind == Kind::CliffCutLoop)
@@ -525,7 +528,7 @@ void captureSharedDamageCavity(Renderer &renderer,const std::filesystem::path &e
             cut.projectorRadius={.33f,.33f};
             cut.amplitude=.36f;
         }
-        source.version=22;
+        source.version=23;
         source.layers.push_back(cut);
         const auto after=evaluate(source,source.finalResolution);
         if (!PA::validateClosedMesh(after.mesh).hasValue() ||
@@ -2820,7 +2823,7 @@ int run(int argc, char **argv)
             if (added.kind==Kind::DamageCavity)
             {
                 added.damageOperationId=nextDamageOperationId(recipe.layers);
-                recipe.version=std::max(recipe.version,22);
+                recipe.version=std::max(recipe.version,23);
             }
             recipe.layers.push_back(added);
             selected = int(recipe.layers.size()) - 1;
@@ -2862,7 +2865,10 @@ int run(int argc, char **argv)
                 const auto operationId=recipe.layers[selected].damageOperationId;
                 recipe.layers[selected] = defaultLayer(recipe.layers[selected].kind);
                 if (recipe.layers[selected].kind==Kind::DamageCavity)
+                {
                     recipe.layers[selected].damageOperationId=operationId;
+                    recipe.version=std::max(recipe.version,23);
+                }
                 anyChange = true;
             }
         }
@@ -2877,6 +2883,10 @@ int run(int argc, char **argv)
             ImGui::TextWrapped("%s", name(recipe.layers[selected].kind));
             if (editLayer(recipe.layers[selected]))
             {
+                if (recipe.layers[selected].kind==Kind::DamageCavity &&
+                    (recipe.layers[selected].damageBoundaryIrregularity>0 ||
+                     recipe.layers[selected].damageRimFraction>0))
+                    recipe.version=std::max(recipe.version,23);
                 if (recipe.layers[selected].kind == Kind::CliffCutLoop &&
                     recipe.layers[selected].profile > 0)
                     recipe.version = std::max(recipe.version,

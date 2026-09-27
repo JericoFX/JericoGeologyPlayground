@@ -372,6 +372,29 @@ int main()
         }
         Settings railing;
         railing.kind=Assembly::Kind::Railing;
+        const auto intactRailing=build(curvedPath(),railing);
+        const auto metalMember=std::find_if(intactRailing.parts.begin(),intactRailing.parts.end(),
+            [](const Part &part){return part.role==Role::TopRail && part.index==1 && part.side==-1;});
+        require(metalMember!=intactRailing.parts.end(),
+                "metal railing fixture needs a stable semantic member");
+        AreaDamageRule metalArea;
+        metalArea.area.id="shared-projector-metal";
+        metalArea.area.semanticPartId=metalMember->id;
+        metalArea.area.projector.center=metalMember->position;
+        metalArea.area.footprint.radius={1,1,1};
+        metalArea.state=State::Broken;
+        railing.damage.areaRules.push_back(metalArea);
+        const auto brokenMetal=build(curvedPath(),railing);
+        const auto brokenMember=std::find_if(brokenMetal.parts.begin(),brokenMetal.parts.end(),
+            [&](const Part &part){return part.id==metalMember->id;});
+        require(brokenMember!=brokenMetal.parts.end() && brokenMember->state==State::Broken &&
+                meshHash(brokenMetal.mesh.mesh)!=meshHash(intactRailing.mesh.mesh),
+                "same movable shared projector must choose a broken metal variant");
+        railing.damage.areaRules.front().area.projector.center.x+=10;
+        const auto restoredMetal=build(curvedPath(),railing);
+        require(meshHash(restoredMetal.mesh.mesh)==meshHash(intactRailing.mesh.mesh),
+                "moving metal damage area away must restore the untouched source variant");
+        railing.damage.areaRules.clear();
         const auto railId=stablePartId(railing.kind,Role::TopRail,1,-1);
         railing.damage.manual[railId]=State::Missing;
         const auto gap=build(curvedPath(),railing);

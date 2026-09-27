@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
 #include <limits>
 #include <set>
 #include <stdexcept>
@@ -90,6 +91,14 @@ int main()
     area.footprint.depth=.45;
     const auto interior=Solid::region(443,10);
     checkCut(rock,area,interior);
+    auto naturalArea=area;
+    naturalArea.boundary.irregularity=.13;
+    naturalArea.boundary.rimFraction=.2;
+    naturalArea.boundary.seed=443;
+    checkCut(rock,naturalArea,interior);
+    require(PA::hashTriangleMesh(cutDamageCavity(rock,naturalArea,interior,50000))!=
+            PA::hashTriangleMesh(cutDamageCavity(rock,area,interior,50000)),
+            "opt-in shared boundary must change the rock cut geometry");
     auto rockCut=defaultLayer(Kind::DamageCavity);
     rockCut.damageOperationId=10;
     rockCut.seed=443;
@@ -98,7 +107,7 @@ int main()
     rockCut.direction={0,0,1};
     rockCut.projectorRadius={.45f,.35f};
     rockCut.amplitude=.45f;
-    rockRecipe.version=22;
+    rockRecipe.version=23;
     rockRecipe.layers.push_back(rockCut);
     const auto rockResult=evaluate(rockRecipe,12);
     require(PA::validateClosedMesh(rockResult.mesh).hasValue(),
@@ -108,6 +117,26 @@ int main()
         "geology recipe must persist fresh interior lineage");
     require(meshHash(rockResult.mesh)==meshHash(evaluate(deserialize(serialize(rockRecipe)),12).mesh),
             "geology cavity must survive save and load");
+    auto legacyRecipe=rockRecipe;
+    legacyRecipe.version=22;
+    legacyRecipe.layers.back().damageBoundaryIrregularity=0;
+    legacyRecipe.layers.back().damageRimFraction=0;
+    require(meshHash(evaluate(legacyRecipe,12).mesh)==
+            meshHash(evaluate(deserialize(serialize(legacyRecipe)),12).mesh),
+            "v22 circular cavity must retain a readable legacy recipe");
+    legacyRecipe.layers.back().frequency=100;
+    require(meshHash(evaluate(legacyRecipe,12).mesh)==
+            meshHash(evaluate(deserialize(serialize(legacyRecipe)),12).mesh),
+            "v22 cavity must keep its historical valid frequency range");
+    legacyRecipe.layers.back().damageRimFraction=.2f;
+    reject([&]{validate(legacyRecipe);},"soft rim must require recipe v23");
+    const auto oldEvidence=std::filesystem::path(PLAYGROUND_ROOT)/
+        "Evidence/2026-09-27-shared-damage-cavity";
+    require(PA::hashTriangleMesh(evaluate(load(oldEvidence/"rock-cavity-recipe.json"),44).mesh)==
+                2386827915866525017ULL &&
+            PA::hashTriangleMesh(evaluate(load(oldEvidence/"panel-through-hole-recipe.json"),44).mesh)==
+                2986865365891870130ULL,
+            "v22 published rock and panel cavity topology must stay unchanged");
     auto collisionRecipe=rockRecipe;
     collisionRecipe.layers.back().seed=0;
     collisionRecipe.layers.back().damageOperationId=0xDA6A68;

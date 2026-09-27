@@ -50,7 +50,11 @@ Json writeArea(const AreaDamageRule &rule)
             {"profileShape",area.footprint.profileShape},
             {"lipInner",area.footprint.lipInner},
             {"lipOuter",area.footprint.lipOuter},
-            {"lipHeight",area.footprint.lipHeight}}}};
+            {"lipHeight",area.footprint.lipHeight}}},
+        {"boundary",{{"irregularity",area.boundary.irregularity},
+            {"frequency",area.boundary.frequency},
+            {"rimFraction",area.boundary.rimFraction},
+            {"seed",area.boundary.seed}}}};
     if (area.indexRange)
         result["indexRange"]=Json::array({area.indexRange->first,area.indexRange->second});
     if (area.pathRangeMeters)
@@ -98,6 +102,14 @@ AreaDamageRule readArea(const Json &value)
     area.footprint.lipInner=footprint.at("lipInner").get<double>();
     area.footprint.lipOuter=footprint.at("lipOuter").get<double>();
     area.footprint.lipHeight=footprint.at("lipHeight").get<double>();
+    if (value.contains("boundary"))
+    {
+        const auto &boundary=value.at("boundary");
+        area.boundary.irregularity=boundary.at("irregularity").get<double>();
+        area.boundary.frequency=boundary.at("frequency").get<double>();
+        area.boundary.rimFraction=boundary.at("rimFraction").get<double>();
+        area.boundary.seed=boundary.at("seed").get<std::uint32_t>();
+    }
     return rule;
 }
 void validate(const DamageSettings &settings)
@@ -166,6 +178,7 @@ void validate(const DamageSettings &settings)
         // Ask the shared primitives to validate their own geometry contract.
         projectorCoordinates(area.projector,area.projector.center);
         sampleDamageDecal({},area.footprint);
+        damageBoundaryRadiusScale(0,area.boundary);
     }
     for (const auto &[id,state]:settings.manual)
     {checkId(id);if (int(state)<0 || int(state)>int(State::Collapsed))

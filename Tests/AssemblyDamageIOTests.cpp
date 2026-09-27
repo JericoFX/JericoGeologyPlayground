@@ -4,6 +4,7 @@
 #include <cmath>
 #include <filesystem>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 
 using namespace Playground;
@@ -45,11 +46,19 @@ int main()
     rule.area.footprint.radius={.6,.8,1};
     rule.area.footprint.innerRadius=.4;
     rule.area.footprint.outerRadius=1;
+    rule.area.boundary.irregularity=.1;
+    rule.area.boundary.frequency=3;
+    rule.area.boundary.rimFraction=.2;
+    rule.area.boundary.seed=12;
     rule.area.amount=.8;rule.state=State::Broken;
     source.areaRules.push_back(rule);
     auto restored=deserializeAssemblyDamage(serializeAssemblyDamage(source));
     require(serializeAssemblyDamage(restored)==serializeAssemblyDamage(source),
             "damage recipe must round trip exactly and deterministically");
+    auto oldJson=nlohmann::json::parse(serializeAssemblyDamage(source));
+    oldJson.at("areas").at(0).erase("boundary");
+    require(deserializeAssemblyDamage(oldJson.dump()).areaRules.front().area.boundary.irregularity==0,
+            "old assembly damage files must retain the original circular boundary");
     const auto file=std::filesystem::current_path()/"assembly-damage-io-test.json";
     saveAssemblyDamage(source,file);
     require(serializeAssemblyDamage(loadAssemblyDamage(file))==serializeAssemblyDamage(source),
@@ -81,6 +90,8 @@ int main()
     rejects([&]{serializeAssemblyDamage(bad);},"non-orthonormal projector basis accepted");
     bad=source;bad.areaRules.front().area.footprint.lipInner=1;
     rejects([&]{serializeAssemblyDamage(bad);},"invalid lip range accepted");
+    bad=source;bad.areaRules.front().area.boundary.irregularity=.3;
+    rejects([&]{serializeAssemblyDamage(bad);},"invalid boundary irregularity accepted");
     bad=source;bad.areaRules.push_back(bad.areaRules.front());
     rejects([&]{serializeAssemblyDamage(bad);},"duplicate operation ID accepted");
     bad=source;bad.areaRules.resize(maximumDamageAreas+1);

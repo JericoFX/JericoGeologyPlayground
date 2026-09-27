@@ -9,6 +9,7 @@
 #include <numeric>
 #include <numbers>
 #include <stdexcept>
+#include <vector>
 
 namespace Playground
 {
@@ -107,28 +108,70 @@ TriangleMesh cutterMesh(const DamageArea &area,Jerico::Guid freshInterior)
     const double exteriorMargin=std::max(1e-4,
         std::min(footprint.radius.x*projector.scale.x,
                  footprint.radius.y*projector.scale.y)*.01)/projector.scale.z;
+    const double rimDepth=std::min(depth*.4,
+        std::min(footprint.radius.x,footprint.radius.y)*area.boundary.rimFraction);
+    std::vector<double> levels{-depth};
+    if (rimDepth>0) levels.push_back(-rimDepth);
+    levels.push_back(exteriorMargin);
     TriangleMesh cutter;
-    cutter.positions.reserve(2*sides+2);
-    for (double z:{-depth,exteriorMargin})
+    const bool shapedFloor=area.boundary.irregularity>0;
+    cutter.positions.reserve((levels.size()+std::uint32_t(shapedFloor))*sides+2);
+    for (std::size_t ring=0;ring<levels.size();++ring)
         for (std::uint32_t i=0;i<sides;++i)
         {
             const auto angle=2*std::numbers::pi*i/sides;
+            const auto radial=damageBoundaryRadiusScale(angle,area.boundary)*
+                (ring+1==levels.size()?1+area.boundary.rimFraction:1);
             cutter.positions.push_back(localToWorld(projector,
-                footprint.radius.x*std::cos(angle),
-                footprint.radius.y*std::sin(angle),z));
+                radial*footprint.radius.x*std::cos(angle),
+                radial*footprint.radius.y*std::sin(angle),levels[ring]));
+        }
+    const auto floorBase=std::uint32_t(cutter.positions.size());
+    auto effectiveFootprint=footprint;
+    effectiveFootprint.depth=depth;
+    if (shapedFloor)
+        for (std::uint32_t i=0;i<sides;++i)
+        {
+            const auto angle=2*std::numbers::pi*i/sides;
+            const auto radial=.55*damageBoundaryRadiusScale(angle,area.boundary);
+            const auto x=radial*footprint.radius.x*std::cos(angle);
+            const auto y=radial*footprint.radius.y*std::sin(angle);
+            cutter.positions.push_back(localToWorld(projector,
+                x,y,-damageCavityFloorDepth({x,y,0},effectiveFootprint,area.boundary)));
         }
     const auto bottomCenter=std::uint32_t(cutter.positions.size());
-    cutter.positions.push_back(localToWorld(projector,0,0,-depth));
+    cutter.positions.push_back(localToWorld(projector,0,0,
+        -damageCavityFloorDepth({},effectiveFootprint,area.boundary)));
     const auto topCenter=std::uint32_t(cutter.positions.size());
-    cutter.positions.push_back(localToWorld(projector,0,0,exteriorMargin));
+    cutter.positions.push_back(localToWorld(projector,0,0,levels.back()));
     for (std::uint32_t i=0;i<sides;++i)
     {
         const auto next=(i+1)%sides;
-        cutter.indices.insert(cutter.indices.end(),{
-            i,next,sides+next,i,sides+next,sides+i,
-            bottomCenter,next,i,topCenter,sides+i,sides+next});
-        cutter.triangleRegions.insert(cutter.triangleRegions.end(),
-                                      {freshInterior,freshInterior,freshInterior,freshInterior});
+        for (std::uint32_t ring=0;ring+1<levels.size();++ring)
+        {
+            const auto base=ring*sides;
+            cutter.indices.insert(cutter.indices.end(),{
+                base+i,base+next,base+sides+next,
+                base+i,base+sides+next,base+sides+i});
+            cutter.triangleRegions.insert(cutter.triangleRegions.end(),
+                                          {freshInterior,freshInterior});
+        }
+        const auto topBase=std::uint32_t(levels.size()-1)*sides;
+        if (shapedFloor)
+        {
+            cutter.indices.insert(cutter.indices.end(),{
+                floorBase+i,next,i,floorBase+i,floorBase+next,next,
+                bottomCenter,floorBase+next,floorBase+i});
+            cutter.triangleRegions.insert(cutter.triangleRegions.end(),
+                                          {freshInterior,freshInterior,freshInterior});
+        }
+        else
+        {
+            cutter.indices.insert(cutter.indices.end(),{bottomCenter,next,i});
+            cutter.triangleRegions.push_back(freshInterior);
+        }
+        cutter.indices.insert(cutter.indices.end(),{topCenter,topBase+i,topBase+next});
+        cutter.triangleRegions.push_back(freshInterior);
     }
     return cutter;
 }
@@ -144,9 +187,12 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
             throw std::runtime_error("Cancelled");
     };
     checkCancel();
-    if (maximumTriangles<256 || maximumTriangles>240000 ||
+    const auto cutterTriangles=256+
+        (area.boundary.rimFraction>0 ? 128 : 0)+
+        (area.boundary.irregularity>0 ? 128 : 0);
+    if (maximumTriangles<cutterTriangles || maximumTriangles>240000 ||
         host.indices.size()/3>maximumTriangles ||
-        host.indices.size()/3+256>maximumTriangles ||
+        host.indices.size()/3+cutterTriangles>maximumTriangles ||
         host.positions.size()>maximumTriangles)
         throw std::runtime_error("Damage cavity mesh budget exceeded");
     if (!PA::validateClosedMesh(host).hasValue())
@@ -155,6 +201,10 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
         return host;
     projectorCoordinates(area.projector,area.projector.center);
     sampleDamageDecal({},area.footprint);
+    auto effectiveFootprint=area.footprint;
+    effectiveFootprint.depth*=area.amount;
+    sampleDamageCavityField({0,0,-effectiveFootprint.depth*.5},
+                            effectiveFootprint,area.boundary);
     if (!std::isfinite(area.amount) || area.amount<0 || area.amount>1)
         throw std::runtime_error("Damage cavity amount outside [0,1]");
     const auto cutter=cutterMesh(area,freshInteriorRegion);

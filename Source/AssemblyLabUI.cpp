@@ -345,6 +345,12 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                                       .01,.1,"%.3f");
             dirty|=ImGui::InputDouble("Area rotation rad",
                                       &rule.area.projector.rotationRadians,.05,.5,"%.3f");
+            constexpr double minimumBoundary=0,maximumBoundary=.25;
+            dirty|=ImGui::SliderScalar("Area edge irregularity",ImGuiDataType_Double,
+                &rule.area.boundary.irregularity,&minimumBoundary,&maximumBoundary,"%.3f");
+            constexpr double minimumFrequency=.1,maximumFrequency=20;
+            dirty|=ImGui::SliderScalar("Area edge frequency",ImGuiDataType_Double,
+                &rule.area.boundary.frequency,&minimumFrequency,&maximumFrequency,"%.2f");
             if (ImGui::Button("Move area to selected part"))
                 if (const auto *part=selectedPart())
                 {rule.area.projector.center=part->position;dirty=true;}

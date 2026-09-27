@@ -33,6 +33,19 @@ struct DamageNoiseSettings
 };
 double structuredDamageNoise01(Vec3d position,const DamageNoiseSettings &settings);
 
+struct DamageBoundarySettings
+{
+    double irregularity{}, frequency{2}, rimFraction{};
+    std::uint32_t seed{123};
+};
+double damageBoundaryRadiusScale(double angleRadians,const DamageBoundarySettings &settings);
+double damageCavityFloorDepth(Vec3d projectorPosition,
+                              const DamageDecalSettings &footprint,
+                              const DamageBoundarySettings &boundary);
+double sampleDamageCavityField(Vec3d projectorPosition,
+                               const DamageDecalSettings &footprint,
+                               const DamageBoundarySettings &boundary);
+
 struct DamageArea
 {
     std::string id;
@@ -43,6 +56,7 @@ struct DamageArea
     std::optional<std::pair<double,double>> pathRangeMeters;
     DamageProjector projector;
     DamageDecalSettings footprint;
+    DamageBoundarySettings boundary;
     double amount{1};
 };
 struct DamageSampleContext
