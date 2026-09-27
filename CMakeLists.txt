@@ -8,7 +8,7 @@ if(CMAKE_SOURCE_DIR MATCHES "^${JERICO_SOURCE}(/|$)" OR CMAKE_BINARY_DIR MATCHES
     message(FATAL_ERROR "Playground source and build must be outside the engine checkout")
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp
+add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp"
@@ -39,6 +39,13 @@ target_link_libraries(PlaygroundModel PRIVATE "${JERICO_DEPS}/_deps/manifold-bui
 target_compile_definitions(PlaygroundModel PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_definitions(PlaygroundModel PRIVATE MANIFOLD_PAR=-1)
 target_compile_definitions(PlaygroundModel PRIVATE PLAYGROUND_ROOT="${CMAKE_SOURCE_DIR}")
+add_library(PlaygroundWebPhysics Source/WebPhysics.cpp)
+target_include_directories(PlaygroundWebPhysics PUBLIC Source PRIVATE
+    "${JERICO_DEPS}/_deps/jolt-src")
+target_link_libraries(PlaygroundWebPhysics PUBLIC PlaygroundModel
+    "${JERICO_DEPS}/_deps/jolt-build/$<CONFIG>/Jolt.lib")
+target_compile_definitions(PlaygroundWebPhysics PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN
+    JPH_CROSS_PLATFORM_DETERMINISTIC)
 enable_testing()
 add_executable(PlaygroundNormalBakeTests Tests/NormalBakeTests.cpp)
 target_link_libraries(PlaygroundNormalBakeTests PRIVATE PlaygroundModel)
@@ -103,11 +110,17 @@ add_test(NAME Playground.SplineConstruction COMMAND PlaygroundSplineConstruction
 add_executable(PlaygroundProceduralAssembliesTests Tests/ProceduralAssembliesTests.cpp)
 target_link_libraries(PlaygroundProceduralAssembliesTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.ProceduralAssemblies COMMAND PlaygroundProceduralAssembliesTests)
+add_executable(PlaygroundWebLodTests Tests/WebLodTests.cpp)
+target_link_libraries(PlaygroundWebLodTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.WebLod COMMAND PlaygroundWebLodTests)
+add_executable(PlaygroundWebPhysicsTests Tests/WebPhysicsTests.cpp)
+target_link_libraries(PlaygroundWebPhysicsTests PRIVATE PlaygroundWebPhysics)
+add_test(NAME Playground.WebPhysics COMMAND PlaygroundWebPhysicsTests)
 
 set(DC "${JERICO_DEPS}/DiligentCore")
 set(DT "${JERICO_DEPS}/DiligentTools")
 set(DB "${JERICO_DEPS}/_deps/diligentcore-build")
-add_executable(JericoGeologyPlayground Source/Main.cpp Source/Renderer.cpp Source/SplineLabUI.cpp Source/SplineLabEvidence.cpp Source/AssemblyLabUI.cpp Source/AssemblyLabEvidence.cpp
+add_executable(JericoGeologyPlayground Source/Main.cpp Source/Renderer.cpp Source/SplineLabUI.cpp Source/SplineLabEvidence.cpp Source/AssemblyLabUI.cpp Source/AssemblyLabEvidence.cpp Source/WebLabUI.cpp Source/WebLabEvidence.cpp
     "${JERICO_SOURCE}/Engine/Platform/Source/WindowWin32.cpp"
     "${DT}/ThirdParty/imgui/backends/imgui_impl_win32.cpp")
 target_include_directories(JericoGeologyPlayground PRIVATE
@@ -122,7 +135,7 @@ target_compile_definitions(JericoGeologyPlayground PRIVATE
     PLAYGROUND_ROOT="${CMAKE_SOURCE_DIR}"
     PLATFORM_WIN32=1 DILIGENT_VK_SHARED=1
     IMGUI_USER_CONFIG="ImGuiDiligentConfig.h" IMGUI_DEFINE_MATH_OPERATORS)
-target_link_libraries(JericoGeologyPlayground PRIVATE PlaygroundModel
+target_link_libraries(JericoGeologyPlayground PRIVATE PlaygroundModel PlaygroundWebPhysics
     "${JERICO_DEPS}/ThirdParty/RelWithDebInfo/JericoDiligentImgui.lib"
     "${DB}/Graphics/GraphicsTools/RelWithDebInfo/Diligent-GraphicsTools.lib"
     "${DB}/Graphics/GraphicsAccessories/RelWithDebInfo/Diligent-GraphicsAccessories.lib"

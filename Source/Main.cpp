@@ -8,6 +8,8 @@
 #include "SplineLabUI.hpp"
 #include "AssemblyLabUI.hpp"
 #include "AssemblyLabEvidence.hpp"
+#include "WebLabUI.hpp"
+#include "WebLabEvidence.hpp"
 #include "SplineLabEvidence.hpp"
 #include <Jerico/Core/Guid.hpp>
 #include <Jerico/Platform/Window.hpp>
@@ -2192,7 +2194,7 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
-    bool splineEvidence=false,assemblyEvidence=false;
+    bool splineEvidence=false,assemblyEvidence=false,webEvidence=false;
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
          angularProfileSmoke = false, extremeDeformationSmoke = false,
          cliffSoftCreationSmoke = false, rockLodSmoke = false,
@@ -2233,6 +2235,12 @@ int run(int argc, char **argv)
         if (std::string(argv[i])=="--procedural-assemblies-test")
         {
             assemblyEvidence=true;
+            if (i+1<argc) evidence=argv[i+1];
+        }
+    for (int i=1;i<argc;++i)
+        if (std::string(argv[i])=="--web-surface-test")
+        {
+            webEvidence=true;
             if (i+1<argc) evidence=argv[i+1];
         }
     for (int i = 1; i < argc; ++i)
@@ -2373,7 +2381,7 @@ int run(int argc, char **argv)
                 adaptiveSeed = unsigned(std::stoul(argv[++i]));
             }
         }
-    if (smoke || splineEvidence || assemblyEvidence)
+    if (smoke || splineEvidence || assemblyEvidence || webEvidence)
         std::filesystem::create_directories(evidence);
     if (lowSweepSmoke)
     {
@@ -2406,6 +2414,12 @@ int run(int argc, char **argv)
         SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }
+    if (webEvidence)
+    {
+        captureWebSurface(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
     Recipe recipe = preset(0);
     MeshResult displayed = evaluate(recipe, recipe.previewResolution);
     renderer.upload(displayed);
@@ -2413,6 +2427,7 @@ int run(int argc, char **argv)
     Camera camera;
     SplineLabUI splineLab;
     AssemblyLabUI assemblyLab;
+    WebLabUI webLab;
     int workspace = 0;
     int selected = 0, presetIndex = 0, mode = 4, inspection = 0, addKind = 1;
     int materialChoice = 0;
@@ -2570,6 +2585,12 @@ int run(int argc, char **argv)
             workspace = 2;
             assemblyLab.activate(renderer);
         }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Spider Web Surface",workspace==3) && workspace!=3)
+        {
+            workspace=3;
+            webLab.activate();
+        }
         ImGui::End();
         if (workspace==1)
         {
@@ -2580,6 +2601,12 @@ int run(int argc, char **argv)
         if (workspace==2)
         {
             assemblyLab.frame(renderer,w,h);
+            renderer.present();
+            continue;
+        }
+        if (workspace==3)
+        {
+            webLab.frame(renderer,w,h);
             renderer.present();
             continue;
         }

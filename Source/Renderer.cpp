@@ -1,5 +1,6 @@
 #include "Renderer.hpp"
 #include "NormalBake.hpp"
+#include "WebLod.hpp"
 #include <Buffer.h>
 #include <DeviceContext.h>
 #include <EngineFactoryVk.h>
@@ -41,9 +42,16 @@ struct Constants
     float target[4];
     float range[4];
     float normalBias[4];
+    float webA[4];
+    float webB[4];
+    float webC[4];
+    float webD[4];
+    float webE[4];
+    float webF[4];
+    float webG[4];
 };
 const char *shader = R"(
-cbuffer Constants {float4 Camera;float4 Target;float4 Range;float4 NormalBias;};
+cbuffer Constants {float4 Camera;float4 Target;float4 Range;float4 NormalBias;float4 WebA;float4 WebB;float4 WebC;float4 WebD;float4 WebE;float4 WebF;float4 WebG;};
 Texture2D NormalMap; SamplerState NormalMap_sampler;
 Texture2D ColorMap; SamplerState ColorMap_sampler;
 Texture2D AmbientMap; SamplerState AmbientMap_sampler;
@@ -55,11 +63,96 @@ struct VOut {float4 Position:SV_POSITION;float3 Normal:NORMAL;float3 World:TEXCO
 VOut VSMain(VIn input) {
  VOut o;float cy=cos(Camera.x),sy=sin(Camera.x),cp=cos(Camera.y),sp=sin(Camera.y);
  float3 right=float3(cy,0,-sy),forward=float3(sy*cp,sp,cy*cp),up=cross(forward,right);
- float3 q=input.Position-Target.xyz;float depth=dot(q,forward)+Camera.z;float scale=2.4;
+ float3 position=input.Position;
+ if(WebF.w>.5){
+  float weight=Target.w>10.5 && Target.w<15.5?
+    sin(3.14159265*input.UV.x)*sin(3.14159265*input.UV.y):input.Field;
+  position+=WebF.xyz*saturate(weight);
+ }
+ float3 q=position-Target.xyz;float depth=dot(q,forward)+Camera.z;float scale=2.4;
  o.Position=float4(dot(q,right)*scale/Camera.w,dot(q,up)*scale,(depth-0.05)*100.0/99.95,depth);
- o.Normal=input.Normal;o.World=input.Position;o.Field=input.Field;o.UV=input.UV;o.Tangent=input.Tangent;o.Bitangent=input.Bitangent;return o;
+ o.Normal=input.Normal;o.World=position;o.Field=input.Field;o.UV=input.UV;o.Tangent=input.Tangent;o.Bitangent=input.Bitangent;return o;
 }
 float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
+ if(Target.w>10.5 && Target.w<15.5){
+  float2 uv=float2(input.UV.x,1-input.UV.y);
+  float4 coverage=AmbientMap.Sample(AmbientMap_sampler,uv);
+  float phi=ContactMap.Sample(ContactMap_sampler,uv).r;
+  float alpha=coverage.a;
+  if(Target.w>14.5){
+   float signedPhi=(phi-.5)*.5;
+   float aa=max(.0001,max(.1,WebB.y)*fwidth(signedPhi));
+   alpha=1-smoothstep(-aa,aa,signedPhi);
+  }
+  if((Target.w<11.5 || Target.w>14.5) && alpha<1.0/255.0 && phi>.53)
+   discard;
+  float3 mapped=NormalMap.Sample(NormalMap_sampler,uv).xyz*2-1;
+  if(Target.w<11.5 || Target.w>14.5){
+   float3 surfaceNormal=normalize(input.Normal);
+   float3 n=surfaceNormal;
+   float3 dx=ddx(input.World),dy=ddy(input.World);
+   float2 ux=ddx(input.UV),uy=ddy(input.UV);
+   float det=ux.x*uy.y-ux.y*uy.x;
+   float3 tangent=abs(det)>1e-6?normalize((dx*uy.y-dy*ux.y)/det):float3(1,0,0);
+   float3 bitangent=normalize(cross(n,tangent));
+   if(dot(bitangent,(dy*ux.x-dx*uy.x)/max(abs(det),1e-6))*sign(det)<0)bitangent=-bitangent;
+   n=normalize(tangent*mapped.x+bitangent*mapped.y+n*mapped.z);
+   float3 lightDelta=WebE.xyz-input.World;
+   float lightDistance=length(lightDelta);
+   float3 light=lightDelta/max(lightDistance,.0001);
+   float3 forward=float3(sin(Camera.x)*cos(Camera.y),sin(Camera.y),cos(Camera.x)*cos(Camera.y));
+   float3 eye=Target.xyz-forward*Camera.z;
+   float3 viewDirection=normalize(eye-input.World);
+   if(dot(n,viewDirection)<0){n=-n;surfaceNormal=-surfaceNormal;}
+   float3 halfway=normalize(light+viewDirection);
+   float attenuation=pow(saturate(1-lightDistance/max(WebE.w,.001)),2);
+   float wet=saturate(WebA.z);
+   float rough=saturate(WebA.x*(1-.72*wet));
+   float key=saturate(dot(n,light))*(.25+.75*attenuation);
+   float rim=saturate(1-dot(n,viewDirection));
+   float3 strandTangent=normalize(cross(surfaceNormal,n)+float3(.001,.002,.003));
+   float tangentGlint=pow(saturate(1-abs(dot(strandTangent,halfway))),
+                          lerp(36,8,rough));
+   float normalGlint=pow(saturate(dot(n,halfway)),lerp(80,8,rough));
+   float glint=tangentGlint*normalGlint*attenuation;
+   float signedPhi=(phi-.5)*.5;
+   float sigma=max(.001,WebB.y*fwidth(signedPhi)*2);
+   float field=exp(-pow(max(signedPhi,0)/sigma,2));
+   float droplet=0;
+   if(WebD.z>0){
+    float2 dropletCell=uv/max(WebD.w,.002);
+    float2 cell=floor(dropletCell);
+    float random=frac(sin(dot(cell,float2(127.1,311.7))+WebD.y)*43758.5453);
+    float2 center=float2(frac(sin(dot(cell,float2(269.5,183.3))+WebD.y)*27471.3),
+                         frac(sin(dot(cell,float2(113.5,271.9))+WebD.y)*13579.7));
+    float dropRadius=lerp(WebG.x/max(WebD.w,.002),1,
+       frac(sin(dot(cell,float2(41.3,97.7))+WebD.y)*17831.3))*.36;
+    droplet=step(1-saturate(WebD.z),random)*
+       (1-smoothstep(dropRadius*.25,dropRadius,
+         length(frac(dropletCell)-center)))*field;
+   }
+   float3 silk=float3(.72,.78,.80)*(.24+key*.78)+float3(.19,.23,.29)*rim;
+   silk=lerp(silk,float3(.92,.95,1),saturate(WebA.w)*.65);
+   silk=lerp(silk,float3(.57,.51,.42),saturate(WebB.x)*.5);
+   float response=saturate(WebC.x+WebC.y*glint+
+      WebC.z*glint*(1+wet)+WebC.w*rim*glint+wet*.25*glint);
+   float glintEnergy=WebD.x*(glint*(.2+wet*.8)+droplet*attenuation*(.5+wet));
+   silk=WebA.y*(silk*.28+float3(.94,.97,1)*glintEnergy);
+   alpha=saturate(max(alpha,field*.3)*response+droplet*attenuation*.55*WebD.x);
+   alpha*=saturate((WebB.w-Camera.z)/max(WebB.w-WebB.z,.001));
+   return float4(pow(saturate(silk),1.0/2.2),alpha);
+  }
+  if(Target.w<12.5)return float4(coverage.aaa,1);
+  if(Target.w<13.5)return float4(phi,phi,phi,1);
+  return float4(mapped*.5+.5,coverage.a);
+ }
+ if(Target.w>15.5 && Target.w<16.5){
+  float grain=sin(input.World.x*3.1+sin(input.World.z*1.7))*
+              sin(input.World.y*4.2+input.World.z*2.3);
+  float shade=.12+.025*grain+.045*saturate(dot(normalize(input.Normal),
+                                             normalize(float3(-.3,.8,-.4))));
+  return float4(shade*.85,shade*.86,shade*.81,1);
+ }
  if(Target.w>5.5 && Target.w<7.5){
   uint packed;
   if(Target.w<6.5){
@@ -213,16 +306,24 @@ struct Renderer::Impl
     RefCntAutoPtr<IDeviceContext> context;
     RefCntAutoPtr<ISwapChain> swap;
     std::unique_ptr<ImGuiImplDiligent> ui;
-    RefCntAutoPtr<IPipelineState> solid, wire, compute;
+    RefCntAutoPtr<IPipelineState> solid, wire, webSolid, compute;
     RefCntAutoPtr<IShaderResourceBinding> binding;
     RefCntAutoPtr<IBuffer> constants, vertices, indices, parameters;
+    RefCntAutoPtr<IBuffer> webStructureVertices,webStructureIndices;
+    RefCntAutoPtr<IBuffer> webBackdropVertices,webBackdropIndices;
     RefCntAutoPtr<ITexture> color, depth, normalMap;
+    RefCntAutoPtr<IQuery> timing;
     std::array<RefCntAutoPtr<ITexture>, 5> materialMaps;
-    bool baked{}, material{}, materialColorMips{};
+    bool baked{}, material{}, materialColorMips{},web{};
+    WebAppearance webAppearance;
+    Vec3d webDisplacement{};
+    bool webDeformable{};
     int materialAppearance{};
     std::filesystem::path materialColorPath;
     std::size_t materialColorBytes{};
     unsigned indexCount{}, viewWidth{}, viewHeight{};
+    unsigned webStructureIndexCount{};
+    unsigned webBackdropIndexCount{};
     std::size_t bytes{}, meshBytes{};
     float low{}, high{1};
     float normalMipBias{};
@@ -318,6 +419,18 @@ Renderer::Renderer(void *window, unsigned width, unsigned height) : impl(std::ma
     r.solid->GetStaticVariableByName(SHADER_TYPE_VERTEX, "Constants")->Set(r.constants);
     r.solid->GetStaticVariableByName(SHADER_TYPE_PIXEL, "Constants")->Set(r.constants);
     r.solid->CreateShaderResourceBinding(&r.binding, true);
+    p.PSODesc.Name="Playground transparent web";
+    auto &blend=p.GraphicsPipeline.BlendDesc.RenderTargets[0];
+    blend.BlendEnable=true;
+    blend.SrcBlend=BLEND_FACTOR_SRC_ALPHA;
+    blend.DestBlend=BLEND_FACTOR_INV_SRC_ALPHA;
+    p.GraphicsPipeline.DepthStencilDesc.DepthWriteEnable=false;
+    r.device->CreateGraphicsPipelineState(p,&r.webSolid);
+    require(bool(r.webSolid),"Web pipeline creation failed");
+    r.webSolid->GetStaticVariableByName(SHADER_TYPE_VERTEX,"Constants")->Set(r.constants);
+    r.webSolid->GetStaticVariableByName(SHADER_TYPE_PIXEL,"Constants")->Set(r.constants);
+    p.GraphicsPipeline.DepthStencilDesc.DepthWriteEnable=true;
+    p.GraphicsPipeline.BlendDesc.RenderTargets[0]=RenderTargetBlendDesc{};
     const char *names[] = {"ColorMap", "AmbientMap", "ContactMap", "CavityMap", "EdgeMap"};
     for (std::size_t i = 0; i < std::size(names); ++i)
     {
@@ -374,6 +487,14 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
                       const std::vector<std::array<float, 2>> *cornerUV)
 {
     auto &r = *impl;
+    r.web=false;
+    r.webDeformable=false;
+    r.webStructureVertices.Release();
+    r.webStructureIndices.Release();
+    r.webStructureIndexCount=0;
+    r.webBackdropVertices.Release();
+    r.webBackdropIndices.Release();
+    r.webBackdropIndexCount=0;
     std::vector<Vertex> vertices;
     auto indices = mesh.mesh.indices;
     bool corners = mesh.cornerNormals.size() == mesh.mesh.indices.size();
@@ -481,6 +602,217 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
     for (Uint32 level = 0; level < texture.MipLevels; ++level)
         r.bytes += std::size_t(texture.Width >> level) * (texture.Height >> level) * 4;
     r.meshBytes = r.bytes;
+}
+void Renderer::uploadWeb(const Web::Result &web,bool averagedCoverageMips,
+                         const Web::Result *structural,const MeshResult *backdrop)
+{
+    require(web.cardAccepted && !web.mips.empty() &&
+            web.cardUV.size()==web.card.mesh.indices.size(),
+            "Web card and baked texture are required");
+    MeshResult subdivided;
+    std::vector<std::array<float,2>> subdividedUV;
+    const bool deformable=structural && web.patches.size()==1;
+    if (deformable)
+    {
+        const auto &patch=web.patches.front();
+        for (unsigned y=0;y<3;++y)
+            for (unsigned x=0;x<3;++x)
+            {
+                const double u=patch.minU+(patch.maxU-patch.minU)*x*.5;
+                const double v=patch.minV+(patch.maxV-patch.minV)*y*.5;
+                subdivided.mesh.positions.push_back({
+                    patch.center.x+patch.axisU.x*u+patch.axisV.x*v,
+                    patch.center.y+patch.axisU.y*u+patch.axisV.y*v,
+                    patch.center.z+patch.axisU.z*u+patch.axisV.z*v});
+                subdivided.normals.push_back(patch.normal);
+                subdivided.field.push_back(1);
+            }
+        for (unsigned y=0;y<2;++y)
+            for (unsigned x=0;x<2;++x)
+            {
+                const unsigned a=y*3+x,b=a+1,c=a+3,d=c+1;
+                for (unsigned vertex:{a,b,d,a,d,c})
+                {subdivided.mesh.indices.push_back(vertex);
+                 subdivided.cornerNormals.push_back(patch.normal);
+                 subdividedUV.push_back({float(vertex%3)*.5f,
+                                         float(vertex/3)*.5f});}
+            }
+    }
+    upload(deformable?subdivided:web.card,nullptr,nullptr,nullptr,false,
+           deformable?&subdividedUV:&web.cardUV);
+    auto &r=*impl;
+    r.webDeformable=deformable;
+    std::vector<std::vector<std::uint8_t>> average;
+    if (averagedCoverageMips)
+    {
+        average.reserve(web.mips.size());
+        average.push_back(web.mips.front().coverageRgba);
+        for (std::size_t level=1;level<web.mips.size();++level)
+        {
+            const auto &previous=web.mips[level-1],&current=web.mips[level];
+            average.emplace_back(std::size_t(current.width)*current.height*4);
+            for (unsigned y=0;y<current.height;++y)
+                for (unsigned x=0;x<current.width;++x)
+                {
+                    unsigned sum{};
+                    for (unsigned dy=0;dy<2;++dy)
+                        for (unsigned dx=0;dx<2;++dx)
+                            sum+=average[level-1][4*(std::size_t(2*y+dy)*previous.width+
+                                2*x+dx)+3];
+                    const auto value=std::uint8_t(sum/4);
+                    const auto index=4*(std::size_t(y)*current.width+x);
+                    for (unsigned channel=0;channel<4;++channel)
+                        average.back()[index+channel]=value;
+                }
+        }
+    }
+    auto bind=[&](const char *name,const char *label,
+                  const std::vector<std::uint8_t> Web::TextureLevel::*member,
+                  RefCntAutoPtr<ITexture> &texture)
+    {
+        const auto &base=web.mips.front();
+        TextureDesc description;
+        description.Name=label;
+        description.Type=RESOURCE_DIM_TEX_2D;
+        description.Width=base.width;
+        description.Height=base.height;
+        description.MipLevels=Uint32(web.mips.size());
+        description.Format=TEX_FORMAT_RGBA8_UNORM;
+        description.Usage=USAGE_IMMUTABLE;
+        description.BindFlags=BIND_SHADER_RESOURCE;
+        std::vector<TextureSubResData> subresources(web.mips.size());
+        for (std::size_t level=0;level<web.mips.size();++level)
+        {
+            const auto &mip=web.mips[level];
+            const auto &pixels=averagedCoverageMips && member==
+                &Web::TextureLevel::coverageRgba?average[level]:mip.*member;
+            require(mip.width==std::max(1u,base.width>>level) &&
+                    mip.height==std::max(1u,base.height>>level) &&
+                    pixels.size()==std::size_t(mip.width)*mip.height*4,
+                    "Web texture mip dimensions mismatch");
+            subresources[level].pData=pixels.data();
+            subresources[level].Stride=mip.width*4;
+            r.bytes+=pixels.size();
+        }
+        TextureData data{subresources.data(),Uint32(subresources.size())};
+        texture.Release();
+        r.device->CreateTexture(description,&data,&texture);
+        require(bool(texture),"Web texture allocation failed");
+        r.binding->GetVariableByName(SHADER_TYPE_PIXEL,name)->Set(
+            texture->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+    };
+    bind("NormalMap","Web pseudo normal",&Web::TextureLevel::normalRgba,r.normalMap);
+    bind("AmbientMap","Web coverage",&Web::TextureLevel::coverageRgba,r.materialMaps[1]);
+    bind("ContactMap","Web distance",&Web::TextureLevel::distanceRgba,r.materialMaps[2]);
+    if (structural && !structural->structural.mesh.indices.empty())
+    {
+        const auto &mesh=structural->structural;
+        require(mesh.cornerNormals.size()==mesh.mesh.indices.size(),
+                "Web structure corner normals mismatch");
+        double extent=0;
+        const auto hub=web.graph.nodes.front();
+        for (auto point:web.graph.nodes)
+            extent=std::max(extent,std::hypot(point.x-hub.x,point.y-hub.y,
+                                               point.z-hub.z));
+        std::vector<Vertex> vertices;
+        vertices.reserve(mesh.mesh.indices.size());
+        std::vector<std::uint32_t> indices;
+        indices.reserve(mesh.mesh.indices.size());
+        for (std::size_t i=0;i<mesh.mesh.indices.size();++i)
+        {
+            const auto source=mesh.mesh.indices[i];
+            const auto p=mesh.mesh.positions[source],n=mesh.cornerNormals[i];
+            const auto distance=std::hypot(p.x-hub.x,p.y-hub.y,p.z-hub.z);
+            const float weight=float(std::clamp(1-distance/std::max(extent,.001),0.0,1.0));
+            vertices.push_back({{float(p.x),float(p.y),float(p.z)},
+                                {float(n.x),float(n.y),float(n.z)},weight});
+            indices.push_back(std::uint32_t(i));
+        }
+        BufferDesc description;
+        description.Name="Web structural vertices";
+        description.Size=vertices.size()*sizeof(Vertex);
+        description.Usage=USAGE_IMMUTABLE;
+        description.BindFlags=BIND_VERTEX_BUFFER;
+        BufferData initial{vertices.data(),description.Size};
+        r.device->CreateBuffer(description,&initial,&r.webStructureVertices);
+        description.Name="Web structural indices";
+        description.Size=indices.size()*sizeof(std::uint32_t);
+        description.BindFlags=BIND_INDEX_BUFFER;
+        initial={indices.data(),description.Size};
+        r.device->CreateBuffer(description,&initial,&r.webStructureIndices);
+        require(bool(r.webStructureVertices) && bool(r.webStructureIndices),
+                "Web structure buffer allocation failed");
+        r.webStructureIndexCount=unsigned(indices.size());
+        r.bytes+=vertices.size()*sizeof(Vertex)+indices.size()*sizeof(std::uint32_t);
+    }
+    if (backdrop && !backdrop->mesh.indices.empty())
+    {
+        require(backdrop->normals.size()==backdrop->mesh.positions.size(),
+                "Web backdrop normals mismatch");
+        std::vector<Vertex> vertices;
+        vertices.reserve(backdrop->mesh.positions.size());
+        for (std::size_t i=0;i<backdrop->mesh.positions.size();++i)
+        {
+            const auto p=backdrop->mesh.positions[i],n=backdrop->normals[i];
+            vertices.push_back({{float(p.x),float(p.y),float(p.z)},
+                                {float(n.x),float(n.y),float(n.z)},0});
+        }
+        BufferDesc description;
+        description.Name="Web corridor vertices";
+        description.Size=vertices.size()*sizeof(Vertex);
+        description.Usage=USAGE_IMMUTABLE;
+        description.BindFlags=BIND_VERTEX_BUFFER;
+        BufferData initial{vertices.data(),description.Size};
+        r.device->CreateBuffer(description,&initial,&r.webBackdropVertices);
+        description.Name="Web corridor indices";
+        description.Size=backdrop->mesh.indices.size()*sizeof(std::uint32_t);
+        description.BindFlags=BIND_INDEX_BUFFER;
+        initial={backdrop->mesh.indices.data(),description.Size};
+        r.device->CreateBuffer(description,&initial,&r.webBackdropIndices);
+        require(bool(r.webBackdropVertices) && bool(r.webBackdropIndices),
+                "Web corridor buffer allocation failed");
+        r.webBackdropIndexCount=unsigned(backdrop->mesh.indices.size());
+        r.bytes+=vertices.size()*sizeof(Vertex)+description.Size;
+    }
+    r.web=true;
+}
+void Renderer::clearMesh()
+{
+    auto &r=*impl;
+    r.vertices.Release();
+    r.indices.Release();
+    r.webStructureVertices.Release();
+    r.webStructureIndices.Release();
+    r.webStructureIndexCount=0;
+    r.webBackdropVertices.Release();
+    r.webBackdropIndices.Release();
+    r.webBackdropIndexCount=0;
+    r.indexCount=0;
+    r.web=false;
+    r.webDeformable=false;
+    r.bytes=0;
+    r.meshBytes=0;
+}
+void Renderer::setWebAppearance(const WebAppearance &appearance)
+{
+    for (float value:{appearance.roughness,appearance.brightness,appearance.wetness,
+                      appearance.frost,appearance.dust,appearance.distanceSoftness,
+                      appearance.baseVisibility,appearance.specularResponse,
+                      appearance.lightRevealStrength,appearance.viewAngleResponse,
+                      appearance.dropletDensity,appearance.dropletSizeMin,
+                      appearance.dropletSizeMax,appearance.lightReach,
+                      appearance.shaderOnlyDistance,appearance.cullDistance,
+                      appearance.lightPosition[0],appearance.lightPosition[1],
+                      appearance.lightPosition[2]})
+        require(std::isfinite(value),"Web material parameter is non-finite");
+    auto &r=*impl;
+    r.webAppearance=appearance;
+}
+void Renderer::setWebDisplacement(Vec3d displacement)
+{
+    require(std::isfinite(displacement.x) && std::isfinite(displacement.y) &&
+            std::isfinite(displacement.z),"Web displacement is non-finite");
+    impl->webDisplacement=displacement;
 }
 void Renderer::uploadMaterial(const NormalBake *bake, const std::filesystem::path &diffusePath,
                               bool useDiffuseMips, int appearance)
@@ -604,13 +936,60 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
     r.context->ClearDepthStencil(depth, CLEAR_DEPTH_FLAG, 1, 0, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
     if (r.vertices)
     {
-        MapHelper<Constants> cb(r.context, r.constants, MAP_WRITE, MAP_FLAG_DISCARD);
-        *cb = Constants{{camera.yaw, camera.pitch, camera.distance, float(width) / height},
+        const Constants values{{camera.yaw, camera.pitch, camera.distance, float(width) / height},
                         {camera.target[0], camera.target[1], camera.target[2], float(mode)},
                         {r.low, r.high, r.baked ? 1.0f : 0.0f, float(r.materialAppearance)},
-                        {r.normalMipBias, r.normalMomentMode ? 1.0f : 0.0f, 0.0f, 0.0f}};
-        cb.Unmap();
-        auto *pso = (mode == 2 && r.wire) ? r.wire.RawPtr() : r.solid.RawPtr();
+                        {r.normalMipBias, r.normalMomentMode ? 1.0f : 0.0f, 0.0f, 0.0f},
+                        {r.webAppearance.roughness,r.webAppearance.brightness,
+                         r.webAppearance.wetness,r.webAppearance.frost},
+                        {r.webAppearance.dust,r.webAppearance.distanceSoftness,
+                         r.webAppearance.shaderOnlyDistance,
+                         r.webAppearance.cullDistance},
+                        {r.webAppearance.baseVisibility,r.webAppearance.specularResponse,
+                         r.webAppearance.lightRevealStrength,
+                         r.webAppearance.viewAngleResponse},
+                        {r.webAppearance.specularResponse,
+                         float(r.webAppearance.dropletSeed),
+                         r.webAppearance.dropletDensity,
+                         r.webAppearance.dropletSizeMax},
+                        {r.webAppearance.lightPosition[0],r.webAppearance.lightPosition[1],
+                         r.webAppearance.lightPosition[2],r.webAppearance.lightReach},
+                        {float(r.webDisplacement.x),float(r.webDisplacement.y),
+                         float(r.webDisplacement.z),
+                         r.web && r.webDeformable?1.0f:0.0f},
+                        {r.webAppearance.dropletSizeMin,0,0,0}};
+        {
+            MapHelper<Constants> cb(r.context,r.constants,MAP_WRITE,MAP_FLAG_DISCARD);
+            *cb=values;
+        }
+        if (r.timing) r.context->BeginQuery(r.timing);
+        if (r.webBackdropIndexCount && mode==11)
+        {
+            auto background=values;
+            background.target[3]=16;
+            MapHelper<Constants> bg(r.context,r.constants,MAP_WRITE,MAP_FLAG_DISCARD);
+            *bg=background;
+            bg.Unmap();
+            r.context->SetPipelineState(r.solid);
+            r.context->CommitShaderResources(r.binding,
+                RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+            IBuffer *buffer=r.webBackdropVertices;
+            Uint64 offset=0;
+            r.context->SetVertexBuffers(0,1,&buffer,&offset,
+                RESOURCE_STATE_TRANSITION_MODE_TRANSITION,
+                SET_VERTEX_BUFFERS_FLAG_RESET);
+            r.context->SetIndexBuffer(r.webBackdropIndices,0,
+                RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+            DrawIndexedAttribs backgroundDraw;
+            backgroundDraw.IndexType=VT_UINT32;
+            backgroundDraw.NumIndices=r.webBackdropIndexCount;
+            backgroundDraw.Flags=DRAW_FLAG_VERIFY_ALL;
+            r.context->DrawIndexed(backgroundDraw);
+            MapHelper<Constants> restore(r.context,r.constants,MAP_WRITE,MAP_FLAG_DISCARD);
+            *restore=values;
+        }
+        auto *pso = (mode == 2 && r.wire) ? r.wire.RawPtr() :
+                    (r.web && mode>=11 && mode<=15)?r.webSolid.RawPtr():r.solid.RawPtr();
         r.context->SetPipelineState(pso);
         r.context->CommitShaderResources(r.binding, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
         IBuffer *buffer = r.vertices;
@@ -623,12 +1002,47 @@ void *Renderer::draw(unsigned width, unsigned height, const Camera &camera, int 
         draw.NumIndices = r.indexCount;
         draw.Flags = DRAW_FLAG_VERIFY_ALL;
         r.context->DrawIndexed(draw);
+        if (r.webStructureIndexCount && mode==11)
+        {
+            auto geometryValues=values;
+            geometryValues.target[3]=0;
+            {
+                MapHelper<Constants> cb(r.context,r.constants,MAP_WRITE,MAP_FLAG_DISCARD);
+                *cb=geometryValues;
+            }
+            r.context->SetPipelineState(r.solid);
+            IBuffer *structure=r.webStructureVertices;
+            r.context->SetVertexBuffers(0,1,&structure,&offset,
+                RESOURCE_STATE_TRANSITION_MODE_TRANSITION,SET_VERTEX_BUFFERS_FLAG_RESET);
+            r.context->SetIndexBuffer(r.webStructureIndices,0,
+                RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
+            draw.NumIndices=r.webStructureIndexCount;
+            r.context->DrawIndexed(draw);
+        }
+        if (r.timing) r.context->EndQuery(r.timing);
     }
     r.context->SetRenderTargets(0, nullptr, nullptr, RESOURCE_STATE_TRANSITION_MODE_TRANSITION);
     StateTransitionDesc barrier{r.color, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE,
                                 STATE_TRANSITION_FLAG_UPDATE_STATE};
     r.context->TransitionResourceStates(1, &barrier);
     return r.color->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE);
+}
+double Renderer::measureDrawGpu(unsigned width,unsigned height,const Camera &camera,int mode)
+{
+    auto &r=*impl;
+    if (r.device->GetDeviceInfo().Features.DurationQueries!=DEVICE_FEATURE_STATE_ENABLED)
+        return -1;
+    QueryDesc description;
+    description.Name="Playground web draw duration";
+    description.Type=QUERY_TYPE_DURATION;
+    r.device->CreateQuery(description,&r.timing);
+    require(bool(r.timing),"Web draw duration query failed");
+    draw(width,height,camera,mode);
+    r.context->WaitForIdle();
+    QueryDataDuration data{};
+    const auto ready=r.timing->GetData(&data,sizeof(data));
+    r.timing.Release();
+    return ready && data.Frequency?double(data.Duration)*1000/data.Frequency:-1;
 }
 void Renderer::present()
 {

@@ -1,0 +1,39 @@
+# Procedural Web Surface — result (2026-09-27)
+
+The figures in the original sections below describe the first Web Surface baseline. The final extension and current limitations are recorded at the end of this file.
+
+## Implemented
+
+- The normal path is `Plane / Anchors / Area -> Web Graph -> CPU field bake -> coverage, distance and pseudo-normal textures -> one or two transparent cards`. No sweep meshes are built for an accepted card. The same stable graph also builds selectable 3D strands and ribbons on explicit request.
+- The normal Playground window has **Spider Web Surface** with six presets, plane/anchor/area editing, seed, spoke/ring/density/secondary/missing/irregularity/radius/sag controls, editable material appearance, 1×/2×2/4×4/8×8 supersampling, source-rasterized versus averaged coverage mips, coverage/distance/normal/distance-render views, 3D strands, ribbons, and a coarse physical *candidate* graph. EdgeID selection, Break and Restore regenerate the cheap representation after a 250 ms edit debounce; the old completed texture remains visible until the new one is ready.
+- Each source mip is rasterized from the graph down to 1×1. The normal path blends alpha; the distance-render view reconstructs alpha from signed distance and screen derivatives. A rejected card uses ribbons and reports the reason. At most four cards are accepted.
+- `--web-surface-test Evidence/web-surface` writes original-size 1280×960 Vulkan captures, source maps, mip comparison, recipe/metrics/hashes, intact and broken texture/3D views, and a coarse graph illustration.
+
+## Automated verified
+
+- Release build succeeded. `ctest --test-dir build-surface -C Release --output-on-failure`: **20/20 PASS** (`Evidence/2026-09-27-web-full-ctest.log`). The web test covers deterministic graph/IDs/maps, signed field, planar and corner cards, anchors and area masks (including corner area), ordinary-path absence of strand meshes, source mips versus averaging, Break/Restore and unrelated edge identity, and invalid numeric/budget inputs.
+- Two independent `--web-surface-test` runs produced **26/26 byte-identical PNGs** and **9/9 identical texture and card-mesh hashes**. Timing values are intentionally not hashed.
+- The plane-orb sample had 130 active semantic edges, **2 card triangles, 0 ordinary tube triangles**, 1,048,572 bytes for all three maps and mips, 22.17% nonempty card pixels and 77.83% empty card pixels. A requested 3D-strand representation had 19,292 triangles; ribbons had 260. The coarse candidate graph selected 32 EdgeIDs and created **0 Jolt bodies**.
+- One 1280×960 Vulkan run measured median-of-five GPU draw duration **0.0143 ms card** versus **0.0215 ms 3D strands**. These are isolated draw timings, not full frame time or proof of a general FPS gain. CPU field generation for that card was **443 ms**; the edited/broken case was **427 ms** in this run. Supersampling 1×/4×4/8×8 cost about **429/441/553 ms** for that recipe; timings vary by run.
+
+## Visually verified
+
+Inspected original 1280×960 captures for orb, messy, corner, anchor, polygon area, opaque-free card holes, distance and pseudo-normal fields, 3D strands, coarse graph, and the broken edge in both card and strands. The broken outer radial segment is visibly absent. These images verify static rendering; they do not prove temporal stability or the interactive controls end to end.
+
+## Experimental / pending
+
+- The appearance is an experimental web shader. Coverage versus distance-field rendering and source versus averaged mips are available for comparison, but no moving-camera temporal stability or apparent-strand-thickness acceptance has been established.
+- The first baseline had only a coarse graph illustration. The final extension below adds a bounded Jolt network and card displacement.
+- The normal-window UI is compiled and wired but a manual owner-like interaction pass (placing points, switching presets, breaking and restoring a selected EdgeID while orbiting) remains **PENDING**. The prior Escape stopped computer-control verification; this report does not claim it occurred.
+- The isolated median draw numbers and card occupancy are disclosed above. Full-frame FPS, GPU time under a representative scene, close/mid/far camera transitions, and temporal mip comparison remain **PENDING**; do not extrapolate an engine-wide optimization claim from this sample.
+- JericoEngine code was untouched. This lab does not change the geology Beauty status or start high→low work.
+
+## Final extension: adaptive field, optics and coarse physics
+
+- One Web Field now has Heavy, Medium and Ghost styles; Wetness, local light/view reveal and shader droplets combine with them. Near Hybrid draws a few structural strands over a deformable card; distance thresholds choose geometry, hybrid, shader only and fade/cull. The normal window exposes these controls, selected anchor placement/drag and the fixed 60 Hz Jolt network. Web Graph remains the single source for card and strand representations.
+- Extreme Corner inputs retain every primary spoke/ring and deterministically thin optional secondary/micro edges to the 4,096-edge budget. A 40-million base-level edge×pixel estimate reduces the requested resolution by powers of two, down to 64 per patch; a separate conservative sample estimate reduces supersampling if needed, and a minimum-resolution over-budget case falls back with a diagnostic. The UI shows applied quality. Explicit 3D debug caps at 256 strands and reports truncation. Obsolete asynchronous bakes receive cancellation on edit. The maximum Corner recipe (64 spokes, 12 rings, full secondary/micro density, requested 512 and 8× supersampling) now generates 4,096 edges with a 64-per-patch card and 4× supersampling in the focal test instead of exceeding the budget.
+- Release build and full CTest are **21/21 PASS** (`Evidence/final-ctest.log`). `Playground.WebPhysics` verifies pinned authored anchors, bounded constraints and gravity sag. Two final Vulkan runs (`Evidence/web-field-final-i`, `Evidence/web-field-final-j`) produced **47/47 byte-identical 1280×960 PNGs** and identical recipes; GPU timing is excluded from this replay comparison.
+- The dark corridor captures show Ghost almost invisible unlit, with distinct local filaments revealed at five light positions. Original-resolution captures also show wet/droplet highlights, a Jolt network before/after 120 steps and a displaced Hybrid card. The 100-card grid is visible with a shared texture. These are sampled static frames, not a temporal stability test.
+- The network had 29 nodes, 32 constraints and four pinned anchors. After 120 fixed steps the hub moved −0.234 m vertically; the last isolated Jolt step cost 0.005 ms CPU. Individual visual EdgeID cuts do not yet remove corresponding physical constraints one-to-one.
+- On this RTX 3090, isolated median GPU duration was **0.012 ms** for the plain orb card versus **0.130 ms** for 19,292 debug strand triangles. The optical Ghost shader cost about **0.08 ms** unlit and **0.19 ms** at 2.5 m with Wet/Droplets. A batch of **100 shared cards** used 400 vertices, 200 triangles, one draw call, one GPU instance, one 1,048,572-byte shared texture and **0.14 ms** isolated GPU duration. This repeats a single texture and does not measure 100 unique web bakes, full scene time or FPS. Ghost CPU field generation was about 0.52 s in the optical run, so future production integration needs caching/async generation.
+- **Still pending:** manual owner-like UI interaction after the prior Escape stopped computer control; moving-camera temporal stability; collisions in a real mine; physics-aware per-edge cutting; many unique webs with atlas/instance batching; representative full-frame CPU/GPU/memory/FPS measurements. No Engine integration or geology Beauty acceptance is claimed.

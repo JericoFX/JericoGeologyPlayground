@@ -1,0 +1,47 @@
+Test project F:/JericoGeologyPlayground/build-surface
+      Start  1: Playground.NormalBake
+ 1/21 Test  #1: Playground.NormalBake .............   Passed    0.69 sec
+      Start  2: Playground.AutoUv
+ 2/21 Test  #2: Playground.AutoUv .................   Passed    0.01 sec
+      Start  3: Playground.RockAddonMath
+ 3/21 Test  #3: Playground.RockAddonMath ..........   Passed    0.01 sec
+      Start  4: Playground.RBrushInterop
+ 4/21 Test  #4: Playground.RBrushInterop ..........   Passed    0.02 sec
+      Start  5: Playground.RBrushImageRoundtrip
+ 5/21 Test  #5: Playground.RBrushImageRoundtrip ...   Passed    0.36 sec
+      Start  6: Playground.SurfaceFeatures
+ 6/21 Test  #6: Playground.SurfaceFeatures ........   Passed    4.44 sec
+      Start  7: Playground.Model
+ 7/21 Test  #7: Playground.Model ..................   Passed    0.27 sec
+      Start  8: Playground.NativeSolid
+ 8/21 Test  #8: Playground.NativeSolid ............   Passed    0.18 sec
+      Start  9: Playground.SharedWarp
+ 9/21 Test  #9: Playground.SharedWarp .............   Passed    0.02 sec
+      Start 10: Playground.Thickness
+10/21 Test #10: Playground.Thickness ..............   Passed   43.88 sec
+      Start 11: Playground.Drift
+11/21 Test #11: Playground.Drift ..................   Passed    0.03 sec
+      Start 12: Playground.Envelope
+12/21 Test #12: Playground.Envelope ...............   Passed    0.37 sec
+      Start 13: Playground.Edge
+13/21 Test #13: Playground.Edge ...................   Passed    0.06 sec
+      Start 14: Playground.Backend
+14/21 Test #14: Playground.Backend ................   Passed    5.57 sec
+      Start 15: Playground.Surface
+15/21 Test #15: Playground.Surface ................   Passed    1.62 sec
+      Start 16: Playground.BspSource
+16/21 Test #16: Playground.BspSource ..............   Passed    0.30 sec
+      Start 17: Playground.Reduction
+17/21 Test #17: Playground.Reduction ..............   Passed    3.79 sec
+      Start 18: Playground.SplineConstruction
+18/21 Test #18: Playground.SplineConstruction .....   Passed    0.01 sec
+      Start 19: Playground.ProceduralAssemblies
+19/21 Test #19: Playground.ProceduralAssemblies ...   Passed    0.06 sec
+      Start 20: Playground.WebLod
+20/21 Test #20: Playground.WebLod .................   Passed    3.25 sec
+      Start 21: Playground.WebPhysics
+21/21 Test #21: Playground.WebPhysics .............   Passed    0.35 sec
+
+100% tests passed, 0 tests failed out of 21
+
+Total Test time (real) =  65.31 sec
