@@ -1,4 +1,5 @@
 #include "ProceduralAssemblies.hpp"
+#include "SurfaceFeatures.hpp"
 #include "DamageField.hpp"
 #include "SolidGeometry.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
@@ -212,6 +213,16 @@ int main()
         Settings pier;
         pier.kind=Assembly::Kind::WoodenPier;
         const auto intactPier=build(curvedPath(),pier);
+        SurfaceFeatureCache pierFeatureCache;
+        SurfaceFeatureSettings pierFeatureSettings;
+        pierFeatureSettings.contact=false;
+        const auto pierDebug=surfaceDebugValues(
+            pierFeatureCache.get(intactPier.mesh.mesh,pierFeatureSettings),
+            SurfaceDebugField::SignedCurvature);
+        require(pierDebug.size()==intactPier.mesh.mesh.positions.size() &&
+                std::all_of(pierDebug.begin(),pierDebug.end(),
+                    [](float value){return std::isfinite(value);}),
+                "assembly debug view must consume the shared vertex feature field");
         const auto expected=fitCountSpacing(intactPier.path.lengthMeters,pier.boardWidthMeters,pier.boardGapMeters);
         std::size_t boards=0;
         for (const auto &part:intactPier.parts)

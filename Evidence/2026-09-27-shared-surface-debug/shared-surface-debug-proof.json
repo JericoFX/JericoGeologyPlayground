@@ -1,0 +1,53 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "cacheHits": 1,
+      "cacheMisses": 1,
+      "channel": "curvature",
+      "computeMilliseconds": 1.9644,
+      "consumer": "rock",
+      "maximum": 10.517714500427246,
+      "meshHash": 18033684940807682833,
+      "minimum": -9.774601936340332,
+      "vertices": 1538
+    },
+    {
+      "cacheHits": 2,
+      "cacheMisses": 2,
+      "channel": "cavity",
+      "computeMilliseconds": 17.1073,
+      "consumer": "rock",
+      "maximum": 0.542519748210907,
+      "meshHash": 18033684940807682833,
+      "minimum": 0.0,
+      "vertices": 1538
+    },
+    {
+      "cacheHits": 1,
+      "cacheMisses": 1,
+      "channel": "curvature",
+      "computeMilliseconds": 0.8742,
+      "consumer": "pier",
+      "maximum": 17.092044830322266,
+      "meshHash": 7448196623634934938,
+      "minimum": 0.0,
+      "vertices": 972
+    },
+    {
+      "cacheHits": 2,
+      "cacheMisses": 2,
+      "channel": "cavity",
+      "computeMilliseconds": 15.6904,
+      "consumer": "pier",
+      "maximum": 0.4935692548751831,
+      "meshHash": 7448196623634934938,
+      "minimum": 0.0,
+      "vertices": 972
+    }
+  ],
+  "resolution": [
+    1280,
+    960
+  ]
+}

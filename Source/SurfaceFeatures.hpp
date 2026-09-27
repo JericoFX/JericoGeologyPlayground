@@ -54,6 +54,13 @@ private:
     std::size_t hits_{}, misses_{};
     double computeMilliseconds_{};
 };
+enum class SurfaceDebugField
+{
+    SignedCurvature, Convexity, Concavity, Cavity, EdgeDistance,
+    BoundaryDistance, Exposure, Thickness
+};
+std::vector<float> surfaceDebugValues(const SurfaceFeatureFields &features,
+                                      SurfaceDebugField field);
 std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
                                          double lambda, const Jerico::CancellationToken *cancel = nullptr);
 } // namespace Playground

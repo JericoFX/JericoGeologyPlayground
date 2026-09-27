@@ -18,7 +18,9 @@ constexpr const char *presets[]={"Pipe + Couplings","Railway","Broken Railway",
     "Catwalk","Beam Bridge","Warren Truss","Pratt Truss","Howe Truss",
     "Suspension Bridge","Rope / Plank Bridge"};
 constexpr const char *views[]={"Lit","Wireframe","Normals","UV Checker",
-    "Semantic Roles","RMF Frames"};
+    "Semantic Roles","RMF Frames","Shared surface field"};
+constexpr const char *surfaceFields="Signed curvature\0Convexity\0Concavity\0Cavity/contact\0"
+    "Crease distance\0Boundary distance\0Exposure\0Thickness\0";
 void panel(const char *title,float x,float y,float width,float height)
 {
     ImGui::SetNextWindowPos({x,y});
@@ -571,6 +573,14 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     panel("Procedural Assemblies viewport",left,top,
           float(width)-left-right,float(height)-top-bottom);
     ImGui::Combo("View",&view,views,int(std::size(views)));
+    if (view==6)
+    {
+        if (ImGui::Combo("Shared field",&surfaceDebugField,surfaceFields))
+            uploadedView=-1;
+        ImGui::Text("Feature cache: %zu hits / %zu misses | %.1f ms compute",
+            surfaceFeatureCache.hits(),surfaceFeatureCache.misses(),
+            surfaceFeatureCache.computeMilliseconds());
+    }
     if (ImGui::Button("Fit")) {fitCamera=true;dirty=true;rebuild();}
     if (view!=uploadedView)
     {
@@ -580,6 +590,25 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             axes.path=built.path;axes.mesh=built.mesh;axes.cornerUV=built.cornerUV;
             auto debug=Construction::withFrameAxes(axes);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
+        }
+        else if (view==6)
+        {
+            try
+            {
+                SurfaceFeatureSettings analysis;
+                analysis.contact=surfaceDebugField==3;
+                analysis.thickness=surfaceDebugField==7;
+                const auto &features=surfaceFeatureCache.get(built.mesh.mesh,analysis);
+                auto debug=built.mesh;
+                debug.field=surfaceDebugValues(features,
+                    static_cast<SurfaceDebugField>(surfaceDebugField));
+                renderer.upload(debug,nullptr,nullptr,nullptr,false,&built.cornerUV);
+            }
+            catch (const std::exception &exception)
+            {
+                error=exception.what();
+                renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+            }
         }
         else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
         uploadedView=view;
@@ -605,7 +634,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     }
     auto size=ImGui::GetContentRegionAvail();
     size.x=std::max(size.x,32.0f);size.y=std::max(size.y,32.0f);
-    constexpr int modes[]={0,2,1,8,3,10};
+    constexpr int modes[]={0,2,1,8,3,10,3};
     auto texture=renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture),size);
     if (const auto *projector=selectedProjector())

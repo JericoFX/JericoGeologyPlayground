@@ -63,6 +63,25 @@ int main()
         settings.contact = false;
         auto convex = surfaceFeatures(crease(-1), settings);
         auto concave = surfaceFeatures(crease(1), settings);
+        const auto debugConvex=surfaceDebugValues(convex,
+            SurfaceDebugField::SignedCurvature);
+        const auto debugCavity=surfaceDebugValues(concave,SurfaceDebugField::Cavity);
+        require(debugConvex.size()==crease(-1).positions.size() &&
+                    debugCavity.size()==debugConvex.size() &&
+                    std::abs(double(debugConvex[0])-
+                             convex.signedDihedralCurvature[0])<1e-6 &&
+                    std::abs(double(debugCavity[0])-
+                             concave.cavityAccumulation[0])<1e-6,
+                "shared debug channels must preserve the same vertex fields for consumers");
+        SurfaceFeatureFields unreachable;
+        unreachable.edgeDistance={0,std::numeric_limits<double>::infinity()};
+        const auto debugDistance=surfaceDebugValues(unreachable,
+            SurfaceDebugField::EdgeDistance);
+        require(debugDistance.size()==2 && debugDistance[0]==0 &&
+                    std::isfinite(debugDistance[1]) && debugDistance[1]>0,
+                "unreachable crease distance must remain finite for the renderer");
+        rejects([&]{(void)surfaceDebugValues(convex,SurfaceDebugField::Thickness);},
+                "debug thickness must request the shared thickness analysis explicitly");
         require(concave.cavityAccumulation[0]>convex.cavityAccumulation[0] &&
                     convex.cavityAccumulation.size()==convex.convexity.size(),
                 "shared cavity field must favor concavity without a separate consumer analysis");

@@ -2,6 +2,7 @@
 
 #include "ProceduralAssemblies.hpp"
 #include "Renderer.hpp"
+#include "SurfaceFeatures.hpp"
 
 #include <string>
 #include <optional>
@@ -23,6 +24,8 @@ class AssemblyLabUI
     Camera camera;
     std::string selectedId,error;
     int selectedPoint{},selectedArea{-1},selectedPath{-1},view{},uploadedView{-1};
+    int surfaceDebugField{};
+    SurfaceFeatureCache surfaceFeatureCache;
     bool dirty{true},fitCamera{true},moveDamageAreaMode{},movingDamageArea{};
     Vec3d damageGrabOffset{};
     unsigned nextPointId{30},nextAreaId{1},nextPathId{1};

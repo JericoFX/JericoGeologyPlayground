@@ -535,6 +535,64 @@ void captureSurfaceFeatures(Renderer &renderer, const std::filesystem::path &evi
     std::ofstream(evidence / "surface-features-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
 }
+void captureSharedSurfaceDebug(Renderer &renderer,const std::filesystem::path &evidence)
+{
+    std::filesystem::create_directories(evidence);
+    PA::ProceduralSpline line;
+    line.splineGuid=Solid::region(2302,501);
+    line.name="Shared surface debug pier";
+    line.interpolation=PA::SplineInterpolation::Polyline;
+    for (int i=0;i<2;++i)
+    {
+        PA::SplineControlPoint point;
+        point.pointGuid=Solid::region(2302,502+i);
+        point.position={i?-3.0:3.0,0,0};
+        line.points.push_back(point);
+    }
+    Assembly::Settings settings;
+    settings.kind=Assembly::Kind::WoodenPier;
+    const auto pier=Assembly::build(line,settings);
+    const auto rock=evaluate(preset(0),16);
+    nlohmann::json proof={{"adapter",renderer.adapter()},
+                          {"resolution",{1280,960}}};
+    auto capture=[&](const char *name,const MeshResult &mesh,
+                     const std::vector<std::array<float,2>> *uv,float distance)
+    {
+        SurfaceFeatureCache cache;
+        Camera camera;
+        camera.distance=distance;
+        camera.yaw=.35f;
+        camera.pitch=-.2f;
+        for (const auto [channel,label]:{
+            std::pair{SurfaceDebugField::SignedCurvature,"curvature"},
+            std::pair{SurfaceDebugField::Cavity,"cavity"}})
+        {
+            SurfaceFeatureSettings analysis;
+            analysis.contact=channel==SurfaceDebugField::Cavity;
+            const auto &features=cache.get(mesh.mesh,analysis);
+            const auto &again=cache.get(mesh.mesh,analysis);
+            if (&features!=&again)
+                throw std::runtime_error("Shared surface field cache did not reuse geometry");
+            auto debug=mesh;
+            debug.field=surfaceDebugValues(features,channel);
+            if (debug.field.size()!=mesh.mesh.positions.size())
+                throw std::runtime_error("Shared surface field lost vertex domain");
+            renderer.upload(debug,nullptr,nullptr,nullptr,false,uv);
+            renderer.draw(1280,960,camera,3);
+            renderer.capture(evidence/(std::string(name)+"-"+label+".png"));
+            const auto [low,high]=std::minmax_element(debug.field.begin(),debug.field.end());
+            proof["cases"].push_back({{"consumer",name},{"channel",label},
+                {"meshHash",PA::hashTriangleMesh(mesh.mesh)},
+                {"vertices",debug.field.size()},{"minimum",*low},{"maximum",*high},
+                {"cacheHits",cache.hits()},{"cacheMisses",cache.misses()},
+                {"computeMilliseconds",cache.computeMilliseconds()}});
+        }
+    };
+    capture("rock",rock,nullptr,5.5f);
+    capture("pier",pier.mesh,&pier.cornerUV,9.5f);
+    std::ofstream(evidence/"shared-surface-debug-proof.json")<<proof.dump(2)<<'\n';
+    std::cout<<proof.dump(2)<<'\n';
+}
 void captureSharedDamageCavity(Renderer &renderer,const std::filesystem::path &evidence)
 {
     nlohmann::json proof;
@@ -2429,7 +2487,8 @@ int run(int argc, char **argv)
          slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
          cliffMipBiasSmoke = false, strataMipBiasSmoke = false,
          cliffMomentSmoke = false, strataMomentSmoke = false,
-         damageCavitySmoke = false, damagePathSmoke = false;
+         damageCavitySmoke = false, damagePathSmoke = false,
+         sharedSurfaceDebugSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -2458,6 +2517,7 @@ int run(int argc, char **argv)
         if (std::string(argv[i]) == "--smoke-test" ||
             std::string(argv[i]) == "--material-gallery-test" ||
             std::string(argv[i]) == "--surface-features-test" ||
+            std::string(argv[i]) == "--shared-surface-debug-test" ||
             std::string(argv[i]) == "--damage-cavity-test" ||
             std::string(argv[i]) == "--damage-path-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
@@ -2513,6 +2573,7 @@ int run(int argc, char **argv)
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
+            sharedSurfaceDebugSmoke = std::string(argv[i]) == "--shared-surface-debug-test";
             damageCavitySmoke = std::string(argv[i]) == "--damage-cavity-test";
             damagePathSmoke = std::string(argv[i]) == "--damage-path-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
@@ -2647,6 +2708,12 @@ int run(int argc, char **argv)
         SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }
+    if (sharedSurfaceDebugSmoke)
+    {
+        captureSharedSurfaceDebug(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
     Recipe recipe = preset(0);
     MeshResult displayed = evaluate(recipe, recipe.previewResolution);
     renderer.upload(displayed);
@@ -2657,6 +2724,8 @@ int run(int argc, char **argv)
     WebLabUI webLab;
     int workspace = 0;
     int selected = 0, presetIndex = 0, mode = 4, inspection = 0, addKind = 1;
+    int surfaceDebugField=-1;
+    SurfaceFeatureCache geologyFeatureCache;
     int materialChoice = 0;
     std::string error, status = "Ready", path;
     bool dirty = true, wasActive = false;
@@ -2683,6 +2752,21 @@ int run(int argc, char **argv)
         const int appearance = materialAppearance(recipe, materialChoice);
         renderer.uploadMaterial(bake, materialDiffuse(appearance), true, appearance);
     };
+    auto uploadGeology = [&]
+    {
+        if (surfaceDebugField>=0)
+        {
+            SurfaceFeatureSettings analysis;
+            analysis.contact=surfaceDebugField==3;
+            analysis.thickness=surfaceDebugField==7;
+            const auto &features=geologyFeatureCache.get(displayed.mesh,analysis);
+            auto debug=displayed;
+            debug.field=surfaceDebugValues(features,
+                static_cast<SurfaceDebugField>(surfaceDebugField));
+            renderer.upload(debug);
+        }
+        else renderer.upload(displayed);
+    };
     auto remember = [&](const Recipe &before)
     {
         if (undo.size() >= 64)
@@ -2698,7 +2782,7 @@ int run(int argc, char **argv)
         {
             bakedPreview.reset();
             bakeView = 0;
-            renderer.upload(displayed);
+            uploadGeology();
             bindMaterial(nullptr);
         }
         hasComparison = false;
@@ -2741,7 +2825,7 @@ int run(int argc, char **argv)
                 if (build.generation == generation)
                 {
                     displayed = std::move(next);
-                    renderer.upload(displayed);
+                    uploadGeology();
                     bindMaterial(nullptr);
                     builtResolution = build.resolution;
                     status = "Ready";
@@ -2801,7 +2885,7 @@ int run(int argc, char **argv)
         if (ImGui::RadioButton("Geology", workspace==0) && workspace!=0)
         {
             workspace = 0;
-            renderer.upload(displayed);
+            uploadGeology();
             bindMaterial(nullptr);
         }
         ImGui::SameLine();
@@ -3166,7 +3250,13 @@ int run(int argc, char **argv)
         }
         panel("Viewport", left, top, float(w) - left - right, h - top - bottom);
         ImGui::SetNextItemWidth(140);
-        ImGui::Combo("View", &mode, "Lit\0Normals\0Wireframe\0Field\0Material\0");
+        if (ImGui::Combo("View", &mode, "Lit\0Normals\0Wireframe\0Field\0Material\0") &&
+            mode!=3 && surfaceDebugField>=0)
+        {
+            surfaceDebugField=-1;
+            uploadGeology();
+            bindMaterial(nullptr);
+        }
         ImGui::SameLine();
         ImGui::SetNextItemWidth(125);
         if (ImGui::Combo("Material", &materialChoice,
@@ -3177,11 +3267,36 @@ int run(int argc, char **argv)
         if (ImGui::Combo("Inspect", &inspection,
                          "Final result\0Up to selected layer\0Selected layer field\0"))
         {
+            if (surfaceDebugField>=0)
+            {
+                surfaceDebugField=-1;
+                uploadGeology();
+                bindMaterial(nullptr);
+            }
             if (inspection == 2)
                 mode = 3;
             changed();
         }
-        if (mode == 3 && inspection != 2)
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(190);
+        int debugChoice=surfaceDebugField+1;
+        if (ImGui::Combo("Shared surface field",&debugChoice,
+                         "Off\0Signed curvature\0Convexity\0Concavity\0Cavity/contact\0"
+                         "Crease distance\0Boundary distance\0Exposure\0Thickness\0"))
+        {
+            const int previousInspection=inspection;
+            surfaceDebugField=debugChoice-1;
+            inspection=0;
+            mode=surfaceDebugField>=0?3:0;
+            if (previousInspection!=0 || build.future.valid()) changed();
+            uploadGeology();
+            bindMaterial(nullptr);
+        }
+        if (surfaceDebugField>=0)
+            ImGui::Text("Shared field cache: %zu hits / %zu misses | %.1f ms compute",
+                geologyFeatureCache.hits(),geologyFeatureCache.misses(),
+                geologyFeatureCache.computeMilliseconds());
+        if (mode == 3 && inspection != 2 && surfaceDebugField<0)
         {
             inspection = 2;
             changed();

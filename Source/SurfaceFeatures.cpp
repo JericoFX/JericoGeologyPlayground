@@ -60,6 +60,41 @@ const SurfaceFeatureFields &SurfaceFeatureCache::get(const TriangleMesh &mesh,
     settings_=settings;meshHash_=hash;valid_=true;++misses_;
     return fields_;
 }
+std::vector<float> surfaceDebugValues(const SurfaceFeatureFields &features,
+                                      SurfaceDebugField field)
+{
+    const std::vector<double> *source=nullptr;
+    bool distance=false;
+    switch (field)
+    {
+    case SurfaceDebugField::SignedCurvature: source=&features.signedDihedralCurvature; break;
+    case SurfaceDebugField::Convexity: source=&features.convexity; break;
+    case SurfaceDebugField::Concavity: source=&features.concavity; break;
+    case SurfaceDebugField::Cavity: source=&features.cavityAccumulation; break;
+    case SurfaceDebugField::EdgeDistance: source=&features.edgeDistance; distance=true; break;
+    case SurfaceDebugField::BoundaryDistance: source=&features.boundaryDistance; distance=true; break;
+    case SurfaceDebugField::Exposure: source=&features.exposure; break;
+    case SurfaceDebugField::Thickness: source=&features.thickness; break;
+    }
+    if (!source || source->empty())
+        throw std::runtime_error("Requested surface debug field was not computed");
+    double farthest=0;
+    if (distance)
+        for (const auto value:*source)
+            if (std::isfinite(value)) farthest=std::max(farthest,value);
+    std::vector<float> values;
+    values.reserve(source->size());
+    for (auto value:*source)
+    {
+        if (distance && std::isinf(value) && value>0)
+            value=farthest>0?farthest:1;
+        if (!std::isfinite(value) ||
+            std::abs(value)>std::numeric_limits<float>::max())
+            throw std::runtime_error("Surface debug field has invalid values");
+        values.push_back(float(value));
+    }
+    return values;
+}
 std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
                                          double lambda, const Jerico::CancellationToken *cancel)
 {
