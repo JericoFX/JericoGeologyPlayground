@@ -2565,6 +2565,9 @@ int run(int argc, char **argv)
     auto lastEdit = std::chrono::steady_clock::now();
     std::vector<Recipe> undo, redo;
     bool movingDamageArea=false;
+    bool recordedDamageMove=false;
+    bool moveDamageAreaMode=false;
+    Vec3d damageGrabOffset{};
     auto bindMaterial = [&](const NormalBake *bake)
     {
         const int appearance = materialAppearance(recipe, materialChoice);
@@ -3080,9 +3083,14 @@ int run(int argc, char **argv)
         const bool selectedDamageArea=selected>=0 && selected<int(recipe.layers.size()) &&
             (recipe.layers[selected].kind==Kind::DamageDecal ||
              recipe.layers[selected].kind==Kind::DamageCavity);
-        ImGui::TextUnformatted(selectedDamageArea ?
-            "Shift+drag: move selected damage area | Drag: orbit | Wheel: zoom" :
-            "Drag left: orbit | Middle/right: pan | Wheel: zoom");
+        if (selectedDamageArea)
+        {
+            ImGui::Checkbox("Move selected damage area",&moveDamageAreaMode);
+            ImGui::SameLine();
+            ImGui::TextUnformatted("Shift+drag also moves | Wheel: zoom");
+        }
+        else
+            ImGui::TextUnformatted("Drag left: orbit | Middle/right: pan | Wheel: zoom");
         auto size = ImGui::GetContentRegionAvail();
         size.x = std::max(size.x, 32.0f);
         size.y = std::max(size.y, 32.0f);
@@ -3108,7 +3116,7 @@ int run(int argc, char **argv)
         if (ImGui::IsItemHovered())
         {
             auto &io = ImGui::GetIO();
-            const bool moveArea=selectedDamageArea && io.KeyShift &&
+            const bool moveArea=selectedDamageArea && (io.KeyShift || moveDamageAreaMode) &&
                 ImGui::IsMouseDown(ImGuiMouseButton_Left);
             if (moveArea)
             {
@@ -3121,10 +3129,23 @@ int run(int argc, char **argv)
                 if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
                         io.MousePos.x-origin.x,io.MousePos.y-origin.y,center,normal))
                 {
-                    if (!movingDamageArea) remember(recipe);
-                    movingDamageArea=true;
-                    layer.translation={float(hit->x),float(hit->y),float(hit->z)};
-                    changed();
+                    if (!movingDamageArea)
+                    {
+                        damageGrabOffset={center.x-hit->x,center.y-hit->y,center.z-hit->z};
+                        movingDamageArea=true;
+                    }
+                    const std::array<float,3> next={float(hit->x+damageGrabOffset.x),
+                        float(hit->y+damageGrabOffset.y),float(hit->z+damageGrabOffset.z)};
+                    if (layer.translation!=next)
+                    {
+                        if (!recordedDamageMove)
+                        {
+                            remember(recipe);
+                            recordedDamageMove=true;
+                        }
+                        layer.translation=next;
+                        changed();
+                    }
                 }
             }
             if (!moveArea && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
@@ -3145,7 +3166,11 @@ int run(int argc, char **argv)
             }
             camera.distance = std::clamp(camera.distance * std::exp(-io.MouseWheel * 0.1f), 1.0f, 90.0f);
         }
-        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) movingDamageArea=false;
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+        {
+            movingDamageArea=false;
+            recordedDamageMove=false;
+        }
         ImGui::End();
         panel("Metrics", 0, float(h) - bottom, float(w), bottom);
         ImGui::Text("%s | Mesh generation CPU: %.2f ms | Vertices: %zu | Triangles: %zu | Resolution: %d | "
