@@ -5,6 +5,8 @@
 #include "SolidGeometry.hpp"
 #include "SurfaceGeometry.hpp"
 #include "SurfaceFeatures.hpp"
+#include "SplineLabUI.hpp"
+#include "SplineLabEvidence.hpp"
 #include <Jerico/Core/Guid.hpp>
 #include <Jerico/Platform/Window.hpp>
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
@@ -2188,6 +2190,7 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
+    bool splineEvidence=false;
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
          angularProfileSmoke = false, extremeDeformationSmoke = false,
          cliffSoftCreationSmoke = false, rockLodSmoke = false,
@@ -2218,6 +2221,12 @@ int run(int argc, char **argv)
     unsigned adaptiveSeed = 123;
     int automaticUvFamily = -1;
     int automaticUvRockLodFamily = -1;
+    for (int i=1;i<argc;++i)
+        if (std::string(argv[i])=="--spline-construction-test")
+        {
+            splineEvidence=true;
+            if (i+1<argc) evidence=argv[i+1];
+        }
     for (int i = 1; i < argc; ++i)
         if (std::string(argv[i]) == "--smoke-test" ||
             std::string(argv[i]) == "--material-gallery-test" ||
@@ -2356,7 +2365,7 @@ int run(int argc, char **argv)
                 adaptiveSeed = unsigned(std::stoul(argv[++i]));
             }
         }
-    if (smoke)
+    if (smoke || splineEvidence)
         std::filesystem::create_directories(evidence);
     if (lowSweepSmoke)
     {
@@ -2377,11 +2386,19 @@ int run(int argc, char **argv)
     style.FrameRounding = 3;
     style.FramePadding = {6, 5};
     style.ItemSpacing = {8, 7};
+    if (splineEvidence)
+    {
+        captureSplineConstruction(renderer,evidence);
+        SetWindowLongPtrW(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
     Recipe recipe = preset(0);
     MeshResult displayed = evaluate(recipe, recipe.previewResolution);
     renderer.upload(displayed);
     renderer.uploadMaterial(nullptr, materialDiffuse(materialAppearance(recipe, 0)));
     Camera camera;
+    SplineLabUI splineLab;
+    bool splineWorkspace = false;
     int selected = 0, presetIndex = 0, mode = 4, inspection = 0, addKind = 1;
     int materialChoice = 0;
     std::string error, status = "Ready", path;
@@ -2518,9 +2535,27 @@ int run(int argc, char **argv)
                          ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
         };
         panel("Jerico Geology Playground", 0, 0, float(w), top);
-        ImGui::TextUnformatted(
-            "Independent experiment | Shared Jerico window, mesh types and CPU FBM | No Blender");
+        ImGui::TextUnformatted("Workspace:");
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Geology", !splineWorkspace) && splineWorkspace)
+        {
+            splineWorkspace = false;
+            renderer.upload(displayed);
+            bindMaterial(nullptr);
+        }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Spline Construction", splineWorkspace) && !splineWorkspace)
+        {
+            splineWorkspace = true;
+            splineLab.activate(renderer);
+        }
         ImGui::End();
+        if (splineWorkspace)
+        {
+            splineLab.frame(renderer,w,h);
+            renderer.present();
+            continue;
+        }
         bool anyChange = false;
         Recipe before = recipe;
         panel("Operations", 0, top, left, h - top - bottom);

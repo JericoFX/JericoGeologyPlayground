@@ -82,6 +82,24 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
   n=normalize(t*mapped.x+b*mapped.y+n*mapped.z);
  }
  if(Target.w>0.5 && Target.w<1.5)return float4(n*.5+.5,1);
+ if(Target.w>7.5 && Target.w<8.5){
+  float2 grid=floor(input.UV*2.0);
+  float checker=fmod(abs(grid.x+grid.y),2.0);
+  float2 seam=abs(frac(input.UV)-0.5);
+  float gridLine=step(.47,max(seam.x,seam.y));
+  float3 c=lerp(float3(.12,.16,.18),float3(.84,.81,.69),checker);
+  return float4(lerp(c,float3(.12,.45,.9),gridLine*.65),1);
+ }
+ if(Target.w>8.5 && Target.w<9.5){
+  float seam=step(.5,input.Field);
+  return float4(lerp(float3(.52,.48,.41),float3(1,.05,.1),seam),1);
+ }
+ if(Target.w>9.5 && Target.w<10.5){
+  if(input.Field>.5 && input.Field<1.5)return float4(1,.16,.14,1);
+  if(input.Field>1.5 && input.Field<2.5)return float4(.16,1,.24,1);
+  if(input.Field>2.5)return float4(.15,.45,1,1);
+  return float4(.33,.31,.28,1);
+ }
  if(Target.w>4.5 && Target.w<5.5){
   float2 uv=float2(input.UV.x,1-input.UV.y);
   float ao=AmbientMap.Sample(AmbientMap_sampler,uv).r;
@@ -352,7 +370,8 @@ void Renderer::begin(unsigned width, unsigned height)
 void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
                       const std::vector<std::uint8_t> *diagnosticMap,
                       const std::vector<std::vector<std::uint8_t>> *diagnosticMips,
-                      bool useNormalMoments)
+                      bool useNormalMoments,
+                      const std::vector<std::array<float, 2>> *cornerUV)
 {
     auto &r = *impl;
     std::vector<Vertex> vertices;
@@ -365,6 +384,8 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
                     bake->rgba.size() == std::size_t(bake->resolution) * bake->resolution * 4 &&
                     (!diagnosticMap || diagnosticMap->size() == bake->rgba.size()),
                 "Normal bake renderer input mismatch");
+    require(!cornerUV || (corners && cornerUV->size() == mesh.mesh.indices.size()),
+            "Analytic UV count must match mesh corners");
     require(!diagnosticMap || bake, "Diagnostic map requires the baked low UVs");
     require(!diagnosticMips || diagnosticMap, "Diagnostic mips require a diagnostic map");
     auto count = corners ? indices.size() : mesh.mesh.positions.size();
@@ -392,6 +413,11 @@ void Renderer::upload(const MeshResult &mesh, const NormalBake *bake,
             v.bitangent[0] = float(b.x);
             v.bitangent[1] = float(b.y);
             v.bitangent[2] = float(b.z);
+        }
+        else if (cornerUV)
+        {
+            vertices.back().uv[0] = (*cornerUV)[i][0];
+            vertices.back().uv[1] = (*cornerUV)[i][1];
         }
         r.low = std::min(r.low, f);
         r.high = std::max(r.high, f);
