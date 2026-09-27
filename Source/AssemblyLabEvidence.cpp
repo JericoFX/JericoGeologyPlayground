@@ -54,6 +54,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         const PA::ProceduralSpline *path;
         int mode{};
         bool damage{};
+        int areaSide{};
     };
     const Case cases[]={
         {"pipe-couplings",Assembly::Kind::PipeCouplings,&gentle},
@@ -72,7 +73,9 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"suspension-bridge",Assembly::Kind::SuspensionBridge,&gentle},
         {"suspension-hanger-debug",Assembly::Kind::SuspensionBridge,&gentle,3},
         {"rope-plank-bridge",Assembly::Kind::RopePlankBridge,&gentle},
-        {"rope-manual-damage",Assembly::Kind::RopePlankBridge,&gentle,0,true}};
+        {"rope-manual-damage",Assembly::Kind::RopePlankBridge,&gentle,0,true},
+        {"pier-area-left",Assembly::Kind::WoodenPier,&gentle,0,false,-1},
+        {"pier-area-right",Assembly::Kind::WoodenPier,&gentle,0,false,1}};
     nlohmann::json proof;
     proof["adapter"]=renderer.adapter();
     proof["resolution"]={1280,960};
@@ -91,6 +94,28 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
                 Assembly::Role::DeckPlank,7)]=Assembly::State::Broken;
             settings.damage.manual[Assembly::stablePartId(item.kind,
                 Assembly::Role::DeckPlank,9)]=Assembly::State::Loose;
+        }
+        if (item.areaSide)
+        {
+            const auto source=Assembly::build(*item.path,settings);
+            const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
+            const auto part=std::find_if(source.parts.begin(),source.parts.end(),
+                [&](const Assembly::Part &candidate){return candidate.id==id;});
+            if (part==source.parts.end())
+                throw std::runtime_error("Damage area evidence lacks target plank");
+            const auto frame=Construction::frameAtDistance(source.path,part->stationMeters);
+            Assembly::AreaDamageRule rule;
+            rule.area.id="area-plank-7";
+            rule.area.semanticPartId=id;
+            rule.area.projector.tangent=frame.tangent;
+            rule.area.projector.bitangent=frame.binormal;
+            rule.area.projector.normal=frame.normal;
+            rule.area.projector.center={part->position.x+frame.binormal.x*item.areaSide*.3,
+                part->position.y+frame.binormal.y*item.areaSide*.3,
+                part->position.z+frame.binormal.z*item.areaSide*.3};
+            rule.area.projector.scale.z=.35;
+            rule.area.footprint.radius={2,2,1};
+            settings.damage.areaRules.push_back(rule);
         }
         auto built=Assembly::build(*item.path,settings);
         const auto replay=Assembly::build(*item.path,settings);
@@ -114,6 +139,16 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         camera.target={float((lo.x+hi.x)*.5),float((lo.y+hi.y)*.5),float((lo.z+hi.z)*.5)};
         camera.distance=std::clamp(float(std::hypot(hi.x-lo.x,hi.y-lo.y,hi.z-lo.z))*1.25f,
                                    2.0f,90.0f);
+        if (item.areaSide)
+        {
+            const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
+            const auto part=std::find_if(built.parts.begin(),built.parts.end(),
+                [&](const Assembly::Part &candidate){return candidate.id==id;});
+            camera.target={float(part->position.x),float(part->position.y),
+                           float(part->position.z)};
+            camera.distance=3.2f;
+            camera.pitch=-.65f;
+        }
         renderer.draw(1280,960,camera,item.mode);
         if (std::string_view(item.name)=="pipe-couplings")
         {
@@ -206,6 +241,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             {"semanticPartCount",built.parts.size()},
             {"repeatStations",built.repeatedStations},
             {"manualDamageCount",settings.damage.manual.size()},
+            {"damageAreaSide",item.areaSide},
             {"promotedBodies",built.promotedBodyCount},
             {"constraints",built.constraintCount},{"stateCounts",states},
             {"meshHash",meshHash(built.mesh.mesh)},

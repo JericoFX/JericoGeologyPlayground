@@ -1,4 +1,5 @@
 #include "ProceduralAssemblies.hpp"
+#include "DamageField.hpp"
 #include "SolidGeometry.hpp"
 
 #include <algorithm>
@@ -41,6 +42,8 @@ class Builder
             settings.maximumParts>10000 || settings.maximumVertices<100 ||
             settings.maximumVertices>1000000)
             throw std::runtime_error("Assembly LOD or part/vertex budget is invalid");
+        if (settings.damage.areaRules.size()>maximumDamageAreas)
+            throw std::runtime_error("Assembly exceeds damage area budget");
         const double dimensions[]={settings.widthMeters,settings.heightMeters,settings.gaugeMeters,
             settings.sleeperSpacingMeters,settings.sleeperLengthMeters,settings.sleeperWidthMeters,
             settings.sleeperHeightMeters,settings.boardWidthMeters,settings.boardThicknessMeters,
@@ -104,7 +107,8 @@ class Builder
         result.mesh.cornerNormals.insert(result.mesh.cornerNormals.end(),3,unit(normal));
         result.cornerUV.insert(result.cornerUV.end(),{uvA,uvB,uvC});
     }
-    template<class Draw> void part(Role role,std::uint32_t index,int side,double station,Draw draw)
+    template<class Draw> void part(Role role,std::uint32_t index,int side,double station,
+                                   Vec3d position,Draw draw)
     {
         if (result.parts.size()>=settings.maximumParts)
             throw std::runtime_error("Assembly exceeds semantic part budget");
@@ -112,6 +116,7 @@ class Builder
         item.id=stablePartId(settings.kind,role,index,side);
         item.guid=stablePartGuid(item.id);
         item.role=role;item.index=index;item.side=side;item.stationMeters=station;
+        item.position=position;
         item.protectedPart=settings.damage.protectedIds.contains(item.id);
         item.state=resolveDamage(settings.damage,item);
         item.firstTriangle=result.mesh.mesh.indices.size()/3;
@@ -120,6 +125,11 @@ class Builder
         if (item.state!=State::Missing) draw(item);
         item.triangleCount=result.mesh.mesh.indices.size()/3-item.firstTriangle;
         result.parts.push_back(std::move(item));
+    }
+    template<class Draw> void part(Role role,std::uint32_t index,int side,double station,Draw draw)
+    {
+        part(role,index,side,station,
+             Construction::frameAtDistance(result.path,station).position,draw);
     }
     void box(Vec3d center,Vec3d tangent,Vec3d normal,Vec3d binormal,
              double along,double high,double across)
@@ -142,6 +152,37 @@ class Builder
             triangle(a,b,c,{0,0},{1,0},{1,1});
             triangle(a,c,d,{0,0},{1,1},{0,1});
         }
+    }
+    void plank(Vec3d center,Vec3d tangent,Vec3d normal,Vec3d binormal,
+               double along,double high,double across)
+    {
+        if (settings.lod==2) {box(center,tangent,normal,binormal,along,high,across);return;}
+        const auto bevel=std::min({high*.22,along*.08,across*.02,.012});
+        if (bevel<=1e-6 || bevel*std::min({along,high,across})<=4e-10)
+        {box(center,tangent,normal,binormal,along,high,across);return;}
+        const auto base=std::uint32_t(result.mesh.mesh.positions.size());
+        for (unsigned ring=0;ring<4;++ring)
+        {
+            const bool inner=ring==0 || ring==3;
+            const double a=along*.5-(inner?bevel:0);
+            const double b=across*.5-(inner?bevel:0);
+            const double y=ring==0?high*.5:ring==1?high*.5-bevel:
+                           ring==2?-high*.5+bevel:-high*.5;
+            for (unsigned corner=0;corner<4;++corner)
+                vertex(add(center,add(mul(tangent,corner==1 || corner==2?a:-a),
+                    add(mul(normal,y),mul(binormal,corner>=2?b:-b)))));
+        }
+        auto quad=[&](unsigned a,unsigned b,unsigned c,unsigned d)
+        {
+            triangle(base+a,base+b,base+c,{0,0},{1,0},{1,1});
+            triangle(base+a,base+c,base+d,{0,0},{1,1},{0,1});
+        };
+        quad(0,3,2,1);
+        for (unsigned ring=0;ring<3;++ring)
+            for (unsigned side=0;side<4;++side)
+                quad(ring*4+side,ring*4+(side+1)%4,
+                     (ring+1)*4+(side+1)%4,(ring+1)*4+side);
+        quad(12,13,14,15);
     }
     void beam(Vec3d start,Vec3d end,double width,double height,Vec3d upHint,State state=State::Intact)
     {
@@ -245,14 +286,27 @@ class Builder
         else tube(points,radius);
     }
     void brokenBoard(const Construction::PathFrame &frame,double boardWidth,
-                     double boardLength,double thickness,std::uint32_t index)
+                     double boardLength,double thickness,const Part &part)
     {
-        const auto phase=double(index)*.38196601125;
+        auto cutCenter=boardLength*.5*(damageRandom01(settings.damage.seed,
+            part.id,"cut-position")-.5);
+        for (const auto &rule:settings.damage.areaRules)
+            if (rule.state==State::Broken &&
+                sampleDamageArea(rule.area,{part.position,part.id,name(part.role),
+                    part.index,part.stationMeters})>.5)
+            {
+                cutCenter=std::clamp(dot(sub(rule.area.projector.center,frame.position),
+                    frame.binormal),-boardLength*.35,boardLength*.35);
+                break;
+            }
+        const bool fallenRight=damageRandom01(settings.damage.seed,
+            part.id,"fallen-side")>=.5;
         const auto cut=[&](double u)
         {
             const auto x=(u/boardWidth+.5);
-            return boardLength*(.035*std::sin(2*std::numbers::pi*(2*x+phase))+
-                                .012*std::sin(2*std::numbers::pi*(5*x+phase*.37)));
+            return cutCenter+fractureProfileOffset(x,
+                std::min(boardLength*.05,boardWidth*.22),boardWidth,
+                settings.damage.seed,part.id);
         };
         const auto gap=boardLength*.04;
         auto prism=[&](bool left)
@@ -283,6 +337,9 @@ class Builder
             for (const auto &point:polygon)
             {
                 auto center=add(frame.position,add(mul(frame.tangent,point.u),mul(frame.binormal,point.v)));
+                if (left!=fallenRight)
+                    center=add(center,add(mul(frame.normal,-thickness*1.2),
+                        mul(frame.binormal,(left?-1:1)*thickness*.3)));
                 center=add(center,mul(frame.normal,-thickness*.5));
                 vertex(center);
                 vertex(add(center,mul(frame.normal,thickness)));
@@ -338,7 +395,7 @@ class Builder
 void buildPipe(Builder &builder,const PA::ProceduralSpline &spline)
 {
     const auto &settings=builder.settings;
-    builder.part(Role::PipeBody,0,0,0,[&](const Part &part)
+    builder.part(Role::PipeBody,0,0,builder.result.path.lengthMeters*.5,[&](const Part &part)
     {
         if (part.state!=State::Intact)
         {
@@ -399,14 +456,16 @@ void buildRailway(Builder &builder)
     for (std::size_t i=0;i<placements.size();++i)
     {
         const auto &frame=placements[i].frame;
-        builder.part(Role::Sleeper,std::uint32_t(i),0,frame.distanceMeters,[&](const Part &part)
+        builder.part(Role::Sleeper,std::uint32_t(i),0,frame.distanceMeters,
+                     add(frame.position,mul(frame.normal,-s.sleeperHeightMeters*.6)),
+                     [&](const Part &part)
         {
             auto center=add(frame.position,mul(frame.normal,-s.sleeperHeightMeters*.6));
             if (part.state==State::Loose || part.state==State::Detached)
                 center=add(center,mul(frame.normal,-s.sleeperHeightMeters*.8));
             if (part.state==State::Broken)
                 builder.brokenBoard(frame,s.sleeperWidthMeters,s.sleeperLengthMeters,
-                                    s.sleeperHeightMeters,std::uint32_t(i));
+                                    s.sleeperHeightMeters,part);
             else if (part.state==State::Bent || part.state==State::Collapsed)
             {
                 const auto tilted=unit(add(frame.binormal,mul(frame.normal,.15)));
@@ -425,7 +484,12 @@ void buildRailway(Builder &builder)
         {
             const double start=path.lengthMeters*double(i)/double(segments);
             const double end=path.lengthMeters*double(i+1)/double(segments);
-            builder.part(Role::Rail,std::uint32_t(i),side,(start+end)*.5,[&](const Part &part)
+            const auto middle=Construction::frameAtDistance(path,(start+end)*.5);
+            const auto railCenter=add(middle.position,
+                add(mul(middle.binormal,side*s.gaugeMeters*.5),
+                    mul(middle.normal,s.railHeightMeters*.5)));
+            builder.part(Role::Rail,std::uint32_t(i),side,(start+end)*.5,
+                         railCenter,[&](const Part &part)
             {
                 auto point=[&](double distance)
                 {
@@ -458,18 +522,19 @@ void buildRailway(Builder &builder)
             {
                 const auto station=path.lengthMeters*double(i)/double(segments);
                 const auto frame=Construction::frameAtDistance(path,station);
+                const auto center=add(frame.position,
+                    add(mul(frame.binormal,side*s.gaugeMeters*.5),
+                        mul(frame.normal,s.railHeightMeters*.45)));
                 builder.part(Role::RailJoint,std::uint32_t(i),side,station,
+                             center,
                              [&](const Part &part)
                 {
-                    const auto center=add(frame.position,
-                        add(mul(frame.binormal,side*s.gaugeMeters*.5),
-                            mul(frame.normal,s.railHeightMeters*.45)));
                     builder.box(center,frame.tangent,frame.normal,frame.binormal,
                         s.railWidthMeters*2,s.railHeightMeters*.45,s.railWidthMeters*1.6);
                 });
             }
 }
-void buildPier(Builder &builder)
+void buildPier(Builder &builder,bool groundSupports=true)
 {
     const auto &s=builder.settings;
     const auto &path=builder.result.path;
@@ -495,14 +560,19 @@ void buildPier(Builder &builder)
             }
             if (part.state==State::Broken)
                 builder.brokenBoard(frame,fit.actualWidthMeters,s.widthMeters,s.boardThicknessMeters,
-                                    std::uint32_t(i));
-            else builder.box(center,frame.tangent,frame.normal,frame.binormal,
-                             fit.actualWidthMeters,s.boardThicknessMeters,s.widthMeters);
+                                    part);
+            else builder.plank(center,frame.tangent,frame.normal,frame.binormal,
+                               fit.actualWidthMeters,s.boardThicknessMeters,s.widthMeters);
         });
     }
     builder.result.repeatedStations+=fit.count;
     for (int side:{-1,1})
-        builder.part(Role::Beam,0,side,path.lengthMeters*.5,[&](const Part &part)
+    {
+        const auto middle=Construction::frameAtDistance(path,path.lengthMeters*.5);
+        const auto center=add(middle.position,
+            add(mul(middle.binormal,side*s.widthMeters*.36),
+                mul(middle.normal,-s.beamHeightMeters*.8)));
+        builder.part(Role::Beam,0,side,path.lengthMeters*.5,center,[&](const Part &part)
         {
             std::vector<Vec3d> points;
             const auto count=std::clamp(std::size_t(std::ceil(path.lengthMeters/.25)),
@@ -533,6 +603,7 @@ void buildPier(Builder &builder)
             else builder.tube(points,s.beamWidthMeters*.5,
                 Construction::ProfileKind::Rectangle,s.beamWidthMeters,s.beamHeightMeters);
         });
+    }
     const auto supports=Construction::repeatAlongPath(path,
         {.spacingMeters=s.supportSpacingMeters,.offsetMeters=s.supportSpacingMeters*.5,
          .endPaddingMeters=s.supportSpacingMeters*.25,.maximumParts=s.maximumParts});
@@ -540,24 +611,37 @@ void buildPier(Builder &builder)
     for (std::size_t i=0;i<supports.size();++i)
     {
         const auto &frame=supports[i].frame;
-        builder.part(Role::CrossBeam,std::uint32_t(i),0,frame.distanceMeters,[&](const Part &part)
+        builder.part(Role::CrossBeam,std::uint32_t(i),0,frame.distanceMeters,
+                     add(frame.position,mul(frame.normal,-s.beamHeightMeters*.9)),
+                     [&](const Part &part)
         {
             builder.box(add(frame.position,mul(frame.normal,-s.beamHeightMeters*.9)),
                 frame.tangent,frame.normal,frame.binormal,
                 s.beamWidthMeters,s.beamHeightMeters*.65,s.widthMeters*.95);
         });
-        for (int side:{-1,1})
-            builder.part(Role::Pile,std::uint32_t(i),side,frame.distanceMeters,[&](const Part &part)
-            {
-                const auto top=add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.38),
-                                                     mul(frame.normal,-s.beamHeightMeters)));
-                const auto bottom=add(top,mul(frame.normal,-std::max(1.5,s.heightMeters*1.5)));
-                builder.beam(bottom,top,s.beamWidthMeters,s.beamWidthMeters,frame.tangent,part.state);
-            });
+        if (groundSupports)
+            for (int side:{-1,1})
+                builder.part(Role::Pile,std::uint32_t(i),side,frame.distanceMeters,
+                             add(frame.position,
+                                 add(mul(frame.binormal,side*s.widthMeters*.38),
+                                     mul(frame.normal,-s.beamHeightMeters-
+                                         std::max(1.5,s.heightMeters*1.5)*.5))),
+                             [&](const Part &part)
+                {
+                    const auto top=add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.38),
+                                                         mul(frame.normal,-s.beamHeightMeters)));
+                    const auto bottom=add(top,mul(frame.normal,-std::max(1.5,s.heightMeters*1.5)));
+                    builder.beam(bottom,top,s.beamWidthMeters,s.beamWidthMeters,frame.tangent,part.state);
+                });
     }
     for (int side:{-1,1})
     {
-        builder.part(Role::Fascia,0,side,path.lengthMeters*.5,[&](const Part &part)
+        const auto middle=Construction::frameAtDistance(path,path.lengthMeters*.5);
+        const auto fasciaCenter=add(middle.position,
+            add(mul(middle.binormal,side*s.widthMeters*.5),
+                mul(middle.normal,-s.boardThicknessMeters*.5)));
+        builder.part(Role::Fascia,0,side,path.lengthMeters*.5,
+                     fasciaCenter,[&](const Part &part)
         {
             const auto first=Construction::frameAtDistance(path,0);
             const auto last=Construction::frameAtDistance(path,path.lengthMeters);
@@ -567,9 +651,16 @@ void buildPier(Builder &builder)
             builder.beam(offset(first),offset(last),s.boardThicknessMeters,
                          s.beamHeightMeters,first.normal,part.state);
         });
-        for (std::size_t i=0;i+1<supports.size();++i)
+        for (std::size_t i=0;groundSupports && i+1<supports.size();++i)
+        {
+            const auto station=(supports[i].frame.distanceMeters+
+                                supports[i+1].frame.distanceMeters)*.5;
+            const auto frame=Construction::frameAtDistance(path,station);
+            const auto braceCenter=add(frame.position,
+                add(mul(frame.binormal,side*s.widthMeters*.38),
+                    mul(frame.normal,-(s.heightMeters*1.2+s.beamHeightMeters)*.5)));
             builder.part(Role::Brace,std::uint32_t(i),side,
-                (supports[i].frame.distanceMeters+supports[i+1].frame.distanceMeters)*.5,
+                station,braceCenter,
                 [&](const Part &part)
             {
                 const auto &a=supports[i].frame,&b=supports[i+1].frame;
@@ -580,6 +671,7 @@ void buildPier(Builder &builder)
                 builder.beam(start,end,s.beamWidthMeters*.5,s.beamWidthMeters*.5,
                              a.normal,part.state);
             });
+        }
     }
 }
 void buildRailing(Builder &builder)
@@ -597,7 +689,8 @@ void buildRailing(Builder &builder)
             const double station=path.lengthMeters*i/bays;
             const auto frame=Construction::frameAtDistance(path,station);
             const auto base=add(frame.position,mul(frame.binormal,side*s.widthMeters*.5));
-            builder.part(Role::Post,std::uint32_t(i),side,station,[&](const Part &part)
+            builder.part(Role::Post,std::uint32_t(i),side,station,
+                         add(base,mul(frame.normal,s.heightMeters*.5)),[&](const Part &part)
             {
                 auto top=add(base,mul(frame.normal,s.heightMeters));
                 if (part.state==State::Bent || part.state==State::Collapsed)
@@ -615,7 +708,12 @@ void buildRailing(Builder &builder)
             {
                 if (role==Role::LowerRail && !s.lowerRailEnabled) continue;
                 const double level=role==Role::TopRail?1.0:role==Role::MiddleRail?.53:.18;
-                builder.part(role,std::uint32_t(i),side,(start+end)*.5,[&](const Part &part)
+                const auto middle=Construction::frameAtDistance(path,(start+end)*.5);
+                const auto railPosition=add(middle.position,
+                    add(mul(middle.binormal,side*s.widthMeters*.5),
+                        mul(middle.normal,s.heightMeters*level)));
+                builder.part(role,std::uint32_t(i),side,(start+end)*.5,
+                             railPosition,[&](const Part &part)
                 {
                     const auto point=[&](const Construction::PathFrame &frame)
                     {return add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.5),
@@ -625,10 +723,11 @@ void buildRailing(Builder &builder)
                 });
             }
             const auto center=Construction::frameAtDistance(path,(start+end)*.5);
+            const auto foot=add(center.position,mul(center.binormal,side*s.widthMeters*.5));
             builder.part(Role::Baluster,std::uint32_t(i),side,(start+end)*.5,
+                         add(foot,mul(center.normal,s.heightMeters*.5)),
                          [&](const Part &part)
             {
-                const auto foot=add(center.position,mul(center.binormal,side*s.widthMeters*.5));
                 builder.beam(foot,add(foot,mul(center.normal,s.heightMeters)),
                              s.beamWidthMeters*.5,s.beamWidthMeters*.5,center.tangent,part.state);
             });
@@ -653,20 +752,23 @@ void buildBeamBridge(Builder &builder,bool truss)
             const auto point=[&](const Construction::PathFrame &frame,double level)
             {return add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.52),
                                            mul(frame.normal,level)));};
+            const auto middle=Construction::frameAtDistance(path,(start+end)*.5);
             builder.part(Role::Girder,std::uint32_t(i),side,(start+end)*.5,
+                point(middle,-s.beamHeightMeters),
                 [&](const Part &part)
             {builder.beam(point(a,-s.beamHeightMeters),point(b,-s.beamHeightMeters),
                           s.beamWidthMeters,s.beamHeightMeters,a.normal,part.state);});
             if (truss)
             {
                 builder.part(Role::TopRail,std::uint32_t(i),side,(start+end)*.5,
+                    point(middle,s.heightMeters),
                     [&](const Part &part)
                 {builder.beam(point(a,s.heightMeters),point(b,s.heightMeters),
                               s.beamWidthMeters*.7,s.beamWidthMeters*.7,a.normal,part.state);});
-                const auto middle=Construction::frameAtDistance(path,(start+end)*.5);
                 for (int diagonal=0;diagonal<2;++diagonal)
                     builder.part(Role::Brace,std::uint32_t(i*2+diagonal),side,
-                        (start+end)*.5,[&](const Part &part)
+                        (start+end)*.5,point(middle,s.heightMeters*.5),
+                        [&](const Part &part)
                     {
                         Vec3d from,to;
                         if (s.kind==Kind::TrussWarren)
@@ -688,7 +790,7 @@ void buildBeamBridge(Builder &builder,bool truss)
 }
 void buildSuspension(Builder &builder)
 {
-    buildPier(builder);
+    buildPier(builder,false);
     const auto &s=builder.settings;
     const auto &path=builder.result.path;
     const auto length=path.lengthMeters;
@@ -702,7 +804,7 @@ void buildSuspension(Builder &builder)
             return add(frame.position,add(mul(frame.binormal,side*s.widthMeters*.52),
                 mul(frame.normal,s.towerHeightMeters-parabolicSag(station,length,s.sagMeters))));
         };
-        builder.part(Role::Cable,0,side,length*.5,[&](const Part &part)
+        builder.part(Role::Cable,0,side,length*.5,point(length*.5),[&](const Part &part)
         {
             std::vector<Vec3d> curve;
             for (unsigned i=0;i<=32;++i) curve.push_back(point(length*i/32));
@@ -714,7 +816,8 @@ void buildSuspension(Builder &builder)
             const auto station=i?length:0.0;
             const auto frame=Construction::frameAtDistance(path,station);
             const auto base=add(frame.position,mul(frame.binormal,side*s.widthMeters*.52));
-            builder.part(Role::Tower,i,side,station,[&](const Part &part)
+            builder.part(Role::Tower,i,side,station,
+                         mul(add(base,point(station)),.5),[&](const Part &part)
             {builder.beam(base,point(station),s.beamWidthMeters*1.5,
                           s.beamWidthMeters*1.5,frame.tangent,part.state);});
         }
@@ -725,14 +828,29 @@ void buildSuspension(Builder &builder)
         for (std::size_t i=0;i<hangers.size();++i)
         {
             const auto &frame=hangers[i].frame;
+            const auto foot=add(frame.position,mul(frame.binormal,side*s.widthMeters*.52));
             builder.part(Role::Hanger,std::uint32_t(i),side,frame.distanceMeters,
+                         mul(add(foot,point(frame.distanceMeters)),.5),
                          [&](const Part &part)
             {
-                const auto foot=add(frame.position,mul(frame.binormal,side*s.widthMeters*.52));
                 builder.beam(foot,point(frame.distanceMeters),s.cableRadiusMeters*1.2,
                              s.cableRadiusMeters*1.2,frame.tangent,part.state);
             });
         }
+    }
+    for (unsigned end=0;end<2;++end)
+    {
+        const auto station=end?length:0.0;
+        const auto frame=Construction::frameAtDistance(path,station);
+        builder.part(Role::Anchor,end,0,station,
+                     add(frame.position,mul(frame.normal,s.towerHeightMeters)),[&](const Part &part)
+        {
+            const auto top=add(frame.position,mul(frame.normal,s.towerHeightMeters));
+            builder.beam(add(top,mul(frame.binormal,-s.widthMeters*.52)),
+                         add(top,mul(frame.binormal,s.widthMeters*.52)),
+                         s.beamWidthMeters*.8,s.beamWidthMeters*.8,
+                         frame.normal,part.state);
+        });
     }
 }
 void buildRopeBridge(Builder &builder)
@@ -753,25 +871,42 @@ void buildRopeBridge(Builder &builder)
     {
         const auto &frame=stations[i].frame;
         builder.part(Role::DeckPlank,std::uint32_t(i),0,frame.distanceMeters,
+                     deckPoint(frame),
                      [&](const Part &part)
         {
             auto adjusted=frame;
             adjusted.position=deckPoint(frame);
+            const auto step=std::min(.02,length*.01);
+            const auto before=Construction::frameAtDistance(path,
+                std::max(0.0,frame.distanceMeters-step));
+            const auto after=Construction::frameAtDistance(path,
+                std::min(length,frame.distanceMeters+step));
+            adjusted.tangent=unit(sub(deckPoint(after),deckPoint(before)));
+            adjusted.binormal=unit(sub(frame.binormal,mul(adjusted.tangent,
+                dot(frame.binormal,adjusted.tangent))));
+            adjusted.normal=unit(cross(adjusted.binormal,adjusted.tangent));
             const double variation=s.irregularityMeters*std::sin(double(i)*2.399963);
-            adjusted.position=add(adjusted.position,mul(frame.normal,variation));
+            adjusted.position=add(adjusted.position,mul(adjusted.normal,variation));
             if (part.state==State::Loose || part.state==State::Detached)
-                adjusted.position=add(adjusted.position,mul(frame.normal,-s.boardThicknessMeters*2));
+                adjusted.position=add(adjusted.position,
+                    mul(adjusted.normal,-s.boardThicknessMeters*2));
             if (part.state==State::Broken)
                 builder.brokenBoard(adjusted,s.boardWidthMeters,s.widthMeters,
-                                    s.boardThicknessMeters,std::uint32_t(i));
-            else builder.box(adjusted.position,frame.tangent,frame.normal,frame.binormal,
-                             s.boardWidthMeters,s.boardThicknessMeters,s.widthMeters);
+                                    s.boardThicknessMeters,part);
+            else builder.plank(adjusted.position,adjusted.tangent,adjusted.normal,
+                               adjusted.binormal,s.boardWidthMeters,
+                               s.boardThicknessMeters,s.widthMeters);
         });
     }
     for (int side:{-1,1})
     {
         for (Role role:{Role::Cable,Role::HandRope})
-            builder.part(role,0,side,length*.5,[&](const Part &part)
+        {
+            const auto middle=Construction::frameAtDistance(path,length*.5);
+            const auto center=add(deckPoint(middle),
+                add(mul(middle.binormal,side*s.widthMeters*.48),
+                    mul(middle.normal,role==Role::HandRope?s.heightMeters:0)));
+            builder.part(role,0,side,length*.5,center,[&](const Part &part)
             {
                 std::vector<Vec3d> curve;
                 for (unsigned i=0;i<=32;++i)
@@ -786,12 +921,28 @@ void buildRopeBridge(Builder &builder)
                     s.cableRadiusMeters*(role==Role::HandRope?.8:1),
                     path.frames.front().normal,part.state);
             });
+        }
+        const auto tieStep=std::max(std::size_t(1),stations.size()/14);
+        for (std::size_t i=0;i<stations.size();i+=tieStep)
+        {
+            const auto &frame=stations[i].frame;
+            const auto foot=add(deckPoint(frame),mul(frame.binormal,side*s.widthMeters*.48));
+            builder.part(Role::Hanger,std::uint32_t(i),side,frame.distanceMeters,
+                         add(foot,mul(frame.normal,s.heightMeters*.5)),
+                         [&](const Part &part)
+            {
+                builder.beam(foot,add(foot,mul(frame.normal,s.heightMeters)),
+                             s.cableRadiusMeters*.9,s.cableRadiusMeters*.9,
+                             frame.tangent,part.state);
+            });
+        }
         for (unsigned i=0;i<2;++i)
         {
             auto frame=Construction::frameAtDistance(path,i?length:0);
-            builder.part(Role::Anchor,i,side,frame.distanceMeters,[&](const Part &part)
+            const auto foot=add(frame.position,mul(frame.binormal,side*s.widthMeters*.48));
+            builder.part(Role::Anchor,i,side,frame.distanceMeters,
+                         add(foot,mul(frame.normal,s.heightMeters*.5)),[&](const Part &part)
             {
-                auto foot=add(frame.position,mul(frame.binormal,side*s.widthMeters*.48));
                 builder.beam(foot,add(foot,mul(frame.normal,s.heightMeters)),
                              s.beamWidthMeters,s.beamWidthMeters,frame.tangent,part.state);
             });

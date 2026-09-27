@@ -1,4 +1,5 @@
 #include "SplineConstruction.hpp"
+#include "DamageField.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -480,8 +481,13 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                 std::min(settings.widthMeters,settings.heightMeters)*.5;
             const auto amplitude=settings.breakRoughness*
                 std::min(settings.breakGapMeters*.2,transverse*.3);
-            position=add(position,mul(frame.tangent,amplitude*
-                std::sin(3*std::atan2(point[1],point[0])+.4)));
+            const auto contourFraction=.5+std::atan2(point[1],point[0])/
+                (2*std::numbers::pi);
+            const std::string_view id(reinterpret_cast<const char *>(
+                spline.splineGuid.bytes.data()),spline.splineGuid.bytes.size());
+            position=add(position,mul(frame.tangent,
+                fractureProfileOffset(contourFraction,amplitude,transverse,
+                                      settings.breakSeed,id)));
         }
         return position;
     };

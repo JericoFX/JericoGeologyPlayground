@@ -1,6 +1,8 @@
 #include "ProceduralAssemblies.hpp"
+#include "DamageField.hpp"
 #include "SolidGeometry.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -64,6 +66,14 @@ int main()
         damage.missingProbability=.3;damage.brokenProbability=.2;
         const auto seeded=resolveDamage(damage,plank);
         require(seeded==resolveDamage(damage,plank),"seeded damage must be deterministic");
+        const auto sharedSample=damageRandom01(damage.seed,plank.id,"state");
+        damage.missingProbability=sharedSample-1e-12;
+        damage.brokenProbability=0;
+        require(resolveDamage(damage,plank)==State::Intact,
+                "assembly state must use the shared seeded damage stream");
+        damage.missingProbability=sharedSample+1e-12;
+        require(resolveDamage(damage,plank)==State::Missing,
+                "shared seeded damage threshold must select the semantic part");
         damage.manual[id]=State::Broken;
         require(resolveDamage(damage,plank)==State::Broken,
                 "manual state must override procedural damage");
@@ -81,6 +91,31 @@ int main()
         damage.rules.push_back({SelectorMode::DistanceRange,Role::DeckPlank,0,0,4.9,5.1,State::Loose});
         require(resolveDamage(damage,plank)==State::Loose,
                 "distance selector must use part station");
+        damage.rules.clear();
+        DamageArea selectedArea;
+        selectedArea.id="plank-break";
+        selectedArea.footprint.radius={.3,.3,1};
+        selectedArea.semanticPartId=id;
+        plank.position={0,0,0};
+        damage.areaRules.push_back({selectedArea,State::Broken});
+        require(resolveDamage(damage,plank)==State::Broken,
+                "shared damage area must select a semantic plank");
+        damage.areaRules.front().area.projector.center={2,0,0};
+        require(resolveDamage(damage,plank)==State::Intact,
+                "moving the damage area must restore the previously selected plank");
+        plank.position={2,0,0};
+        require(resolveDamage(damage,plank)==State::Broken,
+                "moving the damage area must affect the new position");
+        damage.protectedIds.insert(id);
+        require(resolveDamage(damage,plank)==State::Intact,
+                "protected plank must ignore movable procedural area");
+        damage.areaRules.clear();damage.protectedIds.clear();
+        Settings oversizedAreas;
+        oversizedAreas.damage.areaRules.resize(65);
+        bool areaBudgetRejected=false;
+        try {build(curvedPath(),oversizedAreas);}
+        catch (const std::exception &) {areaBudgetRejected=true;}
+        require(areaBudgetRejected,"damage area budget must be bounded before generation");
         require(std::abs(parabolicSag(0,12,1.2))<1e-12 &&
                 std::abs(parabolicSag(6,12,1.2)-1.2)<1e-12 &&
                 std::abs(parabolicSag(3,12,1.2)-parabolicSag(9,12,1.2))<1e-12,
@@ -97,6 +132,12 @@ int main()
         pipe.kind=Assembly::Kind::PipeCouplings;
         pipe.couplingSpacingMeters=1;
         const auto coupled=build(curvedPath(),pipe);
+        const auto pipeBody=std::find_if(coupled.parts.begin(),coupled.parts.end(),
+            [](const Part &part){return part.role==Role::PipeBody;});
+        require(pipeBody!=coupled.parts.end() &&
+                    length(sub(pipeBody->position,
+                        Construction::frameAtDistance(coupled.path,coupled.path.lengthMeters*.5).position))<1e-8,
+                "pipe body selection center must follow the middle of its spline");
         std::vector<Part> collars;
         for (const auto &part:coupled.parts)
             if (part.role==Role::Coupling) collars.push_back(part);
@@ -115,6 +156,35 @@ int main()
             if (part.role==Role::Rail) ++rails;
         }
         require(sleepers>=9 && rails>=2,"railway must have selectable sleepers and rails");
+        const auto railPart=std::find_if(track.parts.begin(),track.parts.end(),
+            [](const Part &part){return part.role==Role::Rail && part.side==1;});
+        require(railPart!=track.parts.end(),"rail fixture needs a right rail");
+        const auto railFrame=Construction::frameAtDistance(track.path,railPart->stationMeters);
+        const Vec3d railCenter{
+            railFrame.position.x+railFrame.binormal.x*railway.gaugeMeters*.5+
+                railFrame.normal.x*railway.railHeightMeters*.5,
+            railFrame.position.y+railFrame.binormal.y*railway.gaugeMeters*.5+
+                railFrame.normal.y*railway.railHeightMeters*.5,
+            railFrame.position.z+railFrame.binormal.z*railway.gaugeMeters*.5+
+                railFrame.normal.z*railway.railHeightMeters*.5};
+        require(length(sub(railPart->position,railCenter))<1e-8,
+                "rail area selection point must follow the actual side rail");
+        Settings railingSettings;
+        railingSettings.kind=Assembly::Kind::Railing;
+        const auto railingResult=build(curvedPath(),railingSettings);
+        const auto post=std::find_if(railingResult.parts.begin(),railingResult.parts.end(),
+            [](const Part &part){return part.role==Role::Post && part.side==1;});
+        require(post!=railingResult.parts.end(),"railing fixture needs a side post");
+        const auto postFrame=Construction::frameAtDistance(railingResult.path,post->stationMeters);
+        const Vec3d postCenter{
+            postFrame.position.x+postFrame.binormal.x*railingSettings.widthMeters*.5+
+                postFrame.normal.x*railingSettings.heightMeters*.5,
+            postFrame.position.y+postFrame.binormal.y*railingSettings.widthMeters*.5+
+                postFrame.normal.y*railingSettings.heightMeters*.5,
+            postFrame.position.z+postFrame.binormal.z*railingSettings.widthMeters*.5+
+                postFrame.normal.z*railingSettings.heightMeters*.5};
+        require(length(sub(post->position,postCenter))<1e-8,
+                "railing damage area must follow the side post rather than the path center");
         railway.damage.manual[stablePartId(railway.kind,Role::Sleeper,2)]=State::Missing;
         const auto brokenTrack=build(curvedPath(),railway);
         bool missingSleeper=false;
@@ -130,6 +200,19 @@ int main()
         for (const auto &part:intactPier.parts)
             if (part.role==Role::DeckPlank) ++boards;
         require(boards==expected.count,"pier board fit must use true path length");
+        const auto intactBoard=std::find_if(intactPier.parts.begin(),intactPier.parts.end(),
+            [](const Part &part){return part.role==Role::DeckPlank;});
+        require(intactBoard!=intactPier.parts.end() && intactBoard->triangleCount>12,
+                "near deck planks need bevelled edges rather than plain boxes");
+        Settings tinyBoard=pier;
+        tinyBoard.widthMeters=6e-5;
+        tinyBoard.boardWidthMeters=6e-5;
+        tinyBoard.boardThicknessMeters=6e-5;
+        tinyBoard.boardGapMeters=(intactPier.path.lengthMeters-
+            10*tinyBoard.boardWidthMeters)/9;
+        const auto tinyDeck=build(curvedPath(),tinyBoard);
+        require(!tinyDeck.mesh.mesh.indices.empty(),
+                "valid small planks must fall back from unsafe bevels");
         const auto boardId=stablePartId(pier.kind,Role::DeckPlank,3);
         pier.damage.manual[boardId]=State::Broken;
         auto damagedPier=build(curvedPath(),pier);
@@ -141,6 +224,118 @@ int main()
         for (const auto &part:distantPier.parts)
             if (part.id==boardId) brokenFar=part.state==State::Broken && part.triangleCount>0;
         require(brokenNear && brokenFar,"manual broken board must survive LOD changes");
+        Settings varied=pier;
+        varied.damage.manual.clear();
+        for (unsigned i=2;i<18;++i)
+            varied.damage.manual[stablePartId(varied.kind,Role::DeckPlank,i)]=State::Broken;
+        const auto variedBoards=build(curvedPath(),varied);
+        bool leftBreak=false,rightBreak=false;
+        for (const auto &part:variedBoards.parts)
+        {
+            if (part.role!=Role::DeckPlank || part.state!=State::Broken) continue;
+            const auto frame=Construction::frameAtDistance(variedBoards.path,part.stationMeters);
+            double sum=0;std::size_t count=0;
+            for (std::size_t triangle=part.firstTriangle;
+                 triangle<part.firstTriangle+part.triangleCount;++triangle)
+                for (unsigned corner=0;corner<3;++corner)
+                {
+                    const auto position=variedBoards.mesh.mesh.positions[
+                        variedBoards.mesh.mesh.indices[triangle*3+corner]];
+                    const auto lateral=dot(sub(position,frame.position),frame.binormal);
+                    if (std::abs(lateral)<varied.widthMeters*.3)
+                    {sum+=lateral;++count;}
+                }
+            require(count>0,"broken board must retain a local cut boundary");
+            leftBreak|=sum/count<-.1*varied.widthMeters;
+            rightBreak|=sum/count>.1*varied.widthMeters;
+        }
+        require(leftBreak && rightBreak,
+                "broken boards must vary the cut side by stable piece identity");
+        auto reseeded=varied;
+        ++reseeded.damage.seed;
+        require(meshHash(variedBoards.mesh.mesh)!=meshHash(build(curvedPath(),reseeded).mesh.mesh),
+                "damage seed must change broken-board geometry without changing IDs");
+        Settings placedCut=pier;
+        const auto targetId=stablePartId(placedCut.kind,Role::DeckPlank,3);
+        const auto targetPart=std::find_if(intactPier.parts.begin(),intactPier.parts.end(),
+            [&](const Part &part){return part.id==targetId;});
+        require(targetPart!=intactPier.parts.end(),"movable break fixture needs target plank");
+        const auto targetFrame=Construction::frameAtDistance(intactPier.path,
+            targetPart->stationMeters);
+        AreaDamageRule placedArea;
+        placedArea.area.id="placed-cut";
+        placedArea.area.semanticPartId=targetId;
+        placedArea.area.projector.center=targetPart->position;
+        placedArea.area.projector.tangent=targetFrame.tangent;
+        placedArea.area.projector.bitangent=targetFrame.binormal;
+        placedArea.area.projector.normal=targetFrame.normal;
+        placedArea.area.footprint.radius={2,2,1};
+        placedCut.damage.areaRules.push_back(placedArea);
+        placedCut.damage.areaRules.front().area.projector.center=
+            sub(targetPart->position,{targetFrame.binormal.x*.3,
+                targetFrame.binormal.y*.3,targetFrame.binormal.z*.3});
+        const auto cutLeft=build(curvedPath(),placedCut);
+        placedCut.damage.areaRules.front().area.projector.center={
+            targetPart->position.x+targetFrame.binormal.x*.3,
+            targetPart->position.y+targetFrame.binormal.y*.3,
+            targetPart->position.z+targetFrame.binormal.z*.3};
+        const auto cutRight=build(curvedPath(),placedCut);
+        require(meshHash(cutLeft.mesh.mesh)!=meshHash(cutRight.mesh.mesh) &&
+                cutLeft.parts.size()==cutRight.parts.size(),
+                "moving an area within a broken plank must move the cut, not replace the source");
+        for (std::size_t i=0;i<cutLeft.parts.size();++i)
+            require(cutLeft.parts[i].id==cutRight.parts[i].id &&
+                    cutLeft.parts[i].state==cutRight.parts[i].state,
+                    "moving an area within a plank must preserve semantic identity and state");
+        Settings ropeOrientation;
+        ropeOrientation.kind=Assembly::Kind::RopePlankBridge;
+        ropeOrientation.spanMeters=12;ropeOrientation.sagMeters=2;
+        const auto ropeDeck=build(curvedPath(),ropeOrientation);
+        require(std::count_if(ropeDeck.parts.begin(),ropeDeck.parts.end(),
+                [](const Part &part){return part.role==Role::Hanger;})>=12,
+                "rope bridge hand ropes need distributed side ties");
+        const auto ropeA=solveCatenaryA(ropeDeck.path.lengthMeters,ropeOrientation.sagMeters);
+        const auto ropeMiddle=std::find_if(ropeDeck.parts.begin(),ropeDeck.parts.end(),
+            [&](const Part &part){return part.role==Role::DeckPlank &&
+                std::abs(part.stationMeters-ropeDeck.path.lengthMeters*.5)<ropeOrientation.boardWidthMeters;});
+        require(ropeMiddle!=ropeDeck.parts.end(),"rope fixture needs a central plank");
+        const auto ropeFrame=Construction::frameAtDistance(ropeDeck.path,ropeMiddle->stationMeters);
+        const auto ropeCenter=sub(ropeFrame.position,
+            {ropeFrame.normal.x*catenaryHeight(ropeMiddle->stationMeters,ropeDeck.path.lengthMeters,ropeOrientation.sagMeters,ropeA),
+             ropeFrame.normal.y*catenaryHeight(ropeMiddle->stationMeters,ropeDeck.path.lengthMeters,ropeOrientation.sagMeters,ropeA),
+             ropeFrame.normal.z*catenaryHeight(ropeMiddle->stationMeters,ropeDeck.path.lengthMeters,ropeOrientation.sagMeters,ropeA)});
+        require(length(sub(ropeMiddle->position,ropeCenter))<1e-8,
+                "rope plank selection position must follow the sagged deck");
+        bool checkedRopeNormal=false;
+        for (const auto &part:ropeDeck.parts)
+        {
+            if (part.role!=Role::DeckPlank || part.index>2) continue;
+            const auto station=part.stationMeters;
+            const auto step=.01;
+            const auto aFrame=Construction::frameAtDistance(ropeDeck.path,station-step);
+            const auto bFrame=Construction::frameAtDistance(ropeDeck.path,station+step);
+            const auto aPoint=sub(aFrame.position,{0,catenaryHeight(station-step,
+                ropeDeck.path.lengthMeters,ropeOrientation.sagMeters,ropeA),0});
+            const auto bPoint=sub(bFrame.position,{0,catenaryHeight(station+step,
+                ropeDeck.path.lengthMeters,ropeOrientation.sagMeters,ropeA),0});
+            const auto tangent=sub(bPoint,aPoint);
+            const auto desiredNormal=Construction::frameAtDistance(ropeDeck.path,station).normal;
+            double best=-1;
+            for (std::size_t triangle=part.firstTriangle;
+                 triangle<part.firstTriangle+part.triangleCount;++triangle)
+            {
+                const auto actual=ropeDeck.mesh.cornerNormals[triangle*3];
+                const auto span=length(tangent);
+                const auto tilted=sub(desiredNormal,
+                    {tangent.x*dot(desiredNormal,tangent)/(span*span),
+                     tangent.y*dot(desiredNormal,tangent)/(span*span),
+                     tangent.z*dot(desiredNormal,tangent)/(span*span)});
+                best=std::max(best,dot(actual,tilted)/length(tilted));
+            }
+            require(best>.995,"rope bridge plank top must follow sagged deck normal");
+            checkedRopeNormal=true;
+        }
+        require(checkedRopeNormal,"rope bridge orientation fixture must contain planks");
         for (int family=0;family<=int(Assembly::Kind::RopePlankBridge);++family)
         {
             Settings caseSettings;
@@ -187,6 +382,9 @@ int main()
         Settings suspension;
         suspension.kind=Assembly::Kind::SuspensionBridge;
         const auto suspended=build(curvedPath(),suspension);
+        require(std::none_of(suspended.parts.begin(),suspended.parts.end(),
+                [](const Part &part){return part.role==Role::Pile;}),
+                "suspension deck must not inherit pier ground piles");
         std::size_t hangers=0;
         for (const auto &part:suspended.parts)
         {
@@ -206,6 +404,15 @@ int main()
             const auto cable=suspension.towerHeightMeters-
                 parabolicSag(part.stationMeters,suspended.path.lengthMeters,
                              suspension.sagMeters);
+            const Vec3d hangerCenter{
+                frame.position.x+frame.binormal.x*part.side*suspension.widthMeters*.52+
+                    frame.normal.x*cable*.5,
+                frame.position.y+frame.binormal.y*part.side*suspension.widthMeters*.52+
+                    frame.normal.y*cable*.5,
+                frame.position.z+frame.binormal.z*part.side*suspension.widthMeters*.52+
+                    frame.normal.z*cable*.5};
+            require(length(sub(part.position,hangerCenter))<1e-8,
+                    "suspension hanger damage selection must use its actual center");
             require(std::abs(minimum)<.06 && std::abs(maximum-cable)<.06,
                     "hanger geometry must terminate at deck and parabolic cable");
         }

@@ -52,6 +52,7 @@ struct ConstructionSettings
     double ribAmplitude{}, ribSpacingMeters{0.2}, twistTurns{};
     bool breakEnabled{};
     double breakFraction{0.5}, breakGapMeters{0.15}, breakRoughness{0.3};
+    std::uint32_t breakSeed{123};
     bool capStart{true}, capEnd{true}, repeatEnabled{};
     RepeatSettings repeat;
     std::size_t maximumVertices{100000};

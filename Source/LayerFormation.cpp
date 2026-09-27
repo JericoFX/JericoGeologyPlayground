@@ -91,6 +91,7 @@ double minimumClearance(const ContactFace &upper, const ContactFace &lower)
     return clearance;
 }
 } // namespace
+// Compatibility path for recipes saved before shared feature-edge selection existed.
 void layerEdgeDistances(MeshResult &mesh, const Layer &layer, const Jerico::CancellationToken *cancel)
 {
     if (mesh.layerIndices.size() != mesh.mesh.positions.size())

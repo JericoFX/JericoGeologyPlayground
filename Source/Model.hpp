@@ -63,7 +63,8 @@ enum class Mask
     AmbientOcclusion,
     Exposure,
     BoundaryProximity,
-    Thickness
+    Thickness,
+    Cavity
 };
 struct Layer
 {
@@ -89,6 +90,7 @@ struct Layer
     Mask mask{Mask::None};
     float maskLow{-0.5f}, maskHigh{0.5f};
     bool maskInvert{false};
+    bool useSharedFeatureEdges{}; // Missing in older recipes: preserve legacy stratum-distance behavior.
     bool coherentLayers{false};
     float thicknessFrequency{0.8f}, thicknessCorrelation{0.8f};
     float minimumThickness{0.08f}, maximumThickness{0.8f};
@@ -162,6 +164,8 @@ struct MeshResult
     std::uint64_t sourceRevision{};
     double sampledReductionError{};
     std::size_t trianglesBeforeReduction{};
+    std::size_t featureCacheHits{}, featureCacheMisses{};
+    double featureComputeMilliseconds{};
 };
 const char *name(Kind kind);
 Layer defaultLayer(Kind kind);

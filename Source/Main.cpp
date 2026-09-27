@@ -5,6 +5,7 @@
 #include "SolidGeometry.hpp"
 #include "SurfaceGeometry.hpp"
 #include "SurfaceFeatures.hpp"
+#include "ViewportProjection.hpp"
 #include "SplineLabUI.hpp"
 #include "AssemblyLabUI.hpp"
 #include "AssemblyLabEvidence.hpp"
@@ -197,9 +198,14 @@ bool editLayer(Layer &l)
     }
     else if (l.kind == Kind::EdgeBreakup)
     {
-        ImGui::TextWrapped("Distance to lateral faces of each stratum. Align direction with the layer axis. "
-                           "Strength is capped to 20% of authored layer thickness.");
-        change |= ImGui::SliderFloat3("Layer axis", l.direction.data(), -1, 1);
+        change |= ImGui::Checkbox("Shared feature edges", &l.useSharedFeatureEdges);
+        if (l.useSharedFeatureEdges)
+            ImGui::TextWrapped("Common crease distance and curvature; bounded by local triangle scale.");
+        else
+        {
+            ImGui::TextWrapped("Legacy stratum side distance for saved recipes. Enable shared feature edges to migrate this layer.");
+            change |= ImGui::SliderFloat3("Layer axis", l.direction.data(), -1, 1);
+        }
         change |= slider("Edge width", l.width, 0.01f, 1);
         change |= slider("Edge strength", l.amplitude, 0, 0.15f);
         change |= slider("Edge frequency", l.frequency, 0.1f, 20);
@@ -312,7 +318,7 @@ bool editLayer(Layer &l)
         if (ImGui::Combo("Mask", &mask,
                          "None\0Height\0Slope\0Noise\0Direction\0Radial\0Gradient\0"
                          "Signed curvature\0Crease proximity\0Contact occlusion\0"
-                         "Convexity\0Concavity\0Ambient occlusion\0Exposure\0Boundary proximity\0Thickness\0"))
+                         "Convexity\0Concavity\0Ambient occlusion\0Exposure\0Boundary proximity\0Thickness\0Cavity\0"))
         {
             l.mask = static_cast<Mask>(mask);
             if (mask >= int(Mask::Curvature))
@@ -344,11 +350,12 @@ bool editLayer(Layer &l)
                                    "Use a negative range and invert for recessed areas.");
             if (l.mask == Mask::EdgeProximity || l.mask == Mask::Contact ||
                 l.mask == Mask::AmbientOcclusion || l.mask == Mask::BoundaryProximity ||
-                l.mask == Mask::Thickness)
+                l.mask == Mask::Thickness || l.mask == Mask::Cavity)
                 change |= slider("Feature radius", l.featureRadius, 0.01f, 2);
             if (l.mask == Mask::EdgeProximity)
                 change |= slider("Crease angle (degrees)", l.featureAngle, 1, 120);
-            if (l.mask == Mask::Contact || l.mask == Mask::AmbientOcclusion)
+            if (l.mask == Mask::Contact || l.mask == Mask::AmbientOcclusion ||
+                l.mask == Mask::Cavity)
                 change |= ImGui::SliderInt("Feature rays", &l.contactSamples, 4, 64);
         }
     }
@@ -2447,6 +2454,7 @@ int run(int argc, char **argv)
     bool hasComparison = false;
     auto lastEdit = std::chrono::steady_clock::now();
     std::vector<Recipe> undo, redo;
+    bool movingDamageArea=false;
     auto bindMaterial = [&](const NormalBake *bake)
     {
         const int appearance = materialAppearance(recipe, materialChoice);
@@ -2940,16 +2948,56 @@ int run(int argc, char **argv)
                     std::clamp(radius * (1 + 2.4f / std::min(1.0f, aspect)) * 1.1f, 1.0f, 90.0f);
             }
         }
-        ImGui::TextUnformatted("Drag left: orbit | Middle/right: pan | Wheel: zoom");
+        const bool selectedDamageArea=selected>=0 && selected<int(recipe.layers.size()) &&
+            recipe.layers[selected].kind==Kind::DamageDecal;
+        ImGui::TextUnformatted(selectedDamageArea ?
+            "Shift+drag: move selected damage area | Drag: orbit | Wheel: zoom" :
+            "Drag left: orbit | Middle/right: pan | Wheel: zoom");
         auto size = ImGui::GetContentRegionAvail();
         size.x = std::max(size.x, 32.0f);
         size.y = std::max(size.y, 32.0f);
         auto texture = renderer.draw(unsigned(size.x), unsigned(size.y), camera, mode == 4 ? 5 : mode);
         ImGui::Image(reinterpret_cast<ImTextureID>(texture), size);
+        if (selectedDamageArea)
+        {
+            const auto &center=recipe.layers[selected].translation;
+            if (const auto point=projectToViewport({center[0],center[1],center[2]},
+                                                   camera,unsigned(size.x),unsigned(size.y)))
+                if (point->x>=0 && point->x<=size.x && point->y>=0 && point->y<=size.y)
+                {
+                    const auto origin=ImGui::GetItemRectMin();
+                    const ImVec2 at{origin.x+float(point->x),origin.y+float(point->y)};
+                    auto *draw=ImGui::GetWindowDrawList();
+                    draw->AddCircle(at,10,IM_COL32(255,195,55,255),24,2);
+                    draw->AddLine({at.x-14,at.y},{at.x+14,at.y},
+                                  IM_COL32(255,195,55,255),1);
+                    draw->AddLine({at.x,at.y-14},{at.x,at.y+14},
+                                  IM_COL32(255,195,55,255),1);
+                }
+        }
         if (ImGui::IsItemHovered())
         {
             auto &io = ImGui::GetIO();
-            if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+            const bool moveArea=selectedDamageArea && io.KeyShift &&
+                ImGui::IsMouseDown(ImGuiMouseButton_Left);
+            if (moveArea)
+            {
+                auto &layer=recipe.layers[selected];
+                const Vec3d center{layer.translation[0],layer.translation[1],
+                                   layer.translation[2]};
+                const Vec3d normal{layer.direction[0],layer.direction[1],
+                                   layer.direction[2]};
+                const auto origin=ImGui::GetItemRectMin();
+                if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
+                        io.MousePos.x-origin.x,io.MousePos.y-origin.y,center,normal))
+                {
+                    if (!movingDamageArea) remember(recipe);
+                    movingDamageArea=true;
+                    layer.translation={float(hit->x),float(hit->y),float(hit->z)};
+                    changed();
+                }
+            }
+            if (!moveArea && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
             {
                 camera.yaw -= io.MouseDelta.x * 0.008f;
                 camera.pitch = std::clamp(camera.pitch + io.MouseDelta.y * 0.008f, -1.4f, 1.4f);
@@ -2967,6 +3015,7 @@ int run(int argc, char **argv)
             }
             camera.distance = std::clamp(camera.distance * std::exp(-io.MouseWheel * 0.1f), 1.0f, 90.0f);
         }
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) movingDamageArea=false;
         ImGui::End();
         panel("Metrics", 0, float(h) - bottom, float(w), bottom);
         ImGui::Text("%s | Mesh generation CPU: %.2f ms | Vertices: %zu | Triangles: %zu | Resolution: %d | "

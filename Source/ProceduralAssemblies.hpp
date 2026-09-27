@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SplineConstruction.hpp"
+#include "DamageField.hpp"
 
 #include <cstdint>
 #include <string>
@@ -10,6 +11,7 @@
 
 namespace Playground::Assembly
 {
+inline constexpr std::size_t maximumDamageAreas=64;
 enum class Kind
 {
     PipeCouplings, Railway, BrokenRailway, Railing, BrokenRailing,
@@ -36,6 +38,11 @@ struct DamageRule
     double startMeters{}, endMeters{};
     State state{State::Missing};
 };
+struct AreaDamageRule
+{
+    DamageArea area;
+    State state{State::Broken};
+};
 struct DamageSettings
 {
     bool proceduralEnabled{};
@@ -43,6 +50,7 @@ struct DamageSettings
     double missingProbability{}, brokenProbability{}, looseProbability{}, bentProbability{};
     double clusterCenterMeters{}, clusterRadiusMeters{}, clusterStrength{};
     std::vector<DamageRule> rules;
+    std::vector<AreaDamageRule> areaRules;
     std::unordered_map<std::string, State> manual;
     std::unordered_set<std::string> protectedIds;
 };
@@ -78,6 +86,7 @@ struct Part
     std::uint32_t index{};
     int side{};
     double stationMeters{};
+    Vec3d position{};
     State state{State::Intact};
     bool protectedPart{};
     std::size_t firstTriangle{}, triangleCount{};

@@ -182,6 +182,16 @@ int main()
                 fracture.bodyTriangleCount<effects.bodyTriangleCount &&
                 fracture.mesh.mesh.indices.size()/3>fracture.bodyTriangleCount,
                 "broken sweep needs a genuine gap and closed fracture faces");
+        effected.breakSeed=124;
+        const auto reseededFracture=buildConstruction(straightRun(),effected);
+        inspectMesh(reseededFracture);
+        require(meshHash(reseededFracture.mesh.mesh)!=meshHash(fracture.mesh.mesh),
+                "shared fracture seed must change cut profile without changing the source path");
+        effected.breakEnabled=false;
+        require(meshHash(buildConstruction(straightRun(),effected).mesh.mesh)==
+                meshHash(effects.mesh.mesh),
+                "fracture seed must not change the intact spline construction");
+        effected.breakEnabled=true;
         effected.breakGapMeters=10;
         bool fractureRejected=false;
         try {buildConstruction(straightRun(),effected);}

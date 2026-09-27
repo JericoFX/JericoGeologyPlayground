@@ -8,7 +8,7 @@ if(CMAKE_SOURCE_DIR MATCHES "^${JERICO_SOURCE}(/|$)" OR CMAKE_BINARY_DIR MATCHES
     message(FATAL_ERROR "Playground source and build must be outside the engine checkout")
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
+add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/DamageField.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp"
@@ -56,6 +56,12 @@ add_test(NAME Playground.AutoUv COMMAND PlaygroundAutoUvTests)
 add_executable(PlaygroundRockAddonMathTests Tests/RockAddonMathTests.cpp)
 target_link_libraries(PlaygroundRockAddonMathTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.RockAddonMath COMMAND PlaygroundRockAddonMathTests)
+add_executable(PlaygroundDamageFieldTests Tests/DamageFieldTests.cpp)
+target_link_libraries(PlaygroundDamageFieldTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.DamageField COMMAND PlaygroundDamageFieldTests)
+add_executable(PlaygroundViewportProjectionTests Tests/ViewportProjectionTests.cpp)
+target_link_libraries(PlaygroundViewportProjectionTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.ViewportProjection COMMAND PlaygroundViewportProjectionTests)
 add_executable(PlaygroundRBrushInteropTests Tests/RBrushInteropTests.cpp)
 target_link_libraries(PlaygroundRBrushInteropTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.RBrushInterop COMMAND PlaygroundRBrushInteropTests)

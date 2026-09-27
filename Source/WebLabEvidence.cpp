@@ -266,7 +266,7 @@ void captureWebSurface(Renderer &renderer,const std::filesystem::path &directory
     }
     Web::Settings subtle;
     subtle.style=Web::Style::Ghost;
-    subtle.radiusMeters=.006;
+    subtle.radiusMeters=.004;
     subtle.microStrandDensity=.8;
     subtle.supersamples=8;
     subtle.optics.baseVisibility=.025f;

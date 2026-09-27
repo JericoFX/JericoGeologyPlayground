@@ -20,9 +20,9 @@ class AssemblyLabUI
     Assembly::Result built;
     Camera camera;
     std::string selectedId,error;
-    int selectedPoint{},view{},uploadedView{-1};
+    int selectedPoint{},selectedArea{-1},view{},uploadedView{-1};
     bool dirty{true},fitCamera{true};
-    unsigned nextPointId{30};
+    unsigned nextPointId{30},nextAreaId{1};
     void rebuild();
     void choosePreset(int preset);
     const Assembly::Part *selectedPart() const;

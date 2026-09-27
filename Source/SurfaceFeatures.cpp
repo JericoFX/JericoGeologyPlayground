@@ -2,6 +2,7 @@
 #include "SurfaceRay.hpp"
 #include <TriangleBvh.hpp>
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <limits>
 #include <map>
@@ -34,6 +35,31 @@ Vec3d unit(Vec3d p)
     return D::multiply(p, 1 / size);
 }
 } // namespace
+const SurfaceFeatureFields &SurfaceFeatureCache::get(const TriangleMesh &mesh,
+    const SurfaceFeatureSettings &settings,const Jerico::CancellationToken *cancel)
+{
+    check(cancel);
+    const auto hash=meshHash(mesh);
+    const auto &old=settings_;
+    const bool sameSettings=old.contact==settings.contact &&
+        old.ambient==settings.ambient && old.thickness==settings.thickness &&
+        old.radius==settings.radius && old.creaseAngleDegrees==settings.creaseAngleDegrees &&
+        old.contactSamples==settings.contactSamples &&
+        old.ambientRadius==settings.ambientRadius && old.ambientSamples==settings.ambientSamples &&
+        old.thicknessRadius==settings.thicknessRadius &&
+        old.exposureDirection.x==settings.exposureDirection.x &&
+        old.exposureDirection.y==settings.exposureDirection.y &&
+        old.exposureDirection.z==settings.exposureDirection.z;
+    if (valid_ && hash==meshHash_ && sameSettings)
+    {++hits_;return fields_;}
+    const auto start=std::chrono::steady_clock::now();
+    auto computed=surfaceFeatures(mesh,settings,cancel);
+    computeMilliseconds_+=std::chrono::duration<double,std::milli>(
+        std::chrono::steady_clock::now()-start).count();
+    fields_=std::move(computed);
+    settings_=settings;meshHash_=hash;valid_=true;++misses_;
+    return fields_;
+}
 std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
                                          double lambda, const Jerico::CancellationToken *cancel)
 {
@@ -326,6 +352,13 @@ SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeat
                 }
             }
         }
+    }
+    result.cavityAccumulation.resize(size);
+    for (std::size_t i=0;i<size;++i)
+    {
+        const auto concavity=std::clamp(result.concavity[i]*settings.radius,0.0,1.0);
+        const auto contact=result.contactOcclusion.empty()?0.0:result.contactOcclusion[i];
+        result.cavityAccumulation[i]=std::clamp(.5*concavity+.5*contact,0.0,1.0);
     }
     check(cancel);
     return result;

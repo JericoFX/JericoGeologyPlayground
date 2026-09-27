@@ -105,10 +105,10 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
    float3 viewDirection=normalize(eye-input.World);
    if(dot(n,viewDirection)<0){n=-n;surfaceNormal=-surfaceNormal;}
    float3 halfway=normalize(light+viewDirection);
-   float attenuation=pow(saturate(1-lightDistance/max(WebE.w,.001)),2);
+   float attenuation=saturate(1-lightDistance/max(WebE.w,.001));
    float wet=saturate(WebA.z);
    float rough=saturate(WebA.x*(1-.72*wet));
-   float key=saturate(dot(n,light))*(.25+.75*attenuation);
+   float key=sqrt(saturate(dot(n,light)))*attenuation;
    float rim=saturate(1-dot(n,viewDirection));
    float3 strandTangent=normalize(cross(surfaceNormal,n)+float3(.001,.002,.003));
    float tangentGlint=pow(saturate(1-abs(dot(strandTangent,halfway))),
@@ -131,14 +131,17 @@ float4 PSMain(VOut input,uint primitiveId:SV_PrimitiveID):SV_TARGET {
        (1-smoothstep(dropRadius*.25,dropRadius,
          length(frac(dropletCell)-center)))*field;
    }
-   float3 silk=float3(.72,.78,.80)*(.24+key*.78)+float3(.19,.23,.29)*rim;
+   float3 silk=float3(.80,.84,.86)+float3(.12,.11,.10)*key;
+   silk=lerp(silk,float3(.86,.91,.95),wet*.45);
    silk=lerp(silk,float3(.92,.95,1),saturate(WebA.w)*.65);
    silk=lerp(silk,float3(.57,.51,.42),saturate(WebB.x)*.5);
    float response=saturate(WebC.x+WebC.y*glint+
-      WebC.z*glint*(1+wet)+WebC.w*rim*glint+wet*.25*glint);
-   float glintEnergy=WebD.x*(glint*(.2+wet*.8)+droplet*attenuation*(.5+wet));
-   silk=WebA.y*(silk*.28+float3(.94,.97,1)*glintEnergy);
-   alpha=saturate(max(alpha,field*.3)*response+droplet*attenuation*.55*WebD.x);
+      WebC.z*(.85*key+.15*glint)+WebC.w*rim*key+
+      wet*(.12+.25*key));
+   float glintEnergy=WebD.x*(glint*(.25+wet*.75)+
+      droplet*(.15+.85*attenuation)*(.3+wet*.7));
+   silk=WebA.y*(silk+float3(.94,.97,1)*glintEnergy);
+   alpha=saturate(alpha*response+droplet*(.15+.45*attenuation)*wet);
    alpha*=saturate((WebB.w-Camera.z)/max(WebB.w-WebB.z,.001));
    return float4(pow(saturate(silk),1.0/2.2),alpha);
   }

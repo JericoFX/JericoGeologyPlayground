@@ -22,6 +22,7 @@ struct SurfaceFeatureFields
     std::vector<double> signedDihedralCurvature; // positive convex on the front side, inverse object units
     std::vector<double> convexity;               // max(signed curvature, 0)
     std::vector<double> concavity;               // max(-signed curvature, 0)
+    std::vector<double> cavityAccumulation;       // bounded concavity and local contact, [0,1]
     std::vector<double> absoluteCurvature;
     std::vector<double> edgeDistance;            // shortest edge-graph distance; infinity if no crease
     std::vector<double> boundaryDistance;        // edge-graph distance to open topology boundary
@@ -36,6 +37,23 @@ struct SurfaceFeatureFields
 };
 SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeatureSettings &settings = {},
                                      const Jerico::CancellationToken *cancel = nullptr);
+class SurfaceFeatureCache
+{
+public:
+    const SurfaceFeatureFields &get(const TriangleMesh &mesh,
+                                    const SurfaceFeatureSettings &settings = {},
+                                    const Jerico::CancellationToken *cancel = nullptr);
+    std::size_t hits() const {return hits_;}
+    std::size_t misses() const {return misses_;}
+    double computeMilliseconds() const {return computeMilliseconds_;}
+private:
+    bool valid_{};
+    std::uint64_t meshHash_{};
+    SurfaceFeatureSettings settings_;
+    SurfaceFeatureFields fields_;
+    std::size_t hits_{}, misses_{};
+    double computeMilliseconds_{};
+};
 std::vector<double> relaxSignedCurvature(const TriangleMesh &mesh, const std::vector<double> &raw,
                                          double lambda, const Jerico::CancellationToken *cancel = nullptr);
 } // namespace Playground

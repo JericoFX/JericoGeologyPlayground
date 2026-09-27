@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include "DamageField.hpp"
 #include "LayerFormation.hpp"
 #include "MeshReduction.hpp"
 #include "RockAddonMath.hpp"
@@ -16,6 +17,7 @@
 #include <map>
 #include <nlohmann/json.hpp>
 #include <numbers>
+#include <optional>
 #include <set>
 #include <stdexcept>
 #include <tuple>
@@ -223,6 +225,9 @@ double maskValue(Vec3d p, Vec3d n, const Layer &l, const SurfaceFeatureFields *f
     case Mask::Thickness:
         value = features->thicknessConfidence[vertex] ? features->thickness[vertex] : 0;
         break;
+    case Mask::Cavity:
+        value = features->cavityAccumulation[vertex];
+        break;
     }
     value = smooth((value - l.maskLow) / std::max(1e-5f, l.maskHigh - l.maskLow));
     return l.maskInvert ? 1 - value : value;
@@ -308,6 +313,7 @@ Json layerJson(const Layer &l)
                 {"maskLow", l.maskLow},
                 {"maskHigh", l.maskHigh},
                 {"maskInvert", l.maskInvert},
+                {"useSharedFeatureEdges", l.useSharedFeatureEdges},
                 {"coherentLayers", l.coherentLayers},
                 {"thicknessFrequency", l.thicknessFrequency},
                 {"thicknessCorrelation", l.thicknessCorrelation},
@@ -406,6 +412,7 @@ Layer defaultLayer(Kind kind)
         l.scale = {0.9f, 0.9f, 0.9f};
     if (kind == Kind::EdgeBreakup)
     {
+        l.useSharedFeatureEdges=true;
         l.amplitude = 0.025f;
         l.frequency = 6;
         l.width = 0.2f;
@@ -704,7 +711,7 @@ void validate(const Recipe &r)
     for (auto &l : r.layers)
     {
         finiteJson(layerJson(l));
-        require(int(l.kind) >= 0 && int(l.kind) < 23 && int(l.mask) >= 0 && int(l.mask) < 16);
+        require(int(l.kind) >= 0 && int(l.kind) < 23 && int(l.mask) >= 0 && int(l.mask) < 17);
         if (l.kind == Kind::CliffDrainage)
             require(r.version >= 13 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.5f && l.width >= 0.1f && l.width <= 1 &&
@@ -1076,6 +1083,7 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         }
     };
     std::vector<Vec3d> openReliefDirections;
+    SurfaceFeatureCache featureCache;
     for (std::size_t stage = 0; stage < recipe.layers.size(); ++stage)
     {
         if (stopAfter >= 0 && int(stage) > stopAfter)
@@ -1281,14 +1289,15 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             normals(result);
             continue;
         }
-        SurfaceFeatureFields features;
+        const SurfaceFeatureFields *features=nullptr;
         const bool needsFeatures = int(l.mask) >= int(Mask::Curvature) || l.kind == Kind::SurfaceDamage ||
-                                   l.kind == Kind::DamageDecal;
+                                   l.kind == Kind::DamageDecal ||
+                                   (l.kind == Kind::EdgeBreakup && l.useSharedFeatureEdges);
         auto updateFeatures = [&]()
         {
             if (needsFeatures)
-                features = surfaceFeatures(result.mesh,
-                                           {.contact = l.mask == Mask::Contact,
+                features = &featureCache.get(result.mesh,
+                                           {.contact = l.mask == Mask::Contact || l.mask == Mask::Cavity,
                                             .ambient = l.mask == Mask::AmbientOcclusion,
                                             .thickness = l.mask == Mask::Thickness,
                                             .radius = l.featureRadius,
@@ -1330,14 +1339,14 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                         result.mesh.positions[i] =
                             add(previous[i], mul(sub(mul(average, 1.0 / adjacency[i].size()), previous[i]),
                                                  l.relaxStrength * maskValue(previous[i], result.normals[i],
-                                                                             l, &features, i)));
+                                                                             l, features, i)));
                     if (int(stage) == fieldLayer)
                     {
                         auto delta = sub(result.mesh.positions[i], previous[i]);
                         result.field[i] =
                             l.mask == Mask::None
                                 ? float(std::sqrt(dot(delta, delta)))
-                                : float(maskValue(previous[i], result.normals[i], l, &features, i));
+                                : float(maskValue(previous[i], result.normals[i], l, features, i));
                     }
                 }
                 const bool limitStrain = l.relaxStrength * l.iterations >= 1;
@@ -1357,16 +1366,24 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             }
             continue;
         }
-        if (l.kind == Kind::EdgeBreakup)
-            layerEdgeDistances(result, l, cancel);
+        if (l.kind == Kind::EdgeBreakup && !l.useSharedFeatureEdges)
+            layerEdgeDistances(result,l,cancel);
         updateFeatures();
+        if (l.kind == Kind::EdgeBreakup && l.useSharedFeatureEdges)
+        {
+            result.layerEdgeDistance.resize(result.mesh.positions.size());
+            for (std::size_t i=0;i<result.layerEdgeDistance.size();++i)
+                result.layerEdgeDistance[i]=std::isfinite(features->edgeDistance[i])?
+                    float(features->edgeDistance[i]):std::numeric_limits<float>::max();
+        }
         const auto beforeDamage = l.kind == Kind::SurfaceDamage || l.kind == Kind::DamageDecal
                                       ? result.mesh.positions
                                       : std::vector<Vec3d>{};
         // Amplitude * frequency is the first-order slope of the field. Keep ordinary
         // authored recipes without tagged contacts byte-identical and constrain steep fields.
-        const bool guardDisplacement = l.kind != Kind::Transform && l.kind != Kind::Warp &&
-                                       std::abs(l.amplitude) * l.frequency >= 1;
+        const bool guardDisplacement = (l.kind == Kind::EdgeBreakup && l.useSharedFeatureEdges) ||
+            (l.kind != Kind::Transform && l.kind != Kind::Warp &&
+             std::abs(l.amplitude) * l.frequency >= 1);
         const bool joinContacts = l.kind != Kind::Transform && l.kind != Kind::Warp &&
                                   result.layerContactFaces.size() == result.mesh.indices.size() / 3 &&
                                   std::any_of(result.layerContactFaces.begin(),
@@ -1376,6 +1393,13 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                                             ? result.mesh.positions : std::vector<Vec3d>{};
         DamageProjector damageProjector;
         DamageDecalSettings decalSettings;
+        DamageNoiseSettings damageNoise;
+        DamageEdgeSettings edgeSettings;
+        if (l.kind == Kind::SurfaceDamage)
+            damageNoise={vec(l.coordinateScale),l.frequency,l.lacunarity,
+                         l.roughness,l.octaves,l.seed};
+        if (l.kind == Kind::EdgeBreakup && l.useSharedFeatureEdges)
+            edgeSettings={DamageWidthMode::Metric,l.width,0,.1,0,1};
         if (l.kind == Kind::DamageDecal)
         {
             damageProjector.center = vec(l.translation);
@@ -1399,7 +1423,7 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             if ((i & 255) == 0)
                 checkCancel(cancel);
             auto p = result.mesh.positions[i], n = result.normals[i], q = add(p, warp[i]);
-            double mask = maskValue(q, n, l, &features, i), value = 0;
+            double mask = maskValue(q, n, l, features, i), value = 0;
             if (l.kind == Kind::Transform)
             {
                 result.mesh.positions[i] =
@@ -1415,11 +1439,15 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             }
             else if (l.kind == Kind::SurfaceDamage)
             {
-                value = smooth((0.5 + 0.5 * fbm(q, l) - l.threshold) / l.width);
-                double depth = std::min(double(l.amplitude), 0.2 * features.minimumTriangleAltitude[i]);
-                if (result.layerThickness.size() == result.mesh.positions.size())
-                    depth = std::min(depth, 0.2 * result.layerThickness[i]);
-                result.mesh.positions[i] = add(p, mul(n, -depth * value * mask));
+                const auto noise=structuredDamageNoise01(q,damageNoise);
+                value = smooth((noise - l.threshold) / l.width);
+                value = evaluateDamageField({.noise=value,.protectedMask=1-mask},
+                                            {.noise=1});
+                const auto thickness=result.layerThickness.size()==result.mesh.positions.size()?
+                    std::optional<double>{result.layerThickness[i]}:std::nullopt;
+                const auto depth=boundedDamageAmplitude(l.amplitude,
+                    features->minimumTriangleAltitude[i],thickness);
+                result.mesh.positions[i] = add(p, mul(n, -depth * value));
             }
             else if (l.kind == Kind::DamageDecal)
             {
@@ -1434,12 +1462,26 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             }
             else if (l.kind == Kind::EdgeBreakup)
             {
-                value = 1 - smooth(result.layerEdgeDistance[i] / l.width);
-                double strength = l.amplitude;
-                if (result.layerThickness.size() == result.mesh.positions.size())
-                    strength =
-                        std::clamp(strength, -0.2 * result.layerThickness[i], 0.2 * result.layerThickness[i]);
-                result.mesh.positions[i] = add(p, mul(n, fbm(q, l) * strength * value * mask));
+                if (l.useSharedFeatureEdges)
+                {
+                    value = sampleEdgeDamage(edgeSettings,
+                        std::abs(features->signedDihedralCurvature[i]),
+                        features->edgeDistance[i],1,.5,mask);
+                    const auto thickness=result.layerThickness.size()==result.mesh.positions.size()?
+                        std::optional<double>{result.layerThickness[i]}:std::nullopt;
+                    const auto strength=boundedDamageAmplitude(l.amplitude,
+                        features->minimumTriangleAltitude[i],thickness);
+                    result.mesh.positions[i] = add(p, mul(n, fbm(q, l) * strength * value));
+                }
+                else
+                {
+                    value = 1 - smooth(result.layerEdgeDistance[i] / l.width);
+                    double strength = l.amplitude;
+                    if (result.layerThickness.size() == result.mesh.positions.size())
+                        strength = std::clamp(strength,
+                            -0.2 * result.layerThickness[i], 0.2 * result.layerThickness[i]);
+                    result.mesh.positions[i] = add(p, mul(n, fbm(q, l) * strength * value * mask));
+                }
             }
             else if (l.kind == Kind::StrataRelief)
             {
@@ -1523,8 +1565,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                         std::to_string(stage) + "; orientation ratio=" +
                         std::to_string(dot(oldNormal, newNormal) / dot(oldNormal, oldNormal)) +
                         ", shortest edge=" +
-                        std::to_string(std::min({features.minimumEdgeLength[a], features.minimumEdgeLength[b],
-                                                 features.minimumEdgeLength[c]})) +
+                        std::to_string(std::min({features->minimumEdgeLength[a], features->minimumEdgeLength[b],
+                                                 features->minimumEdgeLength[c]})) +
                         ", minimum altitude=" +
                         std::to_string(std::sqrt(dot(oldNormal, oldNormal)) /
                                        std::max({std::sqrt(dot(sub(beforeDamage[b], beforeDamage[a]),
@@ -1548,6 +1590,9 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         recipe.layers.begin(), recipe.layers.end(), [](const Layer &layer)
         { return layer.enabled && layer.kind == Kind::CliffCutLoop && layer.profile >= 2; });
     renderNormals(result, smoothPushBoundary, cancel);
+    result.featureCacheHits=featureCache.hits();
+    result.featureCacheMisses=featureCache.misses();
+    result.featureComputeMilliseconds=featureCache.computeMilliseconds();
     result.stages = std::move(timings);
     result.milliseconds =
         std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
@@ -1669,6 +1714,7 @@ Recipe deserialize(const std::string &text)
         READ(maskLow);
         READ(maskHigh);
         READ(maskInvert);
+        if (a.contains("useSharedFeatureEdges")) READ(useSharedFeatureEdges);
         if (inputVersion >= 2)
         {
 #define READ_OPTIONAL(member)                                                                                \

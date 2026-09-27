@@ -1,5 +1,6 @@
 #include "AssemblyLabUI.hpp"
 #include "SolidGeometry.hpp"
+#include "ViewportProjection.hpp"
 
 #include <imgui.h>
 #include <algorithm>
@@ -50,7 +51,7 @@ void AssemblyLabUI::choosePreset(int preset)
     {settings.widthMeters=1.4;settings.sagMeters=1.0;settings.boardWidthMeters=.22;}
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
-    selectedId.clear();dirty=true;fitCamera=true;
+    selectedId.clear();selectedArea=-1;dirty=true;fitCamera=true;
 }
 void AssemblyLabUI::activate(Renderer &renderer)
 {dirty=true;uploadedView=-1;rebuild();}
@@ -142,6 +143,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     ImGui::End();
 
     panel("Assembly controls and parts",float(width)-right,top,right,float(height)-top-bottom);
+    ImGui::BeginChild("Assembly controls scroll",{0,0},false);
     ImGui::PushItemWidth(145);
     auto edit=[&](const char *label,double &value,double step=.05)
     {dirty|=ImGui::InputDouble(label,&value,step,step*10,"%.3f");};
@@ -208,6 +210,119 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     edit("Cluster center",settings.damage.clusterCenterMeters,.1);
     edit("Cluster radius",settings.damage.clusterRadiusMeters,.1);
     edit("Cluster strength",settings.damage.clusterStrength,.05);
+    ImGui::Separator();ImGui::TextUnformatted("Movable damage areas");
+    if (settings.damage.areaRules.size()>=Assembly::maximumDamageAreas)
+        ImGui::TextUnformatted("Damage area limit reached (64)");
+    else if (ImGui::Button("Add area at selected part"))
+    {
+        Assembly::AreaDamageRule rule;
+        rule.area.id="area-"+std::to_string(nextAreaId++);
+        const auto *part=selectedPart();
+        const auto station=part?part->stationMeters:built.path.lengthMeters*.5;
+        const auto frame=Construction::frameAtDistance(built.path,station);
+        rule.area.projector.center=part?part->position:frame.position;
+        rule.area.projector.tangent=frame.tangent;
+        rule.area.projector.bitangent=frame.binormal;
+        rule.area.projector.normal=frame.normal;
+        rule.area.projector.scale.z=.35;
+        rule.area.footprint.radius={.3,.3,1};
+        if (part) rule.area.semanticPartId=part->id;
+        settings.damage.areaRules.push_back(std::move(rule));
+        selectedArea=int(settings.damage.areaRules.size())-1;
+        dirty=true;
+    }
+    for (std::size_t i=0;i<settings.damage.areaRules.size();++i)
+    {
+        const auto &rule=settings.damage.areaRules[i];
+        const auto label=rule.area.id+"  ["+Assembly::name(rule.state)+"]";
+        if (ImGui::Selectable(label.c_str(),selectedArea==int(i))) selectedArea=int(i);
+    }
+    if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+    {
+        auto &rule=settings.damage.areaRules[std::size_t(selectedArea)];
+        if (ImGui::Button("Remove selected area"))
+        {
+            settings.damage.areaRules.erase(settings.damage.areaRules.begin()+selectedArea);
+            selectedArea=-1;dirty=true;
+        }
+        else
+        {
+            dirty|=ImGui::Checkbox("Area enabled",&rule.area.enabled);
+            constexpr double minimumAmount=0,maximumAmount=1;
+            dirty|=ImGui::SliderScalar("Area amount",ImGuiDataType_Double,
+                &rule.area.amount,&minimumAmount,&maximumAmount,"%.2f");
+            int areaState=int(rule.state);
+            if (ImGui::Combo("Area state",&areaState,
+                             "Intact\0Missing\0Broken\0Bent\0Loose\0Detached\0Decayed\0Collapsed\0"))
+            {rule.state=Assembly::State(areaState);dirty=true;}
+            double center[]={rule.area.projector.center.x,rule.area.projector.center.y,
+                             rule.area.projector.center.z};
+            if (ImGui::InputScalarN("Area center XYZ",ImGuiDataType_Double,center,3,
+                                    nullptr,nullptr,"%.3f"))
+            {rule.area.projector.center={center[0],center[1],center[2]};dirty=true;}
+            double radius[]={rule.area.footprint.radius.x,rule.area.footprint.radius.y};
+            if (ImGui::InputScalarN("Area radii XY",ImGuiDataType_Double,radius,2,
+                                    nullptr,nullptr,"%.3f"))
+            {rule.area.footprint.radius.x=radius[0];
+             rule.area.footprint.radius.y=radius[1];dirty=true;}
+            dirty|=ImGui::InputDouble("Area depth band",&rule.area.projector.scale.z,
+                                      .01,.1,"%.3f");
+            dirty|=ImGui::InputDouble("Area rotation rad",
+                                      &rule.area.projector.rotationRadians,.05,.5,"%.3f");
+            if (ImGui::Button("Move area to selected part"))
+                if (const auto *part=selectedPart())
+                {rule.area.projector.center=part->position;dirty=true;}
+            if (ImGui::Button("Restrict area to selected part"))
+                if (const auto *part=selectedPart())
+                {rule.area.semanticPartId=part->id;dirty=true;}
+            ImGui::SameLine();
+            if (ImGui::Button("All parts"))
+            {rule.area.semanticPartId.clear();dirty=true;}
+            ImGui::TextWrapped("Part filter: %s",
+                rule.area.semanticPartId.empty()?"All":rule.area.semanticPartId.c_str());
+            if (ImGui::Button("Restrict role to selected part"))
+                if (const auto *part=selectedPart())
+                {rule.area.semanticRole=Assembly::name(part->role);dirty=true;}
+            ImGui::SameLine();
+            if (ImGui::Button("All roles"))
+            {rule.area.semanticRole.clear();dirty=true;}
+            bool indexRange=rule.area.indexRange.has_value();
+            if (ImGui::Checkbox("Limit index range",&indexRange))
+            {
+                rule.area.indexRange=indexRange?
+                    std::optional<std::pair<std::uint32_t,std::uint32_t>>{{0,0}}:
+                    std::nullopt;
+                if (indexRange)
+                    if (const auto *part=selectedPart())
+                        rule.area.indexRange={{part->index,part->index}};
+                dirty=true;
+            }
+            if (rule.area.indexRange)
+            {
+                int range[]={int(rule.area.indexRange->first),
+                             int(rule.area.indexRange->second)};
+                if (ImGui::InputInt2("Index first/last",range))
+                {rule.area.indexRange={{std::uint32_t(std::max(0,range[0])),
+                                        std::uint32_t(std::max(0,range[1]))}};dirty=true;}
+            }
+            bool pathRange=rule.area.pathRangeMeters.has_value();
+            if (ImGui::Checkbox("Limit path distance",&pathRange))
+            {
+                rule.area.pathRangeMeters=pathRange?
+                    std::optional<std::pair<double,double>>{{0,built.path.lengthMeters}}:
+                    std::nullopt;
+                dirty=true;
+            }
+            if (rule.area.pathRangeMeters)
+            {
+                double range[]={rule.area.pathRangeMeters->first,
+                                rule.area.pathRangeMeters->second};
+                if (ImGui::InputScalarN("Path start/end (m)",ImGuiDataType_Double,
+                                        range,2,nullptr,nullptr,"%.3f"))
+                {rule.area.pathRangeMeters={{range[0],range[1]}};dirty=true;}
+            }
+        }
+    }
     ImGui::Separator();ImGui::Text("Semantic parts: %zu",built.parts.size());
     if (ImGui::BeginChild("Part list",{0,145},true))
     {
@@ -243,7 +358,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         ImGui::Text("Triangles %zu | LOD %d | Physical bodies %zu / constraints %zu",
             part->triangleCount,settings.lod,built.promotedBodyCount,built.constraintCount);
     }
-    ImGui::PopItemWidth();ImGui::End();
+    ImGui::PopItemWidth();ImGui::EndChild();ImGui::End();
 
     rebuild();
     panel("Procedural Assemblies viewport",left,top,
@@ -262,16 +377,44 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
         uploadedView=view;
     }
-    ImGui::SameLine();ImGui::TextUnformatted("Click a visible member to select it");
+    ImGui::SameLine();ImGui::TextUnformatted("Click part; Shift+drag selected damage area");
     auto size=ImGui::GetContentRegionAvail();
     size.x=std::max(size.x,32.0f);size.y=std::max(size.y,32.0f);
     constexpr int modes[]={0,2,1,8,3,10};
     auto texture=renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture),size);
+    if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+    {
+        const auto &area=settings.damage.areaRules[std::size_t(selectedArea)].area;
+        if (const auto point=projectToViewport(area.projector.center,camera,
+                                               unsigned(size.x),unsigned(size.y)))
+        {
+            const auto origin=ImGui::GetItemRectMin();
+            const ImVec2 at{origin.x+float(point->x),origin.y+float(point->y)};
+            auto *draw=ImGui::GetWindowDrawList();
+            draw->AddCircle(at,9,IM_COL32(255,195,55,255),24,2);
+            draw->AddLine({at.x-13,at.y},{at.x+13,at.y},
+                          IM_COL32(255,195,55,255),1);
+            draw->AddLine({at.x,at.y-13},{at.x,at.y+13},
+                          IM_COL32(255,195,55,255),1);
+        }
+    }
     if (ImGui::IsItemHovered())
     {
         auto &io=ImGui::GetIO();
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && view!=5)
+        const bool moveArea=io.KeyShift && selectedArea>=0 &&
+            selectedArea<int(settings.damage.areaRules.size()) &&
+            ImGui::IsMouseDown(ImGuiMouseButton_Left);
+        if (moveArea)
+        {
+            auto &area=settings.damage.areaRules[std::size_t(selectedArea)].area;
+            const auto origin=ImGui::GetItemRectMin();
+            if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
+                    io.MousePos.x-origin.x,io.MousePos.y-origin.y,
+                    area.projector.center,area.projector.normal))
+            {area.projector.center=*hit;dirty=true;}
+        }
+        if (!moveArea && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && view!=5)
         {
             const auto minimum=ImGui::GetItemRectMin();
             const auto x=unsigned(std::clamp(io.MousePos.x-minimum.x,0.0f,size.x-1));
@@ -283,7 +426,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                         {selectedId=part.id;break;}
             renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
         }
-        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+        if (!moveArea && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
         {camera.yaw-=io.MouseDelta.x*.008f;
          camera.pitch=std::clamp(camera.pitch+io.MouseDelta.y*.008f,-1.4f,1.4f);}
         if (ImGui::IsMouseDragging(ImGuiMouseButton_Middle) ||

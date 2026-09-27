@@ -267,6 +267,9 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     dirty|=ImGui::InputDouble("Fracture position 0..1",&settings.breakFraction,.05,.2,"%.3f");
     dirty|=ImGui::InputDouble("Fracture gap (m)",&settings.breakGapMeters,.02,.1,"%.3f");
     dirty|=ImGui::InputDouble("Fracture roughness",&settings.breakRoughness,.05,.2,"%.3f");
+    int breakSeed=int(settings.breakSeed);
+    if (ImGui::InputInt("Fracture seed",&breakSeed))
+    {settings.breakSeed=std::uint32_t(std::max(0,breakSeed));dirty=true;}
     ImGui::PopItemWidth();
     ImGui::End();
 

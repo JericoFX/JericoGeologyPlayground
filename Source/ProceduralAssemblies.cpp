@@ -1,4 +1,5 @@
 #include "ProceduralAssemblies.hpp"
+#include "DamageField.hpp"
 #include "SolidGeometry.hpp"
 
 #include <algorithm>
@@ -36,8 +37,6 @@ std::uint64_t stableHash(std::string_view value,std::uint32_t seed=0)
     {hash^=byte;hash*=1099511628211ull;}
     return hash;
 }
-double hash01(std::string_view value,std::uint32_t seed)
-{return double(stableHash(value,seed)>>11)*(1.0/9007199254740992.0);}
 double segmentDistanceSquared(Vec3d p,Vec3d q,Vec3d r,Vec3d s)
 {
     const auto u=sub(q,p),v=sub(s,r),w=sub(p,r);
@@ -118,6 +117,12 @@ State resolveDamage(const DamageSettings &settings,const Part &part)
             part.stationMeters>=rule.startMeters && part.stationMeters<=rule.endMeters;
         if (matches && stateAllowed(part.role,rule.state)) return rule.state;
     }
+    for (const auto &rule:settings.areaRules)
+        if (stateAllowed(part.role,rule.state) &&
+            evaluateDamageField({.impact=sampleDamageArea(rule.area,
+                {part.position,part.id,name(part.role),part.index,part.stationMeters})},
+                                {.impact=1})>.5)
+            return rule.state;
     if (!settings.proceduralEnabled) return State::Intact;
     validateProbability(settings.missingProbability,"missing");
     validateProbability(settings.brokenProbability,"broken");
@@ -133,11 +138,13 @@ State resolveDamage(const DamageSettings &settings,const Part &part)
             !std::isfinite(settings.clusterRadiusMeters) || settings.clusterRadiusMeters<=0)
             throw std::runtime_error("Invalid damage cluster center or radius");
         const auto relative=(part.stationMeters-settings.clusterCenterMeters)/settings.clusterRadiusMeters;
-        const auto probability=settings.clusterStrength*std::exp(-.5*relative*relative);
-        if (hash01(part.id+"/cluster",settings.seed)<probability &&
+        const auto probability=evaluateDamageField(
+            {.impact=settings.clusterStrength*std::exp(-.5*relative*relative)},
+            {.impact=1});
+        if (damageRandom01(settings.seed,part.id,"cluster")<probability &&
             stateAllowed(part.role,State::Broken)) return State::Broken;
     }
-    const auto random=hash01(part.id,settings.seed);
+    const auto random=damageRandom01(settings.seed,part.id,"state");
     if (random<settings.missingProbability) return State::Missing;
     if (random<settings.missingProbability+settings.brokenProbability &&
         stateAllowed(part.role,State::Broken)) return State::Broken;

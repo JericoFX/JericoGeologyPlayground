@@ -63,6 +63,34 @@ int main()
         settings.contact = false;
         auto convex = surfaceFeatures(crease(-1), settings);
         auto concave = surfaceFeatures(crease(1), settings);
+        require(concave.cavityAccumulation[0]>convex.cavityAccumulation[0] &&
+                    convex.cavityAccumulation.size()==convex.convexity.size(),
+                "shared cavity field must favor concavity without a separate consumer analysis");
+        SurfaceFeatureCache cache;
+        const auto firstCached=cache.get(crease(-1),settings);
+        require(cache.misses()==1 && cache.hits()==0 &&
+                    firstCached.signedDihedralCurvature[0]>0,
+                "first feature request must compute from the source mesh");
+        const auto secondCached=cache.get(crease(-1),settings);
+        require(cache.misses()==1 && cache.hits()==1 &&
+                    secondCached.signedDihedralCurvature[0]>0,
+                "unchanged geometry and settings must reuse the computed fields");
+        const auto changedCached=cache.get(crease(1),settings);
+        require(cache.misses()==2 && changedCached.signedDihedralCurvature[0]<0,
+                "position change must invalidate cached feature classification");
+        auto changedSettings=settings;
+        changedSettings.creaseAngleDegrees=120;
+        cache.get(crease(1),changedSettings);
+        require(cache.misses()==3,
+                "feature settings change must invalidate cached fields");
+        Recipe repeatedFeatures;
+        repeatedFeatures.base=Base::Cube;
+        auto wear=defaultLayer(Kind::SurfaceDamage);
+        wear.amplitude=0;
+        repeatedFeatures.layers={wear,wear};
+        const auto reused=evaluate(repeatedFeatures,8);
+        require(reused.featureCacheMisses==1 && reused.featureCacheHits>=1,
+                "unchanged geology stages must share one surface feature computation");
         require(std::abs(convex.signedDihedralCurvature[0] - 3 * std::numbers::pi / 8) < 1e-10,
                 "convex right-angle hinge has hand-derived positive curvature");
         require(std::abs(concave.signedDihedralCurvature[0] + 3 * std::numbers::pi / 8) < 1e-10,
@@ -253,6 +281,11 @@ int main()
         rock.layers[0].mask = Mask::Concavity;
         require(meshHash(evaluate(rock, 16).mesh) == meshHash(before.mesh),
                 "convex fixture has no concavity wear");
+        rock.layers[0].mask = Mask::Cavity;
+        rock.layers[0].maskLow=0;
+        rock.layers[0].maskHigh=1;
+        require(meshHash(evaluate(rock,16).mesh)==meshHash(before.mesh),
+                "shared cavity mask leaves an isolated convex rock unchanged");
         auto extendedStored = serialize(rock);
         rock.layers[0].mask = Mask::Contact;
         require(meshHash(evaluate(rock, 16).mesh) == meshHash(before.mesh),

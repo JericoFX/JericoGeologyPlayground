@@ -8,6 +8,37 @@ namespace Playground
 {
 namespace
 {
+void applyStyle(Web::Settings &settings,Web::Style style)
+{
+    settings.style=style;
+    if (style==Web::Style::Ghost)
+    {
+        settings.radiusMeters=.004;
+        settings.microStrandDensity=.65;
+        settings.optics.baseVisibility=.025f;
+        settings.optics.specularResponse=1.5f;
+        settings.optics.lightRevealStrength=1.8f;
+        settings.optics.viewAngleResponse=.5f;
+    }
+    else if (style==Web::Style::Medium)
+    {
+        settings.radiusMeters=.009;
+        settings.microStrandDensity=.35;
+        settings.optics.baseVisibility=.18f;
+        settings.optics.specularResponse=1.0f;
+        settings.optics.lightRevealStrength=.8f;
+        settings.optics.viewAngleResponse=.3f;
+    }
+    else
+    {
+        settings.radiusMeters=.015;
+        settings.microStrandDensity=0;
+        settings.optics.baseVisibility=1.0f;
+        settings.optics.specularResponse=.6f;
+        settings.optics.lightRevealStrength=0;
+        settings.optics.viewAngleResponse=0;
+    }
+}
 constexpr const char *presets[]={"Orb Web","Corner Cobweb","Messy Cave Web",
     "Broken Old Web","Dense Nest","Trap Strands"};
 constexpr const char *views[]={"Card / lit","Coverage","Distance field",
@@ -76,6 +107,7 @@ bool onPlacementPlane(ImVec2 mouse,const Camera &camera,ImVec2 origin,ImVec2 siz
 }
 WebLabUI::WebLabUI()
 {
+    applyStyle(settings,Web::Style::Ghost);
     camera.yaw=.3f;camera.pitch=-.12f;camera.distance=7;
     settings.anchors={{-1.5,-1.5,0},{1.5,-1.5,0},{1.5,1.5,0},{-1.5,1.5,0}};
     settings.area=settings.anchors;
@@ -199,7 +231,8 @@ void WebLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     if (ImGui::Button("Generate")) {changedAny=true;generateNow=true;}
     ImGui::SameLine();
     if (ImGui::Button("Reset"))
-    {settings=Web::Settings{};settings.anchors={{-1.5,-1.5,0},{1.5,-1.5,0},
+    {settings=Web::Settings{};applyStyle(settings,Web::Style::Ghost);
+     settings.anchors={{-1.5,-1.5,0},{1.5,-1.5,0},
         {1.5,1.5,0},{-1.5,1.5,0}};settings.area=settings.anchors;
      selectedEdge.clear();changedAny=true;fitCamera=true;}
     ImGui::Separator();
@@ -209,11 +242,7 @@ void WebLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     int style=int(settings.style);
     if (ImGui::Combo("Web Field style",&style,"Heavy\0Medium\0Ghost\0"))
     {
-        settings.style=Web::Style(style);
-        settings.optics.baseVisibility=style==2?.03f:style==1?.22f:1.0f;
-        settings.optics.lightRevealStrength=style==0?0:style==1?.5f:1.0f;
-        settings.optics.specularResponse=style==0?.6f:1.0f;
-        settings.microStrandDensity=style==0?0:style==1?.35:.8;
+        applyStyle(settings,Web::Style(style));
         changedAny=true;
     }
     int seed=int(settings.seed);
