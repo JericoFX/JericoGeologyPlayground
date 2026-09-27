@@ -10,6 +10,7 @@
 #include <numbers>
 #include <set>
 #include <stdexcept>
+#include <tuple>
 #include <vector>
 
 namespace Playground
@@ -30,13 +31,29 @@ Vec3d localToWorld(const DamageProjector &projector,double u,double v,double w)
             multiply(projector.normal,w*projector.scale.z))));
 }
 manifold::MeshGL64 nativeMesh(const TriangleMesh &mesh,
-                              std::map<std::uint32_t,Jerico::Guid> &identities)
+                              std::map<std::uint32_t,Jerico::Guid> &identities,
+                              bool mergeCoincident=false)
 {
     manifold::MeshGL64 result;
     result.numProp=3;
     result.vertProperties.reserve(mesh.positions.size()*3);
     for (const auto p:mesh.positions)
         result.vertProperties.insert(result.vertProperties.end(),{p.x,p.y,p.z});
+    if (mergeCoincident)
+    {
+        std::map<std::tuple<double,double,double>,std::uint32_t> firstAtPosition;
+        for (std::uint32_t i=0;i<mesh.positions.size();++i)
+        {
+            const auto p=mesh.positions[i];
+            const auto [it,inserted]=firstAtPosition.try_emplace(
+                std::tuple{p.x,p.y,p.z},i);
+            if (!inserted)
+            {
+                result.mergeFromVert.push_back(i);
+                result.mergeToVert.push_back(it->second);
+            }
+        }
+    }
     std::map<Jerico::Guid,std::vector<std::size_t>> groups;
     for (std::size_t face=0;face<mesh.triangleRegions.size();++face)
         groups[mesh.triangleRegions[face]].push_back(face);
@@ -176,6 +193,55 @@ TriangleMesh cutterMesh(const DamageArea &area,Jerico::Guid freshInterior)
     }
     return cutter;
 }
+TriangleMesh pathSegmentMesh(const DamagePathCutter &cutter,Vec3d first,Vec3d second,
+                             Jerico::Guid freshInterior)
+{
+    constexpr std::uint32_t halfArc=8;
+    constexpr std::uint32_t sides=2*(halfArc+1);
+    const auto dx=second.x-first.x,dy=second.y-first.y;
+    const auto length=std::hypot(dx,dy);
+    if (!(length>1e-9)) throw std::invalid_argument("Damage path segment too short");
+    const auto tx=dx/length,ty=dy/length;
+    const auto nx=-ty,ny=tx;
+    const auto exteriorMargin=std::max(1e-4,cutter.radius*.01)/cutter.projector.scale.z;
+    TriangleMesh mesh;
+    mesh.positions.reserve(2*sides+2);
+    auto appendArc=[&](Vec3d center,double start)
+    {
+        for (std::uint32_t i=0;i<=halfArc;++i)
+        {
+            const auto angle=start+std::numbers::pi*i/halfArc;
+            const auto u=center.x+cutter.radius*(tx*std::cos(angle)+nx*std::sin(angle));
+            const auto v=center.y+cutter.radius*(ty*std::cos(angle)+ny*std::sin(angle));
+            mesh.positions.push_back(localToWorld(cutter.projector,u,v,
+                                                 -cutter.depth*cutter.amount));
+        }
+    };
+    // The two arcs form one counter-clockwise capsule boundary.
+    appendArc(first,std::numbers::pi/2);
+    appendArc(second,-std::numbers::pi/2);
+    for (std::uint32_t i=0;i<sides;++i)
+    {
+        const auto p=mesh.positions[i];
+        mesh.positions.push_back(add(p,multiply(cutter.projector.normal,
+            (cutter.depth*cutter.amount+exteriorMargin)*cutter.projector.scale.z)));
+    }
+    const auto bottomCenter=std::uint32_t(mesh.positions.size());
+    mesh.positions.push_back(localToWorld(cutter.projector,
+        (first.x+second.x)*.5,(first.y+second.y)*.5,-cutter.depth*cutter.amount));
+    const auto topCenter=std::uint32_t(mesh.positions.size());
+    mesh.positions.push_back(localToWorld(cutter.projector,
+        (first.x+second.x)*.5,(first.y+second.y)*.5,exteriorMargin));
+    for (std::uint32_t i=0;i<sides;++i)
+    {
+        const auto next=(i+1)%sides;
+        mesh.indices.insert(mesh.indices.end(),{
+            i,next,sides+next,i,sides+next,sides+i,
+            bottomCenter,next,i,topCenter,sides+i,sides+next});
+        mesh.triangleRegions.insert(mesh.triangleRegions.end(),4,freshInterior);
+    }
+    return mesh;
+}
 }
 
 TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
@@ -227,6 +293,62 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
     auto result=fromNative(output,identities);
     if (!PA::validateClosedMesh(result).hasValue())
         throw std::runtime_error("Damage cavity output is not closed");
+    checkCancel();
+    return result;
+}
+TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &cutter,
+                           Jerico::Guid freshInteriorRegion,std::size_t maximumTriangles,
+                           const Jerico::CancellationToken *cancel)
+{
+    auto checkCancel=[&]
+    {
+        if (cancel && cancel->isCancellationRequested())
+            throw std::runtime_error("Cancelled");
+    };
+    checkCancel();
+    if (maximumTriangles>240000 || host.indices.size()/3>maximumTriangles ||
+        host.positions.size()>maximumTriangles)
+        throw std::runtime_error("Damage path mesh budget exceeded");
+    if (!PA::validateClosedMesh(host).hasValue())
+        throw std::runtime_error("Damage path requires a closed host");
+    if (!cutter.enabled || cutter.amount==0) return host;
+    if (cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints ||
+        host.indices.size()/3+(cutter.path.size()-1)*72>maximumTriangles)
+        throw std::runtime_error("Damage path mesh budget exceeded");
+    sampleDamagePathField(cutter.projector.center,cutter);
+    std::map<std::uint32_t,Jerico::Guid> identities;
+    const manifold::Manifold nativeHost(nativeMesh(host,identities,true));
+    if (nativeHost.Status()!=manifold::Manifold::Error::NoError)
+        throw std::runtime_error("Damage path host is not manifold (status "+
+            std::to_string(int(nativeHost.Status()))+")");
+    manifold::Manifold combined;
+    bool intersects=false;
+    for (std::size_t i=1;i<cutter.path.size();++i)
+    {
+        checkCancel();
+        const auto segment=pathSegmentMesh(cutter,cutter.path[i-1],cutter.path[i],
+                                           freshInteriorRegion);
+        if (separateBounds(host,segment)) continue;
+        manifold::Manifold nativeSegment(nativeMesh(segment,identities));
+        if (nativeSegment.Status()!=manifold::Manifold::Error::NoError)
+            throw std::runtime_error("Damage path cutter is not manifold");
+        combined=intersects ? combined+nativeSegment : nativeSegment;
+        if (combined.Status()!=manifold::Manifold::Error::NoError)
+            throw std::runtime_error("Damage path union failed");
+        intersects=true;
+    }
+    if (!intersects) return host;
+    checkCancel();
+    const auto cut=nativeHost-combined;
+    if (cut.Status()!=manifold::Manifold::Error::NoError || cut.IsEmpty())
+        throw std::runtime_error("Damage path boolean failed");
+    checkCancel();
+    const auto output=cut.GetMeshGL64();
+    if (output.NumTri()>maximumTriangles || output.NumVert()>maximumTriangles)
+        throw std::runtime_error("Damage path output exceeds mesh budget");
+    auto result=fromNative(output,identities);
+    if (!PA::validateClosedMesh(result).hasValue())
+        throw std::runtime_error("Damage path output is not closed");
     checkCancel();
     return result;
 }

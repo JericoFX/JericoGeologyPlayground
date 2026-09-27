@@ -52,9 +52,24 @@ int main()
     rule.area.boundary.seed=12;
     rule.area.amount=.8;rule.state=State::Broken;
     source.areaRules.push_back(rule);
+    PathDamageRule crack;
+    crack.id="beam-crack-1";
+    crack.semanticPartId="WoodenPier/DeckPlank_006";
+    crack.cutter.projector.center={1,2,3};
+    crack.cutter.path={{-.3,0,0},{0,.1,0},{.3,0,0}};
+    crack.cutter.radius=.025;
+    crack.cutter.depth=.04;
+    source.pathRules.push_back(crack);
     auto restored=deserializeAssemblyDamage(serializeAssemblyDamage(source));
     require(serializeAssemblyDamage(restored)==serializeAssemblyDamage(source),
             "damage recipe must round trip exactly and deterministically");
+    require(restored.pathRules.size()==1 && restored.pathRules.front().cutter.path.size()==3,
+            "selected crack path must survive damage recipe roundtrip");
+    auto legacy=source;
+    legacy.pathRules.clear();
+    require(nlohmann::json::parse(serializeAssemblyDamage(legacy)).at("version")==1 &&
+            deserializeAssemblyDamage(serializeAssemblyDamage(legacy)).pathRules.empty(),
+            "legacy area-only damage recipe must stay version 1");
     auto oldJson=nlohmann::json::parse(serializeAssemblyDamage(source));
     oldJson.at("areas").at(0).erase("boundary");
     require(deserializeAssemblyDamage(oldJson.dump()).areaRules.front().area.boundary.irregularity==0,
@@ -79,7 +94,7 @@ int main()
     restored.areaRules.front().area.projector.center={1,2,3};
     require(resolveDamage(restored,selected)==State::Intact,
             "restored protected selection must override area damage");
-    rejects([]{deserializeAssemblyDamage("{\"version\":2}");},"unknown schema version accepted");
+    rejects([]{deserializeAssemblyDamage("{\"version\":3}");},"unknown schema version accepted");
     rejects([]{deserializeAssemblyDamage("{\"version\":1,\"areas\":[{}]}");},
             "incomplete area accepted");
     auto bad=source;bad.areaRules.front().area.projector.scale.x=0;
@@ -96,6 +111,10 @@ int main()
     rejects([&]{serializeAssemblyDamage(bad);},"duplicate operation ID accepted");
     bad=source;bad.areaRules.resize(maximumDamageAreas+1);
     rejects([&]{serializeAssemblyDamage(bad);},"excessive area count accepted");
+    bad=source;bad.pathRules.front().cutter.path[1].z=.1;
+    rejects([&]{serializeAssemblyDamage(bad);},"path point outside projector plane accepted");
+    bad=source;bad.pathRules.push_back(bad.pathRules.front());
+    rejects([&]{serializeAssemblyDamage(bad);},"duplicate selected crack accepted");
     }
     catch (const std::exception &error)
     {std::cerr<<error.what()<<'\n';return 1;}

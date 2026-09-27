@@ -43,6 +43,12 @@ struct AreaDamageRule
     DamageArea area;
     State state{State::Broken};
 };
+struct PathDamageRule
+{
+    std::string id;
+    std::string semanticPartId;
+    DamagePathCutter cutter;
+};
 struct DamageSettings
 {
     bool proceduralEnabled{};
@@ -51,6 +57,7 @@ struct DamageSettings
     double clusterCenterMeters{}, clusterRadiusMeters{}, clusterStrength{};
     std::vector<DamageRule> rules;
     std::vector<AreaDamageRule> areaRules;
+    std::vector<PathDamageRule> pathRules;
     std::unordered_map<std::string, State> manual;
     std::unordered_set<std::string> protectedIds;
 };
@@ -90,6 +97,7 @@ struct Part
     State state{State::Intact};
     bool protectedPart{};
     std::size_t firstTriangle{}, triangleCount{};
+    std::vector<Jerico::Guid> freshInteriorRegions;
 };
 struct FitResult
 {

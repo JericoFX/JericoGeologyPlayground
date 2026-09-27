@@ -103,6 +103,15 @@ bool isFreshDamageInterior(double hostField,double cutterField,
                            double resultField,double tolerance);
 double pathCrackField(Vec3d position,const std::vector<Vec3d> &path,
                       double radius);
+struct DamagePathCutter
+{
+    bool enabled{true};
+    DamageProjector projector;
+    std::vector<Vec3d> path;
+    double radius{.05}, depth{.1}, amount{1};
+};
+inline constexpr std::size_t maximumDamagePathPoints=16;
+double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter);
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,
                              double localFeatureSizeMeters,std::uint64_t seed,
                              std::string_view semanticId);

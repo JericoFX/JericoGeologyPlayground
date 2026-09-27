@@ -1,10 +1,13 @@
 #include "ProceduralAssemblies.hpp"
 #include "DamageField.hpp"
 #include "SolidGeometry.hpp"
+#include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <map>
+#include <set>
 #include <stdexcept>
 
 using namespace Playground;
@@ -36,6 +39,20 @@ Vec3d sub(Vec3d a,Vec3d b)
 {return {a.x-b.x,a.y-b.y,a.z-b.z};}
 double dot(Vec3d a,Vec3d b)
 {return a.x*b.x+a.y*b.y+a.z*b.z;}
+double partVolume(const Result &result,const Part &part)
+{
+    double sum=0;
+    const auto &mesh=result.mesh.mesh;
+    for (std::size_t face=part.firstTriangle;face<part.firstTriangle+part.triangleCount;++face)
+    {
+        const auto a=mesh.positions[mesh.indices[3*face]];
+        const auto b=mesh.positions[mesh.indices[3*face+1]];
+        const auto c=mesh.positions[mesh.indices[3*face+2]];
+        sum+=a.x*(b.y*c.z-b.z*c.y)+a.y*(b.z*c.x-b.x*c.z)+
+             a.z*(b.x*c.y-b.y*c.x);
+    }
+    return sum/6;
+}
 }
 int main()
 {
@@ -204,6 +221,121 @@ int main()
             [](const Part &part){return part.role==Role::DeckPlank;});
         require(intactBoard!=intactPier.parts.end() && intactBoard->triangleCount>12,
                 "near deck planks need bevelled edges rather than plain boxes");
+        Settings crackedPier=pier;
+        PathDamageRule plankCrack;
+        plankCrack.id="plank-crack-0";
+        plankCrack.semanticPartId=intactBoard->id;
+        const auto boardFrame=Construction::frameAtDistance(intactPier.path,
+            intactBoard->stationMeters);
+        plankCrack.cutter.projector.center={
+            intactBoard->position.x+boardFrame.normal.x*pier.boardThicknessMeters*.5,
+            intactBoard->position.y+boardFrame.normal.y*pier.boardThicknessMeters*.5,
+            intactBoard->position.z+boardFrame.normal.z*pier.boardThicknessMeters*.5};
+        plankCrack.cutter.projector.tangent=boardFrame.tangent;
+        plankCrack.cutter.projector.normal=boardFrame.normal;
+        plankCrack.cutter.projector.bitangent={
+            boardFrame.normal.y*boardFrame.tangent.z-boardFrame.normal.z*boardFrame.tangent.y,
+            boardFrame.normal.z*boardFrame.tangent.x-boardFrame.normal.x*boardFrame.tangent.z,
+            boardFrame.normal.x*boardFrame.tangent.y-boardFrame.normal.y*boardFrame.tangent.x};
+        plankCrack.cutter.path={{0,-.35,0},{0,.35,0}};
+        plankCrack.cutter.radius=.025;
+        plankCrack.cutter.depth=.04;
+        crackedPier.damage.pathRules.push_back(plankCrack);
+        const auto cutPier=build(curvedPath(),crackedPier);
+        require(meshHash(cutPier.mesh.mesh)!=meshHash(intactPier.mesh.mesh) &&
+                cutPier.parts.size()==intactPier.parts.size() &&
+                cutPier.cornerUV.size()==cutPier.mesh.mesh.indices.size() &&
+                cutPier.mesh.cornerNormals.size()==cutPier.mesh.mesh.indices.size(),
+                "selected plank crack must change geometry with complete UV and normals");
+        require(std::any_of(cutPier.mesh.regions.begin(),cutPier.mesh.regions.end(),
+                [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;}),
+                "selected plank crack must record fresh interior lineage");
+        require(partVolume(cutPier,cutPier.parts.front())>0 &&
+                partVolume(cutPier,cutPier.parts.front())<
+                    partVolume(intactPier,intactPier.parts.front()) &&
+                cutPier.parts.front().freshInteriorRegions.size()==1,
+                "selected plank crack must remove material and retain selectable fresh faces");
+        for (std::size_t i=0;i<cutPier.parts.size();++i)
+        {
+            require(cutPier.parts[i].id==intactPier.parts[i].id &&
+                    cutPier.parts[i].guid==intactPier.parts[i].guid,
+                    "plank crack must preserve every stable semantic part identity");
+            if (i)
+            {
+                const auto before=intactPier.parts[i].firstTriangle*3;
+                const auto after=cutPier.parts[i].firstTriangle*3;
+                require(cutPier.parts[i].triangleCount==intactPier.parts[i].triangleCount &&
+                        std::equal(intactPier.cornerUV.begin()+std::ptrdiff_t(before),
+                                   intactPier.cornerUV.begin()+std::ptrdiff_t(
+                                       before+3*intactPier.parts[i].triangleCount),
+                                   cutPier.cornerUV.begin()+std::ptrdiff_t(after)),
+                        "cracking one plank must preserve UVs on other parts");
+            }
+        }
+        require(meshHash(cutPier.mesh.mesh)==meshHash(build(curvedPath(),crackedPier).mesh.mesh),
+                "selected plank crack must regenerate deterministically");
+        crackedPier.damage.pathRules.front().cutter.projector.center.x+=100;
+        require(meshHash(build(curvedPath(),crackedPier).mesh.mesh)==
+                meshHash(intactPier.mesh.mesh),
+                "moving plank crack off part must restore original geometry");
+        crackedPier.damage.pathRules.front().cutter=plankCrack.cutter;
+        crackedPier.damage.protectedIds.insert(intactBoard->id);
+        require(meshHash(build(curvedPath(),crackedPier).mesh.mesh)==
+                meshHash(intactPier.mesh.mesh),
+                "locked plank must reject selected crack without changing source");
+        crackedPier.damage.protectedIds.clear();
+        const auto secondBoard=std::find_if(intactPier.parts.begin(),intactPier.parts.end(),
+            [](const Part &part){return part.role==Role::DeckPlank && part.index==1;});
+        require(secondBoard!=intactPier.parts.end(),"crack reassignment needs another plank");
+        const auto secondFrame=Construction::frameAtDistance(intactPier.path,
+            secondBoard->stationMeters);
+        auto &reassigned=crackedPier.damage.pathRules.front();
+        reassigned.semanticPartId=secondBoard->id;
+        reassigned.cutter.projector.center={
+            secondBoard->position.x+secondFrame.normal.x*pier.boardThicknessMeters*.5,
+            secondBoard->position.y+secondFrame.normal.y*pier.boardThicknessMeters*.5,
+            secondBoard->position.z+secondFrame.normal.z*pier.boardThicknessMeters*.5};
+        reassigned.cutter.projector.tangent=secondFrame.tangent;
+        reassigned.cutter.projector.normal=secondFrame.normal;
+        reassigned.cutter.projector.bitangent={
+            secondFrame.normal.y*secondFrame.tangent.z-secondFrame.normal.z*secondFrame.tangent.y,
+            secondFrame.normal.z*secondFrame.tangent.x-secondFrame.normal.x*secondFrame.tangent.z,
+            secondFrame.normal.x*secondFrame.tangent.y-secondFrame.normal.y*secondFrame.tangent.x};
+        const auto movedPier=build(curvedPath(),crackedPier);
+        require(std::abs(partVolume(movedPier,movedPier.parts.front())-
+                         partVolume(intactPier,intactPier.parts.front()))<1e-8 &&
+                partVolume(movedPier,movedPier.parts[1])<
+                    partVolume(intactPier,intactPier.parts[1]),
+                "reassigning a crack must restore the old plank and cut the selected plank");
+        const auto beamPart=std::find_if(intactPier.parts.begin(),intactPier.parts.end(),
+            [](const Part &part){return part.role==Role::Beam;});
+        require(beamPart!=intactPier.parts.end(),"shared wood beam fixture missing");
+        auto beamCrack=plankCrack;
+        beamCrack.id="beam-crack-0";
+        beamCrack.semanticPartId=beamPart->id;
+        const auto beamFrame=Construction::frameAtDistance(intactPier.path,
+            beamPart->stationMeters);
+        beamCrack.cutter.projector.center={
+            beamPart->position.x+beamFrame.normal.x*pier.beamHeightMeters*.5,
+            beamPart->position.y+beamFrame.normal.y*pier.beamHeightMeters*.5,
+            beamPart->position.z+beamFrame.normal.z*pier.beamHeightMeters*.5};
+        beamCrack.cutter.projector.tangent=beamFrame.tangent;
+        beamCrack.cutter.projector.normal=beamFrame.normal;
+        beamCrack.cutter.projector.bitangent={
+            beamFrame.normal.y*beamFrame.tangent.z-beamFrame.normal.z*beamFrame.tangent.y,
+            beamFrame.normal.z*beamFrame.tangent.x-beamFrame.normal.x*beamFrame.tangent.z,
+            beamFrame.normal.x*beamFrame.tangent.y-beamFrame.normal.y*beamFrame.tangent.x};
+        beamCrack.cutter.path={{-.3,0,0},{.3,0,0}};
+        beamCrack.cutter.depth=.12;
+        Settings crackedBeam=pier;
+        crackedBeam.damage.pathRules.push_back(beamCrack);
+        const auto cutBeam=build(curvedPath(),crackedBeam);
+        const auto cutBeamPart=std::find_if(cutBeam.parts.begin(),cutBeam.parts.end(),
+            [&](const Part &part){return part.id==beamPart->id;});
+        require(cutBeamPart!=cutBeam.parts.end() &&
+                partVolume(cutBeam,*cutBeamPart)<partVolume(intactPier,*beamPart) &&
+                cutBeamPart->freshInteriorRegions.size()==1,
+                "same shared path cutter must cut an actual wooden beam");
         Settings tinyBoard=pier;
         tinyBoard.widthMeters=6e-5;
         tinyBoard.boardWidthMeters=6e-5;
@@ -216,6 +348,51 @@ int main()
         const auto boardId=stablePartId(pier.kind,Role::DeckPlank,3);
         pier.damage.manual[boardId]=State::Broken;
         auto damagedPier=build(curvedPath(),pier);
+        const auto brokenBoardPart=std::find_if(damagedPier.parts.begin(),damagedPier.parts.end(),
+            [&](const Part &part){return part.id==boardId;});
+        require(brokenBoardPart!=damagedPier.parts.end(),
+                "local fracture density fixture needs broken plank");
+        const auto breakFrame=Construction::frameAtDistance(damagedPier.path,
+            brokenBoardPart->stationMeters);
+        const auto cutCenter=pier.widthMeters*.5*(damageRandom01(pier.damage.seed,
+            boardId,"cut-position")-.5);
+        std::set<std::uint32_t> boardVertices;
+        for (std::size_t face=brokenBoardPart->firstTriangle;
+             face<brokenBoardPart->firstTriangle+brokenBoardPart->triangleCount;++face)
+            for (int corner=0;corner<3;++corner)
+                boardVertices.insert(damagedPier.mesh.mesh.indices[3*face+corner]);
+        std::size_t nearBreak=0,farEnd=0;
+        for (const auto vertex:boardVertices)
+        {
+            const auto local=dot(sub(damagedPier.mesh.mesh.positions[vertex],
+                                     breakFrame.position),breakFrame.binormal);
+            nearBreak+=std::abs(local-cutCenter)<.25;
+            farEnd+=std::abs(std::abs(local)-pier.widthMeters*.5)<.08;
+        }
+        require(nearBreak>=80 && farEnd<=16 && brokenBoardPart->triangleCount<500,
+                "broken plank needs bounded tessellation concentrated near fracture");
+        TriangleMesh brokenOnly;
+        std::map<std::uint32_t,std::uint32_t> localVertices;
+        for (std::size_t face=brokenBoardPart->firstTriangle;
+             face<brokenBoardPart->firstTriangle+brokenBoardPart->triangleCount;++face)
+            for (int corner=0;corner<3;++corner)
+            {
+                const auto source=damagedPier.mesh.mesh.indices[3*face+corner];
+                const auto [it,inserted]=localVertices.emplace(
+                    source,std::uint32_t(brokenOnly.positions.size()));
+                if (inserted)
+                    brokenOnly.positions.push_back(damagedPier.mesh.mesh.positions[source]);
+                brokenOnly.indices.push_back(it->second);
+            }
+        brokenOnly.triangleRegions.assign(
+            damagedPier.mesh.mesh.triangleRegions.begin()+
+                std::ptrdiff_t(brokenBoardPart->firstTriangle),
+            damagedPier.mesh.mesh.triangleRegions.begin()+
+                std::ptrdiff_t(brokenBoardPart->firstTriangle+
+                    brokenBoardPart->triangleCount));
+        const auto closedBroken=PA::validateClosedMesh(brokenOnly);
+        require(closedBroken.hasValue(),
+                "locally tessellated fractured plank must remain a closed solid");
         pier.lod=2;
         auto distantPier=build(curvedPath(),pier);
         bool brokenNear=false,brokenFar=false;

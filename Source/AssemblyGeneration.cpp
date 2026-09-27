@@ -1,11 +1,16 @@
 #include "ProceduralAssemblies.hpp"
 #include "DamageField.hpp"
+#include "DamageGeometry.hpp"
 #include "SolidGeometry.hpp"
+#include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <limits>
 #include <numbers>
+#include <numeric>
+#include <set>
 #include <stdexcept>
 
 namespace Playground::Assembly
@@ -27,6 +32,42 @@ Vec3d unit(Vec3d a)
     return mul(a,1/magnitude);
 }
 struct Point2 {double u{},v{};};
+struct SurfacePoint
+{
+    std::array<double,3> weights{};
+    double squaredDistance{std::numeric_limits<double>::infinity()};
+};
+SurfacePoint nearestOnTriangle(Vec3d point,Vec3d a,Vec3d b,Vec3d c)
+{
+    const auto ab=sub(b,a),ac=sub(c,a),ap=sub(point,a);
+    const auto aa=dot(ab,ab),abac=dot(ab,ac),cc=dot(ac,ac);
+    const auto denominator=aa*cc-abac*abac;
+    if (!(denominator>1e-18)) throw std::runtime_error("Damage UV source triangle collapsed");
+    const auto u=(dot(ap,ab)*cc-dot(ap,ac)*abac)/denominator;
+    const auto v=(dot(ap,ac)*aa-dot(ap,ab)*abac)/denominator;
+    auto candidate=[&](std::array<double,3> weights)
+    {
+        const auto nearest=add(mul(a,weights[0]),
+            add(mul(b,weights[1]),mul(c,weights[2])));
+        const auto delta=sub(point,nearest);
+        return SurfacePoint{weights,dot(delta,delta)};
+    };
+    if (u>=0 && v>=0 && u+v<=1) return candidate({1-u-v,u,v});
+    SurfacePoint best;
+    const Vec3d vertices[]={a,b,c};
+    for (int edge=0;edge<3;++edge)
+    {
+        const auto next=(edge+1)%3;
+        const auto direction=sub(vertices[next],vertices[edge]);
+        const auto t=std::clamp(dot(sub(point,vertices[edge]),direction)/dot(direction,direction),
+                                0.0,1.0);
+        std::array<double,3> weights{};
+        weights[edge]=1-t;weights[next]=t;
+        auto found=candidate(weights);
+        if (found.squaredDistance<best.squaredDistance) best=found;
+    }
+    return best;
+}
 
 class Builder
 {
@@ -42,8 +83,21 @@ class Builder
             settings.maximumParts>10000 || settings.maximumVertices<100 ||
             settings.maximumVertices>1000000)
             throw std::runtime_error("Assembly LOD or part/vertex budget is invalid");
-        if (settings.damage.areaRules.size()>maximumDamageAreas)
+        if (settings.damage.areaRules.size()>maximumDamageAreas ||
+            settings.damage.pathRules.size()>maximumDamageAreas)
             throw std::runtime_error("Assembly exceeds damage area budget");
+        std::set<std::string> pathIds,partIds;
+        for (const auto &rule:settings.damage.pathRules)
+        {
+            if (rule.id.empty() || rule.semanticPartId.empty() ||
+                !pathIds.insert(rule.id).second ||
+                !partIds.insert(rule.semanticPartId).second ||
+                !std::isfinite(rule.cutter.radius) || rule.cutter.radius<.001 ||
+                rule.cutter.radius>100 || !std::isfinite(rule.cutter.depth) ||
+                rule.cutter.depth<.001 || rule.cutter.depth>100)
+                throw std::runtime_error("Assembly selected crack settings invalid");
+            sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
+        }
         const double dimensions[]={settings.widthMeters,settings.heightMeters,settings.gaugeMeters,
             settings.sleeperSpacingMeters,settings.sleeperLengthMeters,settings.sleeperWidthMeters,
             settings.sleeperHeightMeters,settings.boardWidthMeters,settings.boardThicknessMeters,
@@ -120,11 +174,114 @@ class Builder
         item.protectedPart=settings.damage.protectedIds.contains(item.id);
         item.state=resolveDamage(settings.damage,item);
         item.firstTriangle=result.mesh.mesh.indices.size()/3;
+        const auto firstVertex=result.mesh.mesh.positions.size();
         currentGuid=item.guid;
         currentField=float(int(role)+1)+(item.state==State::Intact?0.0f:0.45f);
-        if (item.state!=State::Missing) draw(item);
+        if (item.state!=State::Missing)
+        {
+            draw(item);
+            if (!item.protectedPart)
+                for (const auto &rule:settings.damage.pathRules)
+                    if (rule.semanticPartId==item.id && rule.cutter.enabled)
+                        applyPathDamage(item,firstVertex,rule);
+        }
         item.triangleCount=result.mesh.mesh.indices.size()/3-item.firstTriangle;
         result.parts.push_back(std::move(item));
+    }
+    void applyPathDamage(Part &item,std::size_t firstVertex,const PathDamageRule &rule)
+    {
+        auto &global=result.mesh.mesh;
+        const auto firstIndex=item.firstTriangle*3;
+        TriangleMesh source;
+        source.positions.assign(global.positions.begin()+std::ptrdiff_t(firstVertex),
+                                global.positions.end());
+        source.indices.assign(global.indices.begin()+std::ptrdiff_t(firstIndex),
+                              global.indices.end());
+        source.triangleRegions.assign(
+            global.triangleRegions.begin()+std::ptrdiff_t(item.firstTriangle),
+            global.triangleRegions.end());
+        for (auto &index:source.indices)
+        {
+            if (index<firstVertex || index-firstVertex>=source.positions.size())
+                throw std::runtime_error("Assembly damage part crosses another mesh range");
+            index-=std::uint32_t(firstVertex);
+        }
+        const std::vector<std::array<float,2>> sourceUV(
+            result.cornerUV.begin()+std::ptrdiff_t(firstIndex),result.cornerUV.end());
+        const auto operation=Jerico::stableGuidHash(stablePartGuid(rule.id));
+        Jerico::Guid fresh;
+        bool unique=false;
+        for (std::uint64_t salt=0;salt<256;++salt)
+        {
+            fresh=Solid::region(settings.damage.seed,operation ^
+                Jerico::stableGuidHash(item.guid) ^ 0xDA6A9ULL ^ salt);
+            unique=fresh!=item.guid &&
+                std::none_of(result.mesh.regions.begin(),result.mesh.regions.end(),
+                    [&](const RegionInfo &region){return region.id==fresh;});
+            if (unique) break;
+        }
+        if (!unique) throw std::runtime_error("Assembly damage fresh region ID collision");
+        const auto cut=cutDamagePath(source,rule.cutter,fresh,240000);
+        if (PA::hashTriangleMesh(cut)==PA::hashTriangleMesh(source)) return;
+        if (firstVertex+cut.positions.size()>settings.maximumVertices)
+            throw std::runtime_error("Assembly damage exceeds vertex budget");
+        global.positions.resize(firstVertex);
+        result.mesh.field.resize(firstVertex);
+        result.mesh.normals.resize(firstVertex);
+        global.indices.resize(firstIndex);
+        global.triangleRegions.resize(item.firstTriangle);
+        result.mesh.cornerNormals.resize(firstIndex);
+        result.cornerUV.resize(firstIndex);
+        for (const auto point:cut.positions) vertex(point);
+        for (std::size_t face=0;face<cut.indices.size()/3;++face)
+        {
+            const auto a=cut.indices[3*face],b=cut.indices[3*face+1],c=cut.indices[3*face+2];
+            const auto p=cut.positions[a],q=cut.positions[b],r=cut.positions[c];
+            const auto faceNormal=unit(cross(sub(q,p),sub(r,p)));
+            global.indices.insert(global.indices.end(),{
+                std::uint32_t(firstVertex)+a,std::uint32_t(firstVertex)+b,
+                std::uint32_t(firstVertex)+c});
+            const auto region=cut.triangleRegions[face];
+            global.triangleRegions.push_back(region);
+            result.mesh.cornerNormals.insert(result.mesh.cornerNormals.end(),3,faceNormal);
+            if (region==fresh)
+            {
+                for (const auto point:{p,q,r})
+                {
+                    const auto local=projectorCoordinates(rule.cutter.projector,point);
+                    result.cornerUV.push_back({float(local.x),float(local.y)});
+                }
+                continue;
+            }
+            const auto midpoint=mul(add(p,add(q,r)),1.0/3);
+            std::size_t closest=0;
+            auto distance=std::numeric_limits<double>::infinity();
+            for (std::size_t sourceFace=0;sourceFace<source.indices.size()/3;++sourceFace)
+            {
+                const auto offset=sourceFace*3;
+                const auto found=nearestOnTriangle(midpoint,
+                    source.positions[source.indices[offset]],
+                    source.positions[source.indices[offset+1]],
+                    source.positions[source.indices[offset+2]]);
+                if (found.squaredDistance<distance)
+                {distance=found.squaredDistance;closest=sourceFace;}
+            }
+            for (const auto point:{p,q,r})
+            {
+                const auto offset=closest*3;
+                const auto weights=nearestOnTriangle(point,
+                    source.positions[source.indices[offset]],
+                    source.positions[source.indices[offset+1]],
+                    source.positions[source.indices[offset+2]]).weights;
+                std::array<float,2> uv{};
+                for (int corner=0;corner<3;++corner)
+                    for (int axis=0;axis<2;++axis)
+                        uv[axis]+=float(weights[corner]*sourceUV[offset+corner][axis]);
+                result.cornerUV.push_back(uv);
+            }
+        }
+        item.freshInteriorRegions.push_back(fresh);
+        result.mesh.regions.push_back({fresh,item.guid,SurfaceRole::DamageInterior,-1,-1});
     }
     template<class Draw> void part(Role role,std::uint32_t index,int side,double station,Draw draw)
     {
@@ -312,7 +469,10 @@ class Builder
         auto prism=[&](bool left)
         {
             std::vector<Point2> polygon;
-            constexpr unsigned steps=8;
+            const auto band=std::min(boardLength*.12,
+                std::max(boardWidth*.5,thickness*2));
+            const bool localTessellation=boardWidth*band>1e-8 && thickness>1e-5;
+            const unsigned steps=localTessellation?16:8;
             if (left)
             {
                 polygon.push_back({-boardWidth*.5,-boardLength*.5});
@@ -333,8 +493,16 @@ class Builder
                 polygon.push_back({boardWidth*.5,boardLength*.5});
                 polygon.push_back({-boardWidth*.5,boardLength*.5});
             }
+            auto points=polygon;
+            const auto innerBase=std::uint32_t(points.size());
+            if (localTessellation)
+                for (unsigned i=0;i<=steps;++i)
+                {
+                    const auto u=boardWidth*(double(i)/steps-.5);
+                    points.push_back({u,cut(u)+(left?-gap*.5-band:gap*.5+band)});
+                }
             const auto base=std::uint32_t(result.mesh.mesh.positions.size());
-            for (const auto &point:polygon)
+            for (const auto &point:points)
             {
                 auto center=add(frame.position,add(mul(frame.tangent,point.u),mul(frame.binormal,point.v)));
                 if (left!=fallenRight)
@@ -346,36 +514,89 @@ class Builder
             }
             auto orient=[](Point2 a,Point2 b,Point2 c)
             {return (b.u-a.u)*(c.v-a.v)-(b.v-a.v)*(c.u-a.u);};
-            std::vector<std::size_t> remaining(polygon.size());
-            for (std::size_t i=0;i<remaining.size();++i) remaining[i]=i;
-            while (remaining.size()>2)
+            auto capFace=[&](std::uint32_t a,std::uint32_t b,std::uint32_t c)
             {
-                bool clipped=false;
-                for (std::size_t i=0;i<remaining.size();++i)
+                triangle(base+2*a,base+2*b,base+2*c);
+                triangle(base+2*c+1,base+2*b+1,base+2*a+1);
+            };
+            auto capPolygon=[&](std::vector<std::uint32_t> remaining)
+            {
+                while (remaining.size()>2)
                 {
-                    const auto a=remaining[(i+remaining.size()-1)%remaining.size()],
-                               b=remaining[i],c=remaining[(i+1)%remaining.size()];
-                    if (orient(polygon[a],polygon[b],polygon[c])<=1e-12) continue;
-                    bool contains=false;
-                    for (const auto p:remaining)
-                        if (p!=a && p!=b && p!=c &&
-                            orient(polygon[a],polygon[b],polygon[p])>=-1e-12 &&
-                            orient(polygon[b],polygon[c],polygon[p])>=-1e-12 &&
-                            orient(polygon[c],polygon[a],polygon[p])>=-1e-12)
-                            {contains=true;break;}
-                    if (contains) continue;
-                    triangle(base+2*std::uint32_t(a),base+2*std::uint32_t(b),base+2*std::uint32_t(c));
-                    triangle(base+2*std::uint32_t(c)+1,base+2*std::uint32_t(b)+1,
-                             base+2*std::uint32_t(a)+1);
-                    remaining.erase(remaining.begin()+std::ptrdiff_t(i));
-                    clipped=true;break;
+                    bool clipped=false;
+                    for (std::size_t i=0;i<remaining.size();++i)
+                    {
+                        const auto a=remaining[(i+remaining.size()-1)%remaining.size()],
+                                   b=remaining[i],c=remaining[(i+1)%remaining.size()];
+                        if (orient(points[a],points[b],points[c])<=1e-12) continue;
+                        bool contains=false;
+                        for (const auto p:remaining)
+                            if (p!=a && p!=b && p!=c &&
+                                orient(points[a],points[b],points[p])>=-1e-12 &&
+                                orient(points[b],points[c],points[p])>=-1e-12 &&
+                                orient(points[c],points[a],points[p])>=-1e-12)
+                                {contains=true;break;}
+                        if (contains) continue;
+                        capFace(a,b,c);
+                        remaining.erase(remaining.begin()+std::ptrdiff_t(i));
+                        clipped=true;break;
+                    }
+                    if (!clipped) throw std::runtime_error("Broken board cut cannot be triangulated");
                 }
-                if (!clipped) throw std::runtime_error("Broken board cut cannot be triangulated");
-            }
-            for (std::size_t i=0;i<polygon.size();++i)
+            };
+            if (!localTessellation)
             {
-                const auto a=base+2*std::uint32_t(i),b=base+2*std::uint32_t((i+1)%polygon.size());
-                triangle(a,b,b+1);triangle(a,b+1,a+1);
+                std::vector<std::uint32_t> outline(polygon.size());
+                std::iota(outline.begin(),outline.end(),0);
+                capPolygon(std::move(outline));
+            }
+            else
+            {
+                std::vector<std::uint32_t> farOutline;
+                if (left)
+                {
+                    farOutline={0,1};
+                    for (int i=int(steps);i>=0;--i)
+                        farOutline.push_back(innerBase+std::uint32_t(i));
+                }
+                else
+                {
+                    for (unsigned i=0;i<=steps;++i)
+                        farOutline.push_back(innerBase+i);
+                    farOutline.push_back(steps+1);
+                    farOutline.push_back(steps+2);
+                }
+                capPolygon(std::move(farOutline));
+                for (unsigned i=0;i<steps;++i)
+                {
+                    const auto cutAt=[&](unsigned sample)
+                    {return left?2+steps-sample:sample;};
+                    if (left)
+                    {
+                        capFace(innerBase+i,innerBase+i+1,cutAt(i+1));
+                        capFace(innerBase+i,cutAt(i+1),cutAt(i));
+                    }
+                    else
+                    {
+                        capFace(cutAt(i),cutAt(i+1),innerBase+i+1);
+                        capFace(cutAt(i),innerBase+i+1,innerBase+i);
+                    }
+                }
+            }
+            auto wall=[&](std::uint32_t from,std::uint32_t to)
+            {
+                const auto a=base+2*from,b=base+2*to;
+                triangle(a,b+1,b);triangle(a,a+1,b+1);
+            };
+            for (std::uint32_t i=0;i<polygon.size();++i)
+            {
+                const auto next=(i+1)%std::uint32_t(polygon.size());
+                if (localTessellation &&
+                    ((left && i==1) || (!left && i==steps)))
+                {wall(i,innerBase+steps);wall(innerBase+steps,next);}
+                else if (localTessellation && i==polygon.size()-1)
+                {wall(i,innerBase);wall(innerBase,next);}
+                else wall(i,next);
             }
         };
         prism(true);prism(false);

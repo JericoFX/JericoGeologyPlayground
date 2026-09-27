@@ -45,7 +45,8 @@ enum class Kind
     FractureShear,
     FractureQuadrants,
     CliffDrainage,
-    DamageCavity
+    DamageCavity,
+    DamagePath
 };
 enum class Mask
 {
@@ -114,6 +115,8 @@ struct Layer
     float projectorRotation{};
     float damageLip{0.025f};
     float damageBoundaryIrregularity{}, damageRimFraction{};
+    float damageAmount{1};
+    std::vector<std::array<float,2>> damagePathPoints;
 };
 struct Recipe
 {

@@ -70,7 +70,8 @@ void AssemblyLabUI::choosePreset(int preset)
     {settings.widthMeters=1.4;settings.sagMeters=1.0;settings.boardWidthMeters=.22;}
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
-    selectedId.clear();selectedArea=-1;dirty=true;fitCamera=true;movingDamageArea=false;
+    selectedId.clear();selectedArea=-1;selectedPath=-1;
+    dirty=true;fitCamera=true;movingDamageArea=false;
     damageUndo.clear();damageRedo.clear();pendingDamageEdit.reset();
 }
 void AssemblyLabUI::activate(Renderer &renderer)
@@ -264,7 +265,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             {
                 auto loaded=Assembly::loadAssemblyDamage(file);
                 settings.damage=std::move(loaded);
-                selectedArea=-1;dirty=true;error.clear();
+                selectedArea=-1;selectedPath=-1;dirty=true;error.clear();
             }
         }
         catch (const std::exception &exception) {error=exception.what();}
@@ -275,6 +276,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         damageRedo.push_back(settings.damage);
         settings.damage=std::move(damageUndo.back());damageUndo.pop_back();
         selectedArea=std::min(selectedArea,int(settings.damage.areaRules.size())-1);
+        selectedPath=std::min(selectedPath,int(settings.damage.pathRules.size())-1);
         dirty=true;suppressDamageHistory=true;
     }
     ImGui::SameLine();
@@ -283,6 +285,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         damageUndo.push_back(settings.damage);
         settings.damage=std::move(damageRedo.back());damageRedo.pop_back();
         selectedArea=std::min(selectedArea,int(settings.damage.areaRules.size())-1);
+        selectedPath=std::min(selectedPath,int(settings.damage.pathRules.size())-1);
         dirty=true;suppressDamageHistory=true;
     }
     if (settings.damage.areaRules.size()>=Assembly::maximumDamageAreas)
@@ -305,13 +308,15 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         if (part) rule.area.semanticPartId=part->id;
         settings.damage.areaRules.push_back(std::move(rule));
         selectedArea=int(settings.damage.areaRules.size())-1;
+        selectedPath=-1;
         dirty=true;
     }
     for (std::size_t i=0;i<settings.damage.areaRules.size();++i)
     {
         const auto &rule=settings.damage.areaRules[i];
         const auto label=rule.area.id+"  ["+Assembly::name(rule.state)+"]";
-        if (ImGui::Selectable(label.c_str(),selectedArea==int(i))) selectedArea=int(i);
+        if (ImGui::Selectable(label.c_str(),selectedArea==int(i)))
+        {selectedArea=int(i);selectedPath=-1;}
     }
     if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
     {
@@ -405,6 +410,126 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             }
         }
     }
+    ImGui::Separator();ImGui::TextUnformatted("Selected geometric crack paths");
+    const auto *crackPart=selectedPart();
+    const bool crackRole=crackPart &&
+        (crackPart->role==Assembly::Role::DeckPlank ||
+         crackPart->role==Assembly::Role::Sleeper ||
+         crackPart->role==Assembly::Role::Beam);
+    const bool partHasCrack=crackPart && std::any_of(
+        settings.damage.pathRules.begin(),settings.damage.pathRules.end(),
+        [&](const auto &rule){return rule.semanticPartId==crackPart->id;});
+    if (crackRole && !partHasCrack &&
+        settings.damage.pathRules.size()<Assembly::maximumDamageAreas &&
+        ImGui::Button("Add crack to selected solid member"))
+    {
+        Assembly::PathDamageRule rule;
+        do {rule.id="path-"+std::to_string(nextPathId++);}
+        while (std::any_of(settings.damage.pathRules.begin(),settings.damage.pathRules.end(),
+            [&](const auto &existing){return existing.id==rule.id;}));
+        rule.semanticPartId=crackPart->id;
+        const auto frame=Construction::frameAtDistance(built.path,crackPart->stationMeters);
+        const auto height=crackPart->role==Assembly::Role::Sleeper?
+            settings.sleeperHeightMeters:crackPart->role==Assembly::Role::Beam?
+            settings.beamHeightMeters:settings.boardThicknessMeters;
+        rule.cutter.projector.center={
+            crackPart->position.x+frame.normal.x*height*.5,
+            crackPart->position.y+frame.normal.y*height*.5,
+            crackPart->position.z+frame.normal.z*height*.5};
+        rule.cutter.projector.tangent=frame.tangent;
+        rule.cutter.projector.normal=frame.normal;
+        rule.cutter.projector.bitangent={
+            frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
+            frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
+            frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
+        rule.cutter.path={{0,-.35,0},{0,.35,0}};
+        rule.cutter.radius=.025;
+        rule.cutter.depth=std::min(height*.6,.08);
+        settings.damage.pathRules.push_back(std::move(rule));
+        selectedPath=int(settings.damage.pathRules.size())-1;
+        selectedArea=-1;dirty=true;
+    }
+    for (std::size_t i=0;i<settings.damage.pathRules.size();++i)
+    {
+        const auto &rule=settings.damage.pathRules[i];
+        const auto label=rule.id+"  ["+rule.semanticPartId+"]";
+        if (ImGui::Selectable(label.c_str(),selectedPath==int(i)))
+        {selectedPath=int(i);selectedArea=-1;}
+    }
+    if (selectedPath>=0 && selectedPath<int(settings.damage.pathRules.size()))
+    {
+        auto &rule=settings.damage.pathRules[std::size_t(selectedPath)];
+        if (ImGui::Button("Remove selected crack"))
+        {
+            settings.damage.pathRules.erase(settings.damage.pathRules.begin()+selectedPath);
+            selectedPath=-1;dirty=true;
+        }
+        else
+        {
+            dirty|=ImGui::Checkbox("Crack enabled",&rule.cutter.enabled);
+            constexpr double zero=0,one=1;
+            dirty|=ImGui::SliderScalar("Crack amount",ImGuiDataType_Double,
+                &rule.cutter.amount,&zero,&one,"%.2f");
+            double center[]={rule.cutter.projector.center.x,
+                rule.cutter.projector.center.y,rule.cutter.projector.center.z};
+            if (ImGui::InputScalarN("Crack center XYZ",ImGuiDataType_Double,
+                                    center,3,nullptr,nullptr,"%.3f"))
+            {rule.cutter.projector.center={center[0],center[1],center[2]};dirty=true;}
+            dirty|=ImGui::InputDouble("Crack rotation rad",
+                &rule.cutter.projector.rotationRadians,.05,.5,"%.3f");
+            dirty|=ImGui::InputDouble("Crack radius",&rule.cutter.radius,.005,.02,"%.3f");
+            dirty|=ImGui::InputDouble("Crack depth",&rule.cutter.depth,.005,.02,"%.3f");
+            for (std::size_t i=0;i<rule.cutter.path.size();++i)
+            {
+                ImGui::PushID(int(i));
+                double xy[]={rule.cutter.path[i].x,rule.cutter.path[i].y};
+                if (ImGui::InputScalarN("Crack point XY",ImGuiDataType_Double,
+                                        xy,2,nullptr,nullptr,"%.3f"))
+                {rule.cutter.path[i]={xy[0],xy[1],0};dirty=true;}
+                ImGui::PopID();
+            }
+            if (rule.cutter.path.size()<maximumDamagePathPoints &&
+                ImGui::Button("Add crack point"))
+            {
+                auto point=rule.cutter.path.back();
+                point.x+=point.x<9.8?.2:-.2;
+                rule.cutter.path.push_back(point);dirty=true;
+            }
+            if (rule.cutter.path.size()>2 && ImGui::Button("Remove last crack point"))
+            {rule.cutter.path.pop_back();dirty=true;}
+            if (ImGui::Button("Move crack to selected part"))
+                if (const auto *part=selectedPart();part &&
+                    (part->role==Assembly::Role::DeckPlank ||
+                     part->role==Assembly::Role::Sleeper ||
+                     part->role==Assembly::Role::Beam))
+                {
+                    const auto assigned=std::any_of(settings.damage.pathRules.begin(),
+                        settings.damage.pathRules.end(),[&](const auto &other)
+                        {return &other!=&rule && other.semanticPartId==part->id;});
+                    if (!assigned)
+                    {
+                        const auto frame=Construction::frameAtDistance(built.path,
+                            part->stationMeters);
+                        const auto height=part->role==Assembly::Role::Sleeper?
+                            settings.sleeperHeightMeters:part->role==Assembly::Role::Beam?
+                            settings.beamHeightMeters:settings.boardThicknessMeters;
+                        rule.semanticPartId=part->id;
+                        rule.cutter.projector.center={
+                            part->position.x+frame.normal.x*height*.5,
+                            part->position.y+frame.normal.y*height*.5,
+                            part->position.z+frame.normal.z*height*.5};
+                        rule.cutter.projector.tangent=frame.tangent;
+                        rule.cutter.projector.normal=frame.normal;
+                        rule.cutter.projector.bitangent={
+                            frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
+                            frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
+                            frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
+                        dirty=true;
+                    }
+                }
+            ImGui::TextWrapped("Part filter: %s",rule.semanticPartId.c_str());
+        }
+    }
     ImGui::Separator();ImGui::Text("Semantic parts: %zu",built.parts.size());
     if (ImGui::BeginChild("Part list",{0,145},true))
     {
@@ -459,10 +584,18 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
         uploadedView=view;
     }
-    if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+    auto selectedProjector=[&]() -> DamageProjector *
+    {
+        if (selectedPath>=0 && selectedPath<int(settings.damage.pathRules.size()))
+            return &settings.damage.pathRules[std::size_t(selectedPath)].cutter.projector;
+        if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+            return &settings.damage.areaRules[std::size_t(selectedArea)].area.projector;
+        return nullptr;
+    };
+    if (selectedProjector())
     {
         ImGui::SameLine();
-        ImGui::Checkbox("Move selected damage area",&moveDamageAreaMode);
+        ImGui::Checkbox("Move selected damage",&moveDamageAreaMode);
         ImGui::SameLine();ImGui::TextUnformatted("Shift+drag also moves");
     }
     else
@@ -475,10 +608,9 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     constexpr int modes[]={0,2,1,8,3,10};
     auto texture=renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture),size);
-    if (selectedArea>=0 && selectedArea<int(settings.damage.areaRules.size()))
+    if (const auto *projector=selectedProjector())
     {
-        const auto &area=settings.damage.areaRules[std::size_t(selectedArea)].area;
-        if (const auto point=projectToViewport(area.projector.center,camera,
+        if (const auto point=projectToViewport(projector->center,camera,
                                                unsigned(size.x),unsigned(size.y)))
         {
             const auto origin=ImGui::GetItemRectMin();
@@ -494,28 +626,27 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     if (ImGui::IsItemHovered())
     {
         auto &io=ImGui::GetIO();
-        const bool moveArea=(io.KeyShift || moveDamageAreaMode) && selectedArea>=0 &&
-            selectedArea<int(settings.damage.areaRules.size()) &&
+        const bool moveArea=(io.KeyShift || moveDamageAreaMode) && selectedProjector() &&
             ImGui::IsMouseDown(ImGuiMouseButton_Left);
         if (moveArea)
         {
-            auto &area=settings.damage.areaRules[std::size_t(selectedArea)].area;
+            auto &projector=*selectedProjector();
             const auto origin=ImGui::GetItemRectMin();
             if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
                     io.MousePos.x-origin.x,io.MousePos.y-origin.y,
-                    area.projector.center,area.projector.normal))
+                    projector.center,projector.normal))
             {
                 if (!movingDamageArea)
                 {
-                    damageGrabOffset={area.projector.center.x-hit->x,
-                        area.projector.center.y-hit->y,area.projector.center.z-hit->z};
+                    damageGrabOffset={projector.center.x-hit->x,
+                        projector.center.y-hit->y,projector.center.z-hit->z};
                     movingDamageArea=true;
                 }
                 const Vec3d next{hit->x+damageGrabOffset.x,hit->y+damageGrabOffset.y,
                     hit->z+damageGrabOffset.z};
-                if (next.x!=area.projector.center.x || next.y!=area.projector.center.y ||
-                    next.z!=area.projector.center.z)
-                {area.projector.center=next;dirty=true;}
+                if (next.x!=projector.center.x || next.y!=projector.center.y ||
+                    next.z!=projector.center.z)
+                {projector.center=next;dirty=true;}
             }
         }
         if (!moveArea && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && view!=5)
@@ -526,7 +657,11 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             if (const auto triangle=renderer.pickTriangle(unsigned(size.x),unsigned(size.y),camera,x,y))
                 if (*triangle<built.mesh.mesh.triangleRegions.size())
                     for (const auto &part:built.parts)
-                        if (part.guid==built.mesh.mesh.triangleRegions[*triangle])
+                        if (part.guid==built.mesh.mesh.triangleRegions[*triangle] ||
+                            std::find(part.freshInteriorRegions.begin(),
+                                      part.freshInteriorRegions.end(),
+                                      built.mesh.mesh.triangleRegions[*triangle])!=
+                                part.freshInteriorRegions.end())
                         {selectedId=part.id;break;}
             renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
         }

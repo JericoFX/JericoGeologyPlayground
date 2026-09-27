@@ -112,9 +112,48 @@ AreaDamageRule readArea(const Json &value)
     }
     return rule;
 }
+Json writePath(const PathDamageRule &rule)
+{
+    const auto &cutter=rule.cutter;
+    Json points=Json::array();
+    for (const auto point:cutter.path) points.push_back(vectorJson(point));
+    return {{"id",rule.id},{"semanticPartId",rule.semanticPartId},
+        {"enabled",cutter.enabled},{"amount",cutter.amount},
+        {"radius",cutter.radius},{"depth",cutter.depth},{"path",points},
+        {"projector",{{"center",vectorJson(cutter.projector.center)},
+            {"tangent",vectorJson(cutter.projector.tangent)},
+            {"bitangent",vectorJson(cutter.projector.bitangent)},
+            {"normal",vectorJson(cutter.projector.normal)},
+            {"scale",vectorJson(cutter.projector.scale)},
+            {"rotationRadians",cutter.projector.rotationRadians}}}};
+}
+PathDamageRule readPath(const Json &value)
+{
+    PathDamageRule rule;
+    rule.id=value.at("id").get<std::string>();
+    rule.semanticPartId=value.at("semanticPartId").get<std::string>();
+    auto &cutter=rule.cutter;
+    cutter.enabled=value.at("enabled").get<bool>();
+    cutter.amount=value.at("amount").get<double>();
+    cutter.radius=value.at("radius").get<double>();
+    cutter.depth=value.at("depth").get<double>();
+    const auto &points=value.at("path");
+    if (!points.is_array() || points.size()<2 || points.size()>maximumDamagePathPoints)
+        throw std::runtime_error("Invalid damage path points");
+    for (const auto &point:points) cutter.path.push_back(readVector(point));
+    const auto &projector=value.at("projector");
+    cutter.projector.center=readVector(projector.at("center"));
+    cutter.projector.tangent=readVector(projector.at("tangent"));
+    cutter.projector.bitangent=readVector(projector.at("bitangent"));
+    cutter.projector.normal=readVector(projector.at("normal"));
+    cutter.projector.scale=readVector(projector.at("scale"));
+    cutter.projector.rotationRadians=projector.at("rotationRadians").get<double>();
+    return rule;
+}
 void validate(const DamageSettings &settings)
 {
-    if (settings.areaRules.size()>maximumDamageAreas || settings.rules.size()>4096 ||
+    if (settings.areaRules.size()>maximumDamageAreas ||
+        settings.pathRules.size()>maximumDamageAreas || settings.rules.size()>4096 ||
         settings.manual.size()>4096 || settings.protectedIds.size()>4096)
         throw std::runtime_error("Damage selection budget exceeded");
     unit(settings.missingProbability);unit(settings.brokenProbability);
@@ -180,6 +219,28 @@ void validate(const DamageSettings &settings)
         sampleDamageDecal({},area.footprint);
         damageBoundaryRadiusScale(0,area.boundary);
     }
+    std::unordered_set<std::string> pathParts;
+    for (const auto &rule:settings.pathRules)
+    {
+        checkId(rule.id);checkId(rule.semanticPartId);
+        if (rule.id.empty() || rule.semanticPartId.empty() ||
+            !areaIds.insert(rule.id).second ||
+            !pathParts.insert(rule.semanticPartId).second)
+            throw std::runtime_error("Invalid or duplicate selected damage path");
+        const auto &cutter=rule.cutter;
+        finite(cutter.radius);finite(cutter.depth);unit(cutter.amount);
+        if (cutter.radius<.001 || cutter.radius>100 ||
+            cutter.depth<.001 || cutter.depth>100 ||
+            cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints)
+            throw std::runtime_error("Damage path dimensions outside limits");
+        for (const auto point:cutter.path)
+        {
+            finite(point.x);finite(point.y);finite(point.z);
+            if (std::abs(point.x)>10000 || std::abs(point.y)>10000 || point.z!=0)
+                throw std::runtime_error("Damage path point outside projector plane or limits");
+        }
+        sampleDamagePathField(cutter.projector.center,cutter);
+    }
     for (const auto &[id,state]:settings.manual)
     {checkId(id);if (int(state)<0 || int(state)>int(State::Collapsed))
         throw std::runtime_error("Invalid manual damage state");}
@@ -190,7 +251,8 @@ void validate(const DamageSettings &settings)
 std::string serializeAssemblyDamage(const DamageSettings &settings)
 {
     validate(settings);
-    Json result={{"version",1},{"proceduralEnabled",settings.proceduralEnabled},
+    Json result={{"version",settings.pathRules.empty()?1:2},
+        {"proceduralEnabled",settings.proceduralEnabled},
         {"seed",settings.seed},{"missingProbability",settings.missingProbability},
         {"brokenProbability",settings.brokenProbability},
         {"looseProbability",settings.looseProbability},
@@ -206,6 +268,11 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
             {"state",int(rule.state)}});
     result["areas"]=Json::array();
     for (const auto &rule:settings.areaRules) result["areas"].push_back(writeArea(rule));
+    if (!settings.pathRules.empty())
+    {
+        result["paths"]=Json::array();
+        for (const auto &rule:settings.pathRules) result["paths"].push_back(writePath(rule));
+    }
     result["manual"]=Json::object();
     for (const auto &[id,state]:settings.manual) result["manual"][id]=int(state);
     std::vector<std::string> protectedIds(settings.protectedIds.begin(),settings.protectedIds.end());
@@ -221,7 +288,8 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
     if (text.size()>maximumDamageFileBytes)
         throw std::runtime_error("Damage recipe file too large");
     const auto root=Json::parse(text);
-    if (root.at("version").get<int>()!=1)
+    const auto version=root.at("version").get<int>();
+    if (version!=1 && version!=2)
         throw std::runtime_error("Unsupported damage recipe version");
     DamageSettings result;
     result.proceduralEnabled=root.at("proceduralEnabled").get<bool>();
@@ -248,6 +316,13 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
             entry.at("startMeters").get<double>(),entry.at("endMeters").get<double>(),
             State(entry.at("state").get<int>())});
     for (const auto &entry:areas) result.areaRules.push_back(readArea(entry));
+    if (version==2)
+    {
+        const auto &paths=root.at("paths");
+        if (!paths.is_array() || paths.empty() || paths.size()>maximumDamageAreas)
+            throw std::runtime_error("Invalid damage path collection");
+        for (const auto &entry:paths) result.pathRules.push_back(readPath(entry));
+    }
     for (auto it=manual.begin();it!=manual.end();++it)
         result.manual[it.key()]=State(it.value().get<int>());
     for (const auto &entry:protectedIds)

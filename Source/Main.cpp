@@ -96,7 +96,8 @@ std::uint64_t nextDamageOperationId(const std::vector<Layer> &layers)
 {
     for (std::uint64_t id=1;id<=layers.size()+1;++id)
         if (std::none_of(layers.begin(),layers.end(),[id](const Layer &layer)
-            {return layer.kind==Kind::DamageCavity && layer.damageOperationId==id;}))
+            {return (layer.kind==Kind::DamageCavity || layer.kind==Kind::DamagePath) &&
+                    layer.damageOperationId==id;}))
             return id;
     throw std::runtime_error("No free damage operation ID");
 }
@@ -183,9 +184,40 @@ bool editLayer(Layer &l)
         change |= ImGui::SliderFloat2("Ellipse radii",l.projectorRadius.data(),.02f,5);
         change |= slider("Projector rotation",l.projectorRotation,-180,180);
         change |= slider("Cavity depth",l.amplitude,.01f,2);
+        change |= slider("Damage amount",l.damageAmount,0,1);
         change |= slider("Boundary irregularity",l.damageBoundaryIrregularity,0,.25f);
         change |= slider("Boundary frequency",l.frequency,.1f,20);
         change |= slider("Soft rim width",l.damageRimFraction,0,.5f);
+        ImGui::Text("Operation ID %llu",static_cast<unsigned long long>(l.damageOperationId));
+    }
+    else if (l.kind == Kind::DamagePath)
+    {
+        ImGui::TextWrapped("Shared crack path cuts a closed solid. Move the projector without "
+                           "changing the source; edit points in its local plane.");
+        change |= ImGui::SliderFloat3("Projector center",l.translation.data(),-5,5);
+        change |= ImGui::SliderFloat3("Projector normal",l.direction.data(),-1,1);
+        change |= slider("Projector rotation",l.projectorRotation,-180,180);
+        change |= slider("Crack width",l.width,.01f,2);
+        change |= slider("Crack depth",l.amplitude,.01f,2);
+        change |= slider("Damage amount",l.damageAmount,0,1);
+        for (std::size_t point=0;point<l.damagePathPoints.size();++point)
+        {
+            ImGui::PushID(int(point));
+            change |= ImGui::SliderFloat2("Point XY",l.damagePathPoints[point].data(),-5,5);
+            ImGui::PopID();
+        }
+        if (l.damagePathPoints.size()<maximumDamagePathPoints && ImGui::Button("Add crack point"))
+        {
+            auto point=l.damagePathPoints.back();
+            point[0]=std::min(5.0f,point[0]+.2f);
+            l.damagePathPoints.push_back(point);
+            change=true;
+        }
+        if (l.damagePathPoints.size()>2 && ImGui::Button("Remove last crack point"))
+        {
+            l.damagePathPoints.pop_back();
+            change=true;
+        }
         ImGui::Text("Operation ID %llu",static_cast<unsigned long long>(l.damageOperationId));
     }
     else if (l.kind == Kind::CliffCutLoop)
@@ -577,6 +609,71 @@ void captureSharedDamageCavity(Renderer &renderer,const std::filesystem::path &e
                 [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;})}});
     }
     std::ofstream(evidence/"damage-cavity-proof.json")<<proof.dump(2)<<'\n';
+    std::cout<<proof.dump(2)<<'\n';
+}
+void captureSharedDamagePath(Renderer &renderer,const std::filesystem::path &evidence)
+{
+    nlohmann::json proof;
+    proof["adapter"]=renderer.adapter();
+    proof["resolution"]={1280,960};
+    Camera camera;
+    camera.yaw=0;
+    camera.pitch=0;
+    camera.distance=5;
+    for (int fixture=0;fixture<2;++fixture)
+    {
+        Recipe source=fixture==0?preset(0):Recipe{};
+        source.finalResolution=16;
+        if (fixture==1)
+        {
+            source.base=Base::Plane;
+            source.planeSize={2,2};
+            auto solid=defaultLayer(Kind::Solidify);
+            solid.thickness=.3f;
+            source.layers={solid};
+        }
+        const auto before=evaluate(source,source.finalResolution);
+        double front=std::numeric_limits<double>::infinity();
+        for (const auto point:before.mesh.positions) front=std::min(front,point.z);
+        auto crack=defaultLayer(Kind::DamagePath);
+        crack.damageOperationId=fixture+1;
+        crack.translation={0,0,float(front)};
+        crack.direction={0,0,-1};
+        crack.damagePathPoints={{{-.5f,0},{0,.12f},{.5f,0}}};
+        crack.width=fixture==0?.22f:.15f;
+        crack.amplitude=fixture==0?.5f:.12f;
+        source.version=25;
+        source.layers.push_back(crack);
+        const auto after=evaluate(source,source.finalResolution);
+        if (!PA::validateClosedMesh(after.mesh).hasValue() ||
+            PA::hashTriangleMesh(before.mesh)==PA::hashTriangleMesh(after.mesh))
+            throw std::runtime_error("Damage path capture did not create a closed crack");
+        const auto label=fixture==0?"rock-crack":"panel-crack";
+        save(source,evidence/(std::string(label)+"-recipe.json"));
+        if (meshHash(after.mesh)!=meshHash(evaluate(load(evidence/(std::string(label)+
+                "-recipe.json")),source.finalResolution).mesh))
+            throw std::runtime_error("Damage path capture did not replay");
+        renderer.upload(before);
+        renderer.draw(1280,960,camera,0);
+        renderer.capture(evidence/(std::string(label)+"-before.png"));
+        renderer.upload(after);
+        renderer.draw(1280,960,camera,0);
+        renderer.capture(evidence/(std::string(label)+"-after.png"));
+        renderer.uploadMaterial(nullptr,materialDiffuse(materialAppearance(source,0)));
+        renderer.draw(1280,960,camera,5);
+        renderer.capture(evidence/(std::string(label)+"-fresh-material.png"));
+        const auto mask=freshInteriorCornerMask(after);
+        const auto fresh=std::count(mask.begin(),mask.end(),1);
+        if (fresh==0) throw std::runtime_error("Damage path capture lost fresh material");
+        proof["cases"].push_back({{"fixture",label},
+            {"beforeHash",PA::hashTriangleMesh(before.mesh)},
+            {"afterHash",PA::hashTriangleMesh(after.mesh)},
+            {"beforeTriangles",before.mesh.indices.size()/3},
+            {"afterTriangles",after.mesh.indices.size()/3},
+            {"freshMaterialCorners",fresh},
+            {"beforeCpuMs",before.milliseconds},{"afterCpuMs",after.milliseconds}});
+    }
+    std::ofstream(evidence/"damage-path-proof.json")<<proof.dump(2)<<'\n';
     std::cout<<proof.dump(2)<<'\n';
 }
 void captureAngularProfiles(Renderer &renderer, const std::filesystem::path &evidence)
@@ -2331,7 +2428,7 @@ int run(int argc, char **argv)
          slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
          cliffMipBiasSmoke = false, strataMipBiasSmoke = false,
          cliffMomentSmoke = false, strataMomentSmoke = false,
-         damageCavitySmoke = false;
+         damageCavitySmoke = false, damagePathSmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -2361,6 +2458,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--material-gallery-test" ||
             std::string(argv[i]) == "--surface-features-test" ||
             std::string(argv[i]) == "--damage-cavity-test" ||
+            std::string(argv[i]) == "--damage-path-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
             std::string(argv[i]) == "--extreme-deformation-test" ||
             std::string(argv[i]) == "--cliff-soft-creation-test" ||
@@ -2415,6 +2513,7 @@ int run(int argc, char **argv)
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
             damageCavitySmoke = std::string(argv[i]) == "--damage-cavity-test";
+            damagePathSmoke = std::string(argv[i]) == "--damage-path-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
             extremeDeformationSmoke = std::string(argv[i]) == "--extreme-deformation-test";
             cliffSoftCreationSmoke = std::string(argv[i]) == "--cliff-soft-creation-test";
@@ -2538,6 +2637,12 @@ int run(int argc, char **argv)
     if (damageCavitySmoke)
     {
         captureSharedDamageCavity(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
+    if (damagePathSmoke)
+    {
+        captureSharedDamagePath(renderer,evidence);
         SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }
@@ -2840,14 +2945,16 @@ int run(int argc, char **argv)
             "fracture\0Relax\0Structural planes\0Shared macro warp\0Macroform envelope\0Layer edge "
             "breakup\0Strata relief\0Ridged noise\0Solidify surface\0Reduce mesh\0Surface damage / wear\0"
             "Oriented damage decal\0Layer settling\0Cliff cut loop\0Grounded fracture shear\0"
-            "Connected four-block chisel\0Cliff drainage incision\0Geometric damage cavity\0");
+            "Connected four-block chisel\0Cliff drainage incision\0Geometric damage cavity\0"
+            "Geometric crack path\0");
         if (ImGui::Button("+ Add layer", {-1, 0}) && recipe.layers.size() < 24)
         {
             auto added=defaultLayer(static_cast<Kind>(addKind));
-            if (added.kind==Kind::DamageCavity)
+            if (added.kind==Kind::DamageCavity || added.kind==Kind::DamagePath)
             {
                 added.damageOperationId=nextDamageOperationId(recipe.layers);
-                recipe.version=std::max(recipe.version,23);
+                recipe.version=std::max(recipe.version,
+                                        added.kind==Kind::DamagePath?25:23);
             }
             if (added.kind==Kind::EdgeBreakup && added.useSharedFeatureEdges &&
                 added.edgeCurvaturePolicy!=2)
@@ -2874,7 +2981,7 @@ int run(int argc, char **argv)
             if (ImGui::Button("Duplicate") && recipe.layers.size() < 24)
             {
                 auto copy = recipe.layers[selected];
-                if (copy.kind==Kind::DamageCavity)
+                if (copy.kind==Kind::DamageCavity || copy.kind==Kind::DamagePath)
                     copy.damageOperationId=nextDamageOperationId(recipe.layers);
                 recipe.layers.insert(recipe.layers.begin() + selected + 1, copy);
                 ++selected;
@@ -2891,10 +2998,12 @@ int run(int argc, char **argv)
             {
                 const auto operationId=recipe.layers[selected].damageOperationId;
                 recipe.layers[selected] = defaultLayer(recipe.layers[selected].kind);
-                if (recipe.layers[selected].kind==Kind::DamageCavity)
+                if (recipe.layers[selected].kind==Kind::DamageCavity ||
+                    recipe.layers[selected].kind==Kind::DamagePath)
                 {
                     recipe.layers[selected].damageOperationId=operationId;
-                    recipe.version=std::max(recipe.version,23);
+                    recipe.version=std::max(recipe.version,
+                        recipe.layers[selected].kind==Kind::DamagePath?25:23);
                 }
                 if (recipe.layers[selected].kind==Kind::EdgeBreakup &&
                     recipe.layers[selected].useSharedFeatureEdges &&
@@ -2918,6 +3027,9 @@ int run(int argc, char **argv)
                     (recipe.layers[selected].damageBoundaryIrregularity>0 ||
                      recipe.layers[selected].damageRimFraction>0))
                     recipe.version=std::max(recipe.version,23);
+                if (recipe.layers[selected].kind==Kind::DamageCavity &&
+                    recipe.layers[selected].damageAmount!=1)
+                    recipe.version=std::max(recipe.version,25);
                 if (recipe.layers[selected].kind==Kind::EdgeBreakup &&
                     recipe.layers[selected].useSharedFeatureEdges &&
                     recipe.layers[selected].edgeCurvaturePolicy!=2)
@@ -3097,7 +3209,8 @@ int run(int argc, char **argv)
         }
         const bool selectedDamageArea=selected>=0 && selected<int(recipe.layers.size()) &&
             (recipe.layers[selected].kind==Kind::DamageDecal ||
-             recipe.layers[selected].kind==Kind::DamageCavity);
+             recipe.layers[selected].kind==Kind::DamageCavity ||
+             recipe.layers[selected].kind==Kind::DamagePath);
         if (selectedDamageArea)
         {
             ImGui::Checkbox("Move selected damage area",&moveDamageAreaMode);

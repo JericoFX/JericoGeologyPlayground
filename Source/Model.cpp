@@ -285,6 +285,8 @@ Json layerJson(const Layer &l)
                 {"damageOperationId", l.damageOperationId},
                 {"damageBoundaryIrregularity", l.damageBoundaryIrregularity},
                 {"damageRimFraction", l.damageRimFraction},
+                {"damageAmount",l.damageAmount},
+                {"damagePathPoints", l.damagePathPoints},
                 {"amplitude", l.amplitude},
                 {"frequency", l.frequency},
                 {"lacunarity", l.lacunarity},
@@ -380,7 +382,8 @@ const char *name(Kind kind)
                                   "Grounded fracture shear",
                                   "Connected four-block chisel",
                                   "Cliff drainage incision",
-                                  "Geometric damage cavity"};
+                                  "Geometric damage cavity",
+                                  "Geometric crack path"};
     return names[int(kind)];
 }
 Layer defaultLayer(Kind kind)
@@ -474,6 +477,16 @@ Layer defaultLayer(Kind kind)
         l.translation={-.5f,.3f,-.9f};
         l.damageBoundaryIrregularity=.13f;
         l.damageRimFraction=.2f;
+        l.mask=Mask::None;
+    }
+    if (kind == Kind::DamagePath)
+    {
+        l.damageOperationId=1;
+        l.amplitude=.18f;
+        l.width=.12f;
+        l.direction={0,0,1};
+        l.translation={0,0,1};
+        l.damagePathPoints={{{-.45f,0},{.45f,0}}};
         l.mask=Mask::None;
     }
     if (kind == Kind::CliffCutLoop)
@@ -719,7 +732,7 @@ void validate(const Recipe &r)
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
              r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21 ||
-             r.version == 22 || r.version == 23 || r.version == 24) &&
+             r.version == 22 || r.version == 23 || r.version == 24 || r.version == 25) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -729,11 +742,30 @@ void validate(const Recipe &r)
     for (auto &l : r.layers)
     {
         finiteJson(layerJson(l));
-        require(int(l.kind) >= 0 && int(l.kind) < 24 && int(l.mask) >= 0 && int(l.mask) < 17);
+        require(int(l.kind) >= 0 && int(l.kind) < 25 && int(l.mask) >= 0 && int(l.mask) < 17);
         require(l.edgeCurvaturePolicy>=0 && l.edgeCurvaturePolicy<=2);
         if (l.kind==Kind::EdgeBreakup && l.useSharedFeatureEdges &&
             l.edgeCurvaturePolicy!=2)
             require(r.version>=24);
+        if (l.kind == Kind::DamagePath)
+        {
+            require(r.version>=25 && l.damageOperationId>0 && l.mask==Mask::None &&
+                    l.amplitude>0 && l.amplitude<=5 && l.width>=.01f && l.width<=2 &&
+                    l.damagePathPoints.size()>=2 && l.damagePathPoints.size()<=16 &&
+                    std::abs(l.projectorRotation)<=360 &&
+                    std::hypot(double(l.direction[0]),double(l.direction[1]),
+                               double(l.direction[2]))>1e-8);
+            for (std::size_t point=0;point<l.damagePathPoints.size();++point)
+            {
+                require(std::abs(l.damagePathPoints[point][0])<=10 &&
+                        std::abs(l.damagePathPoints[point][1])<=10);
+                if (point)
+                    require(std::hypot(double(l.damagePathPoints[point][0]-
+                                              l.damagePathPoints[point-1][0]),
+                                       double(l.damagePathPoints[point][1]-
+                                              l.damagePathPoints[point-1][1]))>1e-6);
+            }
+        }
         if (l.kind == Kind::DamageCavity)
         {
             require(r.version>=22 && l.damageOperationId>0 && l.mask==Mask::None &&
@@ -750,8 +782,14 @@ void validate(const Recipe &r)
                      (l.frequency>=.1f && l.frequency<=20)) &&
                     ((l.damageBoundaryIrregularity==0 && l.damageRimFraction==0) ||
                      r.version>=23));
+        }
+        if (l.kind==Kind::DamageCavity || l.kind==Kind::DamagePath)
+        {
+            require(l.damageAmount>=0 && l.damageAmount<=1 &&
+                (l.kind==Kind::DamagePath || l.damageAmount==1 || r.version>=25));
             for (const auto &previous:r.layers)
-                if (&previous!=&l && previous.kind==Kind::DamageCavity &&
+                if (&previous!=&l &&
+                    (previous.kind==Kind::DamageCavity || previous.kind==Kind::DamagePath) &&
                     previous.damageOperationId==l.damageOperationId)
                     require(false);
         }
@@ -801,7 +839,8 @@ void validate(const Recipe &r)
                     l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
                     l.kind != Kind::LayerSettle && l.kind != Kind::CliffCutLoop &&
                     l.kind != Kind::FractureShear && l.kind != Kind::FractureQuadrants &&
-                    l.kind != Kind::CliffDrainage && l.kind != Kind::DamageCavity);
+                    l.kind != Kind::CliffDrainage && l.kind != Kind::DamageCavity &&
+                    l.kind != Kind::DamagePath);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
                 l.profile < (l.kind == Kind::CliffCutLoop ? 6 :
@@ -1192,12 +1231,13 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             warp = std::move(nextWarp);
             continue;
         }
-        if (l.kind == Kind::DamageCavity)
+        if (l.kind == Kind::DamageCavity || l.kind == Kind::DamagePath)
         {
             if (!result.closedSolid)
-                throw std::runtime_error("Geometric damage cavity requires a closed solid");
+                throw std::runtime_error("Geometric damage requires a closed solid");
             DamageArea area;
             area.id=std::to_string(l.damageOperationId);
+            area.amount=l.damageAmount;
             area.projector.center=vec(l.translation);
             area.projector.normal=unit(vec(l.direction));
             area.projector.tangent=unit(cross(
@@ -1226,7 +1266,19 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             if (!uniqueFresh)
                 throw std::runtime_error("No unique fresh damage region ID");
             MeshResult next;
-            next.mesh=cutDamageCavity(result.mesh,area,fresh,240000,cancel);
+            if (l.kind==Kind::DamageCavity)
+                next.mesh=cutDamageCavity(result.mesh,area,fresh,240000,cancel);
+            else
+            {
+                DamagePathCutter path;
+                path.projector=area.projector;
+                path.radius=l.width*.5;
+                path.depth=l.amplitude;
+                path.amount=l.damageAmount;
+                for (const auto &point:l.damagePathPoints)
+                    path.path.push_back({point[0],point[1],0});
+                next.mesh=cutDamagePath(result.mesh,path,fresh,240000,cancel);
+            }
             if (PA::hashTriangleMesh(next.mesh)==PA::hashTriangleMesh(result.mesh))
                 continue;
             next.closedSolid=true;
@@ -1736,7 +1788,7 @@ Recipe deserialize(const std::string &text)
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
         inputVersion != 17 && inputVersion != 18 && inputVersion != 19 &&
         inputVersion != 20 && inputVersion != 21 && inputVersion != 22 &&
-        inputVersion != 23 && inputVersion != 24)
+        inputVersion != 23 && inputVersion != 24 && inputVersion != 25)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1773,6 +1825,8 @@ Recipe deserialize(const std::string &text)
             throw std::runtime_error("Cliff drainage requires recipe v13");
         if (inputVersion < 22 && l.kind == Kind::DamageCavity)
             throw std::runtime_error("Geometric damage cavity requires recipe v22");
+        if (inputVersion < 25 && l.kind == Kind::DamagePath)
+            throw std::runtime_error("Geometric crack path requires recipe v25");
         if (inputVersion < 7 && a.value("perimeterAmplitude", 0.0f) != 0)
             throw std::runtime_error("Independent stratum perimeter requires recipe v7");
         if (inputVersion < 8 && a.contains("maskAxis") &&
@@ -1789,6 +1843,8 @@ Recipe deserialize(const std::string &text)
         if (a.contains("damageOperationId")) READ(damageOperationId);
         if (a.contains("damageBoundaryIrregularity")) READ(damageBoundaryIrregularity);
         if (a.contains("damageRimFraction")) READ(damageRimFraction);
+        if (a.contains("damageAmount")) READ(damageAmount);
+        if (a.contains("damagePathPoints")) READ(damagePathPoints);
         READ(amplitude);
         READ(frequency);
         READ(lacunarity);

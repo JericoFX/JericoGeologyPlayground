@@ -1,0 +1,29 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "afterCpuMs": 27.8677,
+      "afterHash": 15236032260277137071,
+      "afterTriangles": 3276,
+      "beforeCpuMs": 1.8499,
+      "beforeHash": 18033684940807682833,
+      "beforeTriangles": 3072,
+      "fixture": "rock-crack",
+      "freshMaterialCorners": 492
+    },
+    {
+      "afterCpuMs": 16.2628,
+      "afterHash": 14607439175832582756,
+      "afterTriangles": 1270,
+      "beforeCpuMs": 4.4809,
+      "beforeHash": 6116855814430109892,
+      "beforeTriangles": 1152,
+      "fixture": "panel-crack",
+      "freshMaterialCorners": 333
+    }
+  ],
+  "resolution": [
+    1280,
+    960
+  ]
+}

@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdio>
 #include <filesystem>
 #include <limits>
 #include <set>
@@ -78,7 +79,7 @@ void checkCut(const TriangleMesh &source,const DamageArea &area,Jerico::Guid int
             "moving the projector away must restore the uncut source");
 }
 }
-int main()
+int run()
 {
     auto rockRecipe=preset(0);
     auto rock=evaluate(rockRecipe,12).mesh;
@@ -96,6 +97,46 @@ int main()
     naturalArea.boundary.rimFraction=.2;
     naturalArea.boundary.seed=443;
     checkCut(rock,naturalArea,interior);
+    DamagePathCutter rockPath;
+    rockPath.projector.center=area.projector.center;
+    rockPath.path={{-.35,0,0},{.35,0,0}};
+    rockPath.radius=.08;
+    rockPath.depth=.45;
+    const auto crackedRock=cutDamagePath(rock,rockPath,interior,50000);
+    require(PA::validateClosedMesh(crackedRock).hasValue() &&
+            volume(crackedRock)>0 && volume(crackedRock)<volume(rock),
+            "shared path cutter must remove bounded geometry from rock");
+    auto pathRecipe=preset(0);
+    auto rockCrack=defaultLayer(Kind::DamagePath);
+    rockCrack.damageOperationId=11;
+    rockCrack.translation={float(area.projector.center.x),float(area.projector.center.y),
+                           float(area.projector.center.z)};
+    rockCrack.direction={0,0,1};
+    rockCrack.amplitude=.45f;
+    rockCrack.width=.16f;
+    rockCrack.damagePathPoints={{{-.35f,0},{.35f,0}}};
+    pathRecipe.version=25;
+    pathRecipe.layers.push_back(rockCrack);
+    const auto pathRock=evaluate(pathRecipe,12);
+    require(PA::validateClosedMesh(pathRock.mesh).hasValue() &&
+            PA::hashTriangleMesh(pathRock.mesh)!=PA::hashTriangleMesh(rock),
+            "geology path layer must produce a geometric crack");
+    require(std::any_of(pathRock.regions.begin(),pathRock.regions.end(),
+        [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;}),
+        "geology crack must retain fresh interior lineage");
+    require(meshHash(pathRock.mesh)==meshHash(evaluate(deserialize(serialize(pathRecipe)),12).mesh),
+            "geology crack path must survive recipe save and load");
+    auto zeroPath=pathRecipe;
+    zeroPath.layers.back().damageAmount=0;
+    require(meshHash(evaluate(zeroPath,12).mesh)==meshHash(rock),
+            "zero crack amount must restore the uncut geology source");
+    auto movedPath=pathRecipe;
+    movedPath.layers.back().translation[0]+=10;
+    require(meshHash(evaluate(movedPath,12).mesh)==meshHash(rock),
+            "moving editable crack path off rock must restore source geometry");
+    auto oldVersionPath=pathRecipe;
+    oldVersionPath.version=24;
+    reject([&]{validate(oldVersionPath);},"geology crack path must require recipe v25");
     require(PA::hashTriangleMesh(cutDamageCavity(rock,naturalArea,interior,50000))!=
             PA::hashTriangleMesh(cutDamageCavity(rock,area,interior,50000)),
             "opt-in shared boundary must change the rock cut geometry");
@@ -110,6 +151,14 @@ int main()
     rockRecipe.version=23;
     rockRecipe.layers.push_back(rockCut);
     const auto rockResult=evaluate(rockRecipe,12);
+    auto zeroCavity=rockRecipe;
+    zeroCavity.version=25;
+    zeroCavity.layers.back().damageAmount=0;
+    require(meshHash(evaluate(zeroCavity,12).mesh)==meshHash(rock),
+            "owner cavity amount zero must restore source geometry");
+    zeroCavity.version=24;
+    reject([&]{validate(zeroCavity);},
+           "non-default cavity amount must require recipe v25");
     require(PA::validateClosedMesh(rockResult.mesh).hasValue(),
             "editable geology cavity must remain closed");
     require(std::any_of(rockResult.regions.begin(),rockResult.regions.end(),
@@ -200,6 +249,54 @@ int main()
     require(PA::validateClosedMesh(panel).hasValue(),"panel fixture must be closed");
     double front=-1e9;
     for (const auto p:panel.positions) front=std::max(front,p.z);
+    DamagePathCutter crack;
+    crack.path={{-.7,0,0},{.7,0,0}};
+    crack.radius=.08;
+    crack.depth=.12;
+    crack.projector.center={0,0,front};
+    const auto crackedPanel=cutDamagePath(panel,crack,interior,50000);
+    require(PA::validateClosedMesh(crackedPanel).hasValue() &&
+            volume(crackedPanel)>0 && volume(crackedPanel)<volume(panel),
+            "shared path cutter must remove a bounded channel from a wooden panel fixture");
+    require(std::set<Jerico::Guid>(crackedPanel.triangleRegions.begin(),
+                                  crackedPanel.triangleRegions.end()).contains(interior),
+            "path cutter must mark fresh interior faces");
+    require(PA::hashTriangleMesh(crackedPanel)==
+            PA::hashTriangleMesh(cutDamagePath(panel,crack,interior,50000)),
+            "same path cutter must regenerate identical geometry");
+    require(sampleDamagePathField({0,0,front-.04},crack)<0 &&
+            sampleDamagePathField({0,.3,front-.04},crack)>0,
+            "shared path field must identify the same local channel cut by geometry");
+    auto disabledCrack=crack;
+    disabledCrack.enabled=false;
+    require(sampleDamagePathField({0,0,front-.04},disabledCrack)>0 &&
+            PA::hashTriangleMesh(cutDamagePath(panel,disabledCrack,interior,50000))==
+                PA::hashTriangleMesh(panel),
+            "disabled path must agree between the shared field and geometry");
+    auto bent=crack;
+    bent.path={{-.7,-.2,0},{0,-.2,0},{.7,.2,0}};
+    const auto bentPanel=cutDamagePath(panel,bent,interior,50000);
+    require(PA::validateClosedMesh(bentPanel).hasValue() &&
+            volume(bentPanel)>0 && volume(bentPanel)<volume(panel),
+            "joined crack segments must cut a closed panel");
+    crack.projector.center.x+=10;
+    require(PA::hashTriangleMesh(cutDamagePath(panel,crack,interior,50000))==
+            PA::hashTriangleMesh(panel),
+            "moving a non-destructive path cutter off the panel restores the source");
+    crack.projector.center.x-=10;
+    crack.depth=.32;
+    require(axialCrossings(cutDamagePath(panel,crack,interior,50000),0,.013)==0,
+            "deep path cutter must penetrate the panel without a phantom cap");
+    reject([&]{cutDamagePath(panel,crack,interior,4);},
+           "path cutter budget must reject before boolean work");
+    auto invalidCrack=crack;
+    invalidCrack.path[1]=invalidCrack.path[0];
+    reject([&]{cutDamagePath(panel,invalidCrack,interior,50000);},
+           "collapsed crack segment must be rejected");
+    invalidCrack=crack;
+    invalidCrack.path[1].z=.1;
+    reject([&]{cutDamagePath(panel,invalidCrack,interior,50000);},
+           "crack path outside projector plane must be rejected");
     area.projector.center={0,0,front};
     area.footprint.depth=.12;
     checkCut(panel,area,interior);
@@ -220,4 +317,13 @@ int main()
     area.projector.scale.x=0;
     reject([&]{cutDamageCavity(panel,area,interior,50000);},
            "zero projector scale must be rejected before boolean work");
+}
+int main()
+{
+    try {return run();}
+    catch (const std::exception &error)
+    {
+        std::fprintf(stderr,"DamageGeometryTests: %s\n",error.what());
+        return 1;
+    }
 }

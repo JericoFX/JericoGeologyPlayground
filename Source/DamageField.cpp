@@ -256,6 +256,21 @@ double pathCrackField(Vec3d position,const std::vector<Vec3d> &path,
         field=std::min(field,segmentCrackField(position,path[i-1],path[i],radius));
     return field;
 }
+double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter)
+{
+    const auto q=projectorCoordinates(cutter.projector,worldPosition);
+    if (cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints)
+        throw std::invalid_argument("Damage path point budget invalid");
+    if (!std::isfinite(cutter.depth) || cutter.depth<=0 ||
+        !std::isfinite(cutter.amount) || cutter.amount<0 || cutter.amount>1)
+        throw std::invalid_argument("Damage path depth or amount invalid");
+    for (const auto point:cutter.path)
+        if (!std::isfinite(point.z) || point.z!=0)
+            throw std::invalid_argument("Damage path must lie in projector plane");
+    const auto radial=pathCrackField({q.x,q.y,0},cutter.path,cutter.radius);
+    if (!cutter.enabled || cutter.amount==0) return 1e30;
+    return std::max(radial,std::max(q.z,-q.z-cutter.depth*cutter.amount));
+}
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,
                              double localFeatureSizeMeters,std::uint64_t seed,
                              std::string_view semanticId)

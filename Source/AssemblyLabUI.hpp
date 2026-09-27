@@ -22,10 +22,10 @@ class AssemblyLabUI
     Assembly::Result built;
     Camera camera;
     std::string selectedId,error;
-    int selectedPoint{},selectedArea{-1},view{},uploadedView{-1};
+    int selectedPoint{},selectedArea{-1},selectedPath{-1},view{},uploadedView{-1};
     bool dirty{true},fitCamera{true},moveDamageAreaMode{},movingDamageArea{};
     Vec3d damageGrabOffset{};
-    unsigned nextPointId{30},nextAreaId{1};
+    unsigned nextPointId{30},nextAreaId{1},nextPathId{1};
     std::vector<Assembly::DamageSettings> damageUndo,damageRedo;
     std::optional<Assembly::DamageSettings> pendingDamageEdit;
     void rebuild();
