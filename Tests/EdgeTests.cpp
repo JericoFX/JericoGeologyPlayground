@@ -17,6 +17,7 @@ int main()
     try
     {
         Recipe recipe;
+        recipe.version=24;
         auto layers = defaultLayer(Kind::Layers);
         layers.coherentLayers = true;
         layers.count = 3;
@@ -31,6 +32,14 @@ int main()
         edge.amplitude = 0.03f;
         edge.width = 0.25f;
         edge.frequency = 5;
+        Recipe unsafePolicy;
+        unsafePolicy.version=23;
+        unsafePolicy.layers={edge};
+        bool oldVersionRejected=false;
+        try {serialize(unsafePolicy);}
+        catch (const std::exception &) {oldVersionRejected=true;}
+        require(oldVersionRejected,
+                "new curvature policies require a recipe version old readers reject");
         recipe.layers.push_back(edge);
         auto result = evaluate(recipe, 16, 1, 1);
         require(result.featureCacheMisses>0,
@@ -86,7 +95,35 @@ int main()
         require(standalone.featureCacheMisses>0 &&
                     standalone.layerEdgeDistance.size()==standalone.mesh.positions.size(),
                 "shared edge damage must work on an unlayered rock too");
+        MeshResult concaveSource;
+        concaveSource.closedSolid=false;
+        concaveSource.mesh.positions={{0,0,0},{1,0,0},{0,1,0},{0,0,1}};
+        concaveSource.mesh.indices={0,1,2,1,0,3};
+        concaveSource.mesh.triangleRegions.resize(2);
+        const auto concaveFeatures=surfaceFeatures(concaveSource.mesh,{.contact=false});
+        require(concaveFeatures.signedDihedralCurvature[0]<0,
+                "fixture must contain a concave signed crease");
+        const auto concaveResult=evaluateSource(recipe,concaveSource,8);
+        require(meshHash(concaveResult.mesh)==meshHash(concaveSource.mesh),
+                "default shared edge damage must not chip concave creases");
+        recipe.layers.back().edgeCurvaturePolicy=1;
+        const auto selectedConcave=evaluateSource(recipe,concaveSource,8);
+        require(meshHash(selectedConcave.mesh)!=meshHash(concaveSource.mesh),
+                "concave policy must deliberately chip the recessed crease");
+        recipe.layers.back().edgeCurvaturePolicy=2;
+        require(meshHash(evaluateSource(recipe,concaveSource,8).mesh)==
+                    meshHash(selectedConcave.mesh),
+                "both-edge policy must retain concave damage");
+        auto savedShared=nlohmann::json::parse(serialize(recipe));
+        savedShared.at("layers").at(0).erase("edgeCurvaturePolicy");
+        const auto restoredShared=deserialize(savedShared.dump());
+        require(restoredShared.layers.back().edgeCurvaturePolicy==2 &&
+                    meshHash(evaluateSource(restoredShared,concaveSource,8).mesh)==
+                    meshHash(selectedConcave.mesh),
+                "older shared-edge recipes without a policy retain both-side curvature");
+        recipe.layers.back()=edge;
         Recipe smooth;
+        smooth.version=24;
         smooth.base=Base::Sphere;
         smooth.layers={edge,defaultLayer(Kind::NormalNoise)};
         const auto sphere=evaluate(smooth,16);

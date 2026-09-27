@@ -71,9 +71,11 @@ double sampleDamageArea(const DamageArea &area, Vec3d worldPosition,
                         std::string_view semanticPartId = {});
 
 enum class DamageWidthMode { Metric, Relative };
+enum class DamageCurvaturePolicy { Convex, Concave, Both };
 struct DamageEdgeSettings
 {
     DamageWidthMode widthMode{DamageWidthMode::Metric};
+    DamageCurvaturePolicy curvaturePolicy{DamageCurvaturePolicy::Convex};
     double width{0.1}, curvatureStart{}, curvatureEnd{1};
     double taperFraction{}, amount{1};
 };

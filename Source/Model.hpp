@@ -93,6 +93,7 @@ struct Layer
     float maskLow{-0.5f}, maskHigh{0.5f};
     bool maskInvert{false};
     bool useSharedFeatureEdges{}; // Missing in older recipes: preserve legacy stratum-distance behavior.
+    int edgeCurvaturePolicy{}; // 0 convex, 1 concave, 2 both; missing in saved shared-edge recipes means both.
     bool coherentLayers{false};
     float thicknessFrequency{0.8f}, thicknessCorrelation{0.8f};
     float minimumThickness{0.08f}, maximumThickness{0.8f};

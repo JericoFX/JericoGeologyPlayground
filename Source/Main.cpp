@@ -224,7 +224,11 @@ bool editLayer(Layer &l)
     {
         change |= ImGui::Checkbox("Shared feature edges", &l.useSharedFeatureEdges);
         if (l.useSharedFeatureEdges)
+        {
             ImGui::TextWrapped("Common crease distance and curvature; bounded by local triangle scale.");
+            change |= ImGui::Combo("Edge curvature",&l.edgeCurvaturePolicy,
+                                   "Convex\0Concave\0Both\0");
+        }
         else
         {
             ImGui::TextWrapped("Legacy stratum side distance for saved recipes. Enable shared feature edges to migrate this layer.");
@@ -2845,6 +2849,9 @@ int run(int argc, char **argv)
                 added.damageOperationId=nextDamageOperationId(recipe.layers);
                 recipe.version=std::max(recipe.version,23);
             }
+            if (added.kind==Kind::EdgeBreakup && added.useSharedFeatureEdges &&
+                added.edgeCurvaturePolicy!=2)
+                recipe.version=std::max(recipe.version,24);
             recipe.layers.push_back(added);
             selected = int(recipe.layers.size()) - 1;
             anyChange = true;
@@ -2889,6 +2896,10 @@ int run(int argc, char **argv)
                     recipe.layers[selected].damageOperationId=operationId;
                     recipe.version=std::max(recipe.version,23);
                 }
+                if (recipe.layers[selected].kind==Kind::EdgeBreakup &&
+                    recipe.layers[selected].useSharedFeatureEdges &&
+                    recipe.layers[selected].edgeCurvaturePolicy!=2)
+                    recipe.version=std::max(recipe.version,24);
                 anyChange = true;
             }
         }
@@ -2907,6 +2918,10 @@ int run(int argc, char **argv)
                     (recipe.layers[selected].damageBoundaryIrregularity>0 ||
                      recipe.layers[selected].damageRimFraction>0))
                     recipe.version=std::max(recipe.version,23);
+                if (recipe.layers[selected].kind==Kind::EdgeBreakup &&
+                    recipe.layers[selected].useSharedFeatureEdges &&
+                    recipe.layers[selected].edgeCurvaturePolicy!=2)
+                    recipe.version=std::max(recipe.version,24);
                 if (recipe.layers[selected].kind == Kind::CliffCutLoop &&
                     recipe.layers[selected].profile > 0)
                     recipe.version = std::max(recipe.version,
@@ -3536,6 +3551,7 @@ int run(int argc, char **argv)
                 formation.lateral = 0;
                 formation.layerScale = 0;
                 auto edge = defaultLayer(Kind::EdgeBreakup);
+                edge.edgeCurvaturePolicy=2; // Preserve the established two-sided evidence fixture.
                 edge.enabled = enabled != 0;
                 edge.amplitude = 0.065f;
                 edge.frequency = 7;

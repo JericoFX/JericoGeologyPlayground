@@ -318,6 +318,7 @@ Json layerJson(const Layer &l)
                 {"maskHigh", l.maskHigh},
                 {"maskInvert", l.maskInvert},
                 {"useSharedFeatureEdges", l.useSharedFeatureEdges},
+                {"edgeCurvaturePolicy", l.edgeCurvaturePolicy},
                 {"coherentLayers", l.coherentLayers},
                 {"thicknessFrequency", l.thicknessFrequency},
                 {"thicknessCorrelation", l.thicknessCorrelation},
@@ -718,7 +719,7 @@ void validate(const Recipe &r)
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
              r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21 ||
-             r.version == 22 || r.version == 23) &&
+             r.version == 22 || r.version == 23 || r.version == 24) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -729,6 +730,10 @@ void validate(const Recipe &r)
     {
         finiteJson(layerJson(l));
         require(int(l.kind) >= 0 && int(l.kind) < 24 && int(l.mask) >= 0 && int(l.mask) < 17);
+        require(l.edgeCurvaturePolicy>=0 && l.edgeCurvaturePolicy<=2);
+        if (l.kind==Kind::EdgeBreakup && l.useSharedFeatureEdges &&
+            l.edgeCurvaturePolicy!=2)
+            require(r.version>=24);
         if (l.kind == Kind::DamageCavity)
         {
             require(r.version>=22 && l.damageOperationId>0 && l.mask==Mask::None &&
@@ -1495,7 +1500,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             damageNoise={vec(l.coordinateScale),l.frequency,l.lacunarity,
                          l.roughness,l.octaves,l.seed};
         if (l.kind == Kind::EdgeBreakup && l.useSharedFeatureEdges)
-            edgeSettings={DamageWidthMode::Metric,l.width,0,.1,0,1};
+            edgeSettings={DamageWidthMode::Metric,
+                static_cast<DamageCurvaturePolicy>(l.edgeCurvaturePolicy),l.width,0,.1,0,1};
         if (l.kind == Kind::DamageDecal)
         {
             damageProjector.center = vec(l.translation);
@@ -1561,7 +1567,7 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                 if (l.useSharedFeatureEdges)
                 {
                     value = sampleEdgeDamage(edgeSettings,
-                        std::abs(features->signedDihedralCurvature[i]),
+                        features->signedDihedralCurvature[i],
                         features->edgeDistance[i],1,.5,mask);
                     const auto thickness=result.layerThickness.size()==result.mesh.positions.size()?
                         std::optional<double>{result.layerThickness[i]}:std::nullopt;
@@ -1730,7 +1736,7 @@ Recipe deserialize(const std::string &text)
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
         inputVersion != 17 && inputVersion != 18 && inputVersion != 19 &&
         inputVersion != 20 && inputVersion != 21 && inputVersion != 22 &&
-        inputVersion != 23)
+        inputVersion != 23 && inputVersion != 24)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1817,6 +1823,9 @@ Recipe deserialize(const std::string &text)
         READ(maskHigh);
         READ(maskInvert);
         if (a.contains("useSharedFeatureEdges")) READ(useSharedFeatureEdges);
+        if (a.contains("edgeCurvaturePolicy")) READ(edgeCurvaturePolicy);
+        else if (l.kind==Kind::EdgeBreakup && l.useSharedFeatureEdges)
+            l.edgeCurvaturePolicy=2;
         if (inputVersion >= 2)
         {
 #define READ_OPTIONAL(member)                                                                                \

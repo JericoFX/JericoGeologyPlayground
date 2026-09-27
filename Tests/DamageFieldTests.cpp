@@ -78,6 +78,17 @@ try
     require(close(resolveDamageEdgeWidth(edge,2),.15) &&
             close(sampleEdgeDamage(edge,-.3,0,2,.5),0),
             "metric width must not scale and concave edges must remain excluded");
+    edge.curvaturePolicy=DamageCurvaturePolicy::Concave;
+    require(close(sampleEdgeDamage(edge,-.3,0,2,.5),1) &&
+            close(sampleEdgeDamage(edge,.3,0,2,.5),0),
+            "concave policy must select only recessed feature edges");
+    edge.curvaturePolicy=DamageCurvaturePolicy::Both;
+    require(close(sampleEdgeDamage(edge,-.3,0,2,.5),1) &&
+            close(sampleEdgeDamage(edge,.3,0,2,.5),1),
+            "both policy must preserve damage on both curvature signs");
+    edge.curvaturePolicy=static_cast<DamageCurvaturePolicy>(3);
+    rejects([&]{sampleEdgeDamage(edge,.3,0,2,.5);});
+    edge.curvaturePolicy=DamageCurvaturePolicy::Convex;
     require(close(sampleEdgeDamage(edge,.3,
                 std::numeric_limits<double>::infinity(),2,.5),0),
             "an absent feature edge must produce no damage");

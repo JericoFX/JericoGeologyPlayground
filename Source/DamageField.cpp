@@ -184,15 +184,23 @@ double sampleEdgeDamage(const DamageEdgeSettings &settings,double signedCurvatur
         !(settings.curvatureEnd>settings.curvatureStart))
         throw std::invalid_argument("Damage edge settings outside limits");
     normalized(semanticMask);normalized(settings.amount);
+    if (settings.curvaturePolicy!=DamageCurvaturePolicy::Convex &&
+        settings.curvaturePolicy!=DamageCurvaturePolicy::Concave &&
+        settings.curvaturePolicy!=DamageCurvaturePolicy::Both)
+        throw std::invalid_argument("Damage curvature policy invalid");
     const auto width=resolveDamageEdgeWidth(settings,characteristicSize);
     if (std::isinf(edgeDistance)) return 0;
-    const auto convex=smoothstep(settings.curvatureStart,settings.curvatureEnd,
-                                 std::max(0.0,signedCurvature));
+    const auto eligibleCurvature=settings.curvaturePolicy==DamageCurvaturePolicy::Convex ?
+        std::max(0.0,signedCurvature):
+        settings.curvaturePolicy==DamageCurvaturePolicy::Concave ?
+            std::max(0.0,-signedCurvature):std::abs(signedCurvature);
+    const auto curvature=smoothstep(settings.curvatureStart,settings.curvatureEnd,
+                                    eligibleCurvature);
     const auto edge=1-smoothstep(0,width,edgeDistance);
     const auto taper=settings.taperFraction>0 ?
         smoothstep(0,settings.taperFraction,pathFraction)*
         smoothstep(0,settings.taperFraction,1-pathFraction):1;
-    return saturate(settings.amount*convex*edge*taper*semanticMask);
+    return saturate(settings.amount*curvature*edge*taper*semanticMask);
 }
 DamageTier selectDamageTier(const DamageNeeds &needs)
 {
