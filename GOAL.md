@@ -1,6 +1,8 @@
-# Goal pausado — JericoGeologyPlayground
+# Goal activo — JericoGeologyPlayground
 
 Desarrollar y verificar en este playground las matemáticas nativas C++ de geología, con prioridad en bakes high→low, mapas de superficie y calidad visual de rocas, cliffs y estratos. Investigar y probar compatibilidad matemática con RBrush leyendo `F:\JericoEngine`, sin modificar ese checkout ni ejecutar Blender. Conservar pruebas, capturas, métricas, procedencia de referencias y un inventario honesto de lo demostrado y lo pendiente para la futura integración M8 en JericoEngine.
+
+El Goal se reanudó en este chat por instrucción del owner. El [dossier de investigación del 2026-09-26](docs/JERICO_GEOLOGY_RESEARCH_2026_09_26.md), su HTML y su catálogo de 80 fuentes llegaron por tres commits de `main` del Playground; la [revisión de entrada](Evidence/2026-09-26-geology-dossier-review.md) fija hashes, propuestas aplicables, límites y el siguiente gate. El dossier permanece **EN REVISIÓN** como referencia, sin cambiar por sí solo el alcance de implementación ni la aceptación visual.
 
 ## Referencias durables del Goal
 
@@ -12,7 +14,7 @@ La instrucción vigente del owner es reconstruir y probar la matemática en C++ 
 
 ## Estado verificable al pausar
 
-El detalle de código, bakes, imágenes, pruebas y limitaciones está en [`Evidence/2026-09-24-geology-math-checkpoint.md`](Evidence/2026-09-24-geology-math-checkpoint.md). El Goal queda **PAUSED/PARTIAL por pedido del owner**: UV automática y cuatro niveles de los diez mapas se probaron en seis familias y múltiples LOD high→low. El loop local del cliff tiene región seleccionable por GUID, UV separado y tres LOD con bake sin misses; el candidato de warp vectorial mejora el contorno, pero su Beauty sigue pendiente. El arco y túnel BSP tienen tres LOD y bakes standalone; eso no resuelve el BSP wall LOD2 previo ni equivale a una caverna natural. Faltan filtros/materiales productivos, mejor macroforma y la integración M8.
+El detalle de código, bakes, imágenes, pruebas y limitaciones está en [`Evidence/2026-09-24-geology-math-checkpoint.md`](Evidence/2026-09-24-geology-math-checkpoint.md). En ese corte, el Goal quedó **PAUSED/PARTIAL por pedido del owner**: UV automática y cuatro niveles de los diez mapas se probaron en seis familias y múltiples LOD high→low. El loop local del cliff tiene región seleccionable por GUID, UV separado y tres LOD con bake sin misses; el candidato de warp vectorial mejora el contorno, pero su Beauty sigue pendiente. El arco y túnel BSP tienen tres LOD y bakes standalone; eso no resuelve el BSP wall LOD2 previo ni equivale a una caverna natural. Faltan filtros/materiales productivos, mejor macroforma y la integración M8.
 
 La [prueba de proyección triplanar](Evidence/2026-09-25-triplanar-projection.md) redujo el facetado de material del cliff LOD0/1/2 y verificó regresiones visuales de arco, túnel y estratos. Una repetición con el mismo binario confirmó [171 artefactos de bake idénticos](Evidence/2026-09-25-layered-repeat-audit.json) en estratos; la comparación antigua cruzaba versiones distintas del algoritmo de cobertura. Las siluetas y la calidad geológica general siguen pendientes.
 
