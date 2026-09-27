@@ -141,3 +141,12 @@ La aceptación exige comparar el card normal contra una implementación geométr
 Después de Web Field se extendió [Spline Construction](docs/SPLINE_CONSTRUCTION_LAB_RESULTS_2026_09_27.md) con taper, corrugación, torsión y fractura real de barridos; la misma fractura mejora los cables rotos de Procedural Assemblies. Hay 13 presets en la ventana normal y 13 capturas de spline, incluidas manguera corrugada, tubería fracturada y conducto torsionado. Build Release y CTest completo **21/21 PASS**; las 47 capturas web finales son reproducibles byte a byte. `git diff --check` pasó.
 
 El trabajo experimental del Playground se entrega para extracción, con código, pruebas y evidencia enlazados desde un MD único en JericoEngine. **Esto cierra el trabajo de laboratorio pedido en este chat, no declara aceptada la Beauty geológica ni la integración M8 del Engine.** Pendientes explícitos: cliff/roca/caverna de aspecto natural, temporalidad de webs, selección/interacción manual completa después del Escape, cortes físicos EdgeID uno a uno, scene FPS y adaptación del código a las autoridades existentes del Engine. Los bakes high→low no se retomaron porque el owner priorizó creación geológica y luego webs/splines.
+
+
+## Global rule — Shared Damage Mathematics across ALL procedural systems (2026-09-27)
+
+El owner aclaró que las matemáticas reconstruidas desde Edge Decal/Edge Damage, Mix Damage, Infinite Fracture, Damage Control, AgedFX, Ucupaint, Cracker/feature-edge/remesh y trabajos relacionados deben reutilizarse **en todo el Playground**, no sólo geología. La directiva transversal es [`docs/SHARED_DAMAGE_MATH_ALL_PROCEDURAL_SYSTEMS_2026_09_27.md`](docs/SHARED_DAMAGE_MATH_ALL_PROCEDURAL_SYSTEMS_2026_09_27.md).
+
+Geología, splines, pipes, rails, puertas, ventanas, hatches, muelles, puentes, catwalks, barandas, estructuras y props deben consumir un mismo `SurfaceFeatureField + DamageField` cuando el problema sea común. Cada sistema conserva sus semantics/parts y elige el tier de representación más barato: material -> bake/displacement -> geometría -> local SDF -> variant -> Jolt.
+
+Ningún generador nuevo debe inventar su propio curvature/cavity/edge-distance/damage-noise backend sin demostrar una carencia concreta del shared backend. Manual/locked semantic selection conserva prioridad, fresh-interior lineage se genera durante el corte y stable IDs no dependen de tessellation.
