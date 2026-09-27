@@ -2,19 +2,28 @@
   "adapter": "NVIDIA GeForce RTX 3090",
   "cases": [
     {
-      "cpuMs": 6.9502,
+      "cpuMs": 7.0476,
       "meshHash": 4165216110282567852,
       "name": "sphere",
       "triangles": 23232,
       "vertices": 11618
     },
     {
-      "cpuMs": 13.217,
+      "cpuMs": 13.495,
       "meshHash": 2225284194798470411,
       "name": "layered",
       "triangles": 27648,
       "vertices": 13832
+    },
+    {
+      "cpuMs": 2.9913,
+      "effectiveThickness": 0.2739688570658807,
+      "meshHash": 4802989769392708407,
+      "name": "solidify",
+      "requestedThickness": 3.0,
+      "triangles": 1152,
+      "vertices": 578
     }
   ],
-  "scope": "Extreme geology displacement and joined layer contacts"
+  "scope": "Extreme field and solidify displacement with joined layer contacts"
 }

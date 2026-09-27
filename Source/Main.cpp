@@ -509,7 +509,7 @@ void captureAngularProfiles(Renderer &renderer, const std::filesystem::path &evi
 }
 void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &evidence)
 {
-    nlohmann::json proof = {{"scope", "Extreme geology displacement and joined layer contacts"},
+    nlohmann::json proof = {{"scope", "Extreme field and solidify displacement with joined layer contacts"},
                             {"adapter", renderer.adapter()}};
     Camera camera;
     camera.yaw = 0.5f;
@@ -539,6 +539,36 @@ void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &
                                    {"triangles", result.mesh.indices.size() / 3},
                                    {"cpuMs", result.milliseconds}});
     }
+    Recipe wall;
+    wall.base = Base::Plane;
+    wall.planeSize = {6, 4};
+    wall.finalResolution = 16;
+    Layer relief;
+    relief.kind = Kind::StrataRelief;
+    relief.amplitude = 0.3f;
+    relief.frequency = 1.5f;
+    Layer solid;
+    solid.kind = Kind::Solidify;
+    solid.thickness = 3;
+    solid.solidAlongNormals = true;
+    wall.layers = {relief, solid};
+    auto thickWall = evaluate(wall, wall.finalResolution);
+    if (!PA::validateClosedMesh(thickWall.mesh).hasValue())
+        throw std::runtime_error("Extreme normal solidify candidate is not closed");
+    save(wall, evidence / "solidify-extreme-recipe.json");
+    camera.distance = 8;
+    renderer.upload(thickWall);
+    renderer.draw(1280, 960, camera, 0);
+    renderer.capture(evidence / "solidify-extreme-neutral.png");
+    const auto a = thickWall.mesh.positions[0];
+    const auto b = thickWall.mesh.positions[thickWall.mesh.positions.size() / 2];
+    proof["cases"].push_back({{"name", "solidify"},
+                               {"requestedThickness", solid.thickness},
+                               {"effectiveThickness", std::hypot(a.x - b.x, a.y - b.y, a.z - b.z)},
+                               {"meshHash", PA::hashTriangleMesh(thickWall.mesh)},
+                               {"vertices", thickWall.mesh.positions.size()},
+                               {"triangles", thickWall.mesh.indices.size() / 3},
+                               {"cpuMs", thickWall.milliseconds}});
     std::ofstream(evidence / "extreme-deformation-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
 }

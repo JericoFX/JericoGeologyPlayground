@@ -1003,6 +1003,63 @@ MeshResult solidifySurface(const MeshResult &source, const Layer &layer,
     if (len > 1e-9)
         axis = {axis.x / len, axis.y / len, axis.z / len};
     double front = (layer.solidOffset + 1) * 0.5 * layer.thickness, back = front - layer.thickness;
+    if (layer.solidAlongNormals)
+    {
+        // A large normal offset can fold a curved source even when the closed mesh
+        // remains manifold. Scale both shells together so their rim stays joined.
+        auto difference = [](Vec3d a, Vec3d b) -> Vec3d
+        { return {a.x - b.x, a.y - b.y, a.z - b.z}; };
+        auto cross = [](Vec3d a, Vec3d b) -> Vec3d
+        { return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x}; };
+        auto dot = [](Vec3d a, Vec3d b)
+        { return a.x * b.x + a.y * b.y + a.z * b.z; };
+        double fraction = 1;
+        for (std::size_t corner = 0; corner < source.mesh.indices.size(); ++corner)
+        {
+            if ((corner & 4095) == 0)
+                check(cancel);
+            const auto a = source.mesh.indices[corner];
+            const auto b = source.mesh.indices[corner - corner % 3 + (corner + 1) % 3];
+            const auto edge = difference(source.mesh.positions[b], source.mesh.positions[a]);
+            const auto normalDelta = difference(source.normals[b], source.normals[a]);
+            const auto edgeLength = std::sqrt(dot(edge, edge));
+            const auto offsetDelta = std::max(std::abs(front), std::abs(back)) *
+                                     std::sqrt(dot(normalDelta, normalDelta));
+            if (edgeLength > 0 && offsetDelta > 0)
+                fraction = std::min(fraction, 0.5 * edgeLength / offsetDelta);
+        }
+        auto safeFaces = [&](double scale)
+        {
+            for (std::size_t face = 0; face < source.mesh.indices.size(); face += 3)
+            {
+                if ((face & 4095) == 0)
+                    check(cancel);
+                const auto a = source.mesh.indices[face], b = source.mesh.indices[face + 1],
+                           c = source.mesh.indices[face + 2];
+                const auto p = source.mesh.positions[a], q = source.mesh.positions[b],
+                           r = source.mesh.positions[c];
+                const auto oldNormal = cross(difference(q, p), difference(r, p));
+                for (double offset : {front, back})
+                {
+                    const auto x = shifted(p, source.normals[a], scale * offset);
+                    const auto y = shifted(q, source.normals[b], scale * offset);
+                    const auto z = shifted(r, source.normals[c], scale * offset);
+                    const auto newNormal = cross(difference(y, x), difference(z, x));
+                    if (dot(oldNormal, newNormal) <= 0.2 * dot(oldNormal, oldNormal))
+                        return false;
+                }
+            }
+            return true;
+        };
+        while (!safeFaces(fraction))
+        {
+            fraction *= 0.5;
+            if (fraction < 1e-12)
+                throw std::runtime_error("Solidify cannot preserve face orientation");
+        }
+        front *= fraction;
+        back *= fraction;
+    }
     for (std::size_t i = 0; i < count; ++i)
     {
         if ((i & 255) == 0)

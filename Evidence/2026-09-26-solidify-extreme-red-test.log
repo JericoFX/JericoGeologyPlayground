@@ -1,0 +1,14 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 15: Playground.Surface
+1/1 Test #15: Playground.Surface ...............***Failed    0.04 sec
+extreme normal solidify minimum front orientation=-4.40807
+extreme normal solidify must not fold its front surface
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.06 sec
+
+The following tests FAILED:
+	 15 - Playground.Surface (Failed)
+Errors while running CTest

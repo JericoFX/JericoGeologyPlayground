@@ -15,6 +15,28 @@ void require(bool v, const char *m)
     if (!v)
         throw std::runtime_error(m);
 }
+double offsetOrientation(const MeshResult &source, const MeshResult &solid, std::size_t offset)
+{
+    auto cross = [](Vec3d a, Vec3d b) -> Vec3d
+    { return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x}; };
+    auto sub = [](Vec3d a, Vec3d b) -> Vec3d
+    { return {a.x - b.x, a.y - b.y, a.z - b.z}; };
+    auto dot = [](Vec3d a, Vec3d b)
+    { return a.x * b.x + a.y * b.y + a.z * b.z; };
+    double minimum = 1;
+    for (std::size_t t = 0; t < source.mesh.indices.size(); t += 3)
+    {
+        const auto a = source.mesh.indices[t], b = source.mesh.indices[t + 1],
+                   c = source.mesh.indices[t + 2];
+        const auto p = source.mesh.positions[a], q = source.mesh.positions[b],
+                   r = source.mesh.positions[c];
+        const auto oldNormal = cross(sub(q, p), sub(r, p));
+        const auto newNormal = cross(sub(solid.mesh.positions[offset + b], solid.mesh.positions[offset + a]),
+                                     sub(solid.mesh.positions[offset + c], solid.mesh.positions[offset + a]));
+        minimum = std::min(minimum, dot(oldNormal, newNormal) / dot(oldNormal, oldNormal));
+    }
+    return minimum;
+}
 int main()
 {
     try
@@ -45,6 +67,36 @@ int main()
         require(PA::hashTriangleMesh(volume.mesh) ==
                     PA::hashTriangleMesh(evaluate(deserialize(serialize(recipe)), 16).mesh),
                 "surface recipe round trip");
+        auto normalOffset = [](Vec3d a, Vec3d b)
+        { return std::hypot(a.x - b.x, a.y - b.y, a.z - b.z); };
+        require(std::abs(normalOffset(volume.mesh.positions[0],
+                                      volume.mesh.positions[cliff.mesh.positions.size()]) - 0.25) < 1e-9,
+                "ordinary normal solidify retains its authored thickness");
+        recipe.layers.back().thickness = 3;
+        auto extremeSolid = evaluate(recipe, 16);
+        const auto extremeFront = offsetOrientation(cliff, extremeSolid, 0);
+        const auto extremeBack = offsetOrientation(cliff, extremeSolid, cliff.mesh.positions.size());
+        const auto effectiveThickness = normalOffset(
+            extremeSolid.mesh.positions[0], extremeSolid.mesh.positions[cliff.mesh.positions.size()]);
+        std::cout << "extreme normal solidify minimum front/back orientation="
+                  << extremeFront << '/' << extremeBack
+                  << " effective thickness=" << effectiveThickness << '\n';
+        require(extremeFront > 0.2 && extremeBack > 0.2 && effectiveThickness > 0.01 &&
+                    effectiveThickness < 3 && PA::validateClosedMesh(extremeSolid.mesh).hasValue(),
+                "extreme normal solidify keeps both surfaces oriented and closed");
+        recipe.layers.back().solidOffset = 1;
+        auto oneSidedSolid = evaluate(recipe, 16);
+        require(offsetOrientation(cliff, oneSidedSolid, 0) > 0.2 &&
+                    offsetOrientation(cliff, oneSidedSolid, cliff.mesh.positions.size()) > 0.2 &&
+                    PA::validateClosedMesh(oneSidedSolid.mesh).hasValue(),
+                "one-sided normal solidify also avoids folded faces");
+        recipe.layers.back().solidAlongNormals = false;
+        recipe.layers.back().direction = {0, 0, 1};
+        auto fixedDirectionSolid = evaluate(recipe, 16);
+        require(std::abs(normalOffset(fixedDirectionSolid.mesh.positions[0],
+                                      fixedDirectionSolid.mesh.positions[cliff.mesh.positions.size()]) - 3) < 1e-9,
+                "fixed-direction solidify retains its authored thickness");
+        recipe.layers.back() = solid;
         Recipe resistantBeds;
         resistantBeds.version = 19;
         resistantBeds.base = Base::Plane;
