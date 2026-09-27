@@ -8,7 +8,7 @@ if(CMAKE_SOURCE_DIR MATCHES "^${JERICO_SOURCE}(/|$)" OR CMAKE_BINARY_DIR MATCHES
     message(FATAL_ERROR "Playground source and build must be outside the engine checkout")
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/DamageField.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
+add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/DamageField.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyDamageIO.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp"
@@ -116,6 +116,9 @@ add_test(NAME Playground.SplineConstruction COMMAND PlaygroundSplineConstruction
 add_executable(PlaygroundProceduralAssembliesTests Tests/ProceduralAssembliesTests.cpp)
 target_link_libraries(PlaygroundProceduralAssembliesTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.ProceduralAssemblies COMMAND PlaygroundProceduralAssembliesTests)
+add_executable(PlaygroundAssemblyDamageIOTests Tests/AssemblyDamageIOTests.cpp)
+target_link_libraries(PlaygroundAssemblyDamageIOTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.AssemblyDamageIO COMMAND PlaygroundAssemblyDamageIOTests)
 add_executable(PlaygroundWebLodTests Tests/WebLodTests.cpp)
 target_link_libraries(PlaygroundWebLodTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.WebLod COMMAND PlaygroundWebLodTests)

@@ -1,7 +1,10 @@
 #include "AssemblyLabUI.hpp"
+#include "AssemblyDamageIO.hpp"
 #include "SolidGeometry.hpp"
 #include "ViewportProjection.hpp"
 
+#include <Windows.h>
+#include <commdlg.h>
 #include <imgui.h>
 #include <algorithm>
 #include <cmath>
@@ -22,6 +25,22 @@ void panel(const char *title,float x,float y,float width,float height)
     ImGui::SetNextWindowSize({width,height});
     ImGui::Begin(title,nullptr,
         ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoCollapse);
+}
+std::filesystem::path chooseDamageFile(bool saveFile)
+{
+    wchar_t filename[MAX_PATH]=L"AssemblyDamage.json";
+    OPENFILENAMEW dialog{};
+    dialog.lStructSize=sizeof(dialog);
+    dialog.hwndOwner=GetActiveWindow();
+    dialog.lpstrFilter=L"Assembly damage (*.json)\0*.json\0\0";
+    dialog.lpstrFile=filename;
+    dialog.nMaxFile=MAX_PATH;
+    dialog.lpstrDefExt=L"json";
+    dialog.Flags=OFN_NOCHANGEDIR|OFN_PATHMUSTEXIST|
+        (saveFile?OFN_OVERWRITEPROMPT:OFN_FILEMUSTEXIST);
+    const bool accepted=saveFile?GetSaveFileNameW(&dialog):GetOpenFileNameW(&dialog);
+    ImGui::GetIO().ClearInputMouse();
+    return accepted?std::filesystem::path(filename):std::filesystem::path{};
 }
 }
 AssemblyLabUI::AssemblyLabUI()
@@ -52,6 +71,7 @@ void AssemblyLabUI::choosePreset(int preset)
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
     selectedId.clear();selectedArea=-1;dirty=true;fitCamera=true;
+    damageUndo.clear();damageRedo.clear();pendingDamageEdit.reset();
 }
 void AssemblyLabUI::activate(Renderer &renderer)
 {dirty=true;uploadedView=-1;rebuild();}
@@ -86,6 +106,19 @@ const Assembly::Part *AssemblyLabUI::selectedPart() const
 }
 void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
 {
+    std::optional<Assembly::DamageSettings> damageBefore;
+    if (ImGui::IsMouseDown(ImGuiMouseButton_Left) || ImGui::IsAnyItemActive() ||
+        ImGui::IsKeyDown(ImGuiKey_Enter) || ImGui::IsKeyDown(ImGuiKey_Space))
+        damageBefore=settings.damage;
+    bool suppressDamageHistory=false;
+    auto commitDamageEdit=[&]
+    {
+        if (!pendingDamageEdit) return;
+        if (damageUndo.size()>=64) damageUndo.erase(damageUndo.begin());
+        damageUndo.push_back(std::move(*pendingDamageEdit));
+        pendingDamageEdit.reset();
+        damageRedo.clear();
+    };
     constexpr float top=54,bottom=112,left=315,right=390;
     panel("Assembly path and presets",0,top,left,float(height)-top-bottom);
     ImGui::TextUnformatted("Reusable path + semantic parts");
@@ -93,7 +126,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     if (ImGui::BeginCombo("Preset",presets[preset]))
     {
         for (int i=0;i<int(std::size(presets));++i)
-            if (ImGui::Selectable(presets[i],i==preset)) choosePreset(i);
+            if (ImGui::Selectable(presets[i],i==preset))
+            {choosePreset(i);suppressDamageHistory=true;}
         ImGui::EndCombo();
     }
     ImGui::Separator();
@@ -211,12 +245,54 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     edit("Cluster radius",settings.damage.clusterRadiusMeters,.1);
     edit("Cluster strength",settings.damage.clusterStrength,.05);
     ImGui::Separator();ImGui::TextUnformatted("Movable damage areas");
+    if (ImGui::Button("Save damage"))
+    {
+        try
+        {
+            const auto file=chooseDamageFile(true);
+            if (!file.empty()) {Assembly::saveAssemblyDamage(settings.damage,file);error.clear();}
+        }
+        catch (const std::exception &exception) {error=exception.what();}
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load damage"))
+    {
+        try
+        {
+            const auto file=chooseDamageFile(false);
+            if (!file.empty())
+            {
+                auto loaded=Assembly::loadAssemblyDamage(file);
+                settings.damage=std::move(loaded);
+                selectedArea=-1;dirty=true;error.clear();
+            }
+        }
+        catch (const std::exception &exception) {error=exception.what();}
+    }
+    if (ImGui::Button("Undo damage") && (pendingDamageEdit || !damageUndo.empty()))
+    {
+        commitDamageEdit();
+        damageRedo.push_back(settings.damage);
+        settings.damage=std::move(damageUndo.back());damageUndo.pop_back();
+        selectedArea=std::min(selectedArea,int(settings.damage.areaRules.size())-1);
+        dirty=true;suppressDamageHistory=true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Redo damage") && !pendingDamageEdit && !damageRedo.empty())
+    {
+        damageUndo.push_back(settings.damage);
+        settings.damage=std::move(damageRedo.back());damageRedo.pop_back();
+        selectedArea=std::min(selectedArea,int(settings.damage.areaRules.size())-1);
+        dirty=true;suppressDamageHistory=true;
+    }
     if (settings.damage.areaRules.size()>=Assembly::maximumDamageAreas)
         ImGui::TextUnformatted("Damage area limit reached (64)");
     else if (ImGui::Button("Add area at selected part"))
     {
         Assembly::AreaDamageRule rule;
-        rule.area.id="area-"+std::to_string(nextAreaId++);
+        do {rule.area.id="area-"+std::to_string(nextAreaId++);}
+        while (std::any_of(settings.damage.areaRules.begin(),settings.damage.areaRules.end(),
+            [&](const auto &existing){return existing.area.id==rule.area.id;}));
         const auto *part=selectedPart();
         const auto station=part?part->stationMeters:built.path.lengthMeters*.5;
         const auto frame=Construction::frameAtDistance(built.path,station);
@@ -442,6 +518,19 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         camera.distance=std::clamp(camera.distance*std::exp(-io.MouseWheel*.1f),1.0f,90.0f);
     }
     ImGui::End();
+    if (!suppressDamageHistory)
+    {
+        bool changed=false;
+        if (damageBefore)
+        {
+            try {changed=Assembly::serializeAssemblyDamage(*damageBefore)!=
+                         Assembly::serializeAssemblyDamage(settings.damage);}
+            catch (const std::exception &) {changed=true;}
+        }
+        if (changed && !pendingDamageEdit) pendingDamageEdit=std::move(*damageBefore);
+        if (pendingDamageEdit && !ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
+            !ImGui::IsAnyItemActive()) commitDamageEdit();
+    }
     panel("Assembly metrics",0,float(height)-bottom,float(width),bottom);
     if (!error.empty())
         ImGui::TextColored({1,.35f,.3f,1},"Diagnostic: %s | Previous valid mesh retained",error.c_str());

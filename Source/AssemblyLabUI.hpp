@@ -4,6 +4,8 @@
 #include "Renderer.hpp"
 
 #include <string>
+#include <optional>
+#include <vector>
 
 namespace Playground
 {
@@ -23,6 +25,8 @@ class AssemblyLabUI
     int selectedPoint{},selectedArea{-1},view{},uploadedView{-1};
     bool dirty{true},fitCamera{true};
     unsigned nextPointId{30},nextAreaId{1};
+    std::vector<Assembly::DamageSettings> damageUndo,damageRedo;
+    std::optional<Assembly::DamageSettings> pendingDamageEdit;
     void rebuild();
     void choosePreset(int preset);
     const Assembly::Part *selectedPart() const;
