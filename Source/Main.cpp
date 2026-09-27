@@ -6,6 +6,8 @@
 #include "SurfaceGeometry.hpp"
 #include "SurfaceFeatures.hpp"
 #include "SplineLabUI.hpp"
+#include "AssemblyLabUI.hpp"
+#include "AssemblyLabEvidence.hpp"
 #include "SplineLabEvidence.hpp"
 #include <Jerico/Core/Guid.hpp>
 #include <Jerico/Platform/Window.hpp>
@@ -2190,7 +2192,7 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
-    bool splineEvidence=false;
+    bool splineEvidence=false,assemblyEvidence=false;
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
          angularProfileSmoke = false, extremeDeformationSmoke = false,
          cliffSoftCreationSmoke = false, rockLodSmoke = false,
@@ -2225,6 +2227,12 @@ int run(int argc, char **argv)
         if (std::string(argv[i])=="--spline-construction-test")
         {
             splineEvidence=true;
+            if (i+1<argc) evidence=argv[i+1];
+        }
+    for (int i=1;i<argc;++i)
+        if (std::string(argv[i])=="--procedural-assemblies-test")
+        {
+            assemblyEvidence=true;
             if (i+1<argc) evidence=argv[i+1];
         }
     for (int i = 1; i < argc; ++i)
@@ -2365,7 +2373,7 @@ int run(int argc, char **argv)
                 adaptiveSeed = unsigned(std::stoul(argv[++i]));
             }
         }
-    if (smoke || splineEvidence)
+    if (smoke || splineEvidence || assemblyEvidence)
         std::filesystem::create_directories(evidence);
     if (lowSweepSmoke)
     {
@@ -2392,13 +2400,20 @@ int run(int argc, char **argv)
         SetWindowLongPtrW(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }
+    if (assemblyEvidence)
+    {
+        captureProceduralAssemblies(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
     Recipe recipe = preset(0);
     MeshResult displayed = evaluate(recipe, recipe.previewResolution);
     renderer.upload(displayed);
     renderer.uploadMaterial(nullptr, materialDiffuse(materialAppearance(recipe, 0)));
     Camera camera;
     SplineLabUI splineLab;
-    bool splineWorkspace = false;
+    AssemblyLabUI assemblyLab;
+    int workspace = 0;
     int selected = 0, presetIndex = 0, mode = 4, inspection = 0, addKind = 1;
     int materialChoice = 0;
     std::string error, status = "Ready", path;
@@ -2537,22 +2552,34 @@ int run(int argc, char **argv)
         panel("Jerico Geology Playground", 0, 0, float(w), top);
         ImGui::TextUnformatted("Workspace:");
         ImGui::SameLine();
-        if (ImGui::RadioButton("Geology", !splineWorkspace) && splineWorkspace)
+        if (ImGui::RadioButton("Geology", workspace==0) && workspace!=0)
         {
-            splineWorkspace = false;
+            workspace = 0;
             renderer.upload(displayed);
             bindMaterial(nullptr);
         }
         ImGui::SameLine();
-        if (ImGui::RadioButton("Spline Construction", splineWorkspace) && !splineWorkspace)
+        if (ImGui::RadioButton("Spline Construction", workspace==1) && workspace!=1)
         {
-            splineWorkspace = true;
+            workspace = 1;
             splineLab.activate(renderer);
         }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Procedural Assemblies", workspace==2) && workspace!=2)
+        {
+            workspace = 2;
+            assemblyLab.activate(renderer);
+        }
         ImGui::End();
-        if (splineWorkspace)
+        if (workspace==1)
         {
             splineLab.frame(renderer,w,h);
+            renderer.present();
+            continue;
+        }
+        if (workspace==2)
+        {
+            assemblyLab.frame(renderer,w,h);
             renderer.present();
             continue;
         }

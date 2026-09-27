@@ -63,6 +63,7 @@ struct ConstructionResult
 };
 
 PathResult samplePath(const PA::ProceduralSpline &spline, const PathQuality &quality);
+PathFrame frameAtDistance(const PathResult &path, double distanceMeters);
 std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const RepeatSettings &settings);
 ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                                      const ConstructionSettings &settings);

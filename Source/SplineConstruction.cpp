@@ -218,6 +218,31 @@ PathResult samplePath(const PA::ProceduralSpline &spline, const PathQuality &qua
     }
     return result;
 }
+PathFrame frameAtDistance(const PathResult &path, double distance)
+{
+    if (path.frames.size()<2 || !(path.lengthMeters>0) || !std::isfinite(distance) ||
+        distance<0 || distance>path.lengthMeters+1e-9)
+        throw std::runtime_error("Distance is outside the sampled spline path");
+    const auto right = std::lower_bound(path.frames.begin(), path.frames.end(), distance,
+        [](const PathFrame &frame, double value) { return frame.distanceMeters < value; });
+    const auto upper = std::size_t(right - path.frames.begin());
+    const auto lower = upper ? upper - 1 : 0;
+    const auto &a = path.frames[lower];
+    const auto &b = path.frames[std::min(upper, path.frames.size() - 1)];
+    const double span = b.distanceMeters - a.distanceMeters;
+    const double t = span > 0 ? std::clamp((distance - a.distanceMeters) / span, 0.0, 1.0) : 0;
+    PathFrame frame;
+    frame.distanceMeters = distance;
+    frame.position = add(a.position, mul(sub(b.position, a.position), t));
+    frame.tangent = unit(add(a.tangent, mul(sub(b.tangent, a.tangent), t)));
+    auto normal = add(a.normal, mul(sub(b.normal, a.normal), t));
+    frame.normal = unit(sub(normal, mul(frame.tangent, dot(normal, frame.tangent))));
+    frame.binormal = unit(cross(frame.tangent, frame.normal));
+    frame.widthMeters = std::lerp(a.widthMeters, b.widthMeters, t);
+    frame.rollRadians = std::lerp(a.rollRadians, b.rollRadians, t);
+    frame.segment = a.segment;
+    return frame;
+}
 std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const RepeatSettings &settings)
 {
     if (path.frames.size() < 2 || !(path.lengthMeters > 0) ||
@@ -241,25 +266,7 @@ std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const Repea
         const double distance = first + double(index) * settings.spacingMeters;
         if (distance > end + 1e-9)
             break;
-        const auto right = std::lower_bound(path.frames.begin(), path.frames.end(), distance,
-            [](const PathFrame &frame, double value) { return frame.distanceMeters < value; });
-        const auto upper = std::size_t(right - path.frames.begin());
-        const auto lower = upper ? upper - 1 : 0;
-        const auto &a = path.frames[lower];
-        const auto &b = path.frames[std::min(upper, path.frames.size() - 1)];
-        const double span = b.distanceMeters - a.distanceMeters;
-        const double t = span > 0 ? std::clamp((distance - a.distanceMeters) / span, 0.0, 1.0) : 0;
-        PathFrame frame;
-        frame.distanceMeters = distance;
-        frame.position = add(a.position, mul(sub(b.position, a.position), t));
-        frame.tangent = unit(add(a.tangent, mul(sub(b.tangent, a.tangent), t)));
-        auto normal = add(a.normal, mul(sub(b.normal, a.normal), t));
-        frame.normal = unit(sub(normal, mul(frame.tangent, dot(normal, frame.tangent))));
-        frame.binormal = unit(cross(frame.tangent, frame.normal));
-        frame.widthMeters = std::lerp(a.widthMeters, b.widthMeters, t);
-        frame.rollRadians = std::lerp(a.rollRadians, b.rollRadians, t);
-        frame.segment = a.segment;
-        placements.push_back({frame});
+        placements.push_back({frameAtDistance(path,distance)});
     }
     return placements;
 }
@@ -576,7 +583,7 @@ ConstructionResult withFrameAxes(const ConstructionResult &construction)
 {
     ConstructionResult result=construction;
     if (result.path.frames.empty()) return result;
-    std::fill(result.mesh.field.begin(),result.mesh.field.end(),0);
+    std::fill(result.mesh.field.begin(),result.mesh.field.end(),0.0f);
     const auto stride=std::max(std::size_t(1),result.path.frames.size()/48);
     const auto extent=std::clamp(result.path.lengthMeters*.035, .035, .2);
     auto &mesh=result.mesh.mesh;

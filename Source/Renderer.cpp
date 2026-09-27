@@ -667,6 +667,38 @@ void Renderer::capture(const std::filesystem::path &path)
     r.context->UnmapTextureSubresource(staging, 0, 0);
     require(ok != 0, "Capture write failed");
 }
+std::optional<std::uint32_t> Renderer::pickTriangle(unsigned width,unsigned height,
+    const Camera &camera,unsigned pixelX,unsigned pixelY)
+{
+    if (pixelX>=width || pixelY>=height) return std::nullopt;
+    draw(width,height,camera,7);
+    auto &r=*impl;
+    TextureDesc desc=r.color->GetDesc();
+    desc.Name="Playground part pick staging";
+    desc.Usage=USAGE_STAGING;
+    desc.BindFlags=BIND_NONE;
+    desc.CPUAccessFlags=CPU_ACCESS_READ;
+    RefCntAutoPtr<ITexture> staging;
+    r.device->CreateTexture(desc,nullptr,&staging);
+    require(bool(staging),"Part pick staging allocation failed");
+    CopyTextureAttribs copy;
+    copy.pSrcTexture=r.color;
+    copy.pDstTexture=staging;
+    copy.SrcTextureTransitionMode=RESOURCE_STATE_TRANSITION_MODE_TRANSITION;
+    copy.DstTextureTransitionMode=RESOURCE_STATE_TRANSITION_MODE_TRANSITION;
+    r.context->CopyTexture(copy);
+    r.context->WaitForIdle();
+    MappedTextureSubresource mapped;
+    r.context->MapTextureSubresource(staging,0,0,MAP_READ,MAP_FLAG_DO_NOT_WAIT,nullptr,mapped);
+    require(mapped.pData!=nullptr,"Part pick readback failed");
+    const auto *pixel=static_cast<const std::uint8_t *>(mapped.pData)+
+        std::size_t(pixelY)*mapped.Stride+std::size_t(pixelX)*4;
+    const std::uint32_t packed=(std::uint32_t(pixel[0])<<16)|
+        (std::uint32_t(pixel[1])<<8)|std::uint32_t(pixel[2]);
+    r.context->UnmapTextureSubresource(staging,0,0);
+    if (!packed) return std::nullopt;
+    return packed-1;
+}
 void Renderer::setNormalMipBias(float bias)
 {
     require(std::isfinite(bias) && bias >= -2.0f && bias <= 0.0f,

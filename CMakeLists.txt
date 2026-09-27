@@ -8,7 +8,7 @@ if(CMAKE_SOURCE_DIR MATCHES "^${JERICO_SOURCE}(/|$)" OR CMAKE_BINARY_DIR MATCHES
     message(FATAL_ERROR "Playground source and build must be outside the engine checkout")
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp
+add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyGeneration.cpp
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp"
@@ -100,11 +100,14 @@ add_test(NAME Playground.Reduction COMMAND PlaygroundReductionTests)
 add_executable(PlaygroundSplineConstructionTests Tests/SplineConstructionTests.cpp)
 target_link_libraries(PlaygroundSplineConstructionTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.SplineConstruction COMMAND PlaygroundSplineConstructionTests)
+add_executable(PlaygroundProceduralAssembliesTests Tests/ProceduralAssembliesTests.cpp)
+target_link_libraries(PlaygroundProceduralAssembliesTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.ProceduralAssemblies COMMAND PlaygroundProceduralAssembliesTests)
 
 set(DC "${JERICO_DEPS}/DiligentCore")
 set(DT "${JERICO_DEPS}/DiligentTools")
 set(DB "${JERICO_DEPS}/_deps/diligentcore-build")
-add_executable(JericoGeologyPlayground Source/Main.cpp Source/Renderer.cpp Source/SplineLabUI.cpp Source/SplineLabEvidence.cpp
+add_executable(JericoGeologyPlayground Source/Main.cpp Source/Renderer.cpp Source/SplineLabUI.cpp Source/SplineLabEvidence.cpp Source/AssemblyLabUI.cpp Source/AssemblyLabEvidence.cpp
     "${JERICO_SOURCE}/Engine/Platform/Source/WindowWin32.cpp"
     "${DT}/ThirdParty/imgui/backends/imgui_impl_win32.cpp")
 target_include_directories(JericoGeologyPlayground PRIVATE

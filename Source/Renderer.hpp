@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.hpp"
 #include <memory>
+#include <optional>
 
 namespace Playground
 {
@@ -31,6 +32,8 @@ class Renderer
     void *draw(unsigned width, unsigned height, const Camera &camera, int mode);
     void present();
     void capture(const std::filesystem::path &path);
+    std::optional<std::uint32_t> pickTriangle(unsigned width, unsigned height,
+        const Camera &camera, unsigned pixelX, unsigned pixelY);
     void setNormalMipBias(float bias);
     GpuComparison compareFbm(const MeshResult &mesh, const Layer &layer);
     std::size_t bufferBytes() const;
