@@ -1,0 +1,6 @@
+exaggerated normal noise maximum edge stretch: 1.11407
+high frequency normal noise maximum edge stretch: 1.11407
+high amplitude normal noise maximum edge stretch: 1.13088
+default normal noise maximum edge stretch: 1.05878
+moderate contact match=1 minimum orientation=0.618794 closed=1
+PASS: four bases, topology, deterministic recipes, disabled identity, order, roundtrip, displacement models, structural layers, domain warp, fields, invalid input, shared engine FBM

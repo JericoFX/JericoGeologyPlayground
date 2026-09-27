@@ -1,0 +1,14 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 7: Playground.Model
+1/1 Test #7: Playground.Model .................***Failed    0.10 sec
+exaggerated normal noise maximum edge stretch: 66.6799
+exaggerated deformation must not grow needle edges
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.13 sec
+
+The following tests FAILED:
+	  7 - Playground.Model (Failed)
+Errors while running CTest

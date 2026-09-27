@@ -824,6 +824,84 @@ void normals(MeshResult &r)
     for (auto &n : r.normals)
         n = unit(n);
 }
+void stabilizeDisplacement(MeshResult &result, const std::vector<Vec3d> &before,
+                           const Jerico::CancellationToken *cancel)
+{
+    auto &positions = result.mesh.positions;
+    if (positions.size() != before.size())
+        throw std::runtime_error("Displacement changed mesh connectivity");
+    if (result.layerContactFaces.size() == result.mesh.indices.size() / 3 &&
+        result.layerIndices.size() == positions.size())
+    {
+        // Share positions across matching stratum contacts without merging their UV or region vertices.
+        using Key = std::tuple<long long, long long, long long>;
+        std::map<Key, std::vector<std::uint32_t>> contacts;
+        std::vector<bool> contactVertex(positions.size());
+        for (std::size_t face = 0; face < result.layerContactFaces.size(); ++face)
+            if (result.layerContactFaces[face] == 1 || result.layerContactFaces[face] == 2)
+                for (int corner = 0; corner < 3; ++corner)
+                    contactVertex[result.mesh.indices[3 * face + corner]] = true;
+        for (std::uint32_t i = 0; i < before.size(); ++i)
+            if (contactVertex[i] &&
+                std::max({std::abs(before[i].x), std::abs(before[i].y), std::abs(before[i].z)}) < 1e9)
+                contacts[{std::llround(before[i].x * 1e8), std::llround(before[i].y * 1e8),
+                          std::llround(before[i].z * 1e8)}].push_back(i);
+        for (const auto &[key, vertices] : contacts)
+        {
+            if (vertices.size() < 2)
+                continue;
+            const auto layer = result.layerIndices[vertices.front()];
+            if (std::all_of(vertices.begin(), vertices.end(), [&](auto i)
+                            { return result.layerIndices[i] == layer; }))
+                continue;
+            Vec3d shared{};
+            for (auto i : vertices)
+                shared = add(shared, positions[i]);
+            shared = mul(shared, 1.0 / vertices.size());
+            for (auto i : vertices)
+                positions[i] = shared;
+        }
+    }
+    double fraction = 1;
+    for (std::size_t corner = 0; corner < result.mesh.indices.size(); ++corner)
+    {
+        if ((corner & 4095) == 0)
+            checkCancel(cancel);
+        const auto a = result.mesh.indices[corner];
+        const auto b = result.mesh.indices[corner - corner % 3 + (corner + 1) % 3];
+        const auto oldEdge = sub(before[b], before[a]);
+        const auto delta = sub(sub(positions[b], before[b]), sub(positions[a], before[a]));
+        const auto oldLength = std::sqrt(dot(oldEdge, oldEdge));
+        const auto deltaLength = std::sqrt(dot(delta, delta));
+        if (oldLength > 0 && deltaLength > 0)
+            fraction = std::min(fraction, 0.5 * oldLength / deltaLength);
+    }
+    auto safeOrientation = [&](double scale)
+    {
+        for (std::size_t face = 0; face < result.mesh.indices.size(); face += 3)
+        {
+            if ((face & 4095) == 0)
+                checkCancel(cancel);
+            auto a = result.mesh.indices[face], b = result.mesh.indices[face + 1],
+                 c = result.mesh.indices[face + 2];
+            auto oldNormal = cross(sub(before[b], before[a]), sub(before[c], before[a]));
+            auto point = [&](auto i) { return add(before[i], mul(sub(positions[i], before[i]), scale)); };
+            auto newNormal = cross(sub(point(b), point(a)), sub(point(c), point(a)));
+            if (dot(oldNormal, newNormal) <= 0.2 * dot(oldNormal, oldNormal))
+                return false;
+        }
+        return true;
+    };
+    while (!safeOrientation(fraction))
+    {
+        fraction *= 0.5;
+        if (fraction < 1e-12)
+            throw std::runtime_error("Displacement cannot preserve face orientation");
+    }
+    if (fraction < 1)
+        for (std::size_t i = 0; i < positions.size(); ++i)
+            positions[i] = add(before[i], mul(sub(positions[i], before[i]), fraction));
+}
 void smoothMatchedLayerSeams(MeshResult &r)
 {
     if (r.layerContactFaces.size() != r.mesh.indices.size() / 3 ||
@@ -1258,6 +1336,19 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                                 : float(maskValue(previous[i], result.normals[i], l, &features, i));
                     }
                 }
+                const bool limitStrain = l.relaxStrength * l.iterations >= 1;
+                const bool joinContacts = result.layerContactFaces.size() == result.mesh.indices.size() / 3 &&
+                                          std::any_of(result.layerContactFaces.begin(),
+                                                      result.layerContactFaces.end(),
+                                                      [](auto face) { return face == 1 || face == 2; });
+                if (limitStrain || joinContacts)
+                    stabilizeDisplacement(result, previous, cancel);
+                if ((limitStrain || joinContacts) && int(stage) == fieldLayer && l.mask == Mask::None)
+                    for (std::size_t i = 0; i < previous.size(); ++i)
+                    {
+                        const auto delta = sub(result.mesh.positions[i], previous[i]);
+                        result.field[i] = float(std::sqrt(dot(delta, delta)));
+                    }
                 normals(result);
             }
             continue;
@@ -1268,6 +1359,17 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
         const auto beforeDamage = l.kind == Kind::SurfaceDamage || l.kind == Kind::DamageDecal
                                       ? result.mesh.positions
                                       : std::vector<Vec3d>{};
+        // Amplitude * frequency is the first-order slope of the field. Keep ordinary
+        // authored recipes without tagged contacts byte-identical and constrain steep fields.
+        const bool guardDisplacement = l.kind != Kind::Transform && l.kind != Kind::Warp &&
+                                       std::abs(l.amplitude) * l.frequency >= 1;
+        const bool joinContacts = l.kind != Kind::Transform && l.kind != Kind::Warp &&
+                                  result.layerContactFaces.size() == result.mesh.indices.size() / 3 &&
+                                  std::any_of(result.layerContactFaces.begin(),
+                                              result.layerContactFaces.end(),
+                                              [](auto face) { return face == 1 || face == 2; });
+        const auto beforeDisplacement = guardDisplacement || joinContacts
+                                            ? result.mesh.positions : std::vector<Vec3d>{};
         DamageProjector damageProjector;
         DamageDecalSettings decalSettings;
         if (l.kind == Kind::DamageDecal)
@@ -1429,6 +1531,8 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                                                                sub(beforeDamage[c], beforeDamage[b])))})) +
                         "; reduce depth or improve input sampling");
             }
+        if (!beforeDisplacement.empty())
+            stabilizeDisplacement(result, beforeDisplacement, cancel);
         if (l.kind != Kind::Warp)
             normals(result);
     }

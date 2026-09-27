@@ -1,0 +1,17 @@
+Test project F:/JericoGeologyPlayground/build
+    Start 7: Playground.Model
+1/1 Test #7: Playground.Model .................***Failed    0.11 sec
+exaggerated normal noise maximum edge stretch: 66.6799
+high frequency normal noise maximum edge stretch: 2.5923
+high amplitude normal noise maximum edge stretch: 19.032
+default normal noise maximum edge stretch: 1.05878
+normal displacement must keep touching strata joined
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.12 sec
+
+The following tests FAILED:
+	  7 - Playground.Model (Failed)
+Errors while running CTest

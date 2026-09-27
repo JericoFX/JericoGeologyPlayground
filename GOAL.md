@@ -1,6 +1,6 @@
 # Goal activo — JericoGeologyPlayground
 
-Desarrollar y verificar en este playground las matemáticas nativas C++ de geología, con prioridad en bakes high→low, mapas de superficie y calidad visual de rocas, cliffs y estratos. Investigar y probar compatibilidad matemática con RBrush leyendo `F:\JericoEngine`, sin modificar ese checkout ni ejecutar Blender. Conservar pruebas, capturas, métricas, procedencia de referencias y un inventario honesto de lo demostrado y lo pendiente para la futura integración M8 en JericoEngine.
+Desarrollar y verificar en este playground las matemáticas nativas C++ de geología, con prioridad actual en la creación y calidad visual de rocas, cliffs y estratos; retomar bakes high→low después. Investigar y probar compatibilidad matemática con RBrush leyendo `F:\JericoEngine`, sin modificar ese checkout ni ejecutar Blender. Conservar pruebas, capturas, métricas, procedencia de referencias y un inventario honesto de lo demostrado y lo pendiente para la futura integración M8 en JericoEngine.
 
 El Goal se reanudó en este chat por instrucción del owner. El [dossier de investigación del 2026-09-26](docs/JERICO_GEOLOGY_RESEARCH_2026_09_26.md), su HTML y su catálogo de 80 fuentes llegaron por tres commits de `main` del Playground; la [revisión de entrada](Evidence/2026-09-26-geology-dossier-review.md) fija hashes, propuestas aplicables, límites y el siguiente gate. El dossier permanece **EN REVISIÓN** como referencia, sin cambiar por sí solo el alcance de implementación ni la aceptación visual.
 
@@ -11,6 +11,8 @@ La [primera prueba v19 de estratos resistentes](Evidence/2026-09-26-cliff-strata
 La [prueba v20 de camas variables y perímetro local](Evidence/2026-09-26-cliff-varied-wall-review.md) redujo la repetición exacta de bancos y movió la silueta sólo cerca del borde. Pasó cierre, replay, captura Vulkan y 17/17 tests, pero la Beauty del cliff permanece **PARTIAL**: aún parece un bloque escalonado; el corte central se excluyó sólo para aislar el defecto y no está resuelto.
 
 La [prueba v21 de incisión finita](Evidence/2026-09-26-cliff-finite-incision-review.md) sustituye experimentalmente la lectura de placa central por un corredor erosionado que termina dentro de la pared. Conserva la malla abierta, cierra y reproduce el sólido y pasa 17/17 tests. En Beauty es sutil y el cliff sigue **PARTIAL**; hace falta cambiar la masa con juntas y salientes arraigados antes de considerar high→low.
+
+La [protección de deformaciones exageradas](Evidence/2026-09-26-extreme-deformation-review.md) responde al ejemplo de agujas y separaciones: mantiene coincidentes los contactos etiquetados entre estratos y acota los desplazamientos de campo demasiado abruptos según las aristas y caras de entrada. El caso reproducible pasó de 66,68× a 1,11× de estiramiento máximo; se conservan recetas históricas, cierre y replay. Las capturas Vulkan muestran la roca estratificada unida, aunque aún con crestas ruidosas. No es un soldado indiscriminado ni una garantía contra toda auto-intersección o una Beauty geológica final.
 
 ## Referencias durables del Goal
 

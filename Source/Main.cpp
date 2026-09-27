@@ -507,6 +507,41 @@ void captureAngularProfiles(Renderer &renderer, const std::filesystem::path &evi
     std::ofstream(evidence / "angular-profiles-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
 }
+void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &evidence)
+{
+    nlohmann::json proof = {{"scope", "Extreme geology displacement and joined layer contacts"},
+                            {"adapter", renderer.adapter()}};
+    Camera camera;
+    camera.yaw = 0.5f;
+    for (int family : {0, 11})
+    {
+        auto recipe = preset(family);
+        if (family == 0)
+            recipe.layers.clear();
+        else
+            recipe.layers.back().enabled = false;
+        auto noise = defaultLayer(Kind::NormalNoise);
+        noise.amplitude = 5;
+        noise.frequency = 100;
+        recipe.layers.push_back(noise);
+        auto result = evaluate(recipe, recipe.finalResolution);
+        if (!PA::validateClosedMesh(result.mesh).hasValue())
+            throw std::runtime_error("Extreme deformation candidate is not closed");
+        const auto label = family == 0 ? "sphere" : "layered";
+        save(recipe, evidence / (std::string(label) + "-extreme-recipe.json"));
+        camera.distance = family == 0 ? 5.8f : 6.8f;
+        renderer.upload(result);
+        renderer.draw(1280, 960, camera, 0);
+        renderer.capture(evidence / (std::string(label) + "-extreme-neutral.png"));
+        proof["cases"].push_back({{"name", label},
+                                   {"meshHash", PA::hashTriangleMesh(result.mesh)},
+                                   {"vertices", result.mesh.positions.size()},
+                                   {"triangles", result.mesh.indices.size() / 3},
+                                   {"cpuMs", result.milliseconds}});
+    }
+    std::ofstream(evidence / "extreme-deformation-proof.json") << proof.dump(2) << '\n';
+    std::cout << proof.dump(2) << '\n';
+}
 struct BakePreview
 {
     Recipe recipe;
@@ -1954,7 +1989,7 @@ struct Build
 int run(int argc, char **argv)
 {
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
-         angularProfileSmoke = false, rockLodSmoke = false,
+         angularProfileSmoke = false, extremeDeformationSmoke = false, rockLodSmoke = false,
          autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
          angularFractureSmoke = false, angularFourBlocksSmoke = false,
          cliffDrainageSmoke = false,
@@ -1987,6 +2022,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--material-gallery-test" ||
             std::string(argv[i]) == "--surface-features-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
+            std::string(argv[i]) == "--extreme-deformation-test" ||
             std::string(argv[i]) == "--rock-lod-bakes-test" ||
             std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test" ||
             std::string(argv[i]) == "--curvature-relaxation-bakes-test" ||
@@ -2038,6 +2074,7 @@ int run(int argc, char **argv)
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
+            extremeDeformationSmoke = std::string(argv[i]) == "--extreme-deformation-test";
             rockLodSmoke = std::string(argv[i]) == "--rock-lod-bakes-test";
             autoUvRockLodSmoke = std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test";
             curvatureRelaxationSmoke = std::string(argv[i]) == "--curvature-relaxation-bakes-test";
@@ -2766,6 +2803,12 @@ int run(int argc, char **argv)
             if (angularProfileSmoke)
             {
                 captureAngularProfiles(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (extremeDeformationSmoke)
+            {
+                captureExtremeDeformation(renderer, evidence);
                 window.requestClose();
                 continue;
             }

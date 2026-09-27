@@ -1,0 +1,20 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "cpuMs": 6.9502,
+      "meshHash": 4165216110282567852,
+      "name": "sphere",
+      "triangles": 23232,
+      "vertices": 11618
+    },
+    {
+      "cpuMs": 13.217,
+      "meshHash": 2225284194798470411,
+      "name": "layered",
+      "triangles": 27648,
+      "vertices": 13832
+    }
+  ],
+  "scope": "Extreme geology displacement and joined layer contacts"
+}

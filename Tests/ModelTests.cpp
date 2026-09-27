@@ -1,14 +1,95 @@
 #include "Model.hpp"
 #include <Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp>
+#include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
+#include <algorithm>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <map>
+#include <set>
 #include <stdexcept>
+#include <tuple>
 using namespace Playground;
 void require(bool value, const char *message)
 {
     if (!value)
         throw std::runtime_error(message);
+}
+double maximumEdgeStretch(const TriangleMesh &before, const TriangleMesh &after)
+{
+    require(before.indices == after.indices && before.positions.size() == after.positions.size(),
+            "displacement must preserve mesh connectivity");
+    double maximum = 0;
+    for (std::size_t corner = 0; corner < before.indices.size(); ++corner)
+    {
+        auto a = before.indices[corner];
+        auto b = before.indices[corner - corner % 3 + (corner + 1) % 3];
+        auto distance = [](Vec3d x, Vec3d y)
+        {
+            return std::hypot(x.x - y.x, x.y - y.y, x.z - y.z);
+        };
+        maximum = std::max(maximum, distance(after.positions[a], after.positions[b]) /
+                                        distance(before.positions[a], before.positions[b]));
+    }
+    return maximum;
+}
+double minimumFaceOrientation(const TriangleMesh &before, const TriangleMesh &after)
+{
+    require(before.indices == after.indices, "displacement must preserve faces");
+    double minimum = 1;
+    auto cross = [](Vec3d a, Vec3d b) -> Vec3d
+    {
+        return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};
+    };
+    auto difference = [](Vec3d a, Vec3d b) -> Vec3d
+    {
+        return {a.x - b.x, a.y - b.y, a.z - b.z};
+    };
+    auto dot = [](Vec3d a, Vec3d b) { return a.x * b.x + a.y * b.y + a.z * b.z; };
+    for (std::size_t face = 0; face < before.indices.size(); face += 3)
+    {
+        auto a = before.indices[face], b = before.indices[face + 1], c = before.indices[face + 2];
+        auto oldNormal = cross(difference(before.positions[b], before.positions[a]),
+                               difference(before.positions[c], before.positions[a]));
+        auto newNormal = cross(difference(after.positions[b], after.positions[a]),
+                               difference(after.positions[c], after.positions[a]));
+        minimum = std::min(minimum, dot(oldNormal, newNormal) / dot(oldNormal, oldNormal));
+    }
+    return minimum;
+}
+bool matchedLayerContacts(const MeshResult &mesh)
+{
+    using Position = std::tuple<long long, long long, long long>;
+    using Face = std::array<Position, 3>;
+    std::map<int, std::multiset<Face>> tops, bottoms;
+    for (std::size_t face = 0; face < mesh.layerContactFaces.size(); ++face)
+    {
+        auto role = mesh.layerContactFaces[face];
+        if (role != 1 && role != 2)
+            continue;
+        auto layer = mesh.layerIndices[mesh.mesh.indices[3 * face]];
+        Face vertices;
+        for (int corner = 0; corner < 3; ++corner)
+        {
+            auto p = mesh.mesh.positions[mesh.mesh.indices[3 * face + corner]];
+            vertices[corner] = {std::llround(p.x * 1e8), std::llround(p.y * 1e8),
+                                std::llround(p.z * 1e8)};
+        }
+        std::sort(vertices.begin(), vertices.end());
+        (role == 1 ? tops[layer] : bottoms[layer]).insert(vertices);
+    }
+    if (tops.empty())
+        return false;
+    const auto layerCount = *std::max_element(mesh.layerIndices.begin(), mesh.layerIndices.end()) + 1;
+    for (const auto &[layer, faces] : tops)
+    {
+        if (layer + 1 >= layerCount)
+            continue;
+        if (!bottoms.contains(layer + 1) || faces != bottoms.at(layer + 1))
+            return false;
+    }
+    return true;
 }
 int main()
 {
@@ -58,6 +139,83 @@ int main()
         plain.layers.clear();
         require(meshHash(evaluate(disabled, 12).mesh) == meshHash(evaluate(plain, 12).mesh),
                 "disabled identity");
+        Recipe exaggerated = plain;
+        exaggerated.layers = {defaultLayer(Kind::NormalNoise)};
+        exaggerated.layers[0].amplitude = 5;
+        exaggerated.layers[0].frequency = 100;
+        auto extreme = evaluate(exaggerated, 12);
+        auto sourceMesh = evaluate(plain, 12).mesh;
+        auto edgeStretch = maximumEdgeStretch(sourceMesh, extreme.mesh);
+        std::cout << "exaggerated normal noise maximum edge stretch: " << edgeStretch << '\n';
+        exaggerated.layers[0].amplitude = 0.18f;
+        std::cout << "high frequency normal noise maximum edge stretch: "
+                  << maximumEdgeStretch(evaluate(plain, 12).mesh, evaluate(exaggerated, 12).mesh) << '\n';
+        exaggerated.layers[0].amplitude = 5;
+        exaggerated.layers[0].frequency = 2;
+        std::cout << "high amplitude normal noise maximum edge stretch: "
+                  << maximumEdgeStretch(evaluate(plain, 12).mesh, evaluate(exaggerated, 12).mesh) << '\n';
+        std::cout << "default normal noise maximum edge stretch: "
+                  << maximumEdgeStretch(evaluate(plain, 12).mesh, evaluate(recipe, 12).mesh) << '\n';
+        auto connected = preset(11);
+        connected.layers.back().enabled = false;
+        auto layeredSource = evaluate(connected, 12);
+        require(matchedLayerContacts(layeredSource), "coherent layer baseline contacts meet");
+        connected.layers.push_back(defaultLayer(Kind::NormalNoise));
+        auto joined = evaluate(connected, 12);
+        std::cout << "moderate contact match=" << matchedLayerContacts(joined)
+                  << " minimum orientation=" << minimumFaceOrientation(layeredSource.mesh, joined.mesh)
+                  << " closed=" << PA::validateClosedMesh(joined.mesh).hasValue() << '\n';
+        require(matchedLayerContacts(joined) &&
+                    minimumFaceOrientation(layeredSource.mesh, joined.mesh) > 0 &&
+                    PA::validateClosedMesh(joined.mesh).hasValue(),
+                "normal displacement keeps touching strata joined without folding faces");
+        for (auto kind : {Kind::NormalNoise, Kind::VectorNoise, Kind::Voronoi,
+                          Kind::Fracture, Kind::RidgedNoise, Kind::StrataRelief,
+                          Kind::SharedWarp})
+        {
+            Recipe stress = plain;
+            stress.layers = {defaultLayer(kind)};
+            stress.layers[0].amplitude = 5;
+            stress.layers[0].frequency = 100;
+            auto result = evaluate(stress, 12);
+            require(maximumEdgeStretch(sourceMesh, result.mesh) <= 1.500001,
+                    "extreme field displacement cannot create needle edges");
+            require(maximumEdgeStretch(result.mesh, sourceMesh) <= 2.000001,
+                    "extreme field displacement cannot collapse source edges");
+            require(minimumFaceOrientation(sourceMesh, result.mesh) > 0.19,
+                    "extreme field displacement cannot flip a source face");
+            require(PA::validateClosedMesh(result.mesh).hasValue(),
+                    "extreme field displacement remains a closed mesh");
+            require(meshHash(result.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(stress)), 12).mesh),
+                    "guarded extreme deformation must replay exactly");
+        }
+        connected.layers.back().amplitude = 5;
+        connected.layers.back().frequency = 100;
+        auto stacked = evaluate(connected, 12);
+        require(matchedLayerContacts(stacked),
+                "extreme field displacement cannot separate touching strata");
+        require(maximumEdgeStretch(layeredSource.mesh, stacked.mesh) <= 1.500001 &&
+                    minimumFaceOrientation(layeredSource.mesh, stacked.mesh) > 0.19 &&
+                    PA::validateClosedMesh(stacked.mesh).hasValue(),
+                "extreme layered displacement preserves edges, faces and closure");
+        Recipe heavyRelax = exaggerated;
+        heavyRelax.layers[0].frequency = 100;
+        auto relaxationLayer = defaultLayer(Kind::Relax);
+        relaxationLayer.relaxStrength = 0.5f;
+        relaxationLayer.iterations = 3;
+        heavyRelax.layers.push_back(relaxationLayer);
+        auto relaxedThree = evaluate(heavyRelax, 12, -1, 1);
+        heavyRelax.layers.back().iterations = 2;
+        auto relaxedTwo = evaluate(heavyRelax, 12);
+        for (std::size_t i = 0; i < relaxedThree.mesh.positions.size(); ++i)
+        {
+            auto a = relaxedThree.mesh.positions[i], b = relaxedTwo.mesh.positions[i];
+            auto distance = std::hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+            require(std::abs(relaxedThree.field[i] - distance) < 1e-6,
+                    "extreme relaxation field records the actual guarded movement");
+        }
+        require(edgeStretch <= 1.5, "exaggerated deformation must not grow needle edges");
         auto transform = defaultLayer(Kind::Transform);
         transform.translation = {1.1f, 0.2f, 0};
         recipe.layers.push_back(transform);
