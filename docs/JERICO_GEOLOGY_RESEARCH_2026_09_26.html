@@ -1,0 +1,1177 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Investigación de geología procedural para JericoEngine: publicaciones, matemática, bibliotecas, addons y pruebas."><title>JericoEngine | Investigación de geología · 26.09.2026</title><style>
+:root{--ink:#172b32;--muted:#566b73;--paper:#fff;--bg:#edf1ef;--line:#d4dfdb;--accent:#24695f;--soft:#eef6f1;--deep:#163f3a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.72 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+header{background:var(--deep);color:white;padding:44px max(5vw,24px) 36px;border-bottom:7px solid #85b5a3}header small{letter-spacing:.15em;text-transform:uppercase;color:#c3dbd0}header .title{font-size:clamp(28px,4vw,47px);font-weight:760;line-height:1.15;max-width:1150px;margin:12px 0}header p{color:#dceae3;max-width:1000px;margin:12px 0 0}
+.layout{display:grid;grid-template-columns:270px minmax(0,1080px);gap:28px;max-width:1460px;margin:28px auto;padding:0 22px}aside{position:sticky;top:18px;align-self:start;max-height:94vh;overflow:auto;font-size:13px;padding:18px;background:white;border:1px solid var(--line);border-radius:10px}aside strong{display:block;margin-bottom:10px;font-size:15px}nav a{display:block;text-decoration:none;padding:8px 0;border-bottom:1px solid #edf1ef;color:var(--deep)}main{min-width:0;background:var(--paper);padding:clamp(22px,3vw,48px);border:1px solid var(--line);border-radius:10px}main>h1{font-size:31px;line-height:1.25;margin-top:0}h2{font-size:27px;line-height:1.3;margin:54px 0 20px;border-top:2px solid var(--line);padding-top:22px;color:var(--deep);scroll-margin-top:20px}h3{font-size:21px;line-height:1.4;margin:34px 0 12px;scroll-margin-top:20px}p{margin:14px 0}strong{font-weight:720}a{color:#226c63;text-underline-offset:3px;overflow-wrap:anywhere}.table-scroll{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}th{background:var(--deep);color:white;text-align:left;padding:12px;vertical-align:top}td{padding:12px;border-top:1px solid var(--line);vertical-align:top;min-width:125px}tr:nth-child(even) td{background:#f5f8f6}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:20px;border-left:4px solid var(--accent);background:var(--soft);font-size:15px;line-height:1.65}code{font:0.91em ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff4f1;padding:2px 4px}pre code{padding:0;background:none}blockquote{margin:20px 0;padding:12px 22px;border-left:4px solid var(--accent);background:var(--soft)}footer{font-size:13px;color:var(--muted);margin:28px 0;text-align:center}main a[id]{scroll-margin-top:24px} @media(max-width:960px){.layout{grid-template-columns:1fr;margin-top:16px}aside{position:static;max-height:280px}main{padding:24px}body{font-size:16px}} @media print{header{padding:15px;background:white;color:black;border-bottom:2px solid #333}header p,header small{color:#333}aside{display:none}.layout{display:block;margin:0;padding:0}main{padding:0;border:0}body{background:white;font:11pt/1.5 Arial,sans-serif}h2{break-before:auto;font-size:19pt}h3{font-size:14pt;break-after:avoid}table{font-size:9pt}tr{break-inside:avoid}a{color:black}footer{display:none}.table-scroll{overflow:visible}}
+</style></head><body><header><small>JericoEngine · Research dossier · 26 septiembre 2026</small><div class="title">Geología con estructura.<br>Geometría que la conserva.</div><p>Publicaciones, bibliotecas, herramientas gratuitas y técnicas de motores, con una propuesta de experimentos para Jerico. Investigación documental: no integración ni rendimiento verificados.</p></header><div class="layout"><aside><strong>Contenido</strong><nav><a href="#sec-0">Investigación técnica, matemática y de herramientas</a><a href="#sec-1">1. Conclusión ejecutiva</a><a href="#sec-3">2. Lecturas prioritarias y qué extraer de ellas</a><a href="#sec-16">3. Geología real: estructura antes que ruido</a><a href="#sec-22">4. Bibliotecas: candidatas, no dependencias automáticas</a><a href="#sec-26">5. Addons gratuitos y herramientas de autoría</a><a href="#sec-30">6. Qué hacen otros motores: capacidades verificadas y límites</a><a href="#sec-41">7. Modelo matemático propuesto para Jerico</a><a href="#sec-56">8. Rendimiento, memoria y portabilidad</a><a href="#sec-62">9. Integración propuesta sin crear un segundo motor de geología</a><a href="#sec-68">10. Plan de experimentos por etapas</a><a href="#sec-73">11. Banco de pruebas propuesto</a><a href="#sec-75">12. Decisiones que evitaría</a><a href="#sec-76">13. Licencias, mantenimiento y admisión</a><a href="#sec-78">14. Propuesta concreta de prioridad</a><a href="#sec-79">15. Limitaciones de esta investigación</a><a href="#sec-80">16. Catálogo de fuentes primarias</a></nav></aside><main><h1>Geología procedural para JericoEngine</h1>
+<h2 id="sec-0">Investigación técnica, matemática y de herramientas</h2>
+<p><strong>Fecha de corte: 26 de septiembre de 2026.</strong></p>
+<p><strong>Destino:</strong> geología de JericoEngine y su Geology Playground. <strong>Estado:</strong> investigación y propuesta de integración; no implementación ni aprobación de dependencias.</p>
+<p>Este dossier reúne publicaciones, bibliotecas, addons gratuitos, herramientas científicas y documentación de motores. Cada recurso tiene una función y un límite explícitos: generar estructura geológica, producir geometría, preparar assets o simular una parte de su comportamiento. No se presupone que una demostración académica pueda integrarse directamente en el motor.</p>
+<p>La revisión es documental. No se compilaron estas bibliotecas, no se instalaron los addons y no se midieron sus costes en Jerico. Se consultaron documentos oficiales, repositorios de autores y publicaciones primarias. Los casos en los que solo se pudo leer una ficha o un resumen están marcados en el catálogo de fuentes. El PDF de Pedro Velasco que inició la conversación no pudo recuperarse directamente; no se atribuyen a su texto las conclusiones nuevas de esta investigación.</p>
+<p><strong>Corrección de la respuesta anterior:</strong> la cifra «80 % del resultado por una fracción del coste» no estaba medida y se retira. La utilidad de estos enfoques debe demostrarse con escenas comparables y presupuestos reales.</p>
+<h2 id="sec-1">1. Conclusión ejecutiva</h2>
+<p>La dirección recomendada no es construir un simulador minero universal. Es dar a la geología procedural una <strong>estructura interna coherente</strong>, conservarla durante la extracción de malla y compartirla con materiales, desgaste y destrucción.</p>
+<p>La base propuesta sigue siendo la del proyecto: <strong>BSP y espacio jugable → receta geológica → campo volumétrico → mallado → cook → consumidores</strong>. El índice actual del repositorio remite a la directiva 0T del 15 de septiembre: integrar en el engine el código probado del Playground. Esa orientación sustituye para geología a instrucciones anteriores sobre un productor Blender. Esta investigación no modifica el slice activo ni reinstaura Blender u OpenVDB como autoridad. <a href="#j01">J01</a></p>
+<p>El orden de valor que propongo es: primero estratos, fallas y juntas; después desgaste localizado que respete esa estructura; luego fragmentos coherentes y soporte; finalmente simulaciones más caras cuando exista una necesidad concreta. La creación visual, la resistencia mecánica y la resolución geométrica no deben confundirse.</p>
+<p>Los hallazgos especialmente útiles son <strong>PhaseTree</strong>, <strong>Directable Weathering</strong>, <strong>LoopStructural</strong>, <strong>pySimFrac</strong>, <strong>MultiScaleErosion</strong>, <strong>Voxel Tools</strong> y el <strong>Mesh Terrain experimental de Unreal</strong>. Sus papeles son distintos: representación, envejecimiento, estructura, rugosidad de fracturas, erosión de superficies, arquitectura por bloques y autoría no destructiva. No son siete alternativas para reemplazar todo Jerico. <a href="#p01">P01</a><a href="#p03">P03</a><a href="#g01">G01</a><a href="#g04">G04</a><a href="#p05">P05</a><a href="#e05">E05</a><a href="#e01">E01</a></p>
+<h3 id="sec-2">Cuatro problemas, cuatro responsabilidades</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Responsabilidad</th>
+<th>Pregunta que resuelve</th>
+<th>Lo que no resuelve por sí sola</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Geología estructural</td>
+<td>¿Qué capas, fallas, contactos y juntas existen?</td>
+<td>Mallado robusto, movimiento físico o rendimiento.</td>
+</tr>
+<tr>
+<td>Geometría</td>
+<td>¿Dónde hay sólido y cuál es su superficie?</td>
+<td>Resistencia real, historia de formación o textura convincente.</td>
+</tr>
+<tr>
+<td>Meteorización / daño</td>
+<td>¿Qué partes cambian, se debilitan o se separan?</td>
+<td>Que toda pieza sea simulable o que el resultado conserve el espacio jugable.</td>
+</tr>
+<tr>
+<td>Runtime y cook</td>
+<td>¿Qué se publica, se dibuja, colisiona y guarda?</td>
+<td>Convertir una regla artística en una predicción geotécnica.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Esta separación es una propuesta de diseño para evitar promesas implícitas. Permite mejorar la apariencia sin activar una simulación costosa en cada fotograma.</p>
+<h2 id="sec-3">2. Lecturas prioritarias y qué extraer de ellas</h2>
+<h3 id="sec-4">2.1 PhaseTree — SDF multifase, 2026</h3>
+<p><strong>Qué se verificó.</strong> El trabajo organiza objetos con varias fases mediante una estructura implícita jerárquica. Los autores publican demostraciones GLSL con licencia MIT. La ficha se centra también en el trazado de rayos; eso no demuestra extracción de mallas ni colisiones listas para Jerico. <a href="#p01">P01</a><a href="#p02">P02</a></p>
+<p><strong>Aplicación propuesta.</strong> Usarlo como referencia para que una roca cortada conserve qué parte era roca, veta, inclusión u otra fase. Actualmente no se debe presuponer que un único valor de distancia contenga toda esa información. La extracción debe poder pedir geometría y procedencia material sin reconstruir una geología diferente en el shader.</p>
+<p><strong>Experimento.</strong> Bloque con tres materiales, corte oblicuo y deformación compartida. Comparar el interior recién expuesto con la clasificación analítica original. El resultado aceptable no es solo una malla cerrada: las regiones deben continuar en la cara nueva y mantenerse entre niveles de detalle.</p>
+<h3 id="sec-5">2.2 Directable Weathering of Concave Rock Using Curvature Estimation — 2010</h3>
+<p><strong>Qué se verificó.</strong> La publicación trata desgaste de roca, incluido comportamiento en concavidades, mediante representación volumétrica, estimación de curvatura y durabilidad editable. También aborda efectos relacionados con material desprendido. Se revisó el resumen institucional, no todo el PDF. <a href="#p03">P03</a></p>
+<p><strong>Aplicación propuesta.</strong> Es una referencia más directa para paredes y techos de cuevas que muchos generadores recientes de montañas. Probar operadores separados para rebajar convexidades, excavar material débil y conservar estratos resistentes. Evitar un filtro de suavizado uniforme que convierta todas las rocas en masas redondeadas.</p>
+<p><strong>Experimento.</strong> La misma pared estratificada con desgaste desactivado, uniforme y guiado por durabilidad. Medir silueta, pérdida de volumen y conservación de bordes; comparar además bajo iluminación plana para no confundir normales con geometría.</p>
+<h3 id="sec-6">2.3 Arches: a Framework for Modelling Complex Terrains — 2009</h3>
+<p><strong>Qué se verificó.</strong> Combina ideas volumétricas y materiales para representar terreno complejo, incluidas formas no describibles con una sola altura. La ficha primaria fue accesible; el PDF enlazado no lo fue. <a href="#p04">P04</a></p>
+<p><strong>Aplicación propuesta.</strong> Recordatorio de que «terreno» puede incluir paredes, huecos, arcos y acumulaciones, no únicamente montañas vistas desde arriba. Para Jerico interesa el reparto de representaciones por función: volumen para la formación principal y representaciones más económicas para elementos repetidos.</p>
+<p><strong>Experimento.</strong> Galería con arco y talud de bloques, manteniendo libre el volumen de paso. Comparar una solución completamente voxelizada con otra híbrida. No adjudicar menor coste a ninguna sin medir generación, colisión, memoria y edición.</p>
+<h3 id="sec-7">2.4 Terrain Amplification using Multi-scale Erosion — 2024</h3>
+<p><strong>Qué se verificó.</strong> Erosión a distintas escalas sobre terrenos de altura. Hay implementación C++ con compute de OpenGL y licencia MIT. Es una base concreta para estudiar el orden de escalas, no un solver volumétrico listo para erosionar techos. <a href="#p05">P05</a><a href="#p06">P06</a></p>
+<p><strong>Aplicación propuesta.</strong> Usarlo en exteriores, pendientes, sedimentos sobre el suelo y pruebas de macroforma. Extraer el principio de no gastar resolución fina donde una pasada gruesa resuelve el cambio. Un port a HLSL necesita revisar memoria, barreras y equivalencia numérica; no consiste en cambiar nombres de API.</p>
+<h3 id="sec-8">2.5 Stochastic Geomorphological Transport — 2026</h3>
+<p><strong>Qué se verificó.</strong> Modelo de transporte para formas como canales, meandros y depósitos. El ecosistema de código distingue geotransport del trabajo más amplio de soillib; este último no quedó admitido por licencia en esta revisión. <a href="#p07">P07</a><a href="#p08">P08</a><a href="#p09">P09</a></p>
+<p><strong>Aplicación propuesta.</strong> Investigación de segunda etapa para cauces, material suelto y depósitos creíbles. Para una mina puede inspirar zonas de arrastre o abanicos de sedimento, pero su contexto superficial no lo convierte automáticamente en disolución volumétrica de cavidades. Reservarlo inicialmente al laboratorio y al cook.</p>
+<h3 id="sec-9">2.6 SubsurfaceGen — preprint de 2026</h3>
+<p><strong>Qué se verificó.</strong> Generación geológica del subsuelo con operadores cronológicos en PyTorch: deposición, deformación, fallas y otras estructuras. Está orientado a modelos de subsuelo y datos de investigación; no a entregar un asset jugable con LOD y colisión. Es un preprint, no se presenta aquí como resultado revisado por pares. <a href="#p10">P10</a></p>
+<p><strong>Aplicación propuesta.</strong> La idea valiosa es una historia editable: depositar, deformar, fallar y después excavar. Una veta anterior a una falla debería responder de forma diferente a una veta posterior. Esa cronología puede inspirar recetas ligeras sin importar toda su infraestructura ni sus resoluciones de investigación.</p>
+<h3 id="sec-10">2.7 Procedural Multiscale Geometry Modeling using Implicit Functions — preprint de 2025</h3>
+<p><strong>Qué se verificó.</strong> Modelado implícito de microestructuras a distintas escalas, con casos porosos y estratificados. El texto HTML fue accesible. Sus resultados de representación/renderizado no prueban extracción y simulación equivalentes. <a href="#p11">P11</a></p>
+<p><strong>Aplicación propuesta.</strong> Separar porosidad visual de porosidad geométrica. Para una roca lejana bastaría un material; para un borde cercano quizá geometría local; para una grieta que cambia el paso, volumen y colisión. No convertir cada microporo en un agujero de la malla de runtime.</p>
+<h3 id="sec-11">2.8 Dual Contouring of Hermite Data — 2002</h3>
+<p><strong>Qué se verificó.</strong> Usa intersecciones y normales de Hermite junto con ajuste cuadrático para conservar características. Se revisó el texto del PDF y varias páginas mediante capturas, incluidas comparaciones y discusión de topología. <a href="#p15">P15</a></p>
+<p><strong>Aplicación propuesta.</strong> Referencia matemática para auditar pérdida de planos y esquinas, no orden de reescribir el QEF existente. Una extracción puede cumplir el ajuste local y aun fallar en conectividad, componentes múltiples o capas subvoxel. Deben probarse por separado error geométrico, orientación y topología.</p>
+<h3 id="sec-12">2.9 Transvoxel — transiciones entre resoluciones</h3>
+<p><strong>Qué se verificó.</strong> Construcción de celdas de transición para conectar terreno de tipo Marching Cubes entre resoluciones vecinas 2:1. El autor lo relaciona con C4 Engine. No es una solución intercambiable sin cambios con cualquier implementación de Surface Nets. <a href="#p16">P16</a></p>
+<p><strong>Aplicación propuesta.</strong> Estudiar el contrato de frontera: qué muestras comparten los bloques, qué resolución se permite a cada lado y quién produce la costura. No copiar tablas antes de decidir si la construcción matemática coincide con el mallador de Jerico.</p>
+<h3 id="sec-13">2.10 OcMesher — 2025</h3>
+<p><strong>Qué se verificó.</strong> Extracción de mallas con octrees adaptados a cámaras; repositorio BSD-3-Clause. Su uso está ligado a escenas procedurales y conjuntos de vistas. <a href="#p12">P12</a></p>
+<p><strong>Aplicación propuesta.</strong> Interesante para distribuir presupuesto en el cooker o en escenarios de cámara conocida. En un juego, una región poco visible hoy puede ser inspeccionada mañana: hay que separar calidad de renderizado y estabilidad de colisión. No sustituir el mallador runtime solo por una imagen de demostración más detallada.</p>
+<h3 id="sec-14">2.11 PaMO y CuACD — herramientas GPU especializadas</h3>
+<p><strong>Qué se verificó.</strong> PaMO trabaja en optimización de mallas con CUDA y declara AGPL-3.0. CuACD aborda descomposición convexa GPU y declara LGPL-2.1-or-later en el repositorio consultado; su anuncio se refiere a SIGGRAPH Asia 2026, no a un evento que esta revisión dé por celebrado. <a href="#p13">P13</a><a href="#p14">P14</a></p>
+<p><strong>Aplicación propuesta.</strong> Comparadores offline para reparación y colisión. No incluirlos como requisitos de ejecución, ni traducir benchmarks de sus autores a una promesa para nuestra escena. Licencias, NVIDIA/CUDA, dependencias y tolerancias hacen que sean experimentos separados de una ruta portable Diligent.</p>
+<h3 id="sec-15">2.12 Terrain Descriptors e Iso-Contours</h3>
+<p><strong>Qué se verificó.</strong> Terrain Descriptors propone análisis de formas del terreno; el trabajo de Iso-Contours trata autoría a partir de curvas de nivel. Sus fichas/páginas primarias fueron consultadas, no se ejecutaron implementaciones. <a href="#p17">P17</a><a href="#p18">P18</a></p>
+<p><strong>Aplicación propuesta.</strong> El primero puede inspirar métricas para evitar evaluar únicamente «se ve bonito». El segundo sirve como referencia de controles de autoría en zonas representables por altura. Ninguno sustituye la representación 3D necesaria para una cueva.</p>
+<h2 id="sec-16">3. Geología real: estructura antes que ruido</h2>
+<h3 id="sec-17">3.1 LoopStructural y GemPy</h3>
+<p>LoopStructural ofrece modelado implícito estructural con marcos geológicos y cronología; su proyecto declara MIT. GemPy también trabaja con geología implícita, contactos y orientaciones, pero declara EUPL-1.2. Son herramientas científicas Python, no bibliotecas runtime de videojuegos. <a href="#g01">G01</a><a href="#g02">G02</a><a href="#g03">G03</a></p>
+<p><strong>Propuesta.</strong> Utilizarlas como referencia conceptual o como oráculo offline para casos sencillos. Construir un pliegue, una falla y varias capas con datos conocidos; luego reproducir en Jerico el comportamiento que realmente necesitamos. El objetivo no es clonar todo un software geológico, sino dejar de tratar los estratos como bandas de color independientes de la forma.</p>
+<p>En particular, los controles de autoría deberían expresar orientación, espesor, continuidad, desplazamiento y orden de formación. Un ruido puede aportar variación, pero no debe destruir esas relaciones. El usuario del editor necesita entender qué cambió cuando mueve un control, no enfrentarse a veinte parámetros de ruido sin significado.</p>
+<h3 id="sec-18">3.2 pySimFrac: caras de fractura que se corresponden</h3>
+<p>pySimFrac, de LANL, genera y analiza superficies rugosas de fractura mediante métodos como síntesis espectral. Permite estudiar apertura, anisotropía y rugosidad; su código declara BSD-3-Clause. No es un solver de propagación de grietas. <a href="#g04">G04</a></p>
+<p><strong>Propuesta.</strong> Cuando se rompa una piedra, las dos caras deberían derivarse de una frontera compartida. Crear dos ruidos independientes puede generar piezas incompatibles. Probar una superficie común con apertura controlada, conservar la identidad del contacto y diferenciar la textura recién expuesta del exterior envejecido.</p>
+<h3 id="sec-19">3.3 dfnWorks: redes de fracturas, no «Voronoi = geología»</h3>
+<p>dfnWorks genera redes discretas de fracturas y tiene herramientas de flujo y transporte. Su archivo de licencia mezcla varios avisos y regímenes; no se clasifica aquí como dependencia permisiva ya aprobada. <a href="#g05">G05</a><a href="#g06">G06</a></p>
+<p><strong>Propuesta.</strong> Estudiar familias estadísticas de juntas finitas: distribución de tamaños, persistencia, espaciado e intersecciones. Un plano débil puede terminar dentro de la roca. Un corte infinito que atraviesa todas las capas produce bloques poco controlables y puede destruir macroformas que el diseñador quería conservar.</p>
+<h3 id="sec-20">3.4 Landlab y modelos de superficie</h3>
+<p>Landlab es un conjunto de componentes para estudiar procesos de superficie y evolución del paisaje, bajo MIT. Su función útil aquí es experimentar con transporte y erosión a escala de terreno, no resolver automáticamente cuevas volumétricas. <a href="#g07">G07</a></p>
+<p><strong>Propuesta.</strong> Mantenerlo fuera del runtime y usarlo para comprobar tendencias de deposición, pendiente y drenaje en escenas de prueba. Una herramienta científica ayuda a construir referencias, pero requiere elegir condiciones de contorno, unidades y resolución; no produce por sí sola un preset correcto para nuestro juego.</p>
+<h3 id="sec-21">3.5 Documentación geotécnica y vocabulario</h3>
+<p>La documentación de Itasca permite estudiar criterios de fallo y comportamiento de juntas, pero que sea accesible no hace gratuito su software ni da permiso para portar sus implementaciones. El capítulo abierto Physical Geology distingue fracturas, juntas, familias de juntas y fallas. <a href="#g08">G08</a><a href="#g09">G09</a><a href="#g10">G10</a></p>
+<p>Para Jerico propongo conservar esas distinciones. <strong>Una junta</strong> es una discontinuidad sin el desplazamiento relativo característico de una falla. <strong>Una falla</strong> necesita una dirección y magnitud de desplazamiento. <strong>Un estrato</strong> es una unidad de la formación, no necesariamente una superficie débil universal. Así los presets pueden ser expresivos sin fingir una simulación geotécnica validada.</p>
+<h2 id="sec-22">4. Bibliotecas: candidatas, no dependencias automáticas</h2>
+<p>La tabla indica qué problema conviene evaluar con cada herramienta. «Candidata nativa» significa que su función podría encajar en C++ o en el cooker; no significa que ya esté admitida ni que deba reemplazar código probado.</p>
+<h3 id="sec-23">4.1 Candidatas de geometría y matemática</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Recurso</th>
+<th>Qué aporta</th>
+<th>Ubicación propuesta</th>
+<th>Restricción o precaución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastNoiseLite — MIT</td>
+<td>Ruido, ruido celular y deformación de dominio en varios lenguajes.</td>
+<td>Campo procedural y pruebas CPU/HLSL.</td>
+<td>No demuestra equivalencia bit a bit entre implementaciones. <a href="#l01">L01</a></td>
+</tr>
+<tr>
+<td>FastNoise2 — MIT</td>
+<td>Evaluación de ruido mediante SIMD en CPU.</td>
+<td>Recetas offline y comparación de generación CPU.</td>
+<td>No es un backend GPU. <a href="#l02">L02</a></td>
+</tr>
+<tr>
+<td>Eigen — núcleo MPL-2.0</td>
+<td>Matrices, QR, SVD y solvers numéricos.</td>
+<td>Oráculo de referencia y herramientas.</td>
+<td>Revisar módulos/terceros; no reemplazar el QEF existente por costumbre. <a href="#l03">L03</a><a href="#l04">L04</a></td>
+</tr>
+<tr>
+<td>Manifold — Apache-2.0</td>
+<td>Booleanas sobre sólidos triangulados y propiedades asociadas.</td>
+<td>Cortes y herramientas offline sobre entradas válidas.</td>
+<td>Un plano abierto no es un sólido de entrada válido. <a href="#l05">L05</a></td>
+</tr>
+<tr>
+<td>geometry-central — MIT</td>
+<td>Operadores y estructuras para geometría de superficies.</td>
+<td>Curvatura, análisis y validación de mallas.</td>
+<td>Sus operaciones no equivalen a una geología completa. <a href="#l06">L06</a></td>
+</tr>
+<tr>
+<td>libigl — núcleo MPL-2.0</td>
+<td>Amplio repertorio de procesamiento geométrico.</td>
+<td>Prototipos, diagnósticos y cooker.</td>
+<td>Revisar licencias por módulo y dependencia. <a href="#l07">L07</a></td>
+</tr>
+<tr>
+<td>Geogram — BSD-3-Clause principal</td>
+<td>Predicados, teselaciones y operaciones geométricas.</td>
+<td>Herramientas robustas y experimentos de Voronoi.</td>
+<td>Elegir módulos; no añadir todo el paquete sin necesidad. <a href="#l08">L08</a><a href="#l09">L09</a></td>
+</tr>
+<tr>
+<td>Voro++ — licencia BSD con avisos</td>
+<td>Celdas Voronoi tridimensionales.</td>
+<td>Fragmentación offline y análisis de celdas.</td>
+<td>Divide espacio; no calcula por qué se rompe una roca. <a href="#l10">L10</a><a href="#l11">L11</a></td>
+</tr>
+<tr>
+<td>CGAL — por paquete</td>
+<td>Geometría computacional y construcciones robustas.</td>
+<td>Referencias u operaciones concretas del cooker.</td>
+<td>GPL/LGPL/comercial según paquete: no admitir «CGAL entero» sin revisar. <a href="#l12">L12</a></td>
+</tr>
+<tr>
+<td>meshoptimizer — MIT</td>
+<td>Simplificación, organización y compresión de mallas.</td>
+<td>LOD y preparación del producto final.</td>
+<td>Las regiones geológicas requieren protección y verificación explícitas. <a href="#l13">L13</a></td>
+</tr>
+<tr>
+<td>xatlas — MIT</td>
+<td>Parametrización UV.</td>
+<td>Bake high/low y materiales de superficies exportadas.</td>
+<td>Un atlas no sabe automáticamente qué corte revela cada material. <a href="#l14">L14</a></td>
+</tr>
+<tr>
+<td>CoACD — MIT en revisión consultada</td>
+<td>Descomposición convexa orientada a colisión.</td>
+<td>Proxies de fragmentos en cook.</td>
+<td>Calidad, número de piezas y costes deben medirse. <a href="#l15">L15</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-24">4.2 Herramientas que mantendría separadas inicialmente</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Recurso</th>
+<th>Papel útil</th>
+<th>Motivo para no convertirlo en núcleo ahora</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fidget — MPL-2.0</td>
+<td>Estudiar evaluación de expresiones implícitas, intervalos y simplificación.</td>
+<td>Rust y arquitectura propia; no es un componente C++/Diligent enchufable. <a href="#l18">L18</a></td>
+</tr>
+<tr>
+<td>OpenVDB / NanoVDB — Apache-2.0 actual</td>
+<td>Referencia de almacenamiento disperso e intercambio.</td>
+<td>La decisión anterior del proyecto no se revierte por encontrar otra referencia. Versiones históricas pueden tener otra licencia. <a href="#l19">L19</a><a href="#l20">L20</a></td>
+</tr>
+<tr>
+<td>NVIDIA Warp — Apache-2.0</td>
+<td>Prototipos de cálculo en CPU/CUDA desde Python.</td>
+<td>CUDA no traduce automáticamente a HLSL ni establece portabilidad a AMD. <a href="#l21">L21</a></td>
+</tr>
+<tr>
+<td>FEMFX — MIT</td>
+<td>Estudiar FEM tetraédrico, plasticidad y fractura.</td>
+<td>Es una biblioteca de CPU multihilo; integrarla sería un proyecto físico adicional. <a href="#l22">L22</a></td>
+</tr>
+<tr>
+<td>NVIDIA Blast</td>
+<td>Referencia de destrucción y separación de responsabilidades.</td>
+<td>Hay que revisar distribución, extensiones, licencia e interfaz concreta con Jolt. <a href="#l23">L23</a></td>
+</tr>
+<tr>
+<td>PaMO — AGPL-3.0</td>
+<td>Comparar remallado y simplificación GPU.</td>
+<td>Obligaciones de licencia, CUDA y compatibilidad del pipeline. <a href="#p13">P13</a></td>
+</tr>
+<tr>
+<td>CuACD — LGPL-2.1-or-later declarada</td>
+<td>Comparar preparación GPU de colisiones.</td>
+<td>Dependencia CUDA y licencia distinta de la revisión actual de CoACD. <a href="#p14">P14</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-25">4.3 Jolt: qué le entregamos y qué no le pedimos</h3>
+<p>La documentación actual de Jolt permite MeshShape dinámico con restricciones: no debe colisionar con otras mallas o heightfields y requiere masa e inercia suministradas. Además advierte de coste y ambigüedades interior/exterior. Por ello, para fragmentos que caen sobre una cueva triangulada, propongo <strong>convexos o compuestos convexos</strong>, no asumir que convertir cada malla visual a cuerpo dinámico resolverá la colisión. <a href="#l16">L16</a><a href="#l17">L17</a></p>
+<p>Jolt debería recibir la pieza ya definida, su proxy y sus propiedades. El sistema geológico decide qué pieza se desprende; la publicación coordina la retirada de su volumen original, la nueva colisión y su identidad persistente. La malla visual puede conservar más detalle que la colisión. Estas decisiones son propuestas de integración, no afirmaciones sobre lo que ya está implementado.</p>
+<h2 id="sec-26">5. Addons gratuitos y herramientas de autoría</h2>
+<p>No se probaron sus instalaciones en esta sesión. Las licencias de código, del programa anfitrión y de los assets deben revisarse por separado. Tener el repositorio abierto no permite deducir que todo archivo incluido sea reutilizable en Shipping.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Uso concreto propuesto</th>
+<th>Tipo de resultado y límite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cell Fracture</td>
+<td>Preparar ejemplos de fragmentación y comparar controles de corte.</td>
+<td>Geometría prefragmentada; no criterio físico de rotura. GPL-3.0-or-later. <a href="#a01">A01</a></td>
+</tr>
+<tr>
+<td>Hydra</td>
+<td>Probar erosión hidráulica/térmica, dureza y mapas de flujo.</td>
+<td>Convierte entradas a mapas de altura; no erosiona techos volumétricos. README declara MIT y avisa de otras posibles limitaciones. <a href="#a02">A02</a></td>
+</tr>
+<tr>
+<td>Sverchok</td>
+<td>Explorar matemáticas de geometría con nodos y obtener casos reproducibles.</td>
+<td>Laboratorio de Blender; no copiar todo su grafo al motor. GPL-3.0. <a href="#a03">A03</a></td>
+</tr>
+<tr>
+<td>Proc-Rock</td>
+<td>Comparar un flujo completo de roca, receta, PBR, exportación y LOD.</td>
+<td>Aplicación independiente; código GPL-3.0 y tratamiento de outputs explicado en su README. <a href="#a04">A04</a></td>
+</tr>
+<tr>
+<td>Blender-Rock-Generator</td>
+<td>Baseline sencillo de creación de rocas.</td>
+<td>MIT; el script puede limpiar la escena. Probar únicamente en archivo desechable. <a href="#a05">A05</a></td>
+</tr>
+<tr>
+<td>Infinigen Nature</td>
+<td>Examinar construcción procedural de escenas y assets naturales.</td>
+<td>Pipeline offline con Blender; BSD-3-Clause principal. No confundir toda Nature con la preview 2.0 orientada a interiores. <a href="#a06">A06</a><a href="#a07">A07</a></td>
+</tr>
+<tr>
+<td>Material Maker</td>
+<td>Crear materiales de roca, humedad, depósitos y máscaras de prueba.</td>
+<td>Herramienta MIT de materiales PBR; no produce por sí sola volumen rocoso. <a href="#a08">A08</a></td>
+</tr>
+<tr>
+<td>Ucupaint</td>
+<td>Pintar/desglosar capas de material para comparar contra nuestros campos.</td>
+<td>Addon GPL-3.0 de capas de textura; no genera estructura interna de roca. <a href="#a09">A09</a></td>
+</tr>
+<tr>
+<td>BlenderGIS</td>
+<td>Importar datos de elevación o contexto geográfico para exteriores.</td>
+<td>Los derechos de los datos se revisan aparte; licencia exacta de versión pendiente aquí. <a href="#a10">A10</a></td>
+</tr>
+<tr>
+<td>A.N.T. Landscape</td>
+<td>Baseline de terrenos de altura y ruido.</td>
+<td>Fuente histórica consultada; no se certifica compatibilidad con un Blender actual. <a href="#a11">A11</a></td>
+</tr>
+<tr>
+<td>ErosionTerrainGenerator</td>
+<td>Experimento adicional de heightfields.</td>
+<td>Ficha reciente de 2026, declara Blender 5.2+; licencia y funcionamiento por verificar. <a href="#a12">A12</a></td>
+</tr>
+<tr>
+<td>SideFX Labs</td>
+<td>Estudiar herramientas de assets, parámetros y preparación geométrica.</td>
+<td>Addons con licencia propia permisiva, pero necesitan Houdini; host separado. <a href="#a13">A13</a><a href="#a14">A14</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-27">Selección práctica para nuestras primeras comparaciones</h3>
+<p>Propongo empezar con <strong>Cell Fracture, Proc-Rock, Material Maker, Infinigen Nature y Hydra</strong>, asignando a cada uno una prueba distinta. No hace falta instalar doce programas para avanzar. Un recurso se mantiene solo si aporta un resultado medible o una idea concreta que nuestros controles aún no resuelven.</p>
+<p>Hydra solo entra en una comparación de altura/sedimento, no en la de techos o paredes interiores. Material Maker solo entra en materiales. Proc-Rock puede ser referencia del proceso de autoría, pero no demostración de geomecánica. Mantener estas categorías impide comparar productos incompatibles como si fueran versiones del mismo algoritmo.</p>
+<h3 id="sec-28">Houdini gratuito no equivale a producción comercial gratuita</h3>
+<p>Houdini Apprentice tiene restricciones no comerciales, de formatos y de integración con otras licencias/Engine. SideFX Labs no elimina esas condiciones del anfitrión. Puede estudiarse documentación pública de Houdini y sus herramientas, pero no se debe planear un flujo comercial gratuito basándose en Apprentice. <a href="#a15">A15</a></p>
+<h3 id="sec-29">Bibliotecas de assets para pruebas y acabados</h3>
+<p>Poly Haven y ambientCG ofrecen assets bajo CC0. Son útiles para materiales y comparaciones visuales, pero hay que leer qué abarca cada licencia: en Poly Haven no todo el sitio web está bajo la licencia de sus assets. <a href="#a16">A16</a><a href="#a17">A17</a></p>
+<p>Propuesta: escoger un pequeño conjunto fijo de materiales y referencias de roca, sin cambiarlo entre experimentos. Comparar en gris, con material neutral y con material final. Así se puede detectar una mejora geométrica real frente a una mejora que proviene únicamente de la iluminación o el albedo.</p>
+<h2 id="sec-30">6. Qué hacen otros motores: capacidades verificadas y límites</h2>
+<h3 id="sec-31">Unreal: no quedarse únicamente con Landscape</h3>
+<p>La ruta Landscape clásica trabaja con mapas de altura. Pero la documentación actual también describe <strong>Mesh Terrain experimental</strong>, con túneles, voladizos, paredes verticales, resolución variable y modificadores no destructivos. Epic diferencia las secciones de preview de las compiladas para runtime y advierte que la función es experimental. La página no basta para deducir su solver interno o una simulación geológica. <a href="#e01">E01</a><a href="#e02">E02</a></p>
+<p><strong>Lección propuesta para Jerico:</strong> mantener diferenciados documento editable, preview y producto cocinado. La geometría no necesita resolución uniforme y el diseñador debe poder revisar operaciones sin destruir la base. Esto respalda estudiar nuestro enfoque, no copiar implementación de Epic ni declarar equivalencia de capacidades.</p>
+<h3 id="sec-32">Unreal Chaos: geometría y relaciones entre piezas</h3>
+<p>Chaos documenta Geometry Collections, agrupaciones jerárquicas y conexiones entre fragmentos. Es una referencia de preparación y activación de destrucción. No demuestra por sí sola un material geológico calibrado con Mohr–Coulomb. <a href="#e03">E03</a></p>
+<p><strong>Lección propuesta:</strong> preparar una fragmentación que parezca pertenecer a la roca, conservar sus vínculos y activar únicamente lo afectado. El sistema de soporte debe poder existir sin simular permanentemente todo el macizo.</p>
+<h3 id="sec-33">Voxel Plugin: editar volumen no basta para tener derrumbes</h3>
+<p>La documentación de edición runtime enumera límites y separa escultura de funcionalidades como física automática de piezas flotantes. Su existencia evita concluir que todas las dificultades desaparecen con un terreno voxel. <a href="#e04">E04</a></p>
+<p><strong>Lección propuesta:</strong> una operación que borra terreno necesita contratos adicionales para detectar componentes, producir cuerpos, actualizar navegación y guardar cambios. El remallado es solo una etapa.</p>
+<h3 id="sec-34">Godot Voxel Tools: referencia abierta de arquitectura</h3>
+<p>El proyecto documenta terreno suave con SDF, Transvoxel y niveles de detalle, además de generadores por bloques y trabajo multihilo. Su código es MIT. No se deduce que todas sus operaciones sean GPU ni que sus tablas encajen directamente en Surface Nets. <a href="#e05">E05</a><a href="#e06">E06</a><a href="#e07">E07</a></p>
+<p><strong>Lección propuesta:</strong> estudiar invalidación, fronteras, persistencia de edición y reparto de trabajo. Es más útil mirar esos contratos que copiar un ruido atractivo de una captura.</p>
+<h3 id="sec-35">C4 Engine: el problema concreto de las costuras</h3>
+<p>La página de Transvoxel vincula el algoritmo con C4 y explica transiciones de resolución. Es un ejemplo de resolver explícitamente un problema de mallado, no de añadir simplemente más resolución a todo el terreno. <a href="#p16">P16</a></p>
+<p><strong>Lección propuesta:</strong> diseñar primero el contrato de frontera del mallador que ya tenemos. Adoptar transiciones de otro método solo después de demostrar su compatibilidad.</p>
+<h3 id="sec-36">Unity: distinguir el Terrain nativo del motor completo</h3>
+<p>El manual del Terrain nativo describe heightmaps. Eso limita esa representación a una altura por posición horizontal, pero no significa que Unity entero sea incapaz de alojar cuevas o mallas volumétricas creadas por otros sistemas. <a href="#e08">E08</a></p>
+<p><strong>Lección propuesta:</strong> usar heightfields donde funcionan y no forzarlos para una galería subterránea.</p>
+<h3 id="sec-37">Decima / Horizon Zero Dawn: colocación procedural</h3>
+<p>La charla oficial de Guerrilla de 2017 trata colocación GPU de elementos del mundo. Es evidencia de distribución procedural de assets, no de simulación de su formación geológica. No se extrapolan sus detalles al estado interno actual de Decima. <a href="#e09">E09</a></p>
+<p><strong>Lección propuesta:</strong> la formación principal y la población secundaria pueden ser problemas diferentes. Una pared volumétrica puede acompañarse de bloques e instancias, con selección y restricciones propias.</p>
+<h3 id="sec-38">No Man’s Sky: mundo continuo</h3>
+<p>La ficha oficial de la charla GDC de 2017 describe un pipeline de generación continua que incluye voxels, poligonización, texturizado y población. No se analizó íntegramente el video ni se atribuye aquí un mallador exacto no comprobado. <a href="#e10">E10</a></p>
+<p><strong>Lección propuesta:</strong> separar representación compacta, generación bajo demanda y producto visible. No confundir el tamaño del mundo con la necesidad de mantener toda su geometría activa.</p>
+<h3 id="sec-39">Houdini: preparación de assets, proxies y restricciones</h3>
+<p>Su documentación distingue fractura, restricciones entre piezas, geometría detallada y representaciones para simulación. Es una referencia de flujo de producción; el anfitrión no es una biblioteca gratuita de runtime para Jerico. <a href="#e11">E11</a></p>
+<p><strong>Lección propuesta:</strong> conservar detalle visual fuera del proxy físico y hacer explícita la relación entre ambos. Un buen asset roto necesita interiores, materiales, colisión y estado persistente, no solamente polígonos nuevos.</p>
+<h3 id="sec-40">Lo que no se pudo verificar con suficiente detalle</h3>
+<p>No se documentan aquí supuestos algoritmos internos de Teardown, Deep Rock Galactic o versiones actuales de CryEngine sin una fuente primaria suficiente. Tampoco se presenta un catálogo de motores como prueba de que ninguno tenga capacidades adicionales. El alcance es lo que sus fuentes concretas permiten afirmar.</p>
+<h2 id="sec-41">7. Modelo matemático propuesto para Jerico</h2>
+<p>Esta sección es una <strong>síntesis de diseño</strong>, no una especificación aprobada, un port de los proyectos citados o una descripción de código que se haya auditado. Las ecuaciones definen experimentos y responsabilidades; faltan implementaciones, tolerancias y pruebas antes de declararlas productivas.</p>
+<h3 id="sec-42">7.1 No almacenar todo dentro de una única distancia</h3>
+<p>Un modelo lógico mínimo puede distinguir:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Campo o descriptor</th>
+<th>Significado propuesto</th>
+<th>Almacenamiento inicial aconsejado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>φ(x)</td>
+<td>Límite del sólido; negativo en el interior.</td>
+<td>Expresión procedural y muestras del dominio que ya use Jerico.</td>
+</tr>
+<tr>
+<td>s(x)</td>
+<td>Coordenada estratigráfica.</td>
+<td>Función derivada de la receta; no necesariamente otra textura 3D.</td>
+</tr>
+<tr>
+<td>L(x)</td>
+<td>Unidad geológica o fase material.</td>
+<td>Clasificación analítica / ID de región.</td>
+</tr>
+<tr>
+<td>J(x)</td>
+<td>Familias de juntas, límites y persistencia.</td>
+<td>Descriptores compactos; muestras solo donde sean necesarias.</td>
+</tr>
+<tr>
+<td>R(x)</td>
+<td>Durabilidad ante un operador de desgaste.</td>
+<td>Parámetro por material y variación de baja frecuencia.</td>
+</tr>
+<tr>
+<td>D(x)</td>
+<td>Daño o debilitamiento cuando el gameplay lo requiere.</td>
+<td>Estado local, no un volumen mundial siempre activo.</td>
+</tr>
+<tr>
+<td>A(x)</td>
+<td>Anclaje, protección o pertenencia a espacio reservado.</td>
+<td>Autoridad semántica del proyecto; no ruido generado aparte.</td>
+</tr>
+</tbody>
+</table></div>
+<p>La decisión importante es que la misma capa que aparece en un corte sirva para materiales y para propiedades de desgaste. No tener una versión de los estratos en el shader, otra en la geometría y otra en Damage. PhaseTree y los modelos estructurales motivan estudiar esta separación, pero el contrato concreto sería propio de Jerico. <a href="#p01">P01</a><a href="#g01">G01</a></p>
+<h3 id="sec-43">7.2 Deformación compartida y estratos coherentes</h3>
+<p>Una prueba sencilla usa una deformación común:</p>
+<pre><code class="language-text">q = W(x)
+s(x) = n · q
+</code></pre>
+<p><code>W</code> deforma la formación y <code>n</code> orienta el sistema inicial de capas. Las fronteras no se inventan después con un ruido independiente para cada banda. Una forma de preservar orden en las coordenadas locales es acumular espesores positivos:</p>
+<pre><code class="language-text">b₀ = referencia
+bᵢ₊₁(u,v) = bᵢ(u,v) + tᵢ(u,v)
+tᵢ(u,v) = t_min + t_ref · exp(aᵢ(u,v))
+</code></pre>
+<p>Con t_ref positivo y expresado en unidades de longitud, y aᵢ adimensional, esto evita espesores negativos por construcción en ese sistema de coordenadas. No garantiza por sí solo que una deformación espacial extrema sea inyectiva: <code>W</code> también necesita límites o validación. Si se pliega hasta invertir espacio, la fórmula de espesores no lo arregla.</p>
+<p>Para un control artístico más directo puede usarse otra transformación positiva; el exponencial es un ejemplo, no una obligación. Una variación de baja frecuencia compartida mantiene correlación entre capas, mientras cada capa añade una variación secundaria limitada.</p>
+<h3 id="sec-44">7.3 Las normales deben seguir la transformación</h3>
+<p>Cuando una función se evalúa en un dominio deformado, su gradiente debe ser coherente con esa transformación. En notación compacta:</p>
+<pre><code class="language-text">∇x f(W(x)) = J_W(x)ᵀ · ∇q f(q)
+</code></pre>
+<p>Un ruido que deforma la forma sin actualizar correctamente la orientación puede entregar normales inconsistentes al mallado. Además, una composición deformada no conserva automáticamente la propiedad de distancia euclídea. Si un algoritmo depende de una distancia verdadera o de una cota de Lipschitz, hay que restaurarla, acotarla o cambiar el supuesto.</p>
+<p><strong>Prueba propuesta:</strong> plano deformado con gradiente analítico conocido frente a diferencia finita en varias resoluciones. La tolerancia debe separar error de muestreo y error de derivación.</p>
+<h3 id="sec-45">7.4 Fallas y cronología</h3>
+<p>Representar una falla con una superficie divisoria y un desplazamiento aplicado a las unidades que existían antes. El orden es parte de la receta. Una unidad depositada después no tiene por qué sufrir la misma deformación histórica.</p>
+<p>Conviene distinguir desplazamiento y apertura. Mover ambos lados de una falla no obliga a introducir una grieta de aire visible. En la autoría pueden existir contactos cerrados, cambios de material o desplazamientos que solo se observan porque una capa deja de coincidir.</p>
+<p><strong>Prueba propuesta:</strong> tres capas, falla oblicua y veta posterior. Comprobar continuidad de la veta posterior y desplazamiento de las capas anteriores. No imponer esta cronología al gameplay sin controles que el diseñador pueda comprender.</p>
+<h3 id="sec-46">7.5 Familias de juntas finitas</h3>
+<p>Para una familia de planos idealizados:</p>
+<pre><code class="language-text">pₖ(x) = nₖ · x − dₖ
+</code></pre>
+<p>El descriptor completo necesita orientación 3D, espaciamiento, dispersión angular, extensión, persistencia y relación con materiales. Un único ángulo no describe una orientación 3D completa. La persistencia debe limitar el parche de fractura, no únicamente atenuar su color.</p>
+<p>Distinguir tres estados: discontinuidad cerrada, superficie debilitada y grieta abierta. Solo el tercero exige representar un hueco o una separación de caras; abrir una grieta no implica necesariamente eliminar masa. Es una diferencia fundamental para conservar bloques conectados y evitar que una roca se convierta inmediatamente en un rompecabezas de piezas separadas.</p>
+<p><strong>Prueba propuesta:</strong> una junta se detiene dentro de una pared y otra atraviesa un borde. El resultado debe depender de su geometría declarada, no del tamaño de bloque usado para evaluarla.</p>
+<h3 id="sec-47">7.6 Voronoi condicionado, con límites matemáticos claros</h3>
+<p>Voronoi puede proponer particiones internas cuando la estructura no define todas las piezas. Una extensión con métrica común es:</p>
+<pre><code class="language-text">dᵢ(x) = (x − cᵢ)ᵀ M (x − cᵢ) − wᵢ
+</code></pre>
+<p>Con una matriz positiva definida <code>M</code> común, una transformación de coordenadas permite orientar o estirar el patrón. Los pesos <code>wᵢ</code> corresponden a una variante de partición ponderada. Esto no significa que toda biblioteca Voronoi admita cualquier formulación; hay que comprobar su API.</p>
+<p>Si se da una matriz diferente a cada celda, las fronteras pueden dejar de ser planas. No debe anunciarse esa generalización como una simple llamada a Voro++. Propongo comenzar con un marco común por región y clips por juntas existentes.</p>
+<p>Los puntos de partición deben ser estables bajo cambios ajenos a la región. Un ID de receta y un identificador espacial estable son mejores entradas para una semilla que el índice actual de una lista que cambia al editar.</p>
+<h3 id="sec-48">7.7 Superficies de fractura compartidas</h3>
+<p>Generar una frontera común <code>F(x)=0</code> para las dos piezas y derivar apertura o separación de esa frontera. El ruido superficial debe tener escalas y amplitudes limitadas para no crear autointersecciones ni delgadas agujas imposibles de colisionar.</p>
+<p>La superficie recién expuesta recibe un marcador de procedencia. Su material puede consultarse en las coordenadas geológicas originales y después recibir un desgaste propio con el tiempo. Eso evita mapear el aspecto viejo del exterior en todas las caras nuevas.</p>
+<p>La rugosidad visual fina puede ir a normales o desplazamiento de render, mientras el proxy conserva una forma más simple. pySimFrac es una referencia para investigar correlación y apertura, no una autorización para suponer fractura dinámica físicamente resuelta. <a href="#g04">G04</a></p>
+<h3 id="sec-49">7.8 Booleanas SDF: no es una resta aritmética</h3>
+<p>Adoptando interior negativo, una diferencia volumétrica se expresa para el signo y la superficie como:</p>
+<pre><code class="language-text">φ_resultado(x) = max(φ_roca(x), −φ_corte(x))
+</code></pre>
+<p>No como <code>φ_roca − φ_corte</code>. Incluso si los operandos son distancias exactas, las composiciones CSG no garantizan una distancia euclídea exacta en todo el dominio. Para operaciones que usan magnitudes métricas, gradientes o curvatura hay que revisar ese supuesto.</p>
+<p>Un plano sin espesor no es automáticamente una grieta abierta. Puede representar una discontinuidad, pero separar material mediante sustracción requiere un volumen de corte definido. La elección afecta pérdida de masa, compatibilidad de las piezas y detectabilidad a la resolución actual.</p>
+<h3 id="sec-50">7.9 Desgaste guiado por material y exposición</h3>
+<p>Como experimento de autoría, separar al menos desgaste de convexidades, excavación de material débil y acumulación. Una combinación artística puede consultar durabilidad, orientación y exposición, siempre marcada como regla visual hasta calibrarla.</p>
+<p>La curvatura puede estimarse a partir de la normal:</p>
+<pre><code class="language-text">n = ∇φ / ||∇φ||
+κ = div(n)
+</code></pre>
+<p>Aquí <code>κ</code> usa la convención de suma de curvaturas principales. Cerca de gradientes degenerados y discontinuidades hay que regularizar, limitar la actualización o usar un tratamiento específico. No aplicar indiscriminadamente un suavizado para «estabilizar» si elimina precisamente las esquinas que queremos conservar.</p>
+<p>Una formulación de evolución de superficie puede escribirse <code>∂φ/∂t + v_n ||∇φ|| = 0</code>. Introducirla exige definir signos, pasos estables y condiciones de contorno. Para el primer experimento puede ser más razonable un operador acotado y repetible que un solver completo presentado como físicamente fiel.</p>
+<h3 id="sec-51">7.10 Erosión superficial no es erosión 3D</h3>
+<p>Un heightfield representa una altura por columna. Puede describir suelo, depósitos sobre pendientes y drenaje en ciertos dominios. No puede representar simultáneamente suelo y techo de una cueva en la misma columna sin extender su representación.</p>
+<p>Por eso propongo una estrategia híbrida explícita: el macizo conserva representación volumétrica; los depósitos sobre una superficie elegible pueden usar una representación superficial; el resultado debe reintegrarse con límites claros. La pérdida de material y la deposición no se conservan automáticamente al cambiar de representación: debe existir una contabilidad o se declara efecto artístico.</p>
+<p>En ningún caso se debe conectar directamente un mapa de altura a toda pared arbitraria y llamarlo «hidráulica volumétrica». Hydra y MultiScaleErosion son referencias útiles precisamente cuando se respeta su dominio. <a href="#a02">A02</a><a href="#p06">P06</a></p>
+<h3 id="sec-52">7.11 Mohr–Coulomb: criterio no equivale a solver</h3>
+<p>Con compresión positiva, una formulación ilustrativa de un contacto es:</p>
+<pre><code class="language-text">t = σ · n
+σ_n = n · t
+τ = ||t − σ_n n||
+σ'_n = σ_n − u
+τ_límite = c + σ'_n tan(θ)     para la rama compresiva
+</code></pre>
+<p><code>σ</code> es el tensor de tensiones, <code>u</code> la presión de poro, <code>c</code> la cohesión y <code>θ</code> el ángulo de fricción. La apertura por tracción necesita un criterio separado. No se deben mezclar convenciones de signo ni usar la ecuación de fricción como una resistencia universal para cualquier estado. La documentación de Itasca permite estudiar esas distinciones. <a href="#g08">G08</a><a href="#g09">G09</a></p>
+<p>Si Jerico solo calcula distancia a un impacto o un valor de desgaste, no dispone de <code>σ</code>. Puede usar una regla de rotura artística, pero no debería llamarla solución Mohr–Coulomb. Un grafo que detecta falta de soporte tampoco resuelve automáticamente redistribución de tensiones.</p>
+<p><strong>Prueba física mínima:</strong> bloque sobre plano inclinado con unidades y cargas conocidas. Una prueba de funcionamiento del código no certifica estabilidad real de una mina, ni este sistema debe usarse para decisiones de ingeniería.</p>
+<h3 id="sec-53">7.12 Mallado y preservación de características</h3>
+<p>Un ajuste de Hermite puede plantearse como:</p>
+<pre><code class="language-text">E(v) = Σᵢ aᵢ [nᵢ · (v − pᵢ)]²
+</code></pre>
+<p><code>pᵢ</code> son intersecciones, <code>nᵢ</code> normales y <code>aᵢ</code> pesos. Hay que controlar condicionamiento, ubicación de la solución y desacuerdos entre muestras. Las pruebas deben distinguir geometría y shading. Una normal bonita no repara una esquina físicamente redondeada. La referencia histórica es Dual Contouring, no una promesa de que cualquier variante de un vértice por celda conserve cualquier detalle. <a href="#p15">P15</a></p>
+<p>Una capa más fina que la rejilla, dos componentes dentro de una celda o una intersección de varias fases pueden requerir refinamiento o una representación distinta. No se solucionan únicamente elevando el peso de una normal. Tampoco «cerrada» significa por sí sola ausencia de autointersecciones o buen comportamiento físico.</p>
+<h3 id="sec-54">7.13 Invalidación y remallado local</h3>
+<p>La región dirty no es necesariamente el conjunto exacto de voxels editados. Cada operador declara su alcance: filtros necesitan vecinos; gradientes necesitan estencils; una modificación de semilla puede afectar toda su región; la conectividad puede atravesar bloques.</p>
+<p>Propuesta: calcular invalidación a partir de dependencias y ampliar por los márgenes necesarios. La publicación no debería aceptar un bloque nuevo con fronteras calculadas contra vecinos de otra revisión. Si la implementación actual aún reconstruye todo, la optimización local sigue siendo un trabajo por demostrar, no una capacidad atribuida por esta investigación.</p>
+<h3 id="sec-55">7.14 Fragmentos, soporte y activación física</h3>
+<p>Un grafo de soporte puede representar piezas y contactos. Al romperse vínculos, se buscan componentes sin anclaje. Es un mecanismo de gameplay útil, pero no una solución completa de elasticidad ni de fractura continua.</p>
+<p>La transición propuesta es transaccional: generar candidato, validar geometría, preparar proxy, asegurar IDs y solo entonces publicar retirada y aparición de la pieza. Mientras la preparación falla o se cancela, conservar el estado anterior. Separar descaradamente primero y resolver la colisión después puede crear huecos temporales o cuerpos inconsistentes.</p>
+<p>Las piezas pequeñas pueden usar un presupuesto simplificado o quedar como decoración; las piezas relevantes reciben simulación. Debe decidirse explícitamente qué interacción permite cada categoría y qué se persiste al guardar la partida.</p>
+<h2 id="sec-56">8. Rendimiento, memoria y portabilidad</h2>
+<p>Todas las cantidades siguientes son razonamientos de presupuesto, no mediciones del motor. No hay una promesa de milisegundos ni de porcentaje de mejora.</p>
+<h3 id="sec-57">8.1 Coste de un volumen denso</h3>
+<p>Un canal de 32 bits ocupa, sin compresión ni márgenes:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Resolución</th>
+<th style="text-align:right">Muestras</th>
+<th style="text-align:right">Un canal</th>
+<th style="text-align:right">Seis canales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128³</td>
+<td style="text-align:right">2.097.152</td>
+<td style="text-align:right">8 MiB</td>
+<td style="text-align:right">48 MiB</td>
+</tr>
+<tr>
+<td>256³</td>
+<td style="text-align:right">16.777.216</td>
+<td style="text-align:right">64 MiB</td>
+<td style="text-align:right">384 MiB</td>
+</tr>
+</tbody>
+</table></div>
+<p>No incluye dobles buffers, halos, normales, vértices, índices, listas temporales, colisión ni copias CPU/GPU. Este cálculo explica por qué «añadamos un campo para cada cosa» necesita una política de almacenamiento. Muchos descriptores deberían evaluarse desde la receta, cuantizarse o almacenarse solo en bloques relevantes.</p>
+<h3 id="sec-58">8.2 Tres escalas de detalle</h3>
+<p>Propongo <strong>macroforma</strong>, <strong>estructura visible</strong> y <strong>microdetalle</strong>. La macroforma controla paso, silueta y masa. La estructura visible incluye estratos, juntas y desprendimientos. El microdetalle puede ir a materiales o a una representación localizada. Es una asignación de presupuesto, no una regla universal de distancia fija.</p>
+<p>Para decidir dónde generar geometría, considerar tamaño en pantalla y efecto sobre colisión/interacción. Un hueco minúsculo visual puede ser irrelevante para física; una abertura pequeña que permite al jugador pasar tiene otra importancia. Mantener políticas separadas pero coherentes.</p>
+<h3 id="sec-59">8.3 Medir toda la cadena</h3>
+<p>Registrar por separado evaluación del campo, transferencias, extracción, reparación, simplificación, UV/bake, cook de colisión, subida, publicación y memoria máxima. Un kernel más rápido no garantiza un editor más responsivo si aumenta el readback o bloquea la creación de colisión.</p>
+<p>Comparar semillas, cámaras, resolución y geometría equivalentes. Medir tiempos típicos y colas lentas, además de cancelación y recuperación. Una captura estática y una compilación correcta no demuestran fluidez, ausencia de pausas o menor coste total.</p>
+<h3 id="sec-60">8.4 CUDA no es Diligent</h3>
+<p>Los proyectos CUDA son buenos comparadores de algoritmos, pero no establecen que nuestra implementación deba exigir NVIDIA. Para una ruta portable hay que rediseñar recursos, reducciones, atomics, sincronización y límites según el backend real.</p>
+<p>Tampoco suponer que usar compute implica una cola asíncrona separada o solapamiento gratuito con gráficos. La evaluación de GPU y la semántica de publicación deben respetar el estado real de Jerico. La ruta CPU puede seguir siendo útil para oráculos pequeños, servidores de cook o hardware diferente.</p>
+<h3 id="sec-61">8.5 Determinismo y estabilidad de autoría</h3>
+<p>Hay varias exigencias distintas: mismo resultado conceptual, resultados dentro de tolerancia, misma topología y reproducibilidad bit a bit. No declarar todas por comprobar solamente una semilla repetida en la misma GPU.</p>
+<p>Propuesta: versionar receta, operadores y política de muestreo. Generar identidades estables a partir de la formación y de coordenadas/IDs permanentes, no del orden accidental de evaluación. Preservar IDs de región aunque cambie la malla visible; un índice de triángulo no es una identidad geológica durable.</p>
+<h2 id="sec-62">9. Integración propuesta sin crear un segundo motor de geología</h2>
+<p>El objetivo es enriquecer contratos existentes, no abrir otro registro de entidades, otro sistema de mutación u otro cooker independiente.</p>
+<h3 id="sec-63">9.1 Documento editable</h3>
+<p>La receta conserva unidades, orden de operaciones, parámetros, semilla, referencias al BSP y restricciones. El autor puede pedir pared, roca aislada o formación compleja, pero el significado del espacio protegido no debe perderse al pasar por una deformación.</p>
+<p>La historia geológica es una parte del documento. La ejecución puede optimizarse o fusionarse internamente, siempre que preserve el resultado y los límites declarados. «Reordenar para acelerar» no puede cambiar una falla anterior por una posterior sin invalidar la equivalencia.</p>
+<h3 id="sec-64">9.2 Preview</h3>
+<p>La vista previa puede usar menor resolución y trabajo cancelable. Debe indicar diferencias relevantes respecto al producto final. Si una capa es demasiado fina para el preview, no ocultar el problema con un material que sugiera una geometría que todavía no existe.</p>
+<p>Mantener las variantes temporales como candidatos. Aplicar debe ser una operación deliberada y reversible. Cancelar no debería dejar regiones, cuerpos o materiales parcialmente actualizados.</p>
+<h3 id="sec-65">9.3 Cook y publicación</h3>
+<p>El cook valida geometría, genera LOD/proxies y produce metadatos para consumidores. Cada salida conserva procedencia: formación, unidad geológica, operación que la creó y clasificación de cara exterior/interior cuando corresponda.</p>
+<p>La publicación consulta una revisión del documento y rechaza candidatos obsoletos. Deshacer debe restituir conjuntamente geometría, colisión y estado asociado, sin una ruta alternativa de mutación que evite las transacciones normales del editor.</p>
+<h3 id="sec-66">9.4 Materiales, navegación y gameplay</h3>
+<p>Los materiales reciben información geológica; no necesitan redescubrirla con otro ruido. La navegación se invalida según cambios relevantes de colisión/paso. Audio y partículas pueden responder a tipos de superficie y ruptura, pero no deben forzar a simular todos los granos.</p>
+<p>Save/load necesita registrar las decisiones persistentes: fractura aplicada, fragmento separado, daño que cambia interacciones. No guardar toda caché derivable por defecto. La política exacta debe respetar los contratos vigentes del proyecto y revisarse antes de cualquier cambio.</p>
+<h3 id="sec-67">9.5 Keep-clear y libertad artística</h3>
+<p>El diseñador debe poder deformar paredes sin invadir un corredor reservado, tapar una puerta o reducir la altura libre de una sección jugable. Los controles deben mostrar cuándo una operación fue limitada y por qué; no esconder recortes que dificulten interpretar el resultado.</p>
+<p>Conviene probar restricciones sobre el volumen final, no solo sobre centros de objetos. Un bloque colocado fuera del camino puede invadirlo con una esquina. Del mismo modo, una textura no puede certificar que un túnel tenga el espacio necesario.</p>
+<h2 id="sec-68">10. Plan de experimentos por etapas</h2>
+<p>No son nuevos slices aprobados: son candidatos de investigación ordenados por dependencia. Cada etapa termina en una decisión sustentada por resultados, no en una lista de código añadido.</p>
+<h3 id="sec-69">Etapa A — estructura interna y controles</h3>
+<p>Construir escenas pequeñas con deformación compartida, espesores positivos, desplazamiento de capas, juntas finitas y materiales interiores. Reutilizar el evaluador y el mallador existentes. Elegir una representación compacta antes de asignar texturas 3D adicionales.</p>
+<p><strong>Salida esperada:</strong> rocas que mantengan estructura después de cortar y variar parámetros. <strong>Condición de avance:</strong> capturas neutrales, medición de desviación geométrica y consistencia de regiones. <strong>No incluye:</strong> solver de tensiones, hidráulica completa o nuevo mallador por defecto.</p>
+<h3 id="sec-70">Etapa B — desgaste controlado y acumulación</h3>
+<p>Comparar desgaste uniforme y dirigido por durabilidad. Introducir un efecto por vez, con volumen y límites medidos. Separar depósitos superficiales de cavidades volumétricas. La acumulación puede empezar como una regla visual explícita, no como conservación física proclamada.</p>
+<p><strong>Salida esperada:</strong> diferencia visible entre unidades resistentes y débiles sin destruir macroforma ni espacio jugable. <strong>Condición de avance:</strong> comportamiento estable al cambiar resolución dentro del rango declarado y operadores cancelables.</p>
+<h3 id="sec-71">Etapa C — piezas y soporte</h3>
+<p>Generar pocos fragmentos con fronteras compartidas e interiores coherentes. Preparar proxies y activar cuerpos únicamente después de validar la transacción. Empezar con una pieza que se desprende de una pared y con un bloque de techo, no con una mina completa en simulación.</p>
+<p><strong>Salida esperada:</strong> geometría, material, colisión y guardado coinciden tras rotura. <strong>Condición de avance:</strong> ausencia de duplicación/pérdida accidental de piezas, IDs estables y test de recuperación ante cook fallido.</p>
+<h3 id="sec-72">Etapa D — referencias científicas y GPU especializadas</h3>
+<p>Solo cuando exista un problema concreto: comparar métodos de transporte, modelos de soporte más ricos, prefractura física o preparación GPU de colisión. Mantener prototipos CUDA/Python separados hasta demostrar beneficio, portabilidad o una razón válida para limitar su uso al cooker.</p>
+<p><strong>Salida esperada:</strong> informe A/B con coste total y mejora del resultado. <strong>Condición de avance:</strong> la herramienta resuelve una carencia real y supera una alternativa más sencilla. <strong>No incluye automáticamente:</strong> convertir Jerico en FEM/DEM geotécnico ni importar todas las dependencias de un paper.</p>
+<h2 id="sec-73">11. Banco de pruebas propuesto</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Prueba</th>
+<th>Escena / operación</th>
+<th>Evidencia necesaria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estratos</td>
+<td>Capas planas y de espesor variable.</td>
+<td>Espesores positivos, orden preservado y continuidad en cortes.</td>
+</tr>
+<tr>
+<td>Pliegue</td>
+<td>Deformación común progresiva.</td>
+<td>Normales coherentes, sin inversión de dominio dentro del rango admitido.</td>
+</tr>
+<tr>
+<td>Falla cronológica</td>
+<td>Capas anteriores y veta posterior.</td>
+<td>El desplazamiento afecta solo a las unidades previstas.</td>
+</tr>
+<tr>
+<td>Junta finita</td>
+<td>Fractura que termina dentro de la roca.</td>
+<td>No se convierte en un plano infinito por límites de bloque.</td>
+</tr>
+<tr>
+<td>Junta cerrada</td>
+<td>Debilitamiento sin abertura.</td>
+<td>No aparecen huecos ni componentes separados antes de la apertura.</td>
+</tr>
+<tr>
+<td>Corte</td>
+<td>Bloque con varias unidades materiales.</td>
+<td>Interior nuevo clasificado con la misma geología.</td>
+</tr>
+<tr>
+<td>Hermite</td>
+<td>Caja y plano oblicuo.</td>
+<td>Error geométrico, ángulos y normales medidos por separado.</td>
+</tr>
+<tr>
+<td>Subvoxel</td>
+<td>Lámina delgada y dos componentes próximos.</td>
+<td>Diagnóstico explícito cuando la representación no los resuelve.</td>
+</tr>
+<tr>
+<td>Fronteras</td>
+<td>Grieta que cruza chunks y niveles de detalle.</td>
+<td>Sin costuras; mismo resultado bajo distintos órdenes de evaluación admitidos.</td>
+</tr>
+<tr>
+<td>Desgaste</td>
+<td>Convexidad, concavidad y estratos resistentes.</td>
+<td>Variación prevista, volumen perdido y bordes conservados.</td>
+</tr>
+<tr>
+<td>Depósito</td>
+<td>Suelo con obstáculos y espacio de paso protegido.</td>
+<td>No invasión de keep-clear; masa declarada si se promete conservación.</td>
+</tr>
+<tr>
+<td>Fractura pareada</td>
+<td>Dos piezas con rugosidad común.</td>
+<td>Ausencia de solapamientos inesperados, apertura controlada e interiores correctos.</td>
+</tr>
+<tr>
+<td>Soporte</td>
+<td>Retirada de un anclaje y ruptura de un vínculo.</td>
+<td>Se activan solo componentes previstos; no se afirma cálculo de tensiones.</td>
+</tr>
+<tr>
+<td>Colisión</td>
+<td>Fragmentos cayendo sobre malla de cueva.</td>
+<td>Proxies válidos, sin pares de colisión no soportados, masa/inercia coherentes.</td>
+</tr>
+<tr>
+<td>LOD</td>
+<td>Cámara próxima/lejana sobre contactos materiales.</td>
+<td>Silueta y regiones protegidas; transiciones sin saltos inadmisibles.</td>
+</tr>
+<tr>
+<td>Transacción</td>
+<td>Cancelar, deshacer y cambiar receta durante un cook.</td>
+<td>No se publica un candidato obsoleto ni un estado parcial.</td>
+</tr>
+<tr>
+<td>Persistencia</td>
+<td>Guardar, recargar y regenerar.</td>
+<td>Misma identidad y estado; precisión de determinismo especificada.</td>
+</tr>
+<tr>
+<td>Rendimiento</td>
+<td>Misma escena, semilla y resolución en variantes.</td>
+<td>CPU/GPU por etapa, memoria pico y latencia de edición/cancelación.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-74">No confundir clases de verificación</h3>
+<p><strong>Compila:</strong> solo prueba que ese build se pudo generar. <strong>Corre:</strong> añade evidencia de ejecución, no de corrección geométrica. <strong>Se ve bien:</strong> necesita contexto de cámara, iluminación y comparación. <strong>Es más rápido:</strong> exige mediciones equivalentes y repetidas. <strong>Es físicamente fiel:</strong> requiere modelos, unidades y validación adicional. Ninguna etiqueta sustituye a las demás.</p>
+<p>Para cada experimento guardar receta, revisión, parámetros, capturas originales y métricas. Si se modifica el mallador y el material a la vez, una mejor imagen no permite atribuir la mejora. Cambiar una variable por comparación facilita encontrar la causa.</p>
+<h2 id="sec-75">12. Decisiones que evitaría</h2>
+<p>No reemplazar Surface Nets/Hermite por un método nuevo antes de aislar un defecto que el actual no pueda resolver. No convertir una necesidad de roca más convincente en una dependencia inmediata de FEM, DEM o CUDA. No reintroducir OpenVDB sin una nueva decisión explícita y un caso de coste/beneficio.</p>
+<p>No llamar «erosión 3D» a un addon que proyecta todo sobre altura. No afirmar que Voronoi produce física real de fractura. No usar un valor escalar de impacto como si fuese un tensor de tensiones. No tratar una malla cerrada como garantía completa de validez o de buena colisión.</p>
+<p>No generar todos los microporos como triángulos ni hacer dinámicas todas las piedras decorativas. No duplicar la autoridad de estratos entre shaders, geometría y Damage. No introducir otro sistema de transacciones para un prototipo que después no pueda deshacerse o cocinarse por las rutas normales.</p>
+<p>No usar un benchmark de una RTX 4090, A100 o escena de paper como presupuesto propio de Jerico. No presentar una licencia permisiva de un repositorio como permiso universal para sus datos, modelos, assets o dependencias. No equiparar «gratis» con «adecuado», ni «comercial» con «técnicamente inferior».</p>
+<h2 id="sec-76">13. Licencias, mantenimiento y admisión</h2>
+<p>La tabla de recursos es un filtro inicial, no una revisión jurídica. Antes de añadir una dependencia debe fijarse una revisión o versión, conservar avisos y comprobar archivos de terceros. La rama principal puede cambiar; las condiciones observadas hoy no describen necesariamente una release anterior o futura.</p>
+<p>En particular, OpenVDB publica actualmente Apache-2.0 y una nota de relicenciamiento; no corresponde repetir sin comprobar que todo OpenVDB es MPL-2.0. CoACD y CuACD tampoco deben agruparse bajo una sola licencia por similitud de nombre. <a href="#l20">L20</a><a href="#l15">L15</a><a href="#p14">P14</a></p>
+<p>GPL o AGPL no significan «prohibido vender». Significan que hay obligaciones que deben evaluarse según cómo se use, modifique y distribuya el componente. Ejecutar una herramienta para producir un asset y copiar su implementación al motor son decisiones distintas; los outputs y contenidos incrustados pueden tener condiciones propias. Para cualquier caso dudoso debe revisarse el texto aplicable y obtener asesoramiento antes de distribuir.</p>
+<h3 id="sec-77">Ficha mínima antes de admitir una dependencia</h3>
+<p>Registrar versión/commit, licencia principal y terceros, propósito exacto, lugar de ejecución, plataformas, costes de build, vulnerabilidades/mantenimiento revisados, tamaño añadido y prueba de salida. Añadir un plan de sustitución cuando el recurso sea experimental.</p>
+<p>Una dependencia que solo se necesita para comparar un resultado puede vivir fuera del producto. Una que genera assets durante cook no tiene necesariamente que enviarse con el juego. La decisión se hace explícita en el contrato del proyecto, no por accidente del sistema de compilación.</p>
+<h2 id="sec-78">14. Propuesta concreta de prioridad</h2>
+<p><strong>Primero: estructura.</strong> Formación con deformación compartida, capas de espesor controlado, juntas finitas y contactos materiales que sobreviven al corte. Es el trabajo que más directamente conecta apariencia, autoría y destrucción futura.</p>
+<p><strong>Después: desgaste que entiende esa estructura.</strong> Comparar operadores acotados sobre la geometría existente. Mantener por separado el desgaste de la superficie y el comportamiento de depósitos. No introducir física completa para resolver una mejora visual local.</p>
+<p><strong>Luego: separación de piezas con estado coherente.</strong> Fronteras compartidas, materiales interiores, vínculos, proxies y publicación transaccional. El beneficio debe verse en una galería pequeña antes de extenderlo a una mina.</p>
+<p><strong>Más adelante: simulación especializada.</strong> Transporte, modelos geomecánicos o herramientas CUDA solo cuando una escena y una métrica justifiquen su coste. Su existencia en un paper es una oportunidad de investigación, no una obligación de integración.</p>
+<p>La idea final es sencilla: <strong>el diseñador controla la mina; la estructura geológica hace que sus paredes parezcan pertenecer a una formación; el mallador conserva esa estructura; materiales y Damage la reutilizan; el runtime solo paga por la interacción necesaria.</strong></p>
+<h2 id="sec-79">15. Limitaciones de esta investigación</h2>
+<p>No es un inventario exhaustivo de todos los artículos o productos existentes. Es una selección extensa centrada en roca volumétrica, cuevas, estratos, fracturas, desgaste y producción de assets para este proyecto. Los resultados negativos de una búsqueda no demuestran ausencia de una capacidad en otro motor.</p>
+<p>No se descargaron ni ejecutaron paquetes de terceros en este trabajo. No se verificaron sus velocidades, compatibilidad con la instalación local de Blender, seguridad del código ni calidad de salida. Tampoco se auditó por completo el código actual de Jerico; solo se leyó contexto documental mediante el conector del repositorio.</p>
+<p>Las etiquetas del catálogo distinguen texto integral accesible, ficha/resumen, documentación y README. Varias páginas de PDF estaban bloqueadas o fallaron; no se presenta una lectura de resumen como revisión completa del algoritmo. Las fuentes de 2026 marcadas como preprint o anuncio conservan ese estado.</p>
+<p>No se modificó el repositorio, no se cambió GOAL.md, no se aprobó una dependencia y no se declaró terminado ningún slice. El dossier está pensado para elegir experimentos verificables antes de convertir una idea en trabajo del motor.</p>
+<h2 id="sec-80">16. Catálogo de fuentes primarias</h2>
+<p>80 registros de fuentes. Algunos son documentación, licencias o repositorios complementarios de un mismo proyecto: no equivalen a 80 papers leídos íntegramente.</p>
+<h3 id="sec-81">Contexto del proyecto</h3>
+<p><a id="j01"></a>
+<strong>J01 — JericoEngine — CODEX_INDEX.md</strong></p>
+<p>Fuente: <a href="https://github.com/JericoFX/JericoEngine/blob/main/docs/CODEX_INDEX.md" rel="noopener noreferrer">https://github.com/JericoFX/JericoEngine/blob/main/docs/CODEX_INDEX.md</a><br/>
+Ámbito: Directiva de integración del Playground; no auditoría completa del código.<br/>
+Licencia / reutilización: Repositorio del usuario.<br/>
+Alcance de revisión: Lectura mediante conector GitHub, primer tramo del índice.</p>
+<h3 id="sec-82">Publicaciones</h3>
+<p><a id="p01"></a>
+<strong>P01 — The PhaseTree: Multiphase Signed Distance Fields (2026)</strong></p>
+<p>Fuente: <a href="https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-05713515/" rel="noopener noreferrer">https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-05713515/</a><br/>
+Ámbito: SDF multifase; DOI 10.1145/3811379.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Ficha y resumen del autor; PDF enlazado no accesible en esta revisión.</p>
+<p><a id="p02"></a>
+<strong>P02 — PhaseTree — código de demostración</strong></p>
+<p>Fuente: <a href="https://github.com/Arches-Team/PhaseTree" rel="noopener noreferrer">https://github.com/Arches-Team/PhaseTree</a><br/>
+Ámbito: GLSL; demostraciones del artículo.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README y licencia declarada; no compilado.</p>
+<p><a id="p03"></a>
+<strong>P03 — Directable Weathering of Concave Rock Using Curvature Estimation (2010)</strong></p>
+<p>Fuente: <a href="https://scholarsarchive.byu.edu/facpub/110/" rel="noopener noreferrer">https://scholarsarchive.byu.edu/facpub/110/</a><br/>
+Ámbito: Meteorización volumétrica; DOI 10.1109/TVCG.2009.39.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Resumen y ficha institucional; no lectura integral del PDF.</p>
+<p><a id="p04"></a>
+<strong>P04 — Arches: a Framework for Modelling Complex Terrains (2009)</strong></p>
+<p>Fuente: <a href="https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-00463263/" rel="noopener noreferrer">https://perso.liris.cnrs.fr/apeytavi/website/publication/hal-00463263/</a><br/>
+Ámbito: Terreno volumétrico y materiales; DOI 10.1111/j.1467-8659.2009.01385.x.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Ficha/resumen primario recuperado; PDF bloqueado.</p>
+<p><a id="p05"></a>
+<strong>P05 — Terrain Amplification using Multi-scale Erosion (2024)</strong></p>
+<p>Fuente: <a href="https://research.adobe.com/publication/terrain-amplification-using-multi-scale-erosion/" rel="noopener noreferrer">https://research.adobe.com/publication/terrain-amplification-using-multi-scale-erosion/</a><br/>
+Ámbito: Erosión multiescala de terrenos de altura; DOI 10.1145/3658200.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Ficha de investigación y repositorio asociado.</p>
+<p><a id="p06"></a>
+<strong>P06 — MultiScaleErosion — implementación</strong></p>
+<p>Fuente: <a href="https://github.com/H-Schott/MultiScaleErosion" rel="noopener noreferrer">https://github.com/H-Schott/MultiScaleErosion</a><br/>
+Ámbito: C++ / compute OpenGL; heightfields.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README y licencia declarada; no ejecutado.</p>
+<p><a id="p07"></a>
+<strong>P07 — Stochastic Geomorphological Transport (2026)</strong></p>
+<p>Fuente: <a href="https://erosiv.studio/publications/stochastic-geomorphological-transport" rel="noopener noreferrer">https://erosiv.studio/publications/stochastic-geomorphological-transport</a><br/>
+Ámbito: Transporte geomorfológico; DOI 10.1145/3811336.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Página de los autores y metadatos; no PDF completo.</p>
+<p><a id="p08"></a>
+<strong>P08 — geotransport — núcleo de integración</strong></p>
+<p>Fuente: <a href="https://github.com/erosiv/geotransport" rel="noopener noreferrer">https://github.com/erosiv/geotransport</a><br/>
+Ámbito: Herramientas del modelo de transporte.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README; no compilado.</p>
+<p><a id="p09"></a>
+<strong>P09 — soillib — erosión y transporte</strong></p>
+<p>Fuente: <a href="https://github.com/erosiv/soillib" rel="noopener noreferrer">https://github.com/erosiv/soillib</a><br/>
+Ámbito: C++ / CUDA / Python; herramientas de terreno.<br/>
+Licencia / reutilización: Licencia de la revisión a verificar antes de integrar.<br/>
+Alcance de revisión: Repositorio consultado; licencia no cerrada en esta revisión.</p>
+<p><a id="p10"></a>
+<strong>P10 — SubsurfaceGen (preprint, 2026)</strong></p>
+<p>Fuente: <a href="https://arxiv.org/html/2605.30541v1" rel="noopener noreferrer">https://arxiv.org/html/2605.30541v1</a><br/>
+Ámbito: Operadores cronológicos de geología del subsuelo; PyTorch.<br/>
+Licencia / reutilización: La licencia del artículo no concede por sí sola licencia del código.<br/>
+Alcance de revisión: Texto HTML del preprint consultado.</p>
+<p><a id="p11"></a>
+<strong>P11 — Procedural Multiscale Geometry Modeling using Implicit Functions (preprint, 2025)</strong></p>
+<p>Fuente: <a href="https://arxiv.org/html/2504.09553v1" rel="noopener noreferrer">https://arxiv.org/html/2504.09553v1</a><br/>
+Ámbito: Microestructura implícita multiescala.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Texto HTML del preprint consultado.</p>
+<p><a id="p12"></a>
+<strong>P12 — OcMesher — Mesh Extraction for Unbounded Scenes Using Camera-Aware Octrees (2025)</strong></p>
+<p>Fuente: <a href="https://github.com/princeton-vl/OcMesher" rel="noopener noreferrer">https://github.com/princeton-vl/OcMesher</a><br/>
+Ámbito: Extracción adaptativa dependiente de cámara.<br/>
+Licencia / reutilización: BSD-3-Clause.<br/>
+Alcance de revisión: Repositorio / ficha del proyecto; no ejecutado.</p>
+<p><a id="p13"></a>
+<strong>P13 — PaMO — Parallel Mesh Optimization (2025)</strong></p>
+<p>Fuente: <a href="https://github.com/SarahWeiii/pamo" rel="noopener noreferrer">https://github.com/SarahWeiii/pamo</a><br/>
+Ámbito: Remallado y simplificación GPU / CUDA; incluye integración Blender.<br/>
+Licencia / reutilización: AGPL-3.0.<br/>
+Alcance de revisión: README y licencia declarada; no ejecutado.</p>
+<p><a id="p14"></a>
+<strong>P14 — CuACD (repositorio 2026)</strong></p>
+<p>Fuente: <a href="https://github.com/eliphatfs/cuacd" rel="noopener noreferrer">https://github.com/eliphatfs/cuacd</a><br/>
+Ámbito: Descomposición convexa CUDA; anuncio SIGGRAPH Asia 2026.<br/>
+Licencia / reutilización: LGPL-2.1-or-later declarada en el repositorio consultado.<br/>
+Alcance de revisión: Repositorio consultado; evento anunciado, no tratado como celebrado.</p>
+<p><a id="p15"></a>
+<strong>P15 — Dual Contouring of Hermite Data (2002)</strong></p>
+<p>Fuente: <a href="https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf" rel="noopener noreferrer">https://www.cs.rice.edu/~jwarren/papers/dualcontour.pdf</a><br/>
+Ámbito: Hermite, QEF, octrees y preservación de características.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Texto PDF y capturas de páginas 1, 2 y 6 consultados.</p>
+<p><a id="p16"></a>
+<strong>P16 — Transvoxel — documentación y tesis</strong></p>
+<p>Fuente: <a href="https://transvoxel.org/" rel="noopener noreferrer">https://transvoxel.org/</a><br/>
+Ámbito: Transiciones 2:1 para mallado de tipo Marching Cubes.<br/>
+Licencia / reutilización: Comprobar licencia exacta de las tablas/código al incorporarlos.<br/>
+Alcance de revisión: Página técnica del autor consultada; tesis no leída íntegramente.</p>
+<p><a id="p17"></a>
+<strong>P17 — Terrain Descriptors (2025)</strong></p>
+<p>Fuente: <a href="https://onlinelibrary.wiley.com/doi/10.1111/cgf.70080" rel="noopener noreferrer">https://onlinelibrary.wiley.com/doi/10.1111/cgf.70080</a><br/>
+Ámbito: Descriptores para analizar terrenos.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Ficha / resumen editorial consultado.</p>
+<p><a id="p18"></a>
+<strong>P18 — Terrain Synthesis and Authoring based on Iso-Contours (2026)</strong></p>
+<p>Fuente: <a href="https://h-schott.github.io/p/isos/" rel="noopener noreferrer">https://h-schott.github.io/p/isos/</a><br/>
+Ámbito: Autoría por curvas de nivel; DOI 10.1111/cgf.70389.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Página del autor consultada.</p>
+<h3 id="sec-83">Geología científica</h3>
+<p><a id="g01"></a>
+<strong>G01 — LoopStructural</strong></p>
+<p>Fuente: <a href="https://github.com/Loop3D/LoopStructural" rel="noopener noreferrer">https://github.com/Loop3D/LoopStructural</a><br/>
+Ámbito: Modelado estructural implícito en Python.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README y licencia declarada.</p>
+<p><a id="g02"></a>
+<strong>G02 — LoopStructural 1.0: time-aware geological modelling (2021)</strong></p>
+<p>Fuente: <a href="https://gmd.copernicus.org/articles/14/3915/2021/index.html" rel="noopener noreferrer">https://gmd.copernicus.org/articles/14/3915/2021/index.html</a><br/>
+Ámbito: Cronología, marcos estructurales, fallas y pliegues.<br/>
+Licencia / reutilización: No se evalúa reutilización de código.<br/>
+Alcance de revisión: Artículo / ficha editorial primaria.</p>
+<p><a id="g03"></a>
+<strong>G03 — GemPy</strong></p>
+<p>Fuente: <a href="https://github.com/gempy-project/gempy" rel="noopener noreferrer">https://github.com/gempy-project/gempy</a><br/>
+Ámbito: Geología implícita de subsuelo en Python.<br/>
+Licencia / reutilización: EUPL-1.2.<br/>
+Alcance de revisión: README y licencia declarada.</p>
+<p><a id="g04"></a>
+<strong>G04 — pySimFrac (artículo 2024 y código)</strong></p>
+<p>Fuente: <a href="https://github.com/lanl/pySimFrac" rel="noopener noreferrer">https://github.com/lanl/pySimFrac</a><br/>
+Ámbito: Superficies rugosas de fractura; DOI 10.1016/j.cageo.2024.105665.<br/>
+Licencia / reutilización: BSD-3-Clause.<br/>
+Alcance de revisión: README y referencia del artículo; no ejecutado.</p>
+<p><a id="g05"></a>
+<strong>G05 — dfnWorks</strong></p>
+<p>Fuente: <a href="https://github.com/lanl/dfnWorks" rel="noopener noreferrer">https://github.com/lanl/dfnWorks</a><br/>
+Ámbito: Redes discretas de fracturas, flujo y transporte.<br/>
+Licencia / reutilización: Avisos y licencias múltiples; revisar componentes.<br/>
+Alcance de revisión: README y LICENSE.md; no se considera admisión legal cerrada.</p>
+<p><a id="g06"></a>
+<strong>G06 — dfnWorks — licencia</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/lanl/dfnWorks/master/LICENSE.md" rel="noopener noreferrer">https://raw.githubusercontent.com/lanl/dfnWorks/master/LICENSE.md</a><br/>
+Ámbito: No resumir todo el paquete como MIT/BSD.<br/>
+Licencia / reutilización: Incluye avisos LANL, LGPL-3.0+, GPL-2.0+ y condiciones adicionales.<br/>
+Alcance de revisión: Texto de licencia consultado.</p>
+<p><a id="g07"></a>
+<strong>G07 — Landlab</strong></p>
+<p>Fuente: <a href="https://github.com/landlab/landlab" rel="noopener noreferrer">https://github.com/landlab/landlab</a><br/>
+Ámbito: Procesos de superficie y evolución del paisaje.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README y licencia declarada.</p>
+<p><a id="g08"></a>
+<strong>G08 — Itasca — Mohr-Coulomb constitutive model</strong></p>
+<p>Fuente: <a href="https://docs.itascacg.com/itasca900/common/models/mohr/doc/modelmohr.html" rel="noopener noreferrer">https://docs.itascacg.com/itasca900/common/models/mohr/doc/modelmohr.html</a><br/>
+Ámbito: Criterios de fallo, elasticidad/plasticidad y tracción.<br/>
+Licencia / reutilización: Documentación consultable; software comercial.<br/>
+Alcance de revisión: Documentación oficial consultada.</p>
+<p><a id="g09"></a>
+<strong>G09 — Itasca — Mohr-Coulomb joint/contact model</strong></p>
+<p>Fuente: <a href="https://docs.itascacg.com/itasca900/common/contactmodel/mohr/doc/manual/cmmohr.html" rel="noopener noreferrer">https://docs.itascacg.com/itasca900/common/contactmodel/mohr/doc/manual/cmmohr.html</a><br/>
+Ámbito: Juntas, cohesión, fricción, dilatancia y presión de poro.<br/>
+Licencia / reutilización: Documentación consultable; no permiso para copiar software.<br/>
+Alcance de revisión: Documentación oficial consultada.</p>
+<p><a id="g10"></a>
+<strong>G10 — Physical Geology — Fractures, Joints, and Faults</strong></p>
+<p>Fuente: <a href="https://opentextbc.ca/physicalgeologyh5p/chapter/fractures-joints-and-faults/" rel="noopener noreferrer">https://opentextbc.ca/physicalgeologyh5p/chapter/fractures-joints-and-faults/</a><br/>
+Ámbito: Terminología y patrones estructurales.<br/>
+Licencia / reutilización: Consultar licencia del libro y de cada imagen.<br/>
+Alcance de revisión: Capítulo abierto consultado.</p>
+<h3 id="sec-84">Bibliotecas</h3>
+<p><a id="l01"></a>
+<strong>L01 — FastNoiseLite</strong></p>
+<p>Fuente: <a href="https://github.com/Auburn/FastNoiseLite" rel="noopener noreferrer">https://github.com/Auburn/FastNoiseLite</a><br/>
+Ámbito: Ruido y domain warping; C++ / HLSL / GLSL.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia; no benchmark local.</p>
+<p><a id="l02"></a>
+<strong>L02 — FastNoise2</strong></p>
+<p>Fuente: <a href="https://github.com/Auburn/FastNoise2" rel="noopener noreferrer">https://github.com/Auburn/FastNoise2</a><br/>
+Ámbito: Ruido SIMD en CPU; no es un backend GPU automático.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l03"></a>
+<strong>L03 — Eigen</strong></p>
+<p>Fuente: <a href="https://gitlab.com/libeigen/eigen" rel="noopener noreferrer">https://gitlab.com/libeigen/eigen</a><br/>
+Ámbito: Álgebra lineal, QR y SVD.<br/>
+Licencia / reutilización: Núcleo MPL-2.0; revisar componentes y versión.<br/>
+Alcance de revisión: Repositorio oficial y avisos del espejo consultados.</p>
+<p><a id="l04"></a>
+<strong>L04 — Eigen — avisos de licencia del espejo</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/eigen-mirror/eigen/master/COPYING.README" rel="noopener noreferrer">https://raw.githubusercontent.com/eigen-mirror/eigen/master/COPYING.README</a><br/>
+Ámbito: La selección real de módulos importa.<br/>
+Licencia / reutilización: MPL-2.0 y avisos de terceros.<br/>
+Alcance de revisión: Avisos de licencia consultados.</p>
+<p><a id="l05"></a>
+<strong>L05 — Manifold</strong></p>
+<p>Fuente: <a href="https://github.com/elalish/manifold" rel="noopener noreferrer">https://github.com/elalish/manifold</a><br/>
+Ámbito: Booleanas sobre sólidos triangulados manifold.<br/>
+Licencia / reutilización: Apache-2.0.<br/>
+Alcance de revisión: README / licencia y condiciones de entrada.</p>
+<p><a id="l06"></a>
+<strong>L06 — geometry-central</strong></p>
+<p>Fuente: <a href="https://github.com/nmwsharp/geometry-central" rel="noopener noreferrer">https://github.com/nmwsharp/geometry-central</a><br/>
+Ámbito: Geometría diferencial y estructuras de malla.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l07"></a>
+<strong>L07 — libigl</strong></p>
+<p>Fuente: <a href="https://github.com/libigl/libigl" rel="noopener noreferrer">https://github.com/libigl/libigl</a><br/>
+Ámbito: Procesamiento y análisis geométrico.<br/>
+Licencia / reutilización: MPL-2.0 en núcleo; módulos/dependencias con otras licencias.<br/>
+Alcance de revisión: README / licencias declaradas.</p>
+<p><a id="l08"></a>
+<strong>L08 — Geogram</strong></p>
+<p>Fuente: <a href="https://github.com/BrunoLevy/geogram" rel="noopener noreferrer">https://github.com/BrunoLevy/geogram</a><br/>
+Ámbito: Geometría computacional, predicados y teselaciones.<br/>
+Licencia / reutilización: BSD-3-Clause en licencia principal.<br/>
+Alcance de revisión: README y licencia primaria consultados.</p>
+<p><a id="l09"></a>
+<strong>L09 — Geogram — licencia</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/BrunoLevy/geogram/main/LICENSE" rel="noopener noreferrer">https://raw.githubusercontent.com/BrunoLevy/geogram/main/LICENSE</a><br/>
+Ámbito: Aviso de reutilización de código.<br/>
+Licencia / reutilización: BSD-3-Clause.<br/>
+Alcance de revisión: Texto completo consultado.</p>
+<p><a id="l10"></a>
+<strong>L10 — Voro++</strong></p>
+<p>Fuente: <a href="https://math.lbl.gov/voro++/" rel="noopener noreferrer">https://math.lbl.gov/voro++/</a><br/>
+Ámbito: Celdas Voronoi 3D.<br/>
+Licencia / reutilización: BSD de 3 cláusulas con avisos del proyecto.<br/>
+Alcance de revisión: Sitio de autores / licencia.</p>
+<p><a id="l11"></a>
+<strong>L11 — Voro++ — licencia</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/chr1shr/voro/master/LICENSE" rel="noopener noreferrer">https://raw.githubusercontent.com/chr1shr/voro/master/LICENSE</a><br/>
+Ámbito: Revisar el archivo completo al fijar versión.<br/>
+Licencia / reutilización: BSD con texto adicional sobre mejoras compartidas.<br/>
+Alcance de revisión: Texto completo consultado.</p>
+<p><a id="l12"></a>
+<strong>L12 — CGAL — licencias</strong></p>
+<p>Fuente: <a href="https://www.cgal.org/license.html" rel="noopener noreferrer">https://www.cgal.org/license.html</a><br/>
+Ámbito: Geometría exacta y robustez; selección por módulo.<br/>
+Licencia / reutilización: GPL / LGPL / comercial según paquete.<br/>
+Alcance de revisión: Página oficial consultada.</p>
+<p><a id="l13"></a>
+<strong>L13 — meshoptimizer</strong></p>
+<p>Fuente: <a href="https://github.com/zeux/meshoptimizer" rel="noopener noreferrer">https://github.com/zeux/meshoptimizer</a><br/>
+Ámbito: LOD, simplificación, organización y compresión de mallas.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l14"></a>
+<strong>L14 — xatlas</strong></p>
+<p>Fuente: <a href="https://github.com/jpcy/xatlas" rel="noopener noreferrer">https://github.com/jpcy/xatlas</a><br/>
+Ámbito: Desplegado UV para bake.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l15"></a>
+<strong>L15 — CoACD</strong></p>
+<p>Fuente: <a href="https://github.com/SarahWeiii/CoACD" rel="noopener noreferrer">https://github.com/SarahWeiii/CoACD</a><br/>
+Ámbito: Descomposición convexa para colisión.<br/>
+Licencia / reutilización: MIT en repositorio consultado; fijar revisión.<br/>
+Alcance de revisión: README / licencia; no ejecución.</p>
+<p><a id="l16"></a>
+<strong>L16 — Jolt — arquitectura</strong></p>
+<p>Fuente: <a href="https://jrouwe.github.io/JoltPhysics/" rel="noopener noreferrer">https://jrouwe.github.io/JoltPhysics/</a><br/>
+Ámbito: Cuerpos, colisiones, proxies, restricciones de MeshShape dinámico.<br/>
+Licencia / reutilización: Código Jolt: MIT; documentación separada.<br/>
+Alcance de revisión: Documentación oficial consultada.</p>
+<p><a id="l17"></a>
+<strong>L17 — Jolt Physics — código</strong></p>
+<p>Fuente: <a href="https://github.com/jrouwe/JoltPhysics" rel="noopener noreferrer">https://github.com/jrouwe/JoltPhysics</a><br/>
+Ámbito: Física de cuerpos; no generador de geología.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l18"></a>
+<strong>L18 — Fidget</strong></p>
+<p>Fuente: <a href="https://github.com/mkeeter/fidget" rel="noopener noreferrer">https://github.com/mkeeter/fidget</a><br/>
+Ámbito: Implícitos; evaluación/JIT y simplificación; Rust.<br/>
+Licencia / reutilización: MPL-2.0.<br/>
+Alcance de revisión: README; candidato de investigación, no integrado.</p>
+<p><a id="l19"></a>
+<strong>L19 — OpenVDB / NanoVDB</strong></p>
+<p>Fuente: <a href="https://github.com/AcademySoftwareFoundation/openvdb" rel="noopener noreferrer">https://github.com/AcademySoftwareFoundation/openvdb</a><br/>
+Ámbito: Campos dispersos; no se propone reabrir su integración en Jerico.<br/>
+Licencia / reutilización: Apache-2.0 en la rama actual consultada.<br/>
+Alcance de revisión: README y nota oficial de relicenciamiento.</p>
+<p><a id="l20"></a>
+<strong>L20 — OpenVDB — relicenciamiento</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/AcademySoftwareFoundation/openvdb/master/RE-LICENSE_NOTE.txt" rel="noopener noreferrer">https://raw.githubusercontent.com/AcademySoftwareFoundation/openvdb/master/RE-LICENSE_NOTE.txt</a><br/>
+Ámbito: No extrapolar a cualquier release histórica.<br/>
+Licencia / reutilización: De aportaciones MPL-2.0 a Apache-2.0.<br/>
+Alcance de revisión: Nota oficial consultada.</p>
+<p><a id="l21"></a>
+<strong>L21 — NVIDIA Warp</strong></p>
+<p>Fuente: <a href="https://github.com/NVIDIA/warp" rel="noopener noreferrer">https://github.com/NVIDIA/warp</a><br/>
+Ámbito: Prototipos CPU/CUDA desde Python.<br/>
+Licencia / reutilización: Apache-2.0; terceros a revisar.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="l22"></a>
+<strong>L22 — AMD FEMFX</strong></p>
+<p>Fuente: <a href="https://github.com/GPUOpen-Effects/FEMFX" rel="noopener noreferrer">https://github.com/GPUOpen-Effects/FEMFX</a><br/>
+Ámbito: FEM tetraédrico multihilo en CPU y fractura.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia; integración y mantenimiento no probados.</p><p><a id="l23"></a>
+<strong>L23 — NVIDIA Blast</strong></p>
+<p>Fuente: <a href="https://github.com/NVIDIAGameWorks/Blast" rel="noopener noreferrer">https://github.com/NVIDIAGameWorks/Blast</a><br/>
+Ámbito: SDK de destrucción; estudiar separación de piezas/soporte.<br/>
+Licencia / reutilización: Revisar distribución y extensiones concretas.<br/>
+Alcance de revisión: README y enlaces de documentación; licencia no cerrada.</p>
+<h3 id="sec-85">Herramientas gratuitas</h3>
+<p><a id="a01"></a>
+<strong>A01 — Cell Fracture</strong></p>
+<p>Fuente: <a href="https://extensions.blender.org/add-ons/cell-fracture/" rel="noopener noreferrer">https://extensions.blender.org/add-ons/cell-fracture/</a><br/>
+Ámbito: Prefragmentación de mallas en Blender.<br/>
+Licencia / reutilización: GPL-3.0-or-later.<br/>
+Alcance de revisión: Ficha oficial; no instalado en esta sesión.</p>
+<p><a id="a02"></a>
+<strong>A02 — Hydra</strong></p>
+<p>Fuente: <a href="https://github.com/ozikazina/Hydra" rel="noopener noreferrer">https://github.com/ozikazina/Hydra</a><br/>
+Ámbito: Erosión mediante mapas de altura y OpenGL.<br/>
+Licencia / reutilización: MIT declarado; README avisa de otras posibles limitaciones.<br/>
+Alcance de revisión: README; compatibilidad y admisión pendientes.</p>
+<p><a id="a03"></a>
+<strong>A03 — Sverchok</strong></p>
+<p>Fuente: <a href="https://github.com/nortikin/sverchok" rel="noopener noreferrer">https://github.com/nortikin/sverchok</a><br/>
+Ámbito: Laboratorio de nodos geométricos y matemáticos.<br/>
+Licencia / reutilización: GPL-3.0.<br/>
+Alcance de revisión: README / licencia; no ejecutado.</p>
+<p><a id="a04"></a>
+<strong>A04 — Proc-Rock</strong></p>
+<p>Fuente: <a href="https://github.com/acfaruk/proc-rock" rel="noopener noreferrer">https://github.com/acfaruk/proc-rock</a><br/>
+Ámbito: Generador independiente de rocas, recetas, materiales y LOD.<br/>
+Licencia / reutilización: GPL-3.0; README distingue los assets generados.<br/>
+Alcance de revisión: README; no ejecutado.</p>
+<p><a id="a05"></a>
+<strong>A05 — Blender-Rock-Generator</strong></p>
+<p>Fuente: <a href="https://github.com/lupin4/Blender-Rock-Generator" rel="noopener noreferrer">https://github.com/lupin4/Blender-Rock-Generator</a><br/>
+Ámbito: Script pequeño de rocas; atención: puede vaciar la escena.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia; solo probar en escena desechable.</p>
+<p><a id="a06"></a>
+<strong>A06 — Infinigen</strong></p>
+<p>Fuente: <a href="https://github.com/princeton-vl/infinigen" rel="noopener noreferrer">https://github.com/princeton-vl/infinigen</a><br/>
+Ámbito: Contenido natural procedural, Blender y generación offline.<br/>
+Licencia / reutilización: BSD-3-Clause en proyecto; dependencias se revisan aparte.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="a07"></a>
+<strong>A07 — Infinigen 2 preview — alcance</strong></p>
+<p>Fuente: <a href="https://github.com/princeton-vl/infinigen/blob/main/docs/source/Infinigen2.md" rel="noopener noreferrer">https://github.com/princeton-vl/infinigen/blob/main/docs/source/Infinigen2.md</a><br/>
+Ámbito: No confundir preview de interiores con toda la ruta Nature.<br/>
+Licencia / reutilización: Ver licencia del proyecto y subcomponentes.<br/>
+Alcance de revisión: Documentación de alcance consultada.</p>
+<p><a id="a08"></a>
+<strong>A08 — Material Maker</strong></p>
+<p>Fuente: <a href="https://github.com/RodZill4/material-maker" rel="noopener noreferrer">https://github.com/RodZill4/material-maker</a><br/>
+Ámbito: Materiales PBR y pintura procedural; no geometría volumétrica.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: Repositorio del autor / licencia.</p>
+<p><a id="a09"></a>
+<strong>A09 — Ucupaint</strong></p>
+<p>Fuente: <a href="https://github.com/ucupumar/ucupaint" rel="noopener noreferrer">https://github.com/ucupumar/ucupaint</a><br/>
+Ámbito: Capas de textura y máscaras para Blender.<br/>
+Licencia / reutilización: GPL-3.0.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="a10"></a>
+<strong>A10 — BlenderGIS</strong></p>
+<p>Fuente: <a href="https://github.com/domlysz/BlenderGIS" rel="noopener noreferrer">https://github.com/domlysz/BlenderGIS</a><br/>
+Ámbito: Importación de datos geográficos / elevación.<br/>
+Licencia / reutilización: Verificar licencia exacta de versión y fuentes de datos.<br/>
+Alcance de revisión: README; licencia no cerrada en esta revisión.</p>
+<p><a id="a11"></a>
+<strong>A11 — A.N.T. Landscape — fuente histórica</strong></p>
+<p>Fuente: <a href="https://github.com/blender/blender-addons/tree/main/ant_landscape" rel="noopener noreferrer">https://github.com/blender/blender-addons/tree/main/ant_landscape</a><br/>
+Ámbito: Terrenos de altura / ruido en Blender.<br/>
+Licencia / reutilización: Verificar paquete actual y licencia de versión.<br/>
+Alcance de revisión: Fuente histórica; compatibilidad actual no comprobada.</p>
+<p><a id="a12"></a>
+<strong>A12 — ErosionTerrainGenerator — ficha 2026</strong></p>
+<p>Fuente: <a href="https://extensions.blender.org/add-ons/erosion-terrain-extension/" rel="noopener noreferrer">https://extensions.blender.org/add-ons/erosion-terrain-extension/</a><br/>
+Ámbito: Terreno de altura; declara Blender 5.2+.<br/>
+Licencia / reutilización: Verificar licencia de la versión antes de reutilizar.<br/>
+Alcance de revisión: Ficha oficial; versión 1 publicada 18-08-2026; no probado.</p>
+<p><a id="a13"></a>
+<strong>A13 — SideFX Labs</strong></p>
+<p>Fuente: <a href="https://github.com/sideeffects/SideFXLabs" rel="noopener noreferrer">https://github.com/sideeffects/SideFXLabs</a><br/>
+Ámbito: Herramientas de autoría, HDA y Python.<br/>
+Licencia / reutilización: Licencia permisiva propia; host Houdini separado.<br/>
+Alcance de revisión: README y LICENSE.md consultados.</p>
+<p><a id="a14"></a>
+<strong>A14 — SideFX Labs — licencia</strong></p>
+<p>Fuente: <a href="https://raw.githubusercontent.com/sideeffects/SideFXLabs/Development/LICENSE.md" rel="noopener noreferrer">https://raw.githubusercontent.com/sideeffects/SideFXLabs/Development/LICENSE.md</a><br/>
+Ámbito: No confundir con licencia de Houdini.<br/>
+Licencia / reutilización: Aviso permisivo propio de SideFX.<br/>
+Alcance de revisión: Texto de licencia consultado.</p>
+<p><a id="a15"></a>
+<strong>A15 — Houdini Apprentice — restricciones</strong></p>
+<p>Fuente: <a href="https://www.sidefx.com/faq/question/apprentice-restrictions/" rel="noopener noreferrer">https://www.sidefx.com/faq/question/apprentice-restrictions/</a><br/>
+Ámbito: No es sustituto gratuito de una licencia comercial de producción.<br/>
+Licencia / reutilización: No comercial; restricciones de pipeline y formatos.<br/>
+Alcance de revisión: FAQ oficial consultada.</p>
+<h3 id="sec-86">Assets</h3>
+<p><a id="a16"></a>
+<strong>A16 — Poly Haven — licencia</strong></p>
+<p>Fuente: <a href="https://polyhaven.com/license" rel="noopener noreferrer">https://polyhaven.com/license</a><br/>
+Ámbito: Materiales, modelos y HDRI para comparación y producción.<br/>
+Licencia / reutilización: CC0 para assets; no todo el contenido del sitio.<br/>
+Alcance de revisión: Página oficial de licencia.</p>
+<p><a id="a17"></a>
+<strong>A17 — ambientCG — licencia</strong></p>
+<p>Fuente: <a href="https://docs.ambientcg.com/license/" rel="noopener noreferrer">https://docs.ambientcg.com/license/</a><br/>
+Ámbito: Materiales y referencias de superficie.<br/>
+Licencia / reutilización: CC0 para assets.<br/>
+Alcance de revisión: Página oficial de licencia.</p>
+<h3 id="sec-87">Motores</h3>
+<p><a id="e01"></a>
+<strong>E01 — Unreal Engine — Mesh Terrain experimental</strong></p>
+<p>Fuente: <a href="https://dev.epicgames.com/documentation/unreal-engine/mesh-terrain-in-unreal-engine" rel="noopener noreferrer">https://dev.epicgames.com/documentation/unreal-engine/mesh-terrain-in-unreal-engine</a><br/>
+Ámbito: Voladizos, túneles, resolución variable y modificadores.<br/>
+Licencia / reutilización: Código/uso bajo condiciones de Epic; no asumir permiso de portado.<br/>
+Alcance de revisión: Documentación oficial actual consultada.</p>
+<p><a id="e02"></a>
+<strong>E02 — Unreal Engine — Landscape Heightmaps</strong></p>
+<p>Fuente: <a href="https://dev.epicgames.com/documentation/unreal-engine/importing-and-exporting-landscape-heightmaps-in-unreal-engine" rel="noopener noreferrer">https://dev.epicgames.com/documentation/unreal-engine/importing-and-exporting-landscape-heightmaps-in-unreal-engine</a><br/>
+Ámbito: Ruta Landscape clásica de mapas de altura.<br/>
+Licencia / reutilización: Documentación de referencia.<br/>
+Alcance de revisión: Documentación oficial.</p>
+<p><a id="e03"></a>
+<strong>E03 — Unreal Engine — Chaos Destruction Overview</strong></p>
+<p>Fuente: <a href="https://dev.epicgames.com/documentation/unreal-engine/destruction-overview" rel="noopener noreferrer">https://dev.epicgames.com/documentation/unreal-engine/destruction-overview</a><br/>
+Ámbito: Geometry Collections, clusters y conexiones.<br/>
+Licencia / reutilización: Documentación de referencia.<br/>
+Alcance de revisión: Documentación oficial.</p>
+<p><a id="e04"></a>
+<strong>E04 — Voxel Plugin — runtime edits and sculpting</strong></p>
+<p>Fuente: <a href="https://docs.voxelplugin.com/knowledgebase/blueprints/runtime-edits-and-sculpting" rel="noopener noreferrer">https://docs.voxelplugin.com/knowledgebase/blueprints/runtime-edits-and-sculpting</a><br/>
+Ámbito: Escultura volumétrica; límites explícitos de física de islas.<br/>
+Licencia / reutilización: Ver edición, versión y licencia comercial/gratuita aplicable.<br/>
+Alcance de revisión: Documentación oficial.</p>
+<p><a id="e05"></a>
+<strong>E05 — Godot Voxel Tools — smooth terrain</strong></p>
+<p>Fuente: <a href="https://voxel-tools.readthedocs.io/en/latest/smooth_terrain/" rel="noopener noreferrer">https://voxel-tools.readthedocs.io/en/latest/smooth_terrain/</a><br/>
+Ámbito: SDF, mallado suave, Transvoxel y LOD.<br/>
+Licencia / reutilización: Código del proyecto MIT.<br/>
+Alcance de revisión: Documentación oficial.</p>
+<p><a id="e06"></a>
+<strong>E06 — Godot Voxel Tools — generators</strong></p>
+<p>Fuente: <a href="https://voxel-tools.readthedocs.io/en/latest/generators/" rel="noopener noreferrer">https://voxel-tools.readthedocs.io/en/latest/generators/</a><br/>
+Ámbito: Generación multihilo por bloques / modificadores.<br/>
+Licencia / reutilización: MIT en código del proyecto.<br/>
+Alcance de revisión: Documentación oficial.</p>
+<p><a id="e07"></a>
+<strong>E07 — Godot Voxel Tools — repositorio</strong></p>
+<p>Fuente: <a href="https://github.com/Zylann/godot_voxel" rel="noopener noreferrer">https://github.com/Zylann/godot_voxel</a><br/>
+Ámbito: Arquitectura de terreno editable por bloques.<br/>
+Licencia / reutilización: MIT.<br/>
+Alcance de revisión: README / licencia.</p>
+<p><a id="e08"></a>
+<strong>E08 — Unity — Terrain Heightmaps</strong></p>
+<p>Fuente: <a href="https://docs.unity3d.com/ja/6000.0/Manual/terrain-Heightmaps.html" rel="noopener noreferrer">https://docs.unity3d.com/ja/6000.0/Manual/terrain-Heightmaps.html</a><br/>
+Ámbito: Terrain nativo basado en altura; no todo el universo de extensiones.<br/>
+Licencia / reutilización: Documentación de referencia.<br/>
+Alcance de revisión: Manual oficial.</p>
+<p><a id="e09"></a>
+<strong>E09 — Guerrilla — GPU-Based Procedural Placement in Horizon Zero Dawn (2017)</strong></p>
+<p>Fuente: <a href="https://www.guerrilla-games.com/read/gpu-based-procedural-placement-in-horizon-zero-dawn" rel="noopener noreferrer">https://www.guerrilla-games.com/read/gpu-based-procedural-placement-in-horizon-zero-dawn</a><br/>
+Ámbito: Colocación procedural GPU, no formación física de roca.<br/>
+Licencia / reutilización: Presentación de referencia.<br/>
+Alcance de revisión: Ficha oficial de la charla; no auditoría del motor actual.</p>
+<p><a id="e10"></a>
+<strong>E10 — GDC — Continuous World Generation in No Man’s Sky (2017)</strong></p>
+<p>Fuente: <a href="https://www.gdcvault.com/play/1024265/Continuous-World-Generation-in-Noby" rel="noopener noreferrer">https://www.gdcvault.com/play/1024265/Continuous-World-Generation-in-Noby</a><br/>
+Ámbito: Pipeline de mundo continuo, voxels, mallas y población.<br/>
+Licencia / reutilización: Presentación de referencia.<br/>
+Alcance de revisión: Ficha oficial; no análisis íntegro del video.</p>
+<p><a id="e11"></a>
+<strong>E11 — Houdini — fracturing geometry</strong></p>
+<p>Fuente: <a href="https://www.sidefx.com/docs/houdini/dyno/fracturing.html" rel="noopener noreferrer">https://www.sidefx.com/docs/houdini/dyno/fracturing.html</a><br/>
+Ámbito: Fractura, constraints, proxies y geometría detallada.<br/>
+Licencia / reutilización: Software comercial; documentación consultable.<br/>
+Alcance de revisión: Documentación oficial.</p>
+</main></div><footer>JericoEngine · Dossier de investigación · Fuentes consultadas al 26 de septiembre de 2026 · Archivo autónomo, sin recursos externos.</footer></body></html>
