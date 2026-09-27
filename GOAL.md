@@ -85,3 +85,14 @@ La [revalidación RBrush contra el checkout actual del Engine](Evidence/2026-09-
 **Criterio visual pendiente del cliff:** el loop nativo rompe la continuidad de las bandas y deja una región semántica seleccionable; ZenUV la separa en charts UV dentro del mismo atlas. Las pruebas high→low/LOD y capturas originales avalan esa ruta técnica, pero la zona queda demasiado lisa y con borde visible. Comparar y corregir macroforma, detalle y material frente a las referencias reales antes de declarar aceptada la calidad visual.
 
 El [perfil métrico opt-in del cliff](Evidence/2026-09-25-cliff-metric-relief.md) deja el resto de la malla fijo y añade variación real dentro del parche mediante distancia al contorno en metros y FBM/crestas. Pasó prueba geométrica, 17/17 CTest, tres LOD con diez mapas high→low y 171 artefactos reproducibles. La Beauty y el presupuesto de rendimiento siguen **PARTIAL**; se deja como código probado en playground, no como capacidad M8 aceptada. El repo privado contiene este cierre. El [handoff M8 en JericoEngine](https://github.com/JericoFX/JericoEngine/issues/6) enlaza el commit, código, pruebas y faltantes sin escribir en el checkout Engine actualmente ocupado por M9.
+
+
+## Nuevo slice pedido por el owner — Spline Construction / Pipe UV Lab (2026-09-27)
+
+El owner pidió usar este Playground también para probar la matemática reutilizable de construcción por spline y poder manipularla personalmente en la UI. La directiva completa está en [`docs/SPLINE_CONSTRUCTION_PIPE_UV_PLAYGROUND_2026_09_27.md`](docs/SPLINE_CONSTRUCTION_PIPE_UV_PLAYGROUND_2026_09_27.md).
+
+Esto **no sustituye ni duplica** la autoridad de `ProceduralSpline` de JericoEngine y no autoriza a modificar el checkout del Engine desde este repo. El Playground debe ensayar en C++ nativo `ArcLength/RMF -> Profile2D -> Sweep/RepeatAlongPath -> UV métrica -> Assembly`, con Pipe como primer consumidor y presets visibles adicionales para cable/manguera, ducto rectangular/redondo, cable tray, handrail/rail y perfil estructural.
+
+La aceptación de este slice exige tanto pruebas automáticas como prueba interactiva real: el ejecutable normal debe exponer un panel/modo **Spline Construction** con presets y controles editables de spline, perfil, diámetro/medidas, calidad, roll, seam y escala UV. Debe quedar posible crear/cambiar al menos cinco construcciones, editar puntos y ver el resultado actualizarse en el viewport Vulkan. Compilar o producir una prueba headless sin dejar esta superficie de uso al owner **no es PASS**.
+
+La implementación debe conservar evidencia reproducible (capturas, métricas y hashes útiles) mediante un comando de prueba dedicado; distinguir implementado, verificado automáticamente, inspeccionado visualmente y pendiente; y dejar un handoff explícito hacia los owners ya existentes de JericoEngine sin proponer una segunda spline, segunda ruta de prefab ni segunda autoridad de cook.
