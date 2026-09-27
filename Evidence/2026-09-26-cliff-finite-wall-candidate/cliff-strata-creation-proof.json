@@ -1,0 +1,78 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "baselineGenerationCpuMs": 55.836,
+  "baselineHash": 310230681386850953,
+  "candidateGenerationCpuMs": 54.9609,
+  "candidateHash": 17623155159170816676,
+  "candidateStages": [
+    {
+      "cpuMs": 1.2035,
+      "kind": "Vector displacement / FBM"
+    },
+    {
+      "cpuMs": 0.7105,
+      "kind": "Strata relief"
+    },
+    {
+      "cpuMs": 1.3714,
+      "kind": "Ridged noise"
+    },
+    {
+      "cpuMs": 0.4004,
+      "kind": "Normal displacement / FBM"
+    },
+    {
+      "cpuMs": 0.4169,
+      "kind": "Cliff cut loop"
+    },
+    {
+      "cpuMs": 44.5553,
+      "kind": "Solidify surface"
+    }
+  ],
+  "changedTriangleIndexEntries": 1284,
+  "changedTriangleRegionEntries": 584,
+  "closedAndReplay": true,
+  "drainedWallGenerationCpuMs": 57.9179,
+  "drainedWallHash": 12024839836944294927,
+  "drainedWallTriangles": 16896,
+  "finiteWallGenerationCpuMs": 57.7414,
+  "finiteWallHash": 13237348981915824454,
+  "finiteWallTriangles": 16896,
+  "gridSizeAndCutIdentityPreserved": true,
+  "imageSize": [
+    1280,
+    960
+  ],
+  "maximumCenterXYDisplacementM": 0.0,
+  "maximumFiniteIncisionRetreatM": 0.2792061578967837,
+  "maximumOutsideFiniteIncisionRetreatM": 0.0,
+  "maximumPerimeterXYDisplacementM": 0.19841616042924828,
+  "maximumReliefStageDisplacementM": 0.26499529773372693,
+  "meanReliefStageDisplacementM": 0.2067655696286466,
+  "outlinedWallGenerationCpuMs": 57.5024,
+  "outlinedWallHash": 8211075133554702787,
+  "outlinedWallTriangles": 16896,
+  "renderBufferBytes": 18666856,
+  "scope": "High geometry creation only; no low mesh or bake",
+  "triangles": 17488,
+  "variedWallGenerationCpuMs": 50.467,
+  "variedWallHash": 14821032936113870281,
+  "variedWallTriangles": 16896,
+  "views": [
+    {
+      "distance": 10.0,
+      "name": "front",
+      "pitch": 0.0,
+      "yaw": 0.0
+    },
+    {
+      "distance": 10.0,
+      "name": "oblique",
+      "pitch": -0.20000000298023224,
+      "yaw": 0.550000011920929
+    }
+  ],
+  "wallOnlyHash": 13429904228295021157,
+  "wallOnlyTriangles": 16896
+}

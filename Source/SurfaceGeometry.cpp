@@ -484,6 +484,18 @@ void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
     if (height <= 0 || layer.translation[0] - layer.lateral - 2 * layer.width <= minX->x ||
         layer.translation[0] + layer.lateral + 2 * layer.width >= maxX->x)
         throw std::runtime_error("Cliff drainage must stay inside the source surface");
+    if (layer.profile == 1 &&
+        (!std::isfinite(layer.projectorRadius[1]) || layer.projectorRadius[1] <= 0))
+        throw std::runtime_error("Finite cliff incision requires a positive extent");
+    if (layer.profile == 1 &&
+        (layer.translation[1] - layer.projectorRadius[1] <= minY->y ||
+         layer.translation[1] + layer.projectorRadius[1] >= maxY->y))
+        throw std::runtime_error("Finite cliff incision must end inside the source surface");
+    auto smooth = [](double x)
+    {
+        x = std::clamp(x, 0.0, 1.0);
+        return x * x * (3 - 2 * x);
+    };
     for (std::size_t i = 0; i < count; ++i)
     {
         if ((i & 255) == 0)
@@ -495,7 +507,9 @@ void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
         const double corridor = std::exp(-0.5 * dx * dx);
         const double weak = 0.5 + 0.5 * std::sin(2 * std::numbers::pi *
                                                  layer.thicknessFrequency * p.y + layer.phase);
-        const double retreat = layer.amplitude * (0.6 + 0.4 * weak) * corridor;
+        const double extent = layer.profile == 1 ?
+            1 - smooth((std::abs(p.y - layer.translation[1]) / layer.projectorRadius[1] - 0.7) / 0.3) : 1;
+        const double retreat = layer.amplitude * (0.6 + 0.4 * weak) * corridor * extent;
         p.z -= retreat;
         if (showField)
             surface.field[i] = float(retreat / layer.amplitude);

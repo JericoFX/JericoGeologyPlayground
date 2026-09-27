@@ -209,6 +209,71 @@ int main()
         try { deserialize(oldDrainage); }
         catch (const std::exception &) { rejectsOldDrainage = true; }
         require(rejectsOldDrainage, "v12 recipe rejects the new drainage operation");
+        Recipe finiteRecipe;
+        finiteRecipe.version = 21;
+        finiteRecipe.base = Base::Plane;
+        finiteRecipe.planeSize = {6, 4};
+        auto finite = defaultLayer(Kind::CliffDrainage);
+        finite.profile = 1;
+        finite.translation = {0, 0, 0};
+        finite.lateral = 0;
+        finite.width = 0.3f;
+        finite.amplitude = 0.3f;
+        finite.projectorRadius[1] = 1.2f;
+        finiteRecipe.layers = {finite};
+        auto plainWall = finiteRecipe;
+        plainWall.layers.clear();
+        auto plainGrid = evaluate(plainWall, 64);
+        auto incisedGrid = evaluate(finiteRecipe, 64);
+        require(!incisedGrid.closedSolid &&
+                    incisedGrid.mesh.indices == plainGrid.mesh.indices &&
+                    incisedGrid.mesh.triangleRegions == plainGrid.mesh.triangleRegions,
+                "finite incision retains the original open grid and regions");
+        bool hasCenterRetreat = false;
+        std::set<int> incisedIntervals;
+        for (std::size_t i = 0; i < plainGrid.mesh.positions.size(); ++i)
+        {
+            const auto a = plainGrid.mesh.positions[i], b = incisedGrid.mesh.positions[i];
+            require(std::abs(a.x - b.x) < 1e-12 && std::abs(a.y - b.y) < 1e-12,
+                    "finite incision changes wall depth only");
+            const double depth = a.z - b.z;
+            if (std::abs(a.x) < 0.01 && std::abs(a.y) < 0.1 && depth > 0.15)
+                hasCenterRetreat = true;
+            if (std::abs(a.x) < 0.1 && depth > 0.08)
+                incisedIntervals.insert(int(std::floor(a.y * 4)));
+            if (std::abs(a.y) > 1.5 || std::abs(a.x) > 1.5)
+                require(depth < 0.001, "finite incision ends inside the wall");
+        }
+        require(hasCenterRetreat && incisedIntervals.size() >= 3,
+                "finite incision crosses several beds with measurable retreat");
+        auto oldFiniteRecipe = finiteRecipe;
+        oldFiniteRecipe.version = 20;
+        bool rejectsOldFinite = false;
+        try { validate(oldFiniteRecipe); }
+        catch (const std::exception &) { rejectsOldFinite = true; }
+        require(rejectsOldFinite, "v20 recipes reject finite drainage profile");
+        auto invalidFinite = finiteRecipe;
+        invalidFinite.layers[0].translation[1] = 1.4f;
+        bool rejectsOpenEnd = false;
+        try { evaluate(invalidFinite, 64); }
+        catch (const std::exception &) { rejectsOpenEnd = true; }
+        require(rejectsOpenEnd, "finite incision rejects endpoints outside the wall");
+        auto invalidDirect = plainGrid;
+        auto zeroExtent = finite;
+        zeroExtent.projectorRadius[1] = 0;
+        bool rejectsZeroExtent = false;
+        try { cliffDrainage(invalidDirect, zeroExtent, false); }
+        catch (const std::exception &) { rejectsZeroExtent = true; }
+        require(rejectsZeroExtent, "finite incision rejects zero extent at the public geometry seam");
+        auto finiteSolid = defaultLayer(Kind::Solidify);
+        finiteSolid.thickness = 0.7f;
+        finiteSolid.solidAlongNormals = false;
+        finiteRecipe.layers.push_back(finiteSolid);
+        auto finiteWall = evaluate(finiteRecipe, 64);
+        require(finiteWall.closedSolid && PA::validateClosedMesh(finiteWall.mesh).hasValue() &&
+                    meshHash(finiteWall.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(finiteRecipe)), 64).mesh),
+                "finite incision closes and replays after recipe serialization");
         auto cliffCut = evaluate(cliffPreset, 32);
         std::set<Jerico::Guid> frontRegions;
         for (const auto &region : cliffCut.regions)

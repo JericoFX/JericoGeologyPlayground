@@ -1815,11 +1815,57 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
     }
     if (maxOutlineXY < 0.03 || maxCenterXY > 1e-9)
         throw std::runtime_error("Cliff perimeter failed localized displacement");
+    auto drainedWall = outlinedWall;
+    auto drainage = defaultLayer(Kind::CliffDrainage);
+    drainage.amplitude = 0.28f;
+    drainage.width = 0.35f;
+    drainage.translation[0] = -0.8f;
+    drainage.lateral = 0.25f;
+    drainage.frequency = 0.75f;
+    drainedWall.layers.insert(drainedWall.layers.end() - 1, drainage);
+    auto drainedMesh = evaluate(drainedWall, drainedWall.finalResolution);
+    if (!PA::validateClosedMesh(drainedMesh.mesh).hasValue() ||
+        meshHash(drainedMesh.mesh) != meshHash(evaluate(deserialize(serialize(drainedWall)),
+                                                         drainedWall.finalResolution).mesh))
+        throw std::runtime_error("Drained cliff wall failed closed replay");
+    auto finiteWall = drainedWall;
+    finiteWall.version = 21;
+    for (auto &layer : finiteWall.layers)
+        if (layer.kind == Kind::CliffDrainage)
+        {
+            layer.profile = 1;
+            layer.translation[1] = 0.1f;
+            layer.projectorRadius[1] = 1.25f;
+        }
+    auto finiteMesh = evaluate(finiteWall, finiteWall.finalResolution);
+    if (!PA::validateClosedMesh(finiteMesh.mesh).hasValue() ||
+        meshHash(finiteMesh.mesh) != meshHash(evaluate(deserialize(serialize(finiteWall)),
+                                                        finiteWall.finalResolution).mesh))
+        throw std::runtime_error("Finite cliff wall failed closed replay");
+    auto outlinedOpen = evaluate(outlinedWall, outlinedWall.finalResolution,
+                                int(outlinedWall.layers.size()) - 2);
+    auto finiteOpen = evaluate(finiteWall, finiteWall.finalResolution,
+                              int(finiteWall.layers.size()) - 2);
+    if (outlinedOpen.mesh.indices != finiteOpen.mesh.indices)
+        throw std::runtime_error("Finite cliff incision changed open grid topology");
+    double maxFiniteRetreat = 0, maxOutsideFiniteRetreat = 0;
+    for (std::size_t i = 0; i < outlinedOpen.mesh.positions.size(); ++i)
+    {
+        const auto before = outlinedOpen.mesh.positions[i], after = finiteOpen.mesh.positions[i];
+        const auto retreat = before.z - after.z;
+        maxFiniteRetreat = std::max(maxFiniteRetreat, retreat);
+        if (std::abs(before.y - 0.1) > 1.25)
+            maxOutsideFiniteRetreat = std::max(maxOutsideFiniteRetreat, std::abs(retreat));
+    }
+    if (maxFiniteRetreat < 0.1 || maxOutsideFiniteRetreat > 1e-9)
+        throw std::runtime_error("Finite cliff incision failed localized retreat");
     save(baseline, evidence / "baseline-recipe.json");
     save(candidate, evidence / "candidate-recipe.json");
     save(wallOnly, evidence / "wall-only-recipe.json");
     save(variedWall, evidence / "varied-wall-recipe.json");
     save(outlinedWall, evidence / "outlined-wall-recipe.json");
+    save(drainedWall, evidence / "drained-wall-recipe.json");
+    save(finiteWall, evidence / "finite-wall-recipe.json");
     double maximum = 0, sum = 0;
     for (std::size_t i = 0; i < beforeRelief.mesh.positions.size(); ++i)
     {
@@ -1837,10 +1883,16 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
                             {"wallOnlyHash", meshHash(wallMesh.mesh)},
                             {"variedWallHash", meshHash(variedMesh.mesh)},
                             {"outlinedWallHash", meshHash(outlinedMesh.mesh)},
+                            {"drainedWallHash", meshHash(drainedMesh.mesh)},
+                            {"finiteWallHash", meshHash(finiteMesh.mesh)},
                             {"triangles", after.mesh.indices.size() / 3},
                             {"wallOnlyTriangles", wallMesh.mesh.indices.size() / 3},
                             {"variedWallTriangles", variedMesh.mesh.indices.size() / 3},
                             {"outlinedWallTriangles", outlinedMesh.mesh.indices.size() / 3},
+                            {"drainedWallTriangles", drainedMesh.mesh.indices.size() / 3},
+                            {"finiteWallTriangles", finiteMesh.mesh.indices.size() / 3},
+                            {"maximumFiniteIncisionRetreatM", maxFiniteRetreat},
+                            {"maximumOutsideFiniteIncisionRetreatM", maxOutsideFiniteRetreat},
                             {"maximumPerimeterXYDisplacementM", maxOutlineXY},
                             {"maximumCenterXYDisplacementM", maxCenterXY},
                             {"maximumReliefStageDisplacementM", maximum},
@@ -1849,6 +1901,8 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
                             {"candidateGenerationCpuMs", after.milliseconds},
                             {"variedWallGenerationCpuMs", variedMesh.milliseconds},
                             {"outlinedWallGenerationCpuMs", outlinedMesh.milliseconds},
+                            {"drainedWallGenerationCpuMs", drainedMesh.milliseconds},
+                            {"finiteWallGenerationCpuMs", finiteMesh.milliseconds},
                             {"gridSizeAndCutIdentityPreserved", true},
                             {"changedTriangleIndexEntries", changedIndices},
                             {"changedTriangleRegionEntries", changedTriangleRegions},
@@ -1865,15 +1919,18 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
         proof["views"].push_back({{"name", view == 0 ? "front" : "oblique"},
                                   {"yaw", camera.yaw}, {"pitch", camera.pitch},
                                   {"distance", camera.distance}});
-        for (int variant = 0; variant < 5; ++variant)
+        for (int variant = 0; variant < 7; ++variant)
         {
             renderer.upload(variant == 0 ? before : variant == 1 ? after :
-                            variant == 2 ? wallMesh : variant == 3 ? variedMesh : outlinedMesh);
+                            variant == 2 ? wallMesh : variant == 3 ? variedMesh :
+                            variant == 4 ? outlinedMesh : variant == 5 ? drainedMesh : finiteMesh);
             renderer.uploadMaterial(nullptr, materialDiffuse(appearance), true, appearance);
             const auto stem = std::string(variant == 0 ? "baseline" :
                                           variant == 1 ? "candidate" :
                                           variant == 2 ? "wall-only" :
-                                          variant == 3 ? "varied-wall" : "outlined-wall") +
+                                          variant == 3 ? "varied-wall" :
+                                          variant == 4 ? "outlined-wall" :
+                                          variant == 5 ? "drained-wall" : "finite-wall") +
                               (view == 0 ? "-front" : "-oblique");
             for (int mode : {0, 5})
             {

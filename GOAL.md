@@ -10,6 +10,8 @@ La [primera prueba v19 de estratos resistentes](Evidence/2026-09-26-cliff-strata
 
 La [prueba v20 de camas variables y perímetro local](Evidence/2026-09-26-cliff-varied-wall-review.md) redujo la repetición exacta de bancos y movió la silueta sólo cerca del borde. Pasó cierre, replay, captura Vulkan y 17/17 tests, pero la Beauty del cliff permanece **PARTIAL**: aún parece un bloque escalonado; el corte central se excluyó sólo para aislar el defecto y no está resuelto.
 
+La [prueba v21 de incisión finita](Evidence/2026-09-26-cliff-finite-incision-review.md) sustituye experimentalmente la lectura de placa central por un corredor erosionado que termina dentro de la pared. Conserva la malla abierta, cierra y reproduce el sólido y pasa 17/17 tests. En Beauty es sutil y el cliff sigue **PARTIAL**; hace falta cambiar la masa con juntas y salientes arraigados antes de considerar high→low.
+
 ## Referencias durables del Goal
 
 Las copias de los documentos del Engine que corresponden a este trabajo están en [`docs/engine-reference-2026-09-24/`](docs/engine-reference-2026-09-24/README.md). [`SOURCE_MANIFEST.json`](docs/engine-reference-2026-09-24/SOURCE_MANIFEST.json) registra para cada copia la ruta original, la ruta local, los bytes y el SHA-256 verificado. Incluye la autoridad M8, el blueprint y matemáticas SDF/geología, ZenUV, SimpleBake, Ucupaint, remesh, segmentación, daño, fractura, diseños de rocas y RBrush, y evidencia matemática de estratos/LOD/coluvión/rockfall. Son referencias documentales congeladas: no sustituyen la autoridad actual del Engine ni implican que la capacidad esté implementada o aceptada.

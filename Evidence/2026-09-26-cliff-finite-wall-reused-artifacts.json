@@ -1,0 +1,107 @@
+{
+  "earlier": "Evidence/2026-09-26-cliff-outlined-wall-candidate",
+  "current": "Evidence/2026-09-26-cliff-finite-wall-candidate",
+  "algorithm": "SHA-256",
+  "identicalArtifacts": [
+    {
+      "name": "baseline-front-material.png",
+      "sha256": "bb628dbc3b3b3778a4a98cd294db45a1c7ac87289cbd1fef6b539bc64739a5eb"
+    },
+    {
+      "name": "baseline-front-neutral.png",
+      "sha256": "825854d1bddb38564cd5c34aa75bd7cbc1f5cf4214d08f0606560322f1621df3"
+    },
+    {
+      "name": "baseline-oblique-material.png",
+      "sha256": "6b7082e78a7a041a86008a4faef0ad776facf8fb0706a21726e202952c9d3d1b"
+    },
+    {
+      "name": "baseline-oblique-neutral.png",
+      "sha256": "24e3ba310378c445815533a7f1634feff608232138c9f276f11782a4163cf61e"
+    },
+    {
+      "name": "baseline-recipe.json",
+      "sha256": "34be174d61e8f18ac41eddd706d14c55918e9cd3e6db39e6dbf0b097dfc6b6f6"
+    },
+    {
+      "name": "candidate-front-material.png",
+      "sha256": "e542f4235ee92dc9d1934dbc62094d1de406a43073fc32496dbf13df1e0313da"
+    },
+    {
+      "name": "candidate-front-neutral.png",
+      "sha256": "a1d0287ad2c1273516e39269582fc3c115ca298600d0c21aff956dde31a73e13"
+    },
+    {
+      "name": "candidate-oblique-material.png",
+      "sha256": "a7b295aab72163c815eab5f56b9553b49b540e170803a91825c63133729f1048"
+    },
+    {
+      "name": "candidate-oblique-neutral.png",
+      "sha256": "a09c509f70a3119afa46fc879f7232c906dfc8fb2fd2f590121d51906a552e55"
+    },
+    {
+      "name": "candidate-recipe.json",
+      "sha256": "7a46232081f69e88eefe5bbb4201892c840308f20dc72f76f3b993507a87ac15"
+    },
+    {
+      "name": "outlined-wall-front-material.png",
+      "sha256": "b56bfa10d50e830d2815c3ac6e70d9e8d5b4e75618af797635533606704c328b"
+    },
+    {
+      "name": "outlined-wall-front-neutral.png",
+      "sha256": "06cd5206ec562241dace9da5223cf031e0a8ccbf13ca1dc3d17de63582b996e1"
+    },
+    {
+      "name": "outlined-wall-oblique-material.png",
+      "sha256": "c9e0ea300457ad34afde8d98959d0f21e4510ff943bc7d2edf3b657b5fe2ac17"
+    },
+    {
+      "name": "outlined-wall-oblique-neutral.png",
+      "sha256": "a80748f4e4d98c5978414995726d240afde5ad50b9b5a62473f6f6e81c294391"
+    },
+    {
+      "name": "outlined-wall-recipe.json",
+      "sha256": "018f8d2a473f248c513042d71d16d89c15b72cfe80fec5822b98e8a9c5a0298b"
+    },
+    {
+      "name": "varied-wall-front-material.png",
+      "sha256": "60b867df3b2219da895a44a599c1600220acc7a97cabc203a2d6fbbc710b074e"
+    },
+    {
+      "name": "varied-wall-front-neutral.png",
+      "sha256": "9f71a77c30ada0c40ee36a26c4c53b4bd82ac3b2d570e17ea49b4d9650533ff2"
+    },
+    {
+      "name": "varied-wall-oblique-material.png",
+      "sha256": "5099881cb8db1dc865b7ca6fe089132b2f0eb13589a2aded4d1a38df01c34300"
+    },
+    {
+      "name": "varied-wall-oblique-neutral.png",
+      "sha256": "1ddaaeb2084148a595c6c8b4f3aeb2decd37893e9c15607f8ef1a1a48ee60c8d"
+    },
+    {
+      "name": "varied-wall-recipe.json",
+      "sha256": "21dde806682e1aeb99419e3f4402761da426ff337bcedb5bcbb0ac1aa8a0f13c"
+    },
+    {
+      "name": "wall-only-front-material.png",
+      "sha256": "d2d3b42fdcb9e3061550f30baabd9fa7a3e8d15b665461d32f753e8319a16f46"
+    },
+    {
+      "name": "wall-only-front-neutral.png",
+      "sha256": "48a5509d82b5fce4d3780ea43ae33b70939f02138bc590db12fd627402601d5a"
+    },
+    {
+      "name": "wall-only-oblique-material.png",
+      "sha256": "2a474b3fb8069ee5185621b3aa9a5c095cfbe857d860d88a0668b31c3cf0ff3d"
+    },
+    {
+      "name": "wall-only-oblique-neutral.png",
+      "sha256": "0b1413ce4c31ccf90262d1dcfa1537e409a86221ba520b6bfe74b687e95fbd88"
+    },
+    {
+      "name": "wall-only-recipe.json",
+      "sha256": "83d0d3f0496191a4d098c0a634831d81b89412ea5d75f11409c670bc7daef253"
+    }
+  ]
+}
