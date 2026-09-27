@@ -98,3 +98,14 @@ Esto **no sustituye ni duplica** la autoridad de `ProceduralSpline` de JericoEng
 La aceptación de este slice exige tanto pruebas automáticas como prueba interactiva real: el ejecutable normal debe exponer un panel/modo **Spline Construction** con presets y controles editables de spline, perfil, diámetro/medidas, calidad, roll, seam y escala UV. Debe quedar posible crear/cambiar al menos cinco construcciones, editar puntos y ver el resultado actualizarse en el viewport Vulkan. Compilar o producir una prueba headless sin dejar esta superficie de uso al owner **no es PASS**.
 
 La implementación debe conservar evidencia reproducible (capturas, métricas y hashes útiles) mediante un comando de prueba dedicado; distinguir implementado, verificado automáticamente, inspeccionado visualmente y pendiente; y dejar un handoff explícito hacia los owners ya existentes de JericoEngine sin proponer una segunda spline, segunda ruta de prefab ni segunda autoridad de cook.
+
+
+## Nuevo slice pedido por el owner — Procedural Assemblies, Damage, Piers & Bridges (2026-09-27)
+
+El owner amplió el laboratorio de spline para probar **assemblies procedurales con partes semánticas y daño seleccionable**. La directiva completa está en [`docs/PROCEDURAL_ASSEMBLIES_DAMAGE_BRIDGES_2026_09_27.md`](docs/PROCEDURAL_ASSEMBLIES_DAMAGE_BRIDGES_2026_09_27.md).
+
+El objetivo es reutilizar `Path/Spline + Sweep + OffsetPath + RepeatAlongPath + FitCountSpacing + Stable Part IDs + Damage Selectors` para construir y romper de forma controlada tuberías con uniones, vías, barandas, muelles de madera, catwalks y puentes. Incluye tanto un puente de suspensión con cable principal parabólico/hangers como un puente de cuerda/tablas con catenaria. Las fórmulas, límites numéricos, estados de daño, pruebas requeridas, LOD y política de promoción opcional a Jolt están fijados en la directiva.
+
+La UI normal del Playground debe permitir al owner seleccionar presets, editar dimensiones/path, inspeccionar IDs y marcar piezas concretas como Missing/Broken/Bent/Loose, incluyendo tablas individuales del muelle. La aceptación exige al menos Pipe+Couplings, Railway, Broken Railing, Wooden Pier, Suspension Bridge y Rope/Plank Bridge interactivos, más evidencia automatizada reproducible. Compilar, producir una captura aislada o generar una malla sin selección/edición interactiva no es PASS.
+
+JericoEngine continúa READ_ONLY para este experimento. El Playground puede leer sus autoridades y reutilizar su dependencia Jolt en pruebas acotadas, pero no debe crear una segunda autoridad productiva de spline, prefab, cook, daño o física.
