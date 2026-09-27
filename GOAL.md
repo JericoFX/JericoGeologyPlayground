@@ -111,3 +111,14 @@ El objetivo es reutilizar `Path/Spline + Sweep + OffsetPath + RepeatAlongPath + 
 La UI normal del Playground debe permitir al owner seleccionar presets, editar dimensiones/path, inspeccionar IDs y marcar piezas concretas como Missing/Broken/Bent/Loose, incluyendo tablas individuales del muelle. La aceptación exige al menos Pipe+Couplings, Railway, Broken Railing, Wooden Pier, Suspension Bridge y Rope/Plank Bridge interactivos, más evidencia automatizada reproducible. Compilar, producir una captura aislada o generar una malla sin selección/edición interactiva no es PASS.
 
 JericoEngine continúa READ_ONLY para este experimento. El Playground puede leer sus autoridades y reutilizar su dependencia Jolt en pruebas acotadas, pero no debe crear una segunda autoridad productiva de spline, prefab, cook, daño o física.
+
+
+## Nuevo slice pedido por el owner — Spider Web Mesh-to-Texture / Card LOD (2026-09-27)
+
+El owner pidió que una telaraña detallada pueda nacer como geometría real y convertirse automáticamente en una representación de textura mucho más barata. La directiva completa está en docs/SPIDER_WEB_MESH_TO_TEXTURE_CARD_LOD_2026_09_27.md.
+
+La ruta experimental reutiliza el baker, mipmaps, PNG y captura ya existentes del Playground y conserva el Web Graph como autoridad: LOD0 geometry -> LOD1 ribbons -> LOD2 card/card cluster. El card debe hornear coverage/opacity y normal como mínimo, evaluar thickness/height/material y una representación distance/centreline-field para hilos finos, y generar mips conscientes de cobertura.
+
+Una sola quad/card sólo se admite cuando un fit de plano cumple el error configurado. Telarañas de esquina/no planas deben dividirse en pocos patches o mantener ribbons. Para damage dinámico, una textura de un solo Edge ID no alcanza en cruces: la prueba debe conservar contribuyentes acotados (inicialmente K=2) o elegir fallback explícito.
+
+No es PASS por exportar un PNG. El owner debe poder alternar Mesh/Ribbon/Card en la UI normal, inspeccionar coverage/normal/distance/IDs, romper un edge y comprobar que el LOD barato aceptado no deja un hilo fantasma.
