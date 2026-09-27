@@ -25,6 +25,7 @@
 #include <future>
 #include <imgui.h>
 #include <iostream>
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <numbers>
 #include <optional>
@@ -89,6 +90,14 @@ std::filesystem::path chooseFile(HWND owner, bool saveFile)
 bool slider(const char *name, float &value, float low, float high)
 {
     return ImGui::SliderFloat(name, &value, low, high, "%.3f");
+}
+std::uint64_t nextDamageOperationId(const std::vector<Layer> &layers)
+{
+    for (std::uint64_t id=1;id<=layers.size()+1;++id)
+        if (std::none_of(layers.begin(),layers.end(),[id](const Layer &layer)
+            {return layer.kind==Kind::DamageCavity && layer.damageOperationId==id;}))
+            return id;
+    throw std::runtime_error("No free damage operation ID");
 }
 bool editLayer(Layer &l)
 {
@@ -163,6 +172,17 @@ bool editLayer(Layer &l)
         change |= slider("Mask transition", l.width, 0.001f, 1);
         change |= slider("Crater profile power", l.profileSharpness, 0.25f, 8);
         change |= slider("Lip height", l.damageLip, 0, 0.3f);
+    }
+    else if (l.kind == Kind::DamageCavity)
+    {
+        ImGui::TextWrapped("Shared projector cuts a closed solid. Fresh interior gets its own region. "
+                           "A shallow depth keeps a cavity floor; a deep cut can pass through.");
+        change |= ImGui::SliderFloat3("Projector center",l.translation.data(),-5,5);
+        change |= ImGui::SliderFloat3("Projector normal",l.direction.data(),-1,1);
+        change |= ImGui::SliderFloat2("Ellipse radii",l.projectorRadius.data(),.02f,5);
+        change |= slider("Projector rotation",l.projectorRotation,-180,180);
+        change |= slider("Cavity depth",l.amplitude,.01f,2);
+        ImGui::Text("Operation ID %llu",static_cast<unsigned long long>(l.damageOperationId));
     }
     else if (l.kind == Kind::CliffCutLoop)
     {
@@ -311,7 +331,7 @@ bool editLayer(Layer &l)
     }
     if (l.kind != Kind::Layers && l.kind != Kind::Transform && l.kind != Kind::Planes &&
         l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
-        l.kind != Kind::CliffCutLoop)
+        l.kind != Kind::CliffCutLoop && l.kind != Kind::DamageCavity)
     {
         ImGui::Separator();
         int mask = int(l.mask);
@@ -473,6 +493,67 @@ void captureSurfaceFeatures(Renderer &renderer, const std::filesystem::path &evi
         }
     std::ofstream(evidence / "surface-features-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
+}
+void captureSharedDamageCavity(Renderer &renderer,const std::filesystem::path &evidence)
+{
+    nlohmann::json proof;
+    proof["adapter"]=renderer.adapter();
+    proof["resolution"]={1280,960};
+    proof["scope"]="Geometric cavity and through-hole in the Playground; no Engine integration";
+    Camera camera;
+    camera.distance=5.8f;
+    for (int fixture=0;fixture<2;++fixture)
+    {
+        Recipe source=fixture==0 ? preset(0) : Recipe{};
+        if (fixture==1)
+        {
+            source.base=Base::Plane;
+            source.planeSize={2,2};
+            auto solid=defaultLayer(Kind::Solidify);
+            solid.thickness=.3f;
+            source.layers={solid};
+        }
+        const auto before=evaluate(source,source.finalResolution);
+        auto cut=defaultLayer(Kind::DamageCavity);
+        cut.damageOperationId=fixture+1;
+        if (fixture==1)
+        {
+            double front=std::numeric_limits<double>::infinity();
+            for (const auto p:before.mesh.positions) front=std::min(front,p.z);
+            cut.translation={0,0,float(front)};
+            cut.direction={0,0,-1};
+            cut.projectorRadius={.33f,.33f};
+            cut.amplitude=.36f;
+        }
+        source.version=22;
+        source.layers.push_back(cut);
+        const auto after=evaluate(source,source.finalResolution);
+        if (!PA::validateClosedMesh(after.mesh).hasValue() ||
+            PA::hashTriangleMesh(before.mesh)==PA::hashTriangleMesh(after.mesh))
+            throw std::runtime_error("Damage cavity capture did not create a closed geometric cut");
+        const auto label=fixture==0 ? "rock-cavity" : "panel-through-hole";
+        save(source,evidence/(std::string(label)+"-recipe.json"));
+        if (meshHash(after.mesh)!=meshHash(evaluate(load(evidence/(std::string(label)+
+                "-recipe.json")),source.finalResolution).mesh))
+            throw std::runtime_error("Damage cavity capture did not replay");
+        renderer.uploadMaterial(nullptr,materialDiffuse(materialAppearance(source,0)));
+        renderer.upload(before);
+        renderer.draw(1280,960,camera,0);
+        renderer.capture(evidence/(std::string(label)+"-before.png"));
+        renderer.upload(after);
+        renderer.draw(1280,960,camera,0);
+        renderer.capture(evidence/(std::string(label)+"-after.png"));
+        proof["cases"].push_back({{"fixture",label},
+            {"beforeHash",PA::hashTriangleMesh(before.mesh)},
+            {"afterHash",PA::hashTriangleMesh(after.mesh)},
+            {"beforeTriangles",before.mesh.indices.size()/3},
+            {"afterTriangles",after.mesh.indices.size()/3},
+            {"beforeCpuMs",before.milliseconds},{"afterCpuMs",after.milliseconds},
+            {"freshInteriorRegions",std::count_if(after.regions.begin(),after.regions.end(),
+                [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;})}});
+    }
+    std::ofstream(evidence/"damage-cavity-proof.json")<<proof.dump(2)<<'\n';
+    std::cout<<proof.dump(2)<<'\n';
 }
 void captureAngularProfiles(Renderer &renderer, const std::filesystem::path &evidence)
 {
@@ -2225,7 +2306,8 @@ int run(int argc, char **argv)
          caveSquareReliefSmoke = false, caveSelectedReliefSmoke = false,
          slateTemporalSmoke = false, cliffTemporalSmoke = false, strataTemporalSmoke = false,
          cliffMipBiasSmoke = false, strataMipBiasSmoke = false,
-         cliffMomentSmoke = false, strataMomentSmoke = false;
+         cliffMomentSmoke = false, strataMomentSmoke = false,
+         damageCavitySmoke = false;
     unsigned scaleTextureResolution = 4096;
     std::filesystem::path evidence = std::filesystem::path(PLAYGROUND_ROOT) / "Evidence";
     std::filesystem::path adaptiveLayoutPath;
@@ -2254,6 +2336,7 @@ int run(int argc, char **argv)
         if (std::string(argv[i]) == "--smoke-test" ||
             std::string(argv[i]) == "--material-gallery-test" ||
             std::string(argv[i]) == "--surface-features-test" ||
+            std::string(argv[i]) == "--damage-cavity-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
             std::string(argv[i]) == "--extreme-deformation-test" ||
             std::string(argv[i]) == "--cliff-soft-creation-test" ||
@@ -2307,6 +2390,7 @@ int run(int argc, char **argv)
         {
             materialGallerySmoke = std::string(argv[i]) == "--material-gallery-test";
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
+            damageCavitySmoke = std::string(argv[i]) == "--damage-cavity-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
             extremeDeformationSmoke = std::string(argv[i]) == "--extreme-deformation-test";
             cliffSoftCreationSmoke = std::string(argv[i]) == "--cliff-soft-creation-test";
@@ -2424,6 +2508,12 @@ int run(int argc, char **argv)
     if (webEvidence)
     {
         captureWebSurface(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
+    if (damageCavitySmoke)
+    {
+        captureSharedDamageCavity(renderer,evidence);
         SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }
@@ -2722,10 +2812,17 @@ int run(int argc, char **argv)
             "Transform\0Normal / FBM\0Vector / FBM\0Voronoi\0Layer formation\0Domain warp\0Surface "
             "fracture\0Relax\0Structural planes\0Shared macro warp\0Macroform envelope\0Layer edge "
             "breakup\0Strata relief\0Ridged noise\0Solidify surface\0Reduce mesh\0Surface damage / wear\0"
-            "Oriented damage decal\0Layer settling\0Cliff cut loop\0");
+            "Oriented damage decal\0Layer settling\0Cliff cut loop\0Grounded fracture shear\0"
+            "Connected four-block chisel\0Cliff drainage incision\0Geometric damage cavity\0");
         if (ImGui::Button("+ Add layer", {-1, 0}) && recipe.layers.size() < 24)
         {
-            recipe.layers.push_back(defaultLayer(static_cast<Kind>(addKind)));
+            auto added=defaultLayer(static_cast<Kind>(addKind));
+            if (added.kind==Kind::DamageCavity)
+            {
+                added.damageOperationId=nextDamageOperationId(recipe.layers);
+                recipe.version=std::max(recipe.version,22);
+            }
+            recipe.layers.push_back(added);
             selected = int(recipe.layers.size()) - 1;
             anyChange = true;
         }
@@ -2747,6 +2844,8 @@ int run(int argc, char **argv)
             if (ImGui::Button("Duplicate") && recipe.layers.size() < 24)
             {
                 auto copy = recipe.layers[selected];
+                if (copy.kind==Kind::DamageCavity)
+                    copy.damageOperationId=nextDamageOperationId(recipe.layers);
                 recipe.layers.insert(recipe.layers.begin() + selected + 1, copy);
                 ++selected;
                 anyChange = true;
@@ -2760,7 +2859,10 @@ int run(int argc, char **argv)
             }
             if (selected >= 0 && ImGui::Button("Reset layer"))
             {
+                const auto operationId=recipe.layers[selected].damageOperationId;
                 recipe.layers[selected] = defaultLayer(recipe.layers[selected].kind);
+                if (recipe.layers[selected].kind==Kind::DamageCavity)
+                    recipe.layers[selected].damageOperationId=operationId;
                 anyChange = true;
             }
         }
@@ -2949,7 +3051,8 @@ int run(int argc, char **argv)
             }
         }
         const bool selectedDamageArea=selected>=0 && selected<int(recipe.layers.size()) &&
-            recipe.layers[selected].kind==Kind::DamageDecal;
+            (recipe.layers[selected].kind==Kind::DamageDecal ||
+             recipe.layers[selected].kind==Kind::DamageCavity);
         ImGui::TextUnformatted(selectedDamageArea ?
             "Shift+drag: move selected damage area | Drag: orbit | Wheel: zoom" :
             "Drag left: orbit | Middle/right: pan | Wheel: zoom");

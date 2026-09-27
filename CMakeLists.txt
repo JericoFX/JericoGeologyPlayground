@@ -8,7 +8,7 @@ if(CMAKE_SOURCE_DIR MATCHES "^${JERICO_SOURCE}(/|$)" OR CMAKE_BINARY_DIR MATCHES
     message(FATAL_ERROR "Playground source and build must be outside the engine checkout")
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/DamageField.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyDamageIO.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
+add_library(PlaygroundModel Source/Model.cpp Source/SolidGeometry.cpp Source/LayerFormation.cpp Source/SurfaceGeometry.cpp Source/MeshReduction.cpp Source/SurfaceFeatures.cpp Source/NormalBake.cpp Source/AutoUv.cpp Source/RockAddonMath.cpp Source/DamageField.cpp Source/DamageGeometry.cpp Source/RBrushInterop.cpp Source/SplineConstruction.cpp Source/ProceduralAssemblies.cpp Source/AssemblyDamageIO.cpp Source/AssemblyGeneration.cpp Source/WebGraph.cpp Source/WebBake.cpp
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp"
     "${JERICO_SOURCE}/Tools/ProceduralAuthoring/Source/MaskSignedDistanceField2D.cpp"
@@ -59,6 +59,9 @@ add_test(NAME Playground.RockAddonMath COMMAND PlaygroundRockAddonMathTests)
 add_executable(PlaygroundDamageFieldTests Tests/DamageFieldTests.cpp)
 target_link_libraries(PlaygroundDamageFieldTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.DamageField COMMAND PlaygroundDamageFieldTests)
+add_executable(PlaygroundDamageGeometryTests Tests/DamageGeometryTests.cpp)
+target_link_libraries(PlaygroundDamageGeometryTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.DamageGeometry COMMAND PlaygroundDamageGeometryTests)
 add_executable(PlaygroundViewportProjectionTests Tests/ViewportProjectionTests.cpp)
 target_link_libraries(PlaygroundViewportProjectionTests PRIVATE PlaygroundModel)
 add_test(NAME Playground.ViewportProjection COMMAND PlaygroundViewportProjectionTests)

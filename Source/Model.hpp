@@ -44,7 +44,8 @@ enum class Kind
     CliffCutLoop,
     FractureShear,
     FractureQuadrants,
-    CliffDrainage
+    CliffDrainage,
+    DamageCavity
 };
 enum class Mask
 {
@@ -71,6 +72,7 @@ struct Layer
     Kind kind{Kind::NormalNoise};
     bool enabled{true};
     std::uint32_t seed{123};
+    std::uint64_t damageOperationId{}; // Stable cutter identity across layer reorder and regeneration.
     float amplitude{0.08f}, frequency{2.0f}, lacunarity{2}, roughness{0.5f};
     int octaves{3};
     std::array<float, 3> coordinateScale{1, 1, 1}, scale{1, 1, 1}, rotation{}, translation{};
@@ -130,7 +132,8 @@ enum class SurfaceRole
     CutLoop,
     CutFace,
     FractureCut,
-    BlockChisel
+    BlockChisel,
+    DamageInterior
 };
 struct RegionInfo
 {

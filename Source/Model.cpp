@@ -1,5 +1,6 @@
 #include "Model.hpp"
 #include "DamageField.hpp"
+#include "DamageGeometry.hpp"
 #include "LayerFormation.hpp"
 #include "MeshReduction.hpp"
 #include "RockAddonMath.hpp"
@@ -281,6 +282,7 @@ Json layerJson(const Layer &l)
     return Json{{"kind", int(l.kind)},
                 {"enabled", l.enabled},
                 {"seed", l.seed},
+                {"damageOperationId", l.damageOperationId},
                 {"amplitude", l.amplitude},
                 {"frequency", l.frequency},
                 {"lacunarity", l.lacunarity},
@@ -374,7 +376,8 @@ const char *name(Kind kind)
                                   "Cliff cut loop",
                                   "Grounded fracture shear",
                                   "Connected four-block chisel",
-                                  "Cliff drainage incision"};
+                                  "Cliff drainage incision",
+                                  "Geometric damage cavity"};
     return names[int(kind)];
 }
 Layer defaultLayer(Kind kind)
@@ -458,6 +461,15 @@ Layer defaultLayer(Kind kind)
         l.featureRadius = 0.15f;
         l.direction = {0, 0, 1};
         l.translation = {0, 0, 1};
+    }
+    if (kind == Kind::DamageCavity)
+    {
+        l.damageOperationId=1;
+        l.amplitude=.3f;
+        l.projectorRadius={.4f,.4f};
+        l.direction={-.45f,.27f,-.85f};
+        l.translation={-.5f,.3f,-.9f};
+        l.mask=Mask::None;
     }
     if (kind == Kind::CliffCutLoop)
     {
@@ -701,7 +713,8 @@ void validate(const Recipe &r)
     };
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
-             r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21) &&
+             r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21 ||
+             r.version == 22) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -711,7 +724,21 @@ void validate(const Recipe &r)
     for (auto &l : r.layers)
     {
         finiteJson(layerJson(l));
-        require(int(l.kind) >= 0 && int(l.kind) < 23 && int(l.mask) >= 0 && int(l.mask) < 17);
+        require(int(l.kind) >= 0 && int(l.kind) < 24 && int(l.mask) >= 0 && int(l.mask) < 17);
+        if (l.kind == Kind::DamageCavity)
+        {
+            require(r.version>=22 && l.damageOperationId>0 && l.mask==Mask::None &&
+                    l.amplitude>0 && l.amplitude<=5 &&
+                    l.projectorRadius[0]>=.02f && l.projectorRadius[0]<=10 &&
+                    l.projectorRadius[1]>=.02f && l.projectorRadius[1]<=10 &&
+                    std::abs(l.projectorRotation)<=360 &&
+                    std::hypot(double(l.direction[0]),double(l.direction[1]),
+                               double(l.direction[2]))>1e-8);
+            for (const auto &previous:r.layers)
+                if (&previous!=&l && previous.kind==Kind::DamageCavity &&
+                    previous.damageOperationId==l.damageOperationId)
+                    require(false);
+        }
         if (l.kind == Kind::CliffDrainage)
             require(r.version >= 13 && l.mask == Mask::None && l.amplitude >= 0.01f &&
                     l.amplitude <= 0.5f && l.width >= 0.1f && l.width <= 1 &&
@@ -758,7 +785,7 @@ void validate(const Recipe &r)
                     l.kind != Kind::Envelope && l.kind != Kind::Solidify && l.kind != Kind::Reduce &&
                     l.kind != Kind::LayerSettle && l.kind != Kind::CliffCutLoop &&
                     l.kind != Kind::FractureShear && l.kind != Kind::FractureQuadrants &&
-                    l.kind != Kind::CliffDrainage);
+                    l.kind != Kind::CliffDrainage && l.kind != Kind::DamageCavity);
         require(l.reductionError >= 0.0001f && l.reductionError <= 0.5f);
         require(std::isfinite(l.phase) && std::abs(l.phase) <= 100 && l.profile >= 0 &&
                 l.profile < (l.kind == Kind::CliffCutLoop ? 6 :
@@ -1147,6 +1174,60 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
             normals(next);
             result = std::move(next);
             warp = std::move(nextWarp);
+            continue;
+        }
+        if (l.kind == Kind::DamageCavity)
+        {
+            if (!result.closedSolid)
+                throw std::runtime_error("Geometric damage cavity requires a closed solid");
+            DamageArea area;
+            area.id=std::to_string(l.damageOperationId);
+            area.projector.center=vec(l.translation);
+            area.projector.normal=unit(vec(l.direction));
+            area.projector.tangent=unit(cross(
+                std::abs(area.projector.normal.y)<.9 ? Vec3d{0,1,0} : Vec3d{1,0,0},
+                area.projector.normal));
+            area.projector.bitangent=cross(area.projector.normal,area.projector.tangent);
+            area.projector.rotationRadians=l.projectorRotation*std::numbers::pi/180;
+            area.footprint.radius={l.projectorRadius[0],l.projectorRadius[1],1};
+            area.footprint.depth=l.amplitude;
+            Jerico::Guid fresh;
+            bool uniqueFresh=false;
+            for (std::uint64_t salt=0;salt<256;++salt)
+            {
+                fresh=Solid::region(l.seed,(l.damageOperationId ^ 0xDA6A6EULL)+salt);
+                uniqueFresh=std::none_of(result.regions.begin(),result.regions.end(),
+                    [&](const RegionInfo &region){return region.id==fresh;}) &&
+                    std::find(result.mesh.triangleRegions.begin(),
+                              result.mesh.triangleRegions.end(),fresh)==
+                        result.mesh.triangleRegions.end();
+                if (uniqueFresh) break;
+            }
+            if (!uniqueFresh)
+                throw std::runtime_error("No unique fresh damage region ID");
+            MeshResult next;
+            next.mesh=cutDamageCavity(result.mesh,area,fresh,240000,cancel);
+            if (PA::hashTriangleMesh(next.mesh)==PA::hashTriangleMesh(result.mesh))
+                continue;
+            next.closedSolid=true;
+            next.hardRegions=true;
+            next.sourceSelection=result.sourceSelection;
+            next.sourceRevision=result.sourceRevision;
+            next.regions=result.regions;
+            next.regions.push_back({fresh,{},SurfaceRole::DamageInterior,int(stage),-1});
+            std::vector<Vec3d> nextWarp;
+            Solid::transferSamples(result,warp,next,nextWarp,cancel);
+            if (int(stage)==fieldLayer)
+            {
+                next.field.assign(next.mesh.positions.size(),0);
+                for (std::size_t t=0;t<next.mesh.triangleRegions.size();++t)
+                    if (next.mesh.triangleRegions[t]==fresh)
+                        for (int corner=0;corner<3;++corner)
+                            next.field[next.mesh.indices[3*t+corner]]=1;
+            }
+            normals(next);
+            result=std::move(next);
+            warp=std::move(nextWarp);
             continue;
         }
         if (l.kind == Kind::Solidify)
@@ -1633,7 +1714,7 @@ Recipe deserialize(const std::string &text)
         inputVersion != 9 && inputVersion != 10 && inputVersion != 11 && inputVersion != 12 &&
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
         inputVersion != 17 && inputVersion != 18 && inputVersion != 19 &&
-        inputVersion != 20 && inputVersion != 21)
+        inputVersion != 20 && inputVersion != 21 && inputVersion != 22)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1668,6 +1749,8 @@ Recipe deserialize(const std::string &text)
             throw std::runtime_error("Four-block chisel requires recipe v12");
         if (inputVersion < 13 && l.kind == Kind::CliffDrainage)
             throw std::runtime_error("Cliff drainage requires recipe v13");
+        if (inputVersion < 22 && l.kind == Kind::DamageCavity)
+            throw std::runtime_error("Geometric damage cavity requires recipe v22");
         if (inputVersion < 7 && a.value("perimeterAmplitude", 0.0f) != 0)
             throw std::runtime_error("Independent stratum perimeter requires recipe v7");
         if (inputVersion < 8 && a.contains("maskAxis") &&
@@ -1681,6 +1764,7 @@ Recipe deserialize(const std::string &text)
             a.at("seed").get<double>() > 4294967295.0)
             throw std::runtime_error("Seed must be an unsigned 32-bit integer");
         READ(seed);
+        if (a.contains("damageOperationId")) READ(damageOperationId);
         READ(amplitude);
         READ(frequency);
         READ(lacunarity);
