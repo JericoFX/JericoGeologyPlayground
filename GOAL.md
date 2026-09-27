@@ -1,4 +1,4 @@
-# Goal activo — JericoGeologyPlayground
+# Goal de laboratorio — JericoGeologyPlayground
 
 Desarrollar y verificar en este playground las matemáticas nativas C++ de geología, con prioridad actual en la creación y calidad visual de rocas, cliffs y estratos; retomar bakes high→low después. Investigar y probar compatibilidad matemática con RBrush leyendo `F:\JericoEngine`, sin modificar ese checkout ni ejecutar Blender. Conservar pruebas, capturas, métricas, procedencia de referencias y un inventario honesto de lo demostrado y lo pendiente para la futura integración M8 en JericoEngine.
 
@@ -28,7 +28,7 @@ Las copias de los documentos del Engine que corresponden a este trabajo están e
 
 **Asignación pedida por el owner:** ZenUV guía las matemáticas de UV automática (seams, charts, unwrap, packing y densidad); Ucupaint guía la generación de bakes/mapas y máscaras de superficie; SimpleBake aporta además el flujo de proyección high→low, cage y empaquetado. Todo debe implementarse y comprobarse en C++ nativo.
 
-La instrucción vigente del owner es reconstruir y probar la matemática en C++ nativo. No ejecutar Blender ni copiar código, assets o node graphs de los addons. No escribir en `F:\JericoEngine`. El M8 del Engine decidirá la integración después de pruebas suficientes en el playground.
+La instrucción vigente del owner es reconstruir y probar la matemática en C++ nativo. No ejecutar Blender ni copiar código, assets o node graphs de los addons. El Engine se usa como referencia; la única excepción de escritura pedida por el owner es un MD de extracción al cerrar el laboratorio. El M8 del Engine decidirá la integración después de pruebas suficientes en el playground.
 
 ## Estado verificable al pausar
 
@@ -128,8 +128,16 @@ No es PASS por exportar un PNG. El owner debe poder alternar Mesh/Ribbon/Card en
 
 ## Preferred web path — Procedural Web Surface (2026-09-27)
 
+**Resultado actual:** el [laboratorio Web Surface](docs/PROCEDURAL_WEB_SURFACE_LAB_RESULTS_2026_09_27.md) implementa ambas representaciones desde el mismo Web Graph: textura/card como ruta normal y hilos 3D/ribbons bajo demanda. Plane, Anchors y Area; seis presets; EdgeID Break/Restore; Coverage/Distance/Normal; mips fuente/promedio; UI normal, óptica Ghost/Wet/Droplets y red gruesa Jolt a 60 Hz están presentes. Release, 21/21 CTest y dos capturas Vulkan independientes con 47/47 PNG idénticos pasaron. Se inspeccionaron las imágenes originales del corredor, la red física y el card deformado. La interacción manual integral y la estabilidad temporal siguen **PENDING**; no se declara que el rendimiento global ya esté aceptado.
+
 El owner aclaró que la telaraña normal no debe nacer como cientos/miles de tubos spline. La ruta preferida del Playground pasa a ser la directiva [`docs/PROCEDURAL_WEB_SURFACE_SHADER_2026_09_27.md`](docs/PROCEDURAL_WEB_SURFACE_SHADER_2026_09_27.md): el diseñador coloca un plano/área o anchors, un Web Graph determinista genera los strands semánticos y un baker CPU/GPU genera/cachea un Web Field/Texture para renderizar normalmente con uno o pocos cards. La geometría por strand queda para debug, LOD cercano o casos especiales.
 
 El experimento anterior de mesh-to-card sigue siendo referencia/fallback útil, pero ya no es requisito generar primero una malla pesada. La primera ruta de damage debe ser simple: `Break Edge -> mark dirty -> regenerate texture`, porque el cambio de web es event-driven; no introducir contributor tables complejas antes de medir esa regeneración.
 
 La aceptación exige comparar el card normal contra una implementación geométrica de debug, medir coste real, conservar hilos finos mediante mips generados desde el Web Graph y permitir al owner crear/editar/break webs desde la UI normal.
+
+## Cierre del laboratorio solicitado por el owner (2026-09-27)
+
+Después de Web Field se extendió [Spline Construction](docs/SPLINE_CONSTRUCTION_LAB_RESULTS_2026_09_27.md) con taper, corrugación, torsión y fractura real de barridos; la misma fractura mejora los cables rotos de Procedural Assemblies. Hay 13 presets en la ventana normal y 13 capturas de spline, incluidas manguera corrugada, tubería fracturada y conducto torsionado. Build Release y CTest completo **21/21 PASS**; las 47 capturas web finales son reproducibles byte a byte. `git diff --check` pasó.
+
+El trabajo experimental del Playground se entrega para extracción, con código, pruebas y evidencia enlazados desde un MD único en JericoEngine. **Esto cierra el trabajo de laboratorio pedido en este chat, no declara aceptada la Beauty geológica ni la integración M8 del Engine.** Pendientes explícitos: cliff/roca/caverna de aspecto natural, temporalidad de webs, selección/interacción manual completa después del Escape, cortes físicos EdgeID uno a uno, scene FPS y adaptación del código a las autoridades existentes del Engine. Los bakes high→low no se retomaron porque el owner priorizó creación geológica y luego webs/splines.

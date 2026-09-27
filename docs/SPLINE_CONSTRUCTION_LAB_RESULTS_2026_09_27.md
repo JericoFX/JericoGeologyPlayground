@@ -1,5 +1,7 @@
 # Spline Construction / Pipe UV Lab — resultado experimental (2026-09-27)
 
+Las cifras iniciales siguientes describen la primera línea base. La extensión final de efectos y roturas se detalla al final.
+
 ## Estado de verdad
 
 - **IMPLEMENTED:** `Source/SplineConstruction.hpp/.cpp` toma `PA::ProceduralSpline` del Engine como único documento de path. Evalúa Polyline, Catmull-Rom y Bézier, subdivide según desviación/ángulo/paso, acumula distancia en metros, transporta el frame por double-reflection RMF, corrige la costura de un loop cerrado y aplica el roll después. Un solo barrido usa perfiles Circle, Ring, Rectangle, Rounded Rectangle, U/Channel e I-Beam; genera tapas, UV analíticas y piezas repetidas por longitud de arco. `Source/SplineLabUI.cpp` expone diez presets, controles de puntos/perfil/calidad/UV/repetición y seis vistas dentro del ejecutable normal.
@@ -36,3 +38,10 @@ No se escribió ningún archivo de `F:\JericoEngine`. Este laboratorio consume e
 | Malla validada y salida futura | Geometry IR / rmesh cook / prefab parts |
 
 No se propone otra autoridad de spline, prefab ni cook. Las juntas de una red futura necesitarían un nodo de construcción explícito, perfiles de corte compatibles y una resolución de unión/UV independiente del barrido de tramos; este experimento deja tramos con posición, orientación, perímetro y UV métricos para probar esa arquitectura después.
+
+## Extensión final: efectos, rotura y usos procedurales
+
+- `ConstructionSettings` expone longitud de taper, escala de puntas, amplitud/espaciado de corrugación, vueltas de torsión y fractura con posición, separación y rugosidad. Los efectos son deterministas, usan distancia real de arco y el muestreo se ajusta al espaciado de la corrugación. Una fractura inserta dos frames exactos, elimina el tramo central, produce extremos irregulares y tapa ambos cortes; las UV por longitud siguen siendo métricas. Se rechazan huecos imposibles y torsión no entera en loops cerrados.
+- La UI normal tiene 13 presets, incluidos **Corrugated Hose**, **Fractured Pipe** y **Twisted Duct**, además de controles editables para cada efecto. El cable roto de Procedural Assemblies reutiliza la misma fractura del barrido en vez de quitar muestras y dejar extremos planos.
+- `Playground.SplineConstruction` y `Playground.ProceduralAssemblies` pasan. El build Release y CTest completo pasan **21/21**. `Evidence/spline-effects-final` y `Evidence/spline-effects-final-b` contienen 13/13 capturas Vulkan 1280×960 idénticas y hashes de malla/UV coincidentes entre corridas; las tres capturas nuevas se inspeccionaron en tamaño original. Corrugated Hose: 329 frames, 8.883 vértices, 17.104 triángulos, 3,23 ms CPU en esta corrida. Fractured Pipe: 1.404 vértices, 2.704 triángulos, 0,55 ms. Twisted Duct: 125 vértices, 196 triángulos, 0,08 ms. Estas duraciones son casos aislados y no presupuestos de producción.
+- La misma ruta ya puede ensayar aislamiento de tubería, mangueras corrugadas, cable trenzado visual, conductos retorcidos y roturas de cables/caños. Para una herramienta del Engine faltan junctions, autoría de varios perfiles/materiales por tramo, colisiones de efectos contra sí mismos, edición visual directa de cortes y regeneración incremental. Este laboratorio no crea otra autoridad de spline, cook ni prefab.

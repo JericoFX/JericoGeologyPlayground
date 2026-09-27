@@ -5,6 +5,7 @@
 #include <cmath>
 #include <functional>
 #include <numbers>
+#include <optional>
 #include <stdexcept>
 
 namespace Playground::Construction
@@ -282,7 +283,19 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
         !std::isfinite(settings.profileRotationRadians) || settings.maximumVertices < 8 ||
         settings.maximumVertices > 500000 || settings.profileScale > 1000 ||
         settings.profileChordErrorMeters > 1 ||
-        settings.profileMaximumAngleRadians > std::numbers::pi/2)
+        settings.profileMaximumAngleRadians > std::numbers::pi/2 ||
+        !std::isfinite(settings.taperLengthMeters) || settings.taperLengthMeters<0 ||
+        !std::isfinite(settings.tipScale) || settings.tipScale<=0 || settings.tipScale>1 ||
+        !std::isfinite(settings.ribAmplitude) || settings.ribAmplitude<0 ||
+        settings.ribAmplitude>.4 || !std::isfinite(settings.ribSpacingMeters) ||
+        settings.ribSpacingMeters<.04 ||
+        settings.ribSpacingMeters>10 || !std::isfinite(settings.twistTurns) ||
+        std::abs(settings.twistTurns)>16 ||
+        !std::isfinite(settings.breakFraction) ||
+        settings.breakFraction<=0 || settings.breakFraction>=1 ||
+        !positive(settings.breakGapMeters) ||
+        !std::isfinite(settings.breakRoughness) ||
+        settings.breakRoughness<0 || settings.breakRoughness>1)
         throw std::runtime_error("Invalid profile, UV or vertex-budget settings");
     const bool radial = settings.profile == ProfileKind::Circle || settings.profile == ProfileKind::Ring;
     if ((radial && (!positive(settings.radiusMeters) || settings.radiusMeters > 1000)) ||
@@ -299,9 +312,41 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
           settings.wallThicknessMeters >= 0.5 * std::min(settings.widthMeters, settings.heightMeters))))
         throw std::runtime_error("Invalid profile dimensions or wall thickness");
     ConstructionResult result;
-    result.path = samplePath(spline, settings.pathQuality);
+    auto quality=settings.pathQuality;
+    if (settings.ribAmplitude>0)
+        quality.maximumStepMeters=std::min(quality.maximumStepMeters,
+                                          settings.ribSpacingMeters/8);
+    result.path = samplePath(spline, quality);
+    if (spline.closed && std::abs(settings.twistTurns-std::round(settings.twistTurns))>1e-8)
+        throw std::runtime_error("Closed spline twist needs a whole number of turns");
     if (settings.repeatEnabled)
         result.repeats = repeatAlongPath(result.path, settings.repeat);
+    std::optional<std::size_t> breakLeftRing;
+    if (settings.breakEnabled)
+    {
+        if (spline.closed)
+            throw std::runtime_error("Open path required for a spline fracture");
+        const auto center=settings.breakFraction*result.path.lengthMeters;
+        const auto left=center-settings.breakGapMeters*.5;
+        const auto right=center+settings.breakGapMeters*.5;
+        if (left<=.01 || right>=result.path.lengthMeters-.01)
+            throw std::runtime_error("Spline fracture must leave both ends intact");
+        const auto leftFrame=frameAtDistance(result.path,left);
+        const auto rightFrame=frameAtDistance(result.path,right);
+        std::vector<PathFrame> frames;
+        frames.reserve(result.path.frames.size()+2);
+        for (const auto &frame:result.path.frames)
+            if (frame.distanceMeters<left-1e-8) frames.push_back(frame);
+        frames.push_back(leftFrame);
+        breakLeftRing=frames.size()-1;
+        frames.push_back(rightFrame);
+        for (const auto &frame:result.path.frames)
+            if (frame.distanceMeters>right+1e-8) frames.push_back(frame);
+        result.path.frames=std::move(frames);
+        std::erase_if(result.repeats,[&](const RepeatPlacement &placement)
+            {return placement.frame.distanceMeters>left &&
+                    placement.frame.distanceMeters<right;});
+    }
 
     using Point = std::array<double, 2>;
     std::vector<std::vector<Point>> contours;
@@ -402,13 +447,43 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
             }
         }
     }
-    auto surfacePosition = [&](const PathFrame &frame, Point point)
+    auto surfaceScale = [&](const PathFrame &frame)
     {
-        const double c = std::cos(settings.profileRotationRadians),
-                     s = std::sin(settings.profileRotationRadians);
-        const double x = settings.profileScale * frame.widthMeters * (point[0]*c-point[1]*s);
-        const double y = settings.profileScale * frame.widthMeters * (point[0]*s+point[1]*c);
-        return add(frame.position, add(mul(frame.normal, x), mul(frame.binormal, y)));
+        double taper=1;
+        if (!spline.closed && settings.taperLengthMeters>0)
+        {
+            const auto edge=std::min(frame.distanceMeters,
+                                     result.path.lengthMeters-frame.distanceMeters);
+            const auto t=std::clamp(edge/settings.taperLengthMeters,0.0,1.0);
+            taper=std::lerp(settings.tipScale,1.0,t*t*(3-2*t));
+        }
+        const auto cycles=spline.closed?
+            std::max(1.0,std::round(result.path.lengthMeters/settings.ribSpacingMeters)):
+            result.path.lengthMeters/settings.ribSpacingMeters;
+        const auto rib=1+settings.ribAmplitude*std::sin(
+            2*std::numbers::pi*cycles*frame.distanceMeters/result.path.lengthMeters);
+        return settings.profileScale*frame.widthMeters*taper*rib;
+    };
+    auto surfacePosition = [&](const PathFrame &frame, Point point,std::size_t ring)
+    {
+        const auto angle=settings.profileRotationRadians+
+            2*std::numbers::pi*settings.twistTurns*
+            frame.distanceMeters/result.path.lengthMeters;
+        const double c = std::cos(angle),s = std::sin(angle);
+        const auto scale=surfaceScale(frame);
+        const double x = scale*(point[0]*c-point[1]*s);
+        const double y = scale*(point[0]*s+point[1]*c);
+        auto position=add(frame.position,add(mul(frame.normal,x),mul(frame.binormal,y)));
+        if (breakLeftRing && (ring==*breakLeftRing || ring==*breakLeftRing+1))
+        {
+            const auto transverse=radial?settings.radiusMeters:
+                std::min(settings.widthMeters,settings.heightMeters)*.5;
+            const auto amplitude=settings.breakRoughness*
+                std::min(settings.breakGapMeters*.2,transverse*.3);
+            position=add(position,mul(frame.tangent,amplitude*
+                std::sin(3*std::atan2(point[1],point[0])+.4)));
+        }
+        return position;
     };
     auto addVertex = [&](Vec3d position, float u, float v)
     {
@@ -428,8 +503,9 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
         result.cornerUV.insert(result.cornerUV.end(), {uvA,uvB,uvC});
         result.mesh.mesh.triangleRegions.push_back(spline.splineGuid);
     };
-    for (const auto &frame : result.path.frames)
+    for (std::size_t ring=0;ring<result.path.frames.size();++ring)
     {
+        const auto &frame=result.path.frames[ring];
         const float u = float(settings.uvMode == UvMode::WorldMetric ?
             frame.distanceMeters / settings.metresPerTileU :
             settings.uvMode == UvMode::Stretch01 ? frame.distanceMeters / result.path.lengthMeters :
@@ -440,14 +516,16 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
             const auto &distances = perimeter[contourIndex];
             for (std::size_t i = 0; i <= outline.size(); ++i)
             {
-                const float v = float(distances[i] * settings.profileScale * frame.widthMeters /
+                const float v = float(distances[i] * surfaceScale(frame) /
                     settings.metresPerTileV);
-                addVertex(surfacePosition(frame, outline[i%outline.size()]), u, v);
+                addVertex(surfacePosition(frame, outline[i%outline.size()],ring), u, v);
             }
         }
     }
     result.bodyVertexCount = result.mesh.mesh.positions.size();
     for (std::size_t ring = 0; ring + 1 < ringCount; ++ring)
+    {
+        if (breakLeftRing && ring==*breakLeftRing) continue;
         for (std::size_t contourIndex = 0; contourIndex < contours.size(); ++contourIndex)
             for (std::size_t side = 0; side < contours[contourIndex].size(); ++side)
             {
@@ -459,7 +537,11 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                 {
                     const auto orientation=contourIndex==0?1.0:-1.0;
                     const auto normalAt=[&](std::uint32_t vertex,const PathFrame &frame)
-                    {return mul(unit(sub(result.mesh.mesh.positions[vertex],frame.position)),orientation);};
+                    {
+                        const auto offset=sub(result.mesh.mesh.positions[vertex],frame.position);
+                        return mul(unit(sub(offset,mul(frame.tangent,dot(offset,frame.tangent)))),
+                                   orientation);
+                    };
                     const auto size=result.mesh.cornerNormals.size();
                     result.mesh.cornerNormals[size-6]=normalAt(a,result.path.frames[ring]);
                     result.mesh.cornerNormals[size-5]=normalAt(b,result.path.frames[ring]);
@@ -469,12 +551,12 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                     result.mesh.cornerNormals[size-1]=normalAt(c,result.path.frames[ring+1]);
                 }
             }
+    }
     result.bodyTriangleCount = result.mesh.mesh.indices.size()/3;
 
-    auto cap = [&](bool start)
+    auto cap = [&](bool start,std::size_t ring)
     {
-        const auto &frame = start ? result.path.frames.front() : result.path.frames.back();
-        const std::size_t ring = start ? 0 : ringCount-1;
+        const auto &frame = result.path.frames[ring];
         // Cap corners need planar UVs independent of the side's longitudinal UV.
         auto planar = [&](std::uint32_t index)
         {
@@ -532,8 +614,10 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
             }
         }
     };
-    if (!spline.closed && settings.capStart) cap(true);
-    if (!spline.closed && settings.capEnd) cap(false);
+    if (!spline.closed && settings.capStart) cap(true,0);
+    if (!spline.closed && settings.capEnd) cap(false,ringCount-1);
+    if (breakLeftRing)
+    {cap(false,*breakLeftRing);cap(true,*breakLeftRing+1);}
     for (const auto &placement : result.repeats)
     {
         const auto &frame = placement.frame;

@@ -190,7 +190,7 @@ class Builder
     }
     void tube(const std::vector<Vec3d> &positions,double radius,
               Construction::ProfileKind profile=Construction::ProfileKind::Circle,
-              double width=0,double height=0,double wall=0)
+              double width=0,double height=0,double wall=0,bool fracture=false)
     {
         if (positions.size()<2 || positions.size()>256 || radius<=0)
             throw std::runtime_error("Assembly sweep path or radius is invalid");
@@ -217,6 +217,16 @@ class Builder
             std::min(radius*.3,std::min(sweep.widthMeters,sweep.heightMeters)*.2);
         sweep.profileChordErrorMeters=settings.lod==2?.008:settings.lod==1?.003:.001;
         sweep.profileMaximumAngleRadians=settings.lod==2?.6:settings.lod==1?.35:.2;
+        sweep.breakEnabled=fracture;
+        if (fracture)
+        {
+            double lengthMeters=0;
+            for (std::size_t i=1;i<positions.size();++i)
+                lengthMeters+=length(sub(positions[i],positions[i-1]));
+            sweep.breakGapMeters=std::max(radius*3,
+                std::clamp(lengthMeters*.08,.08,.7));
+        }
+        sweep.breakRoughness=.5;
         sweep.maximumVertices=settings.maximumVertices-result.mesh.mesh.positions.size();
         appendSweep(Construction::buildConstruction(line,sweep));
     }
@@ -231,13 +241,7 @@ class Builder
         if (state==State::Detached)
             for (auto &point:points) point=add(point,mul(up,-.15));
         if (state==State::Broken)
-        {
-            const auto middle=points.size()/2;
-            tube(std::vector<Vec3d>(points.begin(),points.begin()+
-                                    std::ptrdiff_t(middle-1)),radius);
-            tube(std::vector<Vec3d>(points.begin()+std::ptrdiff_t(middle+2),
-                                    points.end()),radius);
-        }
+            tube(points,radius,Construction::ProfileKind::Circle,0,0,0,true);
         else tube(points,radius);
     }
     void brokenBoard(const Construction::PathFrame &frame,double boardWidth,

@@ -1,0 +1,72 @@
+{
+  "format": "spline-effects-final-replay",
+  "firstRun": "Evidence\\spline-effects-final",
+  "secondRun": "Evidence\\spline-effects-final-b",
+  "files": [
+    {
+      "name": "cable-tray-crossbars.png",
+      "sha256": "14b53da3df5ba3e104db74822c48b3714c3aee4f8e0fd57104981ad85420ea24",
+      "replaySha256": "14b53da3df5ba3e104db74822c48b3714c3aee4f8e0fd57104981ad85420ea24"
+    },
+    {
+      "name": "cable.png",
+      "sha256": "8722412f86e5bdd40723eab227386ec841f1c37715d36378e665291853e106d6",
+      "replaySha256": "8722412f86e5bdd40723eab227386ec841f1c37715d36378e665291853e106d6"
+    },
+    {
+      "name": "corrugated-hose.png",
+      "sha256": "3404d45b540921db098744bb413a65eb70c6c10d19a7e800868ff7832198bb91",
+      "replaySha256": "3404d45b540921db098744bb413a65eb70c6c10d19a7e800868ff7832198bb91"
+    },
+    {
+      "name": "fractured-pipe.png",
+      "sha256": "df7f84acaf66d7ba5756e5837f594a3491198c572c2798963133f48a9a64c1dc",
+      "replaySha256": "df7f84acaf66d7ba5756e5837f594a3491198c572c2798963133f48a9a64c1dc"
+    },
+    {
+      "name": "high-curvature-bend.png",
+      "sha256": "5122424739d201eeed224cb8f8d3ebf7e57f7790e6b5bd125d44b845e1e2c26a",
+      "replaySha256": "5122424739d201eeed224cb8f8d3ebf7e57f7790e6b5bd125d44b845e1e2c26a"
+    },
+    {
+      "name": "i-beam-run.png",
+      "sha256": "6b044a974e5d460b725904aa062bc6b757c70f33718c6827b97d17f99a6e47f5",
+      "replaySha256": "6b044a974e5d460b725904aa062bc6b757c70f33718c6827b97d17f99a6e47f5"
+    },
+    {
+      "name": "pipe-s-curve.png",
+      "sha256": "db3b68662f6aa4d5133840529b5acd7921a26615868cd070628f5ad6cc320a46",
+      "replaySha256": "db3b68662f6aa4d5133840529b5acd7921a26615868cd070628f5ad6cc320a46"
+    },
+    {
+      "name": "pipe-seam.png",
+      "sha256": "db0905677f54d2e80fc4c05b5addb5427ae8554cd4651a0144f583079e574542",
+      "replaySha256": "db0905677f54d2e80fc4c05b5addb5427ae8554cd4651a0144f583079e574542"
+    },
+    {
+      "name": "pipe-straight.png",
+      "sha256": "4a8522a52bb865692fea64475c6de3fbd33347ca14b7395d899c8652a3bb47c6",
+      "replaySha256": "4a8522a52bb865692fea64475c6de3fbd33347ca14b7395d899c8652a3bb47c6"
+    },
+    {
+      "name": "pipe-uv-checker.png",
+      "sha256": "ed7dc9507fbd57eccf1eda197b6498b012a8457d227438b781f5ba886d6f26b6",
+      "replaySha256": "ed7dc9507fbd57eccf1eda197b6498b012a8457d227438b781f5ba886d6f26b6"
+    },
+    {
+      "name": "pipe-vertical-rmf.png",
+      "sha256": "588d1854b9ef5edc6075264cb83bcec33aa8534a2bac84bd1544658d9fd7fed2",
+      "replaySha256": "588d1854b9ef5edc6075264cb83bcec33aa8534a2bac84bd1544658d9fd7fed2"
+    },
+    {
+      "name": "rectangular-duct.png",
+      "sha256": "261872f77354dbdc9ebe4bfcf9e12f602cea5aaf8ebab614a1215fdf2565ada0",
+      "replaySha256": "261872f77354dbdc9ebe4bfcf9e12f602cea5aaf8ebab614a1215fdf2565ada0"
+    },
+    {
+      "name": "twisted-duct.png",
+      "sha256": "db20ca65966dac5dbc94d5c712a138d8d525cdee165c455675d0f892953b292e",
+      "replaySha256": "db20ca65966dac5dbc94d5c712a138d8d525cdee165c455675d0f892953b292e"
+    }
+  ]
+}

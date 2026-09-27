@@ -157,6 +157,36 @@ int main()
                     built.mesh.cornerNormals.size() == built.mesh.mesh.indices.size(),
                 "pipe needs planar end caps and per-corner UV/normals");
         inspectMesh(built);
+        auto effected=pipe;
+        effected.taperLengthMeters=.5;
+        effected.tipScale=.4;
+        effected.ribAmplitude=.2;
+        effected.ribSpacingMeters=.25;
+        effected.twistTurns=.5;
+        const auto effects=buildConstruction(straightRun(),effected);
+        inspectMesh(effects);
+        require(effects.path.frames.size()>built.path.frames.size() &&
+                std::hypot(effects.mesh.mesh.positions.front().x,
+                           effects.mesh.mesh.positions.front().y)<
+                    std::hypot(built.mesh.mesh.positions.front().x,
+                               built.mesh.mesh.positions.front().y)*.6,
+                "taper and ribs must affect geometry at adequate sampling density");
+        require(meshHash(effects.mesh.mesh)==meshHash(
+                    buildConstruction(straightRun(),effected).mesh.mesh),
+                "spline effects must be deterministic");
+        effected.breakEnabled=true;
+        effected.breakGapMeters=.2;
+        const auto fracture=buildConstruction(straightRun(),effected);
+        inspectMesh(fracture);
+        require(fracture.mesh.closedSolid &&
+                fracture.bodyTriangleCount<effects.bodyTriangleCount &&
+                fracture.mesh.mesh.indices.size()/3>fracture.bodyTriangleCount,
+                "broken sweep needs a genuine gap and closed fracture faces");
+        effected.breakGapMeters=10;
+        bool fractureRejected=false;
+        try {buildConstruction(straightRun(),effected);}
+        catch (const std::exception &) {fractureRejected=true;}
+        require(fractureRejected,"oversize fracture gap must be rejected");
         for (int kind=1;kind<6;++kind)
         {
             auto candidate=pipe;

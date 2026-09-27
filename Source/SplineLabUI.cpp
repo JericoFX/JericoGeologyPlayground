@@ -12,7 +12,8 @@ namespace
 {
 constexpr const char *presetNames[] = {
     "Pipe 25 mm", "Pipe 80 mm", "Hollow Pipe", "Cable", "Hose",
-    "Round Duct", "Rectangular Duct", "Cable Tray", "Handrail", "I-Beam Run"};
+    "Round Duct", "Rectangular Duct", "Cable Tray", "Handrail", "I-Beam Run",
+    "Corrugated Hose", "Fractured Pipe", "Twisted Duct"};
 constexpr const char *profileNames[] = {
     "Circle", "Ring / hollow", "Rectangle", "Rounded Rectangle", "U / Channel", "I-Beam"};
 void panel(const char *name, float x, float y, float width, float height)
@@ -48,6 +49,15 @@ Construction::ConstructionSettings splinePreset(int index)
             settings.cornerRadiusMeters=.025; settings.repeatEnabled=true; settings.repeat.spacingMeters=.8; break;
     case 9: settings.profile=Construction::ProfileKind::IBeam; settings.widthMeters=.22; settings.heightMeters=.3;
             settings.wallThicknessMeters=.025; break;
+    case 10: settings.radiusMeters=.022;settings.ribAmplitude=.16;
+             settings.ribSpacingMeters=.16;break;
+    case 11: settings.profile=Construction::ProfileKind::Ring;
+             settings.radiusMeters=.055;settings.wallThicknessMeters=.008;
+             settings.breakEnabled=true;settings.breakGapMeters=.18;break;
+    case 12: settings.profile=Construction::ProfileKind::Rectangle;
+             settings.widthMeters=.22;settings.heightMeters=.13;
+             settings.twistTurns=.4;settings.taperLengthMeters=.3;
+             settings.tipScale=.7;break;
     }
     return settings;
 }
@@ -116,7 +126,7 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     ImGui::Separator();
     if (ImGui::BeginCombo("Preset",presetNames[preset]))
     {
-        for (int i=0;i<10;++i)
+        for (int i=0;i<int(std::size(presetNames));++i)
             if (ImGui::Selectable(presetNames[i],preset==i)) choosePreset(i);
         ImGui::EndCombo();
     }
@@ -247,6 +257,16 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     dirty|=ImGui::InputDouble("Offset (m)",&settings.repeat.offsetMeters,.1,1,"%.3f");
     dirty|=ImGui::InputDouble("Start padding (m)",&settings.repeat.startPaddingMeters,.1,1,"%.3f");
     dirty|=ImGui::InputDouble("End padding (m)",&settings.repeat.endPaddingMeters,.1,1,"%.3f");
+    ImGui::Separator();ImGui::TextUnformatted("Spline effects and controlled fracture");
+    dirty|=ImGui::InputDouble("Taper length (m)",&settings.taperLengthMeters,.05,.2,"%.3f");
+    dirty|=ImGui::InputDouble("Tip scale",&settings.tipScale,.05,.2,"%.3f");
+    dirty|=ImGui::InputDouble("Rib amplitude",&settings.ribAmplitude,.02,.1,"%.3f");
+    dirty|=ImGui::InputDouble("Rib spacing (m)",&settings.ribSpacingMeters,.02,.1,"%.3f");
+    dirty|=ImGui::InputDouble("Twist turns",&settings.twistTurns,.1,.5,"%.3f");
+    dirty|=ImGui::Checkbox("Fracture sweep",&settings.breakEnabled);
+    dirty|=ImGui::InputDouble("Fracture position 0..1",&settings.breakFraction,.05,.2,"%.3f");
+    dirty|=ImGui::InputDouble("Fracture gap (m)",&settings.breakGapMeters,.02,.1,"%.3f");
+    dirty|=ImGui::InputDouble("Fracture roughness",&settings.breakRoughness,.05,.2,"%.3f");
     ImGui::PopItemWidth();
     ImGui::End();
 

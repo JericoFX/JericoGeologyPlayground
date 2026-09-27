@@ -48,6 +48,10 @@ struct ConstructionSettings
     double seamAngleRadians{}, profileRotationRadians{}, profileScale{1};
     double profileChordErrorMeters{0.002}, profileMaximumAngleRadians{0.25};
     double metresPerTileU{1}, metresPerTileV{0.25}, repeatCount{4};
+    double taperLengthMeters{}, tipScale{1};
+    double ribAmplitude{}, ribSpacingMeters{0.2}, twistTurns{};
+    bool breakEnabled{};
+    double breakFraction{0.5}, breakGapMeters{0.15}, breakRoughness{0.3};
     bool capStart{true}, capEnd{true}, repeatEnabled{};
     RepeatSettings repeat;
     std::size_t maximumVertices{100000};

@@ -56,7 +56,10 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
         {"pipe-uv-checker",1,&s,8},{"pipe-vertical-rmf",1,&vertical,10},
         {"pipe-seam",1,&s,9},{"rectangular-duct",6,&s,0},
         {"cable-tray-crossbars",7,&s,0},{"i-beam-run",9,&s,0},
-        {"high-curvature-bend",2,&bend,2},{"cable",3,&s,0}};
+        {"high-curvature-bend",2,&bend,2},{"cable",3,&s,0},
+        {"corrugated-hose",10,&s,0},
+        {"fractured-pipe",11,&s,0},
+        {"twisted-duct",12,&s,0}};
     nlohmann::json proof;
     proof["adapter"]=renderer.adapter();
     proof["resolution"]={1280,960};
@@ -94,6 +97,15 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
             {"profile",int(settings.profile)},{"radiusMeters",settings.radiusMeters},
             {"widthMeters",settings.widthMeters},{"heightMeters",settings.heightMeters},
             {"wallThicknessMeters",settings.wallThicknessMeters},
+            {"taperLengthMeters",settings.taperLengthMeters},
+            {"tipScale",settings.tipScale},
+            {"ribAmplitude",settings.ribAmplitude},
+            {"ribSpacingMeters",settings.ribSpacingMeters},
+            {"twistTurns",settings.twistTurns},
+            {"breakEnabled",settings.breakEnabled},
+            {"breakFraction",settings.breakFraction},
+            {"breakGapMeters",settings.breakGapMeters},
+            {"breakRoughness",settings.breakRoughness},
             {"pathErrorMeters",settings.pathQuality.maximumDeviationMeters},
             {"profileChordErrorMeters",settings.profileChordErrorMeters},
             {"measuredDeviationMeters",built.path.maximumMeasuredDeviationMeters},
