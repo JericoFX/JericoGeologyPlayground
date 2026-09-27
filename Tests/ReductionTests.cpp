@@ -54,6 +54,8 @@ int main()
         require(reduced.sampledReductionError <= 0.01, "reduction respects sampled bidirectional error");
         require(PA::validateClosedMesh(reduced.mesh).hasValue(), "reduced cube stays closed");
         recipe = preset(8);
+        recipe.version = 10;
+        recipe.layers[4].profile = 0;
         auto wall = evaluate(recipe, 64);
         Jerico::Guid cutId{}, jointId{};
         for (const auto &region : wall.regions)

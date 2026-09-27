@@ -1,0 +1,88 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "cpuMs": 15.2352,
+      "maximumNeighborRetreatDifference": 0.0,
+      "maximumRetreat": 0.0,
+      "meshHash": 12736218084863928132,
+      "name": "classic",
+      "triangles": 4640,
+      "vertices": 2322
+    },
+    {
+      "cpuMs": 13.4926,
+      "maximumNeighborRetreatDifference": 0.3873571562976448,
+      "maximumRetreat": 0.44551776771794327,
+      "meshHash": 1401513393037753535,
+      "name": "push-035",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 13.7776,
+      "maximumNeighborRetreatDifference": 0.27215270622597554,
+      "maximumRetreat": 0.44551776771794327,
+      "meshHash": 16015124827218354486,
+      "name": "push-070",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 14.3892,
+      "maximumNeighborRetreatDifference": 0.40398849688542904,
+      "maximumRetreat": 0.5764140120949552,
+      "meshHash": 6192126794570788646,
+      "name": "metric-035",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 14.2525,
+      "maximumNeighborRetreatDifference": 0.29282495697695915,
+      "maximumRetreat": 0.48468622783362864,
+      "meshHash": 15898024725471709229,
+      "name": "metric-070",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 14.9246,
+      "maximumNeighborRetreatDifference": 0.17200243525891556,
+      "maximumRetreat": 0.30838916088645996,
+      "meshHash": 15599688110338270107,
+      "name": "metric-130",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 14.1454,
+      "maximumNeighborRetreatDifference": 0.16478413848069035,
+      "maximumRetreat": 0.3590890598675909,
+      "meshHash": 3859988996738416112,
+      "name": "push-130",
+      "triangles": 4352,
+      "vertices": 2178
+    },
+    {
+      "cpuMs": 54.2946,
+      "meshHash": 11901763614008258559,
+      "name": "classic-64",
+      "triangles": 17488,
+      "vertices": 8746
+    },
+    {
+      "cpuMs": 54.3136,
+      "meshHash": 4977084932753855425,
+      "name": "soft-default-64",
+      "triangles": 16896,
+      "vertices": 8450
+    }
+  ],
+  "imageSize": [
+    1280,
+    960
+  ],
+  "resolution": 32,
+  "scope": "Cliff cut creation before high-to-low"
+}

@@ -205,7 +205,42 @@ int main()
                     meshHash(variedVolume.mesh) ==
                         meshHash(evaluate(deserialize(serialize(variedBeds)), 64).mesh),
                 "variable beds close and replay after recipe serialization");
-        auto cliffPreset = preset(8);
+        auto softDefault = preset(8);
+        auto softBefore = evaluate(softDefault, 32, 3);
+        auto softOpen = evaluate(softDefault, 32, 4);
+        require(softOpen.mesh.positions.size() == softBefore.mesh.positions.size() &&
+                    softOpen.mesh.indices == softBefore.mesh.indices &&
+                    std::any_of(softOpen.regions.begin(), softOpen.regions.end(),
+                        [](const auto &region) { return region.role == SurfaceRole::CutLoop; }) &&
+                    std::none_of(softOpen.regions.begin(), softOpen.regions.end(),
+                        [](const auto &region) { return region.role == SurfaceRole::CutFace; }),
+                "default cliff cut must deform the same surface without a hard sidewall");
+        double softDefaultRetreat = 0, softDefaultNeighborStep = 0;
+        for (std::size_t i = 0; i < softOpen.mesh.positions.size(); ++i)
+            softDefaultRetreat = std::max(softDefaultRetreat,
+                softBefore.mesh.positions[i].z - softOpen.mesh.positions[i].z);
+        for (std::size_t t = 0; t < softOpen.mesh.indices.size(); t += 3)
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto a = softOpen.mesh.indices[t + corner];
+                const auto b = softOpen.mesh.indices[t + (corner + 1) % 3];
+                const auto retreatA = softBefore.mesh.positions[a].z - softOpen.mesh.positions[a].z;
+                const auto retreatB = softBefore.mesh.positions[b].z - softOpen.mesh.positions[b].z;
+                softDefaultNeighborStep = std::max(softDefaultNeighborStep,
+                                                   std::abs(retreatA - retreatB));
+            }
+        std::cout << "default cliff soft cut retreat/neighbor step=" << softDefaultRetreat << '/'
+                  << softDefaultNeighborStep << '\n';
+        require(softDefaultRetreat > 0.15 && softDefaultNeighborStep < 0.20,
+                "default cliff cut must keep visible relief with a gradual transition");
+        auto softClosed = evaluate(softDefault, 32);
+        require(PA::validateClosedMesh(softClosed.mesh).hasValue() &&
+                    meshHash(softClosed.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(softDefault)), 32).mesh),
+                "default soft cliff remains closed and replays");
+        auto cliffPreset = softDefault;
+        cliffPreset.version = 10;
+        cliffPreset.layers[4].profile = 0;
         auto drainageRecipe = cliffPreset;
         drainageRecipe.version = 13;
         auto drainage = defaultLayer(Kind::CliffDrainage);
@@ -548,6 +583,62 @@ int main()
         require(meshHash(evaluate(metricRecipe, 32).mesh) ==
                     meshHash(evaluate(deserialize(serialize(metricRecipe)), 32).mesh),
                 "metric geological push replays after serialization");
+        auto wideMetricRecipe = metricRecipe;
+        wideMetricRecipe.layers[4].width = 1.30f;
+        const auto wideMetric = evaluate(wideMetricRecipe, 32, 4);
+        require(wideMetric.mesh.indices == metricPush.mesh.indices &&
+                    wideMetric.mesh.triangleRegions == metricPush.mesh.triangleRegions,
+                "wide metric cut keeps grid topology and selection");
+        const auto cutRegion = std::find_if(wideMetric.regions.begin(), wideMetric.regions.end(),
+            [](const auto &region) { return region.role == SurfaceRole::CutLoop; });
+        require(cutRegion != wideMetric.regions.end(), "wide metric cut keeps the region GUID");
+        std::vector<bool> cutVertex(wideMetric.mesh.positions.size());
+        std::vector<bool> outsideVertex(wideMetric.mesh.positions.size());
+        for (std::size_t t = 0; t < wideMetric.mesh.triangleRegions.size(); ++t)
+            for (int corner = 0; corner < 3; ++corner)
+            {
+                const auto vertex = wideMetric.mesh.indices[3 * t + corner];
+                (wideMetric.mesh.triangleRegions[t] == cutRegion->id ?
+                    cutVertex : outsideVertex)[vertex] = true;
+            }
+        auto boundaryStep = [&](const MeshResult &mesh)
+        {
+            double maximum = 0;
+            for (std::size_t t = 0; t < mesh.mesh.indices.size(); t += 3)
+                for (int corner = 0; corner < 3; ++corner)
+                {
+                    const auto a = mesh.mesh.indices[t + corner];
+                    const auto b = mesh.mesh.indices[t + (corner + 1) % 3];
+                    if (!(cutVertex[a] && outsideVertex[a]) &&
+                        !(cutVertex[b] && outsideVertex[b]))
+                        continue;
+                    const auto depthA = beforePush.mesh.positions[a].z - mesh.mesh.positions[a].z;
+                    const auto depthB = beforePush.mesh.positions[b].z - mesh.mesh.positions[b].z;
+                    maximum = std::max(maximum, std::abs(depthA - depthB));
+                }
+            return maximum;
+        };
+        const auto narrowStep = boundaryStep(metricPush);
+        const auto wideStep = boundaryStep(wideMetric);
+        double wideCoreRetreat = 0;
+        for (std::size_t i = 0; i < wideMetric.mesh.positions.size(); ++i)
+        {
+            const auto a = beforePush.mesh.positions[i], b = wideMetric.mesh.positions[i];
+            const auto depth = a.z - b.z;
+            if (std::hypot((a.x - 0.45) / 1.45, (a.y - 0.15) / 1.0) < 0.4)
+                wideCoreRetreat = std::max(wideCoreRetreat, depth);
+            if (std::abs(a.x) > 2.8 || std::abs(a.y) > 1.8)
+                require(std::abs(depth) < 1e-10,
+                        "wide metric cut leaves the distant cliff fixed");
+        }
+        std::cout << "metric cut boundary step=" << narrowStep << " -> " << wideStep << '\n';
+        require(wideStep < 0.5 * narrowStep && wideCoreRetreat > 0.15,
+                "wide metric cut softens its boundary and retains central relief");
+        const auto wideMetricSolid = evaluate(wideMetricRecipe, 32);
+        require(PA::validateClosedMesh(wideMetricSolid.mesh).hasValue() &&
+                    meshHash(wideMetricSolid.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(wideMetricRecipe)), 32).mesh),
+                "wide metric cut closes and replays");
         auto alphaRecipe = pushRecipe;
         alphaRecipe.layers[4].alphaSource = 1;
         const auto alphaPush = evaluate(alphaRecipe, 32, 4);

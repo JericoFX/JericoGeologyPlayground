@@ -1,0 +1,221 @@
+{
+  "previous": "Evidence\\2026-09-26-cliff-finite-wall-candidate",
+  "current": "Evidence\\2026-09-27-cliff-soft-v21-regression",
+  "meshHashCount": 7,
+  "pngCount": 28,
+  "allEqual": true,
+  "meshHashes": [
+    {
+      "name": "baselineHash",
+      "previous": "310230681386850953",
+      "current": "310230681386850953",
+      "equal": true
+    },
+    {
+      "name": "candidateHash",
+      "previous": "17623155159170816676",
+      "current": "17623155159170816676",
+      "equal": true
+    },
+    {
+      "name": "drainedWallHash",
+      "previous": "12024839836944294927",
+      "current": "12024839836944294927",
+      "equal": true
+    },
+    {
+      "name": "finiteWallHash",
+      "previous": "13237348981915824454",
+      "current": "13237348981915824454",
+      "equal": true
+    },
+    {
+      "name": "outlinedWallHash",
+      "previous": "8211075133554702787",
+      "current": "8211075133554702787",
+      "equal": true
+    },
+    {
+      "name": "variedWallHash",
+      "previous": "14821032936113870281",
+      "current": "14821032936113870281",
+      "equal": true
+    },
+    {
+      "name": "wallOnlyHash",
+      "previous": "13429904228295021157",
+      "current": "13429904228295021157",
+      "equal": true
+    }
+  ],
+  "images": [
+    {
+      "file": "baseline-front-material.png",
+      "previousSha256": "bb628dbc3b3b3778a4a98cd294db45a1c7ac87289cbd1fef6b539bc64739a5eb",
+      "currentSha256": "bb628dbc3b3b3778a4a98cd294db45a1c7ac87289cbd1fef6b539bc64739a5eb",
+      "equal": true
+    },
+    {
+      "file": "baseline-front-neutral.png",
+      "previousSha256": "825854d1bddb38564cd5c34aa75bd7cbc1f5cf4214d08f0606560322f1621df3",
+      "currentSha256": "825854d1bddb38564cd5c34aa75bd7cbc1f5cf4214d08f0606560322f1621df3",
+      "equal": true
+    },
+    {
+      "file": "baseline-oblique-material.png",
+      "previousSha256": "6b7082e78a7a041a86008a4faef0ad776facf8fb0706a21726e202952c9d3d1b",
+      "currentSha256": "6b7082e78a7a041a86008a4faef0ad776facf8fb0706a21726e202952c9d3d1b",
+      "equal": true
+    },
+    {
+      "file": "baseline-oblique-neutral.png",
+      "previousSha256": "24e3ba310378c445815533a7f1634feff608232138c9f276f11782a4163cf61e",
+      "currentSha256": "24e3ba310378c445815533a7f1634feff608232138c9f276f11782a4163cf61e",
+      "equal": true
+    },
+    {
+      "file": "candidate-front-material.png",
+      "previousSha256": "e542f4235ee92dc9d1934dbc62094d1de406a43073fc32496dbf13df1e0313da",
+      "currentSha256": "e542f4235ee92dc9d1934dbc62094d1de406a43073fc32496dbf13df1e0313da",
+      "equal": true
+    },
+    {
+      "file": "candidate-front-neutral.png",
+      "previousSha256": "a1d0287ad2c1273516e39269582fc3c115ca298600d0c21aff956dde31a73e13",
+      "currentSha256": "a1d0287ad2c1273516e39269582fc3c115ca298600d0c21aff956dde31a73e13",
+      "equal": true
+    },
+    {
+      "file": "candidate-oblique-material.png",
+      "previousSha256": "a7b295aab72163c815eab5f56b9553b49b540e170803a91825c63133729f1048",
+      "currentSha256": "a7b295aab72163c815eab5f56b9553b49b540e170803a91825c63133729f1048",
+      "equal": true
+    },
+    {
+      "file": "candidate-oblique-neutral.png",
+      "previousSha256": "a09c509f70a3119afa46fc879f7232c906dfc8fb2fd2f590121d51906a552e55",
+      "currentSha256": "a09c509f70a3119afa46fc879f7232c906dfc8fb2fd2f590121d51906a552e55",
+      "equal": true
+    },
+    {
+      "file": "drained-wall-front-material.png",
+      "previousSha256": "3dc0f6bee503fdb047fa27597ed15a0370d1fa21eb93e36f32bf6f123a593cbb",
+      "currentSha256": "3dc0f6bee503fdb047fa27597ed15a0370d1fa21eb93e36f32bf6f123a593cbb",
+      "equal": true
+    },
+    {
+      "file": "drained-wall-front-neutral.png",
+      "previousSha256": "337f723af7caa7f741fb7d6d9f8b8c8d0d58657d109b150288032d255787b583",
+      "currentSha256": "337f723af7caa7f741fb7d6d9f8b8c8d0d58657d109b150288032d255787b583",
+      "equal": true
+    },
+    {
+      "file": "drained-wall-oblique-material.png",
+      "previousSha256": "83441e6f9d708ad49a047c9ebb052165db7740e5b0e1d4be3c05c1b680a81ee7",
+      "currentSha256": "83441e6f9d708ad49a047c9ebb052165db7740e5b0e1d4be3c05c1b680a81ee7",
+      "equal": true
+    },
+    {
+      "file": "drained-wall-oblique-neutral.png",
+      "previousSha256": "875f8b64f28a12b7e85aba9fa93e71f5e4373491c3bfc91998cc53494158f404",
+      "currentSha256": "875f8b64f28a12b7e85aba9fa93e71f5e4373491c3bfc91998cc53494158f404",
+      "equal": true
+    },
+    {
+      "file": "finite-wall-front-material.png",
+      "previousSha256": "09923b92757daef84ae095c33bf4f2a7fccf862a64db97622e7f3752a857cc16",
+      "currentSha256": "09923b92757daef84ae095c33bf4f2a7fccf862a64db97622e7f3752a857cc16",
+      "equal": true
+    },
+    {
+      "file": "finite-wall-front-neutral.png",
+      "previousSha256": "42617d0c578d8942ec73c93b32be365d36e6f2cdb63c2ea8186ca83c460b8220",
+      "currentSha256": "42617d0c578d8942ec73c93b32be365d36e6f2cdb63c2ea8186ca83c460b8220",
+      "equal": true
+    },
+    {
+      "file": "finite-wall-oblique-material.png",
+      "previousSha256": "4a26ba77e8a8aac5598f5c5e76ec569c0525aa3cf229694457a2272e1e991453",
+      "currentSha256": "4a26ba77e8a8aac5598f5c5e76ec569c0525aa3cf229694457a2272e1e991453",
+      "equal": true
+    },
+    {
+      "file": "finite-wall-oblique-neutral.png",
+      "previousSha256": "5608e9db7c4c4f11ba457aee5c7fcceed802f3242a80ba6da386acbff381ae56",
+      "currentSha256": "5608e9db7c4c4f11ba457aee5c7fcceed802f3242a80ba6da386acbff381ae56",
+      "equal": true
+    },
+    {
+      "file": "outlined-wall-front-material.png",
+      "previousSha256": "b56bfa10d50e830d2815c3ac6e70d9e8d5b4e75618af797635533606704c328b",
+      "currentSha256": "b56bfa10d50e830d2815c3ac6e70d9e8d5b4e75618af797635533606704c328b",
+      "equal": true
+    },
+    {
+      "file": "outlined-wall-front-neutral.png",
+      "previousSha256": "06cd5206ec562241dace9da5223cf031e0a8ccbf13ca1dc3d17de63582b996e1",
+      "currentSha256": "06cd5206ec562241dace9da5223cf031e0a8ccbf13ca1dc3d17de63582b996e1",
+      "equal": true
+    },
+    {
+      "file": "outlined-wall-oblique-material.png",
+      "previousSha256": "c9e0ea300457ad34afde8d98959d0f21e4510ff943bc7d2edf3b657b5fe2ac17",
+      "currentSha256": "c9e0ea300457ad34afde8d98959d0f21e4510ff943bc7d2edf3b657b5fe2ac17",
+      "equal": true
+    },
+    {
+      "file": "outlined-wall-oblique-neutral.png",
+      "previousSha256": "a80748f4e4d98c5978414995726d240afde5ad50b9b5a62473f6f6e81c294391",
+      "currentSha256": "a80748f4e4d98c5978414995726d240afde5ad50b9b5a62473f6f6e81c294391",
+      "equal": true
+    },
+    {
+      "file": "varied-wall-front-material.png",
+      "previousSha256": "60b867df3b2219da895a44a599c1600220acc7a97cabc203a2d6fbbc710b074e",
+      "currentSha256": "60b867df3b2219da895a44a599c1600220acc7a97cabc203a2d6fbbc710b074e",
+      "equal": true
+    },
+    {
+      "file": "varied-wall-front-neutral.png",
+      "previousSha256": "9f71a77c30ada0c40ee36a26c4c53b4bd82ac3b2d570e17ea49b4d9650533ff2",
+      "currentSha256": "9f71a77c30ada0c40ee36a26c4c53b4bd82ac3b2d570e17ea49b4d9650533ff2",
+      "equal": true
+    },
+    {
+      "file": "varied-wall-oblique-material.png",
+      "previousSha256": "5099881cb8db1dc865b7ca6fe089132b2f0eb13589a2aded4d1a38df01c34300",
+      "currentSha256": "5099881cb8db1dc865b7ca6fe089132b2f0eb13589a2aded4d1a38df01c34300",
+      "equal": true
+    },
+    {
+      "file": "varied-wall-oblique-neutral.png",
+      "previousSha256": "1ddaaeb2084148a595c6c8b4f3aeb2decd37893e9c15607f8ef1a1a48ee60c8d",
+      "currentSha256": "1ddaaeb2084148a595c6c8b4f3aeb2decd37893e9c15607f8ef1a1a48ee60c8d",
+      "equal": true
+    },
+    {
+      "file": "wall-only-front-material.png",
+      "previousSha256": "d2d3b42fdcb9e3061550f30baabd9fa7a3e8d15b665461d32f753e8319a16f46",
+      "currentSha256": "d2d3b42fdcb9e3061550f30baabd9fa7a3e8d15b665461d32f753e8319a16f46",
+      "equal": true
+    },
+    {
+      "file": "wall-only-front-neutral.png",
+      "previousSha256": "48a5509d82b5fce4d3780ea43ae33b70939f02138bc590db12fd627402601d5a",
+      "currentSha256": "48a5509d82b5fce4d3780ea43ae33b70939f02138bc590db12fd627402601d5a",
+      "equal": true
+    },
+    {
+      "file": "wall-only-oblique-material.png",
+      "previousSha256": "2a474b3fb8069ee5185621b3aa9a5c095cfbe857d860d88a0668b31c3cf0ff3d",
+      "currentSha256": "2a474b3fb8069ee5185621b3aa9a5c095cfbe857d860d88a0668b31c3cf0ff3d",
+      "equal": true
+    },
+    {
+      "file": "wall-only-oblique-neutral.png",
+      "previousSha256": "0b1413ce4c31ccf90262d1dcfa1537e409a86221ba520b6bfe74b687e95fbd88",
+      "currentSha256": "0b1413ce4c31ccf90262d1dcfa1537e409a86221ba520b6bfe74b687e95fbd88",
+      "equal": true
+    }
+  ]
+}

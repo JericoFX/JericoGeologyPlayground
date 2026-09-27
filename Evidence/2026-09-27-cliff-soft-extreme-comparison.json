@@ -1,0 +1,65 @@
+{
+  "previous": "Evidence/2026-09-27-cliff-drainage-vulkan",
+  "current": "Evidence/2026-09-27-cliff-soft-extreme-regression",
+  "meshHashes": [
+    {
+      "name": "sphere",
+      "equal": true
+    },
+    {
+      "name": "layered",
+      "equal": true
+    },
+    {
+      "name": "perimeter-16-seed-1",
+      "equal": true
+    },
+    {
+      "name": "perimeter-28-seed-1",
+      "equal": true
+    },
+    {
+      "name": "perimeter-22-seed-12",
+      "equal": true
+    },
+    {
+      "name": "perimeter-30-seed-1",
+      "equal": true
+    },
+    {
+      "name": "solidify",
+      "equal": true
+    },
+    {
+      "name": "cliff-incision-control",
+      "equal": true
+    },
+    {
+      "name": "cliff-incision-extreme",
+      "equal": true
+    }
+  ],
+  "images": [
+    {
+      "name": "cliff-incision-control-view-0.png",
+      "equal": true,
+      "sha256": "4F58E2F123BFAD1DD1323838C361C52206DA939495F493C6755A56AE13A61969"
+    },
+    {
+      "name": "cliff-incision-control-view-1.png",
+      "equal": true,
+      "sha256": "46490902E1CB5F8677F5AAF4E512B5D5B8D0921292947BE1F3E572FAC4327D33"
+    },
+    {
+      "name": "cliff-incision-extreme-view-0.png",
+      "equal": true,
+      "sha256": "BF29F1ADF0E113F91282C2875E5E80A26E305D990032DF801C12D87975BC2FD0"
+    },
+    {
+      "name": "cliff-incision-extreme-view-1.png",
+      "equal": true,
+      "sha256": "1262A9949BF07C38677CB6554A702ECA165D0A8DE0ACB8177A675DE33991D11C"
+    }
+  ],
+  "allEqual": true
+}

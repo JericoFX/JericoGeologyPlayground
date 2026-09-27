@@ -604,7 +604,11 @@ Recipe preset(int index)
                 }
         if (index == 8)
         {
-            r.layers.push_back(defaultLayer(Kind::CliffCutLoop));
+            r.version = 13;
+            auto cut = defaultLayer(Kind::CliffCutLoop);
+            cut.profile = 2;
+            cut.width = 1.30f;
+            r.layers.push_back(cut);
             auto solid = defaultLayer(Kind::Solidify);
             solid.thickness = 0.7f;
             solid.solidAlongNormals = false;

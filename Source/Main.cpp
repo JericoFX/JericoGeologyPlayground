@@ -600,6 +600,7 @@ void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &
                                 {"cpuMs", thickWall.milliseconds}});
     auto cliff = preset(8);
     cliff.version = 13;
+    cliff.layers[4].profile = 0;
     auto incision = defaultLayer(Kind::CliffDrainage);
     incision.amplitude = 0.16f;
     incision.width = 0.30f;
@@ -640,6 +641,104 @@ void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &
                                    {"cpuMs", result.milliseconds}});
     }
     std::ofstream(evidence / "extreme-deformation-proof.json") << proof.dump(2) << '\n';
+    std::cout << proof.dump(2) << '\n';
+}
+void captureCliffSoftCreation(Renderer &renderer, const std::filesystem::path &evidence)
+{
+    auto classic = preset(8);
+    classic.version = 10;
+    classic.layers[4].profile = 0;
+    const auto beforeCut = evaluate(classic, 32, 3);
+    nlohmann::json proof = {{"scope", "Cliff cut creation before high-to-low"},
+                            {"adapter", renderer.adapter()}, {"resolution", 32},
+                            {"imageSize", {1280, 960}}};
+    for (int variant = 0; variant < 7; ++variant)
+    {
+        auto recipe = classic;
+        const char *label = "classic";
+        if (variant)
+        {
+            const bool metric = variant >= 3 && variant != 6;
+            recipe.version = metric ? 18 : 13;
+            recipe.layers[4].profile = metric ? 5 : 2;
+            recipe.layers[4].width = variant == 1 || variant == 3 ? 0.35f :
+                                     variant == 5 || variant == 6 ? 1.30f : 0.70f;
+            label = variant == 1 ? "push-035" : variant == 2 ? "push-070" :
+                    variant == 3 ? "metric-035" : variant == 4 ? "metric-070" :
+                    variant == 5 ? "metric-130" : "push-130";
+        }
+        const auto open = evaluate(recipe, 32, 4);
+        const auto closed = evaluate(recipe, 32);
+        if (variant == 6 && meshHash(closed.mesh) != meshHash(evaluate(preset(8), 32).mesh))
+            throw std::runtime_error("Default cliff differs from the soft creation candidate");
+        if (!PA::validateClosedMesh(closed.mesh).hasValue() ||
+            meshHash(closed.mesh) != meshHash(evaluate(deserialize(serialize(recipe)), 32).mesh))
+            throw std::runtime_error("Cliff soft creation must close and replay");
+        double maximumRetreat = 0, maximumNeighborDelta = 0;
+        if (variant)
+        {
+            if (open.mesh.indices != beforeCut.mesh.indices ||
+                open.mesh.positions.size() != beforeCut.mesh.positions.size())
+                throw std::runtime_error("Soft cliff cut changed the source grid");
+            for (std::size_t i = 0; i < open.mesh.positions.size(); ++i)
+                maximumRetreat = std::max(maximumRetreat,
+                    beforeCut.mesh.positions[i].z - open.mesh.positions[i].z);
+            for (std::size_t t = 0; t < open.mesh.indices.size(); t += 3)
+                for (int c = 0; c < 3; ++c)
+                {
+                    const auto a = open.mesh.indices[t + c];
+                    const auto b = open.mesh.indices[t + (c + 1) % 3];
+                    const auto retreatA = beforeCut.mesh.positions[a].z - open.mesh.positions[a].z;
+                    const auto retreatB = beforeCut.mesh.positions[b].z - open.mesh.positions[b].z;
+                    maximumNeighborDelta = std::max(maximumNeighborDelta,
+                                                    std::abs(retreatA - retreatB));
+                }
+        }
+        save(recipe, evidence / (std::string(label) + "-recipe.json"));
+        renderer.upload(closed);
+        for (int view = 0; view < 2; ++view)
+        {
+            Camera camera;
+            camera.yaw = view == 0 ? 0.0f : 0.55f;
+            camera.pitch = view == 0 ? 0.0f : -0.2f;
+            camera.distance = 10;
+            renderer.draw(1280, 960, camera, 0);
+            renderer.capture(evidence / (std::string(label) + "-view-" +
+                                         std::to_string(view) + ".png"));
+        }
+        proof["cases"].push_back({{"name", label}, {"meshHash", PA::hashTriangleMesh(closed.mesh)},
+                                  {"vertices", closed.mesh.positions.size()},
+                                  {"triangles", closed.mesh.indices.size() / 3},
+                                  {"maximumRetreat", maximumRetreat},
+                                  {"maximumNeighborRetreatDifference", maximumNeighborDelta},
+                                  {"cpuMs", closed.milliseconds}});
+    }
+    for (int variant = 0; variant < 2; ++variant)
+    {
+        const auto recipe = variant == 0 ? classic : preset(8);
+        const auto result = evaluate(recipe, recipe.finalResolution);
+        if (!PA::validateClosedMesh(result.mesh).hasValue())
+            throw std::runtime_error("Final-resolution cliff creation is not closed");
+        const auto label = variant == 0 ? "classic-64" : "soft-default-64";
+        save(recipe, evidence / (std::string(label) + "-recipe.json"));
+        renderer.upload(result);
+        for (int view = 0; view < 2; ++view)
+        {
+            Camera camera;
+            camera.yaw = view == 0 ? 0.0f : 0.55f;
+            camera.pitch = view == 0 ? 0.0f : -0.2f;
+            camera.distance = 10;
+            renderer.draw(1280, 960, camera, 0);
+            renderer.capture(evidence / (std::string(label) + "-view-" +
+                                         std::to_string(view) + ".png"));
+        }
+        proof["cases"].push_back({{"name", label},
+                                  {"meshHash", PA::hashTriangleMesh(result.mesh)},
+                                  {"vertices", result.mesh.positions.size()},
+                                  {"triangles", result.mesh.indices.size() / 3},
+                                  {"cpuMs", result.milliseconds}});
+    }
+    std::ofstream(evidence / "cliff-soft-creation-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
 }
 struct BakePreview
@@ -1854,6 +1953,7 @@ void captureCliffStrataCreation(Renderer &renderer, const std::filesystem::path 
 {
     auto baseline = preset(8);
     baseline.version = 19;
+    baseline.layers[4].profile = 0;
     auto candidate = baseline;
     for (auto &layer : candidate.layers)
         if (layer.kind == Kind::StrataRelief)
@@ -2089,7 +2189,8 @@ struct Build
 int run(int argc, char **argv)
 {
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
-         angularProfileSmoke = false, extremeDeformationSmoke = false, rockLodSmoke = false,
+         angularProfileSmoke = false, extremeDeformationSmoke = false,
+         cliffSoftCreationSmoke = false, rockLodSmoke = false,
          autoUvRockLodSmoke = false, curvatureRelaxationSmoke = false,
          angularFractureSmoke = false, angularFourBlocksSmoke = false,
          cliffDrainageSmoke = false,
@@ -2123,6 +2224,7 @@ int run(int argc, char **argv)
             std::string(argv[i]) == "--surface-features-test" ||
             std::string(argv[i]) == "--angular-profiles-test" ||
             std::string(argv[i]) == "--extreme-deformation-test" ||
+            std::string(argv[i]) == "--cliff-soft-creation-test" ||
             std::string(argv[i]) == "--rock-lod-bakes-test" ||
             std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test" ||
             std::string(argv[i]) == "--curvature-relaxation-bakes-test" ||
@@ -2175,6 +2277,7 @@ int run(int argc, char **argv)
             featureSmoke = std::string(argv[i]) == "--surface-features-test";
             angularProfileSmoke = std::string(argv[i]) == "--angular-profiles-test";
             extremeDeformationSmoke = std::string(argv[i]) == "--extreme-deformation-test";
+            cliffSoftCreationSmoke = std::string(argv[i]) == "--cliff-soft-creation-test";
             rockLodSmoke = std::string(argv[i]) == "--rock-lod-bakes-test";
             autoUvRockLodSmoke = std::string(argv[i]) == "--auto-uv-rock-lod-bakes-test";
             curvatureRelaxationSmoke = std::string(argv[i]) == "--curvature-relaxation-bakes-test";
@@ -2909,6 +3012,12 @@ int run(int argc, char **argv)
             if (extremeDeformationSmoke)
             {
                 captureExtremeDeformation(renderer, evidence);
+                window.requestClose();
+                continue;
+            }
+            if (cliffSoftCreationSmoke)
+            {
+                captureCliffSoftCreation(renderer, evidence);
                 window.requestClose();
                 continue;
             }

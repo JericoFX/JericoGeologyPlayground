@@ -1,0 +1,7 @@
+extreme normal solidify minimum front/back orientation=0.506363/0.621003 effective thickness=0.273969
+default cliff soft cut retreat/neighbor step=0.359089/0.164784
+extreme drainage edge stretch=1.74005
+ordinary finite drainage edge stretch=1.66107
+extreme finite drainage edge stretch=1.73823
+metric cut boundary step=0.391841 -> 0.0438489
+PASS plane, relief, solidify, closedness, round trip and surface/solid guard
