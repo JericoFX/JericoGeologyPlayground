@@ -1,0 +1,484 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          0.0
+        ],
+        [
+          1.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "cpuMilliseconds": 0.1809,
+      "frames": 17,
+      "geometryBytesApprox": 21576,
+      "heightMeters": 0.12,
+      "image": "pipe-straight.png",
+      "interpolation": 0,
+      "lengthMeters": 3.0,
+      "measuredDeviationMeters": 0.0,
+      "meshHash": 13919368923693441032,
+      "name": "pipe-straight",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 17,
+      "triangles": 880,
+      "uvHash": 15803705273351948381,
+      "vertices": 459,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.1908,
+      "frames": 25,
+      "geometryBytesApprox": 31752,
+      "heightMeters": 0.12,
+      "image": "pipe-s-curve.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 2074044908779740602,
+      "name": "pipe-s-curve",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 1296,
+      "uvHash": 16206911282648438700,
+      "vertices": 675,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.185,
+      "frames": 25,
+      "geometryBytesApprox": 31752,
+      "heightMeters": 0.12,
+      "image": "pipe-uv-checker.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 2074044908779740602,
+      "name": "pipe-uv-checker",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 1296,
+      "uvHash": 16206911282648438700,
+      "vertices": 675,
+      "viewMode": 8,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.12,
+          1.0,
+          0.0
+        ],
+        [
+          -0.12,
+          2.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0
+        ]
+      ],
+      "cpuMilliseconds": 0.2137,
+      "frames": 23,
+      "geometryBytesApprox": 29208,
+      "heightMeters": 0.12,
+      "image": "pipe-vertical-rmf.png",
+      "interpolation": 1,
+      "lengthMeters": 3.049443972863294,
+      "measuredDeviationMeters": 0.0018321463734021816,
+      "meshHash": 13292784159589022967,
+      "name": "pipe-vertical-rmf",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 23,
+      "triangles": 1192,
+      "uvHash": 10293228286631221373,
+      "vertices": 621,
+      "viewMode": 10,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.1854,
+      "frames": 25,
+      "geometryBytesApprox": 31752,
+      "heightMeters": 0.12,
+      "image": "pipe-seam.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 2074044908779740602,
+      "name": "pipe-seam",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 1296,
+      "uvHash": 16206911282648438700,
+      "vertices": 675,
+      "viewMode": 9,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.069,
+      "frames": 25,
+      "geometryBytesApprox": 5352,
+      "heightMeters": 0.16,
+      "image": "rectangular-duct.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 15808622185487252951,
+      "name": "rectangular-duct",
+      "pathErrorMeters": 0.01,
+      "preset": 6,
+      "profile": 2,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 4,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 196,
+      "uvHash": 10493293675680373141,
+      "vertices": 125,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.26
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.0998,
+      "frames": 25,
+      "geometryBytesApprox": 14520,
+      "heightMeters": 0.1,
+      "image": "cable-tray-crossbars.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 17244852159207288242,
+      "name": "cable-tray-crossbars",
+      "pathErrorMeters": 0.01,
+      "preset": 7,
+      "profile": 4,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 8,
+      "radiusMeters": 0.04,
+      "repeats": 13,
+      "samples": 25,
+      "triangles": 552,
+      "uvHash": 6461096942506678085,
+      "vertices": 329,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.012,
+      "widthMeters": 0.36
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.0998,
+      "frames": 25,
+      "geometryBytesApprox": 14952,
+      "heightMeters": 0.3,
+      "image": "i-beam-run.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 12036642668894311326,
+      "name": "i-beam-run",
+      "pathErrorMeters": 0.01,
+      "preset": 9,
+      "profile": 5,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 12,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 596,
+      "uvHash": 15899403038401208921,
+      "vertices": 325,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.025,
+      "widthMeters": 0.22
+    },
+    {
+      "controlPoints": [
+        [
+          -1.0,
+          0.0,
+          -1.0
+        ],
+        [
+          -0.15,
+          0.0,
+          -1.0
+        ],
+        [
+          0.15,
+          0.0,
+          -0.75
+        ],
+        [
+          0.3,
+          0.0,
+          0.0
+        ],
+        [
+          0.3,
+          0.0,
+          0.75
+        ]
+      ],
+      "cpuMilliseconds": 0.2611,
+      "frames": 18,
+      "geometryBytesApprox": 45792,
+      "heightMeters": 0.12,
+      "image": "high-curvature-bend.png",
+      "interpolation": 1,
+      "lengthMeters": 2.7823363692376923,
+      "measuredDeviationMeters": 0.004166748051083603,
+      "meshHash": 5343540999064337628,
+      "name": "high-curvature-bend",
+      "pathErrorMeters": 0.01,
+      "preset": 2,
+      "profile": 1,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.055,
+      "repeats": 0,
+      "samples": 18,
+      "triangles": 1872,
+      "uvHash": 4746517425871080429,
+      "vertices": 972,
+      "viewMode": 2,
+      "wallThicknessMeters": 0.007,
+      "widthMeters": 0.12
+    },
+    {
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.4051,
+      "frames": 25,
+      "geometryBytesApprox": 31752,
+      "heightMeters": 0.12,
+      "image": "cable.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 16784488694204216920,
+      "name": "cable",
+      "pathErrorMeters": 0.01,
+      "preset": 3,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.009,
+      "repeats": 0,
+      "samples": 25,
+      "triangles": 1296,
+      "uvHash": 8082822229219022000,
+      "vertices": 675,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    }
+  ],
+  "resolution": [
+    1280,
+    960
+  ]
+}

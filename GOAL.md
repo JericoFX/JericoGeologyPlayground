@@ -91,6 +91,8 @@ El [perfil métrico opt-in del cliff](Evidence/2026-09-25-cliff-metric-relief.md
 
 ## Nuevo slice pedido por el owner — Spline Construction / Pipe UV Lab (2026-09-27)
 
+**Resultado del slice:** el [laboratorio interactivo y su handoff](docs/SPLINE_CONSTRUCTION_LAB_RESULTS_2026_09_27.md) quedaron implementados y verificados en este Playground con build Release, 18/18 CTest, comando de diez capturas Vulkan y prueba en la ventana normal de cambio de preset y edición de puntos. El núcleo usa `PA::ProceduralSpline`; el Engine permaneció sólo de lectura. El trabajo geológico persistente continúa activo y su Beauty parcial no queda resuelta por este slice.
+
 El owner pidió usar este Playground también para probar la matemática reutilizable de construcción por spline y poder manipularla personalmente en la UI. La directiva completa está en [`docs/SPLINE_CONSTRUCTION_PIPE_UV_PLAYGROUND_2026_09_27.md`](docs/SPLINE_CONSTRUCTION_PIPE_UV_PLAYGROUND_2026_09_27.md).
 
 Esto **no sustituye ni duplica** la autoridad de `ProceduralSpline` de JericoEngine y no autoriza a modificar el checkout del Engine desde este repo. El Playground debe ensayar en C++ nativo `ArcLength/RMF -> Profile2D -> Sweep/RepeatAlongPath -> UV métrica -> Assembly`, con Pipe como primer consumidor y presets visibles adicionales para cable/manguera, ducto rectangular/redondo, cable tray, handrail/rail y perfil estructural.
