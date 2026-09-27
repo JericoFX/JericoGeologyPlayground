@@ -126,6 +126,39 @@ int run()
         "geology crack must retain fresh interior lineage");
     require(meshHash(pathRock.mesh)==meshHash(evaluate(deserialize(serialize(pathRecipe)),12).mesh),
             "geology crack path must survive recipe save and load");
+    auto naturalPath=pathRecipe;
+    naturalPath.version=26;
+    naturalPath.layers.back().damageBoundaryIrregularity=.8f;
+    naturalPath.layers.back().damagePathPoints={{{-2,0}},{{2,0}}};
+    naturalPath.layers.back().amplitude=3.5f;
+    naturalPath.layers.back().damagePathSeparation=.18f;
+    const auto separatedRock=evaluate(naturalPath,12);
+    auto joinedPath=naturalPath;
+    joinedPath.layers.back().damagePathSeparation=0;
+    const auto joinedRock=evaluate(joinedPath,12);
+    require(PA::validateClosedMesh(separatedRock.mesh).hasValue() &&
+            meshHash(separatedRock.mesh)!=meshHash(joinedRock.mesh) &&
+            separatedRock.mesh.indices.size()==joinedRock.mesh.indices.size() &&
+            std::abs(volume(separatedRock.mesh)-volume(joinedRock.mesh))<1e-5,
+            "through-fracture must create separated closed rock chunks");
+    require(meshHash(evaluate(naturalPath,12).mesh)==
+            meshHash(evaluate(deserialize(serialize(naturalPath)),12).mesh),
+            "irregular rock fracture must survive recipe save and load");
+    for (const std::uint32_t seed:{0u,1u,73u,421u,4294967295u})
+    {
+        naturalPath.layers.back().seed=seed;
+        const auto variedFracture=evaluate(naturalPath,12);
+        require(PA::validateClosedMesh(variedFracture.mesh).hasValue() &&
+                volume(variedFracture.mesh)>0,
+                "bounded fracture contour must remain manifold across stable seeds");
+    }
+    naturalPath.version=25;
+    reject([&]{validate(naturalPath);},
+           "older recipes must reject new irregular fracture semantics");
+    auto shallowSplit=rockPath;
+    shallowSplit.separationMeters=.18;
+    reject([&]{cutDamagePath(rock,shallowSplit,interior,50000);},
+           "chunk separation must reject a shallow unsplit groove");
     auto zeroPath=pathRecipe;
     zeroPath.layers.back().damageAmount=0;
     require(meshHash(evaluate(zeroPath,12).mesh)==meshHash(rock),
@@ -264,6 +297,37 @@ int run()
     require(PA::hashTriangleMesh(crackedPanel)==
             PA::hashTriangleMesh(cutDamagePath(panel,crack,interior,50000)),
             "same path cutter must regenerate identical geometry");
+    auto fractured=crack;
+    fractured.irregularity=1;
+    fractured.seed=421;
+    const auto outline=damagePathSegmentOutline(fractured,fractured.path[0],
+                                                fractured.path[1]);
+    double narrow=1e9,wide=0;
+    for (const auto point:outline)
+        if (std::abs(point.x)<.6)
+        {narrow=std::min(narrow,std::abs(point.y));
+         wide=std::max(wide,std::abs(point.y));}
+    require(outline.size()>18 && wide-narrow>.025,
+            "fracture fixture must break the constant-width capsule silhouette");
+    const auto roughPanel=cutDamagePath(panel,fractured,interior,50000);
+    require(PA::validateClosedMesh(roughPanel).hasValue() &&
+            PA::hashTriangleMesh(roughPanel)!=PA::hashTriangleMesh(crackedPanel) &&
+            PA::hashTriangleMesh(roughPanel)==
+                PA::hashTriangleMesh(cutDamagePath(panel,fractured,interior,50000)),
+            "irregular shared crack must remain closed and deterministic");
+    require(sampleDamagePathField({0,0,front-.04},fractured)<0 &&
+            sampleDamagePathField({0,.3,front-.04},fractured)>0,
+            "irregular crack field must follow the geometric contour");
+    const auto middleOutline=damagePathSegmentOutline(fractured,
+        fractured.path[0],fractured.path[1],.37);
+    const auto boundaryPoint=middleOutline[12];
+    require(std::abs(sampleDamagePathField({boundaryPoint.x,boundaryPoint.y,
+        front-fractured.depth*.63},fractured))<1e-6,
+        "shared crack field must agree with the depth-varying cutter boundary");
+    auto invalidContour=fractured;
+    invalidContour.irregularity=1.1;
+    reject([&]{cutDamagePath(panel,invalidContour,interior,50000);},
+           "unbounded crack irregularity must be rejected");
     require(sampleDamagePathField({0,0,front-.04},crack)<0 &&
             sampleDamagePathField({0,.3,front-.04},crack)>0,
             "shared path field must identify the same local channel cut by geometry");

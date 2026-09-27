@@ -287,6 +287,7 @@ Json layerJson(const Layer &l)
                 {"damageRimFraction", l.damageRimFraction},
                 {"damageAmount",l.damageAmount},
                 {"damagePathPoints", l.damagePathPoints},
+                {"damagePathSeparation", l.damagePathSeparation},
                 {"amplitude", l.amplitude},
                 {"frequency", l.frequency},
                 {"lacunarity", l.lacunarity},
@@ -732,7 +733,8 @@ void validate(const Recipe &r)
     require((r.version == 10 || r.version == 11 || r.version == 12 || r.version == 13 ||
              r.version == 14 || r.version == 15 || r.version == 16 || r.version == 17 ||
              r.version == 18 || r.version == 19 || r.version == 20 || r.version == 21 ||
-             r.version == 22 || r.version == 23 || r.version == 24 || r.version == 25) &&
+             r.version == 22 || r.version == 23 || r.version == 24 || r.version == 25 ||
+             r.version == 26) &&
             int(r.base) >= 0 && int(r.base) < 6 &&
             r.layers.size() <= 24);
     for (auto x : r.planeSize)
@@ -751,6 +753,12 @@ void validate(const Recipe &r)
         {
             require(r.version>=25 && l.damageOperationId>0 && l.mask==Mask::None &&
                     l.amplitude>0 && l.amplitude<=5 && l.width>=.01f && l.width<=2 &&
+                    l.damageBoundaryIrregularity>=0 &&
+                    l.damageBoundaryIrregularity<=1 &&
+                    (l.damageBoundaryIrregularity==0 || r.version>=26) &&
+                    l.damagePathSeparation>=0 && l.damagePathSeparation<=2 &&
+                    (l.damagePathSeparation==0 || (r.version>=26 &&
+                        l.damagePathPoints.size()==2)) &&
                     l.damagePathPoints.size()>=2 && l.damagePathPoints.size()<=16 &&
                     std::abs(l.projectorRotation)<=360 &&
                     std::hypot(double(l.direction[0]),double(l.direction[1]),
@@ -1275,6 +1283,9 @@ MeshResult evaluateImpl(const Recipe &recipe, const MeshResult *source, int reso
                 path.radius=l.width*.5;
                 path.depth=l.amplitude;
                 path.amount=l.damageAmount;
+                path.irregularity=l.damageBoundaryIrregularity;
+                path.seed=l.seed;
+                path.separationMeters=l.damagePathSeparation;
                 for (const auto &point:l.damagePathPoints)
                     path.path.push_back({point[0],point[1],0});
                 next.mesh=cutDamagePath(result.mesh,path,fresh,240000,cancel);
@@ -1788,7 +1799,8 @@ Recipe deserialize(const std::string &text)
         inputVersion != 13 && inputVersion != 14 && inputVersion != 15 && inputVersion != 16 &&
         inputVersion != 17 && inputVersion != 18 && inputVersion != 19 &&
         inputVersion != 20 && inputVersion != 21 && inputVersion != 22 &&
-        inputVersion != 23 && inputVersion != 24 && inputVersion != 25)
+        inputVersion != 23 && inputVersion != 24 && inputVersion != 25 &&
+        inputVersion != 26)
         throw std::runtime_error("Unsupported recipe version");
     if (inputVersion >= 11)
         r.version = inputVersion;
@@ -1845,6 +1857,7 @@ Recipe deserialize(const std::string &text)
         if (a.contains("damageRimFraction")) READ(damageRimFraction);
         if (a.contains("damageAmount")) READ(damageAmount);
         if (a.contains("damagePathPoints")) READ(damagePathPoints);
+        if (a.contains("damagePathSeparation")) READ(damagePathSeparation);
         READ(amplitude);
         READ(frequency);
         READ(lacunarity);

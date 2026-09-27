@@ -66,6 +66,8 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"broken-railing",Assembly::Kind::BrokenRailing,&gentle},
         {"wooden-pier",Assembly::Kind::WoodenPier,&gentle},
         {"pier-manual-damage",Assembly::Kind::WoodenPier,&gentle,0,true},
+        {"pier-break-closeup",Assembly::Kind::WoodenPier,&gentle,0,true},
+        {"plank-fracture-isolated",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"catwalk",Assembly::Kind::Catwalk,&gentle},
         {"truss-warren",Assembly::Kind::TrussWarren,&gentle},
         {"truss-pratt",Assembly::Kind::TrussPratt,&gentle},
@@ -129,6 +131,29 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             const auto debug=Construction::withFrameAxes(axes);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
+        else if (std::string_view(item.name)=="plank-fracture-isolated")
+        {
+            const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
+            const auto part=std::find_if(built.parts.begin(),built.parts.end(),
+                [&](const Assembly::Part &candidate){return candidate.id==id;});
+            if (part==built.parts.end())
+                throw std::runtime_error("Isolated fracture has no selected plank");
+            const auto begin=std::ptrdiff_t(part->firstTriangle*3);
+            const auto end=std::ptrdiff_t((part->firstTriangle+part->triangleCount)*3);
+            auto isolated=built.mesh;
+            isolated.mesh.indices.assign(built.mesh.mesh.indices.begin()+begin,
+                                         built.mesh.mesh.indices.begin()+end);
+            isolated.mesh.triangleRegions.assign(
+                built.mesh.mesh.triangleRegions.begin()+
+                    std::ptrdiff_t(part->firstTriangle),
+                built.mesh.mesh.triangleRegions.begin()+
+                    std::ptrdiff_t(part->firstTriangle+part->triangleCount));
+            isolated.cornerNormals.assign(built.mesh.cornerNormals.begin()+begin,
+                                          built.mesh.cornerNormals.begin()+end);
+            const std::vector<std::array<float,2>> uv(built.cornerUV.begin()+begin,
+                                                       built.cornerUV.begin()+end);
+            renderer.upload(isolated,nullptr,nullptr,nullptr,false,&uv);
+        }
         else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
         auto lo=built.mesh.mesh.positions.front(),hi=lo;
         for (auto p:built.mesh.mesh.positions)
@@ -139,7 +164,8 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         camera.target={float((lo.x+hi.x)*.5),float((lo.y+hi.y)*.5),float((lo.z+hi.z)*.5)};
         camera.distance=std::clamp(float(std::hypot(hi.x-lo.x,hi.y-lo.y,hi.z-lo.z))*1.25f,
                                    2.0f,90.0f);
-        if (item.areaSide)
+        if (item.areaSide || std::string_view(item.name)=="pier-break-closeup" ||
+            std::string_view(item.name)=="plank-fracture-isolated")
         {
             const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
             const auto part=std::find_if(built.parts.begin(),built.parts.end(),
@@ -148,6 +174,10 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
                            float(part->position.z)};
             camera.distance=3.2f;
             camera.pitch=-.65f;
+            if (std::string_view(item.name)=="pier-break-closeup")
+            {camera.distance=2.4f;camera.yaw=.8f;camera.pitch=-.4f;}
+            if (std::string_view(item.name)=="plank-fracture-isolated")
+            {camera.distance=1.8f;camera.yaw=.6f;camera.pitch=-.55f;}
         }
         renderer.draw(1280,960,camera,item.mode);
         if (std::string_view(item.name)=="pipe-couplings")

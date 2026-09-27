@@ -200,6 +200,9 @@ bool editLayer(Layer &l)
         change |= slider("Crack width",l.width,.01f,2);
         change |= slider("Crack depth",l.amplitude,.01f,2);
         change |= slider("Damage amount",l.damageAmount,0,1);
+        change |= slider("Fracture irregularity",l.damageBoundaryIrregularity,0,1);
+        if (l.damagePathPoints.size()==2)
+            change |= slider("Chunk separation",l.damagePathSeparation,0,1);
         for (std::size_t point=0;point<l.damagePathPoints.size();++point)
         {
             ImGui::PushID(int(point));
@@ -211,6 +214,7 @@ bool editLayer(Layer &l)
             auto point=l.damagePathPoints.back();
             point[0]+=point[0]<4.8f?.2f:-.2f;
             l.damagePathPoints.push_back(point);
+            l.damagePathSeparation=0;
             change=true;
         }
         if (l.damagePathPoints.size()>2 && ImGui::Button("Remove last crack point"))
@@ -698,16 +702,22 @@ void captureSharedDamagePath(Renderer &renderer,const std::filesystem::path &evi
         crack.damageOperationId=fixture+1;
         crack.translation={0,0,float(front)};
         crack.direction={0,0,-1};
-        crack.damagePathPoints={{{-.5f,0},{0,.12f},{.5f,0}}};
-        crack.width=fixture==0?.22f:.15f;
-        crack.amplitude=fixture==0?.5f:.12f;
-        source.version=25;
+        crack.damagePathPoints=fixture==0 ?
+            std::vector<std::array<float,2>>{{{-2,0}},{{2,0}}} :
+            std::vector<std::array<float,2>>{{{-.5f,0}},{{0,.12f}},{{.5f,0}}};
+        crack.width=fixture==0?.08f:.15f;
+        crack.amplitude=fixture==0?3.5f:.12f;
+        crack.damageBoundaryIrregularity=fixture==0?.9f:.65f;
+        crack.damagePathSeparation=fixture==0?.24f:0;
+        source.version=26;
         source.layers.push_back(crack);
         const auto after=evaluate(source,source.finalResolution);
         if (!PA::validateClosedMesh(after.mesh).hasValue() ||
             PA::hashTriangleMesh(before.mesh)==PA::hashTriangleMesh(after.mesh))
             throw std::runtime_error("Damage path capture did not create a closed crack");
         const auto label=fixture==0?"rock-crack":"panel-crack";
+        camera.yaw=fixture==0?.18f:0;
+        camera.pitch=fixture==0?-.28f:0;
         save(source,evidence/(std::string(label)+"-recipe.json"));
         if (meshHash(after.mesh)!=meshHash(evaluate(load(evidence/(std::string(label)+
                 "-recipe.json")),source.finalResolution).mesh))
@@ -3115,6 +3125,10 @@ int run(int argc, char **argv)
                 if (recipe.layers[selected].kind==Kind::DamageCavity &&
                     recipe.layers[selected].damageAmount!=1)
                     recipe.version=std::max(recipe.version,25);
+                if (recipe.layers[selected].kind==Kind::DamagePath &&
+                    (recipe.layers[selected].damageBoundaryIrregularity>0 ||
+                     recipe.layers[selected].damagePathSeparation>0))
+                    recipe.version=std::max(recipe.version,26);
                 if (recipe.layers[selected].kind==Kind::EdgeBreakup &&
                     recipe.layers[selected].useSharedFeatureEdges &&
                     recipe.layers[selected].edgeCurvaturePolicy!=2)

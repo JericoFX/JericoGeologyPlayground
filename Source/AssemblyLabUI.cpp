@@ -447,6 +447,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         rule.cutter.path={{0,-.35,0},{0,.35,0}};
         rule.cutter.radius=.025;
         rule.cutter.depth=std::min(height*.6,.08);
+        rule.cutter.irregularity=.6;
+        rule.cutter.seed=settings.damage.seed;
         settings.damage.pathRules.push_back(std::move(rule));
         selectedPath=int(settings.damage.pathRules.size())-1;
         selectedArea=-1;dirty=true;
@@ -481,6 +483,17 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 &rule.cutter.projector.rotationRadians,.05,.5,"%.3f");
             dirty|=ImGui::InputDouble("Crack radius",&rule.cutter.radius,.005,.02,"%.3f");
             dirty|=ImGui::InputDouble("Crack depth",&rule.cutter.depth,.005,.02,"%.3f");
+            dirty|=ImGui::SliderScalar("Fracture irregularity",ImGuiDataType_Double,
+                &rule.cutter.irregularity,&zero,&one,"%.2f");
+            dirty|=ImGui::InputScalar("Fracture seed",ImGuiDataType_U64,
+                                      &rule.cutter.seed);
+            if (rule.cutter.path.size()==2)
+            {
+                constexpr double maxSeparation=2;
+                dirty|=ImGui::SliderScalar("Chunk separation",ImGuiDataType_Double,
+                    &rule.cutter.separationMeters,&zero,&maxSeparation,"%.3f m");
+                ImGui::TextWrapped("Separation requires a crack passing through the whole member.");
+            }
             for (std::size_t i=0;i<rule.cutter.path.size();++i)
             {
                 ImGui::PushID(int(i));
@@ -495,7 +508,9 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             {
                 auto point=rule.cutter.path.back();
                 point.x+=point.x<9.8?.2:-.2;
-                rule.cutter.path.push_back(point);dirty=true;
+                rule.cutter.path.push_back(point);
+                rule.cutter.separationMeters=0;
+                dirty=true;
             }
             if (rule.cutter.path.size()>2 && ImGui::Button("Remove last crack point"))
             {rule.cutter.path.pop_back();dirty=true;}

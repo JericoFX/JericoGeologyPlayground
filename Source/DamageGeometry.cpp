@@ -196,51 +196,150 @@ TriangleMesh cutterMesh(const DamageArea &area,Jerico::Guid freshInterior)
 TriangleMesh pathSegmentMesh(const DamagePathCutter &cutter,Vec3d first,Vec3d second,
                              Jerico::Guid freshInterior)
 {
-    constexpr std::uint32_t halfArc=8;
-    constexpr std::uint32_t sides=2*(halfArc+1);
-    const auto dx=second.x-first.x,dy=second.y-first.y;
-    const auto length=std::hypot(dx,dy);
-    if (!(length>1e-9)) throw std::invalid_argument("Damage path segment too short");
-    const auto tx=dx/length,ty=dy/length;
-    const auto nx=-ty,ny=tx;
+    const auto sides=std::uint32_t(damagePathSegmentOutline(cutter,first,second).size());
+    const std::uint32_t rings=cutter.irregularity>0?damagePathDepthIntervals+1:2;
     const auto exteriorMargin=std::max(1e-4,cutter.radius*.01)/cutter.projector.scale.z;
+    const auto depth=cutter.depth*cutter.amount;
     TriangleMesh mesh;
-    mesh.positions.reserve(2*sides+2);
-    auto appendArc=[&](Vec3d center,double start)
+    mesh.positions.reserve(rings*sides+2);
+    for (std::uint32_t ring=0;ring<rings;++ring)
     {
-        for (std::uint32_t i=0;i<=halfArc;++i)
-        {
-            const auto angle=start+std::numbers::pi*i/halfArc;
-            const auto u=center.x+cutter.radius*(tx*std::cos(angle)+nx*std::sin(angle));
-            const auto v=center.y+cutter.radius*(ty*std::cos(angle)+ny*std::sin(angle));
-            mesh.positions.push_back(localToWorld(cutter.projector,u,v,
-                                                 -cutter.depth*cutter.amount));
-        }
-    };
-    // The two arcs form one counter-clockwise capsule boundary.
-    appendArc(first,std::numbers::pi/2);
-    appendArc(second,-std::numbers::pi/2);
-    for (std::uint32_t i=0;i<sides;++i)
-    {
-        const auto p=mesh.positions[i];
-        mesh.positions.push_back(add(p,multiply(cutter.projector.normal,
-            (cutter.depth*cutter.amount+exteriorMargin)*cutter.projector.scale.z)));
+        const auto fraction=double(ring)/(rings-1);
+        const auto outline=damagePathSegmentOutline(cutter,first,second,fraction);
+        const auto z=std::lerp(-depth,exteriorMargin,fraction);
+        for (const auto point:outline)
+            mesh.positions.push_back(localToWorld(cutter.projector,point.x,point.y,z));
     }
     const auto bottomCenter=std::uint32_t(mesh.positions.size());
-    mesh.positions.push_back(localToWorld(cutter.projector,
-        (first.x+second.x)*.5,(first.y+second.y)*.5,-cutter.depth*cutter.amount));
-    const auto topCenter=std::uint32_t(mesh.positions.size());
-    mesh.positions.push_back(localToWorld(cutter.projector,
-        (first.x+second.x)*.5,(first.y+second.y)*.5,exteriorMargin));
+    if (cutter.irregularity==0)
+    {
+        mesh.positions.push_back(localToWorld(cutter.projector,
+            (first.x+second.x)*.5,(first.y+second.y)*.5,-depth));
+        mesh.positions.push_back(localToWorld(cutter.projector,
+            (first.x+second.x)*.5,(first.y+second.y)*.5,exteriorMargin));
+    }
     for (std::uint32_t i=0;i<sides;++i)
     {
         const auto next=(i+1)%sides;
-        mesh.indices.insert(mesh.indices.end(),{
-            i,next,sides+next,i,sides+next,sides+i,
-            bottomCenter,next,i,topCenter,sides+i,sides+next});
-        mesh.triangleRegions.insert(mesh.triangleRegions.end(),4,freshInterior);
+        for (std::uint32_t ring=0;ring+1<rings;++ring)
+        {
+            const auto base=ring*sides;
+            mesh.indices.insert(mesh.indices.end(),{
+                base+i,base+next,base+sides+next,
+                base+i,base+sides+next,base+sides+i});
+            mesh.triangleRegions.insert(mesh.triangleRegions.end(),2,freshInterior);
+        }
+        if (cutter.irregularity==0)
+        {
+            mesh.indices.insert(mesh.indices.end(),{
+                bottomCenter,next,i,bottomCenter+1,
+                (rings-1)*sides+i,(rings-1)*sides+next});
+            mesh.triangleRegions.insert(mesh.triangleRegions.end(),2,freshInterior);
+        }
+    }
+    if (cutter.irregularity>0)
+    {
+        const auto cap=[&](std::uint32_t ring,bool bottom)
+        {
+            const auto outline=damagePathSegmentOutline(cutter,first,second,
+                                                         bottom?0:1);
+            std::vector<std::uint32_t> remaining(sides);
+            std::iota(remaining.begin(),remaining.end(),0);
+            const auto orient=[&](std::uint32_t a,std::uint32_t b,std::uint32_t c)
+            {
+                const auto &p=outline[a],&q=outline[b],&r=outline[c];
+                return (q.x-p.x)*(r.y-p.y)-(q.y-p.y)*(r.x-p.x);
+            };
+            while (remaining.size()>2)
+            {
+                bool clipped=false;
+                for (std::size_t i=0;i<remaining.size();++i)
+                {
+                    const auto a=remaining[(i+remaining.size()-1)%remaining.size()];
+                    const auto b=remaining[i];
+                    const auto c=remaining[(i+1)%remaining.size()];
+                    if (orient(a,b,c)<=1e-12) continue;
+                    bool contains=false;
+                    for (const auto point:remaining)
+                        if (point!=a && point!=b && point!=c &&
+                            orient(a,b,point)>=-1e-12 &&
+                            orient(b,c,point)>=-1e-12 &&
+                            orient(c,a,point)>=-1e-12)
+                            {contains=true;break;}
+                    if (contains) continue;
+                    const auto base=ring*sides;
+                    if (bottom)
+                        mesh.indices.insert(mesh.indices.end(),
+                                            {base+c,base+b,base+a});
+                    else
+                        mesh.indices.insert(mesh.indices.end(),
+                                            {base+a,base+b,base+c});
+                    mesh.triangleRegions.push_back(freshInterior);
+                    remaining.erase(remaining.begin()+std::ptrdiff_t(i));
+                    clipped=true;
+                    break;
+                }
+                if (!clipped)
+                    throw std::runtime_error("Fracture cap cannot be triangulated");
+            }
+        };
+        cap(0,true);
+        cap(rings-1,false);
     }
     return mesh;
+}
+void separateFractureChunks(TriangleMesh &mesh,const DamagePathCutter &cutter)
+{
+    if (cutter.separationMeters==0) return;
+    if (cutter.path.size()!=2)
+        throw std::invalid_argument("Chunk separation requires one straight fracture path");
+    std::vector<std::size_t> parents(mesh.positions.size());
+    std::iota(parents.begin(),parents.end(),0);
+    const auto root=[&](std::size_t index)
+    {
+        while (parents[index]!=index)
+        {parents[index]=parents[parents[index]];index=parents[index];}
+        return index;
+    };
+    for (std::size_t i=0;i<mesh.indices.size();i+=3)
+    {
+        const auto first=root(mesh.indices[i]);
+        parents[root(mesh.indices[i+1])]=first;
+        parents[root(mesh.indices[i+2])]=first;
+    }
+    std::set<std::size_t> chunks;
+    for (std::size_t i=0;i<mesh.positions.size();++i) chunks.insert(root(i));
+    if (chunks.size()<2)
+        throw std::runtime_error("Chunk separation requires a through-fracture");
+    const auto dx=cutter.path[1].x-cutter.path[0].x;
+    const auto dy=cutter.path[1].y-cutter.path[0].y;
+    const auto pathLength=std::hypot(dx,dy);
+    const auto side=localToWorld(cutter.projector,-dy/pathLength,dx/pathLength,0);
+    const auto sideVector=multiply(add(side,multiply(cutter.projector.center,-1)),
+        1/std::hypot(std::hypot(side.x-cutter.projector.center.x,
+                                side.y-cutter.projector.center.y),
+                     side.z-cutter.projector.center.z));
+    const auto localCenter=localToWorld(cutter.projector,
+        (cutter.path[0].x+cutter.path[1].x)*.5,
+        (cutter.path[0].y+cutter.path[1].y)*.5,0);
+    std::map<std::size_t,std::pair<double,std::size_t>> centers;
+    for (std::size_t i=0;i<mesh.positions.size();++i)
+    {
+        const auto p=mesh.positions[i];
+        const auto offset=add(p,multiply(localCenter,-1));
+        const auto sideDistance=offset.x*sideVector.x+offset.y*sideVector.y+
+                                offset.z*sideVector.z;
+        auto &entry=centers[root(i)];
+        entry.first+=sideDistance;
+        ++entry.second;
+    }
+    for (std::size_t i=0;i<mesh.positions.size();++i)
+    {
+        const auto &entry=centers.at(root(i));
+        const auto direction=entry.first>=0?1.0:-1.0;
+        mesh.positions[i]=add(mesh.positions[i],multiply(sideVector,
+            direction*cutter.separationMeters*.5));
+    }
 }
 }
 
@@ -313,7 +412,8 @@ TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &cutt
         throw std::runtime_error("Damage path requires a closed host");
     if (!cutter.enabled || cutter.amount==0) return host;
     if (cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints ||
-        host.indices.size()/3+(cutter.path.size()-1)*72>maximumTriangles)
+        host.indices.size()/3+(cutter.path.size()-1)*
+            (cutter.irregularity>0?864:72)>maximumTriangles)
         throw std::runtime_error("Damage path mesh budget exceeded");
     sampleDamagePathField(cutter.projector.center,cutter);
     std::map<std::uint32_t,Jerico::Guid> identities;
@@ -347,6 +447,7 @@ TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &cutt
     if (output.NumTri()>maximumTriangles || output.NumVert()>maximumTriangles)
         throw std::runtime_error("Damage path output exceeds mesh budget");
     auto result=fromNative(output,identities);
+    separateFractureChunks(result,cutter);
     if (!PA::validateClosedMesh(result).hasValue())
         throw std::runtime_error("Damage path output is not closed");
     checkCancel();

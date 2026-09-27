@@ -65,6 +65,19 @@ int main()
             "damage recipe must round trip exactly and deterministically");
     require(restored.pathRules.size()==1 && restored.pathRules.front().cutter.path.size()==3,
             "selected crack path must survive damage recipe roundtrip");
+    auto shaped=source;
+    shaped.pathRules.front().cutter.path={{-.3,0,0},{.3,0,0}};
+    shaped.pathRules.front().cutter.irregularity=.7;
+    shaped.pathRules.front().cutter.separationMeters=.1;
+    shaped.pathRules.front().cutter.seed=827;
+    const auto shapedText=serializeAssemblyDamage(shaped);
+    require(nlohmann::json::parse(shapedText).at("version")==3 &&
+            serializeAssemblyDamage(deserializeAssemblyDamage(shapedText))==shapedText,
+            "irregular separated fracture must roundtrip as schema v3");
+    auto falselyOld=nlohmann::json::parse(shapedText);
+    falselyOld["version"]=2;
+    rejects([&]{deserializeAssemblyDamage(falselyOld.dump());},
+            "older schema must reject new fracture semantics");
     auto legacy=source;
     legacy.pathRules.clear();
     require(nlohmann::json::parse(serializeAssemblyDamage(legacy)).at("version")==1 &&
@@ -94,7 +107,7 @@ int main()
     restored.areaRules.front().area.projector.center={1,2,3};
     require(resolveDamage(restored,selected)==State::Intact,
             "restored protected selection must override area damage");
-    rejects([]{deserializeAssemblyDamage("{\"version\":3}");},"unknown schema version accepted");
+    rejects([]{deserializeAssemblyDamage("{\"version\":4}");},"unknown schema version accepted");
     rejects([]{deserializeAssemblyDamage("{\"version\":1,\"areas\":[{}]}");},
             "incomplete area accepted");
     auto bad=source;bad.areaRules.front().area.projector.scale.x=0;

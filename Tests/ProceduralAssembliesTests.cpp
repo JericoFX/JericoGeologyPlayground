@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <set>
 #include <stdexcept>
@@ -369,6 +370,8 @@ int main()
             beamFrame.normal.x*beamFrame.tangent.y-beamFrame.normal.y*beamFrame.tangent.x};
         beamCrack.cutter.path={{-.3,0,0},{.3,0,0}};
         beamCrack.cutter.depth=.12;
+        beamCrack.cutter.irregularity=.6;
+        beamCrack.cutter.seed=73;
         Settings crackedBeam=pier;
         crackedBeam.damage.pathRules.push_back(beamCrack);
         const auto cutBeam=build(curvedPath(),crackedBeam);
@@ -394,6 +397,37 @@ int main()
             [&](const Part &part){return part.id==boardId;});
         require(brokenBoardPart!=damagedPier.parts.end(),
                 "local fracture density fixture needs broken plank");
+        require(brokenBoardPart->freshInteriorRegions.size()==1 &&
+                std::find(damagedPier.mesh.mesh.triangleRegions.begin(),
+                          damagedPier.mesh.mesh.triangleRegions.end(),
+                          brokenBoardPart->freshInteriorRegions.front())!=
+                    damagedPier.mesh.mesh.triangleRegions.end() &&
+                std::any_of(damagedPier.mesh.regions.begin(),
+                            damagedPier.mesh.regions.end(),
+                    [&](const RegionInfo &region)
+                    {return region.id==brokenBoardPart->freshInteriorRegions.front() &&
+                            region.role==SurfaceRole::DamageInterior;}),
+                "broken plank must preserve selectable fresh wood interior faces");
+        std::array<float,2> freshUvMin{
+            std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity()};
+        std::array<float,2> freshUvMax{
+            -std::numeric_limits<float>::infinity(),-std::numeric_limits<float>::infinity()};
+        for (std::size_t face=brokenBoardPart->firstTriangle;
+             face<brokenBoardPart->firstTriangle+brokenBoardPart->triangleCount;++face)
+            if (damagedPier.mesh.mesh.triangleRegions[face]==
+                brokenBoardPart->freshInteriorRegions.front())
+                for (int corner=0;corner<3;++corner)
+                {
+                    const auto &uv=damagedPier.cornerUV[3*face+corner];
+                    for (int axis=0;axis<2;++axis)
+                    {
+                        freshUvMin[axis]=std::min(freshUvMin[axis],uv[axis]);
+                        freshUvMax[axis]=std::max(freshUvMax[axis],uv[axis]);
+                    }
+                }
+        require(freshUvMax[0]-freshUvMin[0]>pier.boardWidthMeters*.5 &&
+                freshUvMax[1]-freshUvMin[1]>pier.boardThicknessMeters*.5,
+                "broken plank fresh wood faces need two-dimensional material UVs");
         const auto breakFrame=Construction::frameAtDistance(damagedPier.path,
             brokenBoardPart->stationMeters);
         const auto cutCenter=pier.widthMeters*.5*(damageRandom01(pier.damage.seed,
@@ -413,6 +447,25 @@ int main()
         }
         require(nearBreak>=80 && farEnd<=16 && brokenBoardPart->triangleCount<500,
                 "broken plank needs bounded tessellation concentrated near fracture");
+        const auto fallenLeft=damageRandom01(pier.damage.seed,
+            boardId,"fallen-side")>=.5;
+        const auto anchoredEnd=fallenLeft?-pier.widthMeters*.5:pier.widthMeters*.5;
+        double anchorLow=std::numeric_limits<double>::infinity();
+        double tipLow=std::numeric_limits<double>::infinity();
+        for (const auto vertex:boardVertices)
+        {
+            const auto relative=sub(damagedPier.mesh.mesh.positions[vertex],
+                                    breakFrame.position);
+            const auto along=dot(relative,breakFrame.binormal);
+            const auto height=dot(relative,breakFrame.normal);
+            if (std::abs(along-anchoredEnd)<.02)
+                anchorLow=std::min(anchorLow,height);
+            if (std::abs(along-cutCenter)<.25)
+                tipLow=std::min(tipLow,height);
+        }
+        require(std::isfinite(anchorLow) && std::isfinite(tipLow) &&
+                tipLow<anchorLow-pier.boardThicknessMeters,
+                "broken plank must droop toward its fracture while the far end stays anchored");
         TriangleMesh brokenOnly;
         std::map<std::uint32_t,std::uint32_t> localVertices;
         for (std::size_t face=brokenBoardPart->firstTriangle;

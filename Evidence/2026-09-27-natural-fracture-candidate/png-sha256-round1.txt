@@ -1,0 +1,6 @@
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\panel-crack-after.png|2548AA18509BB724769FAD6DAB8A9BFD1B7FA1FFE886A108E2C5F294145A27E5
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\panel-crack-before.png|0A6DF00CC8CF5F2B187EFC8519E8588FF0701CC1AEE333A3D2358BA68B03DEB1
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\panel-crack-fresh-material.png|ED90B12C4076C0B01C470BD97042D3EB046B1130937F14C84FBBD0969F468CFC
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\rock-crack-after.png|C287CC3F6D5A88D3AB7DF3FA724651B6787FF35FDD5058439CAF33DF3882D020
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\rock-crack-before.png|4A7919E66E05E1FB8566DAD47FFE8E47C5498A09ADE1AD1CD08B311CA134267E
+F:\JericoGeologyPlayground\Evidence\2026-09-27-natural-fracture-candidate\rock-crack-fresh-material.png|ACBE2E3ED8F633919E530208D8D6DB3FE383D4CC5390C5B0CEBF565F6E5B3D33

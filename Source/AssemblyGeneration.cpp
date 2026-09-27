@@ -94,7 +94,8 @@ class Builder
                 !partIds.insert(rule.semanticPartId).second ||
                 !std::isfinite(rule.cutter.radius) || rule.cutter.radius<.001 ||
                 rule.cutter.radius>100 || !std::isfinite(rule.cutter.depth) ||
-                rule.cutter.depth<.001 || rule.cutter.depth>100)
+                rule.cutter.depth<.001 || rule.cutter.depth>100 ||
+                (rule.cutter.separationMeters>0 && rule.cutter.path.size()!=2))
                 throw std::runtime_error("Assembly selected crack settings invalid");
             sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
         }
@@ -443,8 +444,26 @@ class Builder
         else tube(points,radius);
     }
     void brokenBoard(const Construction::PathFrame &frame,double boardWidth,
-                     double boardLength,double thickness,const Part &part)
+                     double boardLength,double thickness,Part &part)
     {
+        Jerico::Guid fresh;
+        bool unique=false;
+        for (std::uint64_t salt=0;salt<256;++salt)
+        {
+            fresh=Solid::region(settings.damage.seed,
+                Jerico::stableGuidHash(part.guid)^0xB04D5ULL^salt);
+            unique=fresh!=part.guid &&
+                std::none_of(result.mesh.regions.begin(),result.mesh.regions.end(),
+                    [&](const RegionInfo &region){return region.id==fresh;}) &&
+                std::find(result.mesh.mesh.triangleRegions.begin(),
+                          result.mesh.mesh.triangleRegions.end(),fresh)==
+                    result.mesh.mesh.triangleRegions.end();
+            if (unique) break;
+        }
+        if (!unique)
+            throw std::runtime_error("Broken board fresh region ID collision");
+        part.freshInteriorRegions.push_back(fresh);
+        result.mesh.regions.push_back({fresh,part.guid,SurfaceRole::DamageInterior,-1,-1});
         auto cutCenter=boardLength*.5*(damageRandom01(settings.damage.seed,
             part.id,"cut-position")-.5);
         for (const auto &rule:settings.damage.areaRules)
@@ -458,6 +477,12 @@ class Builder
             }
         const bool fallenRight=damageRandom01(settings.damage.seed,
             part.id,"fallen-side")>=.5;
+        DamageNoiseSettings grain;
+        grain.frequency=5;
+        grain.seed=std::uint32_t(damageRandom01(settings.damage.seed,
+            part.id,"fracture-grain")*std::numeric_limits<std::uint32_t>::max());
+        const auto leftId=part.id+"/left-fibers";
+        const auto rightId=part.id+"/right-fibers";
         const auto cut=[&](double u)
         {
             const auto x=(u/boardWidth+.5);
@@ -466,6 +491,15 @@ class Builder
                 settings.damage.seed,part.id);
         };
         const auto gap=boardLength*.04;
+        const auto cutSide=[&](double u,bool left)
+        {
+            const auto fraction=u/boardWidth+.5;
+            const auto fiber=structuredDamageNoise01({fraction,0,0},grain);
+            const auto localGap=gap*(.35+1.3*fiber);
+            const auto edge=fractureProfileOffset(fraction,localGap*.2,
+                boardWidth,settings.damage.seed,left?leftId:rightId);
+            return cut(u)+(left?-1:1)*localGap*.5+edge;
+        };
         auto prism=[&](bool left)
         {
             std::vector<Point2> polygon;
@@ -480,7 +514,7 @@ class Builder
                 for (int i=steps;i>=0;--i)
                 {
                     const auto u=boardWidth*(double(i)/steps-.5);
-                    polygon.push_back({u,cut(u)-gap*.5});
+                    polygon.push_back({u,cutSide(u,true)});
                 }
             }
             else
@@ -488,7 +522,7 @@ class Builder
                 for (unsigned i=0;i<=steps;++i)
                 {
                     const auto u=boardWidth*(double(i)/steps-.5);
-                    polygon.push_back({u,cut(u)+gap*.5});
+                    polygon.push_back({u,cutSide(u,false)});
                 }
                 polygon.push_back({boardWidth*.5,boardLength*.5});
                 polygon.push_back({-boardWidth*.5,boardLength*.5});
@@ -499,15 +533,21 @@ class Builder
                 for (unsigned i=0;i<=steps;++i)
                 {
                     const auto u=boardWidth*(double(i)/steps-.5);
-                    points.push_back({u,cut(u)+(left?-gap*.5-band:gap*.5+band)});
+                    points.push_back({u,cutSide(u,left)+(left?-band:band)});
                 }
             const auto base=std::uint32_t(result.mesh.mesh.positions.size());
             for (const auto &point:points)
             {
                 auto center=add(frame.position,add(mul(frame.tangent,point.u),mul(frame.binormal,point.v)));
                 if (left!=fallenRight)
-                    center=add(center,add(mul(frame.normal,-thickness*1.2),
-                        mul(frame.binormal,(left?-1:1)*thickness*.3)));
+                {
+                    const auto farEnd=left?-boardLength*.5:boardLength*.5;
+                    const auto distanceToBreak=std::abs(cutSide(point.u,left)-farEnd);
+                    const auto progress=std::clamp(std::abs(point.v-farEnd)/
+                        std::max(distanceToBreak,1e-9),0.0,1.0);
+                    center=add(center,add(mul(frame.normal,-thickness*2*progress),
+                        mul(frame.binormal,(left?-1:1)*thickness*.3*progress)));
+                }
                 center=add(center,mul(frame.normal,-thickness*.5));
                 vertex(center);
                 vertex(add(center,mul(frame.normal,thickness)));
@@ -586,17 +626,34 @@ class Builder
             auto wall=[&](std::uint32_t from,std::uint32_t to)
             {
                 const auto a=base+2*from,b=base+2*to;
-                triangle(a,b+1,b);triangle(a,a+1,b+1);
+                if (currentGuid==fresh)
+                {
+                    const auto uv=[&](std::uint32_t index)
+                    {
+                        const auto relative=sub(result.mesh.mesh.positions[index],
+                                                frame.position);
+                        return std::array<float,2>{float(dot(relative,frame.tangent)),
+                                                   float(dot(relative,frame.normal))};
+                    };
+                    triangle(a,b+1,b,uv(a),uv(b+1),uv(b));
+                    triangle(a,a+1,b+1,uv(a),uv(a+1),uv(b+1));
+                }
+                else
+                {triangle(a,b+1,b);triangle(a,a+1,b+1);}
             };
             for (std::uint32_t i=0;i<polygon.size();++i)
             {
                 const auto next=(i+1)%std::uint32_t(polygon.size());
+                const auto sourceGuid=currentGuid;
+                if (left?(i>=2 && i<steps+2):(i<steps))
+                    currentGuid=fresh;
                 if (localTessellation &&
                     ((left && i==1) || (!left && i==steps)))
                 {wall(i,innerBase+steps);wall(innerBase+steps,next);}
                 else if (localTessellation && i==polygon.size()-1)
                 {wall(i,innerBase);wall(innerBase,next);}
                 else wall(i,next);
+                currentGuid=sourceGuid;
             }
         };
         prism(true);prism(false);
@@ -679,7 +736,7 @@ void buildRailway(Builder &builder)
         const auto &frame=placements[i].frame;
         builder.part(Role::Sleeper,std::uint32_t(i),0,frame.distanceMeters,
                      add(frame.position,mul(frame.normal,-s.sleeperHeightMeters*.6)),
-                     [&](const Part &part)
+                     [&](Part &part)
         {
             auto center=add(frame.position,mul(frame.normal,-s.sleeperHeightMeters*.6));
             if (part.state==State::Loose || part.state==State::Detached)
@@ -766,7 +823,7 @@ void buildPier(Builder &builder,bool groundSupports=true)
     {
         const auto station=fit.actualWidthMeters*(i+.5)+s.boardGapMeters*i;
         const auto frame=Construction::frameAtDistance(path,station);
-        builder.part(Role::DeckPlank,std::uint32_t(i),0,station,[&](const Part &part)
+        builder.part(Role::DeckPlank,std::uint32_t(i),0,station,[&](Part &part)
         {
             auto center=frame.position;
             if (part.state==State::Loose || part.state==State::Detached)
@@ -1107,7 +1164,7 @@ void buildRopeBridge(Builder &builder)
         const auto &frame=stations[i].frame;
         builder.part(Role::DeckPlank,std::uint32_t(i),0,frame.distanceMeters,
                      deckPoint(frame),
-                     [&](const Part &part)
+                     [&](Part &part)
         {
             auto adjusted=frame;
             adjusted.position=deckPoint(frame);

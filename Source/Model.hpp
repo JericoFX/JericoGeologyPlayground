@@ -117,6 +117,7 @@ struct Layer
     float damageBoundaryIrregularity{}, damageRimFraction{};
     float damageAmount{1};
     std::vector<std::array<float,2>> damagePathPoints;
+    float damagePathSeparation{};
 };
 struct Recipe
 {

@@ -108,9 +108,14 @@ struct DamagePathCutter
     bool enabled{true};
     DamageProjector projector;
     std::vector<Vec3d> path;
-    double radius{.05}, depth{.1}, amount{1};
+    double radius{.05}, depth{.1}, amount{1}, irregularity{}, separationMeters{};
+    std::uint64_t seed{};
 };
 inline constexpr std::size_t maximumDamagePathPoints=16;
+inline constexpr unsigned damagePathDepthIntervals=8;
+std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
+                                             Vec3d first,Vec3d second,
+                                             double depthFraction=1);
 double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter);
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,
                              double localFeatureSizeMeters,std::uint64_t seed,

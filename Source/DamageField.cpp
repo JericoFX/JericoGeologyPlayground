@@ -256,19 +256,115 @@ double pathCrackField(Vec3d position,const std::vector<Vec3d> &path,
         field=std::min(field,segmentCrackField(position,path[i-1],path[i],radius));
     return field;
 }
+std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
+                                             Vec3d first,Vec3d second,
+                                             double depthFraction)
+{
+    if (!std::isfinite(cutter.radius) || cutter.radius<=0 ||
+        !std::isfinite(cutter.irregularity) || cutter.irregularity<0 ||
+        cutter.irregularity>1 || !std::isfinite(depthFraction) ||
+        depthFraction<0 || depthFraction>1)
+        throw std::invalid_argument("Damage path contour outside limits");
+    const auto dx=second.x-first.x,dy=second.y-first.y;
+    const auto segmentLength=std::hypot(dx,dy);
+    if (!(segmentLength>1e-9))
+        throw std::invalid_argument("Damage path segment too short");
+    const auto tx=dx/segmentLength,ty=dy/segmentLength;
+    const auto nx=-ty,ny=tx;
+    // Translate both sides together; the width perturbation remains below 0.3 radius.
+    const auto sheetAmplitude=cutter.irregularity*
+        std::min({cutter.depth*cutter.amount*.09,segmentLength*.075,
+                  cutter.radius*5});
+    DamageNoiseSettings sheetNoise;
+    sheetNoise.frequency=4.5;
+    sheetNoise.seed=std::uint32_t(cutter.seed);
+    constexpr unsigned halfArc=8,sideSteps=16;
+    std::vector<Vec3d> outline;
+    outline.reserve(2*(halfArc+1)+2*(sideSteps-1));
+    const auto arc=[&](Vec3d center,double start)
+    {
+        for (unsigned i=0;i<=halfArc;++i)
+        {
+            const auto angle=start+std::numbers::pi*i/halfArc;
+            outline.push_back({center.x+cutter.radius*(tx*std::cos(angle)+
+                nx*std::sin(angle)),center.y+cutter.radius*(ty*std::cos(angle)+
+                ny*std::sin(angle)),0});
+        }
+    };
+    const auto side=[&](unsigned i,bool positive)
+    {
+        const auto t=double(i)/sideSteps;
+        const auto taper=std::sin(std::numbers::pi*t);
+        const auto center=fractureProfileOffset(t,cutter.radius*.6*cutter.irregularity,
+            cutter.radius,cutter.seed,"path-center")*taper;
+        const auto scaledDepth=depthFraction*damagePathDepthIntervals;
+        const auto lowDepth=std::floor(scaledDepth)/damagePathDepthIntervals;
+        const auto highDepth=std::ceil(scaledDepth)/damagePathDepthIntervals;
+        const auto lowNoise=structuredDamageNoise01({t,lowDepth,0},sheetNoise);
+        const auto highNoise=highDepth==lowDepth?lowNoise:
+            structuredDamageNoise01({t,highDepth,0},sheetNoise);
+        const auto sheet=taper*sheetAmplitude*2.5*(
+            std::lerp(lowNoise,highNoise,scaledDepth-std::floor(scaledDepth))-.5);
+        const auto width=fractureProfileOffset(t,cutter.radius*.5*cutter.irregularity,
+            cutter.radius,cutter.seed,positive?"path-positive":"path-negative")*taper;
+        const auto distance=center+sheet+(positive?1:-1)*(cutter.radius+width);
+        outline.push_back({first.x+t*dx+nx*distance,
+                           first.y+t*dy+ny*distance,0});
+    };
+    arc(first,std::numbers::pi/2);
+    if (cutter.irregularity>0)
+        for (unsigned i=1;i<sideSteps;++i) side(i,false);
+    arc(second,-std::numbers::pi/2);
+    if (cutter.irregularity>0)
+        for (unsigned i=sideSteps-1;i>0;--i) side(i,true);
+    return outline;
+}
 double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter)
 {
     const auto q=projectorCoordinates(cutter.projector,worldPosition);
     if (cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints)
         throw std::invalid_argument("Damage path point budget invalid");
-    if (!std::isfinite(cutter.depth) || cutter.depth<=0 ||
+    if (cutter.separationMeters>0 && cutter.path.size()!=2)
+        throw std::invalid_argument("Chunk separation requires one straight fracture path");
+    if (!std::isfinite(cutter.radius) || cutter.radius<=0 ||
+        !std::isfinite(cutter.irregularity) || cutter.irregularity<0 ||
+        cutter.irregularity>1 || !std::isfinite(cutter.separationMeters) ||
+        cutter.separationMeters<0 || cutter.separationMeters>2 ||
+        !std::isfinite(cutter.depth) || cutter.depth<=0 ||
         !std::isfinite(cutter.amount) || cutter.amount<0 || cutter.amount>1)
         throw std::invalid_argument("Damage path depth or amount invalid");
     for (const auto point:cutter.path)
         if (!std::isfinite(point.z) || point.z!=0)
             throw std::invalid_argument("Damage path must lie in projector plane");
-    const auto radial=pathCrackField({q.x,q.y,0},cutter.path,cutter.radius);
     if (!cutter.enabled || cutter.amount==0) return 1e30;
+    double radial;
+    if (cutter.irregularity==0)
+        radial=pathCrackField({q.x,q.y,0},cutter.path,cutter.radius);
+    else
+    {
+        radial=std::numeric_limits<double>::infinity();
+        for (std::size_t segment=1;segment<cutter.path.size();++segment)
+        {
+            const auto outline=damagePathSegmentOutline(cutter,cutter.path[segment-1],
+                cutter.path[segment],std::clamp((q.z+cutter.depth*cutter.amount)/
+                    (cutter.depth*cutter.amount),0.0,1.0));
+            bool inside=false;
+            double distanceSquared=std::numeric_limits<double>::infinity();
+            for (std::size_t i=0;i<outline.size();++i)
+            {
+                const auto a=outline[i],b=outline[(i+1)%outline.size()];
+                if ((a.y>q.y)!=(b.y>q.y) &&
+                    q.x<(b.x-a.x)*(q.y-a.y)/(b.y-a.y)+a.x)
+                    inside=!inside;
+                const auto dx=b.x-a.x,dy=b.y-a.y;
+                const auto t=std::clamp(((q.x-a.x)*dx+(q.y-a.y)*dy)/
+                    (dx*dx+dy*dy),0.0,1.0);
+                const auto ex=q.x-a.x-t*dx,ey=q.y-a.y-t*dy;
+                distanceSquared=std::min(distanceSquared,ex*ex+ey*ey);
+            }
+            radial=std::min(radial,(inside?-1:1)*std::sqrt(distanceSquared));
+        }
+    }
     return std::max(radial,std::max(q.z,-q.z-cutter.depth*cutter.amount));
 }
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,

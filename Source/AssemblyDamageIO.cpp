@@ -120,6 +120,8 @@ Json writePath(const PathDamageRule &rule)
     return {{"id",rule.id},{"semanticPartId",rule.semanticPartId},
         {"enabled",cutter.enabled},{"amount",cutter.amount},
         {"radius",cutter.radius},{"depth",cutter.depth},{"path",points},
+        {"irregularity",cutter.irregularity},{"separationMeters",cutter.separationMeters},
+        {"contourSeed",cutter.seed},
         {"projector",{{"center",vectorJson(cutter.projector.center)},
             {"tangent",vectorJson(cutter.projector.tangent)},
             {"bitangent",vectorJson(cutter.projector.bitangent)},
@@ -137,6 +139,9 @@ PathDamageRule readPath(const Json &value)
     cutter.amount=value.at("amount").get<double>();
     cutter.radius=value.at("radius").get<double>();
     cutter.depth=value.at("depth").get<double>();
+    cutter.irregularity=value.value("irregularity",0.0);
+    cutter.separationMeters=value.value("separationMeters",0.0);
+    cutter.seed=value.value("contourSeed",std::uint64_t(0));
     const auto &points=value.at("path");
     if (!points.is_array() || points.size()<2 || points.size()>maximumDamagePathPoints)
         throw std::runtime_error("Invalid damage path points");
@@ -231,7 +236,8 @@ void validate(const DamageSettings &settings)
         finite(cutter.radius);finite(cutter.depth);unit(cutter.amount);
         if (cutter.radius<.001 || cutter.radius>100 ||
             cutter.depth<.001 || cutter.depth>100 ||
-            cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints)
+            cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints ||
+            (cutter.separationMeters>0 && cutter.path.size()!=2))
             throw std::runtime_error("Damage path dimensions outside limits");
         for (const auto point:cutter.path)
         {
@@ -251,7 +257,10 @@ void validate(const DamageSettings &settings)
 std::string serializeAssemblyDamage(const DamageSettings &settings)
 {
     validate(settings);
-    Json result={{"version",settings.pathRules.empty()?1:2},
+    const auto shapedPath=std::any_of(settings.pathRules.begin(),settings.pathRules.end(),
+        [](const PathDamageRule &rule)
+        {return rule.cutter.irregularity>0 || rule.cutter.separationMeters>0;});
+    Json result={{"version",settings.pathRules.empty()?1:shapedPath?3:2},
         {"proceduralEnabled",settings.proceduralEnabled},
         {"seed",settings.seed},{"missingProbability",settings.missingProbability},
         {"brokenProbability",settings.brokenProbability},
@@ -289,7 +298,7 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
         throw std::runtime_error("Damage recipe file too large");
     const auto root=Json::parse(text);
     const auto version=root.at("version").get<int>();
-    if (version!=1 && version!=2)
+    if (version!=1 && version!=2 && version!=3)
         throw std::runtime_error("Unsupported damage recipe version");
     DamageSettings result;
     result.proceduralEnabled=root.at("proceduralEnabled").get<bool>();
@@ -316,12 +325,19 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
             entry.at("startMeters").get<double>(),entry.at("endMeters").get<double>(),
             State(entry.at("state").get<int>())});
     for (const auto &entry:areas) result.areaRules.push_back(readArea(entry));
-    if (version==2)
+    if (version>=2)
     {
         const auto &paths=root.at("paths");
         if (!paths.is_array() || paths.empty() || paths.size()>maximumDamageAreas)
             throw std::runtime_error("Invalid damage path collection");
-        for (const auto &entry:paths) result.pathRules.push_back(readPath(entry));
+        for (const auto &entry:paths)
+        {
+            auto rule=readPath(entry);
+            if (version<3 && (rule.cutter.irregularity>0 ||
+                              rule.cutter.separationMeters>0))
+                throw std::runtime_error("Irregular fracture requires damage recipe v3");
+            result.pathRules.push_back(std::move(rule));
+        }
     }
     for (auto it=manual.begin();it!=manual.end();++it)
         result.manual[it.key()]=State(it.value().get<int>());
