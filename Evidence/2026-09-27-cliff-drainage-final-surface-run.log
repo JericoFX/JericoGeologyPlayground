@@ -1,0 +1,5 @@
+extreme normal solidify minimum front/back orientation=0.506363/0.621003 effective thickness=0.273969
+extreme drainage edge stretch=1.74005
+ordinary finite drainage edge stretch=1.66107
+extreme finite drainage edge stretch=1.73823
+PASS plane, relief, solidify, closedness, round trip and surface/solid guard

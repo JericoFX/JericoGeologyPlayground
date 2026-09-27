@@ -509,7 +509,7 @@ void captureAngularProfiles(Renderer &renderer, const std::filesystem::path &evi
 }
 void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &evidence)
 {
-    nlohmann::json proof = {{"scope", "Extreme field and solidify displacement with joined layer contacts"},
+    nlohmann::json proof = {{"scope", "Extreme field, solidify and cliff incision displacement"},
                             {"adapter", renderer.adapter()}};
     Camera camera;
     camera.yaw = 0.5f;
@@ -592,12 +592,53 @@ void captureExtremeDeformation(Renderer &renderer, const std::filesystem::path &
     const auto a = thickWall.mesh.positions[0];
     const auto b = thickWall.mesh.positions[thickWall.mesh.positions.size() / 2];
     proof["cases"].push_back({{"name", "solidify"},
-                               {"requestedThickness", solid.thickness},
-                               {"effectiveThickness", std::hypot(a.x - b.x, a.y - b.y, a.z - b.z)},
-                               {"meshHash", PA::hashTriangleMesh(thickWall.mesh)},
-                               {"vertices", thickWall.mesh.positions.size()},
-                               {"triangles", thickWall.mesh.indices.size() / 3},
-                               {"cpuMs", thickWall.milliseconds}});
+                                {"requestedThickness", solid.thickness},
+                                {"effectiveThickness", std::hypot(a.x - b.x, a.y - b.y, a.z - b.z)},
+                                {"meshHash", PA::hashTriangleMesh(thickWall.mesh)},
+                                {"vertices", thickWall.mesh.positions.size()},
+                                {"triangles", thickWall.mesh.indices.size() / 3},
+                                {"cpuMs", thickWall.milliseconds}});
+    auto cliff = preset(8);
+    cliff.version = 13;
+    auto incision = defaultLayer(Kind::CliffDrainage);
+    incision.amplitude = 0.16f;
+    incision.width = 0.30f;
+    incision.translation[0] = -1.5f;
+    incision.lateral = 0.22f;
+    incision.frequency = 1;
+    incision.thicknessFrequency = 2.2f;
+    incision.phase = 0.25f;
+    cliff.layers.insert(cliff.layers.begin() + 4, incision);
+    for (int variant = 0; variant < 2; ++variant)
+    {
+        auto recipe = cliff;
+        if (variant == 1)
+        {
+            recipe.layers[4].amplitude = 0.5f;
+            recipe.layers[4].width = 0.10f;
+        }
+        auto result = evaluate(recipe, 32);
+        if (!PA::validateClosedMesh(result.mesh).hasValue())
+            throw std::runtime_error("Extreme cliff incision candidate is not closed");
+        const auto label = variant == 0 ? "cliff-incision-control" : "cliff-incision-extreme";
+        save(recipe, evidence / (std::string(label) + "-recipe.json"));
+        renderer.upload(result);
+        for (int view = 0; view < 2; ++view)
+        {
+            Camera cliffCamera;
+            cliffCamera.yaw = view == 0 ? 0.0f : 0.55f;
+            cliffCamera.pitch = view == 0 ? 0.0f : -0.2f;
+            cliffCamera.distance = 10;
+            renderer.draw(1280, 960, cliffCamera, 0);
+            renderer.capture(evidence / (std::string(label) + "-view-" +
+                                         std::to_string(view) + ".png"));
+        }
+        proof["cases"].push_back({{"name", label},
+                                   {"meshHash", PA::hashTriangleMesh(result.mesh)},
+                                   {"vertices", result.mesh.positions.size()},
+                                   {"triangles", result.mesh.indices.size() / 3},
+                                   {"cpuMs", result.milliseconds}});
+    }
     std::ofstream(evidence / "extreme-deformation-proof.json") << proof.dump(2) << '\n';
     std::cout << proof.dump(2) << '\n';
 }

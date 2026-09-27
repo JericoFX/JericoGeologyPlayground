@@ -253,6 +253,51 @@ int main()
         require(meshHash(drainedCliff.mesh) ==
                     meshHash(evaluate(deserialize(serialize(drainageRecipe)), 32).mesh),
                 "drainage is deterministic after v13 recipe roundtrip");
+        auto maximumEdgeStretch = [](const MeshResult &before, const MeshResult &after)
+        {
+            require(before.mesh.indices == after.mesh.indices,
+                    "edge stretch comparison needs the same topology");
+            double maximum = 0;
+            for (std::size_t t = 0; t < after.mesh.indices.size(); t += 3)
+                for (int corner = 0; corner < 3; ++corner)
+                {
+                    const auto a = after.mesh.indices[t + corner];
+                    const auto b = after.mesh.indices[t + (corner + 1) % 3];
+                    const auto &oldA = before.mesh.positions[a], &oldB = before.mesh.positions[b];
+                    const auto &newA = after.mesh.positions[a], &newB = after.mesh.positions[b];
+                    const auto oldLength = std::hypot(oldB.x - oldA.x, oldB.y - oldA.y,
+                                                      oldB.z - oldA.z);
+                    const auto newLength = std::hypot(newB.x - newA.x, newB.y - newA.y,
+                                                      newB.z - newA.z);
+                    maximum = std::max(maximum, newLength / oldLength);
+                }
+            return maximum;
+        };
+        auto extremeDrainage = drainageRecipe;
+        extremeDrainage.layers[4].amplitude = 0.5f;
+        extremeDrainage.layers[4].width = 0.10f;
+        auto extremeOpenDrainage = evaluate(extremeDrainage, 32, 4);
+        const auto maximumDrainageEdgeStretch =
+            maximumEdgeStretch(beforeDrainage, extremeOpenDrainage);
+        double extremeRetreat = 0;
+        for (std::size_t i = 0; i < extremeOpenDrainage.mesh.positions.size(); ++i)
+            extremeRetreat = std::max(extremeRetreat,
+                beforeDrainage.mesh.positions[i].z - extremeOpenDrainage.mesh.positions[i].z);
+        std::cout << "extreme drainage edge stretch=" << maximumDrainageEdgeStretch << '\n';
+        require(maximumDrainageEdgeStretch <= 1.75 + 1e-6 && extremeRetreat > 0.05,
+                "extreme cliff incision must not stretch neighboring edges into spikes");
+        auto extremeField = evaluate(extremeDrainage, 32, 4, 4);
+        require(meshHash(extremeField.mesh) == meshHash(extremeOpenDrainage.mesh),
+                "field preview must retain the guarded cliff geometry");
+        for (std::size_t i = 0; i < extremeField.field.size(); ++i)
+            require(std::abs((beforeDrainage.mesh.positions[i].z -
+                              extremeField.mesh.positions[i].z) / 0.5 - extremeField.field[i]) < 1e-5,
+                    "extreme incision field must report applied retreat");
+        auto extremeClosedCliff = evaluate(extremeDrainage, 32);
+        require(PA::validateClosedMesh(extremeClosedCliff.mesh).hasValue() &&
+                    meshHash(extremeClosedCliff.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(extremeDrainage)), 32).mesh),
+                "guarded extreme incision must close and replay through the cut");
         auto oldDrainage = serialize(drainageRecipe);
         auto oldDrainageVersion = oldDrainage.find("\"version\": 13");
         require(oldDrainageVersion != std::string::npos, "experimental drainage uses schema v13");
@@ -277,6 +322,20 @@ int main()
         plainWall.layers.clear();
         auto plainGrid = evaluate(plainWall, 64);
         auto incisedGrid = evaluate(finiteRecipe, 64);
+        const auto finiteEdgeStretch = maximumEdgeStretch(plainGrid, incisedGrid);
+        std::cout << "ordinary finite drainage edge stretch=" << finiteEdgeStretch << '\n';
+        auto finiteExtreme = finiteRecipe;
+        finiteExtreme.layers[0].amplitude = 0.5f;
+        finiteExtreme.layers[0].width = 0.1f;
+        auto finiteExtremeGrid = evaluate(finiteExtreme, 64);
+        const auto finiteExtremeStretch = maximumEdgeStretch(plainGrid, finiteExtremeGrid);
+        double finiteExtremeRetreat = 0;
+        for (std::size_t i = 0; i < finiteExtremeGrid.mesh.positions.size(); ++i)
+            finiteExtremeRetreat = std::max(finiteExtremeRetreat,
+                plainGrid.mesh.positions[i].z - finiteExtremeGrid.mesh.positions[i].z);
+        std::cout << "extreme finite drainage edge stretch=" << finiteExtremeStretch << '\n';
+        require(finiteExtremeStretch <= 1.75 + 1e-6 && finiteExtremeRetreat > 0.05,
+                "extreme finite incision must not stretch neighboring edges into spikes");
         require(!incisedGrid.closedSolid &&
                     incisedGrid.mesh.indices == plainGrid.mesh.indices &&
                     incisedGrid.mesh.triangleRegions == plainGrid.mesh.triangleRegions,
@@ -326,6 +385,13 @@ int main()
                     meshHash(finiteWall.mesh) ==
                         meshHash(evaluate(deserialize(serialize(finiteRecipe)), 64).mesh),
                 "finite incision closes and replays after recipe serialization");
+        auto finiteExtremeWall = finiteExtreme;
+        finiteExtremeWall.layers.push_back(finiteSolid);
+        auto closedExtremeFinite = evaluate(finiteExtremeWall, 64);
+        require(PA::validateClosedMesh(closedExtremeFinite.mesh).hasValue() &&
+                    meshHash(closedExtremeFinite.mesh) ==
+                        meshHash(evaluate(deserialize(serialize(finiteExtremeWall)), 64).mesh),
+                "guarded extreme finite incision closes and replays");
         auto cliffCut = evaluate(cliffPreset, 32);
         std::set<Jerico::Guid> frontRegions;
         for (const auto &region : cliffCut.regions)

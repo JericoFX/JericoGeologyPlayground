@@ -496,11 +496,12 @@ void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
         x = std::clamp(x, 0.0, 1.0);
         return x * x * (3 - 2 * x);
     };
+    std::vector<double> retreat(count);
     for (std::size_t i = 0; i < count; ++i)
     {
         if ((i & 255) == 0)
             check(cancel);
-        auto &p = surface.mesh.positions[i];
+        const auto &p = surface.mesh.positions[i];
         const double center = layer.translation[0] + layer.lateral *
             std::sin(2 * std::numbers::pi * layer.frequency * (p.y - minY->y) / height + layer.phase);
         const double dx = (p.x - center) / layer.width;
@@ -509,10 +510,41 @@ void cliffDrainage(MeshResult &surface, const Layer &layer, bool showField,
                                                  layer.thicknessFrequency * p.y + layer.phase);
         const double extent = layer.profile == 1 ?
             1 - smooth((std::abs(p.y - layer.translation[1]) / layer.projectorRadius[1] - 0.7) / 0.3) : 1;
-        const double retreat = layer.amplitude * (0.6 + 0.4 * weak) * corridor * extent;
-        p.z -= retreat;
+        retreat[i] = layer.amplitude * (0.6 + 0.4 * weak) * corridor * extent;
+    }
+    double fraction = 1;
+    constexpr double maximumEdgeStretch = 1.75;
+    for (std::size_t corner = 0; corner < surface.mesh.indices.size(); ++corner)
+    {
+        if ((corner & 4095) == 0)
+            check(cancel);
+        const auto a = surface.mesh.indices[corner];
+        const auto b = surface.mesh.indices[corner - corner % 3 + (corner + 1) % 3];
+        const auto &first = surface.mesh.positions[a], &second = surface.mesh.positions[b];
+        const auto length = std::hypot(second.x - first.x, second.y - first.y,
+                                       second.z - first.z);
+        const auto delta = retreat[b] - retreat[a];
+        const auto difference = std::abs(delta);
+        if (difference > 0)
+        {
+            if (!(length > 1e-12))
+                throw std::runtime_error("Cliff drainage requires nondegenerate source edges");
+            const auto signedDepth = (second.z - first.z) * (delta > 0 ? 1 : -1);
+            const auto limit = (signedDepth + std::sqrt(signedDepth * signedDepth +
+                (maximumEdgeStretch * maximumEdgeStretch - 1) * length * length)) / difference;
+            fraction = std::min(fraction, limit);
+        }
+    }
+    if (fraction < 1)
+        fraction *= 0.99;
+    for (std::size_t i = 0; i < count; ++i)
+    {
+        if ((i & 255) == 0)
+            check(cancel);
+        auto &p = surface.mesh.positions[i];
+        p.z -= fraction * retreat[i];
         if (showField)
-            surface.field[i] = float(retreat / layer.amplitude);
+            surface.field[i] = float(fraction * retreat[i] / layer.amplitude);
     }
     normals(surface);
 }

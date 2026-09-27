@@ -1,0 +1,4 @@
+horizon correlation baseline=0.901583 fractured=0.671257
+slate source aspect baseline=1.2846 cube=2.13394
+extreme side minimum cosine=-0.516052 seed=24 triangle=6164 maximum edge ratio=6.41945
+PASS thickness bounds, spatial variation, layer identity, zero variation and recipe roundtrip

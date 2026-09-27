@@ -64,6 +64,8 @@ Los desplazamientos de campo mantienen unidos los contactos de estratos etiqueta
 
 La formación de capas coherentes limita automáticamente el perímetro exagerado cuando sus tapas de contacto se plegarían. Usa el mismo factor para todos los estratos y el warp propagado; las amplitudes ordinarias válidas quedan iguales. El test cubre los fallos conocidos y 32 seeds a la amplitud máxima, con contactos completos, replay y capturas Vulkan originales. No protege aún caras laterales ni toda autointersección. [Regresión y capturas](Evidence/2026-09-27-layer-perimeter-guard.md).
 
+La incisión geológica del cliff limita el alargamiento de cada arista a 1,75× de su longitud de entrada cuando se combinan amplitud alta y corredor estrecho. La receta normal y las variantes v19–v21 ya capturadas conservan sus hashes e imágenes; el campo de depuración refleja el retroceso aplicado. El caso extremo pasó de 2,625× a 1,740×, con captura Vulkan y cierre/replay. Esta protección geométrica no resuelve todavía la placa central ni la Beauty del cliff. [RED y verificación](Evidence/2026-09-27-cliff-incision-stretch-guard.md).
+
 El contrato, las matemáticas, la semántica de regiones y los límites para un consumidor sin UI están en `BACKEND_CONTRACT.md`. La evidencia v3 vive en `Evidence/surface-v3`; v2 y v1 permanecen en `Evidence/backend-v2` y `Evidence/baseline-v1`. La investigación acotada está en `docs/NODE_MATH_RESEARCH_2026_09_15.md`. Recetas reutilizables, importación de heightmap y aplicación de RBrush para M8 están especificados en `docs/M8_GEOLOGY_BACKEND.md`; la matemática de bake de altura, la proyección RBrush local y un pack derivado de imagen CC0 se probaron en el Playground.
 
 ## Arco y túnel de prueba
