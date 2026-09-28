@@ -1137,12 +1137,18 @@ int main()
         const auto cableId=stablePartId(suspension.kind,Role::Cable,0,-1);
         suspension.damage.manual[cableId]=State::Broken;
         const auto cutCable=build(curvedPath(),suspension);
-        std::size_t intactCableTriangles=0,cutCableTriangles=0;
-        for (const auto &part:suspended.parts)
-            if (part.id==cableId) intactCableTriangles=part.triangleCount;
-        for (const auto &part:cutCable.parts)
-            if (part.id==cableId) cutCableTriangles=part.triangleCount;
-        require(cutCableTriangles>0 && cutCableTriangles<intactCableTriangles,
+        const auto intactCable=std::find_if(suspended.parts.begin(),suspended.parts.end(),
+            [&](const Part &part){return part.id==cableId;});
+        const auto brokenCable=std::find_if(cutCable.parts.begin(),cutCable.parts.end(),
+            [&](const Part &part){return part.id==cableId;});
+        require(intactCable!=suspended.parts.end() && brokenCable!=cutCable.parts.end() &&
+                brokenCable->freshInteriorRegions.size()==1 &&
+                partVolume(cutCable,*brokenCable)>0 &&
+                partVolume(cutCable,*brokenCable)<partVolume(suspended,*intactCable) &&
+                PA::validateClosedMesh(partMesh(cutCable,*brokenCable)).hasValue() &&
+                std::count_if(cutCable.fragments.begin(),cutCable.fragments.end(),
+                    [&](const Fragment &fragment)
+                    {return fragment.parentPartId==cableId;})==2,
                 "broken suspension cable must have a real geometry gap");
         Settings rope;
         rope.kind=Assembly::Kind::RopePlankBridge;
@@ -1173,12 +1179,18 @@ int main()
                 "damage seed must not alter healthy coupling variation");
         pipe.damage.manual[stablePartId(pipe.kind,Role::PipeBody,0)]=State::Broken;
         const auto cutPipe=build(curvedPath(),pipe);
-        std::size_t intactPipeTriangles=0,brokenPipeTriangles=0;
-        for (const auto &part:healthy.parts)
-            if (part.role==Role::PipeBody) intactPipeTriangles=part.triangleCount;
-        for (const auto &part:cutPipe.parts)
-            if (part.role==Role::PipeBody) brokenPipeTriangles=part.triangleCount;
-        require(brokenPipeTriangles>0 && brokenPipeTriangles<intactPipeTriangles,
+        const auto intactPipe=std::find_if(healthy.parts.begin(),healthy.parts.end(),
+            [](const Part &part){return part.role==Role::PipeBody;});
+        const auto brokenPipe=std::find_if(cutPipe.parts.begin(),cutPipe.parts.end(),
+            [](const Part &part){return part.role==Role::PipeBody;});
+        require(intactPipe!=healthy.parts.end() && brokenPipe!=cutPipe.parts.end() &&
+                brokenPipe->freshInteriorRegions.size()==1 &&
+                partVolume(cutPipe,*brokenPipe)>0 &&
+                partVolume(cutPipe,*brokenPipe)<partVolume(healthy,*intactPipe) &&
+                PA::validateClosedMesh(partMesh(cutPipe,*brokenPipe)).hasValue() &&
+                std::count_if(cutPipe.fragments.begin(),cutPipe.fragments.end(),
+                    [&](const Fragment &fragment)
+                    {return fragment.parentPartId==brokenPipe->id;})==2,
                 "broken pipe body must have a visible gap");
         require(!stateAllowed(Role::Coupling,State::Bent) &&
                 stateAllowed(Role::Rail,State::Bent),
@@ -1213,12 +1225,14 @@ int main()
                 "new truss recipe must select only one semantic member");
         }
         const std::pair<Assembly::Kind,Role> brokenRoles[]={
+            {Assembly::Kind::PipeCouplings,Role::PipeBody},
             {Assembly::Kind::PipeCouplings,Role::Coupling},
             {Assembly::Kind::Railway,Role::Rail},
             {Assembly::Kind::Railway,Role::RailJoint},
             {Assembly::Kind::WoodenPier,Role::Beam},
             {Assembly::Kind::WoodenPier,Role::CrossBeam},
             {Assembly::Kind::WoodenPier,Role::Pile},
+            {Assembly::Kind::WoodenPier,Role::Fascia},
             {Assembly::Kind::Railing,Role::Post},
             {Assembly::Kind::Railing,Role::TopRail},
             {Assembly::Kind::Railing,Role::MiddleRail},
@@ -1227,8 +1241,11 @@ int main()
             {Assembly::Kind::BeamBridge,Role::Girder},
             {Assembly::Kind::TrussPratt,Role::Brace},
             {Assembly::Kind::SuspensionBridge,Role::Tower},
+            {Assembly::Kind::SuspensionBridge,Role::Cable},
             {Assembly::Kind::SuspensionBridge,Role::Hanger},
-            {Assembly::Kind::SuspensionBridge,Role::Anchor}};
+            {Assembly::Kind::SuspensionBridge,Role::Anchor},
+            {Assembly::Kind::RopePlankBridge,Role::Cable},
+            {Assembly::Kind::RopePlankBridge,Role::HandRope}};
         for (const auto [kind,role]:brokenRoles)
         {
             require(stateAllowed(role,State::Broken),
@@ -1248,14 +1265,14 @@ int main()
             const auto broken=build(curvedPath(),settings);
             const auto changed=std::find_if(broken.parts.begin(),broken.parts.end(),
                 [&](const Part &part){return part.id==target->id;});
-            require(changed!=broken.parts.end() && changed->state==State::Broken &&
+            if (!(changed!=broken.parts.end() && changed->state==State::Broken &&
                     changed->freshInteriorRegions.size()==1 &&
                     meshHash(partMesh(broken,*changed))!=meshHash(partMesh(intact,*target)) &&
                     partVolume(broken,*changed)>0 &&
                     partVolume(broken,*changed)<partVolume(intact,*target) &&
                     PA::validateClosedMesh(partMesh(broken,*changed)).hasValue() &&
-                    broken.cornerUV.size()==broken.mesh.mesh.indices.size(),
-                    "Broken must cut a closed piece using shared fracture geometry");
+                    broken.cornerUV.size()==broken.mesh.mesh.indices.size()))
+                throw std::runtime_error("Broken shared fracture failed: "+target->id);
             const auto replay=build(curvedPath(),settings);
             require(meshHash(replay.mesh.mesh)==meshHash(broken.mesh.mesh),
                     "Broken cutter must reproduce the same assembly mesh");

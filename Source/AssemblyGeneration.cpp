@@ -295,7 +295,9 @@ class Builder
         {
             draw(item);
             if (item.state==State::Broken &&
-                (role==Role::Rail || role==Role::Beam ||
+                (role==Role::PipeBody || role==Role::Rail ||
+                 role==Role::Beam || role==Role::Cable ||
+                 role==Role::HandRope || role==Role::Fascia ||
                  role==Role::Pile || role==Role::Brace || role==Role::Post ||
                  role==Role::TopRail || role==Role::MiddleRail ||
                  role==Role::LowerRail || role==Role::Baluster ||
@@ -798,7 +800,7 @@ class Builder
     }
     void tube(const std::vector<Vec3d> &positions,double radius,
               Construction::ProfileKind profile=Construction::ProfileKind::Circle,
-              double width=0,double height=0,double wall=0,bool fracture=false)
+              double width=0,double height=0,double wall=0)
     {
         if (positions.size()<2 || positions.size()>256 || radius<=0)
             throw std::runtime_error("Assembly sweep path or radius is invalid");
@@ -825,16 +827,6 @@ class Builder
             std::min(radius*.3,std::min(sweep.widthMeters,sweep.heightMeters)*.2);
         sweep.profileChordErrorMeters=settings.lod==2?.008:settings.lod==1?.003:.001;
         sweep.profileMaximumAngleRadians=settings.lod==2?.6:settings.lod==1?.35:.2;
-        sweep.breakEnabled=fracture;
-        if (fracture)
-        {
-            double lengthMeters=0;
-            for (std::size_t i=1;i<positions.size();++i)
-                lengthMeters+=length(sub(positions[i],positions[i-1]));
-            sweep.breakGapMeters=std::max(radius*3,
-                std::clamp(lengthMeters*.08,.08,.7));
-        }
-        sweep.breakRoughness=.5;
         sweep.maximumVertices=settings.maximumVertices-result.mesh.mesh.positions.size();
         appendSweep(Construction::buildConstruction(line,sweep));
     }
@@ -848,9 +840,7 @@ class Builder
                     std::numbers::pi*double(i)/double(points.size()-1))));
         if (state==State::Detached)
             for (auto &point:points) point=add(point,mul(up,-.15));
-        if (state==State::Broken)
-            tube(points,radius,Construction::ProfileKind::Circle,0,0,0,true);
-        else tube(points,radius);
+        tube(points,radius);
     }
     void brokenBoard(const Construction::PathFrame &frame,double boardWidth,
                      double boardLength,double thickness,Part &part)
@@ -1084,7 +1074,7 @@ void buildPipe(Builder &builder,const PA::ProceduralSpline &spline)
     const auto &settings=builder.settings;
     builder.part(Role::PipeBody,0,0,builder.result.path.lengthMeters*.5,[&](const Part &part)
     {
-        if (part.state!=State::Intact)
+        if (part.state!=State::Intact && part.state!=State::Broken)
         {
             std::vector<Vec3d> points;
             for (unsigned i=0;i<=32;++i)
@@ -1334,7 +1324,7 @@ void buildPier(Builder &builder,bool groundSupports=true)
             }
             builder.tube(points,s.boardThicknessMeters*.5,
                 Construction::ProfileKind::Rectangle,s.boardThicknessMeters,
-                s.beamHeightMeters,0,part.state==State::Broken);
+                s.beamHeightMeters);
         });
         for (std::size_t i=0;groundSupports && i+1<supports.size();++i)
         {

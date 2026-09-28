@@ -65,6 +65,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"pipe-through-hole",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-edge",Assembly::Kind::PipeCouplings,&gentle},
         {"broken-coupling",Assembly::Kind::PipeCouplings,&gentle},
+        {"broken-pipe-body",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-uv",Assembly::Kind::PipeCouplings,&bend,8},
         {"pipe-high-curvature-rmf",Assembly::Kind::PipeCouplings,&bend,10},
         {"railway",Assembly::Kind::Railway,&gentle},
@@ -79,6 +80,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"broken-beam-member",Assembly::Kind::WoodenPier,&gentle},
         {"broken-cross-beam",Assembly::Kind::WoodenPier,&gentle},
         {"broken-pile",Assembly::Kind::WoodenPier,&gentle},
+        {"broken-fascia",Assembly::Kind::WoodenPier,&gentle},
         {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
         {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
@@ -94,9 +96,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"truss-pratt",Assembly::Kind::TrussPratt,&gentle},
         {"truss-howe",Assembly::Kind::TrussHowe,&gentle},
         {"suspension-bridge",Assembly::Kind::SuspensionBridge,&gentle},
+        {"broken-suspension-cable",Assembly::Kind::SuspensionBridge,&gentle},
         {"broken-hanger",Assembly::Kind::SuspensionBridge,&gentle},
         {"suspension-hanger-debug",Assembly::Kind::SuspensionBridge,&gentle,3},
         {"rope-plank-bridge",Assembly::Kind::RopePlankBridge,&gentle},
+        {"broken-rope-cable",Assembly::Kind::RopePlankBridge,&gentle},
+        {"broken-hand-rope",Assembly::Kind::RopePlankBridge,&gentle},
         {"rope-manual-damage",Assembly::Kind::RopePlankBridge,&gentle,0,true},
         {"pier-area-left",Assembly::Kind::WoodenPier,&gentle,0,false,-1},
         {"pier-area-right",Assembly::Kind::WoodenPier,&gentle,0,false,1}};
@@ -114,6 +119,8 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         std::string brokenTargetId;
         if (caseName=="broken-coupling")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Coupling,0);
+        else if (caseName=="broken-pipe-body")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::PipeBody,0);
         else if (caseName=="broken-rail-member")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Rail,0,-1);
         else if (caseName=="broken-rail-joint")
@@ -128,6 +135,13 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::TopRail,0,-1);
         else if (caseName=="broken-pile")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Pile,0,-1);
+        else if (caseName=="broken-fascia")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Fascia,0,-1);
+        else if (caseName=="broken-suspension-cable" ||
+                 caseName=="broken-rope-cable")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Cable,0,-1);
+        else if (caseName=="broken-hand-rope")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::HandRope,0,-1);
         else if (caseName=="broken-hanger")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Hanger,0,-1);
         else if (caseName=="broken-truss-brace")
