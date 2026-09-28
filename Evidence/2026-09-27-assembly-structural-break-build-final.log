@@ -1,0 +1,34 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundModel.lib
+  PlaygroundEnvelopeTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundEnvelopeTests.exe
+  PlaygroundEdgeTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundEdgeTests.exe
+  PlaygroundAssemblyDamageIOTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundAssemblyDamageIOTests.exe
+  PlaygroundWebPhysics.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundWebPhysics.lib
+  PlaygroundNormalBakeTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundNormalBakeTests.exe
+  PlaygroundProceduralAssembliesTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundProceduralAssembliesTests.exe
+  PlaygroundRBrushImageRoundtripTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundRBrushImageRoundtripTests.exe
+  PlaygroundAutoUvTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundAutoUvTests.exe
+  PlaygroundRBrushInteropTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundRBrushInteropTests.exe
+  PlaygroundBackendTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundBackendTests.exe
+  PlaygroundReductionTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundReductionTests.exe
+  PlaygroundBspSourceTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundBspSourceTests.exe
+  PlaygroundRockAddonMathTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundRockAddonMathTests.exe
+  PlaygroundDamageFieldTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundDamageFieldTests.exe
+  PlaygroundSharedWarpTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSharedWarpTests.exe
+  PlaygroundDamageGeometryTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundDamageGeometryTests.exe
+  PlaygroundSolidTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSolidTests.exe
+  PlaygroundDriftTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundDriftTests.exe
+  PlaygroundSplineConstructionTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSplineConstructionTests.exe
+  PlaygroundSurfaceFeatureTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSurfaceFeatureTests.exe
+  PlaygroundSurfaceTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundSurfaceTests.exe
+  AssemblyLabEvidence.cpp
+  PlaygroundTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundTests.exe
+  PlaygroundViewportProjectionTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundViewportProjectionTests.exe
+  PlaygroundThicknessTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundThicknessTests.exe
+  PlaygroundWebLodTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundWebLodTests.exe
+  PlaygroundWebPhysicsTests.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundWebPhysicsTests.exe
+  JericoDiligentImgui.lib(imgui.obj) : se encontró .netmodule MSIL o un módulo compilado con /GL; reiniciando la vinculación con /LTCG; agregue /LTCG a la línea de comandos de vínculo para mejorar el rendimiento del vinculador
+  Generando código
+  Generación de código finalizada
+  JericoGeologyPlayground.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\JericoGeologyPlayground.exe

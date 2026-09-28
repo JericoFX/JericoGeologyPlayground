@@ -292,7 +292,8 @@ class Builder
         {
             draw(item);
             if (item.state==State::Broken &&
-                (role==Role::Coupling || role==Role::Clamp ||
+                (role==Role::Rail || role==Role::Beam ||
+                 role==Role::Coupling || role==Role::Clamp ||
                  role==Role::Flange || role==Role::Support ||
                  role==Role::RailJoint || role==Role::CrossBeam))
                 applyAutomaticBroken(item,firstVertex);
@@ -1185,15 +1186,9 @@ void buildRailway(Builder &builder)
                     return add(frame.position,add(mul(frame.binormal,side*s.gaugeMeters*.5),
                         mul(frame.normal,s.railHeightMeters*.5+deformation)));
                 };
-                if (part.state==State::Broken)
-                {
-                    builder.tube({point(start),point(std::lerp(start,end,.44))},s.railWidthMeters*.5,
-                                 Construction::ProfileKind::IBeam,s.railWidthMeters,s.railHeightMeters);
-                    builder.tube({point(std::lerp(start,end,.56)),point(end)},s.railWidthMeters*.5,
-                                 Construction::ProfileKind::IBeam,s.railWidthMeters,s.railHeightMeters);
-                }
-                else builder.tube({point(start),point((start+end)*.5),point(end)},s.railWidthMeters*.5,
-                                  Construction::ProfileKind::IBeam,s.railWidthMeters,s.railHeightMeters);
+                builder.tube({point(start),point((start+end)*.5),point(end)},
+                    s.railWidthMeters*.5,Construction::ProfileKind::IBeam,
+                    s.railWidthMeters,s.railHeightMeters);
             });
         }
     if (s.railJointsEnabled)
@@ -1270,17 +1265,7 @@ void buildPier(Builder &builder,bool groundSupports=true)
             if (part.state==State::Detached || part.state==State::Loose)
                 for (auto &point:points)
                     point=add(point,mul(path.frames.front().normal,-s.beamHeightMeters));
-            if (part.state==State::Broken)
-            {
-                const auto middle=points.size()/2;
-                builder.tube(std::vector<Vec3d>(points.begin(),
-                    points.begin()+std::ptrdiff_t(middle-1)),s.beamWidthMeters*.5,
-                    Construction::ProfileKind::Rectangle,s.beamWidthMeters,s.beamHeightMeters);
-                builder.tube(std::vector<Vec3d>(points.begin()+std::ptrdiff_t(middle+2),
-                    points.end()),s.beamWidthMeters*.5,Construction::ProfileKind::Rectangle,
-                    s.beamWidthMeters,s.beamHeightMeters);
-            }
-            else builder.tube(points,s.beamWidthMeters*.5,
+            builder.tube(points,s.beamWidthMeters*.5,
                 Construction::ProfileKind::Rectangle,s.beamWidthMeters,s.beamHeightMeters);
         });
     }

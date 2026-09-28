@@ -69,10 +69,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"pipe-high-curvature-rmf",Assembly::Kind::PipeCouplings,&bend,10},
         {"railway",Assembly::Kind::Railway,&gentle},
         {"broken-railway",Assembly::Kind::BrokenRailway,&gentle},
+        {"broken-rail-member",Assembly::Kind::Railway,&gentle},
         {"broken-rail-joint",Assembly::Kind::Railway,&gentle},
         {"railing",Assembly::Kind::Railing,&gentle},
         {"broken-railing",Assembly::Kind::BrokenRailing,&gentle},
         {"wooden-pier",Assembly::Kind::WoodenPier,&gentle},
+        {"broken-beam-member",Assembly::Kind::WoodenPier,&gentle},
         {"broken-cross-beam",Assembly::Kind::WoodenPier,&gentle},
         {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
@@ -107,8 +109,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         std::string brokenTargetId;
         if (caseName=="broken-coupling")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Coupling,0);
+        else if (caseName=="broken-rail-member")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Rail,0,-1);
         else if (caseName=="broken-rail-joint")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::RailJoint,1,-1);
+        else if (caseName=="broken-beam-member")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Beam,0,-1);
         else if (caseName=="broken-cross-beam")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::CrossBeam,0);
         if (!brokenTargetId.empty())
@@ -315,8 +321,11 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             if (geometric && !pipe)
             {camera.distance=1.4f;camera.yaw=.6f;camera.pitch=-.5f;}
             if (pipe) {camera.distance=1.4f;camera.yaw=.5f;camera.pitch=-.4f;}
-            if (caseName=="broken-coupling" || caseName=="broken-rail-joint")
+            if (caseName=="broken-coupling" || caseName=="broken-rail-joint" ||
+                caseName=="broken-rail-member")
             {camera.distance=.65f;camera.yaw=.5f;camera.pitch=-.4f;}
+            if (caseName=="broken-beam-member")
+            {camera.distance=2.5f;camera.yaw=.6f;camera.pitch=-.5f;}
             if (caseName=="broken-cross-beam")
             {camera.distance=1.5f;camera.yaw=.6f;camera.pitch=-.5f;}
         }

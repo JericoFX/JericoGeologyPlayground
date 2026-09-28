@@ -1185,7 +1185,9 @@ int main()
                 "state menu must expose only represented member damage");
         const std::pair<Assembly::Kind,Role> brokenRoles[]={
             {Assembly::Kind::PipeCouplings,Role::Coupling},
+            {Assembly::Kind::Railway,Role::Rail},
             {Assembly::Kind::Railway,Role::RailJoint},
+            {Assembly::Kind::WoodenPier,Role::Beam},
             {Assembly::Kind::WoodenPier,Role::CrossBeam}};
         for (const auto [kind,role]:brokenRoles)
         {
