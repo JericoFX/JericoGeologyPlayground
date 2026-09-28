@@ -1,57 +1,57 @@
 Test project F:/JericoGeologyPlayground/build-surface
       Start  1: Playground.NormalBake
- 1/26 Test  #1: Playground.NormalBake ................   Passed    0.80 sec
+ 1/26 Test  #1: Playground.NormalBake ................   Passed    0.74 sec
       Start  2: Playground.AutoUv
- 2/26 Test  #2: Playground.AutoUv ....................   Passed    0.04 sec
+ 2/26 Test  #2: Playground.AutoUv ....................   Passed    0.03 sec
       Start  3: Playground.RockAddonMath
- 3/26 Test  #3: Playground.RockAddonMath .............   Passed    0.04 sec
+ 3/26 Test  #3: Playground.RockAddonMath .............   Passed    0.02 sec
       Start  4: Playground.DamageField
- 4/26 Test  #4: Playground.DamageField ...............   Passed    0.04 sec
+ 4/26 Test  #4: Playground.DamageField ...............   Passed    0.02 sec
       Start  5: Playground.DamageGeometry
- 5/26 Test  #5: Playground.DamageGeometry ............   Passed    0.92 sec
+ 5/26 Test  #5: Playground.DamageGeometry ............   Passed    0.86 sec
       Start  6: Playground.ViewportProjection
- 6/26 Test  #6: Playground.ViewportProjection ........   Passed    0.04 sec
+ 6/26 Test  #6: Playground.ViewportProjection ........   Passed    0.02 sec
       Start  7: Playground.RBrushInterop
- 7/26 Test  #7: Playground.RBrushInterop .............   Passed    0.05 sec
+ 7/26 Test  #7: Playground.RBrushInterop .............   Passed    0.04 sec
       Start  8: Playground.RBrushImageRoundtrip
- 8/26 Test  #8: Playground.RBrushImageRoundtrip ......   Passed    0.43 sec
+ 8/26 Test  #8: Playground.RBrushImageRoundtrip ......   Passed    0.38 sec
       Start  9: Playground.SurfaceFeatures
- 9/26 Test  #9: Playground.SurfaceFeatures ...........   Passed    4.92 sec
+ 9/26 Test  #9: Playground.SurfaceFeatures ...........   Passed    4.60 sec
       Start 10: Playground.Model
-10/26 Test #10: Playground.Model .....................   Passed    0.31 sec
+10/26 Test #10: Playground.Model .....................   Passed    0.29 sec
       Start 11: Playground.NativeSolid
-11/26 Test #11: Playground.NativeSolid ...............   Passed    0.23 sec
+11/26 Test #11: Playground.NativeSolid ...............   Passed    0.20 sec
       Start 12: Playground.SharedWarp
-12/26 Test #12: Playground.SharedWarp ................   Passed    0.05 sec
+12/26 Test #12: Playground.SharedWarp ................   Passed    0.03 sec
       Start 13: Playground.Thickness
-13/26 Test #13: Playground.Thickness .................   Passed   47.31 sec
+13/26 Test #13: Playground.Thickness .................   Passed   45.29 sec
       Start 14: Playground.Drift
-14/26 Test #14: Playground.Drift .....................   Passed    0.06 sec
+14/26 Test #14: Playground.Drift .....................   Passed    0.04 sec
       Start 15: Playground.Envelope
-15/26 Test #15: Playground.Envelope ..................   Passed    0.43 sec
+15/26 Test #15: Playground.Envelope ..................   Passed    0.40 sec
       Start 16: Playground.Edge
-16/26 Test #16: Playground.Edge ......................   Passed    0.16 sec
+16/26 Test #16: Playground.Edge ......................   Passed    0.14 sec
       Start 17: Playground.Backend
-17/26 Test #17: Playground.Backend ...................   Passed    6.04 sec
+17/26 Test #17: Playground.Backend ...................   Passed    5.72 sec
       Start 18: Playground.Surface
-18/26 Test #18: Playground.Surface ...................   Passed    1.73 sec
+18/26 Test #18: Playground.Surface ...................   Passed    1.64 sec
       Start 19: Playground.BspSource
-19/26 Test #19: Playground.BspSource .................   Passed    0.36 sec
+19/26 Test #19: Playground.BspSource .................   Passed    0.33 sec
       Start 20: Playground.Reduction
-20/26 Test #20: Playground.Reduction .................   Passed    4.18 sec
+20/26 Test #20: Playground.Reduction .................   Passed    3.81 sec
       Start 21: Playground.SplineConstruction
-21/26 Test #21: Playground.SplineConstruction ........   Passed    0.07 sec
+21/26 Test #21: Playground.SplineConstruction ........   Passed    0.06 sec
       Start 22: Playground.ProceduralAssemblies
-22/26 Test #22: Playground.ProceduralAssemblies ......   Passed    3.01 sec
+22/26 Test #22: Playground.ProceduralAssemblies ......   Passed    2.75 sec
       Start 23: Playground.AssemblyDamageIO
-23/26 Test #23: Playground.AssemblyDamageIO ..........   Passed    0.06 sec
+23/26 Test #23: Playground.AssemblyDamageIO ..........   Passed    0.03 sec
       Start 24: Playground.WebLod
-24/26 Test #24: Playground.WebLod ....................   Passed    3.53 sec
+24/26 Test #24: Playground.WebLod ....................   Passed    3.34 sec
       Start 25: Playground.WebPhysics
-25/26 Test #25: Playground.WebPhysics ................   Passed    0.42 sec
+25/26 Test #25: Playground.WebPhysics ................   Passed    0.38 sec
       Start 26: Playground.AssemblyFragmentPhysics
-26/26 Test #26: Playground.AssemblyFragmentPhysics ...   Passed    0.41 sec
+26/26 Test #26: Playground.AssemblyFragmentPhysics ...   Passed    0.40 sec
 
 100% tests passed, 0 tests failed out of 26
 
-Total Test time (real) =  76.04 sec
+Total Test time (real) =  71.96 sec
