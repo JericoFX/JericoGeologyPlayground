@@ -1,4 +1,5 @@
 #include "ProceduralAssemblies.hpp"
+#include "AutoUv.hpp"
 #include "DamageField.hpp"
 #include "SolidGeometry.hpp"
 
@@ -6,6 +7,7 @@
 #include <cmath>
 #include <iomanip>
 #include <numeric>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <string_view>
@@ -260,5 +262,58 @@ double catenaryHeight(double x,double span,double sag,double a)
         !std::isfinite(a) || span<=0 || sag<=0 || a<=0 || x<0 || x>span)
         throw std::runtime_error("Invalid catenary station or parameter");
     return 2*a*std::sinh(x/(2*a))*std::sinh((span-x)/(2*a));
+}
+void writeBakeObj(std::ostream &stream,const Result &result,const AutoUvPlan &atlas)
+{
+    const auto &mesh=result.mesh.mesh;
+    if (mesh.indices.size()!=atlas.cornerUv.size() ||
+        mesh.indices.size()!=result.mesh.cornerNormals.size() ||
+        mesh.indices.size()%3 ||
+        mesh.triangleRegions.size()!=mesh.indices.size()/3)
+        throw std::runtime_error("Assembly bake OBJ needs complete UV, normals and regions");
+    std::size_t nextFace=0;
+    for (const auto &part:result.parts)
+    {
+        if (part.firstTriangle!=nextFace ||
+            part.triangleCount>mesh.indices.size()/3-nextFace)
+            throw std::runtime_error("Assembly bake OBJ part ranges are inconsistent");
+        nextFace+=part.triangleCount;
+    }
+    if (nextFace!=mesh.indices.size()/3)
+        throw std::runtime_error("Assembly bake OBJ has unowned faces");
+    stream<<std::setprecision(17)
+          <<"# Procedural assembly bake atlas; groups preserve semantic Part IDs\n";
+    for (const auto p:mesh.positions)
+        stream<<"v "<<p.x<<' '<<p.y<<' '<<p.z<<'\n';
+    for (const auto uv:atlas.cornerUv)
+        stream<<"vt "<<uv[0]<<' '<<uv[1]<<'\n';
+    for (const auto n:result.mesh.cornerNormals)
+        stream<<"vn "<<n.x<<' '<<n.y<<' '<<n.z<<'\n';
+    for (const auto &part:result.parts)
+    {
+        if (!part.triangleCount) continue;
+        stream<<"g "<<part.id<<'\n';
+        bool previousFresh=false,first=true;
+        for (std::size_t face=part.firstTriangle;
+             face<part.firstTriangle+part.triangleCount;++face)
+        {
+            const bool fresh=std::find(part.freshInteriorRegions.begin(),
+                part.freshInteriorRegions.end(),mesh.triangleRegions[face])!=
+                part.freshInteriorRegions.end();
+            if (first || fresh!=previousFresh)
+            {
+                stream<<"usemtl "<<(fresh?"FreshInterior":"Exterior")<<'\n';
+                first=false;previousFresh=fresh;
+            }
+            stream<<"f";
+            for (int corner=0;corner<3;++corner)
+            {
+                const auto index=3*face+corner;
+                stream<<' '<<mesh.indices[index]+1<<'/'<<index+1<<'/'<<index+1;
+            }
+            stream<<'\n';
+        }
+    }
+    if (!stream) throw std::runtime_error("Could not write assembly bake OBJ");
 }
 }

@@ -1,4 +1,5 @@
 #include "AssemblyLabEvidence.hpp"
+#include "AutoUv.hpp"
 #include "ProceduralAssemblies.hpp"
 #include "Renderer.hpp"
 #include "SolidGeometry.hpp"
@@ -6,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <optional>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string_view>
@@ -73,6 +75,8 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
         {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
         {"plank-edge",Assembly::Kind::WoodenPier,&gentle},
+        {"pier-bake-uv",Assembly::Kind::WoodenPier,&gentle,8},
+        {"plank-bake-uv",Assembly::Kind::WoodenPier,&gentle,8},
         {"pier-manual-damage",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"pier-break-closeup",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"plank-fracture-isolated",Assembly::Kind::WoodenPier,&gentle,0,true},
@@ -132,7 +136,8 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             caseName=="pipe-dent" || caseName=="pipe-through-hole" ||
             caseName=="pipe-edge" ||
             caseName=="plank-cavity" || caseName=="plank-dent" ||
-            caseName=="plank-through-hole" || caseName=="plank-edge";
+            caseName=="plank-through-hole" || caseName=="plank-edge" ||
+            caseName=="plank-bake-uv";
         if (geometric)
         {
             const auto source=Assembly::build(*item.path,settings);
@@ -214,6 +219,16 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         if (meshHash(built.mesh.mesh)!=meshHash(replay.mesh.mesh) ||
             semanticHash(built.parts)!=semanticHash(replay.parts))
             throw std::runtime_error(std::string("Nondeterministic assembly: ")+item.name);
+        std::optional<AutoUvPlan> bakeAtlas;
+        if (caseName=="pier-bake-uv" || caseName=="plank-bake-uv")
+        {
+            bakeAtlas=planAutomaticUv(built.mesh.mesh);
+            if (caseName=="plank-bake-uv")
+            {
+                std::ofstream stream(directory/"damaged-pier-bake.obj");
+                Assembly::writeBakeObj(stream,built,*bakeAtlas);
+            }
+        }
         if (item.mode==10)
         {
             Construction::ConstructionResult axes;
@@ -243,11 +258,13 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
                     std::ptrdiff_t(part->firstTriangle+part->triangleCount));
             isolated.cornerNormals.assign(built.mesh.cornerNormals.begin()+begin,
                                           built.mesh.cornerNormals.begin()+end);
-            const std::vector<std::array<float,2>> uv(built.cornerUV.begin()+begin,
-                                                       built.cornerUV.begin()+end);
+            const auto &sourceUv=bakeAtlas?bakeAtlas->cornerUv:built.cornerUV;
+            const std::vector<std::array<float,2>> uv(sourceUv.begin()+begin,
+                                                       sourceUv.begin()+end);
             renderer.upload(isolated,nullptr,nullptr,nullptr,false,&uv);
         }
-        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,
+            bakeAtlas?&bakeAtlas->cornerUv:&built.cornerUV);
         auto lo=built.mesh.mesh.positions.front(),hi=lo;
         for (auto p:built.mesh.mesh.positions)
         {lo={std::min(lo.x,p.x),std::min(lo.y,p.y),std::min(lo.z,p.z)};
@@ -381,6 +398,10 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             {"meshHash",meshHash(built.mesh.mesh)},
             {"semanticHash",semanticHash(built.parts)},
             {"parts",parts},{"image",std::string(item.name)+".png"}});
+        if (bakeAtlas)
+            proof["cases"].back()["bakeUv"]={{"islands",bakeAtlas->islandCount},
+                {"pixelsPerMeter",bakeAtlas->pixelsPerMeter},
+                {"activeAreaFraction",bakeAtlas->activeAreaFraction}};
     }
     Assembly::Settings editSettings;
     editSettings.kind=Assembly::Kind::WoodenPier;

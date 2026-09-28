@@ -4,10 +4,13 @@
 #include "DamageField.hpp"
 
 #include <cstdint>
+#include <iosfwd>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+namespace Playground { struct AutoUvPlan; }
 
 namespace Playground::Assembly
 {
@@ -131,6 +134,7 @@ double parabolicSag(double xMeters, double spanMeters, double sagMeters);
 double solveCatenaryA(double spanMeters, double sagMeters);
 double catenaryHeight(double xMeters, double spanMeters, double sagMeters, double aMeters);
 Result build(const PA::ProceduralSpline &spline, const Settings &settings);
+void writeBakeObj(std::ostream &stream,const Result &result,const AutoUvPlan &atlas);
 std::optional<Vec3d> raycastPartSurface(const Result &result,const Part &part,
                                         Vec3d origin,Vec3d direction);
 }

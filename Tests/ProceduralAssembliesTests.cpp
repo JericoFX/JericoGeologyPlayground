@@ -1,5 +1,6 @@
 #include "ProceduralAssemblies.hpp"
 #include "AssemblyDamageIO.hpp"
+#include "AutoUv.hpp"
 #include "SurfaceFeatures.hpp"
 #include "DamageField.hpp"
 #include "SolidGeometry.hpp"
@@ -13,6 +14,7 @@
 #include <numeric>
 #include <nlohmann/json.hpp>
 #include <set>
+#include <sstream>
 #include <stdexcept>
 
 using namespace Playground;
@@ -402,7 +404,7 @@ int main()
                 cutPier.mesh.cornerNormals.size()==cutPier.mesh.mesh.indices.size(),
                 "selected plank crack must change geometry with complete UV and normals");
         require(std::any_of(cutPier.mesh.regions.begin(),cutPier.mesh.regions.end(),
-                [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;}),
+                 [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;}),
                 "selected plank crack must record fresh interior lineage");
         require(partVolume(cutPier,cutPier.parts.front())>0 &&
                 partVolume(cutPier,cutPier.parts.front())<
@@ -426,6 +428,33 @@ int main()
                         "cracking one plank must preserve UVs on other parts");
             }
         }
+        const auto bakeUv=planAutomaticUv(cutPier.mesh.mesh);
+        require(bakeUv.cornerUv.size()==cutPier.mesh.mesh.indices.size() &&
+                bakeUv.islandCount>cutPier.parts.size(),
+                "assembly bake UV must cover every corner with separate charts");
+        const auto otherBoard=std::find_if(cutPier.parts.begin()+1,cutPier.parts.end(),
+            [](const Part &part)
+            {return part.role==Role::DeckPlank && part.triangleCount>0;});
+        require(otherBoard!=cutPier.parts.end() &&
+                bakeUv.triangleIsland[cutPier.parts.front().firstTriangle]!=
+                    bakeUv.triangleIsland[otherBoard->firstTriangle],
+                "different planks need distinct bake islands");
+        const auto freshRegion=cutPier.parts.front().freshInteriorRegions.front();
+        const auto freshFace=std::find(cutPier.mesh.mesh.triangleRegions.begin(),
+            cutPier.mesh.mesh.triangleRegions.end(),freshRegion);
+        require(freshFace!=cutPier.mesh.mesh.triangleRegions.end() &&
+                bakeUv.triangleIsland[std::size_t(std::distance(
+                    cutPier.mesh.mesh.triangleRegions.begin(),freshFace))]!=
+                    bakeUv.triangleIsland[cutPier.parts.front().firstTriangle],
+                "fresh fracture interior needs a distinct bake island");
+        require(bakeUv.cornerUv==planAutomaticUv(cutPier.mesh.mesh).cornerUv,
+                "assembly bake atlas must reproduce exactly");
+        std::ostringstream bakeObj;
+        writeBakeObj(bakeObj,cutPier,bakeUv);
+        require(bakeObj.str().find("vt ")!=std::string::npos &&
+                bakeObj.str().find("usemtl FreshInterior")!=std::string::npos &&
+                bakeObj.str().find("g "+otherBoard->id)!=std::string::npos,
+                "bake OBJ must expose UVs, fresh faces and semantic plank groups");
         require(meshHash(cutPier.mesh.mesh)==meshHash(build(curvedPath(),crackedPier).mesh.mesh),
                 "selected plank crack must regenerate deterministically");
         Settings cavityPier=pier;

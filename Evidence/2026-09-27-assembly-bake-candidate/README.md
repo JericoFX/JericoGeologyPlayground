@@ -1,0 +1,9 @@
+# Unique bake UVs for assembly parts and damaged interiors
+
+Status: **UV/export integration verified; global damage goal ACTIVE; Beauty PARTIAL**.
+
+The Playground reuses `planAutomaticUv` on the complete assembly after geometry and damage generation. Its semantic triangle regions keep every plank and other Part in separate charts, while fresh interior faces get their own charts. The original procedural UV stream remains available for tiling; the new atlas is generated on demand in the Assembly Lab, previewed with `Bake UV Checker`, and exported as OBJ with one semantic group per Part and `Exterior`/`FreshInterior` material tags. Atlas generation is on demand because repacking a whole assembly after each interactive edit would block the viewport. The user can choose 512, 1024, 2048 or 4096 resolution.
+
+The focused fixture verifies separate plank charts, separate fresh interior charts, complete corner UVs, deterministic atlas coordinates, and the OBJ's UV/group/material streams. Release `ALL_BUILD` and **25/25** CTest passed (`../2026-09-27-assembly-bake-build.log`, `../2026-09-27-assembly-bake-ctest.log`). Vulkan produced 31 original 1280×960 PNGs; a second capture repeated all 31 byte-for-byte, and all 27 previously committed common cases stayed identical. The new captures are `pier-bake-uv.png` and `plank-bake-uv.png`; `damaged-pier-bake.obj` is the export. The 2048 atlas contains 466 charts for the damaged pier at about 118 pixels/m and 20% active area.
+
+The checker view uses the renderer's existing low-frequency checker, so it is a structural preview, not proof of material quality or normal-map bake. Atlas layout may repack when damage changes and therefore needs a fresh export/bake after an edit. Smooth/harden geometry and shading, projector texture/height damage, missing/broken parity and natural fracture Beauty remain active work.

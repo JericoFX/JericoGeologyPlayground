@@ -8,6 +8,7 @@
 #include <imgui.h>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <limits>
 #include <numeric>
 
@@ -20,7 +21,7 @@ constexpr const char *presets[]={"Pipe + Couplings","Railway","Broken Railway",
     "Catwalk","Beam Bridge","Warren Truss","Pratt Truss","Howe Truss",
     "Suspension Bridge","Rope / Plank Bridge"};
 constexpr const char *views[]={"Lit","Wireframe","Normals","UV Checker",
-    "Semantic Roles","RMF Frames","Shared surface field"};
+    "Semantic Roles","RMF Frames","Shared surface field","Bake UV Checker"};
 constexpr const char *surfaceFields="Signed curvature\0Convexity\0Concavity\0Cavity/contact\0"
     "Crease distance\0Boundary distance\0Exposure\0Thickness\0";
 struct PartBounds
@@ -88,6 +89,21 @@ std::filesystem::path chooseDamageFile(bool saveFile)
     ImGui::GetIO().ClearInputMouse();
     return accepted?std::filesystem::path(filename):std::filesystem::path{};
 }
+std::filesystem::path chooseBakeFile()
+{
+    wchar_t filename[MAX_PATH]=L"AssemblyBake.obj";
+    OPENFILENAMEW dialog{};
+    dialog.lStructSize=sizeof(dialog);
+    dialog.hwndOwner=GetActiveWindow();
+    dialog.lpstrFilter=L"Wavefront OBJ (*.obj)\0*.obj\0\0";
+    dialog.lpstrFile=filename;
+    dialog.nMaxFile=MAX_PATH;
+    dialog.lpstrDefExt=L"obj";
+    dialog.Flags=OFN_NOCHANGEDIR|OFN_PATHMUSTEXIST|OFN_OVERWRITEPROMPT;
+    const bool accepted=GetSaveFileNameW(&dialog);
+    ImGui::GetIO().ClearInputMouse();
+    return accepted?std::filesystem::path(filename):std::filesystem::path{};
+}
 }
 AssemblyLabUI::AssemblyLabUI()
 {
@@ -117,6 +133,7 @@ void AssemblyLabUI::choosePreset(int preset)
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
     selectedId.clear();selectedArea=-1;selectedPath=-1;
+    bakeAtlasReady=false;
     dirty=true;fitCamera=true;movingDamageArea=false;
     damageUndo.clear();damageRedo.clear();pendingDamageEdit.reset();
 }
@@ -129,6 +146,7 @@ void AssemblyLabUI::rebuild()
     {
         auto next=Assembly::build(spline,settings);
         built=std::move(next);
+        bakeAtlasReady=false;
         error.clear();uploadedView=-1;
         if (fitCamera && !built.mesh.mesh.positions.empty())
         {
@@ -716,6 +734,44 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     panel("Procedural Assemblies viewport",left,top,
           float(width)-left-right,float(height)-top-bottom);
     ImGui::Combo("View",&view,views,int(std::size(views)));
+    ImGui::SameLine();
+    ImGui::Combo("Atlas resolution",&bakeResolutionIndex,
+                 "512\0 1024\0 2048\0 4096\0");
+    if (ImGui::Button("Generate bake UV"))
+    {
+        try
+        {
+            AutoUvSettings uvSettings;
+            uvSettings.resolution=512u<<bakeResolutionIndex;
+            bakeAtlas=planAutomaticUv(built.mesh.mesh,uvSettings);
+            bakeAtlasReady=true;view=7;uploadedView=-1;error.clear();
+        }
+        catch (const std::exception &exception)
+        {bakeAtlasReady=false;error=exception.what();}
+    }
+    if (bakeAtlasReady)
+    {
+        ImGui::SameLine();
+        if (ImGui::Button("Save bake OBJ"))
+        {
+            const auto file=chooseBakeFile();
+            if (!file.empty())
+            {
+                try
+                {
+                    std::ofstream stream(file);
+                    writeBakeObj(stream,built,bakeAtlas);
+                    error.clear();
+                }
+                catch (const std::exception &exception) {error=exception.what();}
+            }
+        }
+        ImGui::Text("Bake atlas: %u islands | %.1f pixels/m | %.1f%% area",
+            bakeAtlas.islandCount,bakeAtlas.pixelsPerMeter,
+            bakeAtlas.activeAreaFraction*100);
+    }
+    else if (view==7)
+        ImGui::TextUnformatted("Generate bake UV to preview unique part islands");
     if (view==6)
     {
         if (ImGui::Combo("Shared field",&surfaceDebugField,surfaceFields))
@@ -753,7 +809,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
             }
         }
-        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,
+            view==7 && bakeAtlasReady?&bakeAtlas.cornerUv:&built.cornerUV);
         uploadedView=view;
     }
     auto selectedProjector=[&]() -> DamageProjector *
@@ -777,7 +834,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     }
     auto size=ImGui::GetContentRegionAvail();
     size.x=std::max(size.x,32.0f);size.y=std::max(size.y,32.0f);
-    constexpr int modes[]={0,2,1,8,3,10,3};
+    constexpr int modes[]={0,2,1,8,3,10,3,8};
     auto texture=renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture),size);
     if (const auto *projector=selectedProjector())
