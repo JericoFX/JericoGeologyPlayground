@@ -21,9 +21,10 @@ class SplineLabUI
     Construction::ConstructionResult built;
     Camera camera;
     std::string error;
-    int selected{}, preset{}, view{}, uploadedView{-1}, quality{1};
-    bool dirty{true}, fitCamera{true};
-    unsigned nextPointId{20};
+    int selected{}, selectedDamage{-1}, preset{}, view{}, uploadedView{-1}, quality{1};
+    bool dirty{true}, fitCamera{true}, moveDamageMode{}, movingDamage{};
+    unsigned nextPointId{20}, nextDamageId{1};
+    Vec3d damageGrabOffset{};
     void rebuild(Renderer &renderer);
     void choosePreset(int index);
 };

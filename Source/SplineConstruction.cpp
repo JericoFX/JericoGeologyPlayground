@@ -1,5 +1,9 @@
 #include "SplineConstruction.hpp"
+#include "AutoUv.hpp"
 #include "DamageField.hpp"
+#include "DamageGeometry.hpp"
+#include "DamageUvTransfer.hpp"
+#include "SolidGeometry.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -7,7 +11,9 @@
 #include <functional>
 #include <numbers>
 #include <optional>
+#include <set>
 #include <stdexcept>
+#include <tuple>
 
 namespace Playground::Construction
 {
@@ -97,6 +103,59 @@ Vec3d rotateAbout(Vec3d vector, Vec3d axis, double angle)
 {
     return add(add(mul(vector, std::cos(angle)), mul(cross(axis, vector), std::sin(angle))),
                mul(axis, dot(axis, vector) * (1 - std::cos(angle))));
+}
+Jerico::Guid damageRegion(Jerico::Guid source,const PathDamageRule &rule)
+{
+    std::uint64_t hash=Jerico::stableGuidHash(source);
+    for (unsigned char byte:rule.id)
+    {hash^=byte;hash*=1099511628211ull;}
+    for (unsigned shift=0;shift<64;shift+=8)
+    {hash^=(rule.cutter.seed>>shift)&255u;hash*=1099511628211ull;}
+    return Solid::region(2409,hash);
+}
+void rebuildDamageNormals(MeshResult &result)
+{
+    const auto &mesh=result.mesh;
+    std::set<Jerico::Guid> fresh;
+    for (const auto &region:result.regions)
+        if (region.role==SurfaceRole::DamageInterior) fresh.insert(region.id);
+    std::vector<Vec3d> faces(mesh.indices.size()/3);
+    std::vector<std::vector<std::size_t>> adjacent(mesh.positions.size());
+    for (std::size_t face=0;face<faces.size();++face)
+    {
+        const auto a=mesh.indices[face*3],b=mesh.indices[face*3+1],
+                   c=mesh.indices[face*3+2];
+        if (a>=mesh.positions.size() || b>=mesh.positions.size() ||
+            c>=mesh.positions.size())
+            throw std::runtime_error("Damaged spline has an invalid triangle");
+        const auto area=cross(sub(mesh.positions[b],mesh.positions[a]),
+                              sub(mesh.positions[c],mesh.positions[a]));
+        if (length(area)<=1e-12)
+            throw std::runtime_error("Damaged spline has a degenerate triangle");
+        faces[face]=unit(area);
+        for (const auto vertex:{a,b,c}) adjacent[vertex].push_back(face);
+    }
+    result.normals.assign(mesh.positions.size(),{});
+    result.cornerNormals.resize(mesh.indices.size());
+    for (std::size_t face=0;face<faces.size();++face)
+        for (int corner=0;corner<3;++corner)
+        {
+            const auto vertex=mesh.indices[face*3+corner];
+            auto normal=faces[face];
+            if (!fresh.contains(mesh.triangleRegions[face]))
+            {
+                Vec3d smooth{};
+                for (const auto neighbor:adjacent[vertex])
+                    if (mesh.triangleRegions[neighbor]==mesh.triangleRegions[face] &&
+                        dot(faces[neighbor],faces[face])>.82)
+                        smooth=add(smooth,faces[neighbor]);
+                if (length(smooth)>1e-12) normal=unit(smooth);
+            }
+            result.cornerNormals[face*3+corner]=normal;
+            result.normals[vertex]=add(result.normals[vertex],normal);
+        }
+    for (auto &normal:result.normals)
+        if (length(normal)>1e-12) normal=unit(normal);
 }
 }
 
@@ -312,6 +371,16 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
          (!positive(settings.wallThicknessMeters) ||
           settings.wallThicknessMeters >= 0.5 * std::min(settings.widthMeters, settings.heightMeters))))
         throw std::runtime_error("Invalid profile dimensions or wall thickness");
+    if (settings.damagePaths.size()>64)
+        throw std::runtime_error("Spline damage path budget exceeded");
+    std::set<std::string> damageIds;
+    for (const auto &rule:settings.damagePaths)
+    {
+        if (rule.id.empty() || rule.id.size()>64 ||
+            !damageIds.insert(rule.id).second)
+            throw std::runtime_error("Spline damage path ID is invalid or repeated");
+        sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
+    }
     ConstructionResult result;
     auto quality=settings.pathQuality;
     if (settings.ribAmplitude>0)
@@ -664,6 +733,63 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
             result.mesh.field[base]=1;
             result.mesh.field[base+contours[contourIndex].size()]=1;
         }
+    std::set<std::tuple<double,double,double>> seamPositions;
+    for (std::size_t vertex=0;vertex<result.mesh.field.size();++vertex)
+        if (result.mesh.field[vertex]>0)
+        {
+            const auto p=result.mesh.mesh.positions[vertex];
+            seamPositions.emplace(p.x,p.y,p.z);
+        }
+    bool damaged=false;
+    for (const auto &rule:settings.damagePaths)
+    {
+        if (!rule.cutter.enabled || rule.cutter.amount==0) continue;
+        if (!result.mesh.closedSolid)
+            throw std::runtime_error("Shared spline damage needs a closed sweep");
+        const auto fresh=damageRegion(spline.splineGuid,rule);
+        if (fresh==spline.splineGuid ||
+            std::find(result.mesh.mesh.triangleRegions.begin(),
+                      result.mesh.mesh.triangleRegions.end(),fresh)!=
+                      result.mesh.mesh.triangleRegions.end())
+            throw std::runtime_error("Spline fresh interior region ID collision");
+        const auto cut=cutDamagePath(result.mesh.mesh,rule.cutter,fresh,240000);
+        if (meshHash(cut)==meshHash(result.mesh.mesh)) continue;
+        if (cut.positions.size()>settings.maximumVertices ||
+            std::find(cut.triangleRegions.begin(),cut.triangleRegions.end(),fresh)==
+                cut.triangleRegions.end())
+            throw std::runtime_error("Spline crack exceeded budget or lost fresh interior");
+        auto transferred=transferDamageCornerUv(result.mesh.mesh,result.cornerUV,
+                                                cut,fresh,rule.cutter.projector);
+        result.mesh.mesh=cut;
+        result.cornerUV=std::move(transferred);
+        result.mesh.regions.push_back({fresh,spline.splineGuid,
+            SurfaceRole::DamageInterior,-1,-1});
+        damaged=true;
+    }
+    if (damaged)
+    {
+        rebuildDamageNormals(result.mesh);
+        result.mesh.field.assign(result.mesh.mesh.positions.size(),0);
+        for (std::size_t vertex=0;vertex<result.mesh.mesh.positions.size();++vertex)
+        {
+            const auto p=result.mesh.mesh.positions[vertex];
+            if (seamPositions.contains(std::tuple{p.x,p.y,p.z}))
+                result.mesh.field[vertex]=1;
+        }
+        result.vertexUV.assign(result.mesh.mesh.positions.size(),{});
+        std::vector<bool> assigned(result.vertexUV.size());
+        for (std::size_t corner=0;corner<result.mesh.mesh.indices.size();++corner)
+        {
+            const auto vertex=result.mesh.mesh.indices[corner];
+            if (!assigned[vertex])
+            {result.vertexUV[vertex]=result.cornerUV[corner];assigned[vertex]=true;}
+        }
+        result.bodyVertexCount=result.mesh.mesh.positions.size();
+        result.bodyTriangleCount=result.mesh.mesh.indices.size()/3;
+        const auto atlas=planAutomaticUv(result.mesh.mesh);
+        result.bakeCornerUV=atlas.cornerUv;
+        result.bakeIslandCount=atlas.islandCount;
+    }
     result.generationCpuMilliseconds = std::chrono::duration<double,std::milli>(
         std::chrono::steady_clock::now()-started).count();
     result.mesh.milliseconds = result.generationCpuMilliseconds;

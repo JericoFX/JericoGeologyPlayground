@@ -50,7 +50,8 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
                              PA::SplineInterpolation::CatmullRom);
     const auto bend=path({{-1,0,-1},{-.15,0,-1},{.15,0,-.75},{.3,0,0},{.3,0,.75}},
                          PA::SplineInterpolation::CatmullRom);
-    struct Case {const char *name;int preset;const PA::ProceduralSpline *spline;int mode;};
+    struct Case {const char *name;int preset;const PA::ProceduralSpline *spline;int mode;
+                 bool sharedDamage{},bakeUv{};};
     const Case cases[]={
         {"pipe-straight",1,&line,0},{"pipe-s-curve",1,&s,0},
         {"pipe-uv-checker",1,&s,8},{"pipe-vertical-rmf",1,&vertical,10},
@@ -59,14 +60,38 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
         {"high-curvature-bend",2,&bend,2},{"cable",3,&s,0},
         {"corrugated-hose",10,&s,0},
         {"fractured-pipe",11,&s,0},
-        {"twisted-duct",12,&s,0}};
+        {"twisted-duct",12,&s,0},
+        {"shared-crack-lit",1,&line,0,true,false},
+        {"shared-crack-wire",1,&line,2,true,false},
+        {"shared-crack-bake-uv",1,&line,8,true,true}};
     nlohmann::json proof;
     proof["adapter"]=renderer.adapter();
     proof["resolution"]={1280,960};
     proof["cases"]=nlohmann::json::array();
     for (const auto &item:cases)
     {
-        const auto settings=splinePreset(item.preset);
+        auto settings=splinePreset(item.preset);
+        if (item.sharedDamage)
+        {
+            const auto intact=Construction::buildConstruction(*item.spline,settings);
+            const auto frame=Construction::frameAtDistance(intact.path,
+                                                           intact.path.lengthMeters*.5);
+            Construction::PathDamageRule rule;
+            rule.id="spline-evidence-crack";
+            rule.cutter.projector.center={
+                frame.position.x+frame.normal.x*settings.radiusMeters,
+                frame.position.y+frame.normal.y*settings.radiusMeters,
+                frame.position.z+frame.normal.z*settings.radiusMeters};
+            rule.cutter.projector.normal=frame.normal;
+            rule.cutter.projector.tangent=frame.tangent;
+            rule.cutter.projector.bitangent=frame.binormal;
+            rule.cutter.path={{-.3,0,0},{.3,0,0}};
+            rule.cutter.radius=.02;
+            rule.cutter.depth=.05;
+            rule.cutter.irregularity=.3;
+            rule.cutter.seed=777;
+            settings.damagePaths.push_back(std::move(rule));
+        }
         const auto built=Construction::buildConstruction(*item.spline,settings);
         const auto replay=Construction::buildConstruction(*item.spline,settings);
         if (meshHash(built.mesh.mesh)!=meshHash(replay.mesh.mesh) ||
@@ -77,7 +102,8 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
             const auto debug=Construction::withFrameAxes(built);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
-        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,
+            item.bakeUv ? &built.bakeCornerUV : &built.cornerUV);
         auto lo=built.mesh.mesh.positions.front(),hi=lo;
         for (auto p:built.mesh.mesh.positions)
         {lo={std::min(lo.x,p.x),std::min(lo.y,p.y),std::min(lo.z,p.z)};
@@ -86,6 +112,8 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
         camera.yaw=.52f;camera.pitch=-.22f;
         camera.target={float((lo.x+hi.x)*.5),float((lo.y+hi.y)*.5),float((lo.z+hi.z)*.5)};
         camera.distance=std::clamp(float(std::hypot(hi.x-lo.x,hi.y-lo.y,hi.z-lo.z))*1.35f,1.0f,90.0f);
+        if (item.sharedDamage)
+        {camera.pitch=-.45f;camera.distance=1.0f;}
         renderer.draw(1280,960,camera,item.mode);
         renderer.capture(directory/(std::string(item.name)+".png"));
         nlohmann::json points=nlohmann::json::array();
@@ -116,6 +144,9 @@ void captureSplineConstruction(Renderer &renderer, const std::filesystem::path &
             {"triangles",built.mesh.mesh.indices.size()/3},
             {"repeats",built.repeats.size()},
             {"meshHash",meshHash(built.mesh.mesh)},{"uvHash",uvHash(built.cornerUV)},
+            {"sharedDamage",item.sharedDamage},{"bakeUv",item.bakeUv},
+            {"bakeIslandCount",built.bakeIslandCount},
+            {"bakeUvHash",uvHash(built.bakeCornerUV)},
             {"geometryBytesApprox",built.mesh.mesh.positions.size()*sizeof(Vec3d)+
                 built.mesh.mesh.indices.size()*sizeof(std::uint32_t)},
             {"image",std::string(item.name)+".png"}});

@@ -2,6 +2,13 @@
   "adapter": "NVIDIA GeForce RTX 3090",
   "cases": [
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -14,7 +21,7 @@
           0.0
         ]
       ],
-      "cpuMilliseconds": 0.1809,
+      "cpuMilliseconds": 0.225,
       "frames": 17,
       "geometryBytesApprox": 21576,
       "heightMeters": 0.12,
@@ -31,8 +38,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 17,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 880,
+      "twistTurns": 0.0,
       "uvHash": 15803705273351948381,
       "vertices": 459,
       "viewMode": 0,
@@ -40,6 +53,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -62,7 +82,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.1908,
+      "cpuMilliseconds": 0.2767,
       "frames": 25,
       "geometryBytesApprox": 31752,
       "heightMeters": 0.12,
@@ -79,8 +99,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1296,
+      "twistTurns": 0.0,
       "uvHash": 16206911282648438700,
       "vertices": 675,
       "viewMode": 0,
@@ -88,6 +114,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -110,7 +143,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.185,
+      "cpuMilliseconds": 0.325,
       "frames": 25,
       "geometryBytesApprox": 31752,
       "heightMeters": 0.12,
@@ -127,8 +160,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1296,
+      "twistTurns": 0.0,
       "uvHash": 16206911282648438700,
       "vertices": 675,
       "viewMode": 8,
@@ -136,6 +175,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           0.0,
@@ -158,7 +204,7 @@
           0.0
         ]
       ],
-      "cpuMilliseconds": 0.2137,
+      "cpuMilliseconds": 0.3161,
       "frames": 23,
       "geometryBytesApprox": 29208,
       "heightMeters": 0.12,
@@ -175,8 +221,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 23,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1192,
+      "twistTurns": 0.0,
       "uvHash": 10293228286631221373,
       "vertices": 621,
       "viewMode": 10,
@@ -184,6 +236,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -206,7 +265,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.1854,
+      "cpuMilliseconds": 0.2961,
       "frames": 25,
       "geometryBytesApprox": 31752,
       "heightMeters": 0.12,
@@ -223,8 +282,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1296,
+      "twistTurns": 0.0,
       "uvHash": 16206911282648438700,
       "vertices": 675,
       "viewMode": 9,
@@ -232,6 +297,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -254,7 +326,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.069,
+      "cpuMilliseconds": 0.0716,
       "frames": 25,
       "geometryBytesApprox": 5352,
       "heightMeters": 0.16,
@@ -271,8 +343,14 @@
       "profileSegments": 4,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 196,
+      "twistTurns": 0.0,
       "uvHash": 10493293675680373141,
       "vertices": 125,
       "viewMode": 0,
@@ -280,6 +358,13 @@
       "widthMeters": 0.26
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -302,7 +387,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.0998,
+      "cpuMilliseconds": 0.1573,
       "frames": 25,
       "geometryBytesApprox": 14520,
       "heightMeters": 0.1,
@@ -319,8 +404,14 @@
       "profileSegments": 8,
       "radiusMeters": 0.04,
       "repeats": 13,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 552,
+      "twistTurns": 0.0,
       "uvHash": 6461096942506678085,
       "vertices": 329,
       "viewMode": 0,
@@ -328,6 +419,13 @@
       "widthMeters": 0.36
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -350,7 +448,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.0998,
+      "cpuMilliseconds": 0.88,
       "frames": 25,
       "geometryBytesApprox": 14952,
       "heightMeters": 0.3,
@@ -367,8 +465,14 @@
       "profileSegments": 12,
       "radiusMeters": 0.04,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 596,
+      "twistTurns": 0.0,
       "uvHash": 15899403038401208921,
       "vertices": 325,
       "viewMode": 0,
@@ -376,6 +480,13 @@
       "widthMeters": 0.22
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.0,
@@ -403,7 +514,7 @@
           0.75
         ]
       ],
-      "cpuMilliseconds": 0.2611,
+      "cpuMilliseconds": 0.502,
       "frames": 18,
       "geometryBytesApprox": 45792,
       "heightMeters": 0.12,
@@ -420,8 +531,14 @@
       "profileSegments": 26,
       "radiusMeters": 0.055,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 18,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1872,
+      "twistTurns": 0.0,
       "uvHash": 4746517425871080429,
       "vertices": 972,
       "viewMode": 2,
@@ -429,6 +546,13 @@
       "widthMeters": 0.12
     },
     {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
       "controlPoints": [
         [
           -1.5,
@@ -451,7 +575,7 @@
           0.65
         ]
       ],
-      "cpuMilliseconds": 0.4051,
+      "cpuMilliseconds": 0.5061,
       "frames": 25,
       "geometryBytesApprox": 31752,
       "heightMeters": 0.12,
@@ -468,11 +592,353 @@
       "profileSegments": 26,
       "radiusMeters": 0.009,
       "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
       "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
       "triangles": 1296,
+      "twistTurns": 0.0,
       "uvHash": 8082822229219022000,
       "vertices": 675,
       "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 5.3224,
+      "frames": 329,
+      "geometryBytesApprox": 418440,
+      "heightMeters": 0.12,
+      "image": "corrugated-hose.png",
+      "interpolation": 1,
+      "lengthMeters": 4.3657239377835495,
+      "measuredDeviationMeters": 0.00017489363063571443,
+      "meshHash": 1610137880624614962,
+      "name": "corrugated-hose",
+      "pathErrorMeters": 0.01,
+      "preset": 10,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.022,
+      "repeats": 0,
+      "ribAmplitude": 0.16,
+      "ribSpacingMeters": 0.16,
+      "samples": 329,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
+      "triangles": 17104,
+      "twistTurns": 0.0,
+      "uvHash": 1649237218034012811,
+      "vertices": 8883,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": true,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.18,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.9333,
+      "frames": 26,
+      "geometryBytesApprox": 66144,
+      "heightMeters": 0.12,
+      "image": "fractured-pipe.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 13653388043183465719,
+      "name": "fractured-pipe",
+      "pathErrorMeters": 0.01,
+      "preset": 11,
+      "profile": 1,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.055,
+      "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
+      "samples": 26,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
+      "triangles": 2704,
+      "twistTurns": 0.0,
+      "uvHash": 5206022108273943331,
+      "vertices": 1404,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "bakeIslandCount": 0,
+      "bakeUv": false,
+      "bakeUvHash": 14695981039346656037,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          0.55,
+          0.2
+        ],
+        [
+          0.4,
+          -0.5,
+          -0.15
+        ],
+        [
+          1.5,
+          0.0,
+          0.65
+        ]
+      ],
+      "cpuMilliseconds": 0.1,
+      "frames": 25,
+      "geometryBytesApprox": 5352,
+      "heightMeters": 0.13,
+      "image": "twisted-duct.png",
+      "interpolation": 1,
+      "lengthMeters": 4.357790439142159,
+      "measuredDeviationMeters": 0.009362936410467546,
+      "meshHash": 9130580450076032409,
+      "name": "twisted-duct",
+      "pathErrorMeters": 0.01,
+      "preset": 12,
+      "profile": 2,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 4,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
+      "samples": 25,
+      "sharedDamage": false,
+      "taperLengthMeters": 0.3,
+      "tipScale": 0.7,
+      "triangles": 196,
+      "twistTurns": 0.4,
+      "uvHash": 780970787330555535,
+      "vertices": 125,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.22
+    },
+    {
+      "bakeIslandCount": 24,
+      "bakeUv": false,
+      "bakeUvHash": 13293981302192221866,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          0.0
+        ],
+        [
+          1.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "cpuMilliseconds": 21.6281,
+      "frames": 17,
+      "geometryBytesApprox": 44592,
+      "heightMeters": 0.12,
+      "image": "shared-crack-lit.png",
+      "interpolation": 0,
+      "lengthMeters": 3.0,
+      "measuredDeviationMeters": 0.0,
+      "meshHash": 5462317554085830082,
+      "name": "shared-crack-lit",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
+      "samples": 17,
+      "sharedDamage": true,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
+      "triangles": 1856,
+      "twistTurns": 0.0,
+      "uvHash": 605929549180278950,
+      "vertices": 930,
+      "viewMode": 0,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "bakeIslandCount": 24,
+      "bakeUv": false,
+      "bakeUvHash": 13293981302192221866,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          0.0
+        ],
+        [
+          1.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "cpuMilliseconds": 20.4439,
+      "frames": 17,
+      "geometryBytesApprox": 44592,
+      "heightMeters": 0.12,
+      "image": "shared-crack-wire.png",
+      "interpolation": 0,
+      "lengthMeters": 3.0,
+      "measuredDeviationMeters": 0.0,
+      "meshHash": 5462317554085830082,
+      "name": "shared-crack-wire",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
+      "samples": 17,
+      "sharedDamage": true,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
+      "triangles": 1856,
+      "twistTurns": 0.0,
+      "uvHash": 605929549180278950,
+      "vertices": 930,
+      "viewMode": 2,
+      "wallThicknessMeters": 0.008,
+      "widthMeters": 0.12
+    },
+    {
+      "bakeIslandCount": 24,
+      "bakeUv": true,
+      "bakeUvHash": 13293981302192221866,
+      "breakEnabled": false,
+      "breakFraction": 0.5,
+      "breakGapMeters": 0.15,
+      "breakRoughness": 0.3,
+      "controlPoints": [
+        [
+          -1.5,
+          0.0,
+          0.0
+        ],
+        [
+          1.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "cpuMilliseconds": 21.7754,
+      "frames": 17,
+      "geometryBytesApprox": 44592,
+      "heightMeters": 0.12,
+      "image": "shared-crack-bake-uv.png",
+      "interpolation": 0,
+      "lengthMeters": 3.0,
+      "measuredDeviationMeters": 0.0,
+      "meshHash": 5462317554085830082,
+      "name": "shared-crack-bake-uv",
+      "pathErrorMeters": 0.01,
+      "preset": 1,
+      "profile": 0,
+      "profileChordErrorMeters": 0.002,
+      "profileSegments": 26,
+      "radiusMeters": 0.04,
+      "repeats": 0,
+      "ribAmplitude": 0.0,
+      "ribSpacingMeters": 0.2,
+      "samples": 17,
+      "sharedDamage": true,
+      "taperLengthMeters": 0.0,
+      "tipScale": 1.0,
+      "triangles": 1856,
+      "twistTurns": 0.0,
+      "uvHash": 605929549180278950,
+      "vertices": 930,
+      "viewMode": 8,
       "wallThicknessMeters": 0.008,
       "widthMeters": 0.12
     }

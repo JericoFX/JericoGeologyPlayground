@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Model.hpp"
+#include "DamageField.hpp"
 #include <Jerico/ProceduralAuthoring/ProceduralSpline.hpp>
 
 #include <cstddef>
 #include <array>
+#include <string>
 #include <vector>
 
 namespace Playground::Construction
@@ -38,6 +40,11 @@ struct RepeatPlacement
 };
 enum class ProfileKind { Circle, Ring, Rectangle, RoundedRectangle, Channel, IBeam };
 enum class UvMode { WorldMetric, Stretch01, RepeatCount };
+struct PathDamageRule
+{
+    std::string id;
+    DamagePathCutter cutter;
+};
 struct ConstructionSettings
 {
     PathQuality pathQuality;
@@ -55,6 +62,7 @@ struct ConstructionSettings
     std::uint32_t breakSeed{123};
     bool capStart{true}, capEnd{true}, repeatEnabled{};
     RepeatSettings repeat;
+    std::vector<PathDamageRule> damagePaths;
     std::size_t maximumVertices{100000};
 };
 struct ConstructionResult
@@ -62,7 +70,9 @@ struct ConstructionResult
     PathResult path;
     MeshResult mesh;
     std::vector<std::array<float, 2>> vertexUV, cornerUV;
+    std::vector<std::array<float, 2>> bakeCornerUV;
     std::vector<RepeatPlacement> repeats;
+    unsigned bakeIslandCount{};
     std::size_t profileSegments{}, bodyVertexCount{}, bodyTriangleCount{};
     double generationCpuMilliseconds{};
 };

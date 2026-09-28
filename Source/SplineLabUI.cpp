@@ -1,5 +1,6 @@
 #include "SplineLabUI.hpp"
 #include "SolidGeometry.hpp"
+#include "ViewportProjection.hpp"
 
 #include <imgui.h>
 #include <algorithm>
@@ -85,6 +86,8 @@ void SplineLabUI::choosePreset(int index)
 {
     preset=index;
     settings=splinePreset(index);
+    selectedDamage=-1;
+    movingDamage=false;
     dirty=true;
 }
 void SplineLabUI::activate(Renderer &renderer)
@@ -270,13 +273,82 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     int breakSeed=int(settings.breakSeed);
     if (ImGui::InputInt("Fracture seed",&breakSeed))
     {settings.breakSeed=std::uint32_t(std::max(0,breakSeed));dirty=true;}
+    ImGui::Separator();ImGui::TextUnformatted("Shared path damage");
+    if (ImGui::Button("Add crack / gouge") && !built.path.frames.empty() &&
+        settings.damagePaths.size()<64)
+    {
+        Construction::PathDamageRule rule;
+        rule.id="spline-damage-"+std::to_string(nextDamageId++);
+        const auto frame=Construction::frameAtDistance(built.path,built.path.lengthMeters*.5);
+        const double surface=(settings.profile==Construction::ProfileKind::Circle ||
+            settings.profile==Construction::ProfileKind::Ring) ?
+            settings.radiusMeters : settings.widthMeters*.5;
+        rule.cutter.projector.center={frame.position.x+frame.normal.x*surface,
+            frame.position.y+frame.normal.y*surface,
+            frame.position.z+frame.normal.z*surface};
+        rule.cutter.projector.tangent=frame.tangent;
+        rule.cutter.projector.bitangent=frame.binormal;
+        rule.cutter.projector.normal=frame.normal;
+        const double halfLength=std::clamp(built.path.lengthMeters*.1,.05,.3);
+        rule.cutter.path={{-halfLength,0,0},{halfLength,0,0}};
+        rule.cutter.radius=std::clamp(surface*.5,.01,.06);
+        rule.cutter.depth=std::max(surface*1.25,.04);
+        rule.cutter.irregularity=.3;
+        rule.cutter.seed=nextDamageId;
+        settings.damagePaths.push_back(std::move(rule));
+        selectedDamage=int(settings.damagePaths.size())-1;
+        dirty=true;
+    }
+    ImGui::SameLine();ImGui::Text("Areas %zu / 64",settings.damagePaths.size());
+    for (std::size_t i=0;i<settings.damagePaths.size();++i)
+    {
+        auto &rule=settings.damagePaths[i];
+        if (ImGui::Selectable(rule.id.c_str(),selectedDamage==int(i)))
+            selectedDamage=int(i);
+    }
+    if (selectedDamage>=0 && selectedDamage<int(settings.damagePaths.size()))
+    {
+        auto &rule=settings.damagePaths[std::size_t(selectedDamage)];
+        auto &cutter=rule.cutter;
+        dirty|=ImGui::Checkbox("Damage enabled",&cutter.enabled);
+        double center[]={cutter.projector.center.x,cutter.projector.center.y,
+                         cutter.projector.center.z};
+        if (ImGui::InputScalarN("Damage XYZ (m)",ImGuiDataType_Double,center,3,
+                               nullptr,nullptr,"%.4f"))
+        {cutter.projector.center={center[0],center[1],center[2]};dirty=true;}
+        dirty|=ImGui::InputDouble("Crack radius (m)",&cutter.radius,.005,.02,"%.4f");
+        dirty|=ImGui::InputDouble("Crack depth (m)",&cutter.depth,.01,.05,"%.4f");
+        dirty|=ImGui::InputDouble("Damage amount",&cutter.amount,.05,.2,"%.3f");
+        dirty|=ImGui::InputDouble("Edge irregularity",&cutter.irregularity,.05,.2,"%.3f");
+        dirty|=ImGui::InputDouble("Separate chunks (m)",&cutter.separationMeters,.01,.05,"%.3f");
+        if (cutter.path.size()==2)
+        {
+            double ends[]={cutter.path[0].x,cutter.path[1].x};
+            if (ImGui::InputScalarN("Crack ends (m)",ImGuiDataType_Double,ends,2,
+                                   nullptr,nullptr,"%.4f"))
+            {cutter.path[0].x=ends[0];cutter.path[1].x=ends[1];dirty=true;}
+        }
+        int seed=int(cutter.seed);
+        if (ImGui::InputInt("Damage seed",&seed))
+        {cutter.seed=std::uint64_t(std::max(0,seed));dirty=true;}
+        ImGui::Checkbox("Move selected area",&moveDamageMode);
+        ImGui::SameLine();ImGui::TextUnformatted("or Shift+drag");
+        if (ImGui::Button("Remove selected damage"))
+        {
+            settings.damagePaths.erase(settings.damagePaths.begin()+selectedDamage);
+            selectedDamage=std::min(selectedDamage,int(settings.damagePaths.size())-1);
+            movingDamage=false;
+            dirty=true;
+        }
+    }
     ImGui::PopItemWidth();
     ImGui::End();
 
     rebuild(renderer);
     panel("Spline Construction viewport",left,top,float(width)-left-right,float(height)-top-bottom);
-    const char *views[]={"Lit","Wireframe","Normals","RMF Frames","UV Checker","Seam Debug"};
-    ImGui::Combo("View",&view,views,6);
+    const char *views[]={"Lit","Wireframe","Normals","RMF Frames","UV Checker",
+                         "Seam Debug","Bake UV Checker"};
+    ImGui::Combo("View",&view,views,7);
     if (view!=uploadedView && !built.mesh.mesh.positions.empty())
     {
         if (view==3)
@@ -284,21 +356,58 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
             auto debug=Construction::withFrameAxes(built);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
-        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,
+            view==6 && !built.bakeCornerUV.empty() ? &built.bakeCornerUV : &built.cornerUV);
         uploadedView=view;
     }
     ImGui::SameLine();
     if (ImGui::Button("Fit")) {fitCamera=true;dirty=true;}
-    ImGui::TextUnformatted("Left drag: orbit | Middle/right: pan | Wheel: zoom");
+    ImGui::TextUnformatted("Left drag: orbit | Shift+drag damage | Middle/right: pan | Wheel: zoom");
     auto size=ImGui::GetContentRegionAvail();
     size.x=std::max(size.x,32.0f);size.y=std::max(size.y,32.0f);
-    const int rendererMode[]={0,2,1,10,8,9};
+    const int rendererMode[]={0,2,1,10,8,9,8};
     auto texture=renderer.draw(unsigned(size.x),unsigned(size.y),camera,rendererMode[view]);
     ImGui::Image(reinterpret_cast<ImTextureID>(texture),size);
+    if (selectedDamage>=0 && selectedDamage<int(settings.damagePaths.size()))
+        if (const auto point=projectToViewport(
+                settings.damagePaths[std::size_t(selectedDamage)].cutter.projector.center,
+                camera,unsigned(size.x),unsigned(size.y)))
+        {
+            const auto origin=ImGui::GetItemRectMin();
+            const ImVec2 at{origin.x+float(point->x),origin.y+float(point->y)};
+            auto *draw=ImGui::GetWindowDrawList();
+            draw->AddCircle(at,9,IM_COL32(255,195,55,255),24,2);
+            draw->AddLine({at.x-13,at.y},{at.x+13,at.y},IM_COL32(255,195,55,255),1);
+            draw->AddLine({at.x,at.y-13},{at.x,at.y+13},IM_COL32(255,195,55,255),1);
+        }
     if (ImGui::IsItemHovered())
     {
         auto &io=ImGui::GetIO();
-        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+        const bool moveArea=(io.KeyShift || moveDamageMode) &&
+            selectedDamage>=0 && selectedDamage<int(settings.damagePaths.size()) &&
+            ImGui::IsMouseDown(ImGuiMouseButton_Left);
+        if (moveArea)
+        {
+            auto &projector=settings.damagePaths[std::size_t(selectedDamage)].cutter.projector;
+            const auto origin=ImGui::GetItemRectMin();
+            if (const auto hit=pointOnPlaneAtPixel(camera,unsigned(size.x),unsigned(size.y),
+                    io.MousePos.x-origin.x,io.MousePos.y-origin.y,
+                    projector.center,projector.normal))
+            {
+                if (!movingDamage)
+                {
+                    damageGrabOffset={projector.center.x-hit->x,
+                        projector.center.y-hit->y,projector.center.z-hit->z};
+                    movingDamage=true;
+                }
+                const Vec3d next{hit->x+damageGrabOffset.x,hit->y+damageGrabOffset.y,
+                    hit->z+damageGrabOffset.z};
+                if (next.x!=projector.center.x || next.y!=projector.center.y ||
+                    next.z!=projector.center.z)
+                {projector.center=next;dirty=true;}
+            }
+        }
+        if (!moveArea && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
         {camera.yaw-=io.MouseDelta.x*.008f;
          camera.pitch=std::clamp(camera.pitch+io.MouseDelta.y*.008f,-1.4f,1.4f);}
         if (ImGui::IsMouseDragging(ImGuiMouseButton_Middle) || ImGui::IsMouseDragging(ImGuiMouseButton_Right))
@@ -312,6 +421,7 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
         }
         camera.distance=std::clamp(camera.distance*std::exp(-io.MouseWheel*.1f),1.0f,90.0f);
     }
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) movingDamage=false;
     ImGui::End();
     panel("Spline Construction metrics",0,float(height)-bottom,float(width),bottom);
     if (!error.empty()) ImGui::TextColored({1,.32,.25,1},"Diagnostic: %s | Previous valid mesh retained",error.c_str());
@@ -324,6 +434,9 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
                 built.path.maximumMeasuredDeviationMeters,
                 (built.mesh.mesh.positions.size()*sizeof(Vec3d)+built.mesh.mesh.indices.size()*sizeof(std::uint32_t))/1048576.0,
                 renderer.bufferBytes()/1048576.0,renderer.adapter().c_str());
+    if (built.bakeIslandCount)
+        ImGui::Text("Unique bake UV islands %u | Fresh damage areas %zu",
+                    built.bakeIslandCount,settings.damagePaths.size());
     if (built.bodyVertexCount && built.vertexUV.size()>=built.bodyVertexCount)
     {
         float minimumU=built.vertexUV[0][0],maximumU=minimumU;

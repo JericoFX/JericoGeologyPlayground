@@ -1,6 +1,9 @@
 #include "SplineConstruction.hpp"
+#include "DamageField.hpp"
 #include "SolidGeometry.hpp"
+#include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <numbers>
@@ -197,6 +200,50 @@ int main()
         try {buildConstruction(straightRun(),effected);}
         catch (const std::exception &) {fractureRejected=true;}
         require(fractureRejected,"oversize fracture gap must be rejected");
+        auto shared=pipe;
+        Construction::PathDamageRule crack;
+        crack.id="spline-groove";
+        const auto damageFrame=frameAtDistance(built.path,1.5);
+        crack.cutter.projector.center={
+            damageFrame.position.x+damageFrame.normal.x*pipe.radiusMeters,
+            damageFrame.position.y+damageFrame.normal.y*pipe.radiusMeters,
+            damageFrame.position.z+damageFrame.normal.z*pipe.radiusMeters};
+        crack.cutter.projector.normal=damageFrame.normal;
+        crack.cutter.projector.tangent=damageFrame.tangent;
+        crack.cutter.projector.bitangent=damageFrame.binormal;
+        crack.cutter.path={{-.3,0,0},{.3,0,0}};
+        crack.cutter.radius=.035;
+        crack.cutter.depth=.12;
+        crack.cutter.irregularity=.3;
+        crack.cutter.seed=777;
+        shared.damagePaths.push_back(crack);
+        const auto groove=buildConstruction(straightRun(),shared);
+        inspectMesh(groove);
+        require(PA::validateClosedMesh(groove.mesh.mesh).hasValue() &&
+                meshHash(groove.mesh.mesh)!=meshHash(built.mesh.mesh),
+                "shared spline path damage must change a closed sweep");
+        require(std::any_of(groove.mesh.regions.begin(),groove.mesh.regions.end(),
+            [](const RegionInfo &region)
+            {return region.role==SurfaceRole::DamageInterior;}),
+            "shared spline crack must keep fresh interior lineage");
+        require(groove.bakeCornerUV.size()==groove.mesh.mesh.indices.size() &&
+                groove.bakeIslandCount>0,
+                "damaged spline needs unique corner UV islands for bake");
+        require(std::count_if(groove.mesh.field.begin(),groove.mesh.field.end(),
+                [](float marker){return marker>0;})>0,
+                "damaged spline must retain surviving seam-debug markers");
+        require(meshHash(groove.mesh.mesh)==
+                meshHash(buildConstruction(straightRun(),shared).mesh.mesh),
+                "shared spline crack must replay exactly");
+        shared.damagePaths.front().cutter.projector.center.x+=100;
+        require(meshHash(buildConstruction(straightRun(),shared).mesh.mesh)==
+                meshHash(built.mesh.mesh),
+                "moving spline crack away must restore intact geometry");
+        shared.damagePaths.front().cutter.projector.center=crack.cutter.projector.center;
+        shared.damagePaths.front().cutter.enabled=false;
+        require(meshHash(buildConstruction(straightRun(),shared).mesh.mesh)==
+                meshHash(built.mesh.mesh),
+                "disabling spline crack must restore intact source");
         for (int kind=1;kind<6;++kind)
         {
             auto candidate=pipe;

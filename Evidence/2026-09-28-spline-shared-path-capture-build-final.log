@@ -1,0 +1,9 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundModel.lib
+  PlaygroundWebPhysics.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundWebPhysics.lib
+  SplineLabEvidence.cpp
+  JericoDiligentImgui.lib(imgui.obj) : se encontró .netmodule MSIL o un módulo compilado con /GL; reiniciando la vinculación con /LTCG; agregue /LTCG a la línea de comandos de vínculo para mejorar el rendimiento del vinculador
+  Generando código
+  Generación de código finalizada
+  JericoGeologyPlayground.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\JericoGeologyPlayground.exe
