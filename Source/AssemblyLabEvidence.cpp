@@ -343,6 +343,11 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
                 {"state",Assembly::name(part.state)},{"stationMeters",part.stationMeters},
                 {"triangles",part.triangleCount}});
         }
+        nlohmann::json fragments=nlohmann::json::array();
+        for (const auto &fragment:built.fragments)
+            fragments.push_back({{"id",fragment.id},
+                {"parentPartId",fragment.parentPartId},
+                {"triangles",fragment.triangles.size()}});
         nlohmann::json points=nlohmann::json::array();
         for (const auto &point:item.path->points)
             points.push_back({{"position",{point.position.x,point.position.y,point.position.z}},
@@ -410,6 +415,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             {"vertices",built.mesh.mesh.positions.size()},
             {"triangles",built.mesh.mesh.indices.size()/3},
             {"semanticPartCount",built.parts.size()},
+            {"fragmentCount",built.fragments.size()},{"fragments",fragments},
             {"repeatStations",built.repeatedStations},
             {"manualDamageCount",settings.damage.manual.size()},
             {"damageAreaSide",item.areaSide},

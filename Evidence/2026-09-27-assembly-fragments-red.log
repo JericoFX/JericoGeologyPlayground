@@ -1,0 +1,11 @@
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  AssemblyDamageIO.cpp
+  AssemblyGeneration.cpp
+  ProceduralAssemblies.cpp
+  Generando código...
+  PlaygroundModel.vcxproj -> F:\JericoGeologyPlayground\build-surface\Release\PlaygroundModel.lib
+  ProceduralAssembliesTests.cpp
+ProceduralAssembliesTests.obj : error LNK2019: símbolo externo "struct Playground::Assembly::Fragment const * __cdecl Playground::Assembly::fragmentAtTriangle(struct Playground::Assembly::Result const &,unsigned __int64)" (?fragmentAtTriangle@Assembly@Playground@@YAPEBUFragment@12@AEBUResult@12@_K@Z) sin resolver al que se hace referencia en la función main [F:\JericoGeologyPlayground\build-surface\PlaygroundProceduralAssembliesTests.vcxproj]
+ProceduralAssembliesTests.obj : error LNK2019: símbolo externo "struct Jerico::Tools::ProceduralAuthoring::TriangleMesh __cdecl Playground::Assembly::fragmentMesh(struct Playground::Assembly::Result const &,struct Playground::Assembly::Fragment const &)" (?fragmentMesh@Assembly@Playground@@YA?AUTriangleMesh@ProceduralAuthoring@Tools@Jerico@@AEBUResult@12@AEBUFragment@12@@Z) sin resolver al que se hace referencia en la función main [F:\JericoGeologyPlayground\build-surface\PlaygroundProceduralAssembliesTests.vcxproj]
+F:\JericoGeologyPlayground\build-surface\Release\PlaygroundProceduralAssembliesTests.exe : fatal error LNK1120: 2 externos sin resolver [F:\JericoGeologyPlayground\build-surface\PlaygroundProceduralAssembliesTests.vcxproj]

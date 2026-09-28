@@ -132,7 +132,7 @@ void AssemblyLabUI::choosePreset(int preset)
     {settings.widthMeters=1.4;settings.sagMeters=1.0;settings.boardWidthMeters=.22;}
     if (settings.kind==Assembly::Kind::SuspensionBridge)
     {settings.spanMeters=12;settings.hangerSpacingMeters=.8;settings.towerHeightMeters=3.5;}
-    selectedId.clear();selectedArea=-1;selectedPath=-1;
+    selectedId.clear();selectedFragmentId.clear();selectedArea=-1;selectedPath=-1;
     bakeAtlasReady=false;
     dirty=true;fitCamera=true;movingDamageArea=false;
     damageUndo.clear();damageRedo.clear();pendingDamageEdit.reset();
@@ -146,6 +146,10 @@ void AssemblyLabUI::rebuild()
     {
         auto next=Assembly::build(spline,settings);
         built=std::move(next);
+        if (std::none_of(built.fragments.begin(),built.fragments.end(),
+            [&](const Assembly::Fragment &fragment)
+            {return fragment.id==selectedFragmentId;}))
+            selectedFragmentId.clear();
         bakeAtlasReady=false;
         error.clear();uploadedView=-1;
         if (fitCamera && !built.mesh.mesh.positions.empty())
@@ -699,7 +703,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         for (const auto &part:built.parts)
         {
             const auto label=part.id+"  ["+Assembly::name(part.state)+"]";
-            if (ImGui::Selectable(label.c_str(),part.id==selectedId)) selectedId=part.id;
+            if (ImGui::Selectable(label.c_str(),part.id==selectedId))
+            {selectedId=part.id;selectedFragmentId.clear();}
         }
     }
     ImGui::EndChild();
@@ -727,6 +732,14 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
          else settings.damage.protectedIds.erase(part->id);dirty=true;}
         ImGui::Text("Triangles %zu | LOD %d | Physical bodies %zu / constraints %zu",
             part->triangleCount,settings.lod,built.promotedBodyCount,built.constraintCount);
+        for (const auto &fragment:built.fragments)
+            if (fragment.parentPartId==part->id)
+            {
+                const auto label=fragment.id+"  ["+
+                    std::to_string(fragment.triangles.size())+" triangles]";
+                if (ImGui::Selectable(label.c_str(),fragment.id==selectedFragmentId))
+                    selectedFragmentId=fragment.id;
+            }
     }
     ImGui::PopItemWidth();ImGui::EndChild();ImGui::End();
 
@@ -852,6 +865,17 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                           IM_COL32(255,195,55,255),1);
         }
     }
+    for (const auto &fragment:built.fragments)
+        if (fragment.id==selectedFragmentId)
+            if (const auto point=projectToViewport(fragment.center,camera,
+                    unsigned(size.x),unsigned(size.y)))
+            {
+                const auto origin=ImGui::GetItemRectMin();
+                const ImVec2 at{origin.x+float(point->x),origin.y+float(point->y)};
+                auto *draw=ImGui::GetWindowDrawList();
+                draw->AddCircleFilled(at,6,IM_COL32(80,220,255,230),24);
+                draw->AddCircle(at,11,IM_COL32(80,220,255,255),24,2);
+            }
     if (ImGui::IsItemHovered())
     {
         auto &io=ImGui::GetIO();
@@ -891,7 +915,12 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                                       part.freshInteriorRegions.end(),
                                       built.mesh.mesh.triangleRegions[*triangle])!=
                                 part.freshInteriorRegions.end())
-                        {selectedId=part.id;break;}
+                        {
+                            selectedId=part.id;
+                            const auto *fragment=Assembly::fragmentAtTriangle(built,*triangle);
+                            selectedFragmentId=fragment?fragment->id:std::string{};
+                            break;
+                        }
             renderer.draw(unsigned(size.x),unsigned(size.y),camera,modes[view]);
         }
         if (!moveArea && ImGui::IsMouseDragging(ImGuiMouseButton_Left))

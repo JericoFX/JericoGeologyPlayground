@@ -105,6 +105,13 @@ struct Part
     std::size_t firstTriangle{}, triangleCount{};
     std::vector<Jerico::Guid> freshInteriorRegions;
 };
+struct Fragment
+{
+    std::string id, parentPartId;
+    Jerico::Guid guid;
+    Vec3d center{};
+    std::vector<std::size_t> triangles;
+};
 struct FitResult
 {
     std::size_t count{};
@@ -116,6 +123,7 @@ struct Result
     MeshResult mesh;
     std::vector<std::array<float, 2>> cornerUV;
     std::vector<Part> parts;
+    std::vector<Fragment> fragments;
     std::size_t repeatedStations{}, promotedBodyCount{}, constraintCount{};
     double generationCpuMilliseconds{}, damageEditCpuMilliseconds{}, pathEditCpuMilliseconds{};
 };
@@ -137,4 +145,6 @@ Result build(const PA::ProceduralSpline &spline, const Settings &settings);
 void writeBakeObj(std::ostream &stream,const Result &result,const AutoUvPlan &atlas);
 std::optional<Vec3d> raycastPartSurface(const Result &result,const Part &part,
                                         Vec3d origin,Vec3d direction);
+const Fragment *fragmentAtTriangle(const Result &result,std::size_t triangle);
+TriangleMesh fragmentMesh(const Result &result,const Fragment &fragment);
 }

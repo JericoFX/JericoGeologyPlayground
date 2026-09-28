@@ -1,0 +1,9 @@
+# Selectable closed assembly fragments
+
+Status: **fragment identity and extraction verified; interactive picking wired but not manually accepted; global damage goal ACTIVE**.
+
+After a `Broken` state or a path cut with chunk separation, each disconnected component of a Part receives a stable child ID when there are at least two components. The Part keeps its original semantic ID and geometry range. Each child records its triangle membership and an area-weighted center; `fragmentMesh` extracts a separate closed mesh with the original region IDs. The assembly editor lists the children under their Part, selects one when its triangles are clicked, and marks the selected center in the viewport. This does not create physics bodies or constraints: `promotedBodyCount` remains zero.
+
+The RED build failed because the fragment extraction/picking API was missing (`../2026-09-27-assembly-fragments-red.log`). The focused GREEN fixture covers Coupling, RailJoint and CrossBeam: each exposes two closed, independently pickable children. It also checks that each child ID remains on the same physical side at LOD 1. Release `ALL_BUILD` exited 0 (`../2026-09-27-assembly-fragments-build-final.log`), and **25/25** CTest passed (`../2026-09-27-assembly-fragments-ctest.log`). Two Vulkan runs on the RTX 3090 repeated all 34 original 1280×960 PNGs byte for byte; all 34 previously retained captures also stayed pixel-identical. The per-case child IDs and counts are in `procedural-assemblies-proof.json`. No duplicate PNGs are retained here.
+
+Manual click/list/marker interaction still needs acceptance in the normal window. Fragment movement, activation/collision through Jolt, debris, material-specific fracture and other procedural consumers are pending; this slice does not establish realistic destruction Beauty or full shared-damage parity.

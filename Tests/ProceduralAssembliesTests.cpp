@@ -1222,6 +1222,38 @@ int main()
                         meshHash(partMesh(intact,original)),
                         "Breaking one assembly part must preserve other parts");
             }
+            const auto fragments=std::count_if(broken.fragments.begin(),
+                broken.fragments.end(),[&](const Fragment &fragment)
+                {return fragment.parentPartId==target->id;});
+            require(fragments==2,"through-fracture must expose two semantic fragments");
+            for (const auto &fragment:broken.fragments)
+            {
+                if (fragment.parentPartId!=target->id) continue;
+                require(fragment.id.find(target->id+"/fragment-")==0 &&
+                        !fragment.triangles.empty() &&
+                        PA::validateClosedMesh(fragmentMesh(broken,fragment)).hasValue() &&
+                        fragmentAtTriangle(broken,fragment.triangles.front())==&fragment,
+                        "fracture fragment must be stable, closed and independently pickable");
+            }
+            auto coarseSettings=settings;
+            coarseSettings.lod=1;
+            const auto coarse=build(curvedPath(),coarseSettings);
+            for (const auto &fragment:broken.fragments)
+                if (fragment.parentPartId==target->id)
+                {
+                    const auto match=std::find_if(coarse.fragments.begin(),
+                        coarse.fragments.end(),[&](const Fragment &candidate)
+                        {return candidate.id==fragment.id &&
+                                candidate.guid==fragment.guid;});
+                    const auto other=std::find_if(broken.fragments.begin(),
+                        broken.fragments.end(),[&](const Fragment &candidate)
+                        {return candidate.parentPartId==target->id &&
+                                candidate.id!=fragment.id;});
+                    require(match!=coarse.fragments.end() && other!=broken.fragments.end() &&
+                            length(sub(match->center,fragment.center))<
+                            length(sub(match->center,other->center)),
+                            "fragment identity must stay on the same physical side at LOD 1");
+                }
         }
         auto oversized=path;
         oversized.frames.resize(4097);

@@ -24,7 +24,7 @@ class AssemblyLabUI
     Assembly::Result built;
     AutoUvPlan bakeAtlas;
     Camera camera;
-    std::string selectedId,error;
+    std::string selectedId,selectedFragmentId,error;
     int selectedPoint{},selectedArea{-1},selectedPath{-1},view{},uploadedView{-1};
     int surfaceDebugField{};
     int bakeResolutionIndex{2};

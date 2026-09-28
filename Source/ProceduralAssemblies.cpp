@@ -317,4 +317,35 @@ void writeBakeObj(std::ostream &stream,const Result &result,const AutoUvPlan &at
     }
     if (!stream) throw std::runtime_error("Could not write assembly bake OBJ");
 }
+const Fragment *fragmentAtTriangle(const Result &result,std::size_t triangle)
+{
+    for (const auto &fragment:result.fragments)
+        if (std::binary_search(fragment.triangles.begin(),
+                               fragment.triangles.end(),triangle))
+            return &fragment;
+    return nullptr;
+}
+TriangleMesh fragmentMesh(const Result &result,const Fragment &fragment)
+{
+    const auto &source=result.mesh.mesh;
+    TriangleMesh mesh;
+    std::unordered_map<std::uint32_t,std::uint32_t> indices;
+    for (const auto face:fragment.triangles)
+    {
+        if (face>=source.indices.size()/3 || face>=source.triangleRegions.size())
+            throw std::runtime_error("Assembly fragment has an invalid face");
+        for (int corner=0;corner<3;++corner)
+        {
+            const auto sourceIndex=source.indices[face*3+corner];
+            if (sourceIndex>=source.positions.size())
+                throw std::runtime_error("Assembly fragment has an invalid vertex");
+            auto [entry,inserted]=indices.try_emplace(sourceIndex,
+                std::uint32_t(mesh.positions.size()));
+            if (inserted) mesh.positions.push_back(source.positions[sourceIndex]);
+            mesh.indices.push_back(entry->second);
+        }
+        mesh.triangleRegions.push_back(source.triangleRegions[face]);
+    }
+    return mesh;
+}
 }

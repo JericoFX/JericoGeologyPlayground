@@ -9,6 +9,7 @@
 #include <chrono>
 #include <cmath>
 #include <limits>
+#include <map>
 #include <numbers>
 #include <numeric>
 #include <set>
@@ -444,7 +445,99 @@ class Builder
             }
         }
         item.triangleCount=result.mesh.mesh.indices.size()/3-item.firstTriangle;
+        if (item.triangleCount &&
+            (item.state==State::Broken || std::any_of(
+                settings.damage.pathRules.begin(),settings.damage.pathRules.end(),
+                [&](const PathDamageRule &rule)
+                {return rule.semanticPartId==item.id && rule.cutter.enabled &&
+                        rule.cutter.separationMeters>0;})))
+            recordFragments(item,firstVertex);
         result.parts.push_back(std::move(item));
+    }
+    void recordFragments(const Part &item,std::size_t firstVertex)
+    {
+        const auto &mesh=result.mesh.mesh;
+        std::vector<std::size_t> parents(mesh.positions.size()-firstVertex);
+        std::iota(parents.begin(),parents.end(),0);
+        const auto root=[&](std::size_t index)
+        {
+            while (parents[index]!=index)
+            {parents[index]=parents[parents[index]];index=parents[index];}
+            return index;
+        };
+        for (std::size_t face=item.firstTriangle;
+             face<item.firstTriangle+item.triangleCount;++face)
+        {
+            const auto a=mesh.indices[face*3]-firstVertex;
+            parents[root(mesh.indices[face*3+1]-firstVertex)]=root(a);
+            parents[root(mesh.indices[face*3+2]-firstVertex)]=root(a);
+        }
+        struct Component
+        {
+            Fragment fragment;
+            Vec3d centerSum{};
+            double area{};
+        };
+        std::map<std::size_t,std::size_t> componentIndex;
+        std::vector<Component> components;
+        for (std::size_t face=item.firstTriangle;
+             face<item.firstTriangle+item.triangleCount;++face)
+        {
+            const auto component=root(mesh.indices[face*3]-firstVertex);
+            auto [entry,inserted]=componentIndex.try_emplace(component,components.size());
+            if (inserted) components.emplace_back();
+            auto &found=components[entry->second];
+            found.fragment.triangles.push_back(face);
+            const auto a=mesh.positions[mesh.indices[face*3]];
+            const auto b=mesh.positions[mesh.indices[face*3+1]];
+            const auto c=mesh.positions[mesh.indices[face*3+2]];
+            const auto area=length(cross(sub(b,a),sub(c,a)))*.5;
+            found.centerSum=add(found.centerSum,
+                mul(add(a,add(b,c)),area/3));
+            found.area+=area;
+        }
+        if (components.size()<2) return;
+        for (auto &component:components)
+        {
+            if (!(component.area>0) || !std::isfinite(component.area))
+                throw std::runtime_error("Assembly fragment has no valid surface area");
+            component.fragment.center=mul(component.centerSum,
+                1.0/component.area);
+        }
+        const auto frame=Construction::frameAtDistance(result.path,item.stationMeters);
+        const Vec3d axes[]={frame.tangent,frame.binormal,frame.normal};
+        int sortAxis=0;
+        double greatestSpan=-1;
+        for (int axis=0;axis<3;++axis)
+        {
+            double low=std::numeric_limits<double>::infinity(),high=-low;
+            for (const auto &component:components)
+            {
+                const auto coordinate=dot(component.fragment.center,axes[axis]);
+                low=std::min(low,coordinate);high=std::max(high,coordinate);
+            }
+            if (high-low>greatestSpan)
+            {greatestSpan=high-low;sortAxis=axis;}
+        }
+        std::sort(components.begin(),components.end(),[&](const auto &a,const auto &b)
+        {
+            const auto da=dot(a.fragment.center,axes[sortAxis]);
+            const auto db=dot(b.fragment.center,axes[sortAxis]);
+            if (da!=db) return da<db;
+            if (a.fragment.center.x!=b.fragment.center.x)
+                return a.fragment.center.x<b.fragment.center.x;
+            if (a.fragment.center.y!=b.fragment.center.y)
+                return a.fragment.center.y<b.fragment.center.y;
+            return a.fragment.center.z<b.fragment.center.z;
+        });
+        for (std::size_t index=0;index<components.size();++index)
+        {
+            auto &fragment=components[index].fragment;
+            fragment.parentPartId=item.id;
+            fragment.id=item.id+"/fragment-"+std::to_string(index);
+            fragment.guid=stablePartGuid(fragment.id);
+            result.fragments.push_back(std::move(fragment));
+        }
     }
     void applyPathDamage(Part &item,std::size_t firstVertex,const PathDamageRule &rule)
     {
