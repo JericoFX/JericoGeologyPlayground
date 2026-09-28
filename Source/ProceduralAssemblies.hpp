@@ -58,6 +58,7 @@ struct PathDamageRule
 struct DamageSettings
 {
     bool proceduralEnabled{};
+    bool legacySharedPartIds{};
     std::uint32_t seed{123};
     double missingProbability{}, brokenProbability{}, looseProbability{}, bentProbability{};
     double clusterCenterMeters{}, clusterRadiusMeters{}, clusterStrength{};

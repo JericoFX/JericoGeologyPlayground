@@ -73,9 +73,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"broken-rail-joint",Assembly::Kind::Railway,&gentle},
         {"railing",Assembly::Kind::Railing,&gentle},
         {"broken-railing",Assembly::Kind::BrokenRailing,&gentle},
+        {"broken-railing-post",Assembly::Kind::Railing,&gentle},
+        {"broken-top-rail",Assembly::Kind::Railing,&gentle},
         {"wooden-pier",Assembly::Kind::WoodenPier,&gentle},
         {"broken-beam-member",Assembly::Kind::WoodenPier,&gentle},
         {"broken-cross-beam",Assembly::Kind::WoodenPier,&gentle},
+        {"broken-pile",Assembly::Kind::WoodenPier,&gentle},
         {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
         {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
@@ -87,9 +90,11 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"plank-fracture-isolated",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"catwalk",Assembly::Kind::Catwalk,&gentle},
         {"truss-warren",Assembly::Kind::TrussWarren,&gentle},
+        {"broken-truss-brace",Assembly::Kind::TrussWarren,&gentle},
         {"truss-pratt",Assembly::Kind::TrussPratt,&gentle},
         {"truss-howe",Assembly::Kind::TrussHowe,&gentle},
         {"suspension-bridge",Assembly::Kind::SuspensionBridge,&gentle},
+        {"broken-hanger",Assembly::Kind::SuspensionBridge,&gentle},
         {"suspension-hanger-debug",Assembly::Kind::SuspensionBridge,&gentle,3},
         {"rope-plank-bridge",Assembly::Kind::RopePlankBridge,&gentle},
         {"rope-manual-damage",Assembly::Kind::RopePlankBridge,&gentle,0,true},
@@ -117,6 +122,24 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Beam,0,-1);
         else if (caseName=="broken-cross-beam")
             brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::CrossBeam,0);
+        else if (caseName=="broken-railing-post")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Post,0,-1);
+        else if (caseName=="broken-top-rail")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::TopRail,0,-1);
+        else if (caseName=="broken-pile")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Pile,0,-1);
+        else if (caseName=="broken-hanger")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Hanger,0,-1);
+        else if (caseName=="broken-truss-brace")
+        {
+            const auto source=Assembly::build(*item.path,settings);
+            const auto brace=std::find_if(source.parts.rbegin(),source.parts.rend(),
+                [](const Assembly::Part &part)
+                {return part.role==Assembly::Role::Brace;});
+            if (brace==source.parts.rend())
+                throw std::runtime_error("Truss evidence lacks a diagonal brace");
+            brokenTargetId=brace->id;
+        }
         if (!brokenTargetId.empty())
             settings.damage.manual[brokenTargetId]=Assembly::State::Broken;
         if (item.damage)

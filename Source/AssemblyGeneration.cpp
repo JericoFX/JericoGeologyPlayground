@@ -12,6 +12,7 @@
 #include <map>
 #include <numbers>
 #include <numeric>
+#include <optional>
 #include <set>
 #include <stdexcept>
 
@@ -186,6 +187,7 @@ class Builder
     Result result;
     Jerico::Guid currentGuid;
     float currentField{};
+    std::optional<std::array<Vec3d,3>> currentMemberAxes;
 
     Builder(const PA::ProceduralSpline &spline,const Settings &input):settings(input)
     {
@@ -288,11 +290,17 @@ class Builder
         const auto firstVertex=result.mesh.mesh.positions.size();
         currentGuid=item.guid;
         currentField=float(int(role)+1)+(item.state==State::Intact?0.0f:0.45f);
+        currentMemberAxes.reset();
         if (item.state!=State::Missing)
         {
             draw(item);
             if (item.state==State::Broken &&
                 (role==Role::Rail || role==Role::Beam ||
+                 role==Role::Pile || role==Role::Brace || role==Role::Post ||
+                 role==Role::TopRail || role==Role::MiddleRail ||
+                 role==Role::LowerRail || role==Role::Baluster ||
+                 role==Role::Girder || role==Role::Tower ||
+                 role==Role::Hanger || role==Role::Anchor ||
                  role==Role::Coupling || role==Role::Clamp ||
                  role==Role::Flange || role==Role::Support ||
                  role==Role::RailJoint || role==Role::CrossBeam))
@@ -549,7 +557,10 @@ class Builder
     void applyAutomaticBroken(Part &item,std::size_t firstVertex)
     {
         const auto frame=Construction::frameAtDistance(result.path,item.stationMeters);
-        const Vec3d axes[]={frame.tangent,frame.binormal,frame.normal};
+        const Vec3d axes[]={
+            currentMemberAxes?(*currentMemberAxes)[0]:frame.tangent,
+            currentMemberAxes?(*currentMemberAxes)[1]:frame.binormal,
+            currentMemberAxes?(*currentMemberAxes)[2]:frame.normal};
         double low[3],high[3];
         std::fill(std::begin(low),std::end(low),std::numeric_limits<double>::infinity());
         std::fill(std::begin(high),std::end(high),-
@@ -758,12 +769,7 @@ class Builder
             projected=sub(alternative,mul(t,dot(alternative,t)));
         }
         const auto n=unit(projected),b=unit(cross(t,n));
-        if (state==State::Broken)
-        {
-            beam(start,add(start,mul(axis,.44)),width,height,upHint);
-            beam(add(start,mul(axis,.56)),end,width,height,upHint);
-            return;
-        }
+        currentMemberAxes=std::array<Vec3d,3>{t,b,n};
         Vec3d center=mul(add(start,end),.5);
         if (state==State::Loose || state==State::Detached)
             center=add(center,mul(n,-std::min(.12,span*.08)));
@@ -1363,6 +1369,10 @@ void buildRailing(Builder &builder)
         throw std::runtime_error("Railing bay count exceeds assembly part budget");
     for (int side:{-1,1})
     {
+        std::uint32_t topRailBase=0;
+        for (const auto &part:builder.result.parts)
+            if (part.role==Role::TopRail && part.side==side)
+                topRailBase=std::max(topRailBase,part.index+1);
         for (std::size_t i=0;i<=bays;++i)
         {
             const double station=path.lengthMeters*i/bays;
@@ -1391,7 +1401,9 @@ void buildRailing(Builder &builder)
                 const auto railPosition=add(middle.position,
                     add(mul(middle.binormal,side*s.widthMeters*.5),
                         mul(middle.normal,s.heightMeters*level)));
-                builder.part(role,std::uint32_t(i),side,(start+end)*.5,
+                builder.part(role,std::uint32_t(i)+
+                             (role==Role::TopRail && !s.damage.legacySharedPartIds?
+                              topRailBase:0),side,(start+end)*.5,
                              railPosition,[&](const Part &part)
                 {
                     const auto point=[&](const Construction::PathFrame &frame)
@@ -1423,6 +1435,10 @@ void buildBeamBridge(Builder &builder,bool truss)
         std::size_t(std::ceil(path.lengthMeters/s.baySpacingMeters)));
     for (int side:{-1,1})
     {
+        std::uint32_t braceBase=0;
+        for (const auto &part:builder.result.parts)
+            if (part.role==Role::Brace && part.side==side)
+                braceBase=std::max(braceBase,part.index+1);
         for (std::size_t i=0;i<bays;++i)
         {
             const double start=path.lengthMeters*i/bays,end=path.lengthMeters*(i+1)/bays;
@@ -1445,7 +1461,9 @@ void buildBeamBridge(Builder &builder,bool truss)
                 {builder.beam(point(a,s.heightMeters),point(b,s.heightMeters),
                               s.beamWidthMeters*.7,s.beamWidthMeters*.7,a.normal,part.state);});
                 for (int diagonal=0;diagonal<2;++diagonal)
-                    builder.part(Role::Brace,std::uint32_t(i*2+diagonal),side,
+                    builder.part(Role::Brace,
+                        (s.damage.legacySharedPartIds?0:braceBase)+
+                        std::uint32_t(i*2+diagonal),side,
                         (start+end)*.5,point(middle,s.heightMeters*.5),
                         [&](const Part &part)
                     {

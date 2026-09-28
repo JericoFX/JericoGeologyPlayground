@@ -312,8 +312,9 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
         [](const AreaDamageRule &rule){return rule.operation==AreaOperation::EdgeDamage;});
     const auto geometricArea=std::any_of(settings.areaRules.begin(),settings.areaRules.end(),
         [](const AreaDamageRule &rule){return rule.operation!=AreaOperation::State;});
-    Json result={{"version",edgeArea?5:geometricArea?4:
-        settings.pathRules.empty()?1:shapedPath?3:2},
+    Json result={{"version",settings.legacySharedPartIds?
+        (edgeArea?5:geometricArea?4:
+         settings.pathRules.empty()?1:shapedPath?3:2):6},
         {"proceduralEnabled",settings.proceduralEnabled},
         {"seed",settings.seed},{"missingProbability",settings.missingProbability},
         {"brokenProbability",settings.brokenProbability},
@@ -330,7 +331,8 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
             {"state",int(rule.state)}});
     result["areas"]=Json::array();
     for (const auto &rule:settings.areaRules) result["areas"].push_back(writeArea(rule));
-    if (!settings.pathRules.empty() || geometricArea)
+    if (!settings.pathRules.empty() || geometricArea ||
+        !settings.legacySharedPartIds)
     {
         result["paths"]=Json::array();
         for (const auto &rule:settings.pathRules) result["paths"].push_back(writePath(rule));
@@ -351,9 +353,10 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
         throw std::runtime_error("Damage recipe file too large");
     const auto root=Json::parse(text);
     const auto version=root.at("version").get<int>();
-    if (version<1 || version>5)
+    if (version<1 || version>6)
         throw std::runtime_error("Unsupported damage recipe version");
     DamageSettings result;
+    result.legacySharedPartIds=version<=5;
     result.proceduralEnabled=root.at("proceduralEnabled").get<bool>();
     result.seed=root.at("seed").get<std::uint32_t>();
     result.missingProbability=root.at("missingProbability").get<double>();

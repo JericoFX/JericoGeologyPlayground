@@ -1183,22 +1183,67 @@ int main()
         require(!stateAllowed(Role::Coupling,State::Bent) &&
                 stateAllowed(Role::Rail,State::Bent),
                 "state menu must expose only represented member damage");
+        for (int value=0;value<=int(Assembly::Kind::RopePlankBridge);++value)
+        {
+            Settings uniqueSettings;
+            uniqueSettings.kind=Assembly::Kind(value);
+            const auto assembly=build(curvedPath(),uniqueSettings);
+            std::set<std::string> ids;
+            for (const auto &part:assembly.parts)
+                if (!ids.insert(part.id).second)
+                    throw std::runtime_error("Duplicate assembly Part ID: "+part.id);
+        }
+        for (const auto role:{Role::Brace,Role::TopRail})
+        {
+            Settings truss;
+            truss.kind=Assembly::Kind::TrussWarren;
+            truss.damage.legacySharedPartIds=true;
+            const auto sharedId=stablePartId(truss.kind,role,0,-1);
+            truss.damage.manual[sharedId]=State::Missing;
+            const auto oldSelection=build(curvedPath(),truss);
+            require(std::count_if(oldSelection.parts.begin(),oldSelection.parts.end(),
+                [&](const Part &part)
+                {return part.id==sharedId && part.state==State::Missing;})==2,
+                "legacy truss recipe must retain both previously shared targets");
+            truss.damage.legacySharedPartIds=false;
+            const auto uniqueSelection=build(curvedPath(),truss);
+            require(std::count_if(uniqueSelection.parts.begin(),uniqueSelection.parts.end(),
+                [&](const Part &part)
+                {return part.id==sharedId && part.state==State::Missing;})==1,
+                "new truss recipe must select only one semantic member");
+        }
         const std::pair<Assembly::Kind,Role> brokenRoles[]={
             {Assembly::Kind::PipeCouplings,Role::Coupling},
             {Assembly::Kind::Railway,Role::Rail},
             {Assembly::Kind::Railway,Role::RailJoint},
             {Assembly::Kind::WoodenPier,Role::Beam},
-            {Assembly::Kind::WoodenPier,Role::CrossBeam}};
+            {Assembly::Kind::WoodenPier,Role::CrossBeam},
+            {Assembly::Kind::WoodenPier,Role::Pile},
+            {Assembly::Kind::Railing,Role::Post},
+            {Assembly::Kind::Railing,Role::TopRail},
+            {Assembly::Kind::Railing,Role::MiddleRail},
+            {Assembly::Kind::Railing,Role::LowerRail},
+            {Assembly::Kind::Railing,Role::Baluster},
+            {Assembly::Kind::BeamBridge,Role::Girder},
+            {Assembly::Kind::TrussPratt,Role::Brace},
+            {Assembly::Kind::SuspensionBridge,Role::Tower},
+            {Assembly::Kind::SuspensionBridge,Role::Hanger},
+            {Assembly::Kind::SuspensionBridge,Role::Anchor}};
         for (const auto [kind,role]:brokenRoles)
         {
             require(stateAllowed(role,State::Broken),
                     "every generated solid role must accept Broken");
             Settings settings;
             settings.kind=kind;
+            if (role==Role::LowerRail) settings.lowerRailEnabled=true;
             const auto intact=build(curvedPath(),settings);
-            const auto target=std::find_if(intact.parts.begin(),intact.parts.end(),
+            auto target=std::find_if(intact.parts.begin(),intact.parts.end(),
                 [&](const Part &part){return part.role==role && part.triangleCount>0;});
             require(target!=intact.parts.end(),"broken role fixture lacks a solid target");
+            if (kind==Assembly::Kind::TrussPratt && role==Role::Brace)
+                for (auto candidate=target;candidate!=intact.parts.end();++candidate)
+                    if (candidate->role==Role::Brace && candidate->triangleCount>0)
+                        target=candidate;
             settings.damage.manual[target->id]=State::Broken;
             const auto broken=build(curvedPath(),settings);
             const auto changed=std::find_if(broken.parts.begin(),broken.parts.end(),

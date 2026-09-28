@@ -26,6 +26,7 @@ int main()
     try
     {
     DamageSettings source;
+    source.legacySharedPartIds=true;
     source.proceduralEnabled=true;source.seed=873;
     source.missingProbability=.1;source.brokenProbability=.2;
     source.looseProbability=.03;source.bentProbability=.04;
@@ -63,6 +64,13 @@ int main()
     auto restored=deserializeAssemblyDamage(serializeAssemblyDamage(source));
     require(serializeAssemblyDamage(restored)==serializeAssemblyDamage(source),
             "damage recipe must round trip exactly and deterministically");
+    require(restored.legacySharedPartIds,
+            "old damage recipes must retain their original shared part selection");
+    DamageSettings current;
+    const auto currentText=serializeAssemblyDamage(current);
+    require(nlohmann::json::parse(currentText).at("version")==6 &&
+            !deserializeAssemblyDamage(currentText).legacySharedPartIds,
+            "new damage recipes must use unique assembly part identities");
     require(restored.pathRules.size()==1 && restored.pathRules.front().cutter.path.size()==3,
             "selected crack path must survive damage recipe roundtrip");
     auto shaped=source;
@@ -152,7 +160,7 @@ int main()
     restored.areaRules.front().area.projector.center={1,2,3};
     require(resolveDamage(restored,selected)==State::Intact,
             "restored protected selection must override area damage");
-    rejects([]{deserializeAssemblyDamage("{\"version\":6}");},"unknown schema version accepted");
+    rejects([]{deserializeAssemblyDamage("{\"version\":7}");},"unknown schema version accepted");
     rejects([]{deserializeAssemblyDamage("{\"version\":1,\"areas\":[{}]}");},
             "incomplete area accepted");
     auto bad=source;bad.areaRules.front().area.projector.scale.x=0;
