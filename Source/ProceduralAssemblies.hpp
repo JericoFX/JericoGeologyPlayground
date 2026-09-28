@@ -38,12 +38,13 @@ struct DamageRule
     double startMeters{}, endMeters{};
     State state{State::Missing};
 };
-enum class AreaOperation { State, Cavity, Dent, ThroughHole };
+enum class AreaOperation { State, Cavity, Dent, ThroughHole, EdgeDamage };
 struct AreaDamageRule
 {
     DamageArea area;
     State state{State::Broken};
     AreaOperation operation{AreaOperation::State};
+    DamageEdgeSettings edge;
 };
 struct PathDamageRule
 {

@@ -474,6 +474,61 @@ int main()
             }
         require(newNearCavity>0,
                 "selected plank cavity must create local geometry at its footprint");
+        Settings edgePier=pier;
+        AreaDamageRule plankEdge=plankCavity;
+        plankEdge.area.id="selected-plank-edge";
+        plankEdge.operation=AreaOperation::EdgeDamage;
+        plankEdge.area.footprint.radius={.035,.08,1};
+        plankEdge.area.footprint.depth=.025;
+        plankEdge.edge.width=.08;
+        plankEdge.edge.curvatureEnd=.1;
+        edgePier.damage.areaRules.push_back(plankEdge);
+        require(meshHash(build(curvedPath(),edgePier).mesh.mesh)==
+                    meshHash(intactPier.mesh.mesh),
+                "Edge Damage on a flat plank center must not invent an edge");
+        auto &edgeCenter=edgePier.damage.areaRules.front().area.projector.center;
+        edgeCenter.x+=boardFrame.tangent.x*pier.boardWidthMeters*.5;
+        edgeCenter.y+=boardFrame.tangent.y*pier.boardWidthMeters*.5;
+        edgeCenter.z+=boardFrame.tangent.z*pier.boardWidthMeters*.5;
+        const auto chippedPier=build(curvedPath(),edgePier);
+        require(chippedPier.parts.front().triangleCount>
+                    intactPier.parts.front().triangleCount &&
+                chippedPier.parts.front().freshInteriorRegions.size()==1 &&
+                PA::validateClosedMesh(partMesh(chippedPier,chippedPier.parts.front())).hasValue(),
+                "selected shared Edge Damage must chip and refine only the chosen edge");
+        auto weakerEdge=edgePier;
+        weakerEdge.damage.areaRules.front().edge.amount=.5;
+        require(meshHash(build(curvedPath(),weakerEdge).mesh.mesh)!=
+                    meshHash(chippedPier.mesh.mesh),
+                "edge strength must change the geometric chip depth");
+        auto weakerArea=edgePier;
+        weakerArea.damage.areaRules.front().area.amount=.5;
+        require(meshHash(build(curvedPath(),weakerArea).mesh.mesh)==
+                    meshHash(build(curvedPath(),weakerEdge).mesh.mesh),
+                "area and edge strengths must combine once, without squaring area amount");
+        auto narrowEdge=edgePier;
+        narrowEdge.damage.areaRules.front().edge.width=.01;
+        require(meshHash(build(curvedPath(),narrowEdge).mesh.mesh)!=
+                    meshHash(chippedPier.mesh.mesh),
+                "edge width must change the geometric chip footprint");
+        auto nearEdgeEnd=edgePier;
+        auto &nearEndArea=nearEdgeEnd.damage.areaRules.front().area;
+        nearEndArea.projector.center.x-=boardFrame.binormal.x*pier.widthMeters*.48;
+        nearEndArea.projector.center.y-=boardFrame.binormal.y*pier.widthMeters*.48;
+        nearEndArea.projector.center.z-=boardFrame.binormal.z*pier.widthMeters*.48;
+        nearEndArea.footprint.radius={.015,.015,1};
+        nearEndArea.boundary.rimFraction=.5;
+        nearEndArea.boundary.irregularity=.25;
+        nearEndArea.projector.rotationRadians=.6;
+        const auto untapered=build(curvedPath(),nearEdgeEnd);
+        require(meshHash(untapered.mesh.mesh)!=meshHash(intactPier.mesh.mesh),
+                "edge near its endpoint must cut when taper is disabled");
+        require(PA::validateClosedMesh(partMesh(untapered,untapered.parts.front())).hasValue(),
+                "wide irregular edge rim near a segment endpoint must remain closed");
+        nearEdgeEnd.damage.areaRules.front().edge.taperFraction=.5;
+        require(meshHash(build(curvedPath(),nearEdgeEnd).mesh.mesh)==
+                    meshHash(intactPier.mesh.mesh),
+                "edge taper must suppress the chip near a segment endpoint");
         cavityPier.damage.areaRules.front().area.projector.center.x+=100;
         require(meshHash(build(curvedPath(),cavityPier).mesh.mesh)==
                 meshHash(intactPier.mesh.mesh),
@@ -860,6 +915,57 @@ int main()
                     selectedCut->freshInteriorRegions.size()==1 &&
                     selectedCut->triangleCount>selected->triangleCount,
                     "shared cavity must refine one intact part in every assembly family");
+            auto edgeFamily=cavityFamily;
+            auto &edgeRule=edgeFamily.damage.areaRules.front();
+            edgeRule.operation=AreaOperation::EdgeDamage;
+            edgeRule.edge.curvaturePolicy=DamageCurvaturePolicy::Both;
+            edgeRule.edge.curvatureEnd=.1;
+            edgeRule.edge.width=.1;
+            const auto memberMesh=partMesh(near,*selected);
+            SurfaceFeatureSettings edgeAnalysis;
+            edgeAnalysis.contact=false;
+            const auto memberFeatures=surfaceFeatures(memberMesh,edgeAnalysis);
+            const auto eligible=std::find_if(memberFeatures.featureEdges.begin(),
+                memberFeatures.featureEdges.end(),[&](const SurfaceFeatureEdge &edge)
+                {
+                    return sampleEdgeDamage(edgeRule.edge,
+                        memberFeatures.signedDihedralCurvature[edge.first],
+                        memberFeatures.edgeDistance[edge.first],1,.5)>.05 &&
+                        sampleEdgeDamage(edgeRule.edge,
+                        memberFeatures.signedDihedralCurvature[edge.second],
+                        memberFeatures.edgeDistance[edge.second],1,.5)>.05;
+                });
+            require(eligible!=memberFeatures.featureEdges.end(),
+                    "every solid family needs a shared eligible feature edge");
+            const auto first=memberMesh.positions[eligible->first];
+            const auto second=memberMesh.positions[eligible->second];
+            const auto edgeDirection=sub(second,first);
+            const auto edgeLength=length(edgeDirection);
+            edgeRule.area.projector.center={std::midpoint(first.x,second.x),
+                std::midpoint(first.y,second.y),std::midpoint(first.z,second.z)};
+            edgeRule.area.projector.normal=eligible->outwardNormal;
+            edgeRule.area.projector.tangent={edgeDirection.x/edgeLength,
+                edgeDirection.y/edgeLength,edgeDirection.z/edgeLength};
+            const auto tangent=edgeRule.area.projector.tangent;
+            const auto normal=edgeRule.area.projector.normal;
+            edgeRule.area.projector.bitangent={
+                normal.y*tangent.z-normal.z*tangent.y,
+                normal.z*tangent.x-normal.x*tangent.z,
+                normal.x*tangent.y-normal.y*tangent.x};
+            const auto chipRadius=std::clamp(edgeLength*.2,.005,.08);
+            edgeRule.area.footprint.radius={chipRadius,chipRadius,1};
+            edgeRule.area.footprint.depth=std::clamp(
+                std::min({high[0]-low[0],high[1]-low[1],
+                          high[2]-low[2]})*.2,.003,.04);
+            const auto chippedFamily=build(curvedPath(),edgeFamily);
+            const auto chippedPart=std::find_if(chippedFamily.parts.begin(),
+                chippedFamily.parts.end(),[&](const Part &part)
+                {return part.id==selected->id;});
+            require(chippedPart!=chippedFamily.parts.end() &&
+                    chippedPart->freshInteriorRegions.size()==1 &&
+                    chippedPart->triangleCount>selected->triangleCount &&
+                    PA::validateClosedMesh(partMesh(chippedFamily,*chippedPart)).hasValue(),
+                    "shared Edge Damage must locally refine one solid in every family");
             for (auto operation:{AreaOperation::Dent,AreaOperation::ThroughHole})
             {
                 auto shaped=cavityFamily;

@@ -104,6 +104,25 @@ int main()
                     ["operation"]==operation,
                 "selected geometric damage operation must roundtrip");
     }
+    auto edgeJson=nlohmann::json::parse(geometricText);
+    edgeJson["version"]=5;
+    edgeJson["areas"][0]["operation"]="EdgeDamage";
+    const auto edgeRestored=deserializeAssemblyDamage(edgeJson.dump());
+    require(nlohmann::json::parse(serializeAssemblyDamage(edgeRestored))["version"]==5 &&
+            nlohmann::json::parse(serializeAssemblyDamage(edgeRestored))["areas"][0]
+                ["operation"]=="EdgeDamage",
+            "shared Edge Damage must persist as its own selected operator");
+    auto tunedEdge=edgeRestored;
+    tunedEdge.areaRules.front().edge.curvaturePolicy=DamageCurvaturePolicy::Both;
+    tunedEdge.areaRules.front().edge.widthMode=DamageWidthMode::Relative;
+    tunedEdge.areaRules.front().edge.width=.14;
+    tunedEdge.areaRules.front().edge.taperFraction=.2;
+    require(serializeAssemblyDamage(deserializeAssemblyDamage(
+                serializeAssemblyDamage(tunedEdge)))==serializeAssemblyDamage(tunedEdge),
+            "Edge Damage settings must roundtrip without changing selection");
+    edgeJson["version"]=4;
+    rejects([&]{deserializeAssemblyDamage(edgeJson.dump());},
+            "v4 recipes must reject v5 Edge Damage semantics");
     auto legacy=source;
     legacy.pathRules.clear();
     require(nlohmann::json::parse(serializeAssemblyDamage(legacy)).at("version")==1 &&
@@ -133,7 +152,7 @@ int main()
     restored.areaRules.front().area.projector.center={1,2,3};
     require(resolveDamage(restored,selected)==State::Intact,
             "restored protected selection must override area damage");
-    rejects([]{deserializeAssemblyDamage("{\"version\":5}");},"unknown schema version accepted");
+    rejects([]{deserializeAssemblyDamage("{\"version\":6}");},"unknown schema version accepted");
     rejects([]{deserializeAssemblyDamage("{\"version\":1,\"areas\":[{}]}");},
             "incomplete area accepted");
     auto bad=source;bad.areaRules.front().area.projector.scale.x=0;
@@ -146,6 +165,10 @@ int main()
     rejects([&]{serializeAssemblyDamage(bad);},"invalid lip range accepted");
     bad=source;bad.areaRules.front().area.boundary.irregularity=.3;
     rejects([&]{serializeAssemblyDamage(bad);},"invalid boundary irregularity accepted");
+    bad=tunedEdge;bad.areaRules.front().edge.width=0;
+    rejects([&]{serializeAssemblyDamage(bad);},"zero shared edge width accepted");
+    bad=tunedEdge;bad.areaRules.front().edge.widthMode=DamageWidthMode(99);
+    rejects([&]{serializeAssemblyDamage(bad);},"unknown shared edge width mode accepted");
     bad=source;bad.areaRules.push_back(bad.areaRules.front());
     rejects([&]{serializeAssemblyDamage(bad);},"duplicate operation ID accepted");
     bad=source;bad.areaRules.resize(maximumDamageAreas+1);

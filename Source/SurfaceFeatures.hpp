@@ -15,6 +15,12 @@ struct SurfaceFeatureSettings
     double thicknessRadius{10};
     Vec3d exposureDirection{0, 1, 0};
 };
+struct SurfaceFeatureEdge
+{
+    std::uint32_t first{},second{};
+    double signedAngleRadians{};
+    Vec3d outwardNormal{};
+};
 struct SurfaceFeatureFields
 {
     // Vertex domain, evaluated on the supplied geometry; never silently welded.
@@ -34,6 +40,7 @@ struct SurfaceFeatureFields
     std::vector<double> minimumEdgeLength;
     std::vector<double> minimumTriangleAltitude;
     std::vector<bool> boundary;
+    std::vector<SurfaceFeatureEdge> featureEdges; // Creases already classified by the shared analysis.
 };
 SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeatureSettings &settings = {},
                                      const Jerico::CancellationToken *cancel = nullptr);

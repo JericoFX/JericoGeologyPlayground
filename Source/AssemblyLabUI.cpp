@@ -363,6 +363,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
         const char *operationName=rule.operation==Assembly::AreaOperation::Cavity?"Cavity":
             rule.operation==Assembly::AreaOperation::Dent?"Dent":
             rule.operation==Assembly::AreaOperation::ThroughHole?"Through hole":
+            rule.operation==Assembly::AreaOperation::EdgeDamage?"Edge Damage":
             Assembly::name(rule.state);
         const auto label=rule.area.id+"  ["+operationName+"]";
         if (ImGui::Selectable(label.c_str(),selectedArea==int(i)))
@@ -384,7 +385,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 &rule.area.amount,&minimumAmount,&maximumAmount,"%.2f");
             int operation=int(rule.operation);
             if (ImGui::Combo("Damage operation",&operation,
-                             "Part state\0Cavity\0Dent\0Through hole\0"))
+                             "Part state\0Cavity\0Dent\0Through hole\0Edge Damage\0"))
             {
                 rule.operation=Assembly::AreaOperation(operation);
                 if (rule.operation!=Assembly::AreaOperation::State)
@@ -402,8 +403,10 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                             frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
                         rule.area.projector.scale.z=1;
                         rule.area.footprint.radius={
-                            std::clamp(bounds.span[0]*.4,.005,.15),
-                            std::clamp(bounds.span[2]*.4,.005,.15),1};
+                            std::clamp(bounds.span[0]*(rule.operation==
+                                Assembly::AreaOperation::EdgeDamage?.6:.4),.005,.15),
+                            std::clamp(bounds.span[2]*(rule.operation==
+                                Assembly::AreaOperation::EdgeDamage?.6:.4),.005,.15),1};
                         const auto depthFactor=
                             rule.operation==Assembly::AreaOperation::Dent?.1:
                             rule.operation==Assembly::AreaOperation::ThroughHole?1.1:.75;
@@ -412,6 +415,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                         rule.area.boundary.irregularity=.13;
                         rule.area.boundary.rimFraction=.2;
                         rule.area.boundary.seed=settings.damage.seed;
+                        rule.edge.width=std::clamp(std::min(bounds.span[0],
+                            bounds.span[2])*.4,.005,.2);
                     }
                 dirty=true;
             }
@@ -429,6 +434,30 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 ImGui::TextUnformatted("Dent depth is capped by local size and thickness.");
             if (rule.operation==Assembly::AreaOperation::ThroughHole)
                 ImGui::TextUnformatted("Hole depth extends far enough to exit the part.");
+            if (rule.operation==Assembly::AreaOperation::EdgeDamage)
+            {
+                int policy=int(rule.edge.curvaturePolicy);
+                if (ImGui::Combo("Edge curvature",&policy,
+                                 "Convex\0Concave\0Both\0"))
+                {rule.edge.curvaturePolicy=DamageCurvaturePolicy(policy);
+                 dirty=true;}
+                int widthMode=int(rule.edge.widthMode);
+                if (ImGui::Combo("Edge width mode",&widthMode,
+                                 "Metric\0Relative\0"))
+                {rule.edge.widthMode=DamageWidthMode(widthMode);
+                 dirty=true;}
+                dirty|=ImGui::InputDouble("Edge width",&rule.edge.width,.005,.05,"%.3f");
+                dirty|=ImGui::InputDouble("Curvature start",&rule.edge.curvatureStart,
+                                          .01,.1,"%.3f");
+                dirty|=ImGui::InputDouble("Curvature end",&rule.edge.curvatureEnd,
+                                          .01,.1,"%.3f");
+                constexpr double zero=0,half=.5,one=1;
+                dirty|=ImGui::SliderScalar("Edge taper",ImGuiDataType_Double,
+                    &rule.edge.taperFraction,&zero,&half,"%.2f");
+                dirty|=ImGui::SliderScalar("Edge strength",ImGuiDataType_Double,
+                    &rule.edge.amount,&zero,&one,"%.2f");
+                ImGui::TextUnformatted("Nearest eligible feature edge inside the area is chipped.");
+            }
             double center[]={rule.area.projector.center.x,rule.area.projector.center.y,
                              rule.area.projector.center.z};
             if (ImGui::InputScalarN("Area center XYZ",ImGuiDataType_Double,center,3,

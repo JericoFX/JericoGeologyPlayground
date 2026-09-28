@@ -63,6 +63,12 @@ int main()
         settings.contact = false;
         auto convex = surfaceFeatures(crease(-1), settings);
         auto concave = surfaceFeatures(crease(1), settings);
+        require(convex.featureEdges.size()==1 &&
+                    convex.featureEdges.front().first==0 &&
+                    convex.featureEdges.front().second==1 &&
+                    std::abs(convex.featureEdges.front().signedAngleRadians-
+                             std::numbers::pi*.5)<1e-10,
+                "shared crease analysis must expose the long eligible edge segment");
         const auto debugConvex=surfaceDebugValues(convex,
             SurfaceDebugField::SignedCurvature);
         const auto debugCavity=surfaceDebugValues(concave,SurfaceDebugField::Cavity);

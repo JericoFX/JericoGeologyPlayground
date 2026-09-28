@@ -61,6 +61,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"pipe-cavity",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-dent",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-through-hole",Assembly::Kind::PipeCouplings,&gentle},
+        {"pipe-edge",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-uv",Assembly::Kind::PipeCouplings,&bend,8},
         {"pipe-high-curvature-rmf",Assembly::Kind::PipeCouplings,&bend,10},
         {"railway",Assembly::Kind::Railway,&gentle},
@@ -71,6 +72,7 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
         {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
+        {"plank-edge",Assembly::Kind::WoodenPier,&gentle},
         {"pier-manual-damage",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"pier-break-closeup",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"plank-fracture-isolated",Assembly::Kind::WoodenPier,&gentle,0,true},
@@ -128,8 +130,9 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         const std::string_view caseName(item.name);
         const bool geometric=caseName=="pipe-cavity" ||
             caseName=="pipe-dent" || caseName=="pipe-through-hole" ||
+            caseName=="pipe-edge" ||
             caseName=="plank-cavity" || caseName=="plank-dent" ||
-            caseName=="plank-through-hole";
+            caseName=="plank-through-hole" || caseName=="plank-edge";
         if (geometric)
         {
             const auto source=Assembly::build(*item.path,settings);
@@ -144,7 +147,9 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             const auto frame=Construction::frameAtDistance(source.path,
                 part->stationMeters);
             Assembly::AreaDamageRule rule;
-            rule.operation=caseName.find("through-hole")!=std::string_view::npos?
+            rule.operation=caseName.find("edge")!=std::string_view::npos?
+                Assembly::AreaOperation::EdgeDamage:
+                caseName.find("through-hole")!=std::string_view::npos?
                 Assembly::AreaOperation::ThroughHole:
                 caseName.find("dent")!=std::string_view::npos?
                     Assembly::AreaOperation::Dent:Assembly::AreaOperation::Cavity;
@@ -167,11 +172,38 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
                     rule.area.projector.center,
                     {-frame.normal.x,-frame.normal.y,-frame.normal.z}))
                 rule.area.projector.center=*hit;
+            if (rule.operation==Assembly::AreaOperation::EdgeDamage)
+            {
+                if (pipe)
+                {
+                    const auto end=Construction::frameAtDistance(source.path,
+                        source.path.lengthMeters);
+                    rule.area.projector.center={
+                        end.position.x+end.normal.x*settings.pipeRadiusMeters,
+                        end.position.y+end.normal.y*settings.pipeRadiusMeters,
+                        end.position.z+end.normal.z*settings.pipeRadiusMeters};
+                }
+                else
+                {
+                    rule.area.projector.center.x+=frame.tangent.x*
+                        settings.boardWidthMeters*.5;
+                    rule.area.projector.center.y+=frame.tangent.y*
+                        settings.boardWidthMeters*.5;
+                    rule.area.projector.center.z+=frame.tangent.z*
+                        settings.boardWidthMeters*.5;
+                }
+                rule.edge.width=.08;
+                rule.edge.curvatureEnd=.1;
+            }
             rule.area.footprint.radius=pipe?
                 (rule.operation==Assembly::AreaOperation::ThroughHole?
-                    Vec3d{.06,.045,1}:Vec3d{.12,.12,1}):
-                Vec3d{.08,.08,1};
-            rule.area.footprint.depth=pipe?.14:.045;
+                    Vec3d{.06,.045,1}:rule.operation==
+                    Assembly::AreaOperation::EdgeDamage?
+                    Vec3d{.06,.06,1}:Vec3d{.12,.12,1}):
+                rule.operation==Assembly::AreaOperation::EdgeDamage?
+                    Vec3d{.035,.08,1}:Vec3d{.08,.08,1};
+            rule.area.footprint.depth=rule.operation==
+                Assembly::AreaOperation::EdgeDamage?.025:(pipe?.14:.045);
             rule.area.boundary.irregularity=.13;
             rule.area.boundary.rimFraction=.2;
             rule.area.boundary.seed=83;

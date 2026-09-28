@@ -272,7 +272,12 @@ SurfaceFeatureFields surfaceFeatures(const TriangleMesh &mesh, const SurfaceFeat
                 result.signedDihedralCurvature[from] += integral;
                 result.signedDihedralCurvature[to] += integral;
                 if (std::abs(theta) >= angleLimit)
+                {
                     result.edgeDistance[from] = result.edgeDistance[to] = 0;
+                    const auto bisector=D::add(nf,ng);
+                    result.featureEdges.push_back({key.first,key.second,theta,
+                        D::lengthSquared(bisector)>1e-18?unit(bisector):nf});
+                }
             }
         }
     }

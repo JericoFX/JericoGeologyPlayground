@@ -2,6 +2,7 @@
 #include "DamageField.hpp"
 #include "DamageGeometry.hpp"
 #include "SolidGeometry.hpp"
+#include "SurfaceFeatures.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 
 #include <algorithm>
@@ -329,6 +330,85 @@ class Builder
                                     (rule.operation==AreaOperation::ThroughHole &&
                                      (high<-.001 || low>.001)))
                                     return source;
+                                if (rule.operation==AreaOperation::EdgeDamage)
+                                {
+                                    SurfaceFeatureSettings analysis;
+                                    analysis.contact=false;
+                                    const auto features=surfaceFeatures(source,analysis);
+                                    const auto size=std::max({highX-lowX,highY-lowY,
+                                                              high-low});
+                                    auto nearest=std::numeric_limits<double>::infinity();
+                                    std::optional<Vec3d> target;
+                                    const SurfaceFeatureEdge *selectedEdge=nullptr;
+                                    double selectedFraction{};
+                                    double selectedWeight{};
+                                    for (const auto &edge:features.featureEdges)
+                                    {
+                                        const auto first=source.positions[edge.first];
+                                        const auto second=source.positions[edge.second];
+                                        const auto along=sub(second,first);
+                                        const auto t=std::clamp(dot(sub(area.projector.center,first),
+                                                                      along)/dot(along,along),
+                                                                0.0,1.0);
+                                        const auto point=add(first,mul(along,t));
+                                        const auto mask=sampleDamageArea(area,point,item.id);
+                                        if (mask<=.05) continue;
+                                        const auto curvature=std::lerp(
+                                            features.signedDihedralCurvature[edge.first],
+                                            features.signedDihedralCurvature[edge.second],t);
+                                        const auto edgeDistance=std::lerp(
+                                            features.edgeDistance[edge.first],
+                                            features.edgeDistance[edge.second],t);
+                                        const auto weight=sampleEdgeDamage(rule.edge,curvature,
+                                            edgeDistance,size,t,mask/area.amount);
+                                        if (weight<=.05) continue;
+                                        const auto distance=length(sub(point,area.projector.center));
+                                        if (distance<nearest)
+                                        {nearest=distance;target=point;
+                                         selectedEdge=&edge;selectedFraction=t;
+                                         selectedWeight=weight;}
+                                    }
+                                    if (!target) return source;
+                                    area.amount*=selectedWeight;
+                                    area.footprint.radius.y=std::min(
+                                        area.footprint.radius.y,
+                                        resolveDamageEdgeWidth(rule.edge,size)/
+                                        area.projector.scale.y);
+                                    const auto edgeVector=sub(
+                                        source.positions[selectedEdge->second],
+                                        source.positions[selectedEdge->first]);
+                                    const auto edgeLength=length(edgeVector);
+                                    const auto endpointMargin=std::min(.5,.01/edgeLength);
+                                    const auto cutFraction=std::clamp(selectedFraction,
+                                        endpointMargin,1-endpointMargin);
+                                    area.projector.center=add(
+                                        source.positions[selectedEdge->first],
+                                        mul(edgeVector,cutFraction));
+                                    const auto available=std::min(cutFraction,
+                                        1-cutFraction)*edgeLength/
+                                        area.projector.scale.x;
+                                    const auto angle=area.projector.rotationRadians;
+                                    const auto projectedRadius=std::abs(std::cos(angle))*
+                                        area.footprint.radius.x+
+                                        std::abs(std::sin(angle))*
+                                        area.footprint.radius.y;
+                                    const auto limit=available/
+                                        ((1+area.boundary.rimFraction)*
+                                         (1+area.boundary.irregularity));
+                                    if (projectedRadius>limit)
+                                    {
+                                        const auto shrink=limit/projectedRadius;
+                                        area.footprint.radius.x*=shrink;
+                                        area.footprint.radius.y*=shrink;
+                                    }
+                                    if (area.footprint.radius.x<.001) return source;
+                                    area.projector.normal=selectedEdge->outwardNormal;
+                                    area.projector.tangent=unit(sub(
+                                        source.positions[selectedEdge->second],
+                                        source.positions[selectedEdge->first]));
+                                    area.projector.bitangent=unit(cross(
+                                        area.projector.normal,area.projector.tangent));
+                                }
                                 const auto scale=area.projector.scale.z;
                                 const auto thickness=(high-low)*scale;
                                 if (rule.operation==AreaOperation::Dent)

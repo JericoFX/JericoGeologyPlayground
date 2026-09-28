@@ -63,6 +63,17 @@ Json writeArea(const AreaDamageRule &rule)
     else if (rule.operation==AreaOperation::Dent) result["operation"]="Dent";
     else if (rule.operation==AreaOperation::ThroughHole)
         result["operation"]="ThroughHole";
+    else if (rule.operation==AreaOperation::EdgeDamage)
+    {
+        result["operation"]="EdgeDamage";
+        result["edge"]={{"widthMode",int(rule.edge.widthMode)},
+            {"curvaturePolicy",int(rule.edge.curvaturePolicy)},
+            {"width",rule.edge.width},
+            {"curvatureStart",rule.edge.curvatureStart},
+            {"curvatureEnd",rule.edge.curvatureEnd},
+            {"taperFraction",rule.edge.taperFraction},
+            {"amount",rule.edge.amount}};
+    }
     return result;
 }
 AreaDamageRule readArea(const Json &value)
@@ -81,7 +92,22 @@ AreaDamageRule readArea(const Json &value)
         if (operation=="Cavity") rule.operation=AreaOperation::Cavity;
         else if (operation=="Dent") rule.operation=AreaOperation::Dent;
         else if (operation=="ThroughHole") rule.operation=AreaOperation::ThroughHole;
+        else if (operation=="EdgeDamage") rule.operation=AreaOperation::EdgeDamage;
         else throw std::runtime_error("Unknown damage area operation");
+    }
+    if (value.contains("edge"))
+    {
+        if (rule.operation!=AreaOperation::EdgeDamage)
+            throw std::runtime_error("Edge settings require Edge Damage");
+        const auto &edge=value.at("edge");
+        rule.edge.widthMode=DamageWidthMode(edge.at("widthMode").get<int>());
+        rule.edge.curvaturePolicy=DamageCurvaturePolicy(
+            edge.at("curvaturePolicy").get<int>());
+        rule.edge.width=edge.at("width").get<double>();
+        rule.edge.curvatureStart=edge.at("curvatureStart").get<double>();
+        rule.edge.curvatureEnd=edge.at("curvatureEnd").get<double>();
+        rule.edge.taperFraction=edge.at("taperFraction").get<double>();
+        rule.edge.amount=edge.at("amount").get<double>();
     }
     if (value.contains("indexRange"))
     {
@@ -198,8 +224,15 @@ void validate(const DamageSettings &settings)
     for (const auto &rule:settings.areaRules)
     {
         if (int(rule.operation)<int(AreaOperation::State) ||
-            int(rule.operation)>int(AreaOperation::ThroughHole))
+            int(rule.operation)>int(AreaOperation::EdgeDamage))
             throw std::runtime_error("Unknown damage area operation");
+        if (rule.operation==AreaOperation::EdgeDamage)
+        {
+            if (rule.edge.widthMode!=DamageWidthMode::Metric &&
+                rule.edge.widthMode!=DamageWidthMode::Relative)
+                throw std::runtime_error("Unknown damage edge width mode");
+            sampleEdgeDamage(rule.edge,1,0,1,.5);
+        }
         const auto &area=rule.area;
         checkId(area.id);checkId(area.semanticPartId);checkId(area.semanticRole);
         if (area.id.empty() || int(rule.state)<0 || int(rule.state)>int(State::Collapsed))
@@ -275,9 +308,12 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
     const auto shapedPath=std::any_of(settings.pathRules.begin(),settings.pathRules.end(),
         [](const PathDamageRule &rule)
         {return rule.cutter.irregularity>0 || rule.cutter.separationMeters>0;});
+    const auto edgeArea=std::any_of(settings.areaRules.begin(),settings.areaRules.end(),
+        [](const AreaDamageRule &rule){return rule.operation==AreaOperation::EdgeDamage;});
     const auto geometricArea=std::any_of(settings.areaRules.begin(),settings.areaRules.end(),
         [](const AreaDamageRule &rule){return rule.operation!=AreaOperation::State;});
-    Json result={{"version",geometricArea?4:settings.pathRules.empty()?1:shapedPath?3:2},
+    Json result={{"version",edgeArea?5:geometricArea?4:
+        settings.pathRules.empty()?1:shapedPath?3:2},
         {"proceduralEnabled",settings.proceduralEnabled},
         {"seed",settings.seed},{"missingProbability",settings.missingProbability},
         {"brokenProbability",settings.brokenProbability},
@@ -315,7 +351,7 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
         throw std::runtime_error("Damage recipe file too large");
     const auto root=Json::parse(text);
     const auto version=root.at("version").get<int>();
-    if (version!=1 && version!=2 && version!=3 && version!=4)
+    if (version<1 || version>5)
         throw std::runtime_error("Unsupported damage recipe version");
     DamageSettings result;
     result.proceduralEnabled=root.at("proceduralEnabled").get<bool>();
@@ -346,6 +382,8 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
         auto area=readArea(entry);
         if (version<4 && area.operation!=AreaOperation::State)
             throw std::runtime_error("Geometric area requires damage recipe v4");
+        if (version<5 && area.operation==AreaOperation::EdgeDamage)
+            throw std::runtime_error("Edge Damage requires damage recipe v5");
         result.areaRules.push_back(std::move(area));
     }
     if (version>=2)
