@@ -1183,6 +1183,46 @@ int main()
         require(!stateAllowed(Role::Coupling,State::Bent) &&
                 stateAllowed(Role::Rail,State::Bent),
                 "state menu must expose only represented member damage");
+        const std::pair<Assembly::Kind,Role> brokenRoles[]={
+            {Assembly::Kind::PipeCouplings,Role::Coupling},
+            {Assembly::Kind::Railway,Role::RailJoint},
+            {Assembly::Kind::WoodenPier,Role::CrossBeam}};
+        for (const auto [kind,role]:brokenRoles)
+        {
+            require(stateAllowed(role,State::Broken),
+                    "every generated solid role must accept Broken");
+            Settings settings;
+            settings.kind=kind;
+            const auto intact=build(curvedPath(),settings);
+            const auto target=std::find_if(intact.parts.begin(),intact.parts.end(),
+                [&](const Part &part){return part.role==role && part.triangleCount>0;});
+            require(target!=intact.parts.end(),"broken role fixture lacks a solid target");
+            settings.damage.manual[target->id]=State::Broken;
+            const auto broken=build(curvedPath(),settings);
+            const auto changed=std::find_if(broken.parts.begin(),broken.parts.end(),
+                [&](const Part &part){return part.id==target->id;});
+            require(changed!=broken.parts.end() && changed->state==State::Broken &&
+                    changed->freshInteriorRegions.size()==1 &&
+                    meshHash(partMesh(broken,*changed))!=meshHash(partMesh(intact,*target)) &&
+                    partVolume(broken,*changed)>0 &&
+                    partVolume(broken,*changed)<partVolume(intact,*target) &&
+                    PA::validateClosedMesh(partMesh(broken,*changed)).hasValue() &&
+                    broken.cornerUV.size()==broken.mesh.mesh.indices.size(),
+                    "Broken must cut a closed piece using shared fracture geometry");
+            const auto replay=build(curvedPath(),settings);
+            require(meshHash(replay.mesh.mesh)==meshHash(broken.mesh.mesh),
+                    "Broken cutter must reproduce the same assembly mesh");
+            for (const auto &original:intact.parts)
+            {
+                if (original.id==target->id) continue;
+                const auto preserved=std::find_if(broken.parts.begin(),broken.parts.end(),
+                    [&](const Part &part){return part.id==original.id;});
+                require(preserved!=broken.parts.end() &&
+                        meshHash(partMesh(broken,*preserved))==
+                        meshHash(partMesh(intact,original)),
+                        "Breaking one assembly part must preserve other parts");
+            }
+        }
         auto oversized=path;
         oversized.frames.resize(4097);
         invalid=false;

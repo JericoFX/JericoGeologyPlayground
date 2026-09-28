@@ -290,6 +290,11 @@ class Builder
         if (item.state!=State::Missing)
         {
             draw(item);
+            if (item.state==State::Broken &&
+                (role==Role::Coupling || role==Role::Clamp ||
+                 role==Role::Flange || role==Role::Support ||
+                 role==Role::RailJoint || role==Role::CrossBeam))
+                applyAutomaticBroken(item,firstVertex);
             if (!item.protectedPart &&
                 result.mesh.mesh.indices.size()/3>item.firstTriangle)
             {
@@ -446,6 +451,52 @@ class Builder
         applyGeometricDamage(item,firstVertex,rule.id,rule.cutter.projector,
             [&](const TriangleMesh &source,Jerico::Guid fresh)
             {return cutDamagePath(source,rule.cutter,fresh,240000);});
+    }
+    void applyAutomaticBroken(Part &item,std::size_t firstVertex)
+    {
+        const auto frame=Construction::frameAtDistance(result.path,item.stationMeters);
+        const Vec3d axes[]={frame.tangent,frame.binormal,frame.normal};
+        double low[3],high[3];
+        std::fill(std::begin(low),std::end(low),std::numeric_limits<double>::infinity());
+        std::fill(std::begin(high),std::end(high),-
+            std::numeric_limits<double>::infinity());
+        for (std::size_t i=firstVertex;i<result.mesh.mesh.positions.size();++i)
+            for (int axis=0;axis<3;++axis)
+            {
+                const auto coordinate=dot(result.mesh.mesh.positions[i],axes[axis]);
+                low[axis]=std::min(low[axis],coordinate);
+                high[axis]=std::max(high[axis],coordinate);
+            }
+        const auto along=high[0]-low[0];
+        const auto across=high[1]-low[1];
+        const auto thickness=high[2]-low[2];
+        if (!(along>.001 && across>.001 && thickness>.001 && thickness<=80))
+            throw std::runtime_error("Broken member dimensions outside shared cutter budget");
+        PathDamageRule rule;
+        rule.id=item.id+"/broken";
+        rule.semanticPartId=item.id;
+        auto &cutter=rule.cutter;
+        cutter.projector.tangent=axes[0];
+        cutter.projector.bitangent=mul(axes[1],-1);
+        cutter.projector.normal=axes[2];
+        cutter.projector.center=add(add(
+            mul(axes[0],std::midpoint(low[0],high[0])),
+            mul(axes[1],std::midpoint(low[1],high[1]))),mul(axes[2],high[2]));
+        const auto acrossShorter=across<=along;
+        const auto span=acrossShorter?across:along;
+        cutter.path=acrossShorter?
+            std::vector<Vec3d>{{0,-span*.6,0},{0,span*.6,0}}:
+            std::vector<Vec3d>{{-span*.6,0,0},{span*.6,0,0}};
+        cutter.radius=std::clamp(span*.1,.003,.05);
+        cutter.depth=thickness*1.2;
+        cutter.irregularity=.15;
+        cutter.seed=Jerico::stableGuidHash(item.guid);
+        const auto before=item.freshInteriorRegions.size();
+        try {applyPathDamage(item,firstVertex,rule);}
+        catch (const std::exception &error)
+        {throw std::runtime_error(item.id+": "+error.what());}
+        if (item.freshInteriorRegions.size()==before)
+            throw std::runtime_error("Broken member has no shared fracture cut");
     }
     template<class Cutter>
     void applyGeometricDamage(Part &item,std::size_t firstVertex,

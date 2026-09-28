@@ -64,13 +64,16 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"pipe-dent",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-through-hole",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-edge",Assembly::Kind::PipeCouplings,&gentle},
+        {"broken-coupling",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-uv",Assembly::Kind::PipeCouplings,&bend,8},
         {"pipe-high-curvature-rmf",Assembly::Kind::PipeCouplings,&bend,10},
         {"railway",Assembly::Kind::Railway,&gentle},
         {"broken-railway",Assembly::Kind::BrokenRailway,&gentle},
+        {"broken-rail-joint",Assembly::Kind::Railway,&gentle},
         {"railing",Assembly::Kind::Railing,&gentle},
         {"broken-railing",Assembly::Kind::BrokenRailing,&gentle},
         {"wooden-pier",Assembly::Kind::WoodenPier,&gentle},
+        {"broken-cross-beam",Assembly::Kind::WoodenPier,&gentle},
         {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
         {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
         {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
@@ -96,10 +99,20 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
     proof["cases"]=nlohmann::json::array();
     for (const auto &item:cases)
     {
+        const std::string_view caseName(item.name);
         Assembly::Settings settings;
         settings.kind=item.kind;
         if (item.kind==Assembly::Kind::PipeCouplings)
         {settings.pipeRadiusMeters=.09;settings.couplingSpacingMeters=.8;}
+        std::string brokenTargetId;
+        if (caseName=="broken-coupling")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::Coupling,0);
+        else if (caseName=="broken-rail-joint")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::RailJoint,1,-1);
+        else if (caseName=="broken-cross-beam")
+            brokenTargetId=Assembly::stablePartId(item.kind,Assembly::Role::CrossBeam,0);
+        if (!brokenTargetId.empty())
+            settings.damage.manual[brokenTargetId]=Assembly::State::Broken;
         if (item.damage)
         {
             settings.damage.manual[Assembly::stablePartId(item.kind,
@@ -131,7 +144,6 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             rule.area.footprint.radius={2,2,1};
             settings.damage.areaRules.push_back(rule);
         }
-        const std::string_view caseName(item.name);
         const bool geometric=caseName=="pipe-cavity" ||
             caseName=="pipe-dent" || caseName=="pipe-through-hole" ||
             caseName=="pipe-edge" ||
@@ -236,10 +248,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             const auto debug=Construction::withFrameAxes(axes);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
-        else if (caseName=="plank-fracture-isolated" || geometric)
+        else if (caseName=="plank-fracture-isolated" || geometric ||
+                 !brokenTargetId.empty())
         {
             const bool pipe=caseName.substr(0,5)=="pipe-";
-            const auto id=Assembly::stablePartId(item.kind,
+            const auto id=!brokenTargetId.empty()?brokenTargetId:
+                Assembly::stablePartId(item.kind,
                 pipe?Assembly::Role::PipeBody:Assembly::Role::DeckPlank,
                 pipe?0:7);
             const auto part=std::find_if(built.parts.begin(),built.parts.end(),
@@ -275,10 +289,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         camera.distance=std::clamp(float(std::hypot(hi.x-lo.x,hi.y-lo.y,hi.z-lo.z))*1.25f,
                                    2.0f,90.0f);
         if (item.areaSide || caseName=="pier-break-closeup" ||
-            caseName=="plank-fracture-isolated" || geometric)
+            caseName=="plank-fracture-isolated" || geometric ||
+            !brokenTargetId.empty())
         {
             const bool pipe=geometric && caseName.substr(0,5)=="pipe-";
-            const auto id=Assembly::stablePartId(item.kind,
+            const auto id=!brokenTargetId.empty()?brokenTargetId:
+                Assembly::stablePartId(item.kind,
                 pipe?Assembly::Role::PipeBody:Assembly::Role::DeckPlank,
                 pipe?0:7);
             const auto part=std::find_if(built.parts.begin(),built.parts.end(),
@@ -299,6 +315,10 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             if (geometric && !pipe)
             {camera.distance=1.4f;camera.yaw=.6f;camera.pitch=-.5f;}
             if (pipe) {camera.distance=1.4f;camera.yaw=.5f;camera.pitch=-.4f;}
+            if (caseName=="broken-coupling" || caseName=="broken-rail-joint")
+            {camera.distance=.65f;camera.yaw=.5f;camera.pitch=-.4f;}
+            if (caseName=="broken-cross-beam")
+            {camera.distance=1.5f;camera.yaw=.6f;camera.pitch=-.5f;}
         }
         renderer.draw(1280,960,camera,item.mode);
         if (std::string_view(item.name)=="pipe-couplings")

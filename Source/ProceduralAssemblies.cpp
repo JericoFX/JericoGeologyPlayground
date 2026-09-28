@@ -80,14 +80,15 @@ const char *name(State state)
 }
 bool stateAllowed(Role role,State state)
 {
-    if (state==State::Intact || state==State::Missing) return true;
+    if (state==State::Intact || state==State::Missing || state==State::Broken)
+        return true;
     if (role==Role::PipeBody || role==Role::Cable || role==Role::HandRope)
-        return state==State::Broken || state==State::Bent || state==State::Detached;
+        return state==State::Bent || state==State::Detached;
     if (role==Role::Coupling || role==Role::Clamp || role==Role::Flange ||
         role==Role::Support || role==Role::RailJoint || role==Role::CrossBeam)
         return false;
     if (role==Role::DeckPlank || role==Role::Sleeper)
-        return state==State::Broken || state==State::Loose || state==State::Bent ||
+        return state==State::Loose || state==State::Bent ||
                state==State::Detached || state==State::Decayed || state==State::Collapsed;
     return state!=State::Decayed;
 }
