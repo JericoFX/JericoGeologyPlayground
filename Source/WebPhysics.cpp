@@ -1,4 +1,5 @@
 #include "WebPhysics.hpp"
+#include "PhysicsRuntime.hpp"
 
 #include <Jolt/Jolt.h>
 #include <Jolt/RegisterTypes.h>
@@ -42,25 +43,10 @@ class Layers final:public JPH::BroadPhaseLayerInterface,
     bool ShouldCollide(JPH::ObjectLayer,JPH::ObjectLayer) const override
     {return false;}
 };
-struct JoltRuntime
-{
-    JoltRuntime()
-    {
-        JPH::RegisterDefaultAllocator();
-        JPH::Factory::sInstance=new JPH::Factory();
-        JPH::RegisterTypes();
-    }
-    ~JoltRuntime()
-    {
-        JPH::UnregisterTypes();
-        delete JPH::Factory::sInstance;
-        JPH::Factory::sInstance=nullptr;
-    }
-};
 }
 struct WebPhysics::Impl
 {
-    JoltRuntime runtime;
+    Physics::RuntimeLease runtime;
     Layers layers;
     JPH::PhysicsSystem system;
     JPH::TempAllocatorImpl allocator{4*1024*1024};

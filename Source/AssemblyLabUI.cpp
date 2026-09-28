@@ -145,6 +145,9 @@ void AssemblyLabUI::rebuild()
     try
     {
         auto next=Assembly::build(spline,settings);
+        fragmentPhysics.reset();
+        fragmentAccumulator=0;
+        simulateFragment=false;
         built=std::move(next);
         if (std::none_of(built.fragments.begin(),built.fragments.end(),
             [&](const Assembly::Fragment &fragment)
@@ -740,10 +743,63 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 if (ImGui::Selectable(label.c_str(),fragment.id==selectedFragmentId))
                     selectedFragmentId=fragment.id;
             }
+        if (!selectedFragmentId.empty())
+        {
+            if (ImGui::Button("Activate selected fragment"))
+            {
+                const auto selected=std::find_if(built.fragments.begin(),
+                    built.fragments.end(),[&](const Assembly::Fragment &fragment)
+                    {return fragment.id==selectedFragmentId;});
+                if (selected!=built.fragments.end())
+                {
+                    try
+                    {
+                        fragmentPhysics.activate(built,*selected);
+                        fragmentAccumulator=0;
+                        simulateFragment=true;
+                        uploadedView=-1;
+                        error.clear();
+                    }
+                    catch (const std::exception &exception)
+                    {error=exception.what();}
+                }
+            }
+            if (fragmentPhysics.active())
+            {
+                ImGui::SameLine();
+                if (ImGui::Button("Reset fragment"))
+                {
+                    fragmentPhysics.reset();
+                    fragmentAccumulator=0;
+                    simulateFragment=false;
+                    uploadedView=-1;
+                }
+                else ImGui::Checkbox("Simulate",&simulateFragment);
+            }
+        }
     }
     ImGui::PopItemWidth();ImGui::EndChild();ImGui::End();
 
     rebuild();
+    if (fragmentPhysics.active() && simulateFragment)
+    {
+        fragmentAccumulator+=std::min(double(ImGui::GetIO().DeltaTime),.1);
+        try
+        {
+            for (int steps=0;fragmentAccumulator>=1.0/60 && steps<6;++steps)
+            {
+                fragmentPhysics.step();
+                fragmentAccumulator-=1.0/60;
+                uploadedView=-1;
+            }
+        }
+        catch (const std::exception &exception)
+        {
+            error=exception.what();
+            fragmentPhysics.reset();
+            simulateFragment=false;
+        }
+    }
     panel("Procedural Assemblies viewport",left,top,
           float(width)-left-right,float(height)-top-bottom);
     ImGui::Combo("View",&view,views,int(std::size(views)));
@@ -801,7 +857,8 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             Construction::ConstructionResult axes;
             axes.path=built.path;axes.mesh=built.mesh;axes.cornerUV=built.cornerUV;
             auto debug=Construction::withFrameAxes(axes);
-            renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
+            renderer.upload(fragmentPhysics.displacedMesh(built,debug.mesh),
+                nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
         else if (view==6)
         {
@@ -814,15 +871,18 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                 auto debug=built.mesh;
                 debug.field=surfaceDebugValues(features,
                     static_cast<SurfaceDebugField>(surfaceDebugField));
-                renderer.upload(debug,nullptr,nullptr,nullptr,false,&built.cornerUV);
+                renderer.upload(fragmentPhysics.displacedMesh(built,debug),
+                    nullptr,nullptr,nullptr,false,&built.cornerUV);
             }
             catch (const std::exception &exception)
             {
                 error=exception.what();
-                renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+                renderer.upload(fragmentPhysics.displacedMesh(built,built.mesh),
+                    nullptr,nullptr,nullptr,false,&built.cornerUV);
             }
         }
-        else renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,
+        else renderer.upload(fragmentPhysics.displacedMesh(built,built.mesh),
+            nullptr,nullptr,nullptr,false,
             view==7 && bakeAtlasReady?&bakeAtlas.cornerUv:&built.cornerUV);
         uploadedView=view;
     }
@@ -867,7 +927,9 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     }
     for (const auto &fragment:built.fragments)
         if (fragment.id==selectedFragmentId)
-            if (const auto point=projectToViewport(fragment.center,camera,
+            if (const auto point=projectToViewport(
+                    fragmentPhysics.active() && fragmentPhysics.pose().id==fragment.id?
+                    fragmentPhysics.pose().position:fragment.center,camera,
                     unsigned(size.x),unsigned(size.y)))
             {
                 const auto origin=ImGui::GetItemRectMin();
@@ -956,13 +1018,17 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     panel("Assembly metrics",0,float(height)-bottom,float(width),bottom);
     if (!error.empty())
         ImGui::TextColored({1,.35f,.3f,1},"Diagnostic: %s | Previous valid mesh retained",error.c_str());
+    else if (fragmentPhysics.active())
+        ImGui::Text("Ready | Selected fragment simulated with Jolt | step %.3f ms",
+            fragmentPhysics.pose().stepCpuMilliseconds);
     else ImGui::TextUnformatted("Ready | Static geometry; no physics bodies promoted");
     ImGui::Text("CPU %.2f ms | Path %.3f m | Vertices %zu | Triangles %zu | Parts %zu | Repeat stations %zu | LOD %d",
         built.generationCpuMilliseconds,built.path.lengthMeters,built.mesh.mesh.positions.size(),
         built.mesh.mesh.indices.size()/3,built.parts.size(),built.repeatedStations,settings.lod);
     ImGui::Text("Manual overrides %zu | Protected %zu | Bodies %zu | Constraints %zu | GPU %.2f MiB | %s",
         settings.damage.manual.size(),settings.damage.protectedIds.size(),
-        built.promotedBodyCount,built.constraintCount,renderer.bufferBytes()/1048576.0,
+        built.promotedBodyCount+std::size_t(fragmentPhysics.active()),
+        built.constraintCount,renderer.bufferBytes()/1048576.0,
         renderer.adapter().c_str());
     ImGui::End();
 }

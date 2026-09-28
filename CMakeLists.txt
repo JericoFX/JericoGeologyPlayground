@@ -39,7 +39,8 @@ target_link_libraries(PlaygroundModel PRIVATE "${JERICO_DEPS}/_deps/manifold-bui
 target_compile_definitions(PlaygroundModel PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_definitions(PlaygroundModel PRIVATE MANIFOLD_PAR=-1)
 target_compile_definitions(PlaygroundModel PRIVATE PLAYGROUND_ROOT="${CMAKE_SOURCE_DIR}")
-add_library(PlaygroundWebPhysics Source/WebPhysics.cpp)
+add_library(PlaygroundWebPhysics Source/PhysicsRuntime.cpp Source/WebPhysics.cpp
+    Source/AssemblyFragmentPhysics.cpp)
 target_include_directories(PlaygroundWebPhysics PUBLIC Source PRIVATE
     "${JERICO_DEPS}/_deps/jolt-src")
 target_link_libraries(PlaygroundWebPhysics PUBLIC PlaygroundModel
@@ -129,6 +130,9 @@ add_test(NAME Playground.WebLod COMMAND PlaygroundWebLodTests)
 add_executable(PlaygroundWebPhysicsTests Tests/WebPhysicsTests.cpp)
 target_link_libraries(PlaygroundWebPhysicsTests PRIVATE PlaygroundWebPhysics)
 add_test(NAME Playground.WebPhysics COMMAND PlaygroundWebPhysicsTests)
+add_executable(PlaygroundAssemblyFragmentPhysicsTests Tests/AssemblyFragmentPhysicsTests.cpp)
+target_link_libraries(PlaygroundAssemblyFragmentPhysicsTests PRIVATE PlaygroundWebPhysics)
+add_test(NAME Playground.AssemblyFragmentPhysics COMMAND PlaygroundAssemblyFragmentPhysicsTests)
 
 set(DC "${JERICO_DEPS}/DiligentCore")
 set(DT "${JERICO_DEPS}/DiligentTools")

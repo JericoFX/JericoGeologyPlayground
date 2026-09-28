@@ -1,4 +1,5 @@
 #include "AssemblyLabEvidence.hpp"
+#include "AssemblyFragmentPhysics.hpp"
 #include "AutoUv.hpp"
 #include "ProceduralAssemblies.hpp"
 #include "Renderer.hpp"
@@ -7,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <limits>
 #include <optional>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
@@ -489,5 +491,74 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"splinePointRebuildCpuMilliseconds",pathEdit.generationCpuMilliseconds},
         {"algorithm","full synchronous rebuild"}};
     std::ofstream(directory/"procedural-assemblies-proof.json")<<proof.dump(2)<<'\n';
+}
+void captureAssemblyFragmentPhysics(Renderer &renderer,
+                                    const std::filesystem::path &directory)
+{
+    std::filesystem::create_directories(directory);
+    const auto spline=path({{-3,0,0},{-1,0,0},{1,0,0},{3,0,0}});
+    Assembly::Settings settings;
+    settings.kind=Assembly::Kind::WoodenPier;
+    const auto partId=Assembly::stablePartId(settings.kind,
+        Assembly::Role::DeckPlank,7);
+    settings.damage.manual[partId]=Assembly::State::Broken;
+    const auto built=Assembly::build(spline,settings);
+    const auto selected=std::find_if(built.fragments.begin(),built.fragments.end(),
+        [&](const Assembly::Fragment &fragment)
+        {return fragment.parentPartId==partId;});
+    if (selected==built.fragments.end())
+        throw std::runtime_error("Physical evidence has no broken plank fragment");
+    Camera camera;
+    camera.yaw=.6f;camera.pitch=-.45f;camera.distance=4.5f;
+    camera.target={float(selected->center.x),float(selected->center.y-.3),
+                   float(selected->center.z)};
+    renderer.upload(built.mesh,nullptr,nullptr,nullptr,false,&built.cornerUV);
+    renderer.draw(1280,960,camera,0);
+    renderer.capture(directory/"fragment-before.png");
+    Assembly::FragmentPhysics physics;
+    physics.activate(built,*selected);
+    const auto before=physics.pose();
+    for (unsigned i=0;i<120;++i) physics.step();
+    const auto after=physics.pose();
+    const auto moved=physics.displacedMesh(built,built.mesh);
+    const auto lowest=std::min_element(built.mesh.mesh.positions.begin(),
+        built.mesh.mesh.positions.end(),
+        [](Vec3d a,Vec3d b){return a.y<b.y;})->y;
+    double fragmentBottom=std::numeric_limits<double>::infinity();
+    for (const auto face:selected->triangles)
+        for (int corner=0;corner<3;++corner)
+            fragmentBottom=std::min(fragmentBottom,
+                moved.mesh.positions[built.mesh.mesh.indices[face*3+corner]].y);
+    for (unsigned i=0;i<120;++i) physics.step();
+    const auto settled=physics.pose();
+    const auto settlingDrift=std::hypot(
+        settled.position.x-after.position.x,
+        settled.position.y-after.position.y,
+        settled.position.z-after.position.z);
+    if (fragmentBottom<lowest-.21 || settlingDrift>=.01)
+        throw std::runtime_error("Fragment evidence did not establish floor contact");
+    renderer.upload(moved,nullptr,nullptr,nullptr,false,&built.cornerUV);
+    renderer.draw(1280,960,camera,0);
+    renderer.capture(directory/"fragment-after.png");
+    auto closeup=camera;
+    closeup.target={float(after.position.x),float(after.position.y),
+                    float(after.position.z)};
+    closeup.distance=1.6f;
+    renderer.draw(1280,960,closeup,0);
+    renderer.capture(directory/"fragment-after-closeup.png");
+    std::ofstream(directory/"fragment-physics-proof.json")<<nlohmann::json{
+        {"fragmentId",selected->id},
+        {"parentPartId",selected->parentPartId},
+        {"fixedSteps",120},
+        {"initialPosition",{before.position.x,before.position.y,before.position.z}},
+        {"finalPosition",{after.position.x,after.position.y,after.position.z}},
+        {"floorTopY",lowest-.2},
+        {"fragmentBottomY",fragmentBottom},
+        {"settlingDriftMeters",settlingDrift},
+        {"stepCpuMilliseconds",after.stepCpuMilliseconds},
+        {"beforeMeshHash",meshHash(built.mesh.mesh)},
+        {"renderMeshHash",meshHash(moved.mesh)},
+        {"adapter",renderer.adapter()},
+        {"resolution",{1280,960}}}.dump(2)<<'\n';
 }
 }

@@ -2472,7 +2472,8 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
-    bool splineEvidence=false,assemblyEvidence=false,webEvidence=false;
+    bool splineEvidence=false,assemblyEvidence=false,
+         assemblyFragmentEvidence=false,webEvidence=false;
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
          angularProfileSmoke = false, extremeDeformationSmoke = false,
          cliffSoftCreationSmoke = false, rockLodSmoke = false,
@@ -2515,6 +2516,12 @@ int run(int argc, char **argv)
         if (std::string(argv[i])=="--procedural-assemblies-test")
         {
             assemblyEvidence=true;
+            if (i+1<argc) evidence=argv[i+1];
+        }
+    for (int i=1;i<argc;++i)
+        if (std::string(argv[i])=="--assembly-fragment-physics-test")
+        {
+            assemblyFragmentEvidence=true;
             if (i+1<argc) evidence=argv[i+1];
         }
     for (int i=1;i<argc;++i)
@@ -2697,6 +2704,12 @@ int run(int argc, char **argv)
     if (assemblyEvidence)
     {
         captureProceduralAssemblies(renderer,evidence);
+        SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
+        return 0;
+    }
+    if (assemblyFragmentEvidence)
+    {
+        captureAssemblyFragmentPhysics(renderer,evidence);
         SetWindowLongPtrW(hwnd,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }

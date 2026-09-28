@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ProceduralAssemblies.hpp"
+#include "AssemblyFragmentPhysics.hpp"
 #include "AutoUv.hpp"
 #include "Renderer.hpp"
 #include "SurfaceFeatures.hpp"
@@ -22,15 +23,17 @@ class AssemblyLabUI
     PA::ProceduralSpline spline;
     Assembly::Settings settings;
     Assembly::Result built;
+    Assembly::FragmentPhysics fragmentPhysics;
     AutoUvPlan bakeAtlas;
     Camera camera;
     std::string selectedId,selectedFragmentId,error;
     int selectedPoint{},selectedArea{-1},selectedPath{-1},view{},uploadedView{-1};
     int surfaceDebugField{};
     int bakeResolutionIndex{2};
+    double fragmentAccumulator{};
     SurfaceFeatureCache surfaceFeatureCache;
     bool dirty{true},fitCamera{true},moveDamageAreaMode{},movingDamageArea{},
-         bakeAtlasReady{};
+         bakeAtlasReady{},simulateFragment{};
     Vec3d damageGrabOffset{};
     unsigned nextPointId{30},nextAreaId{1},nextPathId{1};
     std::vector<Assembly::DamageSettings> damageUndo,damageRedo;

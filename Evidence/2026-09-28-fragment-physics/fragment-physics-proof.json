@@ -1,0 +1,26 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "beforeMeshHash": 15833525990188877667,
+  "finalPosition": [
+    -1.4616986513137817,
+    -1.2831311225891113,
+    -0.5915088057518005
+  ],
+  "fixedSteps": 120,
+  "floorTopY": -1.92,
+  "fragmentBottomY": -1.9202003625319344,
+  "fragmentId": "WoodenPier/DeckPlank_007/fragment-0",
+  "initialPosition": [
+    -1.0463321208953857,
+    -0.06107759103178978,
+    -0.35652944445610046
+  ],
+  "parentPartId": "WoodenPier/DeckPlank_007",
+  "renderMeshHash": 14399427044030405673,
+  "resolution": [
+    1280,
+    960
+  ],
+  "settlingDriftMeters": 0.0,
+  "stepCpuMilliseconds": 0.004
+}
