@@ -1228,7 +1228,9 @@ int main()
             {Assembly::Kind::PipeCouplings,Role::PipeBody},
             {Assembly::Kind::PipeCouplings,Role::Coupling},
             {Assembly::Kind::Railway,Role::Rail},
+            {Assembly::Kind::Railway,Role::Sleeper},
             {Assembly::Kind::Railway,Role::RailJoint},
+            {Assembly::Kind::WoodenPier,Role::DeckPlank},
             {Assembly::Kind::WoodenPier,Role::Beam},
             {Assembly::Kind::WoodenPier,Role::CrossBeam},
             {Assembly::Kind::WoodenPier,Role::Pile},
@@ -1245,6 +1247,7 @@ int main()
             {Assembly::Kind::SuspensionBridge,Role::Hanger},
             {Assembly::Kind::SuspensionBridge,Role::Anchor},
             {Assembly::Kind::RopePlankBridge,Role::Cable},
+            {Assembly::Kind::RopePlankBridge,Role::DeckPlank},
             {Assembly::Kind::RopePlankBridge,Role::HandRope}};
         for (const auto [kind,role]:brokenRoles)
         {
