@@ -78,6 +78,32 @@ int main()
     falselyOld["version"]=2;
     rejects([&]{deserializeAssemblyDamage(falselyOld.dump());},
             "older schema must reject new fracture semantics");
+    auto geometric=source;
+    geometric.areaRules.front().operation=AreaOperation::Cavity;
+    geometric.areaRules.front().state=State::Intact;
+    const auto geometricText=serializeAssemblyDamage(geometric);
+    require(nlohmann::json::parse(geometricText).at("version")==4 &&
+            deserializeAssemblyDamage(geometricText).areaRules.front().operation==
+                AreaOperation::Cavity &&
+            serializeAssemblyDamage(deserializeAssemblyDamage(geometricText))==geometricText,
+            "selected geometric cavity must persist as damage recipe v4");
+    auto geometricOld=nlohmann::json::parse(geometricText);
+    geometricOld["version"]=3;
+    rejects([&]{deserializeAssemblyDamage(geometricOld.dump());},
+            "older assembly recipes must reject cavity semantics");
+    auto cavityOnly=geometric;
+    cavityOnly.pathRules.clear();
+    require(deserializeAssemblyDamage(serializeAssemblyDamage(cavityOnly)).pathRules.empty(),
+            "v4 geometric cavity needs no crack path");
+    for (const char *operation:{"Dent","ThroughHole"})
+    {
+        auto selected=nlohmann::json::parse(serializeAssemblyDamage(cavityOnly));
+        selected["areas"][0]["operation"]=operation;
+        const auto parsed=deserializeAssemblyDamage(selected.dump());
+        require(nlohmann::json::parse(serializeAssemblyDamage(parsed))["areas"][0]
+                    ["operation"]==operation,
+                "selected geometric damage operation must roundtrip");
+    }
     auto legacy=source;
     legacy.pathRules.clear();
     require(nlohmann::json::parse(serializeAssemblyDamage(legacy)).at("version")==1 &&
@@ -107,7 +133,7 @@ int main()
     restored.areaRules.front().area.projector.center={1,2,3};
     require(resolveDamage(restored,selected)==State::Intact,
             "restored protected selection must override area damage");
-    rejects([]{deserializeAssemblyDamage("{\"version\":4}");},"unknown schema version accepted");
+    rejects([]{deserializeAssemblyDamage("{\"version\":5}");},"unknown schema version accepted");
     rejects([]{deserializeAssemblyDamage("{\"version\":1,\"areas\":[{}]}");},
             "incomplete area accepted");
     auto bad=source;bad.areaRules.front().area.projector.scale.x=0;

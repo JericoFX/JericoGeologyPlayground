@@ -38,10 +38,12 @@ struct DamageRule
     double startMeters{}, endMeters{};
     State state{State::Missing};
 };
+enum class AreaOperation { State, Cavity, Dent, ThroughHole };
 struct AreaDamageRule
 {
     DamageArea area;
     State state{State::Broken};
+    AreaOperation operation{AreaOperation::State};
 };
 struct PathDamageRule
 {
@@ -128,4 +130,6 @@ double parabolicSag(double xMeters, double spanMeters, double sagMeters);
 double solveCatenaryA(double spanMeters, double sagMeters);
 double catenaryHeight(double xMeters, double spanMeters, double sagMeters, double aMeters);
 Result build(const PA::ProceduralSpline &spline, const Settings &settings);
+std::optional<Vec3d> raycastPartSurface(const Result &result,const Part &part,
+                                        Vec3d origin,Vec3d direction);
 }

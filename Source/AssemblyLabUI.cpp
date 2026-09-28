@@ -8,6 +8,8 @@
 #include <imgui.h>
 #include <algorithm>
 #include <cmath>
+#include <limits>
+#include <numeric>
 
 namespace Playground
 {
@@ -21,6 +23,48 @@ constexpr const char *views[]={"Lit","Wireframe","Normals","UV Checker",
     "Semantic Roles","RMF Frames","Shared surface field"};
 constexpr const char *surfaceFields="Signed curvature\0Convexity\0Concavity\0Cavity/contact\0"
     "Crease distance\0Boundary distance\0Exposure\0Thickness\0";
+struct PartBounds
+{
+    Vec3d surfaceCenter{};
+    std::array<double,3> span{};
+};
+PartBounds projectedPartBounds(const Assembly::Result &built,const Assembly::Part &part,
+                               const Construction::PathFrame &frame)
+{
+    const Vec3d axes[]={frame.tangent,frame.normal,frame.binormal};
+    std::array<double,3> low,high;
+    low.fill(std::numeric_limits<double>::infinity());
+    high.fill(-std::numeric_limits<double>::infinity());
+    for (std::size_t face=part.firstTriangle;
+         face<part.firstTriangle+part.triangleCount;++face)
+        for (int corner=0;corner<3;++corner)
+        {
+            const auto point=built.mesh.mesh.positions[
+                built.mesh.mesh.indices[3*face+corner]];
+            for (int axis=0;axis<3;++axis)
+            {
+                const auto coordinate=point.x*axes[axis].x+
+                    point.y*axes[axis].y+point.z*axes[axis].z;
+                low[axis]=std::min(low[axis],coordinate);
+                high[axis]=std::max(high[axis],coordinate);
+            }
+        }
+    PartBounds result;
+    if (!part.triangleCount) return result;
+    const double coordinates[]={std::midpoint(low[0],high[0]),high[1],
+                                std::midpoint(low[2],high[2])};
+    for (int axis=0;axis<3;++axis)
+    {
+        result.span[axis]=high[axis]-low[axis];
+        result.surfaceCenter.x+=axes[axis].x*coordinates[axis];
+        result.surfaceCenter.y+=axes[axis].y*coordinates[axis];
+        result.surfaceCenter.z+=axes[axis].z*coordinates[axis];
+    }
+    if (const auto hit=Assembly::raycastPartSurface(built,part,
+            result.surfaceCenter,{-frame.normal.x,-frame.normal.y,-frame.normal.z}))
+        result.surfaceCenter=*hit;
+    return result;
+}
 void panel(const char *title,float x,float y,float width,float height)
 {
     ImGui::SetNextWindowPos({x,y});
@@ -316,7 +360,11 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     for (std::size_t i=0;i<settings.damage.areaRules.size();++i)
     {
         const auto &rule=settings.damage.areaRules[i];
-        const auto label=rule.area.id+"  ["+Assembly::name(rule.state)+"]";
+        const char *operationName=rule.operation==Assembly::AreaOperation::Cavity?"Cavity":
+            rule.operation==Assembly::AreaOperation::Dent?"Dent":
+            rule.operation==Assembly::AreaOperation::ThroughHole?"Through hole":
+            Assembly::name(rule.state);
+        const auto label=rule.area.id+"  ["+operationName+"]";
         if (ImGui::Selectable(label.c_str(),selectedArea==int(i)))
         {selectedArea=int(i);selectedPath=-1;}
     }
@@ -334,10 +382,53 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             constexpr double minimumAmount=0,maximumAmount=1;
             dirty|=ImGui::SliderScalar("Area amount",ImGuiDataType_Double,
                 &rule.area.amount,&minimumAmount,&maximumAmount,"%.2f");
-            int areaState=int(rule.state);
-            if (ImGui::Combo("Area state",&areaState,
-                             "Intact\0Missing\0Broken\0Bent\0Loose\0Detached\0Decayed\0Collapsed\0"))
-            {rule.state=Assembly::State(areaState);dirty=true;}
+            int operation=int(rule.operation);
+            if (ImGui::Combo("Damage operation",&operation,
+                             "Part state\0Cavity\0Dent\0Through hole\0"))
+            {
+                rule.operation=Assembly::AreaOperation(operation);
+                if (rule.operation!=Assembly::AreaOperation::State)
+                    if (const auto *part=selectedPart();part && part->triangleCount)
+                    {
+                        const auto frame=Construction::frameAtDistance(built.path,
+                            part->stationMeters);
+                        const auto bounds=projectedPartBounds(built,*part,frame);
+                        rule.area.projector.center=bounds.surfaceCenter;
+                        rule.area.projector.tangent=frame.tangent;
+                        rule.area.projector.normal=frame.normal;
+                        rule.area.projector.bitangent={
+                            frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
+                            frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
+                            frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
+                        rule.area.projector.scale.z=1;
+                        rule.area.footprint.radius={
+                            std::clamp(bounds.span[0]*.4,.005,.15),
+                            std::clamp(bounds.span[2]*.4,.005,.15),1};
+                        const auto depthFactor=
+                            rule.operation==Assembly::AreaOperation::Dent?.1:
+                            rule.operation==Assembly::AreaOperation::ThroughHole?1.1:.75;
+                        rule.area.footprint.depth=
+                            std::clamp(bounds.span[1]*depthFactor,.005,100.0);
+                        rule.area.boundary.irregularity=.13;
+                        rule.area.boundary.rimFraction=.2;
+                        rule.area.boundary.seed=settings.damage.seed;
+                    }
+                dirty=true;
+            }
+            if (rule.operation==Assembly::AreaOperation::State)
+            {
+                int areaState=int(rule.state);
+                if (ImGui::Combo("Area state",&areaState,
+                                 "Intact\0Missing\0Broken\0Bent\0Loose\0Detached\0Decayed\0Collapsed\0"))
+                {rule.state=Assembly::State(areaState);dirty=true;}
+            }
+            else
+                dirty|=ImGui::InputDouble("Damage depth (m)",
+                                          &rule.area.footprint.depth,.005,.05,"%.3f");
+            if (rule.operation==Assembly::AreaOperation::Dent)
+                ImGui::TextUnformatted("Dent depth is capped by local size and thickness.");
+            if (rule.operation==Assembly::AreaOperation::ThroughHole)
+                ImGui::TextUnformatted("Hole depth extends far enough to exit the part.");
             double center[]={rule.area.projector.center.x,rule.area.projector.center.y,
                              rule.area.projector.center.z};
             if (ImGui::InputScalarN("Area center XYZ",ImGuiDataType_Double,center,3,
@@ -358,9 +449,28 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             constexpr double minimumFrequency=.1,maximumFrequency=20;
             dirty|=ImGui::SliderScalar("Area edge frequency",ImGuiDataType_Double,
                 &rule.area.boundary.frequency,&minimumFrequency,&maximumFrequency,"%.2f");
+            if (rule.operation!=Assembly::AreaOperation::State)
+            {
+                constexpr double maximumRim=.5;
+                dirty|=ImGui::SliderScalar("Cavity rim fraction",ImGuiDataType_Double,
+                    &rule.area.boundary.rimFraction,&minimumBoundary,&maximumRim,"%.2f");
+                dirty|=ImGui::InputScalar("Cavity contour seed",ImGuiDataType_U32,
+                    &rule.area.boundary.seed);
+            }
             if (ImGui::Button("Move area to selected part"))
                 if (const auto *part=selectedPart())
-                {rule.area.projector.center=part->position;dirty=true;}
+                {
+                    rule.area.projector.center=part->position;
+                    if (rule.operation!=Assembly::AreaOperation::State &&
+                        part->triangleCount)
+                    {
+                        const auto frame=Construction::frameAtDistance(built.path,
+                            part->stationMeters);
+                        rule.area.projector.center=
+                            projectedPartBounds(built,*part,frame).surfaceCenter;
+                    }
+                    dirty=true;
+                }
             if (ImGui::Button("Restrict area to selected part"))
                 if (const auto *part=selectedPart())
                 {rule.area.semanticPartId=part->id;dirty=true;}
@@ -414,14 +524,10 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
     }
     ImGui::Separator();ImGui::TextUnformatted("Selected geometric crack paths");
     const auto *crackPart=selectedPart();
-    const bool crackRole=crackPart &&
-        (crackPart->role==Assembly::Role::DeckPlank ||
-         crackPart->role==Assembly::Role::Sleeper ||
-         crackPart->role==Assembly::Role::Beam);
     const bool partHasCrack=crackPart && std::any_of(
         settings.damage.pathRules.begin(),settings.damage.pathRules.end(),
         [&](const auto &rule){return rule.semanticPartId==crackPart->id;});
-    if (crackRole && !partHasCrack &&
+    if (crackPart && crackPart->triangleCount && !partHasCrack &&
         settings.damage.pathRules.size()<Assembly::maximumDamageAreas &&
         ImGui::Button("Add crack to selected solid member"))
     {
@@ -431,22 +537,23 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             [&](const auto &existing){return existing.id==rule.id;}));
         rule.semanticPartId=crackPart->id;
         const auto frame=Construction::frameAtDistance(built.path,crackPart->stationMeters);
-        const auto height=crackPart->role==Assembly::Role::Sleeper?
-            settings.sleeperHeightMeters:crackPart->role==Assembly::Role::Beam?
-            settings.beamHeightMeters:settings.boardThicknessMeters;
-        rule.cutter.projector.center={
-            crackPart->position.x+frame.normal.x*height*.5,
-            crackPart->position.y+frame.normal.y*height*.5,
-            crackPart->position.z+frame.normal.z*height*.5};
+        const auto bounds=projectedPartBounds(built,*crackPart,frame);
+        rule.cutter.projector.center=bounds.surfaceCenter;
         rule.cutter.projector.tangent=frame.tangent;
         rule.cutter.projector.normal=frame.normal;
         rule.cutter.projector.bitangent={
             frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
             frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
             frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
-        rule.cutter.path={{0,-.35,0},{0,.35,0}};
-        rule.cutter.radius=.025;
-        rule.cutter.depth=std::min(height*.6,.08);
+        const auto crossTangent=bounds.span[0]<bounds.span[2];
+        const auto crossSpan=crossTangent?bounds.span[0]:bounds.span[2];
+        const auto halfLine=std::max(.005,crossSpan*.6);
+        rule.cutter.path=crossTangent?
+            std::vector<Vec3d>{{-halfLine,0,0},{halfLine,0,0}}:
+            std::vector<Vec3d>{{0,-halfLine,0},{0,halfLine,0}};
+        rule.cutter.radius=std::max(.001,std::min({bounds.span[0],
+            bounds.span[1],bounds.span[2]})*.18);
+        rule.cutter.depth=std::max(.002,bounds.span[1]*.7);
         rule.cutter.irregularity=.6;
         rule.cutter.seed=settings.damage.seed;
         settings.damage.pathRules.push_back(std::move(rule));
@@ -515,10 +622,7 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
             if (rule.cutter.path.size()>2 && ImGui::Button("Remove last crack point"))
             {rule.cutter.path.pop_back();dirty=true;}
             if (ImGui::Button("Move crack to selected part"))
-                if (const auto *part=selectedPart();part &&
-                    (part->role==Assembly::Role::DeckPlank ||
-                     part->role==Assembly::Role::Sleeper ||
-                     part->role==Assembly::Role::Beam))
+                if (const auto *part=selectedPart();part && part->triangleCount)
                 {
                     const auto assigned=std::any_of(settings.damage.pathRules.begin(),
                         settings.damage.pathRules.end(),[&](const auto &other)
@@ -527,14 +631,9 @@ void AssemblyLabUI::frame(Renderer &renderer,unsigned width,unsigned height)
                     {
                         const auto frame=Construction::frameAtDistance(built.path,
                             part->stationMeters);
-                        const auto height=part->role==Assembly::Role::Sleeper?
-                            settings.sleeperHeightMeters:part->role==Assembly::Role::Beam?
-                            settings.beamHeightMeters:settings.boardThicknessMeters;
                         rule.semanticPartId=part->id;
-                        rule.cutter.projector.center={
-                            part->position.x+frame.normal.x*height*.5,
-                            part->position.y+frame.normal.y*height*.5,
-                            part->position.z+frame.normal.z*height*.5};
+                        rule.cutter.projector.center=
+                            projectedPartBounds(built,*part,frame).surfaceCenter;
                         rule.cutter.projector.tangent=frame.tangent;
                         rule.cutter.projector.normal=frame.normal;
                         rule.cutter.projector.bitangent={

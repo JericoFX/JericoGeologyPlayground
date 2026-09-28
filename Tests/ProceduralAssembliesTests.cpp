@@ -1,4 +1,5 @@
 #include "ProceduralAssemblies.hpp"
+#include "AssemblyDamageIO.hpp"
 #include "SurfaceFeatures.hpp"
 #include "DamageField.hpp"
 #include "SolidGeometry.hpp"
@@ -9,6 +10,8 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <numeric>
+#include <nlohmann/json.hpp>
 #include <set>
 #include <stdexcept>
 
@@ -54,6 +57,26 @@ double partVolume(const Result &result,const Part &part)
              a.z*(b.x*c.y-b.y*c.x);
     }
     return sum/6;
+}
+TriangleMesh partMesh(const Result &result,const Part &part)
+{
+    TriangleMesh member;
+    std::map<std::uint32_t,std::uint32_t> remap;
+    for (std::size_t face=part.firstTriangle;
+         face<part.firstTriangle+part.triangleCount;++face)
+    {
+        for (int corner=0;corner<3;++corner)
+        {
+            const auto source=result.mesh.mesh.indices[3*face+corner];
+            const auto [it,inserted]=remap.emplace(source,
+                std::uint32_t(member.positions.size()));
+            if (inserted)
+                member.positions.push_back(result.mesh.mesh.positions[source]);
+            member.indices.push_back(it->second);
+        }
+        member.triangleRegions.push_back(result.mesh.mesh.triangleRegions[face]);
+    }
+    return member;
 }
 }
 int main()
@@ -157,6 +180,94 @@ int main()
                     length(sub(pipeBody->position,
                         Construction::frameAtDistance(coupled.path,coupled.path.lengthMeters*.5).position))<1e-8,
                 "pipe body selection center must follow the middle of its spline");
+        const auto pipeFrame=Construction::frameAtDistance(coupled.path,
+            pipeBody->stationMeters);
+        DamageSettings cavityRecipe;
+        AreaDamageRule pipeCavity;
+        pipeCavity.area.id="selected-pipe-cavity";
+        pipeCavity.area.semanticPartId=pipeBody->id;
+        pipeCavity.area.projector.center={
+            pipeBody->position.x+pipeFrame.normal.x*pipe.pipeRadiusMeters,
+            pipeBody->position.y+pipeFrame.normal.y*pipe.pipeRadiusMeters,
+            pipeBody->position.z+pipeFrame.normal.z*pipe.pipeRadiusMeters};
+        pipeCavity.area.projector.tangent=pipeFrame.tangent;
+        pipeCavity.area.projector.bitangent={
+            pipeFrame.normal.y*pipeFrame.tangent.z-pipeFrame.normal.z*pipeFrame.tangent.y,
+            pipeFrame.normal.z*pipeFrame.tangent.x-pipeFrame.normal.x*pipeFrame.tangent.z,
+            pipeFrame.normal.x*pipeFrame.tangent.y-pipeFrame.normal.y*pipeFrame.tangent.x};
+        pipeCavity.area.projector.normal=pipeFrame.normal;
+        pipeCavity.area.footprint.radius={.12,.12,1};
+        pipeCavity.area.footprint.depth=.14;
+        pipeCavity.area.boundary.irregularity=.13;
+        pipeCavity.area.boundary.rimFraction=.2;
+        pipeCavity.area.boundary.seed=83;
+        pipeCavity.state=State::Intact;
+        cavityRecipe.areaRules.push_back(pipeCavity);
+        auto cavityJson=nlohmann::json::parse(serializeAssemblyDamage(cavityRecipe));
+        cavityJson["version"]=4;
+        cavityJson["paths"]=nlohmann::json::array();
+        cavityJson["areas"][0]["operation"]="Cavity";
+        auto cavityPipe=pipe;
+        cavityPipe.damage=deserializeAssemblyDamage(cavityJson.dump());
+        const auto cavityCutPipe=build(curvedPath(),cavityPipe);
+        const auto selectedCutPipe=std::find_if(cavityCutPipe.parts.begin(),cavityCutPipe.parts.end(),
+            [&](const Part &part){return part.id==pipeBody->id;});
+        require(selectedCutPipe!=cavityCutPipe.parts.end() &&
+                selectedCutPipe->freshInteriorRegions.size()==1 &&
+                selectedCutPipe->guid==pipeBody->guid &&
+                selectedCutPipe->triangleCount>pipeBody->triangleCount &&
+                cavityCutPipe.mesh.mesh.indices.size()==cavityCutPipe.cornerUV.size() &&
+                PA::validateClosedMesh(cavityCutPipe.mesh.mesh).hasValue(),
+                "selected shared cavity must locally refine any closed assembly part");
+        for (auto operation:{AreaOperation::Dent,AreaOperation::ThroughHole})
+        {
+            auto selectedPipe=pipe;
+            pipeCavity.operation=operation;
+            selectedPipe.damage.areaRules={pipeCavity};
+            const auto shaped=build(curvedPath(),selectedPipe);
+            const auto member=std::find_if(shaped.parts.begin(),shaped.parts.end(),
+                [&](const Part &part){return part.id==pipeBody->id;});
+            require(member!=shaped.parts.end() &&
+                    member->freshInteriorRegions.size()==1 &&
+                    member->triangleCount>pipeBody->triangleCount &&
+                    std::abs(partVolume(shaped,*member))<
+                        std::abs(partVolume(coupled,*pipeBody)) &&
+                    PA::validateClosedMesh(partMesh(shaped,*member)).hasValue(),
+                    "selected dent and through-hole must cut only the chosen pipe solid");
+            const auto center=pipeCavity.area.projector.center;
+            const auto normal=pipeCavity.area.projector.normal;
+            const Vec3d origin={center.x+normal.x*.001,center.y+normal.y*.001,
+                                center.z+normal.z*.001};
+            const auto contact=raycastPartSurface(shaped,*member,origin,
+                {-normal.x,-normal.y,-normal.z});
+            require(contact.has_value()==(operation==AreaOperation::Dent),
+                    "dent must retain a floor while through-hole exits the solid");
+            selectedPipe.damage.areaRules.front().area.projector.center={100,100,100};
+            const auto moved=build(curvedPath(),selectedPipe);
+            require(PA::hashTriangleMesh(moved.mesh.mesh)==
+                        PA::hashTriangleMesh(coupled.mesh.mesh),
+                    "moving geometric damage away must restore the source assembly");
+        }
+        Settings crackedPipe=pipe;
+        PathDamageRule pipeCrack;
+        pipeCrack.id="selected-pipe-crack";
+        pipeCrack.semanticPartId=pipeBody->id;
+        pipeCrack.cutter.projector=pipeCavity.area.projector;
+        pipeCrack.cutter.path={{0,-.12,0},{0,.12,0}};
+        pipeCrack.cutter.radius=.025;
+        pipeCrack.cutter.depth=.12;
+        pipeCrack.cutter.irregularity=.6;
+        crackedPipe.damage.pathRules.push_back(pipeCrack);
+        const auto crackedPipeResult=build(curvedPath(),crackedPipe);
+        const auto cutPipePart=std::find_if(crackedPipeResult.parts.begin(),
+            crackedPipeResult.parts.end(),
+            [&](const Part &part){return part.id==pipeBody->id;});
+        require(cutPipePart!=crackedPipeResult.parts.end() &&
+                cutPipePart->freshInteriorRegions.size()==1 &&
+                cutPipePart->triangleCount>pipeBody->triangleCount &&
+                crackedPipeResult.mesh.mesh.indices.size()==
+                    crackedPipeResult.cornerUV.size(),
+                "shared geometric crack must work on selected pipe, not just wood");
         std::vector<Part> collars;
         for (const auto &part:coupled.parts)
             if (part.role==Role::Coupling) collars.push_back(part);
@@ -317,6 +428,56 @@ int main()
         }
         require(meshHash(cutPier.mesh.mesh)==meshHash(build(curvedPath(),crackedPier).mesh.mesh),
                 "selected plank crack must regenerate deterministically");
+        Settings cavityPier=pier;
+        AreaDamageRule plankCavity;
+        plankCavity.area.id="selected-plank-cavity";
+        plankCavity.area.semanticPartId=intactBoard->id;
+        plankCavity.area.projector=plankCrack.cutter.projector;
+        plankCavity.area.footprint.radius={.08,.08,1};
+        plankCavity.area.footprint.depth=.045;
+        plankCavity.area.boundary.irregularity=.13;
+        plankCavity.area.boundary.rimFraction=.2;
+        plankCavity.area.boundary.seed=83;
+        plankCavity.state=State::Intact;
+        plankCavity.operation=AreaOperation::Cavity;
+        cavityPier.damage.areaRules.push_back(plankCavity);
+        const auto cutCavityPier=build(curvedPath(),cavityPier);
+        require(cutCavityPier.parts.front().triangleCount>
+                    intactPier.parts.front().triangleCount &&
+                cutCavityPier.parts.front().freshInteriorRegions.size()==1 &&
+                cutCavityPier.parts[1].triangleCount==intactPier.parts[1].triangleCount &&
+                cutCavityPier.mesh.mesh.indices.size()==cutCavityPier.cornerUV.size(),
+                "selected cavity must refine only the damaged plank and keep its UVs");
+        std::vector<Vec3d> originalBoardPositions;
+        for (std::size_t face=intactBoard->firstTriangle;
+             face<intactBoard->firstTriangle+intactBoard->triangleCount;++face)
+            for (int corner=0;corner<3;++corner)
+                originalBoardPositions.push_back(intactPier.mesh.mesh.positions[
+                    intactPier.mesh.mesh.indices[3*face+corner]]);
+        std::size_t newNearCavity=0;
+        for (std::size_t face=cutCavityPier.parts.front().firstTriangle;
+             face<cutCavityPier.parts.front().firstTriangle+
+                  cutCavityPier.parts.front().triangleCount;++face)
+            for (int corner=0;corner<3;++corner)
+            {
+                const auto point=cutCavityPier.mesh.mesh.positions[
+                    cutCavityPier.mesh.mesh.indices[3*face+corner]];
+                if (std::any_of(originalBoardPositions.begin(),
+                    originalBoardPositions.end(),[&](Vec3d source)
+                    {return length(sub(point,source))<1e-8;})) continue;
+                const auto relative=sub(point,plankCavity.area.projector.center);
+                const auto u=dot(relative,plankCavity.area.projector.tangent);
+                const auto v=dot(relative,plankCavity.area.projector.bitangent);
+                require(std::hypot(u,v)<.14,
+                        "cavity tessellation must add vertices only by selected damage");
+                ++newNearCavity;
+            }
+        require(newNearCavity>0,
+                "selected plank cavity must create local geometry at its footprint");
+        cavityPier.damage.areaRules.front().area.projector.center.x+=100;
+        require(meshHash(build(curvedPath(),cavityPier).mesh.mesh)==
+                meshHash(intactPier.mesh.mesh),
+                "moving a geometric plank cavity away must restore the original mesh");
         crackedPier.damage.pathRules.front().cutter.projector.center.x+=100;
         require(meshHash(build(curvedPath(),crackedPier).mesh.mesh)==
                 meshHash(intactPier.mesh.mesh),
@@ -632,6 +793,132 @@ int main()
             for (auto normal:near.mesh.cornerNormals)
                 require(std::isfinite(normal.x) && std::isfinite(normal.y) &&
                         std::isfinite(normal.z),"assembly normal must remain finite");
+            for (const auto &part:near.parts)
+                if (part.triangleCount)
+                    require(PA::validateClosedMesh(partMesh(near,part)).hasValue(),
+                        "every generated solid member must accept shared geometric damage");
+            const auto selected=std::find_if(near.parts.begin(),near.parts.end(),
+                [](const Part &part){return part.triangleCount>0 &&
+                    part.state==State::Intact;});
+            require(selected!=near.parts.end(),
+                    "every assembly family needs an intact solid damage target");
+            const auto frame=Construction::frameAtDistance(near.path,
+                selected->stationMeters);
+            const Vec3d axes[]={frame.tangent,frame.normal,
+                {frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
+                 frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
+                 frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x}};
+            std::array<double,3> low,high;
+            low.fill(std::numeric_limits<double>::infinity());
+            high.fill(-std::numeric_limits<double>::infinity());
+            for (std::size_t face=selected->firstTriangle;
+                 face<selected->firstTriangle+selected->triangleCount;++face)
+                for (int corner=0;corner<3;++corner)
+                {
+                    const auto point=near.mesh.mesh.positions[
+                        near.mesh.mesh.indices[3*face+corner]];
+                    for (int axis=0;axis<3;++axis)
+                    {
+                        low[axis]=std::min(low[axis],dot(point,axes[axis]));
+                        high[axis]=std::max(high[axis],dot(point,axes[axis]));
+                    }
+                }
+            Settings cavityFamily=caseSettings;
+            cavityFamily.lod=0;
+            AreaDamageRule cavity;
+            cavity.operation=AreaOperation::Cavity;
+            cavity.area.id="family-cavity";
+            cavity.area.semanticPartId=selected->id;
+            cavity.area.projector.tangent=axes[0];
+            cavity.area.projector.normal=axes[1];
+            cavity.area.projector.bitangent=axes[2];
+            const double coordinates[]={std::midpoint(low[0],high[0]),high[1],
+                                        std::midpoint(low[2],high[2])};
+            for (int axis=0;axis<3;++axis)
+            {
+                cavity.area.projector.center.x+=axes[axis].x*coordinates[axis];
+                cavity.area.projector.center.y+=axes[axis].y*coordinates[axis];
+                cavity.area.projector.center.z+=axes[axis].z*coordinates[axis];
+            }
+            const auto surface=raycastPartSurface(near,*selected,
+                cavity.area.projector.center,
+                {-frame.normal.x,-frame.normal.y,-frame.normal.z});
+            require(surface.has_value(),
+                    "selected part needs an actual surface below the damage projector");
+            cavity.area.projector.center=*surface;
+            cavity.area.footprint.radius={
+                std::clamp((high[0]-low[0])*.25,.01,.12),
+                std::clamp((high[2]-low[2])*.25,.01,.12),1};
+            cavity.area.footprint.depth=std::clamp((high[1]-low[1])*.6,.01,.12);
+            cavityFamily.damage.areaRules.push_back(cavity);
+            const auto familyCut=build(curvedPath(),cavityFamily);
+            const auto selectedCut=std::find_if(familyCut.parts.begin(),
+                familyCut.parts.end(),[&](const Part &part)
+                {return part.id==selected->id;});
+            require(selectedCut!=familyCut.parts.end() &&
+                    selectedCut->guid==selected->guid &&
+                    selectedCut->freshInteriorRegions.size()==1 &&
+                    selectedCut->triangleCount>selected->triangleCount,
+                    "shared cavity must refine one intact part in every assembly family");
+            for (auto operation:{AreaOperation::Dent,AreaOperation::ThroughHole})
+            {
+                auto shaped=cavityFamily;
+                shaped.damage.areaRules.front().operation=operation;
+                const auto operated=build(curvedPath(),shaped);
+                const auto changed=std::find_if(operated.parts.begin(),
+                    operated.parts.end(),[&](const Part &part)
+                    {return part.id==selected->id;});
+                if (changed==operated.parts.end() ||
+                    changed->freshInteriorRegions.size()!=1 ||
+                    changed->triangleCount<=selected->triangleCount)
+                    std::cerr<<"family "<<family<<" operation "<<int(operation)
+                             <<" role "<<name(selected->role)
+                             <<" spans "<<high[0]-low[0]<<","<<high[1]-low[1]
+                             <<","<<high[2]-low[2]
+                             <<" baseline "<<selected->triangleCount<<" changed "
+                             <<(changed==operated.parts.end()?0:changed->triangleCount)
+                             <<" fresh "<<(changed==operated.parts.end()?0:
+                                             changed->freshInteriorRegions.size())<<'\n';
+                require(changed!=operated.parts.end() &&
+                        changed->guid==selected->guid &&
+                        changed->freshInteriorRegions.size()==1 &&
+                        changed->triangleCount>selected->triangleCount &&
+                        PA::validateClosedMesh(partMesh(operated,*changed)).hasValue(),
+                        "shared dent and through-hole must refine one part in every assembly family");
+                const auto center=cavity.area.projector.center;
+                const auto normal=cavity.area.projector.normal;
+                const Vec3d origin={center.x+normal.x*.001,center.y+normal.y*.001,
+                                    center.z+normal.z*.001};
+                const auto contact=raycastPartSurface(operated,*changed,origin,
+                    {-normal.x,-normal.y,-normal.z});
+                require(contact.has_value()==(operation==AreaOperation::Dent),
+                        "shared dent floor and through-hole exit must remain distinct");
+            }
+            Settings crackFamily=caseSettings;
+            crackFamily.lod=0;
+            PathDamageRule familyCrack;
+            familyCrack.id="family-crack";
+            familyCrack.semanticPartId=selected->id;
+            familyCrack.cutter.projector=cavity.area.projector;
+            const auto acrossTangent=(high[0]-low[0])<(high[2]-low[2]);
+            const auto crossSpan=acrossTangent?high[0]-low[0]:high[2]-low[2];
+            const auto halfLine=crossSpan*.6;
+            familyCrack.cutter.path=acrossTangent?
+                std::vector<Vec3d>{{-halfLine,0,0},{halfLine,0,0}}:
+                std::vector<Vec3d>{{0,-halfLine,0},{0,halfLine,0}};
+            familyCrack.cutter.radius=std::max(.001,
+                std::min({high[0]-low[0],high[1]-low[1],high[2]-low[2]})*.18);
+            familyCrack.cutter.depth=std::max(.002,(high[1]-low[1])*.7);
+            familyCrack.cutter.irregularity=.6;
+            crackFamily.damage.pathRules.push_back(familyCrack);
+            const auto familyCracked=build(curvedPath(),crackFamily);
+            const auto selectedCracked=std::find_if(familyCracked.parts.begin(),
+                familyCracked.parts.end(),[&](const Part &part)
+                {return part.id==selected->id;});
+            require(selectedCracked!=familyCracked.parts.end() &&
+                    selectedCracked->freshInteriorRegions.size()==1 &&
+                    selectedCracked->guid==selected->guid,
+                    "shared crack must affect one intact part in every assembly family");
             for (std::size_t triangle=0;triangle<near.mesh.mesh.indices.size();triangle+=3)
             {
                 const auto a=near.mesh.mesh.positions[near.mesh.mesh.indices[triangle]];

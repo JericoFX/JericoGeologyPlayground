@@ -69,6 +69,114 @@ SurfacePoint nearestOnTriangle(Vec3d point,Vec3d a,Vec3d b,Vec3d c)
     return best;
 }
 
+class UvSourceIndex
+{
+    struct Node
+    {
+        Vec3d lower{},upper{};
+        std::size_t begin{},end{},left{},right{};
+    };
+    const TriangleMesh &mesh;
+    std::vector<std::size_t> faces;
+    std::vector<Node> nodes;
+    std::size_t evaluations{};
+    static double coordinate(Vec3d point,int axis)
+    {return axis==0?point.x:(axis==1?point.y:point.z);}
+    static double boxDistance(Vec3d point,const Node &node)
+    {
+        double distance=0;
+        for (int axis=0;axis<3;++axis)
+        {
+            const auto value=coordinate(point,axis);
+            const auto delta=std::max({coordinate(node.lower,axis)-value,
+                                       value-coordinate(node.upper,axis),0.0});
+            distance+=delta*delta;
+        }
+        return distance;
+    }
+    std::size_t build(std::size_t begin,std::size_t end)
+    {
+        Node node;
+        node.begin=begin;node.end=end;
+        const auto infinity=std::numeric_limits<double>::infinity();
+        node.lower={infinity,infinity,infinity};
+        node.upper={-infinity,-infinity,-infinity};
+        for (auto entry=begin;entry<end;++entry)
+            for (int corner=0;corner<3;++corner)
+            {
+                const auto point=mesh.positions[mesh.indices[faces[entry]*3+corner]];
+                node.lower={std::min(node.lower.x,point.x),std::min(node.lower.y,point.y),
+                            std::min(node.lower.z,point.z)};
+                node.upper={std::max(node.upper.x,point.x),std::max(node.upper.y,point.y),
+                            std::max(node.upper.z,point.z)};
+            }
+        const auto index=nodes.size();
+        nodes.push_back(node);
+        if (end-begin<=8) return index;
+        const auto span=sub(node.upper,node.lower);
+        const int axis=span.x>=span.y && span.x>=span.z?0:(span.y>=span.z?1:2);
+        const auto middle=begin+(end-begin)/2;
+        std::nth_element(faces.begin()+std::ptrdiff_t(begin),
+                         faces.begin()+std::ptrdiff_t(middle),
+                         faces.begin()+std::ptrdiff_t(end),
+            [&](std::size_t a,std::size_t b)
+            {
+                double centerA=0,centerB=0;
+                for (int corner=0;corner<3;++corner)
+                {
+                    centerA+=coordinate(mesh.positions[mesh.indices[a*3+corner]],axis);
+                    centerB+=coordinate(mesh.positions[mesh.indices[b*3+corner]],axis);
+                }
+                return centerA<centerB || (centerA==centerB && a<b);
+            });
+        const auto left=build(begin,middle);
+        const auto right=build(middle,end);
+        nodes[index].left=left;nodes[index].right=right;
+        return index;
+    }
+  public:
+    explicit UvSourceIndex(const TriangleMesh &source):mesh(source)
+    {
+        faces.resize(mesh.indices.size()/3);
+        std::iota(faces.begin(),faces.end(),0);
+        if (!faces.empty()) build(0,faces.size());
+    }
+    std::size_t nearestFace(Vec3d point)
+    {
+        SurfacePoint best;
+        std::size_t closest=0;
+        auto visit=[&](auto &&self,std::size_t index)->void
+        {
+            const auto &node=nodes[index];
+            if (boxDistance(point,node)>best.squaredDistance) return;
+            if (node.end-node.begin<=8)
+            {
+                for (auto entry=node.begin;entry<node.end;++entry)
+                {
+                    if (++evaluations>16'000'000)
+                        throw std::runtime_error("Assembly damage UV transfer budget exceeded");
+                    const auto face=faces[entry],offset=face*3;
+                    const auto found=nearestOnTriangle(point,
+                        mesh.positions[mesh.indices[offset]],
+                        mesh.positions[mesh.indices[offset+1]],
+                        mesh.positions[mesh.indices[offset+2]]);
+                    if (found.squaredDistance<best.squaredDistance ||
+                        (found.squaredDistance==best.squaredDistance && face<closest))
+                    {best=found;closest=face;}
+                }
+                return;
+            }
+            const auto left=node.left,right=node.right;
+            if (boxDistance(point,nodes[left])<=boxDistance(point,nodes[right]))
+            {self(self,left);self(self,right);}
+            else
+            {self(self,right);self(self,left);}
+        };
+        if (!nodes.empty()) visit(visit,0);
+        return closest;
+    }
+};
+
 class Builder
 {
   public:
@@ -181,15 +289,88 @@ class Builder
         if (item.state!=State::Missing)
         {
             draw(item);
-            if (!item.protectedPart)
+            if (!item.protectedPart &&
+                result.mesh.mesh.indices.size()/3>item.firstTriangle)
+            {
+                for (const auto &rule:settings.damage.areaRules)
+                    if (rule.operation!=AreaOperation::State &&
+                        rule.area.enabled && rule.area.amount>0 &&
+                        (!rule.area.semanticPartId.size() ||
+                         rule.area.semanticPartId==item.id) &&
+                        (!rule.area.semanticRole.size() ||
+                         rule.area.semanticRole==name(item.role)) &&
+                        (!rule.area.indexRange ||
+                         (item.index>=rule.area.indexRange->first &&
+                          item.index<=rule.area.indexRange->second)) &&
+                        (!rule.area.pathRangeMeters ||
+                         (item.stationMeters>=rule.area.pathRangeMeters->first &&
+                          item.stationMeters<=rule.area.pathRangeMeters->second)))
+                        applyGeometricDamage(item,firstVertex,rule.area.id,
+                            rule.area.projector,[&](const TriangleMesh &source,
+                                                     Jerico::Guid fresh)
+                            {
+                                auto area=rule.area;
+                                double low=std::numeric_limits<double>::infinity();
+                                double high=-low;
+                                double lowX=low,highX=high,lowY=low,highY=high;
+                                for (const auto point:source.positions)
+                                {
+                                    const auto local=projectorCoordinates(area.projector,point);
+                                    low=std::min(low,local.z);high=std::max(high,local.z);
+                                    lowX=std::min(lowX,local.x);highX=std::max(highX,local.x);
+                                    lowY=std::min(lowY,local.y);highY=std::max(highY,local.y);
+                                }
+                                const auto extent=1+area.boundary.rimFraction+
+                                    area.boundary.irregularity;
+                                const auto radiusX=area.footprint.radius.x*extent;
+                                const auto radiusY=area.footprint.radius.y*extent;
+                                if (lowX>radiusX || highX< -radiusX ||
+                                    lowY>radiusY || highY< -radiusY ||
+                                    (rule.operation==AreaOperation::ThroughHole &&
+                                     (high<-.001 || low>.001)))
+                                    return source;
+                                const auto scale=area.projector.scale.z;
+                                const auto thickness=(high-low)*scale;
+                                if (rule.operation==AreaOperation::Dent)
+                                {
+                                    const auto radius=std::min(
+                                        area.footprint.radius.x*area.projector.scale.x,
+                                        area.footprint.radius.y*area.projector.scale.y);
+                                    area.footprint.depth=boundedDamageAmplitude(
+                                        area.footprint.depth*scale,radius,thickness)/scale;
+                                }
+                                else if (rule.operation==AreaOperation::ThroughHole)
+                                {
+                                    constexpr double exitMargin=.001;
+                                    const auto backDistance=std::max(0.0,-low)*scale;
+                                    area.footprint.depth=std::max(area.footprint.depth,
+                                        (backDistance+exitMargin)/(area.amount*scale));
+                                    if (!isThroughHole(area.footprint.depth*area.amount*scale,
+                                                       backDistance,exitMargin))
+                                        throw std::runtime_error("Assembly hole cannot exit the part");
+                                }
+                                if (area.footprint.depth>100)
+                                    throw std::runtime_error("Assembly damage depth exceeds budget");
+                                return cutDamageCavity(source,area,fresh,240000);
+                            });
                 for (const auto &rule:settings.damage.pathRules)
                     if (rule.semanticPartId==item.id && rule.cutter.enabled)
                         applyPathDamage(item,firstVertex,rule);
+            }
         }
         item.triangleCount=result.mesh.mesh.indices.size()/3-item.firstTriangle;
         result.parts.push_back(std::move(item));
     }
     void applyPathDamage(Part &item,std::size_t firstVertex,const PathDamageRule &rule)
+    {
+        applyGeometricDamage(item,firstVertex,rule.id,rule.cutter.projector,
+            [&](const TriangleMesh &source,Jerico::Guid fresh)
+            {return cutDamagePath(source,rule.cutter,fresh,240000);});
+    }
+    template<class Cutter>
+    void applyGeometricDamage(Part &item,std::size_t firstVertex,
+                              const std::string &operationId,
+                              const DamageProjector &projector,Cutter cutter)
     {
         auto &global=result.mesh.mesh;
         const auto firstIndex=item.firstTriangle*3;
@@ -209,7 +390,7 @@ class Builder
         }
         const std::vector<std::array<float,2>> sourceUV(
             result.cornerUV.begin()+std::ptrdiff_t(firstIndex),result.cornerUV.end());
-        const auto operation=Jerico::stableGuidHash(stablePartGuid(rule.id));
+        const auto operation=Jerico::stableGuidHash(stablePartGuid(operationId));
         Jerico::Guid fresh;
         bool unique=false;
         for (std::uint64_t salt=0;salt<256;++salt)
@@ -222,7 +403,7 @@ class Builder
             if (unique) break;
         }
         if (!unique) throw std::runtime_error("Assembly damage fresh region ID collision");
-        const auto cut=cutDamagePath(source,rule.cutter,fresh,240000);
+        const auto cut=cutter(source,fresh);
         if (PA::hashTriangleMesh(cut)==PA::hashTriangleMesh(source)) return;
         if (firstVertex+cut.positions.size()>settings.maximumVertices)
             throw std::runtime_error("Assembly damage exceeds vertex budget");
@@ -234,11 +415,17 @@ class Builder
         result.mesh.cornerNormals.resize(firstIndex);
         result.cornerUV.resize(firstIndex);
         for (const auto point:cut.positions) vertex(point);
+        UvSourceIndex uvSource(source);
         for (std::size_t face=0;face<cut.indices.size()/3;++face)
         {
             const auto a=cut.indices[3*face],b=cut.indices[3*face+1],c=cut.indices[3*face+2];
             const auto p=cut.positions[a],q=cut.positions[b],r=cut.positions[c];
-            const auto faceNormal=unit(cross(sub(q,p),sub(r,p)));
+            const auto edges=cross(sub(q,p),sub(r,p));
+            const auto doubledArea=length(edges);
+            if (!std::isfinite(doubledArea) ||
+                doubledArea<=length(sub(q,p))*length(sub(r,p))*1e-10)
+                throw std::runtime_error("Assembly damage produced a degenerate face");
+            const auto faceNormal=mul(edges,1/doubledArea);
             global.indices.insert(global.indices.end(),{
                 std::uint32_t(firstVertex)+a,std::uint32_t(firstVertex)+b,
                 std::uint32_t(firstVertex)+c});
@@ -249,24 +436,13 @@ class Builder
             {
                 for (const auto point:{p,q,r})
                 {
-                    const auto local=projectorCoordinates(rule.cutter.projector,point);
+                    const auto local=projectorCoordinates(projector,point);
                     result.cornerUV.push_back({float(local.x),float(local.y)});
                 }
                 continue;
             }
             const auto midpoint=mul(add(p,add(q,r)),1.0/3);
-            std::size_t closest=0;
-            auto distance=std::numeric_limits<double>::infinity();
-            for (std::size_t sourceFace=0;sourceFace<source.indices.size()/3;++sourceFace)
-            {
-                const auto offset=sourceFace*3;
-                const auto found=nearestOnTriangle(midpoint,
-                    source.positions[source.indices[offset]],
-                    source.positions[source.indices[offset+1]],
-                    source.positions[source.indices[offset+2]]);
-                if (found.squaredDistance<distance)
-                {distance=found.squaredDistance;closest=sourceFace;}
-            }
+            const auto closest=uvSource.nearestFace(midpoint);
             for (const auto point:{p,q,r})
             {
                 const auto offset=closest*3;
@@ -1285,5 +1461,32 @@ Result build(const PA::ProceduralSpline &spline,const Settings &settings)
         std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();
     builder.result.mesh.milliseconds=builder.result.generationCpuMilliseconds;
     return std::move(builder.result);
+}
+std::optional<Vec3d> raycastPartSurface(const Result &result,const Part &part,
+                                        Vec3d origin,Vec3d direction)
+{
+    const auto &mesh=result.mesh.mesh;
+    double nearest=std::numeric_limits<double>::infinity();
+    for (auto face=part.firstTriangle;face<part.firstTriangle+part.triangleCount;++face)
+    {
+        const auto a=mesh.positions[mesh.indices[3*face]];
+        const auto b=mesh.positions[mesh.indices[3*face+1]];
+        const auto c=mesh.positions[mesh.indices[3*face+2]];
+        const auto ab=sub(b,a),ac=sub(c,a);
+        const auto p=cross(direction,ac);
+        const auto determinant=dot(ab,p);
+        if (std::abs(determinant)<1e-12) continue;
+        const auto inverse=1/determinant;
+        const auto fromA=sub(origin,a);
+        const auto u=dot(fromA,p)*inverse;
+        if (u< -1e-9 || u>1+1e-9) continue;
+        const auto q=cross(fromA,ab);
+        const auto v=dot(direction,q)*inverse;
+        if (v< -1e-9 || u+v>1+1e-9) continue;
+        const auto distance=dot(ac,q)*inverse;
+        if (distance>=0 && distance<nearest) nearest=distance;
+    }
+    if (!std::isfinite(nearest)) return std::nullopt;
+    return add(origin,mul(direction,nearest));
 }
 }

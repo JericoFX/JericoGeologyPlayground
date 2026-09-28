@@ -118,7 +118,8 @@ State resolveDamage(const DamageSettings &settings,const Part &part)
         if (matches && stateAllowed(part.role,rule.state)) return rule.state;
     }
     for (const auto &rule:settings.areaRules)
-        if (stateAllowed(part.role,rule.state) &&
+        if (rule.operation==AreaOperation::State &&
+            stateAllowed(part.role,rule.state) &&
             evaluateDamageField({.impact=sampleDamageArea(rule.area,
                 {part.position,part.id,name(part.role),part.index,part.stationMeters})},
                                 {.impact=1})>.5)

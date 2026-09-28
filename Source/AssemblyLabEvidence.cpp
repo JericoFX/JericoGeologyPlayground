@@ -58,6 +58,9 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
     };
     const Case cases[]={
         {"pipe-couplings",Assembly::Kind::PipeCouplings,&gentle},
+        {"pipe-cavity",Assembly::Kind::PipeCouplings,&gentle},
+        {"pipe-dent",Assembly::Kind::PipeCouplings,&gentle},
+        {"pipe-through-hole",Assembly::Kind::PipeCouplings,&gentle},
         {"pipe-uv",Assembly::Kind::PipeCouplings,&bend,8},
         {"pipe-high-curvature-rmf",Assembly::Kind::PipeCouplings,&bend,10},
         {"railway",Assembly::Kind::Railway,&gentle},
@@ -65,6 +68,9 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         {"railing",Assembly::Kind::Railing,&gentle},
         {"broken-railing",Assembly::Kind::BrokenRailing,&gentle},
         {"wooden-pier",Assembly::Kind::WoodenPier,&gentle},
+        {"plank-cavity",Assembly::Kind::WoodenPier,&gentle},
+        {"plank-dent",Assembly::Kind::WoodenPier,&gentle},
+        {"plank-through-hole",Assembly::Kind::WoodenPier,&gentle},
         {"pier-manual-damage",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"pier-break-closeup",Assembly::Kind::WoodenPier,&gentle,0,true},
         {"plank-fracture-isolated",Assembly::Kind::WoodenPier,&gentle,0,true},
@@ -119,6 +125,58 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             rule.area.footprint.radius={2,2,1};
             settings.damage.areaRules.push_back(rule);
         }
+        const std::string_view caseName(item.name);
+        const bool geometric=caseName=="pipe-cavity" ||
+            caseName=="pipe-dent" || caseName=="pipe-through-hole" ||
+            caseName=="plank-cavity" || caseName=="plank-dent" ||
+            caseName=="plank-through-hole";
+        if (geometric)
+        {
+            const auto source=Assembly::build(*item.path,settings);
+            const bool pipe=caseName.substr(0,5)=="pipe-";
+            const auto id=Assembly::stablePartId(item.kind,
+                pipe?Assembly::Role::PipeBody:Assembly::Role::DeckPlank,
+                pipe?0:7);
+            const auto part=std::find_if(source.parts.begin(),source.parts.end(),
+                [&](const Assembly::Part &candidate){return candidate.id==id;});
+            if (part==source.parts.end())
+                throw std::runtime_error("Geometric cavity evidence lacks target part");
+            const auto frame=Construction::frameAtDistance(source.path,
+                part->stationMeters);
+            Assembly::AreaDamageRule rule;
+            rule.operation=caseName.find("through-hole")!=std::string_view::npos?
+                Assembly::AreaOperation::ThroughHole:
+                caseName.find("dent")!=std::string_view::npos?
+                    Assembly::AreaOperation::Dent:Assembly::AreaOperation::Cavity;
+            rule.state=Assembly::State::Intact;
+            rule.area.id=std::string(caseName);
+            rule.area.semanticPartId=id;
+            rule.area.projector.tangent=frame.tangent;
+            rule.area.projector.bitangent={
+                frame.normal.y*frame.tangent.z-frame.normal.z*frame.tangent.y,
+                frame.normal.z*frame.tangent.x-frame.normal.x*frame.tangent.z,
+                frame.normal.x*frame.tangent.y-frame.normal.y*frame.tangent.x};
+            rule.area.projector.normal=frame.normal;
+            const auto height=pipe?settings.pipeRadiusMeters:
+                                   settings.boardThicknessMeters*.5;
+            rule.area.projector.center={
+                part->position.x+frame.normal.x*height,
+                part->position.y+frame.normal.y*height,
+                part->position.z+frame.normal.z*height};
+            if (const auto hit=Assembly::raycastPartSurface(source,*part,
+                    rule.area.projector.center,
+                    {-frame.normal.x,-frame.normal.y,-frame.normal.z}))
+                rule.area.projector.center=*hit;
+            rule.area.footprint.radius=pipe?
+                (rule.operation==Assembly::AreaOperation::ThroughHole?
+                    Vec3d{.06,.045,1}:Vec3d{.12,.12,1}):
+                Vec3d{.08,.08,1};
+            rule.area.footprint.depth=pipe?.14:.045;
+            rule.area.boundary.irregularity=.13;
+            rule.area.boundary.rimFraction=.2;
+            rule.area.boundary.seed=83;
+            settings.damage.areaRules.push_back(rule);
+        }
         auto built=Assembly::build(*item.path,settings);
         const auto replay=Assembly::build(*item.path,settings);
         if (meshHash(built.mesh.mesh)!=meshHash(replay.mesh.mesh) ||
@@ -131,9 +189,12 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
             const auto debug=Construction::withFrameAxes(axes);
             renderer.upload(debug.mesh,nullptr,nullptr,nullptr,false,&debug.cornerUV);
         }
-        else if (std::string_view(item.name)=="plank-fracture-isolated")
+        else if (caseName=="plank-fracture-isolated" || geometric)
         {
-            const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
+            const bool pipe=caseName.substr(0,5)=="pipe-";
+            const auto id=Assembly::stablePartId(item.kind,
+                pipe?Assembly::Role::PipeBody:Assembly::Role::DeckPlank,
+                pipe?0:7);
             const auto part=std::find_if(built.parts.begin(),built.parts.end(),
                 [&](const Assembly::Part &candidate){return candidate.id==id;});
             if (part==built.parts.end())
@@ -164,20 +225,31 @@ void captureProceduralAssemblies(Renderer &renderer,const std::filesystem::path 
         camera.target={float((lo.x+hi.x)*.5),float((lo.y+hi.y)*.5),float((lo.z+hi.z)*.5)};
         camera.distance=std::clamp(float(std::hypot(hi.x-lo.x,hi.y-lo.y,hi.z-lo.z))*1.25f,
                                    2.0f,90.0f);
-        if (item.areaSide || std::string_view(item.name)=="pier-break-closeup" ||
-            std::string_view(item.name)=="plank-fracture-isolated")
+        if (item.areaSide || caseName=="pier-break-closeup" ||
+            caseName=="plank-fracture-isolated" || geometric)
         {
-            const auto id=Assembly::stablePartId(item.kind,Assembly::Role::DeckPlank,7);
+            const bool pipe=geometric && caseName.substr(0,5)=="pipe-";
+            const auto id=Assembly::stablePartId(item.kind,
+                pipe?Assembly::Role::PipeBody:Assembly::Role::DeckPlank,
+                pipe?0:7);
             const auto part=std::find_if(built.parts.begin(),built.parts.end(),
                 [&](const Assembly::Part &candidate){return candidate.id==id;});
             camera.target={float(part->position.x),float(part->position.y),
                            float(part->position.z)};
+            if (geometric)
+                camera.target={
+                    float(settings.damage.areaRules.back().area.projector.center.x),
+                    float(settings.damage.areaRules.back().area.projector.center.y),
+                    float(settings.damage.areaRules.back().area.projector.center.z)};
             camera.distance=3.2f;
             camera.pitch=-.65f;
             if (std::string_view(item.name)=="pier-break-closeup")
             {camera.distance=2.4f;camera.yaw=.8f;camera.pitch=-.4f;}
             if (std::string_view(item.name)=="plank-fracture-isolated")
             {camera.distance=1.8f;camera.yaw=.6f;camera.pitch=-.55f;}
+            if (geometric && !pipe)
+            {camera.distance=1.4f;camera.yaw=.6f;camera.pitch=-.5f;}
+            if (pipe) {camera.distance=1.4f;camera.yaw=.5f;camera.pitch=-.4f;}
         }
         renderer.draw(1280,960,camera,item.mode);
         if (std::string_view(item.name)=="pipe-couplings")

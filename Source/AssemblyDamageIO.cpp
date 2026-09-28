@@ -59,6 +59,10 @@ Json writeArea(const AreaDamageRule &rule)
         result["indexRange"]=Json::array({area.indexRange->first,area.indexRange->second});
     if (area.pathRangeMeters)
         result["pathRangeMeters"]=Json::array({area.pathRangeMeters->first,area.pathRangeMeters->second});
+    if (rule.operation==AreaOperation::Cavity) result["operation"]="Cavity";
+    else if (rule.operation==AreaOperation::Dent) result["operation"]="Dent";
+    else if (rule.operation==AreaOperation::ThroughHole)
+        result["operation"]="ThroughHole";
     return result;
 }
 AreaDamageRule readArea(const Json &value)
@@ -71,6 +75,14 @@ AreaDamageRule readArea(const Json &value)
     area.semanticRole=value.at("semanticRole").get<std::string>();
     area.amount=value.at("amount").get<double>();
     rule.state=State(value.at("state").get<int>());
+    if (value.contains("operation"))
+    {
+        const auto operation=value.at("operation").get<std::string>();
+        if (operation=="Cavity") rule.operation=AreaOperation::Cavity;
+        else if (operation=="Dent") rule.operation=AreaOperation::Dent;
+        else if (operation=="ThroughHole") rule.operation=AreaOperation::ThroughHole;
+        else throw std::runtime_error("Unknown damage area operation");
+    }
     if (value.contains("indexRange"))
     {
         const auto &range=value.at("indexRange");
@@ -185,6 +197,9 @@ void validate(const DamageSettings &settings)
     std::unordered_set<std::string> areaIds;
     for (const auto &rule:settings.areaRules)
     {
+        if (int(rule.operation)<int(AreaOperation::State) ||
+            int(rule.operation)>int(AreaOperation::ThroughHole))
+            throw std::runtime_error("Unknown damage area operation");
         const auto &area=rule.area;
         checkId(area.id);checkId(area.semanticPartId);checkId(area.semanticRole);
         if (area.id.empty() || int(rule.state)<0 || int(rule.state)>int(State::Collapsed))
@@ -260,7 +275,9 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
     const auto shapedPath=std::any_of(settings.pathRules.begin(),settings.pathRules.end(),
         [](const PathDamageRule &rule)
         {return rule.cutter.irregularity>0 || rule.cutter.separationMeters>0;});
-    Json result={{"version",settings.pathRules.empty()?1:shapedPath?3:2},
+    const auto geometricArea=std::any_of(settings.areaRules.begin(),settings.areaRules.end(),
+        [](const AreaDamageRule &rule){return rule.operation!=AreaOperation::State;});
+    Json result={{"version",geometricArea?4:settings.pathRules.empty()?1:shapedPath?3:2},
         {"proceduralEnabled",settings.proceduralEnabled},
         {"seed",settings.seed},{"missingProbability",settings.missingProbability},
         {"brokenProbability",settings.brokenProbability},
@@ -277,7 +294,7 @@ std::string serializeAssemblyDamage(const DamageSettings &settings)
             {"state",int(rule.state)}});
     result["areas"]=Json::array();
     for (const auto &rule:settings.areaRules) result["areas"].push_back(writeArea(rule));
-    if (!settings.pathRules.empty())
+    if (!settings.pathRules.empty() || geometricArea)
     {
         result["paths"]=Json::array();
         for (const auto &rule:settings.pathRules) result["paths"].push_back(writePath(rule));
@@ -298,7 +315,7 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
         throw std::runtime_error("Damage recipe file too large");
     const auto root=Json::parse(text);
     const auto version=root.at("version").get<int>();
-    if (version!=1 && version!=2 && version!=3)
+    if (version!=1 && version!=2 && version!=3 && version!=4)
         throw std::runtime_error("Unsupported damage recipe version");
     DamageSettings result;
     result.proceduralEnabled=root.at("proceduralEnabled").get<bool>();
@@ -324,11 +341,18 @@ DamageSettings deserializeAssemblyDamage(const std::string &text)
             entry.at("lastIndex").get<std::uint32_t>(),
             entry.at("startMeters").get<double>(),entry.at("endMeters").get<double>(),
             State(entry.at("state").get<int>())});
-    for (const auto &entry:areas) result.areaRules.push_back(readArea(entry));
+    for (const auto &entry:areas)
+    {
+        auto area=readArea(entry);
+        if (version<4 && area.operation!=AreaOperation::State)
+            throw std::runtime_error("Geometric area requires damage recipe v4");
+        result.areaRules.push_back(std::move(area));
+    }
     if (version>=2)
     {
         const auto &paths=root.at("paths");
-        if (!paths.is_array() || paths.empty() || paths.size()>maximumDamageAreas)
+        if (!paths.is_array() || (version<4 && paths.empty()) ||
+            paths.size()>maximumDamageAreas)
             throw std::runtime_error("Invalid damage path collection");
         for (const auto &entry:paths)
         {

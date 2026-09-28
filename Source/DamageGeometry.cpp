@@ -377,7 +377,7 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
     if (separateBounds(host,cutter)) return host;
     checkCancel();
     std::map<std::uint32_t,Jerico::Guid> identities;
-    const manifold::Manifold nativeHost(nativeMesh(host,identities));
+    const manifold::Manifold nativeHost(nativeMesh(host,identities,true));
     const manifold::Manifold nativeCutter(nativeMesh(cutter,identities));
     if (nativeHost.Status()!=manifold::Manifold::Error::NoError ||
         nativeCutter.Status()!=manifold::Manifold::Error::NoError)
