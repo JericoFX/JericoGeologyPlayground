@@ -484,9 +484,11 @@ class Builder
             mul(axes[1],std::midpoint(low[1],high[1]))),mul(axes[2],high[2]));
         const auto acrossShorter=across<=along;
         const auto span=acrossShorter?across:along;
+        const auto lateral=std::min((acrossShorter?along:across)*.16,span*.18)*
+            ((Jerico::stableGuidHash(item.guid)&1)?1:-1);
         cutter.path=acrossShorter?
-            std::vector<Vec3d>{{0,-span*.6,0},{0,span*.6,0}}:
-            std::vector<Vec3d>{{-span*.6,0,0},{span*.6,0,0}};
+            std::vector<Vec3d>{{0,-span*.6,0},{lateral,0,0},{0,span*.6,0}}:
+            std::vector<Vec3d>{{-span*.6,0,0},{0,lateral,0},{span*.6,0,0}};
         cutter.radius=std::clamp(span*.1,.003,.05);
         cutter.depth=thickness*1.2;
         cutter.irregularity=.15;

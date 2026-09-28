@@ -81,7 +81,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.9366,
+      "cpuMilliseconds": 1.6188,
       "damageAreaSide": 0,
       "image": "pipe-couplings.png",
       "interpolation": 1,
@@ -293,7 +293,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 27.7775,
+      "cpuMilliseconds": 25.5147,
       "damageAreaSide": 0,
       "image": "pipe-cavity.png",
       "interpolation": 1,
@@ -505,7 +505,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 24.5621,
+      "cpuMilliseconds": 24.4197,
       "damageAreaSide": 0,
       "image": "pipe-dent.png",
       "interpolation": 1,
@@ -717,7 +717,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 24.8908,
+      "cpuMilliseconds": 25.1863,
       "damageAreaSide": 0,
       "image": "pipe-through-hole.png",
       "interpolation": 1,
@@ -929,7 +929,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 25.7404,
+      "cpuMilliseconds": 25.8351,
       "damageAreaSide": 0,
       "image": "pipe-edge.png",
       "interpolation": 1,
@@ -1141,14 +1141,14 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 6.8976,
+      "cpuMilliseconds": 16.4443,
       "damageAreaSide": 0,
       "image": "broken-coupling.png",
       "interpolation": 1,
       "kind": "PipeCouplings",
       "lengthMeters": 6.017497078610848,
       "manualDamageCount": 1,
-      "meshHash": 17103651189479197119,
+      "meshHash": 5015807012776696695,
       "name": "broken-coupling",
       "parts": [
         {
@@ -1163,7 +1163,7 @@
           "role": "Coupling",
           "state": "Broken",
           "stationMeters": 0.4,
-          "triangles": 756
+          "triangles": 1330
         },
         {
           "id": "PipeCouplings/Coupling_001",
@@ -1210,7 +1210,7 @@
       ],
       "promotedBodies": 0,
       "repeatStations": 7,
-      "semanticHash": 12916194280638579013,
+      "semanticHash": 3894138645647337763,
       "semanticPartCount": 8,
       "settings": {
         "baySpacingMeters": 1.5,
@@ -1272,8 +1272,8 @@
         "Broken": 1,
         "Intact": 7
       },
-      "triangles": 4524,
-      "vertices": 2335,
+      "triangles": 5098,
+      "vertices": 2622,
       "viewMode": 0
     },
     {
@@ -1375,7 +1375,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.0643,
+      "cpuMilliseconds": 1.1393,
       "damageAreaSide": 0,
       "image": "pipe-uv.png",
       "interpolation": 1,
@@ -1606,7 +1606,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.0648,
+      "cpuMilliseconds": 1.0824,
       "damageAreaSide": 0,
       "image": "pipe-high-curvature-rmf.png",
       "interpolation": 1,
@@ -1818,7 +1818,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.9825,
+      "cpuMilliseconds": 0.9985,
       "damageAreaSide": 0,
       "image": "railway.png",
       "interpolation": 1,
@@ -2303,7 +2303,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.776,
+      "cpuMilliseconds": 0.7869,
       "damageAreaSide": 0,
       "image": "broken-railway.png",
       "interpolation": 1,
@@ -2790,14 +2790,14 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 4.6733,
+      "cpuMilliseconds": 11.9448,
       "damageAreaSide": 0,
       "image": "broken-rail-joint.png",
       "interpolation": 1,
       "kind": "Railway",
       "lengthMeters": 6.017497078610848,
       "manualDamageCount": 1,
-      "meshHash": 4799261082545541752,
+      "meshHash": 6997941075748413233,
       "name": "broken-rail-joint",
       "parts": [
         {
@@ -3008,7 +3008,7 @@
           "role": "RailJoint",
           "state": "Broken",
           "stationMeters": 0.6017497078610848,
-          "triangles": 648
+          "triangles": 1284
         },
         {
           "id": "Railway/RailJoint_002_Left",
@@ -3132,7 +3132,7 @@
       ],
       "promotedBodies": 0,
       "repeatStations": 9,
-      "semanticHash": 15924474461408559951,
+      "semanticHash": 17980429347895680123,
       "semanticPartCount": 47,
       "settings": {
         "baySpacingMeters": 1.5,
@@ -3194,8 +3194,8 @@
         "Broken": 1,
         "Intact": 46
       },
-      "triangles": 3280,
-      "vertices": 1836,
+      "triangles": 3916,
+      "vertices": 2154,
       "viewMode": 0
     },
     {
@@ -3278,7 +3278,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.3851,
+      "cpuMilliseconds": 0.2075,
       "damageAreaSide": 0,
       "image": "railing.png",
       "interpolation": 1,
@@ -3728,7 +3728,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.1594,
+      "cpuMilliseconds": 0.1577,
       "damageAreaSide": 0,
       "image": "broken-railing.png",
       "interpolation": 1,
@@ -4180,7 +4180,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5545,
+      "cpuMilliseconds": 0.5915,
       "damageAreaSide": 0,
       "image": "wooden-pier.png",
       "interpolation": 1,
@@ -4616,14 +4616,14 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 4.5415,
+      "cpuMilliseconds": 12.1099,
       "damageAreaSide": 0,
       "image": "broken-cross-beam.png",
       "interpolation": 1,
       "kind": "WoodenPier",
       "lengthMeters": 6.017497078610848,
       "manualDamageCount": 1,
-      "meshHash": 15520410915895017953,
+      "meshHash": 11159922618691660966,
       "name": "broken-cross-beam",
       "parts": [
         {
@@ -4806,7 +4806,7 @@
           "role": "CrossBeam",
           "state": "Broken",
           "stationMeters": 1.0,
-          "triangles": 648
+          "triangles": 1288
         },
         {
           "id": "WoodenPier/Pile_000_Left",
@@ -4909,7 +4909,7 @@
       ],
       "promotedBodies": 0,
       "repeatStations": 26,
-      "semanticHash": 2201962592685833012,
+      "semanticHash": 9028195728595641780,
       "semanticPartCount": 40,
       "settings": {
         "baySpacingMeters": 1.5,
@@ -4971,8 +4971,8 @@
         "Broken": 1,
         "Intact": 39
       },
-      "triangles": 2524,
-      "vertices": 1482,
+      "triangles": 3164,
+      "vertices": 1802,
       "viewMode": 0
     },
     {
@@ -5055,7 +5055,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.3427,
+      "cpuMilliseconds": 3.3922,
       "damageAreaSide": 0,
       "image": "plank-cavity.png",
       "interpolation": 1,
@@ -5491,7 +5491,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.3603,
+      "cpuMilliseconds": 3.3228,
       "damageAreaSide": 0,
       "image": "plank-dent.png",
       "interpolation": 1,
@@ -5927,7 +5927,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.6585,
+      "cpuMilliseconds": 3.6425,
       "damageAreaSide": 0,
       "image": "plank-through-hole.png",
       "interpolation": 1,
@@ -6363,7 +6363,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.2128,
+      "cpuMilliseconds": 3.1999,
       "damageAreaSide": 0,
       "image": "plank-edge.png",
       "interpolation": 1,
@@ -6804,7 +6804,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5067,
+      "cpuMilliseconds": 0.4992,
       "damageAreaSide": 0,
       "image": "pier-bake-uv.png",
       "interpolation": 1,
@@ -7245,7 +7245,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.3341,
+      "cpuMilliseconds": 3.259,
       "damageAreaSide": 0,
       "image": "plank-bake-uv.png",
       "interpolation": 1,
@@ -7681,7 +7681,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.7784,
+      "cpuMilliseconds": 0.7519,
       "damageAreaSide": 0,
       "image": "pier-manual-damage.png",
       "interpolation": 1,
@@ -8124,7 +8124,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5636,
+      "cpuMilliseconds": 0.5751,
       "damageAreaSide": 0,
       "image": "pier-break-closeup.png",
       "interpolation": 1,
@@ -8567,7 +8567,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5661,
+      "cpuMilliseconds": 0.5555,
       "damageAreaSide": 0,
       "image": "plank-fracture-isolated.png",
       "interpolation": 1,
@@ -9010,7 +9010,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.6146,
+      "cpuMilliseconds": 0.634,
       "damageAreaSide": 0,
       "image": "catwalk.png",
       "interpolation": 1,
@@ -9740,7 +9740,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.3194,
+      "cpuMilliseconds": 1.2433,
       "damageAreaSide": 0,
       "image": "truss-warren.png",
       "interpolation": 1,
@@ -11464,7 +11464,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.5643,
+      "cpuMilliseconds": 1.6394,
       "damageAreaSide": 0,
       "image": "truss-pratt.png",
       "interpolation": 1,
@@ -13188,7 +13188,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 1.6601,
+      "cpuMilliseconds": 1.6459,
       "damageAreaSide": 0,
       "image": "truss-howe.png",
       "interpolation": 1,
@@ -14912,7 +14912,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.3808,
+      "cpuMilliseconds": 3.3772,
       "damageAreaSide": 0,
       "image": "suspension-bridge.png",
       "interpolation": 1,
@@ -15684,7 +15684,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 3.321,
+      "cpuMilliseconds": 3.1994,
       "damageAreaSide": 0,
       "image": "suspension-hanger-debug.png",
       "interpolation": 1,
@@ -16456,7 +16456,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 4.9471,
+      "cpuMilliseconds": 4.8164,
       "damageAreaSide": 0,
       "image": "rope-plank-bridge.png",
       "interpolation": 1,
@@ -17214,7 +17214,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 5.2983,
+      "cpuMilliseconds": 5.6693,
       "damageAreaSide": 0,
       "image": "rope-manual-damage.png",
       "interpolation": 1,
@@ -17979,7 +17979,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5462,
+      "cpuMilliseconds": 0.5448,
       "damageAreaSide": -1,
       "image": "pier-area-left.png",
       "interpolation": 1,
@@ -18416,7 +18416,7 @@
           "widthMeters": 1.0
         }
       ],
-      "cpuMilliseconds": 0.5211,
+      "cpuMilliseconds": 0.5271,
       "damageAreaSide": 1,
       "image": "pier-area-right.png",
       "interpolation": 1,
@@ -18776,9 +18776,9 @@
   ],
   "editMeasurements": {
     "algorithm": "full synchronous rebuild",
-    "baselineCpuMilliseconds": 0.4964,
-    "localDamageRebuildCpuMilliseconds": 0.5324,
-    "splinePointRebuildCpuMilliseconds": 0.5118
+    "baselineCpuMilliseconds": 0.4915,
+    "localDamageRebuildCpuMilliseconds": 0.5258,
+    "splinePointRebuildCpuMilliseconds": 0.498
   },
   "resolution": [
     1280,
