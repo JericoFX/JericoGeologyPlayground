@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "generatorVersion": "rocks-v12",
+  "extractorVersion": "poly-csg-v1",
+  "family": "columnar_basalt",
+  "units": "m",
+  "seed": 117,
+  "size": 2,
+  "layerThickness": 0.4,
+  "contrast": 0.85,
+  "wear": 0,
+  "detail": 0,
+  "grid": {
+    "cells": 64
+  },
+  "studySpacing": 0.45,
+  "columnCount": 5,
+  "columnLean": 0.08,
+  "jointDepth": 0.4
+}

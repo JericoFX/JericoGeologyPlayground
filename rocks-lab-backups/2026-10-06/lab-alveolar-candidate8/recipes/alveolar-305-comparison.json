@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "surface-families-v14",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "profile": "alveolar_blocks",
+  "seed": 305,
+  "size": 2,
+  "relief": 0.55,
+  "backDepth": 0.3,
+  "directionDegrees": 0,
+  "featureDepth": 0.85,
+  "fractures": 0.7,
+  "irregularity": 0.65,
+  "patchCount": 3,
+  "patchRadiusMeters": 0.22,
+  "alveolusRadiusMeters": 0.065,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  }
+}

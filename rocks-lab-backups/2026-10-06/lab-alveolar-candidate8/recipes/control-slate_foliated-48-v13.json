@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "surface-families-v13",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "profile": "slate_foliated",
+  "seed": 48,
+  "size": 0.64,
+  "relief": 0.12,
+  "backDepth": 0.075,
+  "directionDegrees": -58,
+  "featureDepth": 0,
+  "fractures": 0.7,
+  "irregularity": 0.65,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  },
+  "layerSpacingMeters": 0.075,
+  "plateLengthMeters": 0.28,
+  "thicknessVariation": 0.4
+}

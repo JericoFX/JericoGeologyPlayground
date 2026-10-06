@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const root=new URL('..',import.meta.url).pathname.replace(/\/$/,'');
+const recipe=JSON.parse(fs.readFileSync(root+'/recipes/columnar_basalt-48-v12.json'));
+const elements=new Map();const el=k=>{if(!elements.has(k))elements.set(k,{value:'',textContent:'',checked:false,dataset:{},replaceChildren(...children){this.children=children},append(){},click(){}});return elements.get(k)};
+let sent=[],modes=[],meshes=[];const storage=new Map();
+globalThis.document={querySelector:el,querySelectorAll:()=>[],body:{dataset:{}},createElement:()=>({click(){}})};
+globalThis.window={addEventListener(){}};globalThis.localStorage={getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v)};
+globalThis.__renderer=()=>({setCamera(){},setMode(m){modes.push(m)},setMesh(m){meshes.push(m);return 0},draw(){}});
+const res=data=>({ok:true,json:async()=>data,text:async()=>JSON.stringify(data)});
+const view={domain:{min:[-1,-1,-.3],max:[1,1,.9]},stages:Object.fromEntries(['base','stratified','eroded'].map(n=>[n,{positions:[0,0,0],indices:[]}]))};
+const metrics={clippedLow:0,clippedHigh:0,stages:Object.fromEntries(['base','stratified','eroded'].map(n=>[n,{vertices:1,triangles:0,signedVolume:1}]))};
+globalThis.fetch=async(url,options)=>{if(url.includes('manifest'))return res({materials:[]});if(url==='/api/current')return {ok:false};if(url==='/default-recipe.json')return res(recipe);if(url==='/api/generate'){const data=JSON.parse(options.body);sent.push(data);return res({requestId:data.requestId,viewerUrl:'/view',metricsUrl:'/metrics',exports:{heightfield:'/heightfield.obj',recipe:'/recipe.json'}})}return res(url==='/view'?view:metrics)};
+el('#mode').value='resistance';
+const source=fs.readFileSync(root+'/viewer/app.js','utf8').replace(/^import.*\n/,'const createRenderer=globalThis.__renderer;\n');await import('data:text/javascript,'+encodeURIComponent(source));
+for(let i=0;i<10&&!window.labEvidence;i++)await new Promise(r=>setTimeout(r,0));
+assert.deepEqual(window.labEvidence.recipe,recipe);assert.equal(el('#igneousControls').hidden,false);assert.equal(el('#legacyControls').hidden,true);assert.equal(el('#basaltControls').hidden,false);assert.equal(el('#graniteControls').hidden,true);assert.equal(el('#resistanceOption').disabled,true);
+for(const [key,value] of [['studySpacing',.5],['columnCount',3],['columnLean',-.1],['jointDepth',.7]]){const before=structuredClone(window.labEvidence.recipe);el('#study-'+key).value=String(value);await el('#generate').onclick();assert.deepEqual(sent.at(-1).recipe,{...before,[key]:value})}
+el('#size').value='3';await el('#generate').onclick();assert.equal(sent.at(-1).recipe.size,3);assert.ok(Math.abs(sent.at(-1).recipe.layerThickness-.4)<1e-12);
+el('#family').value='jointed_granite';el('#family').onchange();assert.equal(el('#graniteControls').hidden,false);assert.equal(el('#basaltControls').hidden,true);el('#study-roundness').value='.16';await el('#generate').onclick();assert.equal(sent.at(-1).recipe.roundness,.16);assert.equal('columnCount' in sent.at(-1).recipe,false);assert.equal(sent.at(-1).recipe.extractorVersion,'paris-mc-v1');
+await el('#importRecipe').onchange({target:{files:[{text:async()=>JSON.stringify(recipe)}]}});assert.deepEqual(window.labEvidence.recipe,recipe);
+console.log('v12 UI parameter edits, scale, route switch and exact import PASS (mocked DOM, no WebGL).');

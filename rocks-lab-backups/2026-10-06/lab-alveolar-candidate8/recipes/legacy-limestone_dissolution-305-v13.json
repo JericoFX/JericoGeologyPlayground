@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "heightfield-cliff-v11",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "seed": 305,
+  "size": 2.0,
+  "relief": 0.55,
+  "backDepth": 0.3,
+  "fractures": 1,
+  "irregularity": 1,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  },
+  "directionDegrees": 0,
+  "jointSpacing": 0.24,
+  "jointDepth": 0.65,
+  "blockScale": 0.28,
+  "profile": "vertical_channels"
+}
