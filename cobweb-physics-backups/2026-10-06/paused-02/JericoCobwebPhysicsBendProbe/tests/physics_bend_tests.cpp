@@ -1,0 +1,24 @@
+#include "physics.hpp"
+#include <algorithm>
+#include <cmath>
+#include <functional>
+#include <iostream>
+#include <stdexcept>
+using namespace web;using namespace web::physics;
+namespace {
+void check(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
+void rejects(const std::function<void()>&fn,const char*msg){bool rejected=false;try{fn();}catch(const std::exception&){rejected=true;}check(rejected,msg);}
+double angle(const Graph&g){V3 a=g.particles[0].x-g.particles[1].x,c=g.particles[2].x-g.particles[1].x;return std::acos(std::clamp((a.x*c.x+a.y*c.y+a.z*c.z)/(length(a)*length(c)),-1.,1.));}
+bool same(V3 a,V3 b){return a.x==b.x&&a.y==b.y&&a.z==b.z;}
+Graph tri(){auto g=strandBench(1,1000,2);g.settings.substeps=8;g.settings.iterations=12;g.settings.gravity=0;g.settings.damping=8;return g;}
+void effect(){auto off=tri(),soft=off;addStrandBends(soft,.01);off.particles[2].x={.5,.5,1};soft.particles[2].x=off.particles[2].x;double before=std::abs(angle(soft)-3.141592653589793);for(int i=0;i<120;++i){step(off);step(soft);}check(std::abs(angle(soft)-3.141592653589793)<before*.25,"angular bend failed to reduce kink");check(std::abs(angle(soft)-angle(off))>.5,"bend effect indistinguishable from off");}
+void zero_exact(){auto off=tri(),zero=off;addStrandBends(zero,0);for(int i=0;i<120;++i){step(off,{},{{2,{.003,.002,0}}});step(zero,{},{{2,{.003,.002,0}}});}check(saveState(off)==saveState(zero),"zero bend changes trajectory or checkpoint");}
+void no_compression(){auto g=tri();addStrandBends(g,.01);g.particles[1].x={.25,0,1};g.particles[2].x={.5,0,1};auto initial=g;for(int i=0;i<20;++i)step(g);for(size_t i=0;i<g.particles.size();++i)check(same(g.particles[i].x,initial.particles[i].x),"bend behaves as an axial compression bar");}
+void parent_cut(){for(int parent:{0,1}){auto g=tri();addStrandBends(g,.01);check(g.bends.size()==1,"same-strand triple missing");g.bends[0].lambda=3;cut(g,parent);check(!g.bends[0].active&&g.bends[0].lambda==0,"parent cut did not immediately invalidate bending");g.particles[2].x={.5,.5,1};auto reference=g;reference.bends.clear();for(int t=0;t<30;++t){step(g);step(reference);}for(size_t i=0;i<g.particles.size();++i){check(same(g.particles[i].x,reference.particles[i].x)&&same(g.particles[i].v,reference.particles[i].v),"disabled bend exerted ghost force");}}}
+void same_strand_only(){auto g=tri();g.edges[1].strand=1;addStrandBends(g,.01);check(g.bends.empty(),"bending crossed source strands");g=tri();cut(g,0);addStrandBends(g,.01);check(g.bends.empty(),"bending constructed across an existing break");}
+void exact_anchors_determinism_energy(){auto a=tri();addStrandBends(a,.01);a.particles[2].x={.6,.4,1};auto b=a;const double e0=energy(a);double peak=e0;for(int t=0;t<500;++t){step(a);step(b);peak=std::max(peak,energy(a));check(std::isfinite(energy(a))&&energy(a)>=0,"nonfinite bend energy");}check(saveState(a)==saveState(b),"bend run not deterministic");check(same(a.particles[0].x,a.particles[0].rest)&&same(a.particles[0].v,{}),"bend moved fixed anchor");check(peak<=e0*1.03+1e-12,"unforced bending injected >3% energy");std::cout<<"METRIC bend_energy initial="<<e0<<" peak="<<peak<<" final="<<energy(a)<<'\n';}
+void replay(){auto a=tri();addStrandBends(a,.01);a.particles[2].x={.6,.4,1};for(int t=0;t<25;++t)step(a);Graph b;restoreState(b,saveState(a));check(saveState(a)==saveState(b),"bending checkpoint roundtrip changed bits");for(int t=0;t<25;++t){step(a);step(b);}check(saveState(a)==saveState(b),"bending replay diverged");}
+void hard_budget(){auto g=tri();g.settings.maxConstraints=2;rejects([&]{addStrandBends(g,.01);},"bend excluded from static constraint budget");g=tri();addStrandBends(g,.01);g.settings.maxConstraints=2;rejects([&]{validateGraph(g);},"bend budget not validated");g=tri();addStrandBends(g,.01);g.settings.maxConstraints=3;g.settings.gravity=-9.81;g.anchors.clear();for(auto&p:g.particles){p.anchor=-1;p.invMass=1;p.x.z=p.rest.z=0;}rejects([&]{step(g);},"floor contacts excluded from bending hard budget");}
+void malformed(){auto g=tri();addStrandBends(g,.01);check(g.bends.size()==1,"bend missing");g.bends[0].parentA=999;rejects([&]{validateGraph(g);},"invalid bend parent accepted");g=tri();addStrandBends(g,.01);g.bends[0].c=g.bends[0].a;rejects([&]{validateGraph(g);},"invalid bend particles accepted");}
+}
+int main(){int fail=0;const std::pair<const char*,void(*)()> cases[]={{"bending_effect",effect},{"zero_exact",zero_exact},{"no_axial_compression",no_compression},{"parent_cut_no_ghost_force",parent_cut},{"same_strand_no_break",same_strand_only},{"anchors_determinism_finite_energy",exact_anchors_determinism_energy},{"bend_checkpoint",replay},{"hard_scalar_budget",hard_budget},{"malformed_bend",malformed}};for(auto c:cases)try{c.second();std::cout<<"PASS "<<c.first<<'\n';}catch(const std::exception&e){++fail;std::cerr<<"FAIL "<<c.first<<": "<<e.what()<<'\n';}return fail?1:0;}

@@ -1,0 +1,6 @@
+/build/
+/outputs/
+/renders/
+__pycache__/
+*.pyc
+*.blend1

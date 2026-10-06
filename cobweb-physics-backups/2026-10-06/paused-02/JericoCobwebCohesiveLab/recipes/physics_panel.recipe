@@ -1,0 +1,16 @@
+# Validated two-seed hold profile; one-patch artistic VFX bench.
+# Artistic controls; not calibrated spider silk. All paths are supplied by CLI.
+seed=42
+density=0.9
+width=1
+stiffness=1
+strength=1.25
+mass=0.01
+junction-tolerance=0.005
+broken=0
+gravity=-9.81
+substeps=8
+iterations=12
+ticks=800
+atlas=512
+script=physics_seed42.interactions

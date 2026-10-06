@@ -1,0 +1,16 @@
+# Diagnostic cohesive sheet model; energy acceptance being measured independently.
+seed=42
+density=0.9
+width=1
+stiffness=1
+strength=1.25
+mass=0.01
+junction-tolerance=0.005
+cohesive=1
+cohesive-depth=0.005
+broken=0
+gravity=-9.81
+substeps=16
+iterations=12
+ticks=150
+atlas=512

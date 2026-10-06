@@ -1,0 +1,14 @@
+# Stable seed42 graph, version2, 5mm junction tolerance, target459.
+# Force uses world X. Pull ramps linearly to its value and stops on first new break.
+force 30 150 459 0.015 0 0
+sphere 180 360 -0.55 0.75 1.3 -2.05 0.75 1.3 0.22
+pull 380 640 459 2 0 0
+# Explicit fixture release, not a load-driven tear.
+cut 720 0
+cut 720 3
+cut 720 6
+cut 720 8
+cut 720 11
+cut 720 13
+cut 720 15
+cut 720 18
