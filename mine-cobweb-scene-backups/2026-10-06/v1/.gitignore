@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+/assets/
+/sources/
+/renders/
+*.blend
+*.blend1
+*.zip
+*.xz

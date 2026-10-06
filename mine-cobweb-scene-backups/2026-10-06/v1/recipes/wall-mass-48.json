@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "heightfield-cliff-v11",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "seed": 48,
+  "size": 2,
+  "relief": 0.95,
+  "backDepth": 0.3,
+  "fractures": 1,
+  "irregularity": 1,
+  "grid": {
+    "cells": 96,
+    "width": 512,
+    "height": 512
+  },
+  "directionDegrees": 0,
+  "jointSpacing": 0.24,
+  "jointDepth": 0.65,
+  "blockScale": 0.28,
+  "profile": "massive_oblique"
+}
