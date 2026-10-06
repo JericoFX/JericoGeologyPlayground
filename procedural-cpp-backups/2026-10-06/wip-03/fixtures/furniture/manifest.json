@@ -1,0 +1,406 @@
+[
+  {
+    "file": "cabinet_closed.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.32,
+      "drawer_count": 4,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "asset_hash": "9f607cecc140e8e4286ec9f2cc3470b52b9250e6540dadcc7d2e999920d7185a",
+    "file_sha256": "de832a7df05c4997f3758aaadae396b97b1192e2c52e6c427793a0c99b6ddf24",
+    "nodes": 5,
+    "parts": 184,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 4680,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_open.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.32,
+      "drawer_count": 4,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.58,
+      "wear": 0.7
+    },
+    "asset_hash": "c6685ae7dc52d9eb7b18dab5d4a7aaf39e8f118365a573d2516cd0f34c9cec65",
+    "file_sha256": "f9aedaf411dc1b78d04498ebf9bb6037e2c50e454076b204185dc93b07e98228",
+    "nodes": 5,
+    "parts": 184,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 4680,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "workbench_closed.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "asset_hash": "5500feb49e2c33190798577d36e62a36a07a9c543afd3219e609acbc48e3bc46",
+    "file_sha256": "0401f85f52cf4093d6970a79ae5ea7f62469f627b79979f47fc2247c0ca12041",
+    "nodes": 2,
+    "parts": 107,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 468,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "workbench_open.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.58,
+      "wear": 0.7
+    },
+    "asset_hash": "11b4ed4066578ee788d79d3cd9239db5e3a357a8e7aa88528d31062a497c2160",
+    "file_sha256": "faaca9db0363f1b14f60c89d1a95536bc422acc25da61e8a86a0df273f5a43e0",
+    "nodes": 2,
+    "parts": 107,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 468,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_2_varied.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.88,
+      "depth": 0.62,
+      "height": 1.64,
+      "drawer_count": 2,
+      "drawer": true,
+      "shelf": true,
+      "seed": 21,
+      "open_fraction": 0.71,
+      "wear": 0.7
+    },
+    "file_sha256": "5068f6ec7e3892b78b1eb10927d196dd646f1d34c75cb2c84dc3cc05eff2f1fb",
+    "nodes": 3,
+    "parts": 118,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 1980,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_4_varied.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.88,
+      "depth": 0.62,
+      "height": 1.64,
+      "drawer_count": 4,
+      "drawer": true,
+      "shelf": true,
+      "seed": 23,
+      "open_fraction": 0.71,
+      "wear": 0.7
+    },
+    "file_sha256": "6635d79416e7b171045cd5bca42ca83594988910936129725a25cfe40562f203",
+    "nodes": 5,
+    "parts": 184,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 4680,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_6_varied.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.88,
+      "depth": 0.62,
+      "height": 1.64,
+      "drawer_count": 6,
+      "drawer": true,
+      "shelf": true,
+      "seed": 25,
+      "open_fraction": 0.71,
+      "wear": 0.7
+    },
+    "file_sha256": "e40471ed1709cdd580e94407ba85a3577aca28c625c24645046da44442821138",
+    "nodes": 7,
+    "parts": 250,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 8100,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_single_open.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.32,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": -7,
+      "open_fraction": 1.0,
+      "wear": 0.7
+    },
+    "file_sha256": "6428c3ac6a987f8e6aad7776826e911b4b2896f6c5e47224a160ad5727241929",
+    "nodes": 2,
+    "parts": 85,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 900,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_short_eight.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.42,
+      "drawer_count": 8,
+      "drawer": true,
+      "shelf": true,
+      "seed": 2026,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "file_sha256": "42af65fc9f7714614eccb3dd13f3bc5a4af2bc85f470794c9d1f6809b115399a",
+    "nodes": 9,
+    "parts": 316,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 12240,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_minimum.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.55,
+      "depth": 0.4,
+      "height": 0.65,
+      "drawer_count": 2,
+      "drawer": true,
+      "shelf": true,
+      "seed": 0,
+      "open_fraction": 0.0,
+      "wear": 0.0
+    },
+    "file_sha256": "743b02551d049cf8d67407ae428dd9f2f0297d9a7d8a1f46818f086ac9a6c419",
+    "nodes": 3,
+    "parts": 118,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 1980,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "cabinet_maximum.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 2.4,
+      "depth": 0.95,
+      "height": 2.1,
+      "drawer_count": 8,
+      "drawer": true,
+      "shelf": true,
+      "seed": 1099511627807,
+      "open_fraction": 0.0,
+      "wear": 1.0
+    },
+    "file_sha256": "ba8f50812e23297b223f89834e3ca1f0f2d59f5f20806e38194816a1c30fb914",
+    "nodes": 9,
+    "parts": 316,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 12240,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "workbench_no_optional.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": false,
+      "shelf": false,
+      "seed": 5,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "file_sha256": "663ec4db34141615a40cb26336669bacc08cafad8a83b1ffbd866656d6842f35",
+    "nodes": 1,
+    "parts": 80,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 0,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": null
+    }
+  },
+  {
+    "file": "workbench_no_drawer.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": false,
+      "shelf": true,
+      "seed": 22,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "file_sha256": "9618891070195e79f6a7a70c1d440d3eca2c09b3c42953352d21d1976661513a",
+    "nodes": 1,
+    "parts": 84,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 0,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": null
+    }
+  },
+  {
+    "file": "workbench_no_shelf.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": false,
+      "seed": 61,
+      "open_fraction": 1.0,
+      "wear": 0.7
+    },
+    "file_sha256": "1656d10bfa524cf8fb430b65d604bb32e22351ad025959785f66e08890dcf2c7",
+    "nodes": 2,
+    "parts": 103,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 396,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "workbench_minimum.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 0.55,
+      "depth": 0.4,
+      "height": 0.65,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 11,
+      "open_fraction": 1.0,
+      "wear": 0.7
+    },
+    "file_sha256": "2f952b09f53081308e3547c7dfffb084ddac57fe428f3a4f57ebd493d16dd72d",
+    "nodes": 2,
+    "parts": 107,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 468,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000000027
+    }
+  },
+  {
+    "file": "workbench_maximum.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 2.4,
+      "depth": 0.95,
+      "height": 2.1,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 911,
+      "open_fraction": 0.0,
+      "wear": 1.0
+    },
+    "file_sha256": "5b472034f5de02a81d6cd9ac02b2fc4fbc07f1d0da44c15b7a4c0808a3e5f33b",
+    "nodes": 2,
+    "parts": 107,
+    "clearance": {
+      "passed": true,
+      "collisions": [],
+      "samples": 468,
+      "method": "Continuous full-travel swept AABB of every rigid drawer part against every fixed structural envelope; conservative for curved parts; includes runners",
+      "runner_gap_m": 0.0030000000000001137
+    }
+  }
+]

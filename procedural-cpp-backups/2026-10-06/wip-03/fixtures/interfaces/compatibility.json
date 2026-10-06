@@ -1,0 +1,3222 @@
+[
+  {
+    "name": "HandleFront_lever",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "lever",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "HandleFront_pull",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "HandleBack_lever",
+    "socket": {
+      "id": "door.handle.back.socket",
+      "node": "door.leaf",
+      "role": "HandleBack",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.076,
+        1.008
+      ],
+      "rotation_z": 3.141592653589793,
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "basis": {
+        "x": [
+          -1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleBack",
+      "style": "lever",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "HandleBack_pull",
+    "socket": {
+      "id": "door.handle.back.socket",
+      "node": "door.leaf",
+      "role": "HandleBack",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.076,
+        1.008
+      ],
+      "rotation_z": 3.141592653589793,
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "basis": {
+        "x": [
+          -1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleBack",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "handle_role_Glass",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "Glass",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_interface_mount.handle.v2",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v2",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_footprint_[10, 10]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        10,
+        10
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_footprint_[0, 0.22]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_footprint_[True, 0.22]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        true,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_required_capabilities_['electric']",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "electric"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_projection_0.15",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.15,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_projection_-1",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": -1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_projection_True",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": true,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_style_knob",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "knob",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_thickness_range_[0.08, 0.12]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.08,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_thickness_range_[0.12, 0.028]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.12,
+        0.028
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "handle_thickness_range_[0, 0.12]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "disabled_handle",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": false,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "missing_component_interface",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "role": "HandleFront",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "missing_component_role",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "style": "pull",
+      "footprint": [
+        0.05,
+        0.22
+      ],
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "missing_component_footprint",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {
+      "interface": "mount.handle.v1",
+      "role": "HandleFront",
+      "style": "pull",
+      "projection": 0.1,
+      "required_capabilities": [
+        "hand_grasp",
+        "two_bolt_mount"
+      ],
+      "thickness_range": [
+        0.028,
+        0.12
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "malformed_component_None",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": null,
+    "expected": false
+  },
+  {
+    "name": "malformed_component_[]",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": [],
+    "expected": false
+  },
+  {
+    "name": "malformed_component_{}",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": {},
+    "expected": false
+  },
+  {
+    "name": "malformed_component_invalid",
+    "socket": {
+      "id": "door.handle.front.socket",
+      "node": "door.leaf",
+      "role": "HandleFront",
+      "interface": "mount.handle.v1",
+      "translation": [
+        0.7347189915011962,
+        0.024,
+        1.008
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.14960898628099523,
+          0.27
+        ],
+        "support_part_ids": [
+          "door.plank.4"
+        ],
+        "max_projection": 0.14,
+        "support_thickness": 0.052,
+        "capabilities": [
+          "hand_grasp",
+          "two_bolt_mount"
+        ],
+        "styles": [
+          "lever",
+          "pull"
+        ]
+      }
+    },
+    "component": "invalid",
+    "expected": false
+  },
+  {
+    "name": "pane_thickness_0.004",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": 0.004
+    },
+    "expected": true
+  },
+  {
+    "name": "pane_thickness_0.006",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": 0.006
+    },
+    "expected": true
+  },
+  {
+    "name": "pane_thickness_0.0061",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": 0.0061
+    },
+    "expected": false
+  },
+  {
+    "name": "pane_thickness_0",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": 0
+    },
+    "expected": false
+  },
+  {
+    "name": "pane_thickness_-1",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": -1
+    },
+    "expected": false
+  },
+  {
+    "name": "pane_thickness_True",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": true
+    },
+    "expected": false
+  },
+  {
+    "name": "pane_thickness_None",
+    "socket": {
+      "id": "window.left.glass.0.0.socket",
+      "node": "window.left",
+      "role": "Glass",
+      "interface": "pane.rect.v1",
+      "translation": [
+        0.19524999999999998,
+        0.0465,
+        0.25899999999999995
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.26249999999999996,
+          0.34199999999999997
+        ],
+        "thickness": 0.004,
+        "capabilities": [
+          "glazing"
+        ],
+        "max_thickness": 0.006
+      }
+    },
+    "component": {
+      "interface": "pane.rect.v1",
+      "role": "Glass",
+      "footprint": [
+        0.26249999999999996,
+        0.34199999999999997
+      ],
+      "required_capabilities": [
+        "glazing"
+      ],
+      "thickness": null
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_diameter_0.028",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        0,
+        100
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "hinge_diameter_0.0284",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.0284,
+      "range_degrees": [
+        0,
+        100
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "hinge_diameter_0.029",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.029,
+      "range_degrees": [
+        0,
+        100
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_diameter_0",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0,
+      "range_degrees": [
+        0,
+        100
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_diameter_True",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": true,
+      "range_degrees": [
+        0,
+        100
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_range_[0, 105]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        0,
+        105
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "hinge_range_[0, 106]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        0,
+        106
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_range_[10, 0]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        10,
+        0
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_range_[-1, 10]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        -1,
+        10
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_range_[False, 10]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        false,
+        10
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "hinge_range_[0]",
+    "socket": {
+      "id": "door.hinge.0.socket",
+      "node": "door.leaf",
+      "role": "Hinge",
+      "interface": "hinge.pin.v1",
+      "translation": [
+        0,
+        0,
+        0.273
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "footprint": [
+          0.035,
+          0.07
+        ],
+        "pin_diameter": 0.028,
+        "capabilities": [
+          "rotate_z"
+        ],
+        "range_degrees": [
+          0,
+          105
+        ]
+      }
+    },
+    "component": {
+      "interface": "hinge.pin.v1",
+      "role": "Hinge",
+      "footprint": [
+        0.02,
+        0.05
+      ],
+      "pin_diameter": 0.028,
+      "range_degrees": [
+        0
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "opening_thickness_0.052",
+    "socket": {
+      "id": "frame.opening",
+      "node": "frame",
+      "role": "FrameOpening",
+      "interface": "opening.rect.v1",
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "opening": [
+          1.0,
+          2.1,
+          0.052
+        ],
+        "capabilities": [
+          "hinged_leaf"
+        ],
+        "max_leaf_count": 1
+      }
+    },
+    "component": {
+      "interface": "opening.rect.v1",
+      "role": "FrameOpening",
+      "footprint": [
+        0.95,
+        2
+      ],
+      "thickness": 0.052
+    },
+    "expected": true
+  },
+  {
+    "name": "opening_thickness_0.053",
+    "socket": {
+      "id": "frame.opening",
+      "node": "frame",
+      "role": "FrameOpening",
+      "interface": "opening.rect.v1",
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "opening": [
+          1.0,
+          2.1,
+          0.052
+        ],
+        "capabilities": [
+          "hinged_leaf"
+        ],
+        "max_leaf_count": 1
+      }
+    },
+    "component": {
+      "interface": "opening.rect.v1",
+      "role": "FrameOpening",
+      "footprint": [
+        0.95,
+        2
+      ],
+      "thickness": 0.053
+    },
+    "expected": false
+  },
+  {
+    "name": "opening_thickness_0",
+    "socket": {
+      "id": "frame.opening",
+      "node": "frame",
+      "role": "FrameOpening",
+      "interface": "opening.rect.v1",
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "opening": [
+          1.0,
+          2.1,
+          0.052
+        ],
+        "capabilities": [
+          "hinged_leaf"
+        ],
+        "max_leaf_count": 1
+      }
+    },
+    "component": {
+      "interface": "opening.rect.v1",
+      "role": "FrameOpening",
+      "footprint": [
+        0.95,
+        2
+      ],
+      "thickness": 0
+    },
+    "expected": false
+  },
+  {
+    "name": "opening_thickness_True",
+    "socket": {
+      "id": "frame.opening",
+      "node": "frame",
+      "role": "FrameOpening",
+      "interface": "opening.rect.v1",
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation_z": 0.0,
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "basis": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0,
+          1
+        ],
+        "z": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "enabled": true,
+      "coverage": {
+        "opening": [
+          1.0,
+          2.1,
+          0.052
+        ],
+        "capabilities": [
+          "hinged_leaf"
+        ],
+        "max_leaf_count": 1
+      }
+    },
+    "component": {
+      "interface": "opening.rect.v1",
+      "role": "FrameOpening",
+      "footprint": [
+        0.95,
+        2
+      ],
+      "thickness": true
+    },
+    "expected": false
+  }
+]

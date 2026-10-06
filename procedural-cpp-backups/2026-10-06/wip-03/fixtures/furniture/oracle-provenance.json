@@ -1,0 +1,9 @@
+{
+  "source_snapshot": "JericoWoodFurnitureCheckpoint_20261006_1956",
+  "source_sha256": {
+    "furniture.py": "e8d63abb1ba591b918de4dc033048e1feaea222fa4dccf70fdb7e2efc181b845",
+    "mesh_core.py": "c82a9e70921889a1f5f994f52b0c721186a9428ce3393ca2191bba85b7f3fed2"
+  },
+  "scope": "Offline reference fixtures only; no Python dependency in native generation or tests",
+  "recipe_count": 16
+}

@@ -1,0 +1,12 @@
+{
+  "kind": "window",
+  "preset": "single_pane_fixed",
+  "glazing": "empty",
+  "width": 0.86,
+  "height": 1.72,
+  "thickness": 0.07,
+  "seed": 29,
+  "damage": "aged",
+  "handle": "lever",
+  "angle": 0
+}

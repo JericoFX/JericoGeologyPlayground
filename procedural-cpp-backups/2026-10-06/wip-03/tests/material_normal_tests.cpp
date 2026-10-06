@@ -1,0 +1,7 @@
+#include "jerico/materials.hpp"
+#include <fstream>
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
+using namespace jerico;
+int main(int argc,char**argv){try{if(argc!=2)throw std::runtime_error("Expected original Cycles normal oracle path");std::ifstream file(argv[1]);Json oracle;file>>oracle;double maximum=0;size_t count=0;for(auto&c:oracle["samples"]){auto part=c["part"];part["_material_family"]=c["family"];auto actual=sample_material_normal(part,c["material"],c["position"].get<V3>(),c["geometric_normal"].get<V3>(),c["shading_normal"].get<V3>(),c["footprint_m"],c["object_to_world"].get<std::array<V3,3>>());auto expected=c["expected_object_normal"].get<V3>();double error=std::sqrt(dot(sub(actual,expected),sub(actual,expected)));maximum=std::max(maximum,error);if(error>5e-4)throw std::runtime_error(c["id"].get<std::string>()+" original Cycles normal mismatch: "+std::to_string(error));if(std::abs(dot(actual,actual)-1)>1e-10)throw std::runtime_error("Normal is not unit length");++count;}bool rejected=false;try{sample_material_normal(Json::object(),"grime",{0,0,0},{0,-1,0},{0,-1,0},0);}catch(const std::invalid_argument&){rejected=true;}if(!rejected)throw std::runtime_error("Invalid normal footprint accepted");std::cout<<"Original Cycles normal oracle: "<<count<<" samples; maximum vector error "<<maximum<<"\n";return 0;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

@@ -1,0 +1,10 @@
+{
+  "source_snapshot": "JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927",
+  "source_sha256": {
+    "core.py": "c82a9e70921889a1f5f994f52b0c721186a9428ce3393ca2191bba85b7f3fed2",
+    "presets.py": "5768546df633e596cecc20abf923395be3cece410b97d3c4a726051be3aa8d11",
+    "singlepane.py": "7a16c1542147504d246ff9f79b4caa4a19b80345a4688d28f7173e0c1a599b89"
+  },
+  "recipe_count": 25,
+  "scope": "Offline reference only; no Python runtime in native generation or tests"
+}

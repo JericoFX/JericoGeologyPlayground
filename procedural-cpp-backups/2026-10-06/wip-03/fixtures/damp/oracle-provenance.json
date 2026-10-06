@@ -1,0 +1,14 @@
+{
+  "source_snapshot": "JericoDampWoodWindowsDirectedWIP_20261006_1956",
+  "source_sha256": {
+    "damp_wood.py": "ebe9bf684b06d19c96303e0c0e5cea2411c1c48bd9eaa4aa2dff9c4d0c6f524e",
+    "core.py": "c82a9e70921889a1f5f994f52b0c721186a9428ce3393ca2191bba85b7f3fed2",
+    "singlepane.py": "7a16c1542147504d246ff9f79b4caa4a19b80345a4688d28f7173e0c1a599b89",
+    "glass_fracture.py": "e834f3f31628635e48fcdc8dd4adfe5c00b9aaed4b93a326fb0aa5d4c4537872",
+    "damage_math.py": "f08677938d6862f98f107c7ea01a22f02e6acd3d3a7eb7c385a03164b9af57e2",
+    "crack_math.py": "8a4fb668821b9e0e2e289b20d757d81adb358b21c2f5ff89ba949777c24b8a0c"
+  },
+  "recipe_count": 12,
+  "status": "Development reference; visual approval and exporter tangent issue are separate gates. No bpy/export behavior is used.",
+  "scope": "Offline reference only; no Python runtime in native generation or tests"
+}

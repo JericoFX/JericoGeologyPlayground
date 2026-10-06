@@ -1,0 +1,78 @@
+[
+  {
+    "file": "cabinet_closed.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.32,
+      "drawer_count": 4,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "asset_hash": "9f607cecc140e8e4286ec9f2cc3470b52b9250e6540dadcc7d2e999920d7185a",
+    "file_sha256": "de832a7df05c4997f3758aaadae396b97b1192e2c52e6c427793a0c99b6ddf24",
+    "nodes": 5,
+    "parts": 184
+  },
+  {
+    "file": "cabinet_open.json",
+    "recipe": {
+      "preset": "cabinet",
+      "width": 0.76,
+      "depth": 0.52,
+      "height": 1.32,
+      "drawer_count": 4,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.58,
+      "wear": 0.7
+    },
+    "asset_hash": "c6685ae7dc52d9eb7b18dab5d4a7aaf39e8f118365a573d2516cd0f34c9cec65",
+    "file_sha256": "f9aedaf411dc1b78d04498ebf9bb6037e2c50e454076b204185dc93b07e98228",
+    "nodes": 5,
+    "parts": 184
+  },
+  {
+    "file": "workbench_closed.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.0,
+      "wear": 0.7
+    },
+    "asset_hash": "5500feb49e2c33190798577d36e62a36a07a9c543afd3219e609acbc48e3bc46",
+    "file_sha256": "0401f85f52cf4093d6970a79ae5ea7f62469f627b79979f47fc2247c0ca12041",
+    "nodes": 2,
+    "parts": 107
+  },
+  {
+    "file": "workbench_open.json",
+    "recipe": {
+      "preset": "workbench",
+      "width": 1.65,
+      "depth": 0.68,
+      "height": 0.91,
+      "drawer_count": 1,
+      "drawer": true,
+      "shelf": true,
+      "seed": 41,
+      "open_fraction": 0.58,
+      "wear": 0.7
+    },
+    "asset_hash": "11b4ed4066578ee788d79d3cd9239db5e3a357a8e7aa88528d31062a497c2160",
+    "file_sha256": "faaca9db0363f1b14f60c89d1a95536bc422acc25da61e8a86a0df273f5a43e0",
+    "nodes": 2,
+    "parts": 107
+  }
+]

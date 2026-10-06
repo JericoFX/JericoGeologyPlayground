@@ -1,0 +1,364 @@
+[
+  {
+    "file": "mine_timber_door_aged.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "mine_timber",
+      "damage": "aged",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "5153b29df846f001caf892a303973880627b707ee4abd4e0ceacb500a1cca97f",
+    "source_validation_errors": [],
+    "parts": 79
+  },
+  {
+    "file": "mine_timber_door_deteriorated.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "mine_timber",
+      "damage": "deteriorated",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "d2e4f6f146ce7befc1a8ebc37c5470b7502de745c75bcad9d9ffc48c3f643ef8",
+    "source_validation_errors": [],
+    "parts": 79
+  },
+  {
+    "file": "mine_timber_door_broken.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "mine_timber",
+      "damage": "broken",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "6de9da628695100d8eb5ea6a19672479aa0a7dba22e62e956bf6d8c482d34fc8",
+    "source_validation_errors": [],
+    "parts": 64
+  },
+  {
+    "file": "reinforced_timber_door_aged.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "reinforced_timber",
+      "damage": "aged",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "da6e65288b9710a0700ad16d1e69ab4d8d9d361181e6f78323a7567faa001ec5",
+    "source_validation_errors": [],
+    "parts": 154
+  },
+  {
+    "file": "reinforced_timber_door_deteriorated.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "reinforced_timber",
+      "damage": "deteriorated",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "63294bc49175501641d51d29f3db6e10584de1368e2025784304ae578d7dc4bf",
+    "source_validation_errors": [],
+    "parts": 154
+  },
+  {
+    "file": "reinforced_timber_door_broken.json",
+    "recipe": {
+      "kind": "door",
+      "preset": "reinforced_timber",
+      "damage": "broken",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "95532784263b0b0980a4bd812ea940c57f9ec5f0efd384c1c8aa704f8879d454",
+    "source_validation_errors": [],
+    "parts": 135
+  },
+  {
+    "file": "mine_timber_window_aged.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "mine_timber",
+      "damage": "aged",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "131bb93a709a4a854c28f03f809b18e1087a5ec34337918288f6f84342855ff6",
+    "source_validation_errors": [],
+    "parts": 96
+  },
+  {
+    "file": "mine_timber_window_deteriorated.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "mine_timber",
+      "damage": "deteriorated",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "db1e49bc67bae56d26582ac55b93b552bbbc491bfc47a3c8310bf1b9a61a0f29",
+    "source_validation_errors": [],
+    "parts": 96
+  },
+  {
+    "file": "mine_timber_window_broken.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "mine_timber",
+      "damage": "broken",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "e1c32f18497f6ef1335537f11ffb8458a9e73e96bb4e2fffcfe4744268a95d9e",
+    "source_validation_errors": [],
+    "parts": 82
+  },
+  {
+    "file": "reinforced_timber_window_aged.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "reinforced_timber",
+      "damage": "aged",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "8a74147ce4b1d7efdc06c244a9f57d2cb8e5a26b1acdc6dc03df4b2a7e486ba1",
+    "source_validation_errors": [],
+    "parts": 142
+  },
+  {
+    "file": "reinforced_timber_window_deteriorated.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "reinforced_timber",
+      "damage": "deteriorated",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "e4bb4790643ea5d9c33f1fb4de3cfb9ff0295242de700f2cbfdf8a5af83e065f",
+    "source_validation_errors": [],
+    "parts": 142
+  },
+  {
+    "file": "reinforced_timber_window_broken.json",
+    "recipe": {
+      "kind": "window",
+      "preset": "reinforced_timber",
+      "damage": "broken",
+      "seed": 19,
+      "angle": 0
+    },
+    "family": "wood",
+    "sha256": "4c29ed96f332b7272dde8c676d16ce5d0abefd558f9d6c3256cf25af6c58b805",
+    "source_validation_errors": [],
+    "parts": 122
+  },
+  {
+    "file": "wood_door_small.json",
+    "recipe": {
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": -9,
+      "handle": "pull",
+      "angle": 64,
+      "kind": "door",
+      "preset": "reinforced_timber"
+    },
+    "family": "wood",
+    "sha256": "8cb741bee1aa4e2cb543fdcb90e1f435f76c311e8b0622047639e567b1d44d37",
+    "source_validation_errors": [],
+    "parts": 160
+  },
+  {
+    "file": "wood_door_large.json",
+    "recipe": {
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": 1099511627793,
+      "handle": "lever",
+      "angle": 77,
+      "kind": "door",
+      "preset": "reinforced_timber"
+    },
+    "family": "wood",
+    "sha256": "d2fa752c591ae459ced9893a67502caa90a1d9b7523d231d5933e248c5204b1b",
+    "source_validation_errors": [],
+    "parts": 154
+  },
+  {
+    "file": "wood_window_small.json",
+    "recipe": {
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": -9,
+      "handle": "pull",
+      "angle": 64,
+      "kind": "window",
+      "preset": "reinforced_timber"
+    },
+    "family": "wood",
+    "sha256": "c7292d8a2f3fbb68d7ebb8e1efaee77c25b19076ab662f26d8735c4bffd5c032",
+    "source_validation_errors": [],
+    "parts": 148
+  },
+  {
+    "file": "wood_window_large.json",
+    "recipe": {
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": 1099511627793,
+      "handle": "lever",
+      "angle": 77,
+      "kind": "window",
+      "preset": "reinforced_timber"
+    },
+    "family": "wood",
+    "sha256": "1cac73969c5ddaea6ccdfdd352db814e3eab5905b10f4ed3fd9ced939fa33375",
+    "source_validation_errors": [],
+    "parts": 142
+  },
+  {
+    "file": "singlepane_intact_base.json",
+    "recipe": {
+      "seed": 17,
+      "preset": "single_pane_fixed",
+      "glazing": "intact"
+    },
+    "family": "singlepane",
+    "sha256": "e19963a87a4d2a916517dd3a3a97a4b1d1d22f6038d67acd72df1631b4c7b830",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_intact_small.json",
+    "recipe": {
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": 2,
+      "preset": "single_pane_fixed",
+      "glazing": "intact"
+    },
+    "family": "singlepane",
+    "sha256": "9817e07fc5a22f2e95961d1869228eddd116da1dcc2adab6bd3cb0cba5620100",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_intact_large.json",
+    "recipe": {
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": -71,
+      "preset": "single_pane_fixed",
+      "glazing": "intact"
+    },
+    "family": "singlepane",
+    "sha256": "b364c9621bcfe4bb64821d21c82bd7448e2d6a009a50ff679cb823b1682ba0c0",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_broken_base.json",
+    "recipe": {
+      "seed": 17,
+      "preset": "single_pane_fixed",
+      "glazing": "broken"
+    },
+    "family": "singlepane",
+    "sha256": "3594fbf7d633e92d0d204342c81ea996ebbd397885d4b0885700875876fb0a1a",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_broken_small.json",
+    "recipe": {
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": 2,
+      "preset": "single_pane_fixed",
+      "glazing": "broken"
+    },
+    "family": "singlepane",
+    "sha256": "6c00788656b0aa218b147c765b95c00eb145f2c76a63cf4caf3e9443f99f537b",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_broken_large.json",
+    "recipe": {
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": -71,
+      "preset": "single_pane_fixed",
+      "glazing": "broken"
+    },
+    "family": "singlepane",
+    "sha256": "43ce93cf9cf16789c08ebe0c275a71542777b81c71eb526ee4ecf1989a6d3c9b",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "singlepane_empty_base.json",
+    "recipe": {
+      "seed": 17,
+      "preset": "single_pane_fixed",
+      "glazing": "empty"
+    },
+    "family": "singlepane",
+    "sha256": "2a85ba4289b8391119d7f3cf620fe2e10ddeb4b26202c431407cd7173cab2657",
+    "source_validation_errors": [],
+    "parts": 32
+  },
+  {
+    "file": "singlepane_empty_small.json",
+    "recipe": {
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": 2,
+      "preset": "single_pane_fixed",
+      "glazing": "empty"
+    },
+    "family": "singlepane",
+    "sha256": "65dfe4fb4a3a0bb25b7bfce25fb84685c41b7e39f171f2827ed93831b2ffbb2a",
+    "source_validation_errors": [],
+    "parts": 32
+  },
+  {
+    "file": "singlepane_empty_large.json",
+    "recipe": {
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": -71,
+      "preset": "single_pane_fixed",
+      "glazing": "empty"
+    },
+    "family": "singlepane",
+    "sha256": "e7fabd9d8b2df8997d47d5a6242ac6e942add8783a657957e0453118988acafb",
+    "source_validation_errors": [],
+    "parts": 32
+  }
+]
