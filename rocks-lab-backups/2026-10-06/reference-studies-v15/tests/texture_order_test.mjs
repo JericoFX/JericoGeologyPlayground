@@ -1,0 +1,4 @@
+import {createRenderer} from '../viewer/renderer.js';
+const pending=new Map(),uploaded=[];globalThis.devicePixelRatio=1;globalThis.Image=class{decode(){return new Promise(resolve=>pending.set(this.src,resolve))}};
+const gl=new Proxy({getShaderParameter:()=>true,getProgramParameter:()=>true,texImage2D(...a){const image=a.at(-1);if(image instanceof Image)uploaded.push(image.src)}},{get:(o,k)=>k in o?o[k]:(k.toUpperCase()===k?1:()=>({}))});
+const renderer=createRenderer({getContext:()=>gl,clientWidth:10,clientHeight:10});const old=renderer.setTexture('old.jpg'),latest=renderer.setTexture('latest.jpg');pending.get('latest.jpg')();await latest;pending.get('old.jpg')();await old;if(uploaded.at(-1)!=='latest.jpg')throw Error('Older texture replaced selected material: '+uploaded.join(','));console.log('Texture latest-selection regression PASS (mocked GL)');

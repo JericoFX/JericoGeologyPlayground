@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "seed": 48,
+  "units": "m",
+  "generatorVersion": "rocks-v4",
+  "extractorVersion": "poly-csg-v1",
+  "size": 2,
+  "layerThickness": 0.4,
+  "contrast": 0.85,
+  "wear": 0,
+  "grid": {
+    "cells": 128
+  },
+  "family": "strata",
+  "detail": 0
+}
