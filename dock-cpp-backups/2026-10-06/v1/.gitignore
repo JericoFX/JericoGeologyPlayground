@@ -1,0 +1,8 @@
+/build*/
+/output/
+/reference/
+/.library-transfer/
+*.zip
+*.glb
+*.obj
+*.png
