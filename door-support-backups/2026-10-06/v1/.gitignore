@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+vendor/
+tools/
+build-deps/
+build/
+output/
+out/
