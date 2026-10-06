@@ -1,0 +1,15 @@
+# EXPERIMENTAL: diagnostic profile, panel acceptance is still pending.
+# Artistic controls; not calibrated spider silk. All paths are supplied by CLI.
+seed=42
+density=0.9
+width=1
+stiffness=1
+strength=1
+mass=0.01
+junction-tolerance=0.005
+broken=0
+gravity=-9.81
+substeps=8
+iterations=8
+ticks=800
+atlas=512
