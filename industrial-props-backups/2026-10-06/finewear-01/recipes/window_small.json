@@ -1,0 +1,10 @@
+{
+  "kind": "window",
+  "width": 1.08,
+  "height": 1.08,
+  "thickness": 0.042,
+  "damage": "aged",
+  "handle": "lever",
+  "seed": 17,
+  "angle": 0
+}

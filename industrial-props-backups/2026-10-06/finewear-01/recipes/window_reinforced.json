@@ -1,0 +1,10 @@
+{
+  "kind": "window",
+  "preset": "reinforced_timber",
+  "width": 1.28,
+  "height": 1.18,
+  "thickness": 0.048,
+  "damage": "deteriorated",
+  "handle": "pull",
+  "seed": 73
+}
