@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "seed": 117,
+  "units": "m",
+  "generatorVersion": "rocks-v7",
+  "extractorVersion": "paris-mc-v1",
+  "size": 2,
+  "layerThickness": 0.4,
+  "contrast": 0.85,
+  "wear": 0,
+  "grid": {
+    "cells": 128
+  },
+  "family": "weathered_boulder",
+  "detail": 1
+}

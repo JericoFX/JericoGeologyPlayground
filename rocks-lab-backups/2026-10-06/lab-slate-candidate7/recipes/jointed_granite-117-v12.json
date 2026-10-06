@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "generatorVersion": "rocks-v12",
+  "extractorVersion": "paris-mc-v1",
+  "family": "jointed_granite",
+  "units": "m",
+  "seed": 117,
+  "size": 2,
+  "layerThickness": 0.4,
+  "contrast": 0.85,
+  "wear": 0,
+  "detail": 0,
+  "grid": {
+    "cells": 64
+  },
+  "studySpacing": 0.45,
+  "roundness": 0.12,
+  "chipping": 0.35
+}

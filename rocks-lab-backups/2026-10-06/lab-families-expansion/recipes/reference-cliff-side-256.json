@@ -1,0 +1,12 @@
+{
+  "source": "../assets/reference_heightmaps/cliff_side/cliff_side_disp_1k.u16",
+  "width": 1024,
+  "height": 1024,
+  "cells": 256,
+  "size": 2,
+  "relief": 0.5,
+  "backDepth": 0.3,
+  "sourceUrl": "https://polyhaven.com/a/cliff_side",
+  "license": "CC0-1.0",
+  "description": "Actual Poly Haven cliff_side displacement-derived reference; chosen 0.5m relief on 2m square, not physically calibrated or procedural."
+}

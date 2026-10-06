@@ -1,0 +1,8 @@
+**/build*/
+**/out/
+**/__pycache__/
+*.pyc
+*.obj
+*.u16
+*.zip
+*.blend

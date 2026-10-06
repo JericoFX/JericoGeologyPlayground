@@ -1,0 +1,11 @@
+{
+  "seed": 48,
+  "width": 1024,
+  "height": 1024,
+  "cells": 128,
+  "size": 2,
+  "relief": 0.5,
+  "backDepth": 0.3,
+  "description": "Procedural v9 twelve unequal main beds, same seed and scale as five-bed ablation. No reference pixels.",
+  "bedCount": 12
+}

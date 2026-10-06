@@ -1,0 +1,12 @@
+{
+  "seed": 48,
+  "width": 1024,
+  "height": 1024,
+  "cells": 128,
+  "size": 2,
+  "relief": 0.5,
+  "backDepth": 0.3,
+  "description": "Same twelve-bed seed with kinked tapered joints and shallow chips centered on existing bed contacts.",
+  "bedCount": 12,
+  "fragmentedContacts": true
+}
