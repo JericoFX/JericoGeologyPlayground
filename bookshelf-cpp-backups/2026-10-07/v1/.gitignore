@@ -1,0 +1,5 @@
+build*/
+output/
+review/
+__pycache__/
+*.zip
