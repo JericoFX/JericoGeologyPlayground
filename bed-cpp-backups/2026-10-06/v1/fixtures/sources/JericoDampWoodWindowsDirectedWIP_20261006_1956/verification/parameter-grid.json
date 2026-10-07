@@ -1,0 +1,493 @@
+{
+  "passed": true,
+  "count": 54,
+  "seconds": 6.86494137399859,
+  "checks": [
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "adfd951c123fdfa7a1d1912889134b5898599301ddbcf99cf5eefa83357ed5aa"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "eb6556eb658898a62100530b8d53e70d3b4594492bd244814cfe9ee85912170e"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "3d33ba3b887f9acba00e962d539735fd047561c5c160217b40528391f335fc7c"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "98dcc0ce4add05936d7eb94ec1e25c52090b74c0f8b75ef21623ee0357dea46c"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "2dad8c0d1c134b24218c1842e3c97eaa044c1f67017a12ee7578a952086e7df3"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "2caf246fb3ad2e66383c448437b7b2ee0e8a9f12942a5a6f04cd1294718affb4"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "cd84f9fbae8954bdf4ce383c5b99db6171b2ea4cf28cf5d31aab9a05b914caf1"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "45ef85d127fb6b2798b6c96cdecf0ee57bf709d14037d4e5c9373dcbbea0197e"
+    },
+    {
+      "family": "old",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "7d5a5359388335a5e22e138f59bfba5bfc03a0a1bee57c2b8e3cdfbbe7f2463d"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 52,
+      "asset_hash": "02d1723f7a6df3cdd0aef1d16b05a69f99cd833851519fb373349b8c9badc6a4"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 51,
+      "asset_hash": "a826daa7a72769ebd056b947c9063456f3774bc2cf63c9b0d0b0858ee63c9e7b"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 52,
+      "asset_hash": "48159dddf1ec2031bacd7691484f22f055dce38c2c1554d1dbf7be475ee4692f"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 54,
+      "asset_hash": "9ce198a790d632a3a2e8043228998f32c1cfc6007c98dc424c7835b50c0baca8"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 54,
+      "asset_hash": "3b947cd2ef922465a21a039e7009aafa9fbd9b3e5526fd1995573db03de0d246"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 54,
+      "asset_hash": "642f6cf4999ac2ce7a55f9b0d485ddd60503bd171237499cd8e7ef8a46cde26e"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 52,
+      "asset_hash": "ac902f7138221c0d2ae473c6007cb6eb8797fde36cadbb431bc7d1142ce94a62"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 52,
+      "asset_hash": "c4cd81cf8ccc0167748e80623a5e3f5b81b6e9b8d9992619f66d8c77c1a7aa3f"
+    },
+    {
+      "family": "old",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 53,
+      "asset_hash": "2ccb73b279e6289caa582e91f86332dd7d32680810d20f420080a636744ce1d2"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "e04486bceb05ad5b7c2e32c7a95e9908bc2b2b8dd4989590066a9603b5a66d7c"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "8eb2b33b1e8842bf42cb2760382e41a6e74d9a868373193e3c269897a49b01ff"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "4a0fb4dc99501aa85781b21e80cdd0ecda3481c7d3a6933840d4d25c75ea34cd"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "06cc245e90e27559fee83f544ef5d8e03ef4da334a26aeaec87dd91f21ecad82"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "15d0f6777883cf8d81445ea147cbc088679accbeb2a3bb341534d845d982b876"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "d3c85f955d00263f927eba130de74619a430ab5c8676437550f3ef763225da0a"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "b5d82244894aa93412acc7065c482cd435ff3373bd8de47e7948a2325dd19dac"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "42ca741c91d1944e3550e447193aad1e5782957f83e5edbef717162e01cc9f8f"
+    },
+    {
+      "family": "old",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "6d25f18efb5fe58205e58ed742fc3dd0ec2f8df5ce36469efdfcd03b581729c5"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "9bb82148152c518ac0fd416c1549f6a4a8b13295cf4b0d66aa6e91680b848881"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "a8e52c7eb4701bfe8e3c04e3a7e9ebeaa97495756bb61139f11d1fd4fdfda783"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "a10c795da76bebb3ef20adae7f935520d3749e4976874b203ff9335260c2971a"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "29a43e8d4fe7af50c46857be9befa08d707767cb01d4ea7784bddf225c303f8a"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "0e1aea0309da4bc09368903f913f1d29bfc570a47788770c50e273e6d7765c89"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "fd84e94c70fe89555d33f4a2b5c50d3e733f58f43c2fa8cc12f87bc3fb448bb7"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 33,
+      "asset_hash": "44df6e269e0d4f960e678e75aa845fd206ef7f87db39ecf114cb3d927252d457"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 33,
+      "asset_hash": "f39562281f7df1acb793aef09040e8a5758a678372de80dfc85f42140bd455e6"
+    },
+    {
+      "family": "new",
+      "glazing": "intact",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 33,
+      "asset_hash": "b1bd5805dba1309f6f69865159cc64fe3171e733d412370553d84b8335e2b43d"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 52,
+      "asset_hash": "7d6975960a1d8c5a467a8342087c491151dbf88f9c3fa1da620b5d694518e630"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 51,
+      "asset_hash": "fac44fe375288adccd86ad1bac7c0cf589f6cb73fefdce1018687417108af209"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 52,
+      "asset_hash": "7ed98b18b76310403331d58fedcb66cdc90f3ca2e3fd554f920f076683d88ea4"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 54,
+      "asset_hash": "0ebdfc9663d6bed22e014ed18ad4f1ad5f731f418ae9b58abfb51084edfe79c2"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 54,
+      "asset_hash": "9855576236d8b67e68015b9bd786bad791769b7bc9d32fcf4ec736833e81e7fa"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 54,
+      "asset_hash": "415b5f64ceb192e880021089cfdfb0cc7c2132cc5e145a5955d121e6cfd1e083"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 52,
+      "asset_hash": "3250224ca8a2f66539da730f6af039bd68f307483dca61b7baec82480a889544"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 52,
+      "asset_hash": "c440423d6c43a9c955160ff5ed3a24031a2ab7340a6891ea0ef5a0ad18577dcb"
+    },
+    {
+      "family": "new",
+      "glazing": "broken",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 53,
+      "asset_hash": "61b1879f4f37a92843c0464329a1dba6d79f306cd466d8030fb702cafd5f7e56"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "a8890f0510b85095e3622223ad56db742e7f2e05d1036c9ac6c1f39e631c5f94"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "b32a9160cf420ec577e4e801ba42299c3c2dc50a0f146af8d02392a9d98419f5"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 17,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "64e0c5e94ddb794d1fcf083db242c4b31953601d086c34899122a850e7f571f3"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "6c3500443580ba0e0866cb591bc3f5a512a27bc6fa6468ce71ed9dd5fa6d2edc"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "9ddf90ee4679478b802c06c06ba4f38298884c2e5b8c94ee13d61029ee8dd27a"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 29,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "a238ca92112afbe68216d6d813cb6c8f7f333532c394cea39902078ea8018398"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 0.65,
+      "height": 0.8,
+      "parts": 32,
+      "asset_hash": "cfb9bbf50e0e6512b40330ad9faefdc846c62283b40a21029c736d0717f33fc5"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 1.12,
+      "height": 1.28,
+      "parts": 32,
+      "asset_hash": "8ce81b9ee56bba77d1c0223af895a4c439f0175ec464428df34f8af23d0b22c2"
+    },
+    {
+      "family": "new",
+      "glazing": "empty",
+      "seed": 83,
+      "width": 2.4,
+      "height": 3.2,
+      "parts": 32,
+      "asset_hash": "81cedc4dbaed6f30b26d62e849faf619bd4a80a35ac8c767f127477f450ee910"
+    }
+  ]
+}

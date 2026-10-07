@@ -1,0 +1,12 @@
+{
+  "preset": "industrial_window",
+  "kind": "window",
+  "width": 1.16,
+  "height": 1.25,
+  "thickness": 0.052,
+  "damage": "aged",
+  "finish": "weathered_gray",
+  "glazing": "broken",
+  "seed": 29,
+  "angle": 0
+}

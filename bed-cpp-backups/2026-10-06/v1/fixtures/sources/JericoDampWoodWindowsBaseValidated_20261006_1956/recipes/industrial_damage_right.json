@@ -1,0 +1,77 @@
+{
+  "preset": "industrial_solid",
+  "finish": "weathered_gray",
+  "angle": 30,
+  "seed": 29,
+  "operations": [
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.12,
+          0.018000000000000002,
+          0.62
+        ],
+        "max": [
+          0.09000000000000001,
+          0.09,
+          0.91
+        ]
+      },
+      "depth": null,
+      "seed": 83,
+      "vertices": 13,
+      "jaggedness": 0.48,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.78,
+          0.027,
+          1.35
+        ],
+        "max": [
+          -0.46,
+          0.05,
+          1.75
+        ]
+      },
+      "depth": 0.019,
+      "seed": 41,
+      "vertices": 11,
+      "jaggedness": 0.47,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.right",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.12,
+          0.018000000000000002,
+          0.62
+        ],
+        "max": [
+          0.09000000000000001,
+          0.09,
+          0.91
+        ]
+      },
+      "depth": null,
+      "seed": 83,
+      "vertices": 13,
+      "jaggedness": 0.48,
+      "override_protection": false
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "source_snapshot": "JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927",
+  "core_sha256": "c82a9e70921889a1f5f994f52b0c721186a9428ce3393ca2191bba85b7f3fed2",
+  "compatibility_cases": 47,
+  "distance_cases": 12,
+  "scope": "Pure authoring compatibility and support distance; no physics, UI or runtime interaction"
+}

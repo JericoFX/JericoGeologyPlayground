@@ -1,0 +1,590 @@
+[
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "expected": 0.0
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        1,
+        0,
+        0
+      ]
+    },
+    "expected": 0.0
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0,
+        1,
+        0
+      ]
+    },
+    "expected": 0.0
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0.2,
+        0.2,
+        0.7
+      ]
+    },
+    "expected": 0.7
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        -0.1,
+        -0.2,
+        0.3
+      ]
+    },
+    "expected": 0.37416573867739417
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        1.2,
+        -0.1,
+        0.2
+      ]
+    },
+    "expected": 0.3
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        -0.1,
+        1.2,
+        0.2
+      ]
+    },
+    "expected": 0.3
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0.3,
+        -0.1,
+        0.5
+      ]
+    },
+    "expected": 0.5099019513592785
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        -0.2,
+        0.4,
+        0.5
+      ]
+    },
+    "expected": 0.5385164807134505
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0.8,
+        0.8,
+        0.3
+      ]
+    },
+    "expected": 0.5196152422706632
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0.5,
+        0.5,
+        0
+      ]
+    },
+    "expected": 0.0
+  },
+  {
+    "scene": {
+      "metadata": {
+        "grip_supports": {
+          "g": "p"
+        }
+      },
+      "parts": [
+        {
+          "id": "p",
+          "node": "n",
+          "vertices": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "grip": {
+      "id": "g",
+      "node": "n",
+      "position": [
+        0.1,
+        0.2,
+        0
+      ]
+    },
+    "expected": 1.3877787807814457e-17
+  }
+]

@@ -1,0 +1,133 @@
+[
+  {
+    "file": "old_intact.json",
+    "recipe": {
+      "family": "old",
+      "glazing": "intact"
+    },
+    "sha256": "2dad8c0d1c134b24218c1842e3c97eaa044c1f67017a12ee7578a952086e7df3",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "old_broken.json",
+    "recipe": {
+      "family": "old",
+      "glazing": "broken"
+    },
+    "sha256": "3b947cd2ef922465a21a039e7009aafa9fbd9b3e5526fd1995573db03de0d246",
+    "source_validation_errors": [],
+    "parts": 54
+  },
+  {
+    "file": "old_empty.json",
+    "recipe": {
+      "family": "old",
+      "glazing": "empty"
+    },
+    "sha256": "15d0f6777883cf8d81445ea147cbc088679accbeb2a3bb341534d845d982b876",
+    "source_validation_errors": [],
+    "parts": 32
+  },
+  {
+    "file": "new_intact.json",
+    "recipe": {
+      "family": "new",
+      "glazing": "intact"
+    },
+    "sha256": "0e1aea0309da4bc09368903f913f1d29bfc570a47788770c50e273e6d7765c89",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "new_broken.json",
+    "recipe": {
+      "family": "new",
+      "glazing": "broken"
+    },
+    "sha256": "9855576236d8b67e68015b9bd786bad791769b7bc9d32fcf4ec736833e81e7fa",
+    "source_validation_errors": [],
+    "parts": 54
+  },
+  {
+    "file": "new_empty.json",
+    "recipe": {
+      "family": "new",
+      "glazing": "empty"
+    },
+    "sha256": "9ddf90ee4679478b802c06c06ba4f38298884c2e5b8c94ee13d61029ee8dd27a",
+    "source_validation_errors": [],
+    "parts": 32
+  },
+  {
+    "file": "age_zero.json",
+    "recipe": {
+      "age": 0,
+      "wetness": 0,
+      "seed": 0
+    },
+    "sha256": "0940d12e7ec2107495d0c75cd9bc034b9683900cdbdfb7645d0e78540c0c496b",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "age_threshold.json",
+    "recipe": {
+      "age": 0.35,
+      "wetness": 1,
+      "seed": 59
+    },
+    "sha256": "4f3f0a4f227e6ee34b2b34d4a1409beca74d99cf939ec7b6f1b53a7225ebeb03",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "age_above_threshold.json",
+    "recipe": {
+      "age": 0.350001,
+      "wetness": 0.3,
+      "seed": 59
+    },
+    "sha256": "639d38c2a26f9b05cd03ce4734d269d7d6fddc07b536664d061d8ca6a8fec656",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "age_maximum.json",
+    "recipe": {
+      "age": 1,
+      "wetness": 1,
+      "seed": -15
+    },
+    "sha256": "5c90ca887dc775bd91ed3fe251dc64e59dba38c7b0f476a6e6246d2c46ce755c",
+    "source_validation_errors": [],
+    "parts": 33
+  },
+  {
+    "file": "new_broken_small.json",
+    "recipe": {
+      "family": "new",
+      "glazing": "broken",
+      "width": 0.65,
+      "height": 0.8,
+      "thickness": 0.028,
+      "seed": 17
+    },
+    "sha256": "81f2be6a31f24142c4d26b27ef12f951bfe36c2fb3167e90d496331b437d2990",
+    "source_validation_errors": [],
+    "parts": 52
+  },
+  {
+    "file": "old_large.json",
+    "recipe": {
+      "family": "old",
+      "width": 2.4,
+      "height": 3.2,
+      "thickness": 0.12,
+      "seed": 1099511627793
+    },
+    "sha256": "c5eef3e0b4ea2ec16773e08c099f1bb48153c673908f1de35481e3e1d31a0b89",
+    "source_validation_errors": [],
+    "parts": 33
+  }
+]

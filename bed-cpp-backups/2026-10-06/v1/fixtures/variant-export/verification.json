@@ -1,0 +1,651 @@
+{
+  "scope": "Native generation/evaluation/bake and final GLB binary validity; no additional renders and no visual equivalence inferred from source JSON.",
+  "verified_utc": "2026-10-06T22:25:24Z",
+  "case_catalog_sha256": "8aeb7404060590f0450484f681558aa333f1f708bf991d565f1260343ea09113",
+  "initial_generation_cli_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+  "manual_driver_sha256": "25e3c0d6e8426dcb31027c88c5e1a4c2854f09c6cfe32dfe2a07b6a8dd36a4aa",
+  "final_export_phase": {
+    "mode": "reexport",
+    "requested_bake_resolution": null,
+    "selected_cases": [
+      "industrial_vented",
+      "industrial_damage_left",
+      "industrial_damage_right",
+      "industrial_edge_damage",
+      "industrial_edges_cracks",
+      "fine_wear_after",
+      "dense_wear_continuous",
+      "support_front_override",
+      "support_front_protected",
+      "manual_concave_through",
+      "manual_front_back_overlap"
+    ],
+    "executables": {
+      "export_native_scene": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac"
+    },
+    "validator_sha256": "aeaa0f2f7ac38c51240666700d2da7d7d09977deeccd75b5d56b3e4f35b1d75c",
+    "results": [
+      {
+        "name": "industrial_damage_left",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "industrial_vented",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "industrial_damage_right",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "industrial_edges_cracks",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "industrial_edge_damage",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "fine_wear_after",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "dense_wear_continuous",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "support_front_override",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "support_front_protected",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "manual_concave_through",
+        "status": "VALID_ASSET"
+      },
+      {
+        "name": "manual_front_back_overlap",
+        "status": "VALID_ASSET"
+      }
+    ],
+    "executables_unchanged": true,
+    "validator_unchanged": true
+  },
+  "valid_assets": 11,
+  "expected_rejections": 8,
+  "unexpected_results": [],
+  "totals": {
+    "meshes": 655,
+    "triangles": 220614,
+    "embedded_images": 3930,
+    "glb_bytes": 117853812,
+    "empty_islands": 0
+  },
+  "requested_bake_resolution": 64,
+  "actual_atlas_resolutions": [
+    32,
+    128,
+    256,
+    512
+  ],
+  "finewear_profile_revalidation": {
+    "fine_wear_after": {
+      "checked_png_files": 568,
+      "changed_png_files": [],
+      "native_material_profile": "finewear_1921"
+    },
+    "dense_wear_continuous": {
+      "checked_png_files": 568,
+      "changed_png_files": [],
+      "native_material_profile": "finewear_1921"
+    }
+  },
+  "cases": [
+    {
+      "name": "industrial_vented",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927/recipes/industrial_vented.json",
+      "recipe_sha256": "850505723900ec0f2f618696d3355e8e6f8bc13cf00f7bfca8ee2818f58a932b",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {},
+      "cut_records": 2,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 0,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "cca8bbc63ae1b4fa18b162efd1641527710e1667c482d066043c2f0d266de13b",
+        "bytes": 15616232,
+        "meshes": 106,
+        "materials": 106,
+        "images": 636,
+        "vertices": 92904,
+        "triangles": 30968,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "f5d1722e9e7de5482dda7ec0c6ae3c024e45159cd8fe3b0299946b3b54ebe4ba"
+    },
+    {
+      "name": "industrial_damage_left",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927/recipes/industrial_damage_left.json",
+      "recipe_sha256": "47eb6482d545e59a355a85521d0afb15610e720034636b362662e0c3427db18c",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {},
+      "cut_records": 3,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 3,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "2efcd9abbf3714bcbf1efdd76eab4ed9b15d089057b447f429c1391e1db3052d",
+        "bytes": 8473460,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 48234,
+        "triangles": 16078,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "d9f6f4c666524bd42ac94fc3a9ffd1d4660d8c117bc404709e050868a47c1271"
+    },
+    {
+      "name": "industrial_damage_right",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927/recipes/industrial_damage_right.json",
+      "recipe_sha256": "6756a64bbe83112782928a5c6081c6d85f9f0634a542c70d2baf04642a36c24f",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {},
+      "cut_records": 3,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 3,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "00715524fa47476469fa9bb8273ea39b6eb2f24d1e93862c1a8b0423da9bd866",
+        "bytes": 8628288,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 49560,
+        "triangles": 16520,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "cf96fbf2f73e21e6100b899952b44c22fb6f8ce5986dc7820f5c4d836e078cb6"
+    },
+    {
+      "name": "industrial_edge_damage",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927/recipes/industrial_edge_damage.json",
+      "recipe_sha256": "42b79e71760cdf5bc8adf37608391f6b5e7284d9239cb26cf6d3ea3c9f9dabda",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {},
+      "cut_records": 14,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 12,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "f92547bba37641b46cde4b3b05bcd171f870f878051044f0990c0c4f69ddf008",
+        "bytes": 12896256,
+        "meshes": 71,
+        "materials": 71,
+        "images": 426,
+        "vertices": 71532,
+        "triangles": 23844,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "14406a5bf054a7d6ce5d232fa9a3daf78bb3aa864ca542832ebca1aa39d7b709"
+    },
+    {
+      "name": "industrial_edges_cracks",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsMaterialsR2Checkpoint_20261006_1927/recipes/industrial_edges_cracks.json",
+      "recipe_sha256": "6e502d2ac047598756ff038d4110727bf948714b4e3031b45448ae8282ab744d",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {},
+      "cut_records": 15,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 12,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "6d23835559bf921bfb0da65f0f6515f5ef067c9b4b5fce19e8c5e3a077984c8a",
+        "bytes": 9718920,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 55602,
+        "triangles": 18534,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "b0fc055f276c881ad9c280f760e2d2142760d3d3c4fe05e12443c7155f2fbcbf"
+    },
+    {
+      "name": "fine_wear_after",
+      "family": "finewear",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsFineWearCheckpoint_20261006_1921/recipes/fine_wear_after.json",
+      "recipe_sha256": "299e536b4cd9eaceaa69b2b4b9be39daf34d4ef23d90c766f6a018ef144bd649",
+      "generator_sha256": "b642d43454ec495943c4c42773ab1645a275d1153d8cabac09e43a429c5240f5",
+      "reject": null,
+      "expect": {},
+      "cut_records": 14,
+      "fine_breakup_configs": 2,
+      "operation_statuses": {
+        "applied": 14,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": "finewear_1921",
+      "glb": {
+        "sha256": "83fc4d1b7884aca593e276e96b7dff2bdd87b98c892bd163634ac051595e4cf8",
+        "bytes": 12950328,
+        "meshes": 71,
+        "materials": 71,
+        "images": 426,
+        "vertices": 71532,
+        "triangles": 23844,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "c8492a037b0836576452de1a2ed554248e32fcaeeedb8cf9a578341507c4e139"
+    },
+    {
+      "name": "dense_wear_continuous",
+      "family": "finewear",
+      "status": "VALID_ASSET",
+      "source": "fixtures/sources/JericoIndustrialPropsFineWearCheckpoint_20261006_1921/recipes/dense_wear_continuous.json",
+      "recipe_sha256": "c924f26b53901b21abd8b2adce1dc7b9ba44e8043050bafe8cf1b7eeacb8adf8",
+      "generator_sha256": "b642d43454ec495943c4c42773ab1645a275d1153d8cabac09e43a429c5240f5",
+      "reject": null,
+      "expect": {},
+      "cut_records": 12,
+      "fine_breakup_configs": 14,
+      "operation_statuses": {
+        "applied": 22,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": "finewear_1921",
+      "glb": {
+        "sha256": "3825c71e863a4121d59a7a8c4dbbc3e3672155ec3059e026fb982ebb61ce14df",
+        "bytes": 13480060,
+        "meshes": 71,
+        "materials": 71,
+        "images": 426,
+        "vertices": 73698,
+        "triangles": 24566,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "f195e0962d349b1f701419dd5df13fa940ab1e3adbfc35bba6e344136da6d44c"
+    },
+    {
+      "name": "support_front_override",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": null,
+      "recipe_sha256": "88642effe1a788c452aafce9105188cd339426c862bdc77b037943b46825def0",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {
+        "disabled_socket": "door.handle.front.socket",
+        "enabled_socket": "door.handle.back.socket",
+        "disabled_grip": "door.handle.front.grip"
+      },
+      "cut_records": 1,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 1,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [
+        "door.handle.front.socket"
+      ],
+      "disabled_grips": [
+        "door.handle.front.grip"
+      ],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "29b71486c59cdf7a0746d6e17e910702261295988ef15084633d11934d7e9576",
+        "bytes": 9167348,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 50280,
+        "triangles": 16760,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "76c725a4c06eb4fc9c3582afff067bf539a9ee1d5b5bc0bfd448089047052864"
+    },
+    {
+      "name": "support_front_protected",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": null,
+      "recipe_sha256": "b18e2626b1927bc111093a2bca318b5ab7719d590fce90eefc7f4fb626e2b9ba",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": null,
+      "expect": {
+        "report_status": "protected",
+        "enabled_socket": "door.handle.front.socket"
+      },
+      "cut_records": 0,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 0,
+        "protected": 1,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "bfbfe9c5dfde17eb1250d953fc36456d69053e5044bb6413efd0a0ad657b3af1",
+        "bytes": 8515400,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 48048,
+        "triangles": 16016,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "d1906da82254dfe8c0f953f86055af2b0824f703c86f971735374053bbfaa521"
+    },
+    {
+      "name": "manual_concave_through",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": null,
+      "recipe_sha256": "6dca9c850d54bf7f72f72751730866cb0662cbf91c9ee027f720370f02c8b9f1",
+      "generator_sha256": "25e3c0d6e8426dcb31027c88c5e1a4c2854f09c6cfe32dfe2a07b6a8dd36a4aa",
+      "reject": null,
+      "expect": {},
+      "cut_records": 1,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 0,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "e43e726ed7c58168f2ca824421a2edd357d8364f2f6c96a394311da2d434feca",
+        "bytes": 9204104,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 49740,
+        "triangles": 16580,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "ead86ea83122f13151d016f64b058238a0fad0b01309fe45c677036e50c2bb2c"
+    },
+    {
+      "name": "manual_front_back_overlap",
+      "family": "industrial",
+      "status": "VALID_ASSET",
+      "source": null,
+      "recipe_sha256": "1ffd82d7d8782406bafe6bedc7d5348554a8ef3a461c36d999eca75b15044204",
+      "generator_sha256": "25e3c0d6e8426dcb31027c88c5e1a4c2854f09c6cfe32dfe2a07b6a8dd36a4aa",
+      "reject": null,
+      "expect": {},
+      "cut_records": 2,
+      "fine_breakup_configs": 0,
+      "operation_statuses": {
+        "applied": 0,
+        "protected": 0,
+        "outside": 0
+      },
+      "disabled_sockets": [],
+      "disabled_grips": [],
+      "actual_atlas_resolutions": [
+        32,
+        128,
+        256,
+        512
+      ],
+      "empty_islands": 0,
+      "native_material_profile": null,
+      "glb": {
+        "sha256": "aacb8d166f5714b12d33e92572b0640a43acd678b418b0e7fa3ce5de767d2a99",
+        "bytes": 9203416,
+        "meshes": 48,
+        "materials": 48,
+        "images": 288,
+        "vertices": 50712,
+        "triangles": 16904,
+        "source_geometry_checked": true,
+        "status": "PASS"
+      },
+      "final_exporter_sha256": "a7ef8bf8eae36e6ec8a2d3ff2fb40ad9aa5a5c2fb8cef627b367556a502f2fac",
+      "final_export_input_scene_sha256": "8e3d565842d4674dce3c4551823f1490537bc88d9087426145b0b05a227cf21d"
+    },
+    {
+      "name": "reject_zero_depth",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "202e832edba89e259e5d7a557cc3e803aab8fb39402059ffd5dfed44896ada8f",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "numeric depth must be positive and less than thickness",
+      "expect": {},
+      "reason": "numeric depth must be positive and less than thickness; use explicit None for through",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_crack_outside_region",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "b46e23f0b0aad6e0cb2bc418f0d93cef7cda0cdb2920aa2d910b6be541225961",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "exceeds the selected region",
+      "expect": {},
+      "reason": "crack profile main exceeds the selected region; enlarge the region or reduce length_m, width_m, or depth_m",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_part_cut_budget",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "0607c61837b549d9909cadb3b6d292f5d278a03df6f54dc2007b1895bcce91b3",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "operation cut budget exceeds 12 per part",
+      "expect": {},
+      "reason": "operation cut budget exceeds 12 per part",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_finewear_back",
+      "family": "finewear",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "cd898434eaabf70fce0ebd7568ecd07ec27b2211c34eb51039186176fb6ec3c8",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "fine_breakup supports front only",
+      "expect": {},
+      "reason": "fine_breakup supports front only",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_unknown_part",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "880b4325662e71b6c1695cda7d4b2f475f7ce0dc118696bbe54d1faba4b852c1",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "operation must select an existing exact part_id",
+      "expect": {},
+      "reason": "operation must select an existing exact part_id",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_unsigned_seed",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "c58a696d36132af124cc1476dc5b2bc4d49637277ee755bda8a5c04c55bc73a4",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "seed must be a signed 64-bit integer",
+      "expect": {},
+      "reason": "seed must be a signed 64-bit integer",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_self_crossing_manual",
+      "family": "industrial",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "c34972fe7b419b3d0b59cf1b803713ebea7dd8e09332d72959450e6e6e9d6831",
+      "generator_sha256": "25e3c0d6e8426dcb31027c88c5e1a4c2854f09c6cfe32dfe2a07b6a8dd36a4aa",
+      "reject": "Cutter must be a simple, non-self-intersecting polygon",
+      "expect": {},
+      "reason": "Cutter must be a simple, non-self-intersecting polygon",
+      "generated_glb": false
+    },
+    {
+      "name": "reject_unsafe_fracture",
+      "family": "fracture",
+      "status": "EXPECTED_REJECTION",
+      "source": null,
+      "recipe_sha256": "b32f3d8f008e60f73e6e3ff8d0dbd12f2fc7203e89e7cb6ae2e042396425ceec",
+      "generator_sha256": "770cb0fd1bf5fa92e0f27b75f08cbbc7e028eba52793a919db0c439aad3bb66a",
+      "reject": "Cutter must be a simple, non-self-intersecting polygon",
+      "expect": {},
+      "reason": "Cutter must be a simple, non-self-intersecting polygon",
+      "generated_glb": false
+    }
+  ]
+}

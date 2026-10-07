@@ -1,0 +1,10 @@
+{
+  "kind": "door",
+  "width": 0.86,
+  "height": 2.04,
+  "thickness": 0.048,
+  "damage": "aged",
+  "handle": "lever",
+  "seed": 17,
+  "angle": 0
+}

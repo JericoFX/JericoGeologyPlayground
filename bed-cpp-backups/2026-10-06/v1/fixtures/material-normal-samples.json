@@ -1,0 +1,693 @@
+{
+  "blender": "4.3.2",
+  "method": "Unmodified source Bump evaluated on rotated planes; actual Object position captured by AOV; physical ray footprint equals orthographic span/64",
+  "samples": [
+    {
+      "id": "wood_x_0.0",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "wood_x"
+      },
+      "material": "wood_x",
+      "position": [
+        -0.21499790251255035,
+        -0.03099999949336052,
+        0.42900240421295166
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.0,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.004002988338470459,
+        -0.9999841451644897,
+        -0.003969550132751465
+      ],
+      "expected_world_normal": [
+        -0.004002988338470459,
+        -0.9999841451644897,
+        -0.003969550132751465
+      ]
+    },
+    {
+      "id": "wood_x_0.57",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "wood_x"
+      },
+      "material": "wood_x",
+      "position": [
+        -0.2149983048439026,
+        -0.031000003218650818,
+        0.4290024936199188
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.8419010043144226,
+          0.5396320223808289,
+          0.0
+        ],
+        [
+          -0.5396320223808289,
+          0.8419010043144226,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.57,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.003319829236716032,
+        -0.9999940395355225,
+        -0.0009401439456269145
+      ],
+      "expected_world_normal": [
+        0.5368338823318481,
+        -0.8436875343322754,
+        -0.0009401440620422363
+      ]
+    },
+    {
+      "id": "wood_x_-1.13",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "wood_x"
+      },
+      "material": "wood_x",
+      "position": [
+        -0.2149975746870041,
+        -0.031000012531876564,
+        0.42900219559669495
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.42665982246398926,
+          -0.9044122099876404,
+          0.0
+        ],
+        [
+          0.9044122099876404,
+          0.42665982246398926,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": -1.13,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.0008217096328735352,
+        -0.9999754428863525,
+        -0.006956934928894043
+      ],
+      "expected_world_normal": [
+        -0.904740571975708,
+        -0.4259061813354492,
+        -0.006956934928894043
+      ]
+    },
+    {
+      "id": "painted_steel_0.0",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "painted_steel",
+        "weather": {
+          "seed": 37
+        }
+      },
+      "material": "painted_steel",
+      "position": [
+        -0.21499790251255035,
+        -0.03099999949336052,
+        0.42900240421295166
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.0,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        0.011256575584411621,
+        -0.9999355673789978,
+        -0.0014600157737731934
+      ],
+      "expected_world_normal": [
+        0.011256575584411621,
+        -0.9999355673789978,
+        -0.0014600157737731934
+      ]
+    },
+    {
+      "id": "painted_steel_0.57",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "painted_steel",
+        "weather": {
+          "seed": 37
+        }
+      },
+      "material": "painted_steel",
+      "position": [
+        -0.2149983048439026,
+        -0.031000003218650818,
+        0.4290024936199188
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.8419010043144226,
+          0.5396320223808289,
+          0.0
+        ],
+        [
+          -0.5396320223808289,
+          0.8419010043144226,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.57,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        0.006571948528289795,
+        -0.9999741315841675,
+        0.0029196739196777344
+      ],
+      "expected_world_normal": [
+        0.5451509952545166,
+        -0.8383327722549438,
+        0.0029196739196777344
+      ]
+    },
+    {
+      "id": "painted_steel_-1.13",
+      "family": "steel",
+      "part": {
+        "id": "normal_probe",
+        "material": "painted_steel",
+        "weather": {
+          "seed": 37
+        }
+      },
+      "material": "painted_steel",
+      "position": [
+        -0.2149975746870041,
+        -0.031000012531876564,
+        0.42900219559669495
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.42665982246398926,
+          -0.9044122099876404,
+          0.0
+        ],
+        [
+          0.9044122099876404,
+          0.42665982246398926,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": -1.13,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        0.004356830846518278,
+        -0.9999691843986511,
+        0.006527065299451351
+      ],
+      "expected_world_normal": [
+        -0.9025254845619202,
+        -0.4305870532989502,
+        0.006527066230773926
+      ]
+    },
+    {
+      "id": "damp_wood_0.0",
+      "family": "damp",
+      "part": {
+        "id": "normal_probe",
+        "material": "damp_wood",
+        "wood_finish": {
+          "family": "old",
+          "age": 0.86,
+          "wetness": 0.82,
+          "grain_axis": "Z",
+          "height_m": 1.28
+        }
+      },
+      "material": "damp_wood",
+      "position": [
+        -0.21499790251255035,
+        -0.03099999949336052,
+        0.42900240421295166
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.0,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.011025726795196533,
+        -0.9999374151229858,
+        -0.0019221305847167969
+      ],
+      "expected_world_normal": [
+        -0.011025726795196533,
+        -0.9999374151229858,
+        -0.0019221305847167969
+      ]
+    },
+    {
+      "id": "damp_wood_0.57",
+      "family": "damp",
+      "part": {
+        "id": "normal_probe",
+        "material": "damp_wood",
+        "wood_finish": {
+          "family": "old",
+          "age": 0.86,
+          "wetness": 0.82,
+          "grain_axis": "Z",
+          "height_m": 1.28
+        }
+      },
+      "material": "damp_wood",
+      "position": [
+        -0.2149983048439026,
+        -0.031000003218650818,
+        0.4290024936199188
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.8419010043144226,
+          0.5396320223808289,
+          0.0
+        ],
+        [
+          -0.5396320223808289,
+          0.8419010043144226,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.57,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.005935996770858765,
+        -0.9999773502349854,
+        -0.0031702518463134766
+      ],
+      "expected_world_normal": [
+        0.534622311592102,
+        -0.8450852036476135,
+        -0.0031702518463134766
+      ]
+    },
+    {
+      "id": "damp_wood_-1.13",
+      "family": "damp",
+      "part": {
+        "id": "normal_probe",
+        "material": "damp_wood",
+        "wood_finish": {
+          "family": "old",
+          "age": 0.86,
+          "wetness": 0.82,
+          "grain_axis": "Z",
+          "height_m": 1.28
+        }
+      },
+      "material": "damp_wood",
+      "position": [
+        -0.2149975746870041,
+        -0.031000012531876564,
+        0.42900219559669495
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.42665982246398926,
+          -0.9044122099876404,
+          0.0
+        ],
+        [
+          0.9044122099876404,
+          0.42665982246398926,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": -1.13,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -0.010165363550186157,
+        -0.9998936057090759,
+        -0.010462701320648193
+      ],
+      "expected_world_normal": [
+        -0.9086530804634094,
+        -0.41742074489593506,
+        -0.010462701320648193
+      ]
+    },
+    {
+      "id": "glass_0.0",
+      "family": "glass",
+      "part": {
+        "id": "normal_probe",
+        "material": "glass",
+        "glass_study": true,
+        "glass_bounds": [
+          -0.591,
+          0.591,
+          -0.011,
+          1.261
+        ]
+      },
+      "material": "glass",
+      "position": [
+        -0.568997859954834,
+        -0.03099999949336052,
+        0.1290024071931839
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.0,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -9.435415267944336e-05,
+        -1.0,
+        4.5418739318847656e-05
+      ],
+      "expected_world_normal": [
+        -9.435415267944336e-05,
+        -1.0,
+        4.5418739318847656e-05
+      ]
+    },
+    {
+      "id": "glass_0.57",
+      "family": "glass",
+      "part": {
+        "id": "normal_probe",
+        "material": "glass",
+        "glass_study": true,
+        "glass_bounds": [
+          -0.591,
+          0.591,
+          -0.011,
+          1.261
+        ]
+      },
+      "material": "glass",
+      "position": [
+        -0.568997859954834,
+        -0.030999990180134773,
+        0.1290024369955063
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.8419010043144226,
+          0.5396320223808289,
+          0.0
+        ],
+        [
+          -0.5396320223808289,
+          0.8419010043144226,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": 0.57,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        -3.221631050109863e-05,
+        -1.0,
+        -1.5616416931152344e-05
+      ],
+      "expected_world_normal": [
+        0.539604902267456,
+        -0.841918408870697,
+        -1.5616416931152344e-05
+      ]
+    },
+    {
+      "id": "glass_-1.13",
+      "family": "glass",
+      "part": {
+        "id": "normal_probe",
+        "material": "glass",
+        "glass_study": true,
+        "glass_bounds": [
+          -0.591,
+          0.591,
+          -0.011,
+          1.261
+        ]
+      },
+      "material": "glass",
+      "position": [
+        -0.5689976215362549,
+        -0.030999990180134773,
+        0.129002183675766
+      ],
+      "geometric_normal": [
+        0,
+        -1,
+        0
+      ],
+      "shading_normal": [
+        0,
+        -1,
+        0
+      ],
+      "object_to_world": [
+        [
+          0.42665982246398926,
+          -0.9044122099876404,
+          0.0
+        ],
+        [
+          0.9044122099876404,
+          0.42665982246398926,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rotation_z": -1.13,
+      "footprint_m": 0.004000000189989805,
+      "expected_object_normal": [
+        1.6480684280395508e-05,
+        -1.0,
+        -4.26173210144043e-05
+      ],
+      "expected_world_normal": [
+        -0.9044051766395569,
+        -0.4266747236251831,
+        -4.26173210144043e-05
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "label": "industrial_louvered",
+    "family": "industrial",
+    "recipe": "recipes/industrial_louvered.json"
+  },
+  {
+    "label": "wood_reinforced",
+    "family": "wood",
+    "recipe": "recipes/wood_reinforced.json"
+  },
+  {
+    "label": "cabinet_open",
+    "family": "furniture",
+    "recipe": "recipes/cabinet_open.json"
+  },
+  {
+    "label": "damp_old_broken",
+    "family": "damp",
+    "recipe": "recipes/damp_old_broken.json"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "preset": "industrial_louvered",
+  "kind": "door",
+  "width": 1.0,
+  "height": 2.1,
+  "thickness": 0.052,
+  "damage": "aged",
+  "finish": "weathered_gray",
+  "handle": "lever",
+  "seed": 29,
+  "angle": 0
+}

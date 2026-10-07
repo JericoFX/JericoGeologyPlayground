@@ -1,0 +1,334 @@
+{
+  "preset": "industrial_louvered",
+  "finish": "weathered_gray",
+  "angle": 30,
+  "seed": 29,
+  "operations": [
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.274
+        ],
+        "max": [
+          -0.952,
+          0.034,
+          0.3484
+        ]
+      },
+      "depth": 0.006,
+      "seed": 113,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.274
+        ],
+        "max": [
+          -0.952,
+          0.034,
+          0.3484
+        ]
+      },
+      "depth": null,
+      "seed": 113,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.5795
+        ],
+        "max": [
+          -0.949,
+          0.037,
+          0.6632
+        ]
+      },
+      "depth": 0.009,
+      "seed": 126,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.5795
+        ],
+        "max": [
+          -0.949,
+          0.037,
+          0.6632
+        ]
+      },
+      "depth": null,
+      "seed": 126,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.75
+        ],
+        "max": [
+          -0.956,
+          0.034,
+          0.812
+        ]
+      },
+      "depth": 0.006,
+      "seed": 139,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.75
+        ],
+        "max": [
+          -0.956,
+          0.034,
+          0.812
+        ]
+      },
+      "depth": null,
+      "seed": 139,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.8859999999999999
+        ],
+        "max": [
+          -0.94,
+          0.038,
+          0.9975999999999999
+        ]
+      },
+      "depth": 0.01,
+      "seed": 152,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          0.8859999999999999
+        ],
+        "max": [
+          -0.94,
+          0.038,
+          0.9975999999999999
+        ]
+      },
+      "depth": null,
+      "seed": 152,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          1.2930000000000001
+        ],
+        "max": [
+          -0.958,
+          0.033,
+          1.3488
+        ]
+      },
+      "depth": 0.005,
+      "seed": 165,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          1.2930000000000001
+        ],
+        "max": [
+          -0.958,
+          0.033,
+          1.3488
+        ]
+      },
+      "depth": null,
+      "seed": 165,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          1.8755
+        ],
+        "max": [
+          -0.953,
+          0.036000000000000004,
+          1.9467999999999999
+        ]
+      },
+      "depth": 0.008,
+      "seed": 178,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "cut",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.985,
+          0.018000000000000002,
+          1.8755
+        ],
+        "max": [
+          -0.953,
+          0.036000000000000004,
+          1.9467999999999999
+        ]
+      },
+      "depth": null,
+      "seed": 178,
+      "vertices": 9,
+      "jaggedness": 0.57,
+      "override_protection": false
+    },
+    {
+      "type": "edge_wear",
+      "part_id": "door.sheet",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.992,
+          0.012,
+          0.69
+        ],
+        "max": [
+          -0.87,
+          0.05,
+          1.042
+        ]
+      },
+      "width_m": 0.005,
+      "amount": 0.93,
+      "feather_m": 0.004,
+      "samples_per_axis": 5,
+      "seed": 1731,
+      "override_protection": false,
+      "fine_breakup": false
+    },
+    {
+      "type": "edge_wear",
+      "part_id": "door.fold.left",
+      "side": "front",
+      "region": {
+        "shape": "box",
+        "min": [
+          -0.992,
+          0.012,
+          0.69
+        ],
+        "max": [
+          -0.87,
+          0.05,
+          1.042
+        ]
+      },
+      "width_m": 0.003,
+      "amount": 0.93,
+      "feather_m": 0.004,
+      "samples_per_axis": 5,
+      "seed": 1731,
+      "override_protection": false,
+      "fine_breakup": false
+    }
+  ]
+}
