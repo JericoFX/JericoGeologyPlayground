@@ -1,0 +1,9 @@
+build/
+output*/
+*.zip
+*.glb
+*.obj
+*.mtl
+*.png
+verification/
+delivery/

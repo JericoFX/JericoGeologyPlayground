@@ -1,0 +1,410 @@
+{
+  "schema": 1,
+  "family": "shelf_props",
+  "source_snapshot": "JericoShelfPropsCppCheckpoint01_20261007",
+  "source_archive": "JericoShelfPropsCppCheckpoint01-code.zip",
+  "source_archive_sha256": "699c41744fbe54f30d4b89660c1c93206ea4a67516e5c818fd240c2ae9040f57",
+  "scope": "Byte-preserving source, tests, recipes, technical documentation and redistributable license notices; excludes private work notes, original media, binary build outputs and caches.",
+  "verification": "Payload hashes checked before upload; historical test claims in checkpoint documentation were not rerun during backup.",
+  "files": [
+    {
+      "relative_path": "third_party/blender_cycles/LICENSE.BSD-3-Clause",
+      "bytes": 1544,
+      "sha256": "14d3fc315a19416bccfa35161a3894a354ae2952f4f61eb4bed6f34ddeb4c6cc",
+      "git_blob_sha": "2ed3c872b7d324e2bff51430a0584d00231a5ccd",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "third_party/blender_cycles/NOTICE.md",
+      "bytes": 2874,
+      "sha256": "1ed9f440d0f4a77d7f825c7f85fc874854ff2feaf6b5a49d69958d3f905a02aa",
+      "git_blob_sha": "75b39d61eb2682b4eddbdf4704e49e1770d1653b",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "third_party/blender_cycles/LICENSE.Apache-2.0",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "git_blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "third_party/nlohmann/json.hpp",
+      "bytes": 919975,
+      "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6",
+      "git_blob_sha": "8b72ea6539f40e4e3f7762d17e30c67f2a8308ed",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "third_party/nlohmann/LICENSE.MIT",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14",
+      "git_blob_sha": "1c1f7a690d815db3a79ea3d4c9138a497e2e7702",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": ".gitignore",
+      "bytes": 70,
+      "sha256": "25710544487419d0e46e15e181ed41ba5a2301b730001a6c7bbebe0f156f5d10",
+      "git_blob_sha": "c508255aeba4fa27a833f38ad69a00c2cafd0e06",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/shelf_props_tests.cpp",
+      "bytes": 2670,
+      "sha256": "0f3efb67fe76ba709d2f0f4c2ae2c466c22940b94608ca508aeedc2a0f53dae9",
+      "git_blob_sha": "038f91b3414fe08b67143bdfe57b6505017fc7ca",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/export_tests.cpp",
+      "bytes": 10946,
+      "sha256": "42a5eb2b61b74ee11d4a06038c964bcae4ab500400701e053d3ed0691fcb31b8",
+      "git_blob_sha": "c55fb7575506f62818d4ee36c50f6cd9dcc8c0e8",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/material_scope_tests.cpp",
+      "bytes": 4059,
+      "sha256": "945b5139228a1271ce37b5b86cab6401326e28cdab001b5d0cc4b5212b6b5e33",
+      "git_blob_sha": "642f4386b8ade1ad604f8253bc392700265f4308",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/evaluate_tests.cpp",
+      "bytes": 1296,
+      "sha256": "bb32f8dfb66ec7532e8dbd3e11f690db94247472ff98b9d5d05980dd13bab6cb",
+      "git_blob_sha": "9b28c767359a9cc84ab1d6e76f314866888fac2e",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/png_tests.cpp",
+      "bytes": 2368,
+      "sha256": "008d80a14be47bc113eb7840090fb98e82398d763b485ef32ae68e3989d72a23",
+      "git_blob_sha": "e42f8344b7649fcc49acb7401b31cdbb129ddf2f",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/export_obj_tests.cpp",
+      "bytes": 7241,
+      "sha256": "70189c8dbadcfcdcfb65a205ee42a74b7e2bacf3dd79db1adaa73d4dc0558403",
+      "git_blob_sha": "32003f8e8d8857a0e36231117dce96cce28f633d",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tests/placement_tests.cpp",
+      "bytes": 1327,
+      "sha256": "fe5e96258f35dd3c13d25cd0797a1075b50098350112cd3215be187b437e1ca7",
+      "git_blob_sha": "02a0ada1f525c604acd55e6c723f67ce7dbcf77f",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tools/blender_import_qa.py",
+      "bytes": 5409,
+      "sha256": "4560c4da38e6480934eef81b322a024bee9d7fae692ff1f1a148da1904dbbcd3",
+      "git_blob_sha": "48dc21d057ac09201b04d135eaa4e542e2869b21",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tools/validate_native_obj.py",
+      "bytes": 26904,
+      "sha256": "5a00df1e2e750c72dcac68ae67d114a6eb41cb5e678b3a35714db24a5add641f",
+      "git_blob_sha": "50452b07c54b6351f9f4417ca75efe228ebe0b40",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tools/render_props.py",
+      "bytes": 2654,
+      "sha256": "569df2cb37291259e74001567d07b1ed90422b7458db820f525a28ce1ee5ce28",
+      "git_blob_sha": "803fd4e680c7719ec3bf293665a2f4d099d1b4cf",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tools/shelfprops_independent_qa.py",
+      "bytes": 17614,
+      "sha256": "ef84ad3db4fc8a384d7adc9bbc06bfe5bf567d977d2ec8b350ad63596f78b169",
+      "git_blob_sha": "1b21a16d82f67f514c6cbbd311a9ab8b89c8509d",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "tools/build.sh",
+      "bytes": 1344,
+      "sha256": "f9b4fe3ecaf533751b6adf04e1a9c3a832a73c026a52480ca535b3ef15241b44",
+      "git_blob_sha": "08b7308b3566eaa6c5fd9a6008764c7a34624607",
+      "git_mode": "100755"
+    },
+    {
+      "relative_path": "tools/validate_native_glb.py",
+      "bytes": 19834,
+      "sha256": "aeaa0f2f7ac38c51240666700d2da7d7d09977deeccd75b5d56b3e4f35b1d75c",
+      "git_blob_sha": "a86c7ec4b49360dc8db6f2ec29819870e43d2117",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "README.md",
+      "bytes": 3164,
+      "sha256": "0e394bb8290cedbaadffb037795505a79fc896db05d51cd7f7ddb3e315ef6662",
+      "git_blob_sha": "73b090afcf79a11a7be1da6157e581cd958a257d",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/furniture.cpp",
+      "bytes": 20775,
+      "sha256": "c47d2c4c6b34c6ed6eb37a3ccc08e0a33578a277cefb9ff36280fc9e70f30b81",
+      "git_blob_sha": "86fb4587a926f2e0ba824013064b98489b148626",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/localized_damage.cpp",
+      "bytes": 27641,
+      "sha256": "ff1ee442c89c57ae528afa0bf0537947537e4677f1eb5d40b17a73f1a52046bd",
+      "git_blob_sha": "7c573acca18a5089eabb327abae50d4f51692509",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/evaluate.cpp",
+      "bytes": 30375,
+      "sha256": "b666199b11cebea3358df1a322320a00dbc3c4e5b75ef308480b47acc454aa72",
+      "git_blob_sha": "a5cf797ca2b90c05b3aa69f41a478e030e19b503",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/export_obj.cpp",
+      "bytes": 15220,
+      "sha256": "528cc5166f6fe4d751ba57926cc71c7121a83f8266ad4e6a5cdbac6c1cd37e9f",
+      "git_blob_sha": "840c32e79b27228216bc9008747a30b213f68a59",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/shelf_props.cpp",
+      "bytes": 11867,
+      "sha256": "82edd2855b134fea8ec6a64d33dcd106b287ca224800215a765b88e2f323cf14",
+      "git_blob_sha": "f0577cd257473744dd2aacfc735296d633d2b93c",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/fracture.cpp",
+      "bytes": 15519,
+      "sha256": "1827e009d20de9c8e061cb103d6eae76e3935173ebc7d1f91f00c29212ae08ac",
+      "git_blob_sha": "62cd06a49325ee62f5693ddebfe026b082057a77",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/wood.cpp",
+      "bytes": 28433,
+      "sha256": "b9239da42dcb7599bfad68cb3f7bdc3667060614fe8d04282701118e434c63d7",
+      "git_blob_sha": "0d030bbe91b95c21902cd7d216532ac672199d80",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/materials.cpp",
+      "bytes": 34745,
+      "sha256": "fc8bc81a29e210cb4ac610be6822c8f88f3f6adeca311a7d0ce6b3f8de8c800b",
+      "git_blob_sha": "ff28d70c673b1c39d8a91f7720946193a6e88d66",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/interfaces.cpp",
+      "bytes": 10501,
+      "sha256": "1c32143b3b0563db74ac3e5da45775d2763fa411a8a5d0bfb4d9be589444a535",
+      "git_blob_sha": "c646bb1b6cac7df9771cbe7c2a8d0533b114729f",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/shelf_props_placement.cpp",
+      "bytes": 3170,
+      "sha256": "2e4d61a4fee565e2fbffa60be9018ccaaaaeaf7f06a6b8fb14e0e8399d0a35d8",
+      "git_blob_sha": "d09091f93c3eb68ff8b99fb339e4a78a494d9fb6",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/png.cpp",
+      "bytes": 2956,
+      "sha256": "62832de1430a513a96cb9b43fcec0720389c7c4b0ba30d1e31ead33298be9b8a",
+      "git_blob_sha": "5d766493215c24fbfc8c5115dad122d65ac9f225",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/core.cpp",
+      "bytes": 16814,
+      "sha256": "7df8cb34a16caec65051575a13afba722f13a8a032aa44d48d9d54887f4263c5",
+      "git_blob_sha": "0de5c36a5993c9392af33c8101cad8644a077d10",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/damage.cpp",
+      "bytes": 27473,
+      "sha256": "7a78af52ddade648f7eb47263b2ff50ce5b7dab3122d45508f7460e2a341d4bb",
+      "git_blob_sha": "583e56ade715df7c312018a3592aa0cb6865a811",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/main.cpp",
+      "bytes": 4053,
+      "sha256": "f9ae10addc7535a708ee7d9e5863840ea62b95f4d29ca1f42cb4c44daae7b6d9",
+      "git_blob_sha": "94bb37f01cf3c6cb3a0b5196f15e8a5a5eab04ae",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/industrial.cpp",
+      "bytes": 15145,
+      "sha256": "bd98c3d21b470a66c7e788574e5d01ef89dbcb39ceb4e3c9657f0dad92172c70",
+      "git_blob_sha": "60b253ad7f949de000e9b7c1b0934d57aa96ae1c",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/shelf_props_main.cpp",
+      "bytes": 4129,
+      "sha256": "5ad01f4c28d3bf526f86b3d13b71abfc353971e713418527d9e70ae6cbded030",
+      "git_blob_sha": "577d119c5e6136d609f07d18cdb954b8fffcad76",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/damp_wood.cpp",
+      "bytes": 7571,
+      "sha256": "6f348e8fb8b5013ab73550d66f4cd4db89bc273ebf659803a12f11828399d48a",
+      "git_blob_sha": "3c8eaabb6058a833e97a155d8a5d73f3339eeb56",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/fine_wear.cpp",
+      "bytes": 2813,
+      "sha256": "45727286357e4b266ee454192e79b9bd5e9bc15c56283a819e690a62aa9041cb",
+      "git_blob_sha": "e682378af9b96053b5706f189d8318cb18ade3ae",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/export_glb.cpp",
+      "bytes": 19488,
+      "sha256": "7a1765f76510aa80162c364066db46d7a8df0373a1a8801a20eeaa74689b2706",
+      "git_blob_sha": "6b78b94956e70e81697491150d21f38f639c0f63",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "src/shelf_props_materials.cpp",
+      "bytes": 4865,
+      "sha256": "8a156d30e44363fe4d7f74a98aa2177a4a54af33d19e89ee963109cfa5d95a62",
+      "git_blob_sha": "470efa58fea177d76e3f2b1973cd29bd16f03681",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/png.hpp",
+      "bytes": 363,
+      "sha256": "37c2b0d0bd958f0d882d1e149616ebd7eefd3536ca5168f334c48f81c738fcfa",
+      "git_blob_sha": "e96e9d5ac5790ed3af15803a8cbc52e1bbe8f315",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/materials.hpp",
+      "bytes": 1060,
+      "sha256": "e0f4c7cffcde5de9f99fb75656f9684732366bc58e800ebe9e9535f09bda8372",
+      "git_blob_sha": "5ba5e0e32e43f81602750cd1f62fc328bfd04160",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/fine_wear.hpp",
+      "bytes": 229,
+      "sha256": "a3cd0661f884731ce0f7592aa8cbf3c3c8c4832c0c66a5b9025c9f669905d928",
+      "git_blob_sha": "7bdb3babc822bb552d791216a8241b58a9241e86",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/localized_damage.hpp",
+      "bytes": 751,
+      "sha256": "2e4b408bf3145c529417edad730ef84533a259416717ca8fdb7101a99f31f3f0",
+      "git_blob_sha": "f9819af22e88d4b091bf79364a1deb2384799530",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/damage.hpp",
+      "bytes": 505,
+      "sha256": "d66d958a697f064416b9737faef6c7e9508289ba583d8304be471fd0b8c1a407",
+      "git_blob_sha": "b78f0b0c597e9b564fb795bf48fbe126bc00f2c9",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/shelf_props.hpp",
+      "bytes": 333,
+      "sha256": "f33a56fcc018be23ea3fa18e4cf12fd730b310853e133a286d0e7dd633f55d8e",
+      "git_blob_sha": "628d34a7bfa19718188dfe371dbe1af48ff1f323",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/export.hpp",
+      "bytes": 502,
+      "sha256": "0464fde8eb4b0678bb60599290aa34f2080860da8bc89eba621728edb0489e21",
+      "git_blob_sha": "e429683a93ea8aab54d84fc9206e88c99d1ff8a7",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/scene.hpp",
+      "bytes": 2846,
+      "sha256": "4d7b394453ecc3d10607dac93d9e9e14a1d8c40f9ccda2e0d1dcfd7ad7838196",
+      "git_blob_sha": "6eb3b418c8df951ba25159786b057e39000a59c6",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/interfaces.hpp",
+      "bytes": 479,
+      "sha256": "32e8ed7a46b592679f3969839e4595942fe3260bfaf2f637f846efc7ef8f907f",
+      "git_blob_sha": "f43741ade9f9f0890e3575d33cec342e08618208",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "include/jerico/evaluate.hpp",
+      "bytes": 188,
+      "sha256": "27f118be7ce77781b92be7b038ea208a1a4ae67a7d6ee2d61748bd0b67895da4",
+      "git_blob_sha": "d079509856518f46202c2b49797076f4239d3312",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "CMakeLists.txt",
+      "bytes": 1927,
+      "sha256": "88dad2a7ba03070748d056c6192132cefb64d72e13a2c6c4720b8d62c549ec2e",
+      "git_blob_sha": "82d8f65de4cabcda3d68d47a03d0eda40d4916f6",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "docs/PROVENANCE.md",
+      "bytes": 1009,
+      "sha256": "e25484502598f320e30a5acac24c0294c89334ca69eab367454c9246b596bee1",
+      "git_blob_sha": "b83018c088899dc8ad9497c43c5bcb14d968a800",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "docs/INDEPENDENT_QA_SUMMARY.md",
+      "bytes": 4784,
+      "sha256": "a0b8cc4285c61c07a6b11ec28ef05cab0e90333066da9db1575297448844aeef",
+      "git_blob_sha": "e9d462126efb45d396e22bd8b132647dd1686405",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "docs/API.md",
+      "bytes": 2259,
+      "sha256": "756a335007b827b25019679cb5fb52b6c20b8568f6bc9e02cbe9acbaf8613c72",
+      "git_blob_sha": "63e8797cf55dadac5047936b9f9aae29cd753362",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "recipes/small_less_worn.json",
+      "bytes": 108,
+      "sha256": "38f15fb725c9fa386add4fc5043c1772f8eea379158a5303d815fa82927163a5",
+      "git_blob_sha": "c5e4d3f200b470fc0f05ea0dadf00b0a69b45eb4",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "recipes/worn_large.json",
+      "bytes": 109,
+      "sha256": "6e70856bc7a3c60f952705e1947d807e0e098990f5d0c98e94cb6b32bb14fce2",
+      "git_blob_sha": "0fcc1daab1d95f2bf0b19cf8726705e0738f7d31",
+      "git_mode": "100644"
+    },
+    {
+      "relative_path": "recipes/reference_props.json",
+      "bytes": 105,
+      "sha256": "c52fd1e10c0a29c9474e45c0349b46672ca2ecec2d713089364009987f0b4be4",
+      "git_blob_sha": "00583029686ffcde84e8789b23e364628757c43e",
+      "git_mode": "100644"
+    }
+  ]
+}

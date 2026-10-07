@@ -1,0 +1,6 @@
+#include "jerico/shelf_props.hpp"
+#include <iostream>
+#include <stdexcept>
+using namespace jerico;
+void need(bool x,const std::string&m){if(!x)throw std::runtime_error(m);}
+int main(){try{Json sh={{"metadata",{{"compartments",Json::array()},{"items",Json::array()}}}};for(int row=0;row<4;row++)sh["metadata"]["compartments"].push_back({{"index",row},{"shelf_id","shelf."+std::to_string(row)},{"bottom",row*.5},{"top",row*.5+.45},{"x_min",-.6},{"x_max",.6},{"y_min",-.13},{"y_max",.13}});auto props=build_shelf_props(Json::object());auto q=plan_shelf_prop_placement(sh,props);need(q.is_object()&&q.contains("placements")&&q["placements"].size()==3,"three deterministic supported placements missing");need(q==plan_shelf_prop_placement(sh,props),"placement unstable");for(auto&p:q["placements"]){need(p["status"]=="placed","unexpected no fit");need(p["support_id"].is_string(),"missing support");need(p["clearance_m"]["side"].get<double>()>=.006,"side clearance");}for(auto&bay:sh["metadata"]["compartments"])bay["x_max"]=-.59;auto blocked=plan_shelf_prop_placement(sh,props);for(auto&p:blocked["placements"])need(p["status"]=="no_fit","must refuse impossible gap rather than move books");std::cout<<"PASS deterministic placement and no-fit refusal\n";}catch(const std::exception&e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}
