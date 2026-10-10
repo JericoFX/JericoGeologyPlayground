@@ -1,0 +1,146 @@
+[
+  {
+    "name": "rejected-31-join-neutral",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      }
+    }
+  },
+  {
+    "name": "corrected-31-join-neutral",
+    "obj": "evidence/corrected/31/output/eroded.obj",
+    "status": "Candidate correction, code review pending",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      }
+    }
+  },
+  {
+    "name": "rejected-31-join-edges",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      },
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 0.9,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  {
+    "name": "corrected-31-join-edges",
+    "obj": "evidence/corrected/31/output/eroded.obj",
+    "status": "Candidate correction, code review pending",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      },
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 0.9,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  }
+]

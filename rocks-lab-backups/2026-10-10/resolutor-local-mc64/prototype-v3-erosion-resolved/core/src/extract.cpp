@@ -65,49 +65,70 @@ void contractSubresolutionEdges(Extraction&ex,double size){
 Extraction extract(const RockField&f,const GridSpec&g,Stage stage){auto errors=validateRecipe(f.recipe,g);if(!errors.empty())throw std::invalid_argument(errors.front());using Clock=std::chrono::steady_clock;auto start=Clock::now();Extraction ex;auto &m=ex.mesh;unsigned n=g.cells,N=n+1;std::size_t total=std::size_t(N)*N*N;std::vector<double> values(total);std::vector<int32_t> cache(total*3,-1);double h=(g.max.x-g.min.x)/n;auto id=[&](unsigned x,unsigned y,unsigned z){return (std::size_t(z)*N+y)*N+x;};auto point=[&](unsigned x,unsigned y,unsigned z){return g.min+Vec3{double(x),double(y),double(z)}*h;};
  for(unsigned z=0;z<N;z++)for(unsigned y=0;y<N;y++)for(unsigned x=0;x<N;x++){double v=fieldValue(f,point(x,y,z),stage);if(!std::isfinite(v))throw std::runtime_error("nonfinite field sample");values[id(x,y,z)]=v;if((x==0||y==0||z==0||x==n||y==n||z==n)&&v<=0)ex.boundaryTouched=true;}
  auto sampled=Clock::now();ex.fieldMs=std::chrono::duration<double,std::milli>(sampled-start).count();
- // One canonical entry per grid face; both incident cells consume one decision.
+ // Plan all eligible ambiguous cells before emitting any triangles. Shared
+ // face certificates and cell choices are committed only by whole component.
  using FaceKey=std::tuple<unsigned,unsigned,unsigned,unsigned>;
+ using CellKey=std::array<unsigned,3>;
+ struct CellPlan{CellKey key;unsigned mask;std::vector<FaceKey> faces;};
  std::map<FaceKey,detail::FaceDecision> faceDecisions;
+ std::map<CellKey,std::size_t> cellIndex;std::vector<CellPlan> cells;
+ std::vector<std::optional<bool>> alternatives;
+ std::vector<bool> accepted;
  const bool resolveFaces=detail::eligibleErosionResolver(f,g);
+ auto maskAt=[&](unsigned x,unsigned y,unsigned z){unsigned mask=0;for(unsigned k=0;k<8;k++)if(values[id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1))]<0)mask|=1u<<k;return mask;};
+ if(resolveFaces){
+  auto resolutionStart=Clock::now();
+  for(unsigned z=0;z<n;z++)for(unsigned y=0;y<n;y++)for(unsigned x=0;x<n;x++){
+   unsigned mask=maskAt(x,y,z);if(mask==0||mask==255||!ambiguousCase(mask))continue;
+   cellIndex.emplace(CellKey{x,y,z},cells.size());cells.push_back({{x,y,z},mask,{}});
+  }
+  std::vector<std::vector<std::size_t>> neighbors(cells.size());
+  for(std::size_t ci=0;ci<cells.size();ci++){
+   auto&cell=cells[ci];auto [x,y,z]=cell.key;bool compatible=true;
+   std::vector<std::pair<unsigned,bool>> wanted;
+   for(unsigned face:detail::alternatingFaces(cell.mask)){
+    unsigned axis=face<2?2:face<4?1:0;
+    FaceKey key=axis==0?FaceKey{axis,x+(face==5),y,z}:axis==1?FaceKey{axis,y+(face==3),x,z}:FaceKey{axis,z+(face==1),x,y};
+    cell.faces.push_back(key);
+    int nx=int(x),ny=int(y),nz=int(z),delta=(face%2)?1:-1;
+    if(axis==0)nx+=delta;else if(axis==1)ny+=delta;else nz+=delta;
+    if(nx<0||ny<0||nz<0||nx>=int(n)||ny>=int(n)||nz>=int(n)){compatible=false;continue;}
+    auto neighbor=cellIndex.find(CellKey{unsigned(nx),unsigned(ny),unsigned(nz)});
+    if(neighbor==cellIndex.end()){compatible=false;continue;}
+    neighbors[ci].push_back(neighbor->second);
+    auto it=faceDecisions.find(key);
+    if(it==faceDecisions.end()){
+     std::array<Vec3,4> points;std::array<double,4> faceValues;
+     for(unsigned j=0;j<4;j++){unsigned k=detail::cubeFaces[face][j];points[j]=point(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));faceValues[j]=values[id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1))];}
+     auto decision=detail::decideErosionFace(f,stage,points,faceValues);ex.faceCertificateSamples+=decision.evaluations;
+     it=faceDecisions.emplace(key,std::move(decision)).first;
+    }
+    if(it->second.negativeConnected.has_value())wanted.emplace_back(face,*it->second.negativeConnected);else compatible=false;
+   }
+   alternatives.push_back(compatible?detail::chooseFaceAlternative(cell.mask,wanted):std::nullopt);
+  }
+  accepted=detail::atomicComponentAcceptance(alternatives,neighbors);
+  std::set<FaceKey> committedFaces;
+  for(std::size_t ci=0;ci<cells.size();ci++)if(accepted[ci])for(auto key:cells[ci].faces)committedFaces.insert(key);
+  ex.resolvedAmbiguousFaces=committedFaces.size();
+  ex.ambiguityResolutionMs=std::chrono::duration<double,std::milli>(Clock::now()-resolutionStart).count();
+ }
  for(unsigned z=0;z<n;z++)for(unsigned y=0;y<n;y++)for(unsigned x=0;x<n;x++){
  std::array<std::size_t,8> ids;std::array<double,8> v;unsigned mask=0;for(unsigned k=0;k<8;k++){ids[k]=id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));v[k]=values[ids[k]];if(v[k]<0)mask|=1u<<k;}if(mask==0||mask==255)continue;
  bool alternate=false;
  if(ambiguousCase(mask)){
-  ex.ambiguousCells++;bool resolved=false;auto resolutionStart=Clock::now();
-  if(resolveFaces)if(auto face=detail::simpleAmbiguousFace(mask)){
-   unsigned axis=*face<2?2:*face<4?1:0;
-   FaceKey key=axis==0?FaceKey{axis,x+(*face==5),y,z}:axis==1?FaceKey{axis,y+(*face==3),x,z}:FaceKey{axis,z+(*face==1),x,y};
-   // A shared face is atomic: never change one incident cell while its
-   // neighbor remains on an unsupported configuration and a different pairing.
-   int nx=int(x),ny=int(y),nz=int(z);int delta=(*face%2)?1:-1;
-   if(axis==0)nx+=delta;else if(axis==1)ny+=delta;else nz+=delta;
-   bool neighborCompatible=nx>=0&&ny>=0&&nz>=0&&nx<int(n)&&ny<int(n)&&nz<int(n);
-   if(neighborCompatible){
-    unsigned neighborMask=0;for(unsigned k=0;k<8;k++)if(values[id(unsigned(nx)+(k&1),unsigned(ny)+((k>>1)&1),unsigned(nz)+((k>>2)&1))]<0)neighborMask|=1u<<k;
-    auto neighborFace=detail::simpleAmbiguousFace(neighborMask);
-    neighborCompatible=neighborFace.has_value()&&*neighborFace==(*face^1u);
-   }
-   if(neighborCompatible){
-   auto it=faceDecisions.find(key);
-   if(it==faceDecisions.end()){
-    std::array<Vec3,4> points;std::array<double,4> faceValues;
-    for(unsigned j=0;j<4;j++){unsigned k=detail::cubeFaces[*face][j];points[j]=point(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));faceValues[j]=v[k];}
-    auto decision=detail::decideErosionFace(f,stage,points,faceValues);ex.faceCertificateSamples+=decision.evaluations;
-    if(decision.negativeConnected.has_value())ex.resolvedAmbiguousFaces++;
-    it=faceDecisions.emplace(key,std::move(decision)).first;
-   }
-   auto original=detail::tableConnectsNegative(mask,*face),complement=detail::tableConnectsNegative(255-mask,*face);
-   if(it->second.negativeConnected.has_value()&&original.has_value()&&complement.has_value()&&*original!=(!*complement)){alternate=*original!=*it->second.negativeConnected;resolved=true;}
-   }
-  }
+  ex.ambiguousCells++;bool resolved=false;
+  if(resolveFaces){auto ci=cellIndex.at(CellKey{x,y,z});resolved=accepted[ci];if(resolved)alternate=*alternatives[ci];}
   if(resolved)ex.resolvedAmbiguousCells++;else ex.unresolvedAmbiguousCells++;
-  ex.ambiguityResolutionMs+=std::chrono::duration<double,std::milli>(Clock::now()-resolutionStart).count();
  }
  std::uint32_t vi[12]{};for(unsigned e=0;e<12;e++){int a=edges[e][0],b=edges[e][1];if((v[a]<0)==(v[b]<0))continue;unsigned axis=e<4?0:e<8?1:2;auto key=ids[a]*3+axis;if(cache[key]<0){double t=v[a]/(v[a]-v[b]);Vec3 pa=point(x+(a&1),y+((a>>1)&1),z+((a>>2)&1));Vec3 pb=point(x+(b&1),y+((b>>1)&1),z+((b>>2)&1));double lo=0,hi=1; for(int refine=0;refine<32;refine++){double mid=(lo+hi)*.5;double vm=fieldValue(f,pa+(pb-pa)*mid,stage);if((vm<0)==(v[a]<0))lo=mid;else hi=mid;} t=(lo+hi)*.5;Vec3 p=pa+(pb-pa)*t;cache[key]=int32_t(m.positions.size());m.positions.push_back(p);auto sample=evaluate(f,p,stage);m.normals.push_back(normalized(sample.gradient));m.resistance.push_back(sample.resistance);}vi[e]=std::uint32_t(cache[key]);}
  auto conf=marching_cube_tris[alternate?255-mask:mask];unsigned count=conf&15;for(unsigned j=0;j<count;j++){std::uint32_t a=vi[(conf>>(4+12*j))&15],b=vi[(conf>>(8+12*j))&15],c=vi[(conf>>(12+12*j))&15];// Complement configuration swaps inside/outside, so reverse ALL its faces.
 // The unambiguous branch retains the exact original table and vertex order.
 if(alternate)std::swap(b,c);
 m.indices.insert(m.indices.end(),{a,b,c});}}
+ // The erosion extension reuses the existing bounded cleanup only after all
+ // ambiguous cells are certified. No new roots or normal values are created.
+ if(resolveFaces&&!ex.unresolvedAmbiguousCells&&!ex.boundaryTouched)contractSubresolutionEdges(ex,f.recipe.size);
  if((f.recipe.generatorVersion=="rocks-v7"||(f.recipe.generatorVersion=="rocks-v12"&&f.recipe.family=="jointed_granite"))&&!ex.ambiguousCells&&!ex.boundaryTouched)contractSubresolutionEdges(ex,f.recipe.size);
  ex.extractNormalsMs=std::chrono::duration<double,std::milli>(Clock::now()-sampled).count();ex.coreBufferBytes=values.capacity()*sizeof(double)+cache.capacity()*sizeof(int32_t)+(m.positions.capacity()+m.normals.capacity())*sizeof(Vec3)+m.resistance.capacity()*sizeof(double)+m.indices.capacity()*sizeof(std::uint32_t);return ex;
 }

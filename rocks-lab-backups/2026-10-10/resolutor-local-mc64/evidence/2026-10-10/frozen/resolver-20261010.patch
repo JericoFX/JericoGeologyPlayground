@@ -1,0 +1,358 @@
+--- a/LEEME-CORRECCION-20261010.md
++++ b/LEEME-CORRECCION-20261010.md
+@@ -0,0 +1,37 @@
++# Corrección local de las siete semillas MC64
++
++Se conserva el campo aprobado de irregular_beds, las recetas y los umbrales de calidad. Se corrigen las semillas 4, 5, 8, 14, 25, 29 y 31 del barrido original 0–31, en sus etapas Base, Stratified y Eroded.
++
++## Cambios
++
++- El resolutor sigue usando las dos triangulaciones de la tabla original. Admite una cara ambigua o dos caras ambiguas opuestas (78 máscaras); todas las caras de una celda deben pedir la misma alternativa.
++- La decisión se aplica a todo el componente conectado de celdas o a ninguna. Una cara sin evidencia, una combinación incompatible o un vecino no soportado conserva el rechazo.
++- Los triángulos microscópicos usan la contracción acotada ya existente, después de resolver las ambigüedades. Se conservan raíces y normales originales, la condición topológica de enlace y la orientación. La mayor distancia real observada fue 0,00000173789 m. No se cambiaron umbrales.
++
++## Resultados verificados
++
++- Barrido original: 32/32 admitidas. Controles dirigidos 0–31 más 48, 117, 305 y 999: 36/36; repetición de sus 108 OBJ idéntica byte a byte.
++- Los 25 éxitos anteriores y los controles 48/117/305/999 conservan los 87 OBJ exactos. Los 3 OBJ de strata-v4 seed48 también permanecen idénticos.
++- Las 21 mallas reparadas son manifold cerradas, tienen una componente, normales válidas, volumen positivo y cero caras degeneradas/duplicadas. Cero intersecciones detectadas por el auditor independiente, con tolerancia aproximada de 2,92e-9 m, en 2.468.424 pares candidatos.
++- Holdout fijo 32–63: baseline 26/32, candidato 31/32. Los 26 éxitos anteriores permanecen idénticos; se admiten además 39, 43, 47, 49 y 63. Seed40 sigue rechazada.
++- Exploración 0–127 más 305/999: 130 semillas únicas en 132 ejecuciones (48 y 117 repetidas); 125 únicas admitidas. Se conservan los rechazos 40 (guarda de vértice/normal), 73, 98, 111 y 120 (ambigüedades sin resolver).
++- Controles reales fuera de alcance, grid128, wear distinto de cero, otra familia y otra versión: mismo resultado y diagnóstico estable que el baseline.
++- La medición actual del prepass local fue de 3,576 a 6,482 ms por etapa en este equipo. Incluye el nuevo recorrido previo aun cuando no haya ambigüedades; no es el coste histórico del resolutor del 8 de octubre.
++
++## Límites
++
++Esta corrección conserva el alcance experimental rocks-v3 / irregular_beds / paris-mc-v1 / MC64 / wear0. La cota L=8 y la guarda numérica aportan evidencia conservadora del signo del campo; no son aritmética de intervalos ni prueba exacta universal. Se mantienen las hipótesis previas de MC sobre una raíz por arista y detalle resuelto por la rejilla. La auditoría de intersecciones usa tolerancias y no demuestra ausencia de bucles ocultos dentro de los voxels. No se presenta el resultado como extractor universal.
++
++## Reproducción
++
++La carpeta de fuente debe tener como hermana la carpeta real damage-checkpoint, con sus dependencias originales incluidas. Desde esta carpeta ejecutar:
++
++    bash build_erosion_probe.sh
++
++El comando compila el código, prueba las dependencias matemáticas originales y ejecuta las pruebas de cara, componente atómico, contracción, las siete semillas y la CLI. El resto de pruebas y sus resultados se conservan con la evidencia de entrega.
++
++El campo aprobado sigue teniendo SHA-256:
++
++    2ddf7b9a15d3c4fa83bb33f5554c888f62d67cb3bcba62c50141c8017c4abdc7
++
++Esta entrega no instala nada en la PC ni integra cambios en el motor.
+--- a/build_erosion_probe.sh
++++ b/build_erosion_probe.sh
+@@ -1,6 +1,7 @@
+ #!/bin/bash
+ set -euo pipefail
+ cd "$(dirname "$0")"
++mkdir -p build
+ checkpoint=../damage-checkpoint/JericoPipeCppCheckpoint01_20261007
+ engine=$checkpoint/original/build-chain/deps/engine-inputs
+ incs=(-Icore/include -I"$checkpoint/original/Source" -I"$engine/Engine/Core/Include" -I"$engine/Engine/Jobs/Include" -I"$engine/Tools/ProceduralAuthoring/Include" -I"$engine/Tools/ProceduralAuthoring/Source")
+@@ -12,3 +13,11 @@
+ for file in core/src/*.cpp; do g++ "${flags[@]}" "${incs[@]}" -Wall -Wextra -Wpedantic -c "$file" -o "build/$(basename "$file" .cpp).o"; done
+ ar rcs build/librocks_core.a build/alveolar_surface.o build/compare.o build/extract.o build/field.o build/heightfield.o build/polyhedral.o build/reference_studies.o build/surface_detail.o build/surface_families.o build/validate.o
+ for app in 'cli/main.cpp rocks_cli' 'tests/v3_erosion_tests.cpp v3_erosion_tests' 'tests/erosion_diagnose.cpp erosion_diagnose'; do read -r file name <<<"$app"; g++ "${flags[@]}" "${incs[@]}" "$file" build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o "build/$name"; done
++
++# Resolver regression entry point: real field fixtures, atomic table choices,
++# conservative rejection guards and existing bounded-contraction adversaries.
++for test in face_resolution atomic_resolution contraction erosion_seed_regression; do
++ g++ "${flags[@]}" "${incs[@]}" "tests/${test}_tests.cpp" build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o "build/${test}_tests"
++ "build/${test}_tests"
++done
++python3 tests/test_localized_resolver.py
+--- a/core/src/extract.cpp
++++ b/core/src/extract.cpp
+@@ -65,49 +65,70 @@
+ Extraction extract(const RockField&f,const GridSpec&g,Stage stage){auto errors=validateRecipe(f.recipe,g);if(!errors.empty())throw std::invalid_argument(errors.front());using Clock=std::chrono::steady_clock;auto start=Clock::now();Extraction ex;auto &m=ex.mesh;unsigned n=g.cells,N=n+1;std::size_t total=std::size_t(N)*N*N;std::vector<double> values(total);std::vector<int32_t> cache(total*3,-1);double h=(g.max.x-g.min.x)/n;auto id=[&](unsigned x,unsigned y,unsigned z){return (std::size_t(z)*N+y)*N+x;};auto point=[&](unsigned x,unsigned y,unsigned z){return g.min+Vec3{double(x),double(y),double(z)}*h;};
+  for(unsigned z=0;z<N;z++)for(unsigned y=0;y<N;y++)for(unsigned x=0;x<N;x++){double v=fieldValue(f,point(x,y,z),stage);if(!std::isfinite(v))throw std::runtime_error("nonfinite field sample");values[id(x,y,z)]=v;if((x==0||y==0||z==0||x==n||y==n||z==n)&&v<=0)ex.boundaryTouched=true;}
+  auto sampled=Clock::now();ex.fieldMs=std::chrono::duration<double,std::milli>(sampled-start).count();
+- // One canonical entry per grid face; both incident cells consume one decision.
++ // Plan all eligible ambiguous cells before emitting any triangles. Shared
++ // face certificates and cell choices are committed only by whole component.
+  using FaceKey=std::tuple<unsigned,unsigned,unsigned,unsigned>;
++ using CellKey=std::array<unsigned,3>;
++ struct CellPlan{CellKey key;unsigned mask;std::vector<FaceKey> faces;};
+  std::map<FaceKey,detail::FaceDecision> faceDecisions;
++ std::map<CellKey,std::size_t> cellIndex;std::vector<CellPlan> cells;
++ std::vector<std::optional<bool>> alternatives;
++ std::vector<bool> accepted;
+  const bool resolveFaces=detail::eligibleErosionResolver(f,g);
++ auto maskAt=[&](unsigned x,unsigned y,unsigned z){unsigned mask=0;for(unsigned k=0;k<8;k++)if(values[id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1))]<0)mask|=1u<<k;return mask;};
++ if(resolveFaces){
++  auto resolutionStart=Clock::now();
++  for(unsigned z=0;z<n;z++)for(unsigned y=0;y<n;y++)for(unsigned x=0;x<n;x++){
++   unsigned mask=maskAt(x,y,z);if(mask==0||mask==255||!ambiguousCase(mask))continue;
++   cellIndex.emplace(CellKey{x,y,z},cells.size());cells.push_back({{x,y,z},mask,{}});
++  }
++  std::vector<std::vector<std::size_t>> neighbors(cells.size());
++  for(std::size_t ci=0;ci<cells.size();ci++){
++   auto&cell=cells[ci];auto [x,y,z]=cell.key;bool compatible=true;
++   std::vector<std::pair<unsigned,bool>> wanted;
++   for(unsigned face:detail::alternatingFaces(cell.mask)){
++    unsigned axis=face<2?2:face<4?1:0;
++    FaceKey key=axis==0?FaceKey{axis,x+(face==5),y,z}:axis==1?FaceKey{axis,y+(face==3),x,z}:FaceKey{axis,z+(face==1),x,y};
++    cell.faces.push_back(key);
++    int nx=int(x),ny=int(y),nz=int(z),delta=(face%2)?1:-1;
++    if(axis==0)nx+=delta;else if(axis==1)ny+=delta;else nz+=delta;
++    if(nx<0||ny<0||nz<0||nx>=int(n)||ny>=int(n)||nz>=int(n)){compatible=false;continue;}
++    auto neighbor=cellIndex.find(CellKey{unsigned(nx),unsigned(ny),unsigned(nz)});
++    if(neighbor==cellIndex.end()){compatible=false;continue;}
++    neighbors[ci].push_back(neighbor->second);
++    auto it=faceDecisions.find(key);
++    if(it==faceDecisions.end()){
++     std::array<Vec3,4> points;std::array<double,4> faceValues;
++     for(unsigned j=0;j<4;j++){unsigned k=detail::cubeFaces[face][j];points[j]=point(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));faceValues[j]=values[id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1))];}
++     auto decision=detail::decideErosionFace(f,stage,points,faceValues);ex.faceCertificateSamples+=decision.evaluations;
++     it=faceDecisions.emplace(key,std::move(decision)).first;
++    }
++    if(it->second.negativeConnected.has_value())wanted.emplace_back(face,*it->second.negativeConnected);else compatible=false;
++   }
++   alternatives.push_back(compatible?detail::chooseFaceAlternative(cell.mask,wanted):std::nullopt);
++  }
++  accepted=detail::atomicComponentAcceptance(alternatives,neighbors);
++  std::set<FaceKey> committedFaces;
++  for(std::size_t ci=0;ci<cells.size();ci++)if(accepted[ci])for(auto key:cells[ci].faces)committedFaces.insert(key);
++  ex.resolvedAmbiguousFaces=committedFaces.size();
++  ex.ambiguityResolutionMs=std::chrono::duration<double,std::milli>(Clock::now()-resolutionStart).count();
++ }
+  for(unsigned z=0;z<n;z++)for(unsigned y=0;y<n;y++)for(unsigned x=0;x<n;x++){
+  std::array<std::size_t,8> ids;std::array<double,8> v;unsigned mask=0;for(unsigned k=0;k<8;k++){ids[k]=id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));v[k]=values[ids[k]];if(v[k]<0)mask|=1u<<k;}if(mask==0||mask==255)continue;
+  bool alternate=false;
+  if(ambiguousCase(mask)){
+-  ex.ambiguousCells++;bool resolved=false;auto resolutionStart=Clock::now();
+-  if(resolveFaces)if(auto face=detail::simpleAmbiguousFace(mask)){
+-   unsigned axis=*face<2?2:*face<4?1:0;
+-   FaceKey key=axis==0?FaceKey{axis,x+(*face==5),y,z}:axis==1?FaceKey{axis,y+(*face==3),x,z}:FaceKey{axis,z+(*face==1),x,y};
+-   // A shared face is atomic: never change one incident cell while its
+-   // neighbor remains on an unsupported configuration and a different pairing.
+-   int nx=int(x),ny=int(y),nz=int(z);int delta=(*face%2)?1:-1;
+-   if(axis==0)nx+=delta;else if(axis==1)ny+=delta;else nz+=delta;
+-   bool neighborCompatible=nx>=0&&ny>=0&&nz>=0&&nx<int(n)&&ny<int(n)&&nz<int(n);
+-   if(neighborCompatible){
+-    unsigned neighborMask=0;for(unsigned k=0;k<8;k++)if(values[id(unsigned(nx)+(k&1),unsigned(ny)+((k>>1)&1),unsigned(nz)+((k>>2)&1))]<0)neighborMask|=1u<<k;
+-    auto neighborFace=detail::simpleAmbiguousFace(neighborMask);
+-    neighborCompatible=neighborFace.has_value()&&*neighborFace==(*face^1u);
+-   }
+-   if(neighborCompatible){
+-   auto it=faceDecisions.find(key);
+-   if(it==faceDecisions.end()){
+-    std::array<Vec3,4> points;std::array<double,4> faceValues;
+-    for(unsigned j=0;j<4;j++){unsigned k=detail::cubeFaces[*face][j];points[j]=point(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));faceValues[j]=v[k];}
+-    auto decision=detail::decideErosionFace(f,stage,points,faceValues);ex.faceCertificateSamples+=decision.evaluations;
+-    if(decision.negativeConnected.has_value())ex.resolvedAmbiguousFaces++;
+-    it=faceDecisions.emplace(key,std::move(decision)).first;
+-   }
+-   auto original=detail::tableConnectsNegative(mask,*face),complement=detail::tableConnectsNegative(255-mask,*face);
+-   if(it->second.negativeConnected.has_value()&&original.has_value()&&complement.has_value()&&*original!=(!*complement)){alternate=*original!=*it->second.negativeConnected;resolved=true;}
+-   }
+-  }
++  ex.ambiguousCells++;bool resolved=false;
++  if(resolveFaces){auto ci=cellIndex.at(CellKey{x,y,z});resolved=accepted[ci];if(resolved)alternate=*alternatives[ci];}
+   if(resolved)ex.resolvedAmbiguousCells++;else ex.unresolvedAmbiguousCells++;
+-  ex.ambiguityResolutionMs+=std::chrono::duration<double,std::milli>(Clock::now()-resolutionStart).count();
+  }
+  std::uint32_t vi[12]{};for(unsigned e=0;e<12;e++){int a=edges[e][0],b=edges[e][1];if((v[a]<0)==(v[b]<0))continue;unsigned axis=e<4?0:e<8?1:2;auto key=ids[a]*3+axis;if(cache[key]<0){double t=v[a]/(v[a]-v[b]);Vec3 pa=point(x+(a&1),y+((a>>1)&1),z+((a>>2)&1));Vec3 pb=point(x+(b&1),y+((b>>1)&1),z+((b>>2)&1));double lo=0,hi=1; for(int refine=0;refine<32;refine++){double mid=(lo+hi)*.5;double vm=fieldValue(f,pa+(pb-pa)*mid,stage);if((vm<0)==(v[a]<0))lo=mid;else hi=mid;} t=(lo+hi)*.5;Vec3 p=pa+(pb-pa)*t;cache[key]=int32_t(m.positions.size());m.positions.push_back(p);auto sample=evaluate(f,p,stage);m.normals.push_back(normalized(sample.gradient));m.resistance.push_back(sample.resistance);}vi[e]=std::uint32_t(cache[key]);}
+  auto conf=marching_cube_tris[alternate?255-mask:mask];unsigned count=conf&15;for(unsigned j=0;j<count;j++){std::uint32_t a=vi[(conf>>(4+12*j))&15],b=vi[(conf>>(8+12*j))&15],c=vi[(conf>>(12+12*j))&15];// Complement configuration swaps inside/outside, so reverse ALL its faces.
+ // The unambiguous branch retains the exact original table and vertex order.
+ if(alternate)std::swap(b,c);
+ m.indices.insert(m.indices.end(),{a,b,c});}}
++ // The erosion extension reuses the existing bounded cleanup only after all
++ // ambiguous cells are certified. No new roots or normal values are created.
++ if(resolveFaces&&!ex.unresolvedAmbiguousCells&&!ex.boundaryTouched)contractSubresolutionEdges(ex,f.recipe.size);
+  if((f.recipe.generatorVersion=="rocks-v7"||(f.recipe.generatorVersion=="rocks-v12"&&f.recipe.family=="jointed_granite"))&&!ex.ambiguousCells&&!ex.boundaryTouched)contractSubresolutionEdges(ex,f.recipe.size);
+  ex.extractNormalsMs=std::chrono::duration<double,std::milli>(Clock::now()-sampled).count();ex.coreBufferBytes=values.capacity()*sizeof(double)+cache.capacity()*sizeof(int32_t)+(m.positions.capacity()+m.normals.capacity())*sizeof(Vec3)+m.resistance.capacity()*sizeof(double)+m.indices.capacity()*sizeof(std::uint32_t);return ex;
+ }
+--- a/core/src/face_resolution.hpp
++++ b/core/src/face_resolution.hpp
+@@ -42,6 +42,49 @@
+  if(arcs==aroundZero)return !zeroNegative;
+  if(arcs==aroundOne)return zeroNegative;
+  return {};
++}
++// Narrow extension: one alternating face, or two opposite alternating faces.
++// Interior-only, adjacent multi-face and higher-order configurations stay out.
++inline std::vector<unsigned> alternatingFaces(unsigned mask){
++ std::vector<unsigned> faces;if(mask>255)return faces;
++ for(unsigned face=0;face<6;face++){
++  unsigned bits=0;for(unsigned k=0;k<4;k++)bits|=((mask>>cubeFaces[face][k])&1)<<k;
++  if(bits==5||bits==10)faces.push_back(face);
++ }return faces;
++}
++inline bool supportedFaceMask(unsigned mask){
++ auto faces=alternatingFaces(mask);
++ return faces.size()==1||(faces.size()==2&&(faces[0]^1u)==faces[1]);
++}
++// A cell has only two pinned triangulations. Every face must ask for the same
++// one; a missing/duplicate face or mixed choices cannot be represented safely.
++inline std::optional<bool> chooseFaceAlternative(unsigned mask,const std::vector<std::pair<unsigned,bool>>&wanted){
++ if(!supportedFaceMask(mask))return {};
++ auto faces=alternatingFaces(mask);if(wanted.size()!=faces.size())return {};
++ std::set<unsigned> seen;std::optional<bool> alternate;
++ for(auto [face,negativeConnected]:wanted){
++  if(std::find(faces.begin(),faces.end(),face)==faces.end()||!seen.insert(face).second)return {};
++  auto original=tableConnectsNegative(mask,face),complement=tableConnectsNegative(255-mask,face);
++  if(!original||!complement||*original!=*complement)return {};
++  bool choice=*original!=negativeConnected;
++  if(alternate.has_value()&&*alternate!=choice)return {};
++  alternate=choice;
++ }return alternate;
++}
++// Graph edges join cells across every alternating shared face, including
++// unsupported cells. An unresolved downstream cell rejects the entire patch.
++inline std::vector<bool> atomicComponentAcceptance(const std::vector<std::optional<bool>>&candidates,const std::vector<std::vector<std::size_t>>&neighbors){
++ std::vector<bool> accepted(candidates.size(),false),seen(candidates.size(),false);
++ for(std::size_t start=0;start<candidates.size();start++){
++  if(seen[start])continue;
++  std::vector<std::size_t> component,pending{start};bool valid=true;
++  while(!pending.empty()){
++   auto cell=pending.back();pending.pop_back();if(seen[cell])continue;seen[cell]=true;component.push_back(cell);
++   valid=valid&&candidates[cell].has_value();
++   for(auto neighbor:neighbors[cell])if(!seen[neighbor])pending.push_back(neighbor);
++  }
++  if(valid)for(auto cell:component)accepted[cell]=true;
++ }return accepted;
+ }
+ struct PathEvidence {bool connected=false;unsigned evaluations=0;double minimumClearance=INFINITY;};
+ // Conservative continuity bound plus an explicit floating-point safety margin.
+--- a/tests/atomic_resolution_tests.cpp
++++ b/tests/atomic_resolution_tests.cpp
+@@ -0,0 +1,28 @@
++#include "../core/src/face_resolution.hpp"
++#include <iostream>
++#include <stdexcept>
++using namespace rocks;using namespace rocks::detail;
++#define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
++int main(){try{
++ unsigned supported=0;
++ for(unsigned mask=0;mask<256;mask++){
++  if(!supportedFaceMask(mask))continue;supported++;auto faces=alternatingFaces(mask);
++  CHECK(faces.size()==1||(faces.size()==2&&(faces[0]^1u)==faces[1]));
++  std::vector<std::pair<unsigned,bool>> wantOriginal,wantAlternate;
++  for(unsigned face:faces){auto a=tableConnectsNegative(mask,face),b=tableConnectsNegative(255-mask,face);CHECK(a&&b&&*a==*b);wantOriginal.emplace_back(face,*a);wantAlternate.emplace_back(face,!*b);}
++  auto original=chooseFaceAlternative(mask,wantOriginal),alternate=chooseFaceAlternative(mask,wantAlternate);
++  CHECK(original.has_value()&&!*original);CHECK(alternate.has_value()&&*alternate);
++  if(faces.size()==2){auto mixed=wantOriginal;mixed[0].second=!mixed[0].second;CHECK(!chooseFaceAlternative(mask,mixed).has_value());}
++ }
++ CHECK(supported==78);
++ CHECK(!supportedFaceMask(105));CHECK(!supportedFaceMask(126));CHECK(!supportedFaceMask(129));
++ CHECK(!chooseFaceAlternative(102,{{0,true}}).has_value());
++ CHECK(!chooseFaceAlternative(102,{{0,true},{0,true}}).has_value());
++ CHECK(!chooseFaceAlternative(102,{{0,true},{1,false}}).has_value());
++ std::vector<std::optional<bool>> candidates={true,false,std::nullopt,false,true};
++ std::vector<std::vector<std::size_t>> neighbors={{1},{0,2},{1},{4},{3}};
++ auto accepted=atomicComponentAcceptance(candidates,neighbors);
++ CHECK(!accepted[0]&&!accepted[1]&&!accepted[2]&&accepted[3]&&accepted[4]);
++ candidates[2]=true;accepted=atomicComponentAcceptance(candidates,neighbors);for(bool ok:accepted)CHECK(ok);
++ std::cout<<"78 supported masks, consistent complement, mixed-face rejection, downstream component atomicity PASS\n";
++}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}
+--- a/tests/erosion_seed_regression_tests.cpp
++++ b/tests/erosion_seed_regression_tests.cpp
+@@ -0,0 +1,9 @@
++#include "rocks/mesh.hpp"
++#include <iostream>
++using namespace rocks;
++int main(){unsigned failed=0;for(unsigned seed:{4,5,8,14,25,29,31})for(auto stage:{Stage::Base,Stage::Stratified,Stage::Eroded}){
++ Recipe r;r.schemaVersion=2;r.generatorVersion="rocks-v3";r.extractorVersion="paris-mc-v1";r.family="irregular_beds";r.seed=seed;r.wear=0;r.detail=1;
++ auto ex=extract(makeField(r),makeGrid(r,64),stage);auto q=validate(ex.mesh,r.size);
++ bool ok=q.accepted&&!ex.boundaryTouched&&ex.unresolvedAmbiguousCells==0&&ex.resolvedAmbiguousCells==ex.ambiguousCells;
++ std::cout<<"seed="<<seed<<" stage="<<int(stage)<<" accepted="<<ok<<" ambiguous="<<ex.ambiguousCells<<" unresolved="<<ex.unresolvedAmbiguousCells<<" degenerate="<<q.degenerateFaces<<" badVertices="<<q.badVertices<<" contractedEdges="<<ex.contractedEdges<<" distance="<<ex.maxContractionDistance<<'\n';failed+=!ok;
++}return failed?1:0;}
+--- a/tests/face_resolution_tests.cpp
++++ b/tests/face_resolution_tests.cpp
+@@ -29,6 +29,10 @@
+  auto tie=[](Vec3){return -1e-12;};CHECK(!boundedSignedPath(tie,Vec3{0,0,0},Vec3{1,0,0},1,8.,1e-8).connected);
+  Recipe r;r.schemaVersion=2;r.generatorVersion="rocks-v3";r.family="irregular_beds";r.extractorVersion="paris-mc-v1";r.wear=0;r.detail=1;auto f=makeField(r);
+  CHECK(eligibleErosionResolver(f,makeGrid(r,64)));CHECK(!eligibleErosionResolver(f,makeGrid(r,128)));auto other=f;other.recipe.family="fractured_wall";CHECK(!eligibleErosionResolver(other,makeGrid(r,64)));
++ for(auto version:{"rocks-v2","rocks-v4"}){auto outside=f;outside.recipe.generatorVersion=version;CHECK(!eligibleErosionResolver(outside,makeGrid(r,64)));}
++ for(double wear:{.01,1.}){auto outside=f;outside.recipe.wear=wear;CHECK(!eligibleErosionResolver(outside,makeGrid(r,64)));}
++ auto schema=f;schema.recipe.schemaVersion=1;CHECK(!eligibleErosionResolver(schema,makeGrid(r,64)));
++ auto extractor=f;extractor.recipe.extractorVersion="polyhedral-v1";CHECK(!eligibleErosionResolver(extractor,makeGrid(r,64)));
+  std::array<Vec3,4> crossing={Vec3{0,0,-.41},Vec3{0,.1,-.41},Vec3{0,.1,-.39},Vec3{0,0,-.39}};std::array<double,4> vals={-.1,.1,-.1,.1};CHECK(!decideErosionFace(f,Stage::Stratified,crossing,vals).negativeConnected);
+  vals[0]=0;CHECK(!decideErosionFace(f,Stage::Base,crossing,vals).negativeConnected);
+  std::cout<<"24 orientations/complements, edge roots, rejected ambiguity classes, nonfinite/tie/budget/interrupted-path/branch guards PASS\n";
+--- a/tests/test_localized_resolver.py
++++ b/tests/test_localized_resolver.py
+@@ -10,10 +10,27 @@
+     self.assertEqual(p.returncode,0,p.stderr)
+     metrics=json.loads((out/'metrics.json').read_text());self.assertTrue(metrics['accepted'])
+     stage=metrics['stages']['base' if seed==305 else 'stratified'];self.assertGreater(stage['ambiguousCells'],0);self.assertEqual(stage['resolvedAmbiguousCells'],stage['ambiguousCells']);self.assertEqual(stage['unresolvedAmbiguousCells'],0);self.assertEqual(stage['resolvedAmbiguousFaces'],1)
+- def test_neighbor_rejection_prevents_half_face_changes(self):
++ def test_previously_unsupported_neighbor_seed4_is_now_atomic(self):
++  # Seed4 is now in the supported single-face class. Negative downstream and
++  # mixed-face cases are pinned by atomic_resolution_tests instead of keeping
++  # this historical, repairable seed permanently rejected.
+   with tempfile.TemporaryDirectory() as d:
+    r={'schemaVersion':2,'seed':4,'units':'m','generatorVersion':'rocks-v3','extractorVersion':'paris-mc-v1','size':2,'layerThickness':.4,'contrast':.85,'wear':0,'detail':1,'grid':{'cells':64},'family':'irregular_beds'}
+    recipe=pathlib.Path(d)/'r.json';recipe.write_text(json.dumps(r));out=pathlib.Path(d)/'out'
+    p=subprocess.run([str(ROOT/'build/rocks_cli'),'generate','--recipe',str(recipe),'--out',str(out)],capture_output=True,text=True)
+-   self.assertNotEqual(p.returncode,0);self.assertFalse(out.exists());m=json.loads(p.stderr.split(': ',1)[1]);self.assertEqual(m['resolvedAmbiguousCells'],0);self.assertEqual(m['unresolvedAmbiguousCells'],m['ambiguousCells'])
++   self.assertEqual(p.returncode,0,p.stderr)
++   m=json.loads((out/'metrics.json').read_text())['stages']['stratified']
++   self.assertEqual(m['ambiguousCells'],2);self.assertEqual(m['resolvedAmbiguousCells'],2)
++   self.assertEqual(m['resolvedAmbiguousFaces'],1);self.assertEqual(m['unresolvedAmbiguousCells'],0)
++   self.assertEqual(m['degenerateFaces'],0);self.assertEqual(m['badEdges'],0);self.assertEqual(m['badVertices'],0)
++ def test_inconclusive_field_and_interior_cases_remain_rejected(self):
++  for seed in (73,98,111):
++   with self.subTest(seed=seed),tempfile.TemporaryDirectory() as d:
++    r={'schemaVersion':2,'seed':seed,'units':'m','generatorVersion':'rocks-v3','extractorVersion':'paris-mc-v1','size':2,'layerThickness':.4,'contrast':.85,'wear':0,'detail':1,'grid':{'cells':64},'family':'irregular_beds'}
++    recipe=pathlib.Path(d)/'r.json';recipe.write_text(json.dumps(r));out=pathlib.Path(d)/'out'
++    p=subprocess.run([str(ROOT/'build/rocks_cli'),'generate','--recipe',str(recipe),'--out',str(out)],capture_output=True,text=True)
++    self.assertNotEqual(p.returncode,0);self.assertFalse(out.exists())
++    m=json.loads(p.stderr.split(': ',1)[1]);self.assertGreater(m['ambiguousCells'],0)
++    self.assertEqual(m['resolvedAmbiguousCells'],0);self.assertEqual(m['resolvedAmbiguousFaces'],0)
++    self.assertEqual(m['unresolvedAmbiguousCells'],m['ambiguousCells'])
+ if __name__=='__main__':unittest.main()
+--- a/MANIFEST.sha256
++++ b/MANIFEST.sha256
+@@ -1,15 +1,18 @@
+ 93704ce31f6756bd45575586705ae64167f530c2ed163c8d55c95d4740ec8e5a  CMakeLists.txt
++dc4201e40c5bb12cbe4d0e9fc567ac6e609ba156c04050ffd181f1069dbe8905  LEEME-CORRECCION-20261010.md
+ 0a315816bfed1c79d8b71f3320ae0ce51a839aa995e5f9b28fae4ec976f413fa  README.md
+ c06308ade4094ed42dc1600b90ca0eb3402b0362c470791169c40fa36f33da89  build_direct.sh
+-5dc31adac2e832c483eb33f6262bba8f14c5bde01af66abd29e0f55d75d7b7f5  cli/main.cpp
++723c4c7c2edd6fdfc4033bb081230af8cf7961abba4b066f4c5c338b5dfe741a  build_erosion_probe.sh
++9ed782f25d448ba9c82d24c5985c9eff307dbfb207b445b8082861e176eba328  cli/main.cpp
+ 2e8ad48b9aba9fc28492c384a151577bd1877ec213f186a866d551ce8726746e  core/include/rocks/field.hpp
+-198d33d685987aeb87bac36089713b4ec12afa45bcd79deb216765dd7a4810c6  core/include/rocks/mesh.hpp
++50450916122fc18864ce4853f2e0c54f0f8a7c11c193da16dc38e2c2a86dfa50  core/include/rocks/mesh.hpp
+ abcca1249bca712f61b73d4e653a249a4d3f4ff47d60da329d0b0178b02f950d  core/include/rocks/types.hpp
+ 1c80af4c2ab2124f506c4c1446e977deb8bb5e387434695856435cf6f2f53a80  core/src/alveolar_surface.cpp
+ 0fdbc5fd4c064536f27abe4c8e5293026c78198e299df5efd4a46480d90406a1  core/src/alveolar_surface.hpp
+ 9e607c536a895e9c89bd56207fd05fe734e35afeccc66b7a5f2f0d67aa3d6078  core/src/compare.cpp
+-45cb303d0b6508e2414cb21dd2f8ec2d4f9179053f2026258e1910774ac063dc  core/src/extract.cpp
+-7a83c0c7e9b9d439ed47976841a366054ee552e1d6676403e192862bef83f71e  core/src/field.cpp
++4e76c556ab3879054a82409ae677e3932af5c70315320d1cdfba514a0df51b06  core/src/extract.cpp
++e41a9b0e0c724aa4bc2d6ff84ba52faa5d6ebb1df26194a444694e37995ee88c  core/src/face_resolution.hpp
++2ddf7b9a15d3c4fa83bb33f5554c888f62d67cb3bcba62c50141c8017c4abdc7  core/src/field.cpp
+ dc4837673171760af5c713305b8afdab137e4a143ff006e984b6183485ad464d  core/src/heightfield.cpp
+ 3e2e6929f0a18bc4ed785513c8559cac6ad5dc2c0406ce0d6d430ef58531c87c  core/src/polyhedral.cpp
+ 6eab13c13424e201fb1b7188994b49d1918aff345d0e44f0ff3d7eb14336c697  core/src/reference_studies.cpp
+@@ -127,9 +130,13 @@
+ 0fe723981d6cbfd8f708d12cd247b84245496319ca32154aa998d657206cd1fc  tests/alveolar_invariant_tests.cpp
+ 04c06c811650b184a56fb242baa7b4a7357f1abbc141cac1130c25517e4fe411  tests/alveolar_reconstruction_tests.cpp
+ 4eef7bedbff347f50686fb872975f3ce4e56786c8278a258ab14b9d34245c8c7  tests/alveolar_tests.cpp
++5fee33324d765b2eb7080fef960378e090ee83d84bc5b1436aecc5649425e55a  tests/atomic_resolution_tests.cpp
+ fec22d139f6e557c194832c3f73bb01d63799c3fcaeeab65632bc61d2a03a613  tests/camera_bounds_test.mjs
+ a2e08f6d3f79e7835c28fd6ddc61dc7cff7eb84fd1f82bc989cf8e47b3d1658a  tests/cliff_profile_tests.cpp
+ 1573da7cde46e001780c9dd6c356176bcf57fb0a7173764a6ef3d4562388d9db  tests/contraction_tests.cpp
++2a6e2d2d6859efe43eed7ec646be6abf2a10b9f5b841131e2572c7c0220da62d  tests/erosion_diagnose.cpp
++4edb48830d61cd08186731618a82f228f7a8ebe1d8d0cc4c1040504331ed9f5d  tests/erosion_seed_regression_tests.cpp
++36b5e265bb26f7c8e14e87962c7a63bd0ec23c1f13c25da4e5e51762d182c855  tests/face_resolution_tests.cpp
+ 83feb7b420ebee1fb1d63bce403a6d658ab8c5e0b8a5dd922e084122f80e3fde  tests/family_tests.cpp
+ b6397a3d8bd62bba05a63aab0599849cb7e463c03b131e2995e458fcc8b1cbd6  tests/family_viewer_test.mjs
+ 809f8c487effd00b3414d6aa0b8371a7c1cb03fc0440904586b9842197c77e4d  tests/field_tests.cpp
+@@ -159,12 +166,14 @@
+ 843cbd05be03c3c6176b6387f3915ae70f8a96bf634bf0a959d18d4f842d403c  tests/test_audit_cli.py
+ ebc8d91560f88ae193ad80efe0e4ba8f1c42870e6653b864db927a3c00b09629  tests/test_cli.py
+ 2d893bf5262bcd8af2a5c9e1b4529830aac1a26ebfdbb54936303a22c2f7c2bf  tests/test_igneous_studies.py
++3708862d2f83145d1d8b83c0964e42d20c3b3058d6ec3a9d86ce27ac371c9afb  tests/test_localized_resolver.py
+ c0334c1d34e27b564fdf989d8dfa220fac234476c3363e37109b09f4d5ed2dbe  tests/test_reference_render.py
+ e7a9d7615d6caa9baed6678b606ce7030a4076253369d8981fd94200a48c008c  tests/test_reference_studies.py
+ 9632bf66be62705aa87bb5685513ca97f25d94072f261adbc3b925e01428e434  tests/test_server.py
+ ad0a5ae7d06ad6a000823bdc1224cda136c7c9c1bf02b282d3071b05a0288580  tests/test_surface_families.py
+ 1e36b9cc5ef170a7faa7b8e7fd372d9b06d507aded38f0b64765bb3fb3a640cc  tests/texture_order_test.mjs
+ 421751d2f0f166208b245cc57413a4fe3001024550f7e27fedf324e5fb6265a7  tests/union_tests.cpp
++7af6c45045c370739b096b998772c6bcc07c993d6dfb5c4bf74e49b13003a0c4  tests/v3_erosion_tests.cpp
+ be58790984e582f2cb993f0e20d8d4d05a256f8452f2a36d82079cdeea3a53af  tests/viewer_default_race_test.mjs
+ 02a5186f8d6e4b7a3f6bd57ce7861669a7bcd30b453965292f9391d66ccae19e  tests/viewer_state_test.mjs
+ 2f9b263d3bbafb43c40036804872ba05364fa8cbf4223abba2b81959a4aeec70  tests/viewer_tests.html

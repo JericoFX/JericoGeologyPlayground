@@ -1,0 +1,2900 @@
+{
+  "schema_version": 1,
+  "purpose": "Reproducible direct C++ OBJ render evidence; no geometry repair is performed by the renderer",
+  "render_verification": "passed",
+  "source_original_file_count": 404,
+  "original_source_files_unchanged": true,
+  "original_source_snapshot_sha256": "ea84bdcb249c0ec9c53f52d67c1827ee3971484080d35b6296058c94618c0fdd",
+  "approved_seed48_byte_identical": [
+    {
+      "stage": "base",
+      "sha256": "1f266a3fe8c51f2409e904c8a7fbc347eca44a96de9baab93a5987385f239eef",
+      "byte_identical": true
+    },
+    {
+      "stage": "stratified",
+      "sha256": "eb46d76b702de2d41c6564b8eed78799abeb63c2e4595937ec26c1d0c54aacc7",
+      "byte_identical": true
+    },
+    {
+      "stage": "eroded",
+      "sha256": "eb46d76b702de2d41c6564b8eed78799abeb63c2e4595937ec26c1d0c54aacc7",
+      "byte_identical": true
+    }
+  ],
+  "render_count": 16,
+  "artifacts": [
+    {
+      "path": "hero-aprobada-48.png",
+      "sha256": "55571b632dfc7697bdb50a1dfd127f5aa054edbc6a1f77cf8fa9e173222a8388",
+      "size_bytes": 838713,
+      "resolution": [
+        1280,
+        1440
+      ]
+    },
+    {
+      "path": "siete-corregidas.png",
+      "sha256": "d1bc9e6b432b5d373f4bf756ab8cc100d85cead9bed8ddced651cce2dced67ce",
+      "size_bytes": 839590,
+      "resolution": [
+        2240,
+        1500
+      ]
+    },
+    {
+      "path": "antes-despues-union-31.png",
+      "sha256": "e45811da2ebbe57911da22828e71d6859304acd9e4192da598d62e87bf6c5bab",
+      "size_bytes": 1739855,
+      "resolution": [
+        1680,
+        1990
+      ]
+    },
+    {
+      "path": "antes-despues-micro-14.png",
+      "sha256": "97f862bfa7e5b0ad5272afba423b943f84291146cb4b2745b868828cbf03d0c5",
+      "size_bytes": 1107284,
+      "resolution": [
+        1680,
+        2060
+      ]
+    }
+  ],
+  "matched_comparison_pairs": [
+    {
+      "seed": 31,
+      "view": "main",
+      "settings_identical": true,
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81"
+    },
+    {
+      "seed": 31,
+      "view": "join-neutral",
+      "settings_identical": true,
+      "settings_sha256": "52d5f9b499d06080da74f9afaba67dba3af6d28002d659c4bfa7c402eb85a49c"
+    },
+    {
+      "seed": 31,
+      "view": "join-edges",
+      "settings_identical": true,
+      "settings_sha256": "d02635a44d5522462fec7df6c5e39351a6eca847036cc533620ede40e2963b8d"
+    },
+    {
+      "seed": 14,
+      "view": "main",
+      "settings_identical": true,
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81"
+    },
+    {
+      "seed": 14,
+      "view": "micro-edges",
+      "settings_identical": true,
+      "settings_sha256": "2503a8970602d185da1a8218ed5b2e57816c09a52adc652ffe67bd6fa73e21a4"
+    }
+  ],
+  "seven_main_settings_identical": true,
+  "renders": [
+    {
+      "image": "renders/approved-48-hero.png",
+      "provenance": "renders/approved-48-hero.provenance.json",
+      "provenance_sha256": "7c42dbfc9c8e6f6b405dfa1a7667bceef3df2f9705bb0854bb5f9045f7227e7a",
+      "job": {
+        "name": "approved-48-hero",
+        "obj": "evidence/corrected/48/output/eroded.obj",
+        "status": "Previously accepted, byte-identical",
+        "settings": {
+          "resolution": [
+            1200,
+            1200
+          ],
+          "samples": 32
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/48/output/eroded.obj",
+      "obj_sha256": "eb46d76b702de2d41c6564b8eed78799abeb63c2e4595937ec26c1d0c54aacc7",
+      "png_sha256": "d5dfe07771f2c53aa954f883acbc063e2708ec6f063e57ae12228254de5185d2",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 32,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          1200,
+          1200
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "b081920f4086067fbabef78769c7d549ac3d1fd2c7fd6a329003d1218bd3e53a",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 8064,
+          "triangles": 16124,
+          "has_custom_normals": true,
+          "smooth_polygons": 16124,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "3b47ea589069fbe14da44039ff2171e3d489fddcd890a713e6cdcf4f9110be55"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 21.31857471600233
+    },
+    {
+      "image": "renders/corrected-14-main.png",
+      "provenance": "renders/corrected-14-main.provenance.json",
+      "provenance_sha256": "d81bfa4c20636fe9bf9d93637504be4e340ec39c30095e2f817923c4d471e1b2",
+      "job": {
+        "name": "corrected-14-main",
+        "obj": "evidence/corrected/14/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/14/output/eroded.obj",
+      "obj_sha256": "9a0771649cbc16baf609b64cda949705e7bbf89539209cb2943beaa61a0ad27c",
+      "png_sha256": "33c445131e642dc3e07d3ca7a7cd6dd376f0dfd2d03c6caf51ab9277aa202299",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7913,
+          "triangles": 15822,
+          "has_custom_normals": true,
+          "smooth_polygons": 15822,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "249a2e92934332244b3497703e11559692d465b223a8d848d5139a4286a0bbff"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.987094748998061
+    },
+    {
+      "image": "renders/corrected-14-micro-edges.png",
+      "provenance": "renders/corrected-14-micro-edges.provenance.json",
+      "provenance_sha256": "188f68cfc1daa50b0f650731c02d309270b705767a87777397a0ccc333c0263b",
+      "job": {
+        "name": "corrected-14-micro-edges",
+        "obj": "evidence/corrected/14/output/eroded.obj",
+        "status": "Candidate corrected C++ export",
+        "camera_target_evidence": {
+          "removed_vertex": [
+            0.984375,
+            -0.3281233981888363,
+            0.421875
+          ],
+          "retained_vertex": [
+            0.9843756741374818,
+            -0.328125,
+            0.421875
+          ],
+          "target": "midpoint of actual vertices",
+          "camera_direction": "retained source OBJ vertex normal",
+          "magnification_vs_main_view": 192857.14285714287,
+          "ortho_view_width_meters": 1.4e-05,
+          "source_removed_vertex_one_based": 5826,
+          "source_retained_vertex_one_based": 5805
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.9843753370687409,
+              -0.32812419909441815,
+              0.421875
+            ],
+            "location": [
+              0.9932900749480938,
+              -0.32437234184833297,
+              0.4244148849870473
+            ],
+            "ortho_scale": 1.4e-05,
+            "clip_start": 1e-06,
+            "clip_end": 0.1
+          },
+          "samples": 32,
+          "wireframe": {
+            "shader": "ShaderNodeWireframe",
+            "width_pixels": 1.15,
+            "color": [
+              0.015,
+              0.08,
+              0.115
+            ],
+            "all_imported_triangle_edges": true
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/14/output/eroded.obj",
+      "obj_sha256": "9a0771649cbc16baf609b64cda949705e7bbf89539209cb2943beaa61a0ad27c",
+      "png_sha256": "a553452fa0898777fa36668dafc8f45d476cb7f10d505216eb2283da62498799",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 32,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            0.9932900749480938,
+            -0.32437234184833297,
+            0.4244148849870473
+          ],
+          "target": [
+            0.9843753370687409,
+            -0.32812419909441815,
+            0.421875
+          ],
+          "ortho_scale": 1.4e-05,
+          "clip_start": 1e-06,
+          "clip_end": 0.1,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": {
+          "shader": "ShaderNodeWireframe",
+          "width_pixels": 1.15,
+          "color": [
+            0.015,
+            0.08,
+            0.115
+          ],
+          "all_imported_triangle_edges": true
+        },
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "2503a8970602d185da1a8218ed5b2e57816c09a52adc652ffe67bd6fa73e21a4",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7913,
+          "triangles": 15822,
+          "has_custom_normals": true,
+          "smooth_polygons": 15822,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "249a2e92934332244b3497703e11559692d465b223a8d848d5139a4286a0bbff"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.74233065500448
+    },
+    {
+      "image": "renders/corrected-25-main.png",
+      "provenance": "renders/corrected-25-main.provenance.json",
+      "provenance_sha256": "7a2f04273bf9a3459579f2c9944d9a0aab3d14ee1efe7a36095703d65cc81660",
+      "job": {
+        "name": "corrected-25-main",
+        "obj": "evidence/corrected/25/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/25/output/eroded.obj",
+      "obj_sha256": "02f78230f1010de8d12add5e66c89bd2bc4ec5baca158371305a865ec6d7c402",
+      "png_sha256": "59a61db2fe11dcca440e5793caf44fe29b873c29e19f650de574ac3603e78868",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7937,
+          "triangles": 15870,
+          "has_custom_normals": true,
+          "smooth_polygons": 15870,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "2787a9da2d8201969a5a62c73aa4157143433721aca7217f2748b06d3f1ff892"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.84761629300192
+    },
+    {
+      "image": "renders/corrected-29-main.png",
+      "provenance": "renders/corrected-29-main.provenance.json",
+      "provenance_sha256": "85235f1b4798d6f910638479fd959a6cc83486f2b953821c63bace3bfd100cdd",
+      "job": {
+        "name": "corrected-29-main",
+        "obj": "evidence/corrected/29/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/29/output/eroded.obj",
+      "obj_sha256": "ccaea72e2aaa6d99a9394be030610200ec1a4bc8f95eaebc8e9f2e89ae4e3936",
+      "png_sha256": "9f891660322a689238b01a21e5f5a0e0b84c19b54d3790eee516a1faa081b031",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7920,
+          "triangles": 15836,
+          "has_custom_normals": true,
+          "smooth_polygons": 15836,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "d9e066fadd96c00910e50adfb06438f07d9f10f7b406ffdfcd7161e50384e1a2"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.943690308005898
+    },
+    {
+      "image": "renders/corrected-31-join-edges.png",
+      "provenance": "renders/corrected-31-join-edges.provenance.json",
+      "provenance_sha256": "f33928ce659d007b5630a990bfbb9feb12cff2bb8e2a24ee3643e9cb792d134c",
+      "job": {
+        "name": "corrected-31-join-edges",
+        "obj": "evidence/corrected/31/output/eroded.obj",
+        "status": "Candidate correction, code review pending",
+        "camera_target_evidence": {
+          "source": "evidence/baseline-cells.json",
+          "seed": 31,
+          "stage": 1,
+          "gridIndex": [
+            50,
+            31,
+            43
+          ],
+          "position": "center"
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.8671875,
+              -0.0234375,
+              0.5390625
+            ],
+            "location": [
+              3.8671875,
+              0.7765625,
+              2.0390625
+            ],
+            "ortho_scale": 0.23
+          },
+          "wireframe": {
+            "shader": "ShaderNodeWireframe",
+            "width_pixels": 0.9,
+            "color": [
+              0.015,
+              0.08,
+              0.115
+            ],
+            "all_imported_triangle_edges": true
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/31/output/eroded.obj",
+      "obj_sha256": "327243a6e310adba20ed8d7ae5b1be3e576e465ec4fdde3725abb71b84a402f5",
+      "png_sha256": "9fce4b42cdfc33d8fb8f0735f820356e11d4cc27056d0ff69e45185b6d9a1b02",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            3.8671875,
+            0.7765625,
+            2.0390625
+          ],
+          "target": [
+            0.8671875,
+            -0.0234375,
+            0.5390625
+          ],
+          "ortho_scale": 0.23,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": {
+          "shader": "ShaderNodeWireframe",
+          "width_pixels": 0.9,
+          "color": [
+            0.015,
+            0.08,
+            0.115
+          ],
+          "all_imported_triangle_edges": true
+        },
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "d02635a44d5522462fec7df6c5e39351a6eca847036cc533620ede40e2963b8d",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "5b98318d07848eb8edafd35305905c31131ddebf387d5586c9ccc76a74b6d60a"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.416736383005627
+    },
+    {
+      "image": "renders/corrected-31-join-neutral.png",
+      "provenance": "renders/corrected-31-join-neutral.provenance.json",
+      "provenance_sha256": "dcf4dda2586420dff4eb583522172a5b5f09d6c9bd3ea3df6a7cacffb1fb719e",
+      "job": {
+        "name": "corrected-31-join-neutral",
+        "obj": "evidence/corrected/31/output/eroded.obj",
+        "status": "Candidate correction, code review pending",
+        "camera_target_evidence": {
+          "source": "evidence/baseline-cells.json",
+          "seed": 31,
+          "stage": 1,
+          "gridIndex": [
+            50,
+            31,
+            43
+          ],
+          "position": "center"
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.8671875,
+              -0.0234375,
+              0.5390625
+            ],
+            "location": [
+              3.8671875,
+              0.7765625,
+              2.0390625
+            ],
+            "ortho_scale": 0.23
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/31/output/eroded.obj",
+      "obj_sha256": "327243a6e310adba20ed8d7ae5b1be3e576e465ec4fdde3725abb71b84a402f5",
+      "png_sha256": "871ec4bb6adea9e541564a96e48977326c3ad069364a8a35c0e19e771807a846",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            3.8671875,
+            0.7765625,
+            2.0390625
+          ],
+          "target": [
+            0.8671875,
+            -0.0234375,
+            0.5390625
+          ],
+          "ortho_scale": 0.23,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "52d5f9b499d06080da74f9afaba67dba3af6d28002d659c4bfa7c402eb85a49c",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "5b98318d07848eb8edafd35305905c31131ddebf387d5586c9ccc76a74b6d60a"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.248414753994439
+    },
+    {
+      "image": "renders/corrected-31-main.png",
+      "provenance": "renders/corrected-31-main.provenance.json",
+      "provenance_sha256": "b2b369f29692c1c3c4e3daf88d8697f29c49eb8f364ec02c75d77ef3b2fa24f7",
+      "job": {
+        "name": "corrected-31-main",
+        "obj": "evidence/corrected/31/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/31/output/eroded.obj",
+      "obj_sha256": "327243a6e310adba20ed8d7ae5b1be3e576e465ec4fdde3725abb71b84a402f5",
+      "png_sha256": "d765cf466733ebabf141f56470c5d329f7c31d50a51689e2f4e3224f52a7df11",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "5b98318d07848eb8edafd35305905c31131ddebf387d5586c9ccc76a74b6d60a"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.951709621003829
+    },
+    {
+      "image": "renders/corrected-4-main.png",
+      "provenance": "renders/corrected-4-main.provenance.json",
+      "provenance_sha256": "6dd4464ad0e2fc5d8d018d068feeebadbe1510eaed89e7dd3ee27415993f8796",
+      "job": {
+        "name": "corrected-4-main",
+        "obj": "evidence/corrected/4/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/4/output/eroded.obj",
+      "obj_sha256": "b3a2f0bbefcb34e1a530db00c3d62f89037a3baaa3772e52075c0aafbc3d31a1",
+      "png_sha256": "a9035d5db21bec519ed5bcbc0fec49ab9cfcaab04877b44d75b5095537adb131",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 8067,
+          "triangles": 16130,
+          "has_custom_normals": true,
+          "smooth_polygons": 16130,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "15c75d4871093f275138ffed9fc2956e07506a0cf01f2258f7363b4a9efd49dd"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 7.023207796009956
+    },
+    {
+      "image": "renders/corrected-5-main.png",
+      "provenance": "renders/corrected-5-main.provenance.json",
+      "provenance_sha256": "5fc6d35ad991dff4c326bba364b6023230c0462ece2dadaf3ada891f9bf65208",
+      "job": {
+        "name": "corrected-5-main",
+        "obj": "evidence/corrected/5/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/5/output/eroded.obj",
+      "obj_sha256": "81c4bc2118d22cd05e89ed127bcd9ff8828ea21fa835fcecd28fb11ac06c6610",
+      "png_sha256": "3b2c304673fd37ed45aa045b12ada3cbbc55e059589418027b2da7a32acd38ae",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7960,
+          "triangles": 15916,
+          "has_custom_normals": true,
+          "smooth_polygons": 15916,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "615445e63f582a8dbd7de687b4d5d875a00770fc92c529917bb96e3943021723"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 7.017373563998262
+    },
+    {
+      "image": "renders/corrected-8-main.png",
+      "provenance": "renders/corrected-8-main.provenance.json",
+      "provenance_sha256": "51f7a997061f40a2fc3659bd6fc3a98a38aafd8ffa64ba943f4a661a9ae1ddcd",
+      "job": {
+        "name": "corrected-8-main",
+        "obj": "evidence/corrected/8/output/eroded.obj",
+        "status": "Candidate correction; CLI accepted; code review pending"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/corrected/8/output/eroded.obj",
+      "obj_sha256": "cd3333befddc7015b3a7a1c39333c758ec88e791dfe781b7b14e74f0f0c0493c",
+      "png_sha256": "29c6c9947cb21191e4da5c9b204bdcac1ec71594883b8ee6750ae8a5ddb8db26",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "eroded",
+          "vertices": 7958,
+          "triangles": 15912,
+          "has_custom_normals": true,
+          "smooth_polygons": 15912,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "eroded": "8c2565d5f9511b4cb1c4797ae130d2039bcc215068967365b21db3ff9487dfd2"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.936788465012796
+    },
+    {
+      "image": "renders/rejected-14-main.png",
+      "provenance": "renders/rejected-14-main.provenance.json",
+      "provenance_sha256": "3a62729a29dc7695d5229532c89dc1b112d95bb2ef617fce79a22f30d4e772e4",
+      "job": {
+        "name": "rejected-14-main",
+        "obj": "evidence/baseline-diagnostic/14/2.obj",
+        "status": "Rejected diagnostic export; not the current PC model"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/14/2.obj",
+      "obj_sha256": "0e22c3077f0947a73392ce2653a6828eb18ddc37c03b697d7129dffb87d2c1d2",
+      "png_sha256": "78b047b4ed7ba0072d90da1b96474602212b53cdea524049b744be0a7515c469",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "2",
+          "vertices": 7914,
+          "triangles": 15824,
+          "has_custom_normals": true,
+          "smooth_polygons": 15824,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "2": "90ba105e50b93456b9a980d10f3835851f16f62e8bcc22413bc79eabaa58b93e"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 7.03346608299762
+    },
+    {
+      "image": "renders/rejected-14-micro-edges.png",
+      "provenance": "renders/rejected-14-micro-edges.provenance.json",
+      "provenance_sha256": "54665ab490908284d48315db92e0693d06666ab322d02cd2fa131aa9d3af2747",
+      "job": {
+        "name": "rejected-14-micro-edges",
+        "obj": "evidence/baseline-diagnostic/14/2.obj",
+        "status": "Rejected diagnostic export, not current PC model",
+        "camera_target_evidence": {
+          "removed_vertex": [
+            0.984375,
+            -0.3281233981888363,
+            0.421875
+          ],
+          "retained_vertex": [
+            0.9843756741374818,
+            -0.328125,
+            0.421875
+          ],
+          "target": "midpoint of actual vertices",
+          "camera_direction": "retained source OBJ vertex normal",
+          "magnification_vs_main_view": 192857.14285714287,
+          "ortho_view_width_meters": 1.4e-05,
+          "source_removed_vertex_one_based": 5826,
+          "source_retained_vertex_one_based": 5805
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.9843753370687409,
+              -0.32812419909441815,
+              0.421875
+            ],
+            "location": [
+              0.9932900749480938,
+              -0.32437234184833297,
+              0.4244148849870473
+            ],
+            "ortho_scale": 1.4e-05,
+            "clip_start": 1e-06,
+            "clip_end": 0.1
+          },
+          "samples": 32,
+          "wireframe": {
+            "shader": "ShaderNodeWireframe",
+            "width_pixels": 1.15,
+            "color": [
+              0.015,
+              0.08,
+              0.115
+            ],
+            "all_imported_triangle_edges": true
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/14/2.obj",
+      "obj_sha256": "0e22c3077f0947a73392ce2653a6828eb18ddc37c03b697d7129dffb87d2c1d2",
+      "png_sha256": "cc2420cfc5875e347f67665afd12ad1f867beea5d423e13d4ddcf5346b521861",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 32,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            0.9932900749480938,
+            -0.32437234184833297,
+            0.4244148849870473
+          ],
+          "target": [
+            0.9843753370687409,
+            -0.32812419909441815,
+            0.421875
+          ],
+          "ortho_scale": 1.4e-05,
+          "clip_start": 1e-06,
+          "clip_end": 0.1,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": {
+          "shader": "ShaderNodeWireframe",
+          "width_pixels": 1.15,
+          "color": [
+            0.015,
+            0.08,
+            0.115
+          ],
+          "all_imported_triangle_edges": true
+        },
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "2503a8970602d185da1a8218ed5b2e57816c09a52adc652ffe67bd6fa73e21a4",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "2",
+          "vertices": 7914,
+          "triangles": 15824,
+          "has_custom_normals": true,
+          "smooth_polygons": 15824,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "2": "90ba105e50b93456b9a980d10f3835851f16f62e8bcc22413bc79eabaa58b93e"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.901465103001101
+    },
+    {
+      "image": "renders/rejected-31-join-edges.png",
+      "provenance": "renders/rejected-31-join-edges.provenance.json",
+      "provenance_sha256": "718bda22a178593bc4381fd02452cdbd2dd9f287c0a558ec1664c207e0fbe714",
+      "job": {
+        "name": "rejected-31-join-edges",
+        "obj": "evidence/baseline-diagnostic/31/2.obj",
+        "status": "Rejected diagnostic export, not current PC model",
+        "camera_target_evidence": {
+          "source": "evidence/baseline-cells.json",
+          "seed": 31,
+          "stage": 1,
+          "gridIndex": [
+            50,
+            31,
+            43
+          ],
+          "position": "center"
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.8671875,
+              -0.0234375,
+              0.5390625
+            ],
+            "location": [
+              3.8671875,
+              0.7765625,
+              2.0390625
+            ],
+            "ortho_scale": 0.23
+          },
+          "wireframe": {
+            "shader": "ShaderNodeWireframe",
+            "width_pixels": 0.9,
+            "color": [
+              0.015,
+              0.08,
+              0.115
+            ],
+            "all_imported_triangle_edges": true
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/31/2.obj",
+      "obj_sha256": "1ac4bef22a04142256e8abeadca003149aa24027f6a535763af6ffeb63c7c0b1",
+      "png_sha256": "30f51edb139f08fe1d70ecc28b0fb5f6531c69b1e307eb87d9ed1932552bbb28",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            3.8671875,
+            0.7765625,
+            2.0390625
+          ],
+          "target": [
+            0.8671875,
+            -0.0234375,
+            0.5390625
+          ],
+          "ortho_scale": 0.23,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": {
+          "shader": "ShaderNodeWireframe",
+          "width_pixels": 0.9,
+          "color": [
+            0.015,
+            0.08,
+            0.115
+          ],
+          "all_imported_triangle_edges": true
+        },
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "d02635a44d5522462fec7df6c5e39351a6eca847036cc533620ede40e2963b8d",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "2",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "2": "1be94e1634158f5099d24d3e8ebbd1472b4816f7750e496f965dff186dd5498b"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.855835580994608
+    },
+    {
+      "image": "renders/rejected-31-join-neutral.png",
+      "provenance": "renders/rejected-31-join-neutral.provenance.json",
+      "provenance_sha256": "40fdfd3c1cd3f8871dcf57630246a88d96268b368d0cef64831ac01052f1908d",
+      "job": {
+        "name": "rejected-31-join-neutral",
+        "obj": "evidence/baseline-diagnostic/31/2.obj",
+        "status": "Rejected diagnostic export, not current PC model",
+        "camera_target_evidence": {
+          "source": "evidence/baseline-cells.json",
+          "seed": 31,
+          "stage": 1,
+          "gridIndex": [
+            50,
+            31,
+            43
+          ],
+          "position": "center"
+        },
+        "settings": {
+          "camera": {
+            "target": [
+              0.8671875,
+              -0.0234375,
+              0.5390625
+            ],
+            "location": [
+              3.8671875,
+              0.7765625,
+              2.0390625
+            ],
+            "ortho_scale": 0.23
+          }
+        }
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/31/2.obj",
+      "obj_sha256": "1ac4bef22a04142256e8abeadca003149aa24027f6a535763af6ffeb63c7c0b1",
+      "png_sha256": "51bca65d638533c53c757a60ef2eb53cd3923fc1d3187ae7de9ae70e897ea9ce",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            3.8671875,
+            0.7765625,
+            2.0390625
+          ],
+          "target": [
+            0.8671875,
+            -0.0234375,
+            0.5390625
+          ],
+          "ortho_scale": 0.23,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "52d5f9b499d06080da74f9afaba67dba3af6d28002d659c4bfa7c402eb85a49c",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "2",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "2": "1be94e1634158f5099d24d3e8ebbd1472b4816f7750e496f965dff186dd5498b"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 15.891880954994122
+    },
+    {
+      "image": "renders/rejected-31-main.png",
+      "provenance": "renders/rejected-31-main.provenance.json",
+      "provenance_sha256": "ea4da1b818323b1e8c77eaab6f30e859a732cc4592262d0bbce551cdaddaf505",
+      "job": {
+        "name": "rejected-31-main",
+        "obj": "evidence/baseline-diagnostic/31/2.obj",
+        "status": "Rejected diagnostic export; not the current PC model"
+      },
+      "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/31/2.obj",
+      "obj_sha256": "1ac4bef22a04142256e8abeadca003149aa24027f6a535763af6ffeb63c7c0b1",
+      "png_sha256": "afc67046dacf3180b8a5546cb791a91d0d7245ace7359f632f747e0927aab45f",
+      "settings": {
+        "engine": "CYCLES",
+        "device": "CPU",
+        "threads": 2,
+        "samples": 24,
+        "denoising": false,
+        "adaptive_sampling": false,
+        "render_seed": 1,
+        "resolution": [
+          800,
+          800
+        ],
+        "color_management": {
+          "view_transform": "AgX",
+          "look": "AgX - Medium High Contrast",
+          "exposure": 0.0,
+          "gamma": 1.0
+        },
+        "world": {
+          "color": [
+            0.22,
+            0.22,
+            0.22
+          ],
+          "strength": 0.5
+        },
+        "camera": {
+          "location": [
+            2.4,
+            1.5,
+            4.4
+          ],
+          "target": [
+            0.0,
+            0.0,
+            0.05
+          ],
+          "ortho_scale": 2.7,
+          "clip_start": 0.002,
+          "clip_end": 200.0,
+          "world_up": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "lights": [
+          {
+            "name": "Key",
+            "location": [
+              -3.6,
+              3.8,
+              6.0
+            ],
+            "power_watts": 1680.0,
+            "disk_diameter_meters": 2.5
+          },
+          {
+            "name": "Fill",
+            "location": [
+              4.8,
+              0.8,
+              4.4
+            ],
+            "power_watts": 260.0,
+            "disk_diameter_meters": 3.8
+          },
+          {
+            "name": "Rim",
+            "location": [
+              -1.0,
+              4.6,
+              -3.0
+            ],
+            "power_watts": 560.0,
+            "disk_diameter_meters": 2.8
+          }
+        ],
+        "material": {
+          "base_color": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "roughness": 0.87,
+          "metallic": 0.0
+        },
+        "wireframe": null,
+        "obj_import_axes": {
+          "forward_axis": "Y",
+          "up_axis": "Z"
+        },
+        "source_geometry_changes": [],
+        "source_normal_changes": [],
+        "source_transform_changes": [],
+        "light_aim_target": [
+          0.0,
+          0.0,
+          0.05
+        ]
+      },
+      "settings_sha256": "7eafc0a1d9f832bf1e195f4fc2393cd5e79bb25e7de364c76174998205ea6d81",
+      "blender_version": "5.2.2 LTS",
+      "imported_geometry_normals_transforms_unchanged": true,
+      "mesh_stats": [
+        {
+          "name": "2",
+          "vertices": 7942,
+          "triangles": 15880,
+          "has_custom_normals": true,
+          "smooth_polygons": 15880,
+          "matrix_world": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "imported_fingerprint": {
+        "2": "1be94e1634158f5099d24d3e8ebbd1472b4816f7750e496f965dff186dd5498b"
+      },
+      "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+      "seconds": 6.971817041994655
+    }
+  ],
+  "composition_record_sha256": "a759a5f9793ab2fbbcf671d9ec4c08579db6a3f6c6f17584db61c07056099e7c",
+  "verification_script_sha256": "b832fa4104c76944710489be6be21829896447363e8874695c72d7e8b3e80408",
+  "geometry_review_scope": "Rendering alone does not establish code correctness or absence of self intersections. Consult separate code and geometry review. Job status labels retain their render-time context.",
+  "limitations": [
+    "Rejected before images are diagnostic exports, not the current PC model.",
+    "Microscopic seed14 frame is 14 micrometers wide, camera-only magnification of 192857.14 relative to the main frame. No vertex scaling or modifications.",
+    "Microscope rendering uses Blender floating-point import/render precision. Exact contraction distance 1.7378896249769805e-6 meters comes from original OBJ coordinates.",
+    "All edge images use Blender ShaderNodeWireframe on actual imported triangle edges; no hand drawn or invented edges.",
+    "Labels/margins and uniform image resampling were applied only for evidence sheet layout."
+  ],
+  "source_files": {
+    "evidence/baseline-cells.json": "1007728cc872bad26c7f17cdb685fb3243c1824650bc271e11e8c34021187cd7",
+    "evidence/preservation.json": "9542688ca7a23330e4176e31329b8802a5b0fad36c8b6b81eb91018bf4b9de52"
+  }
+}

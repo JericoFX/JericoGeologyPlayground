@@ -29,6 +29,10 @@ int main(){try{
  auto tie=[](Vec3){return -1e-12;};CHECK(!boundedSignedPath(tie,Vec3{0,0,0},Vec3{1,0,0},1,8.,1e-8).connected);
  Recipe r;r.schemaVersion=2;r.generatorVersion="rocks-v3";r.family="irregular_beds";r.extractorVersion="paris-mc-v1";r.wear=0;r.detail=1;auto f=makeField(r);
  CHECK(eligibleErosionResolver(f,makeGrid(r,64)));CHECK(!eligibleErosionResolver(f,makeGrid(r,128)));auto other=f;other.recipe.family="fractured_wall";CHECK(!eligibleErosionResolver(other,makeGrid(r,64)));
+ for(auto version:{"rocks-v2","rocks-v4"}){auto outside=f;outside.recipe.generatorVersion=version;CHECK(!eligibleErosionResolver(outside,makeGrid(r,64)));}
+ for(double wear:{.01,1.}){auto outside=f;outside.recipe.wear=wear;CHECK(!eligibleErosionResolver(outside,makeGrid(r,64)));}
+ auto schema=f;schema.recipe.schemaVersion=1;CHECK(!eligibleErosionResolver(schema,makeGrid(r,64)));
+ auto extractor=f;extractor.recipe.extractorVersion="polyhedral-v1";CHECK(!eligibleErosionResolver(extractor,makeGrid(r,64)));
  std::array<Vec3,4> crossing={Vec3{0,0,-.41},Vec3{0,.1,-.41},Vec3{0,.1,-.39},Vec3{0,0,-.39}};std::array<double,4> vals={-.1,.1,-.1,.1};CHECK(!decideErosionFace(f,Stage::Stratified,crossing,vals).negativeConnected);
  vals[0]=0;CHECK(!decideErosionFace(f,Stage::Base,crossing,vals).negativeConnected);
  std::cout<<"24 orientations/complements, edge roots, rejected ambiguity classes, nonfinite/tie/budget/interrupted-path/branch guards PASS\n";

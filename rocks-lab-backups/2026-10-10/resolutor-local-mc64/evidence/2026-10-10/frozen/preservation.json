@@ -1,0 +1,126 @@
+{
+  "previously_accepted_seed_count": 29,
+  "checks": [
+    {
+      "seed": 0,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 1,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 2,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 3,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 6,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 7,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 9,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 10,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 11,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 12,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 13,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 15,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 16,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 17,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 18,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 19,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 20,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 21,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 22,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 23,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 24,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 26,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 27,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 28,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 30,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 48,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 117,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 305,
+      "obj_bytes_identical": true
+    },
+    {
+      "seed": 999,
+      "obj_bytes_identical": true
+    }
+  ],
+  "strata_v4_seed48": {
+    "eroded.obj": true,
+    "stratified.obj": true,
+    "base.obj": true
+  }
+}

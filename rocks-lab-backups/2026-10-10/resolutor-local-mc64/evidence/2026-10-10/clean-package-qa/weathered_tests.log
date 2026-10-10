@@ -1,0 +1,12 @@
+weathered seed=48 cells=64 stage=0 ambiguous=0 accepted=1 triangles=9828
+weathered seed=48 cells=64 stage=1 ambiguous=0 accepted=1 triangles=9888
+weathered seed=48 cells=128 stage=0 ambiguous=0 accepted=1 triangles=39220
+weathered seed=48 cells=128 stage=1 ambiguous=0 accepted=1 triangles=39614
+weathered seed=117 cells=64 stage=0 ambiguous=0 accepted=1 triangles=7844
+weathered seed=117 cells=64 stage=1 ambiguous=0 accepted=1 triangles=8352
+weathered seed=117 cells=128 stage=0 ambiguous=0 accepted=1 triangles=31302
+weathered seed=117 cells=128 stage=1 ambiguous=0 accepted=1 triangles=33530
+weathered seed=305 cells=64 stage=0 ambiguous=0 accepted=1 triangles=8844
+weathered seed=305 cells=64 stage=1 ambiguous=0 accepted=1 triangles=8828
+weathered seed=305 cells=128 stage=0 ambiguous=0 accepted=1 triangles=35444
+weathered seed=305 cells=128 stage=1 ambiguous=0 accepted=1 triangles=35294

@@ -1,0 +1,31 @@
+PASS shared damage field, movable area, edge policy and tiers
+PASS native addon math: projector, layered damage, crater, cavity, crack, semantic lattices, stable IDs and aging fields
+24 orientations/complements, edge roots, rejected ambiguity classes, nonfinite/tie/budget/interrupted-path/branch guards PASS
+78 supported masks, consistent complement, mixed-face rejection, downstream component atomicity PASS
+bounded contraction tetrahedron rejection and legal collapse PASS
+seed=4 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=4 stage=1 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.94645e-08
+seed=4 stage=2 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.94645e-08
+seed=5 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=5 stage=1 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=5 stage=2 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=8 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=2 distance=3.41925e-07
+seed=8 stage=1 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=8 stage=2 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=14 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=14 stage=1 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.73789e-06
+seed=14 stage=2 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.73789e-06
+seed=25 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=25 stage=1 accepted=1 ambiguous=4 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.4653e-06
+seed=25 stage=2 accepted=1 ambiguous=4 unresolved=0 degenerate=0 badVertices=0 contractedEdges=1 distance=1.4653e-06
+seed=29 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=29 stage=1 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=29 stage=2 accepted=1 ambiguous=2 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=31 stage=0 accepted=1 ambiguous=0 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=31 stage=1 accepted=1 ambiguous=3 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+seed=31 stage=2 accepted=1 ambiguous=3 unresolved=0 degenerate=0 badVertices=0 contractedEdges=0 distance=0
+...
+----------------------------------------------------------------------
+Ran 3 tests in 3.377s
+
+OK

@@ -1,0 +1,210 @@
+{
+  "job": {
+    "name": "rejected-14-micro-edges",
+    "obj": "evidence/baseline-diagnostic/14/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "removed_vertex": [
+        0.984375,
+        -0.3281233981888363,
+        0.421875
+      ],
+      "retained_vertex": [
+        0.9843756741374818,
+        -0.328125,
+        0.421875
+      ],
+      "target": "midpoint of actual vertices",
+      "camera_direction": "retained source OBJ vertex normal",
+      "magnification_vs_main_view": 192857.14285714287,
+      "ortho_view_width_meters": 1.4e-05,
+      "source_removed_vertex_one_based": 5826,
+      "source_retained_vertex_one_based": 5805
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.9843753370687409,
+          -0.32812419909441815,
+          0.421875
+        ],
+        "location": [
+          0.9932900749480938,
+          -0.32437234184833297,
+          0.4244148849870473
+        ],
+        "ortho_scale": 1.4e-05,
+        "clip_start": 1e-06,
+        "clip_end": 0.1
+      },
+      "samples": 32,
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 1.15,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/14/2.obj",
+  "obj_sha256": "0e22c3077f0947a73392ce2653a6828eb18ddc37c03b697d7129dffb87d2c1d2",
+  "png_sha256": "cc2420cfc5875e347f67665afd12ad1f867beea5d423e13d4ddcf5346b521861",
+  "settings": {
+    "engine": "CYCLES",
+    "device": "CPU",
+    "threads": 2,
+    "samples": 32,
+    "denoising": false,
+    "adaptive_sampling": false,
+    "render_seed": 1,
+    "resolution": [
+      800,
+      800
+    ],
+    "color_management": {
+      "view_transform": "AgX",
+      "look": "AgX - Medium High Contrast",
+      "exposure": 0.0,
+      "gamma": 1.0
+    },
+    "world": {
+      "color": [
+        0.22,
+        0.22,
+        0.22
+      ],
+      "strength": 0.5
+    },
+    "camera": {
+      "location": [
+        0.9932900749480938,
+        -0.32437234184833297,
+        0.4244148849870473
+      ],
+      "target": [
+        0.9843753370687409,
+        -0.32812419909441815,
+        0.421875
+      ],
+      "ortho_scale": 1.4e-05,
+      "clip_start": 1e-06,
+      "clip_end": 0.1,
+      "world_up": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "lights": [
+      {
+        "name": "Key",
+        "location": [
+          -3.6,
+          3.8,
+          6.0
+        ],
+        "power_watts": 1680.0,
+        "disk_diameter_meters": 2.5
+      },
+      {
+        "name": "Fill",
+        "location": [
+          4.8,
+          0.8,
+          4.4
+        ],
+        "power_watts": 260.0,
+        "disk_diameter_meters": 3.8
+      },
+      {
+        "name": "Rim",
+        "location": [
+          -1.0,
+          4.6,
+          -3.0
+        ],
+        "power_watts": 560.0,
+        "disk_diameter_meters": 2.8
+      }
+    ],
+    "material": {
+      "base_color": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "roughness": 0.87,
+      "metallic": 0.0
+    },
+    "wireframe": {
+      "shader": "ShaderNodeWireframe",
+      "width_pixels": 1.15,
+      "color": [
+        0.015,
+        0.08,
+        0.115
+      ],
+      "all_imported_triangle_edges": true
+    },
+    "obj_import_axes": {
+      "forward_axis": "Y",
+      "up_axis": "Z"
+    },
+    "source_geometry_changes": [],
+    "source_normal_changes": [],
+    "source_transform_changes": [],
+    "light_aim_target": [
+      0.0,
+      0.0,
+      0.05
+    ]
+  },
+  "settings_sha256": "2503a8970602d185da1a8218ed5b2e57816c09a52adc652ffe67bd6fa73e21a4",
+  "blender_version": "5.2.2 LTS",
+  "imported_geometry_normals_transforms_unchanged": true,
+  "mesh_stats": [
+    {
+      "name": "2",
+      "vertices": 7914,
+      "triangles": 15824,
+      "has_custom_normals": true,
+      "smooth_polygons": 15824,
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "imported_fingerprint": {
+    "2": "90ba105e50b93456b9a980d10f3835851f16f62e8bcc22413bc79eabaa58b93e"
+  },
+  "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+  "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+  "seconds": 15.901465103001101
+}

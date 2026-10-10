@@ -1,0 +1,30 @@
+seed=4 stage=0 ambiguous=0 meshValid=1
+decision seed=4 mask=111 face=1 original=0 complement=0 field=1 samples=268
+decision seed=4 mask=70 face=0 original=0 complement=0 field=1 samples=268
+seed=4 stage=1 ambiguous=2 meshValid=0
+seed=5 stage=0 ambiguous=0 meshValid=1
+decision seed=5 mask=110 face=1 original=0 complement=0 field=1 samples=428
+decision seed=5 mask=70 face=0 original=0 complement=0 field=1 samples=428
+seed=5 stage=1 ambiguous=2 meshValid=1
+seed=8 stage=0 ambiguous=0 meshValid=0
+decision seed=8 mask=110 face=1 original=0 complement=0 field=1 samples=206
+decision seed=8 mask=70 face=0 original=0 complement=0 field=1 samples=206
+seed=8 stage=1 ambiguous=2 meshValid=1
+seed=14 stage=0 ambiguous=0 meshValid=1
+seed=14 stage=1 ambiguous=0 meshValid=0
+seed=25 stage=0 ambiguous=0 meshValid=1
+decision seed=25 mask=103 face=1 original=0 complement=0 field=1 samples=262
+decision seed=25 mask=132 face=3 original=0 complement=0 field=1 samples=2768
+decision seed=25 mask=237 face=2 original=0 complement=0 field=1 samples=2768
+decision seed=25 mask=6 face=0 original=0 complement=0 field=1 samples=262
+seed=25 stage=1 ambiguous=4 meshValid=0
+seed=29 stage=0 ambiguous=0 meshValid=1
+decision seed=29 mask=110 face=1 original=0 complement=0 field=1 samples=304
+decision seed=29 mask=70 face=0 original=0 complement=0 field=1 samples=304
+seed=29 stage=1 ambiguous=2 meshValid=1
+seed=31 stage=0 ambiguous=0 meshValid=1
+decision seed=31 mask=110 face=1 original=0 complement=0 field=1 samples=502
+decision seed=31 mask=102 face=0 original=0 complement=0 field=1 samples=502
+decision seed=31 mask=102 face=1 original=0 complement=0 field=1 samples=334
+decision seed=31 mask=6 face=0 original=0 complement=0 field=1 samples=334
+seed=31 stage=1 ambiguous=3 meshValid=1

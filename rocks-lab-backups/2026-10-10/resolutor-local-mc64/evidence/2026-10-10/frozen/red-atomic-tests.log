@@ -1,0 +1,55 @@
+tests/atomic_resolution_tests.cpp: In function ‘int main()’:
+tests/atomic_resolution_tests.cpp:9:7: error: ‘supportedFaceMask’ was not declared in this scope
+    9 |   if(!supportedFaceMask(mask))continue;supported++;auto faces=alternatingFaces(mask);
+      |       ^~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:9:63: error: ‘alternatingFaces’ was not declared in this scope
+    9 |   if(!supportedFaceMask(mask))continue;supported++;auto faces=alternatingFaces(mask);
+      |                                                               ^~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:13:17: error: ‘chooseFaceAlternative’ was not declared in this scope
+   13 |   auto original=chooseFaceAlternative(mask,wantOriginal),alternate=chooseFaceAlternative(mask,wantAlternate);
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:14:49: error: ‘alternate’ was not declared in this scope; did you mean ‘wantAlternate’?
+   14 |   CHECK(original.has_value()&&!*original);CHECK(alternate.has_value()&&*alternate);
+      |                                                 ^~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:18:9: error: ‘supportedFaceMask’ was not declared in this scope
+   18 |  CHECK(!supportedFaceMask(105));CHECK(!supportedFaceMask(126));CHECK(!supportedFaceMask(129));
+      |         ^~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:18:40: error: ‘supportedFaceMask’ was not declared in this scope
+   18 |  CHECK(!supportedFaceMask(105));CHECK(!supportedFaceMask(126));CHECK(!supportedFaceMask(129));
+      |                                        ^~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:18:71: error: ‘supportedFaceMask’ was not declared in this scope
+   18 |  CHECK(!supportedFaceMask(105));CHECK(!supportedFaceMask(126));CHECK(!supportedFaceMask(129));
+      |                                                                       ^~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:19:9: error: ‘chooseFaceAlternative’ was not declared in this scope
+   19 |  CHECK(!chooseFaceAlternative(102,{{0,true}}).has_value());
+      |         ^~~~~~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:20:9: error: ‘chooseFaceAlternative’ was not declared in this scope
+   20 |  CHECK(!chooseFaceAlternative(102,{{0,true},{0,true}}).has_value());
+      |         ^~~~~~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:21:9: error: ‘chooseFaceAlternative’ was not declared in this scope
+   21 |  CHECK(!chooseFaceAlternative(102,{{0,true},{1,false}}).has_value());
+      |         ^~~~~~~~~~~~~~~~~~~~~
+tests/atomic_resolution_tests.cpp:5:26: note: in definition of macro ‘CHECK’
+    5 | #define CHECK(x) do{if(!(x))throw std::runtime_error(#x);}while(0)
+      |                          ^
+tests/atomic_resolution_tests.cpp:24:16: error: ‘atomicComponentAcceptance’ was not declared in this scope
+   24 |  auto accepted=atomicComponentAcceptance(candidates,neighbors);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~

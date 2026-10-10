@@ -1,0 +1,466 @@
+{
+  "source_manifest_sha256": "6b8700d010d31788beaf160bd14292d70afd02977cc7b0dcb320721457d349a6",
+  "verification_summary_sha256": "08aa6c56fbea06eb9c19da5d5fe1c35561dff4d1068c5e9d0dae4c17dd8bfbe0",
+  "evidence_files": [
+    {
+      "path": "FINAL-SOURCE-MANIFEST.json",
+      "sha256": "6b8700d010d31788beaf160bd14292d70afd02977cc7b0dcb320721457d349a6",
+      "bytes": 10730
+    },
+    {
+      "path": "VERIFICATION-SUMMARY.json",
+      "sha256": "08aa6c56fbea06eb9c19da5d5fe1c35561dff4d1068c5e9d0dae4c17dd8bfbe0",
+      "bytes": 16223
+    },
+    {
+      "path": "resolver-20261010.patch",
+      "sha256": "f79a8fa08e8eeb7cb9fb37b763de3c64514f496b69963bb2649da78f67b10acd",
+      "bytes": 29265
+    },
+    {
+      "path": "baseline-build.log",
+      "sha256": "7cc9979b391069601c5c07440380a25f241f5689d582ea58ea8bf08eeec87113",
+      "bytes": 183
+    },
+    {
+      "path": "baseline-sweep.log",
+      "sha256": "5f3adbf7065c87a88d188c38f8adf22169905ff4d460bc738a3f44258ba9580f",
+      "bytes": 69
+    },
+    {
+      "path": "baseline/summary.json",
+      "sha256": "38211629d98bb5d2d7beba642bee7e03ea3bbe7097c7f55c3a4ea3d618a572df",
+      "bytes": 116337
+    },
+    {
+      "path": "baseline-cells.json",
+      "sha256": "1007728cc872bad26c7f17cdb685fb3243c1824650bc271e11e8c34021187cd7",
+      "bytes": 37348
+    },
+    {
+      "path": "baseline-cells.log",
+      "sha256": "401c6a0ea511e29d2d1d25fd2d55a312e67af50c7638b97bc8f36946b93193c5",
+      "bytes": 1774
+    },
+    {
+      "path": "red-seed-regressions.log",
+      "sha256": "f8abaa67c0a5c1457cb00e672b2dee39b93df45500fd81ad395102e68229c0f1",
+      "bytes": 2259
+    },
+    {
+      "path": "red-atomic-tests.log",
+      "sha256": "d934fea9fc7aeaedc7a4c29820442f6c5af1a713ac669c0d57aa87549f70c9d3",
+      "bytes": 4169
+    },
+    {
+      "path": "resolver-only-seeds.log",
+      "sha256": "374bf15c074eb19daff190621e2519e65b92613e2781421c5dc80d4d9bc477bf",
+      "bytes": 2259
+    },
+    {
+      "path": "corrected-sweep.log",
+      "sha256": "6d290c6e6ef89a033ee5c91da62c8616bc30d5c56da81be37c6639d89894db39",
+      "bytes": 46
+    },
+    {
+      "path": "corrected/summary.json",
+      "sha256": "5187db18e5c7265c6b79912741707344b627ed61c91b8c1f4faaa8805cd3381b",
+      "bytes": 137898
+    },
+    {
+      "path": "corrected-intersections.log",
+      "sha256": "0d7560d631d628e286e31dd24f053e5d532c5979fd5339a735877b3989ccb5f0",
+      "bytes": 4552
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "9542688ca7a23330e4176e31329b8802a5b0fad36c8b6b81eb91018bf4b9de52",
+      "bytes": 2043
+    },
+    {
+      "path": "determinism.json",
+      "sha256": "dfee2554ad86c6fd6c6dbadfa757ac98c3de69680c4eb67378435baacd36a0b9",
+      "bytes": 48
+    },
+    {
+      "path": "extra-regression-comparison.json",
+      "sha256": "c87997b4a410436ff0d2feb17e5115cef81a9ae50c47ff7a129efc2d59aef035",
+      "bytes": 451
+    },
+    {
+      "path": "baseline-extra/summary.json",
+      "sha256": "b0836a870d461e2b77a1b44d47219b4ac63f222c068d87ce91451fa95929a710",
+      "bytes": 104121
+    },
+    {
+      "path": "deterministic-replay/summary.json",
+      "sha256": "71009669cb3e4e71c61ffcbbc9102b5ad2d2add7a5196a48f337dfa5aa506ea3",
+      "bytes": 490353
+    },
+    {
+      "path": "geometry-delta.json",
+      "sha256": "0ad54afe59a5237ff381b5701d5a26a5c675e064d5bf0c20922fc7333bbabe54",
+      "bytes": 10724
+    },
+    {
+      "path": "outside-scope/summary.json",
+      "sha256": "15f395f1367d59416f819edb44631e87aa4bf91df9c8b05ceec93c0d959794d0",
+      "bytes": 7214
+    },
+    {
+      "path": "final-localized.log",
+      "sha256": "96727afea2c14a7dc3518c3b2ea99332d2ac61fb689239530dff1567f88a0605",
+      "bytes": 101
+    },
+    {
+      "path": "final-build-and-regressions.log",
+      "sha256": "6945bed4df032ed744c1ab8c75ec71eedf033b1e1ae45b7a6fd906f9ee3ab2cd",
+      "bytes": 2904
+    },
+    {
+      "path": "final-build-and-regressions.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "final-source-hashes.log",
+      "sha256": "99c50c780315c84b8ed93337a6cf2030efa636e8b23c591d6086647572be6b70",
+      "bytes": 7722
+    },
+    {
+      "path": "python-suite-final.log",
+      "sha256": "7110a0c894c59100cbd83fccd91a64a7c3688c0d02636676d794691517bf48c0",
+      "bytes": 281
+    },
+    {
+      "path": "python-suite-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "js-suite.log",
+      "sha256": "a919870b8593aa877392d450c29e5399709e5271267c191aacc4f71016ef812a",
+      "bytes": 1278
+    },
+    {
+      "path": "js-suite.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "path": "full-cpp/summary.txt",
+      "sha256": "23029aed34047d0cd4b0a399268e531af6e4a986011cd6fbc21881b533f18c98",
+      "bytes": 797
+    },
+    {
+      "path": "full-cpp/erosion_seed_regression_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/igneous_studies_tests.log",
+      "sha256": "e96ff19111c6a16f3d1510078186c5592041f882ff300aa68b0a1bb915e8f625",
+      "bytes": 586
+    },
+    {
+      "path": "full-cpp/poly_tests.log",
+      "sha256": "5a32ad00f44dd5fd90b58c7ddd6403207e9f4c1886e92d08fe5b99c652ac73ab",
+      "bytes": 73
+    },
+    {
+      "path": "full-cpp/surface_detail_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface_family_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/atomic_resolution_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/v3_erosion_tests.log",
+      "sha256": "6b6801850d6e30c00bb046a865aaeb1bf92f407887945c8f1750be4b06096cf8",
+      "bytes": 111
+    },
+    {
+      "path": "full-cpp/contraction_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/field_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/slate-incision-unequal_ends.log",
+      "sha256": "0d7a850fb2af1b53efa7f5012f1fdab05f721b069273dd76d3ce9bdd00bdc533",
+      "bytes": 486
+    },
+    {
+      "path": "full-cpp/alveolar_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/alveolar_invariant_tests.log",
+      "sha256": "065f72963874bf857378a743c86a7f36ac61e181d06f9f813c8cad7bf6aff0a2",
+      "bytes": 711
+    },
+    {
+      "path": "full-cpp/mesh_tests.log",
+      "sha256": "72b2ca8b769b48df768c794fd6b05db5f7f1f8a6938086cdaf6e1bd22ed9d161",
+      "bytes": 338
+    },
+    {
+      "path": "full-cpp/atomic_resolution_tests.log",
+      "sha256": "3607b580ee5755f56688e73eacbe8cff3646d3aa19d3170fe20bfb1134cb6f95",
+      "bytes": 101
+    },
+    {
+      "path": "full-cpp/surface_host_tests.log",
+      "sha256": "20a7b35f910234a19d1fac19384d671911aa07d5117eea931583a10002d81eb0",
+      "bytes": 427
+    },
+    {
+      "path": "full-cpp/alveolar_tests.log",
+      "sha256": "eb87fb1b358a8e25657568d4b0475267775668b4d87c3dd5191e5065d3887d5a",
+      "bytes": 54
+    },
+    {
+      "path": "full-cpp/weathered_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface_morphology_tests.log",
+      "sha256": "1639a763f0a32d62203d9685e437abaffb361cbfbebfb44404b0efcf1aaf11a7",
+      "bytes": 94
+    },
+    {
+      "path": "full-cpp/surface_continuity_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/field_tests.log",
+      "sha256": "7d809c4b307d80bd8167b0f24ff7567fbb2d46663d971b0dd1a8e1b62a16856b",
+      "bytes": 23
+    },
+    {
+      "path": "full-cpp/heightfield_tests.log",
+      "sha256": "eb47b237472fd640d97487ffa78d0ad3573a06bbfc5f80b1ab4703f55baf58dd",
+      "bytes": 77
+    },
+    {
+      "path": "full-cpp/cliff_profile_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/structural_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/slate_incision_tests.log",
+      "sha256": "22794b4a0274acd735cfab547a6349eda12780bcb36f8a036481788f2d0ae0a5",
+      "bytes": 483
+    },
+    {
+      "path": "full-cpp/erosion_seed_regression_tests.log",
+      "sha256": "872e715d21a2274c38849e6c5b186b8cc8bc97ab439dd962deb0a75aec7f1776",
+      "bytes": 2327
+    },
+    {
+      "path": "full-cpp/cliff_profile_tests.log",
+      "sha256": "637447105f71b21633c95b0670c2096c86d0d470748761cad059b8340c83bfc0",
+      "bytes": 81
+    },
+    {
+      "path": "full-cpp/contraction_tests.log",
+      "sha256": "bcc0d2f7300366ca461ef80c89956538b34bb3f7365fff8b087bcb70aede8681",
+      "bytes": 66
+    },
+    {
+      "path": "full-cpp/surface-family-shale_laminated.log",
+      "sha256": "a0666472b3630d048f06b566e9e0146b9349b0553c52a2380c360e819c03bc77",
+      "bytes": 82
+    },
+    {
+      "path": "full-cpp/igneous_studies_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface_host_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/heightfield_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/alveolar_guide_tests.log",
+      "sha256": "0582dcefb0adeaf2b70633ac0b761b2c22c1a4e1172dca6ca8ffc7880a454216",
+      "bytes": 62
+    },
+    {
+      "path": "full-cpp/reference_studies_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface-family-slate_foliated.log",
+      "sha256": "e31baf08f91712ac60a38e9103868f5bc3f9a97c28f8290719a3ecb1e95f9de7",
+      "bytes": 81
+    },
+    {
+      "path": "full-cpp/family_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/slate_incision_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/structural_tests.log",
+      "sha256": "3166398e87dca19387a342bec697b981d4cd6d1cf5debcc55f03008ac3faff01",
+      "bytes": 477
+    },
+    {
+      "path": "full-cpp/slate-incision-finite_span.log",
+      "sha256": "22794b4a0274acd735cfab547a6349eda12780bcb36f8a036481788f2d0ae0a5",
+      "bytes": 483
+    },
+    {
+      "path": "full-cpp/slate_envelope_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface_family_tests.log",
+      "sha256": "a0666472b3630d048f06b566e9e0146b9349b0553c52a2380c360e819c03bc77",
+      "bytes": 82
+    },
+    {
+      "path": "full-cpp/alveolar_guide_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/mesh_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/weathered_tests.log",
+      "sha256": "81d14b22fccc2444d4781a38c3cc2eb0c3c0a44b3615843531da8a74b3d1c265",
+      "bytes": 896
+    },
+    {
+      "path": "full-cpp/surface_morphology_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/union_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/face_resolution_tests.log",
+      "sha256": "6384dad0f3aadb034098fd5b3a9009d062e9662464e2509a126228fe2abe3099",
+      "bytes": 126
+    },
+    {
+      "path": "full-cpp/slate_envelope_tests.log",
+      "sha256": "3ac6657777a8e0adb598d729cb6685bc951e7fd3acf6e9361b5d8e0be029ccf2",
+      "bytes": 534
+    },
+    {
+      "path": "full-cpp/surface_continuity_tests.log",
+      "sha256": "5252db1332c493008b2519a4d06b8eb70d68b3669becf905131933ecb2f363ee",
+      "bytes": 4140
+    },
+    {
+      "path": "full-cpp/slate-incision-continuous_ends.log",
+      "sha256": "e8d4b74fcc1fb9d673fc875d715988d8d78f48731574fb81559604ce110627da",
+      "bytes": 542
+    },
+    {
+      "path": "full-cpp/reference_studies_tests.log",
+      "sha256": "7b8cd832b5ca2f1a77a8c74789d675c7be3f082d1cdf0efdb44c835451837f4b",
+      "bytes": 164
+    },
+    {
+      "path": "full-cpp/alveolar_invariant_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/alveolar_reconstruction_tests.log",
+      "sha256": "25eb237c463f619206b28146c05097db288f51b7a9d6469cc4f8c7fd52db0e4f",
+      "bytes": 197
+    },
+    {
+      "path": "full-cpp/union_tests.log",
+      "sha256": "98c83551ff730722910b6999776d2a3050f181c10e9f87e423478a5a55d5335e",
+      "bytes": 63
+    },
+    {
+      "path": "full-cpp/poly_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/plateau_tests.log",
+      "sha256": "afec1b7a4fb93d5b52b5db294a5ed49b595ee7e9392c3103b91c015f5a68cb8b",
+      "bytes": 63
+    },
+    {
+      "path": "full-cpp/surface_detail_tests.log",
+      "sha256": "81c0d50fda1d606ac2a9fe8cd1c29d548b8d9ded805c78a94414c4f89c19ccfc",
+      "bytes": 136
+    },
+    {
+      "path": "full-cpp/plateau_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/v3_erosion_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/face_resolution_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/family_tests.log",
+      "sha256": "7575b04beccf5ea33fe7f46f2731df1e48e2919d16603dbc3ba05491e4ed0b78",
+      "bytes": 1632
+    },
+    {
+      "path": "full-cpp/alveolar_reconstruction_tests-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-cpp/surface-family-limestone_dissolution.log",
+      "sha256": "607e893346125f02bb366bcd3ccb2a0f5edd9165a00caf6a994a72af71d4710d",
+      "bytes": 88
+    }
+  ]
+}

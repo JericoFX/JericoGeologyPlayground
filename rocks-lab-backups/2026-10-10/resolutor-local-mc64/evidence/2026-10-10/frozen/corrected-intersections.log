@@ -1,0 +1,60 @@
+fixture crossing result=1 expected=1
+fixture separated result=0 expected=0
+fixture parallel_separated result=0 expected=0
+fixture coplanar_overlap result=2 expected=2
+fixture coplanar_crossing_overlap result=2 expected=2
+fixture coplanar_shared_edge_overlap result=2 expected=2
+fixture coplanar_disjoint result=0 expected=0
+fixture shared_edge result=0 expected=0
+fixture coplanar_shared_edge result=0 expected=0
+fixture shared_vertex_only result=0 expected=0
+fixture shared_vertex_crossing result=1 expected=1
+fixture tiny_adjacent_planar result=0 expected=0
+fixture near_planar_crossing_overlap scale=1e-05 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=1e-05 result=2 expected=2
+fixture near_planar_crossing_overlap scale=1 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=1 result=2 expected=2
+fixture near_planar_crossing_overlap scale=100000 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=100000 result=2 expected=2
+MESH ../evidence/corrected/4/output/base.obj vertices=7040 faces=14076 triangles=14076 eps=2.9189e-09 degenerate=0
+RESULT candidates=109185 intersections=0 coplanar=0
+MESH ../evidence/corrected/4/output/stratified.obj vertices=8067 faces=16130 triangles=16130 eps=2.9189e-09 degenerate=0
+RESULT candidates=124150 intersections=0 coplanar=0
+MESH ../evidence/corrected/4/output/eroded.obj vertices=8067 faces=16130 triangles=16130 eps=2.9189e-09 degenerate=0
+RESULT candidates=124150 intersections=0 coplanar=0
+MESH ../evidence/corrected/5/output/base.obj vertices=6994 faces=13984 triangles=13984 eps=2.9189e-09 degenerate=0
+RESULT candidates=108515 intersections=0 coplanar=0
+MESH ../evidence/corrected/5/output/stratified.obj vertices=7960 faces=15916 triangles=15916 eps=2.9189e-09 degenerate=0
+RESULT candidates=122624 intersections=0 coplanar=0
+MESH ../evidence/corrected/5/output/eroded.obj vertices=7960 faces=15916 triangles=15916 eps=2.9189e-09 degenerate=0
+RESULT candidates=122624 intersections=0 coplanar=0
+MESH ../evidence/corrected/8/output/base.obj vertices=6998 faces=13992 triangles=13992 eps=2.9189e-09 degenerate=0
+RESULT candidates=107607 intersections=0 coplanar=0
+MESH ../evidence/corrected/8/output/stratified.obj vertices=7958 faces=15912 triangles=15912 eps=2.9189e-09 degenerate=0
+RESULT candidates=121615 intersections=0 coplanar=0
+MESH ../evidence/corrected/8/output/eroded.obj vertices=7958 faces=15912 triangles=15912 eps=2.9189e-09 degenerate=0
+RESULT candidates=121615 intersections=0 coplanar=0
+MESH ../evidence/corrected/14/output/base.obj vertices=7022 faces=14040 triangles=14040 eps=2.9189e-09 degenerate=0
+RESULT candidates=108031 intersections=0 coplanar=0
+MESH ../evidence/corrected/14/output/stratified.obj vertices=7913 faces=15822 triangles=15822 eps=2.9189e-09 degenerate=0
+RESULT candidates=121143 intersections=0 coplanar=0
+MESH ../evidence/corrected/14/output/eroded.obj vertices=7913 faces=15822 triangles=15822 eps=2.9189e-09 degenerate=0
+RESULT candidates=121143 intersections=0 coplanar=0
+MESH ../evidence/corrected/25/output/base.obj vertices=7022 faces=14040 triangles=14040 eps=2.9189e-09 degenerate=0
+RESULT candidates=109023 intersections=0 coplanar=0
+MESH ../evidence/corrected/25/output/stratified.obj vertices=7937 faces=15870 triangles=15870 eps=2.9189e-09 degenerate=0
+RESULT candidates=122169 intersections=0 coplanar=0
+MESH ../evidence/corrected/25/output/eroded.obj vertices=7937 faces=15870 triangles=15870 eps=2.9189e-09 degenerate=0
+RESULT candidates=122169 intersections=0 coplanar=0
+MESH ../evidence/corrected/29/output/base.obj vertices=7024 faces=14044 triangles=14044 eps=2.9189e-09 degenerate=0
+RESULT candidates=108457 intersections=0 coplanar=0
+MESH ../evidence/corrected/29/output/stratified.obj vertices=7920 faces=15836 triangles=15836 eps=2.9189e-09 degenerate=0
+RESULT candidates=121399 intersections=0 coplanar=0
+MESH ../evidence/corrected/29/output/eroded.obj vertices=7920 faces=15836 triangles=15836 eps=2.9189e-09 degenerate=0
+RESULT candidates=121399 intersections=0 coplanar=0
+MESH ../evidence/corrected/31/output/base.obj vertices=6996 faces=13988 triangles=13988 eps=2.9189e-09 degenerate=0
+RESULT candidates=108052 intersections=0 coplanar=0
+MESH ../evidence/corrected/31/output/stratified.obj vertices=7942 faces=15880 triangles=15880 eps=2.9189e-09 degenerate=0
+RESULT candidates=121677 intersections=0 coplanar=0
+MESH ../evidence/corrected/31/output/eroded.obj vertices=7942 faces=15880 triangles=15880 eps=2.9189e-09 degenerate=0
+RESULT candidates=121677 intersections=0 coplanar=0

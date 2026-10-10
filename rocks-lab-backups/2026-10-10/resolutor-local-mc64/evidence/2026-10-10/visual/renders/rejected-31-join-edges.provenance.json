@@ -1,0 +1,200 @@
+{
+  "job": {
+    "name": "rejected-31-join-edges",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      },
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 0.9,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  "obj": "/workspace/scratch/8891ccba612f/rocks-resolver-20261010/evidence/baseline-diagnostic/31/2.obj",
+  "obj_sha256": "1ac4bef22a04142256e8abeadca003149aa24027f6a535763af6ffeb63c7c0b1",
+  "png_sha256": "30f51edb139f08fe1d70ecc28b0fb5f6531c69b1e307eb87d9ed1932552bbb28",
+  "settings": {
+    "engine": "CYCLES",
+    "device": "CPU",
+    "threads": 2,
+    "samples": 24,
+    "denoising": false,
+    "adaptive_sampling": false,
+    "render_seed": 1,
+    "resolution": [
+      800,
+      800
+    ],
+    "color_management": {
+      "view_transform": "AgX",
+      "look": "AgX - Medium High Contrast",
+      "exposure": 0.0,
+      "gamma": 1.0
+    },
+    "world": {
+      "color": [
+        0.22,
+        0.22,
+        0.22
+      ],
+      "strength": 0.5
+    },
+    "camera": {
+      "location": [
+        3.8671875,
+        0.7765625,
+        2.0390625
+      ],
+      "target": [
+        0.8671875,
+        -0.0234375,
+        0.5390625
+      ],
+      "ortho_scale": 0.23,
+      "clip_start": 0.002,
+      "clip_end": 200.0,
+      "world_up": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "lights": [
+      {
+        "name": "Key",
+        "location": [
+          -3.6,
+          3.8,
+          6.0
+        ],
+        "power_watts": 1680.0,
+        "disk_diameter_meters": 2.5
+      },
+      {
+        "name": "Fill",
+        "location": [
+          4.8,
+          0.8,
+          4.4
+        ],
+        "power_watts": 260.0,
+        "disk_diameter_meters": 3.8
+      },
+      {
+        "name": "Rim",
+        "location": [
+          -1.0,
+          4.6,
+          -3.0
+        ],
+        "power_watts": 560.0,
+        "disk_diameter_meters": 2.8
+      }
+    ],
+    "material": {
+      "base_color": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "roughness": 0.87,
+      "metallic": 0.0
+    },
+    "wireframe": {
+      "shader": "ShaderNodeWireframe",
+      "width_pixels": 0.9,
+      "color": [
+        0.015,
+        0.08,
+        0.115
+      ],
+      "all_imported_triangle_edges": true
+    },
+    "obj_import_axes": {
+      "forward_axis": "Y",
+      "up_axis": "Z"
+    },
+    "source_geometry_changes": [],
+    "source_normal_changes": [],
+    "source_transform_changes": [],
+    "light_aim_target": [
+      0.0,
+      0.0,
+      0.05
+    ]
+  },
+  "settings_sha256": "d02635a44d5522462fec7df6c5e39351a6eca847036cc533620ede40e2963b8d",
+  "blender_version": "5.2.2 LTS",
+  "imported_geometry_normals_transforms_unchanged": true,
+  "mesh_stats": [
+    {
+      "name": "2",
+      "vertices": 7942,
+      "triangles": 15880,
+      "has_custom_normals": true,
+      "smooth_polygons": 15880,
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "imported_fingerprint": {
+    "2": "1be94e1634158f5099d24d3e8ebbd1472b4816f7750e496f965dff186dd5498b"
+  },
+  "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+  "wrapper_sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46",
+  "seconds": 15.855835580994608
+}

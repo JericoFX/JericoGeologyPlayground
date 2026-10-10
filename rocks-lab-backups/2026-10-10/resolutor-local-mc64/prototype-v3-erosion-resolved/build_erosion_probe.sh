@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 cd "$(dirname "$0")"
+mkdir -p build
 checkpoint=../damage-checkpoint/JericoPipeCppCheckpoint01_20261007
 engine=$checkpoint/original/build-chain/deps/engine-inputs
 incs=(-Icore/include -I"$checkpoint/original/Source" -I"$engine/Engine/Core/Include" -I"$engine/Engine/Jobs/Include" -I"$engine/Tools/ProceduralAuthoring/Include" -I"$engine/Tools/ProceduralAuthoring/Source")
@@ -12,3 +13,11 @@ for test in DamageField RockAddonMath; do g++ "${flags[@]}" "${incs[@]}" "$check
 for file in core/src/*.cpp; do g++ "${flags[@]}" "${incs[@]}" -Wall -Wextra -Wpedantic -c "$file" -o "build/$(basename "$file" .cpp).o"; done
 ar rcs build/librocks_core.a build/alveolar_surface.o build/compare.o build/extract.o build/field.o build/heightfield.o build/polyhedral.o build/reference_studies.o build/surface_detail.o build/surface_families.o build/validate.o
 for app in 'cli/main.cpp rocks_cli' 'tests/v3_erosion_tests.cpp v3_erosion_tests' 'tests/erosion_diagnose.cpp erosion_diagnose'; do read -r file name <<<"$app"; g++ "${flags[@]}" "${incs[@]}" "$file" build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o "build/$name"; done
+
+# Resolver regression entry point: real field fixtures, atomic table choices,
+# conservative rejection guards and existing bounded-contraction adversaries.
+for test in face_resolution atomic_resolution contraction erosion_seed_regression; do
+ g++ "${flags[@]}" "${incs[@]}" "tests/${test}_tests.cpp" build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o "build/${test}_tests"
+ "build/${test}_tests"
+done
+python3 tests/test_localized_resolver.py

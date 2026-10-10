@@ -1,0 +1,260 @@
+[
+  {
+    "case": "grid128",
+    "identical": true,
+    "baseline": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 0,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 45555220,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.533923952479127,
+        "triangles": 56236,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 28120
+      }
+    },
+    "candidate": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 0,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 45555220,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.533923952479127,
+        "triangles": 56236,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 28120
+      }
+    }
+  },
+  {
+    "case": "wear",
+    "identical": true,
+    "baseline": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 1,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 1,
+        "duplicateFaces": 0,
+        "errors": [
+          "noncircular vertex link or reversed normal: 1",
+          "degenerate faces: 1"
+        ],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.0130251272147586,
+        "triangles": 16132,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 8068
+      }
+    },
+    "candidate": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 1,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 1,
+        "duplicateFaces": 0,
+        "errors": [
+          "noncircular vertex link or reversed normal: 1",
+          "degenerate faces: 1"
+        ],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.0130251272147586,
+        "triangles": 16132,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 8068
+      }
+    }
+  },
+  {
+    "case": "family",
+    "identical": true,
+    "baseline": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 0,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.267431348405735,
+        "triangles": 13992,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 6998
+      }
+    },
+    "candidate": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 2,
+        "badEdges": 0,
+        "badVertices": 0,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 3.267431348405735,
+        "triangles": 13992,
+        "unresolvedAmbiguousCells": 2,
+        "vertices": 6998
+      }
+    }
+  },
+  {
+    "case": "version",
+    "identical": true,
+    "baseline": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 6,
+        "badEdges": 0,
+        "badVertices": 6,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [
+          "noncircular vertex link or reversed normal: 6"
+        ],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 1.964235201489688,
+        "triangles": 12068,
+        "unresolvedAmbiguousCells": 6,
+        "vertices": 6036
+      }
+    },
+    "candidate": {
+      "exit": 2,
+      "rejection": {
+        "accepted": false,
+        "ambiguousCells": 6,
+        "badEdges": 0,
+        "badVertices": 6,
+        "boundaryTouched": false,
+        "components": 1,
+        "contractedEdges": 0,
+        "contractedFaces": 0,
+        "coreBufferBytes": 6147860,
+        "degenerateFaces": 0,
+        "duplicateFaces": 0,
+        "errors": [
+          "noncircular vertex link or reversed normal: 6"
+        ],
+        "faceCertificateSamples": 0,
+        "flippedTriangles": 0,
+        "jacobianLowerBound": 1.0,
+        "maxContractionDistance": 0.0,
+        "maxDisplacement": 0.0,
+        "preservedSharpVertices": 0,
+        "resolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "signedVolume": 1.964235201489688,
+        "triangles": 12068,
+        "unresolvedAmbiguousCells": 6,
+        "vertices": 6036
+      }
+    }
+  }
+]

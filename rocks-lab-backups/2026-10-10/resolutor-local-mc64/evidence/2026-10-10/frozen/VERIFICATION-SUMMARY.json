@@ -1,0 +1,518 @@
+{
+  "status": "verified_candidate_not_installed",
+  "source_manifest": "FINAL-SOURCE-MANIFEST.json",
+  "directed": {
+    "seeds": 36,
+    "accepted": 36,
+    "original_range_0_31_accepted": 32,
+    "repaired_seeds": [
+      4,
+      5,
+      8,
+      14,
+      25,
+      29,
+      31
+    ],
+    "repaired_stage_meshes": 21
+  },
+  "preservation": {
+    "previously_accepted_seed_count": 29,
+    "checks": [
+      {
+        "seed": 0,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 1,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 2,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 3,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 6,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 7,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 9,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 10,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 11,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 12,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 13,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 15,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 16,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 17,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 18,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 19,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 20,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 21,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 22,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 23,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 24,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 26,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 27,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 28,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 30,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 48,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 117,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 305,
+        "obj_bytes_identical": true
+      },
+      {
+        "seed": 999,
+        "obj_bytes_identical": true
+      }
+    ],
+    "strata_v4_seed48": {
+      "eroded.obj": true,
+      "stratified.obj": true,
+      "base.obj": true
+    }
+  },
+  "determinism": {
+    "seeds": 36,
+    "obj_bytes_identical": true
+  },
+  "holdout": {
+    "seeds": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "baseline_accepted": 26,
+    "candidate_accepted": 31,
+    "newly_accepted": [
+      39,
+      43,
+      47,
+      49,
+      63
+    ],
+    "still_rejected": [
+      40
+    ],
+    "regressions": []
+  },
+  "expanded": {
+    "executions": 132,
+    "unique_seeds": 130,
+    "unique_accepted": 125,
+    "rejected": [
+      {
+        "seed": 40,
+        "diagnostic": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":3.769619,\"ambiguousCells\":0,\"badEdges\":0,\"badVertices\":1,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[\"noncircular vertex link or reversed normal: 1\"],\"extractNormalsMs\":154.62229,\"faceCertificateSamples\":0,\"fieldMs\":136.229328,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.0773644359018655,\"surfaceDetailMs\":0.0,\"triangles\":15916,\"unresolvedAmbiguousCells\":0,\"validationMs\":15.202822,\"vertices\":7960}"
+      },
+      {
+        "seed": 73,
+        "diagnostic": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":3.815909,\"ambiguousCells\":2,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":152.633791,\"faceCertificateSamples\":160,\"fieldMs\":112.830362,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.160670792155252,\"surfaceDetailMs\":0.0,\"triangles\":16172,\"unresolvedAmbiguousCells\":2,\"validationMs\":17.473709,\"vertices\":8088}"
+      },
+      {
+        "seed": 98,
+        "diagnostic": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":3.793324,\"ambiguousCells\":2,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":153.682868,\"faceCertificateSamples\":124,\"fieldMs\":113.963233,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.0341446191793886,\"surfaceDetailMs\":0.0,\"triangles\":15912,\"unresolvedAmbiguousCells\":2,\"validationMs\":15.462127,\"vertices\":7958}"
+      },
+      {
+        "seed": 111,
+        "diagnostic": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":3.919021,\"ambiguousCells\":1,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":164.48834,\"faceCertificateSamples\":0,\"fieldMs\":122.993232,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.080945938546012,\"surfaceDetailMs\":0.0,\"triangles\":15880,\"unresolvedAmbiguousCells\":1,\"validationMs\":18.544507,\"vertices\":7942}"
+      },
+      {
+        "seed": 120,
+        "diagnostic": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":4.388498,\"ambiguousCells\":4,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":151.76822,\"faceCertificateSamples\":1148,\"fieldMs\":112.906996,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":2,\"resolvedAmbiguousFaces\":1,\"signedVolume\":3.052978815596548,\"surfaceDetailMs\":0.0,\"triangles\":15972,\"unresolvedAmbiguousCells\":2,\"validationMs\":17.29855,\"vertices\":7988}"
+      }
+    ]
+  },
+  "tests": {
+    "cpp_executions": 34,
+    "cpp_failures": [],
+    "python_tests": 53,
+    "python_exit": 0,
+    "js_tests": 9,
+    "js_exit": 0,
+    "final_build_and_regressions_exit": 0,
+    "source_sha256_check_exit": 0
+  },
+  "intersection_audit": {
+    "meshes": 21,
+    "candidate_pairs": 2468424,
+    "detected_intersections": 0,
+    "tolerance_approx_m": 2.92e-09,
+    "exact_proof": false
+  },
+  "contraction": {
+    "maximum_original_to_retained_distance_m": 1.7378896249769805e-06,
+    "surviving_face_orientation_reversals": 0,
+    "all_retained_normals_unchanged": true,
+    "new_positions_created": 0
+  },
+  "outside_scope": [
+    {
+      "case": "grid128",
+      "identical": true,
+      "baseline": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 0,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 45555220,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.533923952479127,
+          "triangles": 56236,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 28120
+        }
+      },
+      "candidate": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 0,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 45555220,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.533923952479127,
+          "triangles": 56236,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 28120
+        }
+      }
+    },
+    {
+      "case": "wear",
+      "identical": true,
+      "baseline": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 1,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 1,
+          "duplicateFaces": 0,
+          "errors": [
+            "noncircular vertex link or reversed normal: 1",
+            "degenerate faces: 1"
+          ],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.0130251272147586,
+          "triangles": 16132,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 8068
+        }
+      },
+      "candidate": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 1,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 1,
+          "duplicateFaces": 0,
+          "errors": [
+            "noncircular vertex link or reversed normal: 1",
+            "degenerate faces: 1"
+          ],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.0130251272147586,
+          "triangles": 16132,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 8068
+        }
+      }
+    },
+    {
+      "case": "family",
+      "identical": true,
+      "baseline": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 0,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.267431348405735,
+          "triangles": 13992,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 6998
+        }
+      },
+      "candidate": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 2,
+          "badEdges": 0,
+          "badVertices": 0,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 3.267431348405735,
+          "triangles": 13992,
+          "unresolvedAmbiguousCells": 2,
+          "vertices": 6998
+        }
+      }
+    },
+    {
+      "case": "version",
+      "identical": true,
+      "baseline": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 6,
+          "badEdges": 0,
+          "badVertices": 6,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [
+            "noncircular vertex link or reversed normal: 6"
+          ],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 1.964235201489688,
+          "triangles": 12068,
+          "unresolvedAmbiguousCells": 6,
+          "vertices": 6036
+        }
+      },
+      "candidate": {
+        "exit": 2,
+        "rejection": {
+          "accepted": false,
+          "ambiguousCells": 6,
+          "badEdges": 0,
+          "badVertices": 6,
+          "boundaryTouched": false,
+          "components": 1,
+          "contractedEdges": 0,
+          "contractedFaces": 0,
+          "coreBufferBytes": 6147860,
+          "degenerateFaces": 0,
+          "duplicateFaces": 0,
+          "errors": [
+            "noncircular vertex link or reversed normal: 6"
+          ],
+          "faceCertificateSamples": 0,
+          "flippedTriangles": 0,
+          "jacobianLowerBound": 1.0,
+          "maxContractionDistance": 0.0,
+          "maxDisplacement": 0.0,
+          "preservedSharpVertices": 0,
+          "resolvedAmbiguousCells": 0,
+          "resolvedAmbiguousFaces": 0,
+          "signedVolume": 1.964235201489688,
+          "triangles": 12068,
+          "unresolvedAmbiguousCells": 6,
+          "vertices": 6036
+        }
+      }
+    }
+  ],
+  "measured_prepass_ms": {
+    "min": 3.576092,
+    "max": 6.481971
+  },
+  "limitations": [
+    "Experimental rocks-v3 irregular_beds, paris-mc-v1, MC64, wear0 scope only.",
+    "L=8 signed-path evidence is not interval arithmetic; existing single-edge-root/resolved-detail MC assumptions remain.",
+    "Intersection checks use a floating tolerance, not an exact universal proof.",
+    "Expanded exploration deliberately preserves five conservative rejections."
+  ]
+}

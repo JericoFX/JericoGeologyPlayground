@@ -1,0 +1,6 @@
+seed=0 patches=3 changed=90116 protected_samples=609559 protected_filter_footprints=37287 topology/replay/zero-identity PASS
+seed=48 patches=3 changed=72764 protected_samples=666598 protected_filter_footprints=40828 topology/replay/zero-identity PASS
+seed=117 patches=3 changed=54806 protected_samples=821272 protected_filter_footprints=50666 topology/replay/zero-identity PASS
+seed=305 patches=3 changed=80885 protected_samples=659061 protected_filter_footprints=40305 topology/replay/zero-identity PASS
+seed=4294967295 patches=3 changed=74605 protected_samples=584237 protected_filter_footprints=35814 topology/replay/zero-identity PASS
+finite bounds, minimum supports, count cap, extreme seeds/controls PASS

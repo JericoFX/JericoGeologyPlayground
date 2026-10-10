@@ -1,32 +1,15 @@
-# Resolutor local MC64: respaldo original y corrección aislada
+# Resolutor local MC64: corrección del 10 de octubre
 
-Este directorio conserva el resolutor de rocas recibido en el ZIP del 8 de octubre de 2026. El primer commit importa sus fuentes sin cambiar un byte. El segundo commit se reserva para la corrección del 10 de octubre, después de revisión y QA. Este snapshot original no afirma que el defecto esté resuelto.
+El commit anterior conserva las fuentes originales del ZIP del 8 de octubre. Esta versión usa exclusivamente el conjunto congelado de FINAL-SOURCE-MANIFEST.json, SHA256 6b8700d010d31788beaf160bd14292d70afd02977cc7b0dcb320721457d349a6. Los archivos del checkpoint mantienen sus bytes originales y la estructura relativa necesaria.
 
-## Procedencia
+Desde prototype-v3-erosion-resolved, ejecutar bash build_erosion_probe.sh. El script crea build, compila la CLI y prueba las dependencias originales y las regresiones del resolutor. LEEME-CORRECCION-20261010.md explica la corrección, reproducción y límites. La batería ampliada incluye 34 ejecuciones C++, 53 pruebas Python y 9 pruebas Node; los resultados originales revisados están separados de la repetición posterior de empaquetado desde árbol limpio.
 
-- Archivo: JericoRocas-Resolutor-Local-MC64-20261008.zip
-- Identidad de Library: libfile_cfa96f89c5048191afddb8d142e09857
-- SHA256: 728612df6473b86b880167c3be9817d6eba77fba28eef0551dc88fcf47002ab2
-- Tamaño: 7.495.030 bytes.
+El barrido original 0–31 pasa 32/32. La exploración ampliada contiene 130 semillas únicas, 125 admitidas y cinco rechazos conservadores: 40, 73, 98, 111 y 120. Las 132 ejecuciones históricas incluyen dos semillas repetidas. No es un extractor universal: se mantiene el alcance experimental rocks-v3 / irregular_beds / paris-mc-v1 / MC64 / wear0, las hipótesis previas de MC y las limitaciones numéricas documentadas.
 
-La identidad identifica el entregable original completo. No es una URL pública. No se verificó una copia de este ZIP final en Drive.
+Se conserva sólo el subconjunto necesario de DamageField, RockAddonMath y GeologyNoise. No se puede construir el producto completo de pipes o Manifold con este subconjunto. Los avisos y manifiestos históricos internos describen sus paquetes completos; BACKUP_MANIFEST.json describe esta entrega. Las rutas build-chain/deps/engine-inputs son fuentes necesarias, no cachés.
 
-## Contenido y límites
+La evidencia histórica del 8 de octubre queda separada en evidence/2026-10-08. La evidencia congelada del 10 de octubre está en evidence/2026-10-10/frozen. Las cuatro láminas revisadas, sus ajustes y procedencia están en evidence/2026-10-10/visual. El ZIP original íntegro sigue identificado en Library como libfile_cfa96f89c5048191afddb8d142e09857, SHA256 728612df6473b86b880167c3be9817d6eba77fba28eef0551dc88fcf47002ab2, 7.495.030 bytes. No se ha verificado una copia de ese ZIP final en Drive.
 
-Se conservan los 205 archivos de fuente, pruebas, recetas, herramientas y visor del laboratorio, y 19 dependencias necesarias del checkpoint original. Se añaden sus seis archivos de procedencia y atribución. El manifiesto enumera los 125 archivos del checkpoint que quedan fuera por no ser necesarios para este resolutor. Sus bytes siguen en el ZIP original.
+No se instala nada en la PC del usuario, no se integra nada en JericoEngine2/O3DE y no se modifica otra familia ni un respaldo anterior.
 
-La estructura relativa entre prototype-v3-erosion-resolved y damage-checkpoint se mantiene para build_erosion_probe.sh. Los archivos bajo original/build-chain/deps/engine-inputs son fuentes requeridas; no son cachés. El subconjunto no permite construir la aplicación completa de pipes ni Manifold.
-
-Los README, manifiestos y sumas históricos internos describen sus paquetes de origen completos. BACKUP_MANIFEST.json delimita este snapshot y registra los hashes reales de cada archivo incluido. Se preservan las licencias MIT de Paris y nlohmann; los avisos históricos del checkpoint y sus referencias de licencia se conservan aunque el código Manifold no forme parte de este subconjunto.
-
-La evidencia textual de 2026-10-08 se conserva separada. Los 8 OBJ y 8 PNG originales están en el ZIP de Library; sus tamaños y SHA256 permiten verificarlos. No se convierten imágenes en texto ni se presentan los registros históricos como pruebas nuevas.
-
-## Comandos soportados para el snapshot original
-
-Desde prototype-v3-erosion-resolved, crear build y ejecutar bash build_erosion_probe.sh. Ese script compila la CLI y los probes del resolutor con las dependencias conservadas, y ejecuta los tests originales de DamageField y RockAddonMath. Luego ejecutar build/v3_erosion_tests y python3 -B tests/test_localized_resolver.py. El test de caras se compila con g++ -O2 -std=c++20 -Icore/include tests/face_resolution_tests.cpp build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o build/face_resolution_tests, y se ejecuta build/face_resolution_tests.
-
-Estos comandos corresponden al snapshot histórico. El test de rechazo de seed 4 registra deliberadamente el comportamiento anterior. La corrección y sus nuevos criterios se documentarán por separado. No usar el CMake ni las instrucciones de los demos del checkpoint de pipes: aquel producto completo no está incluido.
-
-La auditoría inicial verificó dependencias de cabeceras con g++ -MM para 43 unidades C++. La comprobación de empaquetado desde copia limpia valida únicamente los comandos anteriores y no representa la batería completa ni el QA de la corrección. El estado histórico era 25/32 semillas aceptadas, con siete rechazos y sin ejecución de toda la batería del proyecto.
-
-No se modifica rocks-lab-backups/2026-10-06 ni ninguna otra familia. No hay integración con JericoEngine2, O3DE ni la PC del usuario.
+La repetición de empaquetado desde copia limpia pasó el runner oficial, las 34 ejecuciones C++, las 53 pruebas Python y las 9 pruebas Node. Los registros y comandos exactos están en evidence/2026-10-10/clean-package-qa. Se volvió a verificar el hash de todas las fuentes congeladas y que las dependencias del proyecto se resuelven dentro del paquete. Las pruebas Node usan mocks, no validación de browser/WebGL.

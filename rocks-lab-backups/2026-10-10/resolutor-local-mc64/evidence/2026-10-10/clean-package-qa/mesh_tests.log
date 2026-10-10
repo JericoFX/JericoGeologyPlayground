@@ -1,0 +1,7 @@
+64 stage 0 vertices 7290 faces 14576 volume 3.90787
+64 stage 1 vertices 7574 faces 15144 volume 3.69413
+64 stage 2 vertices 7730 faces 15456 volume 3.65517
+128 stage 0 vertices 29048 faces 58092 volume 3.91119
+128 stage 1 vertices 30778 faces 61552 volume 3.70205
+128 stage 2 vertices 31564 faces 63124 volume 3.66295
+mesh fixtures: PASS

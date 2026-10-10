@@ -1,0 +1,1580 @@
+[
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.531200485338854,
+      "triangles": 14076
+    },
+    "seed": 4,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.00026170852515277634,
+            "bilinearDeterminant": 7.498056090257722e-07,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.0035037012555577327,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.04263646670595589,
+        "center": [
+          0.8671875,
+          -0.0234375,
+          0.3515625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9124324678266068,
+              0.35564311377087987,
+              0.20244744326170502
+            ],
+            "offset": 0.8967240411920296,
+            "valueAtCenter": -0.04263646670595589
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.23695062778026832
+          }
+        ],
+        "cornerValues": [
+          -0.0003893557775790249,
+          -0.007223466364782317,
+          -0.009360835405593253,
+          -0.004781986095017151,
+          0.004031162490667323,
+          -0.000991978817654348,
+          -0.0056663923760772485,
+          0.001580374602453168
+        ],
+        "fieldCenter": -0.005919863220360472,
+        "gridIndex": [
+          50,
+          31,
+          39
+        ],
+        "mask": 111,
+        "min": [
+          0.84375,
+          -0.046875,
+          0.328125
+        ],
+        "refinement": [
+          {
+            "activeCells": 3,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 9,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.00026170852515277634,
+            "bilinearDeterminant": 7.498056090257722e-07,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.0035037012555577327,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.0331467428030634,
+        "center": [
+          0.8671875,
+          -0.0234375,
+          0.3984375
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9124324678266068,
+              0.35564311377087987,
+              0.20244744326170502
+            ],
+            "offset": 0.8967240411920296,
+            "valueAtCenter": -0.0331467428030634
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.19312498762362196
+          }
+        ],
+        "cornerValues": [
+          0.004031162490667323,
+          -0.000991978817654348,
+          -0.0056663923760772485,
+          0.001580374602453168,
+          0.006088102964757436,
+          0.005039370115740294,
+          -0.0038665684572511596,
+          0.008247710083305741
+        ],
+        "fieldCenter": -0.001446015356122772,
+        "gridIndex": [
+          50,
+          31,
+          40
+        ],
+        "mask": 70,
+        "min": [
+          0.84375,
+          -0.046875,
+          0.375
+        ],
+        "refinement": [
+          {
+            "activeCells": 8,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 37,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 2,
+      "badEdges": 0,
+      "badVertices": 1,
+      "components": 1,
+      "degenerateFaces": 1,
+      "meshValidatorAccepted": false,
+      "signedVolume": 3.0130251272147586,
+      "triangles": 16132
+    },
+    "seed": 4,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.493995303764112,
+      "triangles": 13984
+    },
+    "seed": 5,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.00033539897070028967,
+            "bilinearDeterminant": 2.74110603258214e-06,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.002744030934639349,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.0453523180533586,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.3515625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9247725650754682,
+              0.3435855428536527,
+              0.1635380005555275
+            ],
+            "offset": 0.8533958550014988,
+            "valueAtCenter": -0.0453523180533586
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.2527278582366611
+          }
+        ],
+        "cornerValues": [
+          0.000800150338535629,
+          -0.004526474003730118,
+          -0.009494786663135166,
+          -0.0036828838225093814,
+          0.003866406592164996,
+          -0.0003400628207054935,
+          -0.006114701628523452,
+          0.001246761974262791
+        ],
+        "fieldCenter": -0.004285543332571269,
+        "gridIndex": [
+          49,
+          31,
+          39
+        ],
+        "mask": 110,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.328125
+        ],
+        "refinement": [
+          {
+            "activeCells": 4,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 14,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.00033539897070028967,
+            "bilinearDeterminant": 2.74110603258214e-06,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.002744030934639349,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.037686474277318194,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.3984375
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9247725650754682,
+              0.3435855428536527,
+              0.1635380005555275
+            ],
+            "offset": 0.8533958550014988,
+            "valueAtCenter": -0.037686474277318194
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.20890221808001475
+          }
+        ],
+        "cornerValues": [
+          0.003866406592164996,
+          -0.0003400628207054935,
+          -0.006114701628523452,
+          0.001246761974262791,
+          0.004518483410160922,
+          0.0023773093263195766,
+          -0.004685131205040307,
+          0.0050800686031180365
+        ],
+        "fieldCenter": -0.0018121960908582604,
+        "gridIndex": [
+          49,
+          31,
+          40
+        ],
+        "mask": 70,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.375
+        ],
+        "refinement": [
+          {
+            "activeCells": 7,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 35,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 2,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.0366008832582936,
+      "triangles": 15916
+    },
+    "seed": 5,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 1,
+      "meshValidatorAccepted": false,
+      "signedVolume": 3.488580021795349,
+      "triangles": 13996
+    },
+    "seed": 8,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0007040510109804176,
+            "bilinearDeterminant": -4.1810322029995065e-06,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.004221842862475343,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.037119378854420626,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.4453125
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9023352716069986,
+              0.38543090956461423,
+              0.1929613214250942
+            ],
+            "offset": 0.8542108328487283,
+            "valueAtCenter": -0.037119378854420626
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.16507657792336827
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          }
+        ],
+        "cornerValues": [
+          3.889660246332184e-05,
+          -0.00699011749836868,
+          -0.01050434618011234,
+          -0.003354777076732072,
+          0.0022559726982533616,
+          -0.0017868320783212717,
+          -0.006886241620848328,
+          0.003600896956994568
+        ],
+        "fieldCenter": -0.006429925085516432,
+        "gridIndex": [
+          49,
+          31,
+          41
+        ],
+        "mask": 110,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.421875
+        ],
+        "refinement": [
+          {
+            "activeCells": 5,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 11,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0007040510109804176,
+            "bilinearDeterminant": -4.1810322029995065e-06,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.004221842862475343,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.028074316912619413,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.4921875
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.9023352716069986,
+              0.38543090956461423,
+              0.1929613214250942
+            ],
+            "offset": 0.8542108328487283,
+            "valueAtCenter": -0.028074316912619413
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.1212509377667218
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          }
+        ],
+        "cornerValues": [
+          0.0022559726982533616,
+          -0.0017868320783212717,
+          -0.006886241620848328,
+          0.003600896956994568,
+          0.004422327883906819,
+          0.003765839111614263,
+          -0.0030542626624711754,
+          0.010665233115507194
+        ],
+        "fieldCenter": -0.0019419658590347326,
+        "gridIndex": [
+          49,
+          31,
+          42
+        ],
+        "mask": 70,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.46875
+        ],
+        "refinement": [
+          {
+            "activeCells": 7,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 37,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 2,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.0414103333672053,
+      "triangles": 15912
+    },
+    "seed": 8,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.505822639356077,
+      "triangles": 14040
+    },
+    "seed": 14,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 1,
+      "meshValidatorAccepted": false,
+      "signedVolume": 3.016382706165672,
+      "triangles": 15824
+    },
+    "seed": 14,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.524684250020027,
+      "triangles": 14040
+    },
+    "seed": 25,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": 0.000947998898033149,
+            "bilinearDeterminant": 1.1443858799924955e-05,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.003171658306739997,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.038748167012268464,
+        "center": [
+          0.8671875,
+          -0.0703125,
+          0.5390625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.8829950576971449,
+              0.44548071961804026,
+              0.14787378581414878
+            ],
+            "offset": 0.8528607931763075,
+            "valueAtCenter": -0.038748167012268464
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.05638899033488498
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          }
+        ],
+        "cornerValues": [
+          -0.0004614202978875439,
+          -0.006346828088127858,
+          -0.0023998115913219376,
+          0.001738212984398321,
+          0.0030751030267896565,
+          -0.002865379571501455,
+          -0.0020407965744334428,
+          0.005623068711277837
+        ],
+        "fieldCenter": -0.004106434278185222,
+        "gridIndex": [
+          50,
+          30,
+          43
+        ],
+        "mask": 103,
+        "min": [
+          0.84375,
+          -0.09375,
+          0.515625
+        ],
+        "refinement": [
+          {
+            "activeCells": 5,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 18,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0005238518172811556,
+            "bilinearDeterminant": 2.1818760158497953e-06,
+            "corners": [
+              2,
+              3,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.0002840985143845211,
+            "face": 3,
+            "faceMask": 5
+          }
+        ],
+        "baseCenter": -0.2571166400159216,
+        "center": [
+          -0.0703125,
+          0.1171875,
+          0.5390625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 8,
+            "normal": [
+              0.05959611498967585,
+              0.09932685831612642,
+              0.9932685831612642
+            ],
+            "offset": 0.8,
+            "valueAtCenter": -0.2571166400159216
+          },
+          {
+            "index": 4,
+            "normal": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "offset": 0.8,
+            "valueAtCenter": -0.26093750000000004
+          },
+          {
+            "index": 12,
+            "normal": [
+              -0.3808124028388122,
+              0.18133923944705344,
+              0.9066961972352672
+            ],
+            "offset": 0.8522944254011512,
+            "valueAtCenter": -0.3155019423817095
+          }
+        ],
+        "cornerValues": [
+          0.045844515859768835,
+          0.05475645384698458,
+          -0.0037145769313492415,
+          0.00017720761004980795,
+          0.0510370643545722,
+          0.05476336233453729,
+          0.0021310059273003078,
+          -0.0006890438751254967
+        ],
+        "fieldCenter": 0.02878204688365938,
+        "gridIndex": [
+          30,
+          34,
+          43
+        ],
+        "mask": 132,
+        "min": [
+          -0.09375,
+          0.09375,
+          0.515625
+        ],
+        "refinement": [
+          {
+            "activeCells": 4,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 14,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0005238518172811556,
+            "bilinearDeterminant": 2.1818760158497953e-06,
+            "corners": [
+              0,
+              1,
+              5,
+              4
+            ],
+            "exactCenterValue": -0.0002840985143845211,
+            "face": 2,
+            "faceMask": 5
+          }
+        ],
+        "baseCenter": -0.2524606935323531,
+        "center": [
+          -0.0703125,
+          0.1640625,
+          0.5390625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 8,
+            "normal": [
+              0.05959611498967585,
+              0.09932685831612642,
+              0.9932685831612642
+            ],
+            "offset": 0.8,
+            "valueAtCenter": -0.2524606935323531
+          },
+          {
+            "index": 4,
+            "normal": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "offset": 0.8,
+            "valueAtCenter": -0.26093750000000004
+          },
+          {
+            "index": 12,
+            "normal": [
+              -0.3808124028388122,
+              0.18133923944705344,
+              0.9066961972352672
+            ],
+            "offset": 0.8522944254011512,
+            "valueAtCenter": -0.30700166553262875
+          }
+        ],
+        "cornerValues": [
+          -0.0037145769313492415,
+          0.00017720761004980795,
+          -0.06316052351507159,
+          -0.06146518581341018,
+          0.0021310059273003078,
+          -0.0006890438751254967,
+          -0.058408539272657864,
+          -0.06381985011544028
+        ],
+        "fieldCenter": -0.032579877464305886,
+        "gridIndex": [
+          30,
+          35,
+          43
+        ],
+        "mask": 237,
+        "min": [
+          -0.09375,
+          0.140625,
+          0.515625
+        ],
+        "refinement": [
+          {
+            "activeCells": 3,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 8,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": 0.000947998898033149,
+            "bilinearDeterminant": 1.1443858799924955e-05,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.003171658306739997,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.01256335017823862,
+        "center": [
+          0.8671875,
+          -0.0703125,
+          0.5859375
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.01256335017823862
+          },
+          {
+            "index": 6,
+            "normal": [
+              0.8829950576971449,
+              0.44548071961804026,
+              0.14787378581414878
+            ],
+            "offset": 0.8528607931763075,
+            "valueAtCenter": -0.03181658330223025
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          }
+        ],
+        "cornerValues": [
+          0.0030751030267896565,
+          -0.002865379571501455,
+          -0.0020407965744334428,
+          0.005623068711277837,
+          0.019716654884248383,
+          0.02381010825329307,
+          0.01380440622597686,
+          0.01804370903797323
+        ],
+        "fieldCenter": 0.0059160318647356325,
+        "gridIndex": [
+          50,
+          30,
+          44
+        ],
+        "mask": 6,
+        "min": [
+          0.84375,
+          -0.09375,
+          0.5625
+        ],
+        "refinement": [
+          {
+            "activeCells": 4,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 21,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 4,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 1,
+      "meshValidatorAccepted": false,
+      "signedVolume": 3.0601351810901907,
+      "triangles": 15872
+    },
+    "seed": 25,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.5062984726519226,
+      "triangles": 14044
+    },
+    "seed": 29,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": 4.1297684192758474e-05,
+            "bilinearDeterminant": 8.1777886107851e-06,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.0034130508587339493,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.039586318978434454,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.3984375
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.8911416582226365,
+              0.3902171449300666,
+              0.23151052844922032
+            ],
+            "offset": 0.8536977223338786,
+            "valueAtCenter": -0.039586318978434454
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.20890221808001475
+          }
+        ],
+        "cornerValues": [
+          0.0012872026568080074,
+          -0.007033188662156627,
+          -0.010954835846086194,
+          -0.005285484692182509,
+          0.004806644734622588,
+          -0.000712452968927,
+          -0.006610120450524163,
+          0.0026811194215996086
+        ],
+        "fieldCenter": -0.00633256044734104,
+        "gridIndex": [
+          49,
+          31,
+          40
+        ],
+        "mask": 110,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.375
+        ],
+        "refinement": [
+          {
+            "activeCells": 4,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 12,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": 4.1297684192758474e-05,
+            "bilinearDeterminant": 8.1777886107851e-06,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.0034130508587339493,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.028734262957377243,
+        "center": [
+          0.8203125,
+          -0.0234375,
+          0.4453125
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.8911416582226365,
+              0.3902171449300666,
+              0.23151052844922032
+            ],
+            "offset": 0.8536977223338786,
+            "valueAtCenter": -0.028734262957377243
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.16507657792336827
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1796875
+          }
+        ],
+        "cornerValues": [
+          0.004806644734622588,
+          -0.000712452968927,
+          -0.006610120450524163,
+          0.0026811194215996086,
+          0.008184221804617411,
+          0.006176199373257422,
+          -0.001902600551498176,
+          0.011322463800941651
+        ],
+        "fieldCenter": -0.00039933996672478905,
+        "gridIndex": [
+          49,
+          31,
+          41
+        ],
+        "mask": 70,
+        "min": [
+          0.796875,
+          -0.046875,
+          0.421875
+        ],
+        "refinement": [
+          {
+            "activeCells": 8,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 33,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 2,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.0282986621824293,
+      "triangles": 15836
+    },
+    "seed": 29,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [],
+    "metrics": {
+      "ambiguousCells": 0,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.518173630666817,
+      "triangles": 13988
+    },
+    "seed": 31,
+    "stage": 0,
+    "voxelPitchMeters": 0.046875
+  },
+  {
+    "cells": [
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0005652938432946419,
+            "bilinearDeterminant": 4.671758436561757e-06,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.0030148027067748388,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.0420734469081665,
+        "center": [
+          0.8671875,
+          -0.0234375,
+          0.4921875
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.920460824832718,
+              0.3736252192039656,
+              0.11469989330012989
+            ],
+            "offset": 0.8879825811013539,
+            "valueAtCenter": -0.0420734469081665
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.10547370731032901
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          }
+        ],
+        "cornerValues": [
+          0.0005890376633182079,
+          -0.0018669124298512085,
+          -0.010021165993548093,
+          -0.0007816794183681704,
+          0.0024778181142104103,
+          -0.0001470293388741075,
+          -0.00688599951801334,
+          0.00229403536949847
+        ],
+        "fieldCenter": -0.0038844525285753103,
+        "gridIndex": [
+          50,
+          31,
+          42
+        ],
+        "mask": 110,
+        "min": [
+          0.84375,
+          -0.046875,
+          0.46875
+        ],
+        "refinement": [
+          {
+            "activeCells": 5,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 16,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": -0.0005652938432946419,
+            "bilinearDeterminant": 4.671758436561757e-06,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.0030148027067748388,
+            "face": 0,
+            "faceMask": 10
+          },
+          {
+            "bilinearCenterValue": 0.0005338272633236129,
+            "bilinearDeterminant": 1.537137128152317e-05,
+            "corners": [
+              4,
+              5,
+              7,
+              6
+            ],
+            "exactCenterValue": -0.0032307602866453143,
+            "face": 1,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.03669688940972282,
+        "center": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 6,
+            "normal": [
+              0.920460824832718,
+              0.3736252192039656,
+              0.11469989330012989
+            ],
+            "offset": 0.8879825811013539,
+            "valueAtCenter": -0.03669688940972282
+          },
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.06164806715368265
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          }
+        ],
+        "cornerValues": [
+          0.0024778181142104103,
+          -0.0001470293388741075,
+          -0.00688599951801334,
+          0.00229403536949847,
+          0.004436972029339584,
+          -0.0005191681929288018,
+          -0.005942168558899007,
+          0.004159673775782677
+        ],
+        "fieldCenter": -0.0027402947648092306,
+        "gridIndex": [
+          50,
+          31,
+          43
+        ],
+        "mask": 102,
+        "min": [
+          0.84375,
+          -0.046875,
+          0.515625
+        ],
+        "refinement": [
+          {
+            "activeCells": 6,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 27,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      },
+      {
+        "alternatingFaces": [
+          {
+            "bilinearCenterValue": 0.0005338272633236129,
+            "bilinearDeterminant": 1.537137128152317e-05,
+            "corners": [
+              0,
+              1,
+              3,
+              2
+            ],
+            "exactCenterValue": -0.0032307602866453143,
+            "face": 0,
+            "faceMask": 10
+          }
+        ],
+        "baseCenter": -0.01782242699703629,
+        "center": [
+          0.8671875,
+          -0.0234375,
+          0.5859375
+        ],
+        "closestHostPlanes": [
+          {
+            "index": 11,
+            "normal": [
+              0.3365809164030446,
+              -0.11219363880101486,
+              0.9349469900084573
+            ],
+            "offset": 0.8601512308077807,
+            "valueAtCenter": -0.01782242699703629
+          },
+          {
+            "index": 6,
+            "normal": [
+              0.920460824832718,
+              0.3736252192039656,
+              0.11469989330012989
+            ],
+            "offset": 0.8879825811013539,
+            "valueAtCenter": -0.03132033191127925
+          },
+          {
+            "index": 0,
+            "normal": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "offset": 1.0,
+            "valueAtCenter": -0.1328125
+          }
+        ],
+        "cornerValues": [
+          0.004436972029339584,
+          -0.0005191681929288018,
+          -0.005942168558899007,
+          0.004159673775782677,
+          0.016109998523382518,
+          0.018924175572817357,
+          0.007042175844634537,
+          0.011752459104328608
+        ],
+        "fieldCenter": 0.0017191374527988704,
+        "gridIndex": [
+          50,
+          31,
+          44
+        ],
+        "mask": 6,
+        "min": [
+          0.84375,
+          -0.046875,
+          0.5625
+        ],
+        "refinement": [
+          {
+            "activeCells": 6,
+            "ambiguous": 0,
+            "divisions": 2
+          },
+          {
+            "activeCells": 31,
+            "ambiguous": 0,
+            "divisions": 4
+          }
+        ]
+      }
+    ],
+    "metrics": {
+      "ambiguousCells": 3,
+      "badEdges": 0,
+      "badVertices": 0,
+      "components": 1,
+      "degenerateFaces": 0,
+      "meshValidatorAccepted": true,
+      "signedVolume": 3.049290782117893,
+      "triangles": 15880
+    },
+    "seed": 31,
+    "stage": 1,
+    "voxelPitchMeters": 0.046875
+  }
+]

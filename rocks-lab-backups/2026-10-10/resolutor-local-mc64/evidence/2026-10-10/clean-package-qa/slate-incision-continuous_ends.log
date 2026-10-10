@@ -1,0 +1,3 @@
+seed=48 mode=continuous_ends nonempty=36 longest_primary_span_m=0.210546875 max_depth=0.126113406424 unequal_end_joints=9 max_epsilon_jump=1.66374735031e-07 signature=812.597593644
+seed=117 mode=continuous_ends nonempty=47 longest_primary_span_m=0.203984375 max_depth=0.127382238027 unequal_end_joints=7 max_epsilon_jump=1.53543115521e-07 signature=885.671749172
+seed=305 mode=continuous_ends nonempty=46 longest_primary_span_m=0.2078125 max_depth=0.115639341999 unequal_end_joints=7 max_epsilon_jump=1.9878233698e-07 signature=904.300650892

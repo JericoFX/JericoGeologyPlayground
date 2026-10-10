@@ -1,0 +1,214 @@
+{
+  "operations": [
+    {
+      "source": "renders/approved-48-hero.png",
+      "sha256": "d5dfe07771f2c53aa954f883acbc063e2708ec6f063e57ae12228254de5185d2",
+      "destination_xy": [
+        40,
+        132
+      ],
+      "destination_size": [
+        1200,
+        1200
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-4-main.png",
+      "sha256": "a9035d5db21bec519ed5bcbc0fec49ab9cfcaab04877b44d75b5095537adb131",
+      "destination_xy": [
+        40,
+        144
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-5-main.png",
+      "sha256": "3b2c304673fd37ed45aa045b12ada3cbbc55e059589418027b2da7a32acd38ae",
+      "destination_xy": [
+        585,
+        144
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-8-main.png",
+      "sha256": "29c6c9947cb21191e4da5c9b204bdcac1ec71594883b8ee6750ae8a5ddb8db26",
+      "destination_xy": [
+        1130,
+        144
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-14-main.png",
+      "sha256": "33c445131e642dc3e07d3ca7a7cd6dd376f0dfd2d03c6caf51ab9277aa202299",
+      "destination_xy": [
+        1675,
+        144
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-25-main.png",
+      "sha256": "59a61db2fe11dcca440e5793caf44fe29b873c29e19f650de574ac3603e78868",
+      "destination_xy": [
+        40,
+        780
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-29-main.png",
+      "sha256": "9f891660322a689238b01a21e5f5a0e0b84c19b54d3790eee516a1faa081b031",
+      "destination_xy": [
+        585,
+        780
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-31-main.png",
+      "sha256": "d765cf466733ebabf141f56470c5d329f7c31d50a51689e2f4e3224f52a7df11",
+      "destination_xy": [
+        1130,
+        780
+      ],
+      "destination_size": [
+        525,
+        525
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/rejected-31-join-neutral.png",
+      "sha256": "51bca65d638533c53c757a60ef2eb53cd3923fc1d3187ae7de9ae70e897ea9ce",
+      "destination_xy": [
+        40,
+        194
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-31-join-neutral.png",
+      "sha256": "871ec4bb6adea9e541564a96e48977326c3ad069364a8a35c0e19e771807a846",
+      "destination_xy": [
+        860,
+        194
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/rejected-31-join-edges.png",
+      "sha256": "30f51edb139f08fe1d70ecc28b0fb5f6531c69b1e307eb87d9ed1932552bbb28",
+      "destination_xy": [
+        40,
+        1036
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-31-join-edges.png",
+      "sha256": "9fce4b42cdfc33d8fb8f0735f820356e11d4cc27056d0ff69e45185b6d9a1b02",
+      "destination_xy": [
+        860,
+        1036
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/rejected-14-main.png",
+      "sha256": "78b047b4ed7ba0072d90da1b96474602212b53cdea524049b744be0a7515c469",
+      "destination_xy": [
+        40,
+        194
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-14-main.png",
+      "sha256": "33c445131e642dc3e07d3ca7a7cd6dd376f0dfd2d03c6caf51ab9277aa202299",
+      "destination_xy": [
+        860,
+        194
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/rejected-14-micro-edges.png",
+      "sha256": "cc2420cfc5875e347f67665afd12ad1f867beea5d423e13d4ddcf5346b521861",
+      "destination_xy": [
+        40,
+        1046
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    },
+    {
+      "source": "renders/corrected-14-micro-edges.png",
+      "sha256": "a553452fa0898777fa36668dafc8f45d476cb7f10d505216eb2283da62498799",
+      "destination_xy": [
+        860,
+        1046
+      ],
+      "destination_size": [
+        780,
+        780
+      ],
+      "operation": "uniform resize and paste; no pixel retouching"
+    }
+  ],
+  "note": "Labels and margins added outside render frames; uniform resize only; no geometry or image content edits",
+  "script_sha256": "c949e2df972d58aa3f0006fe8b60e33a9d962b91ebac9b5400c6f9e2db106047"
+}

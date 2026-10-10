@@ -1,0 +1,26 @@
+[
+  {
+    "library_file_id": "libfile_b6a7b3483d6c8191b28fd5af51d2b4b8",
+    "file_name": "hero-aprobada-48.png",
+    "sha256": "55571b632dfc7697bdb50a1dfd127f5aa054edbc6a1f77cf8fa9e173222a8388",
+    "current_version_number": 0
+  },
+  {
+    "library_file_id": "libfile_90d6b644c1208191aa5fd082c455874e",
+    "file_name": "siete-corregidas.png",
+    "sha256": "d1bc9e6b432b5d373f4bf756ab8cc100d85cead9bed8ddced651cce2dced67ce",
+    "current_version_number": 0
+  },
+  {
+    "library_file_id": "libfile_e156a4714ab48191acac26eff43fb649",
+    "file_name": "antes-despues-union-31.png",
+    "sha256": "e45811da2ebbe57911da22828e71d6859304acd9e4192da598d62e87bf6c5bab",
+    "current_version_number": 0
+  },
+  {
+    "library_file_id": "libfile_26ecd6d045688191a9f0ffe1b75e5f96",
+    "file_name": "antes-despues-micro-14.png",
+    "sha256": "97f862bfa7e5b0ad5272afba423b943f84291146cb4b2745b868828cbf03d0c5",
+    "current_version_number": 0
+  }
+]

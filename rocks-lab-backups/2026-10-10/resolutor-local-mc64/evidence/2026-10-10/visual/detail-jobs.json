@@ -1,0 +1,248 @@
+[
+  {
+    "name": "rejected-31-join-neutral",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      }
+    }
+  },
+  {
+    "name": "corrected-31-join-neutral",
+    "obj": "evidence/corrected/31/output/eroded.obj",
+    "status": "Candidate correction, code review pending",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      }
+    }
+  },
+  {
+    "name": "rejected-31-join-edges",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      },
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 0.9,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  {
+    "name": "corrected-31-join-edges",
+    "obj": "evidence/corrected/31/output/eroded.obj",
+    "status": "Candidate correction, code review pending",
+    "camera_target_evidence": {
+      "source": "evidence/baseline-cells.json",
+      "seed": 31,
+      "stage": 1,
+      "gridIndex": [
+        50,
+        31,
+        43
+      ],
+      "position": "center"
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.8671875,
+          -0.0234375,
+          0.5390625
+        ],
+        "location": [
+          3.8671875,
+          0.7765625,
+          2.0390625
+        ],
+        "ortho_scale": 0.23
+      },
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 0.9,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  {
+    "name": "rejected-14-micro-edges",
+    "obj": "evidence/baseline-diagnostic/14/2.obj",
+    "status": "Rejected diagnostic export, not current PC model",
+    "camera_target_evidence": {
+      "removed_vertex": [
+        0.984375,
+        -0.3281233981888363,
+        0.421875
+      ],
+      "retained_vertex": [
+        0.9843756741374818,
+        -0.328125,
+        0.421875
+      ],
+      "target": "midpoint of actual vertices",
+      "camera_direction": "retained source OBJ vertex normal",
+      "magnification_vs_main_view": 192857.14285714287,
+      "ortho_view_width_meters": 1.4e-05,
+      "source_removed_vertex_one_based": 5826,
+      "source_retained_vertex_one_based": 5805
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.9843753370687409,
+          -0.32812419909441815,
+          0.421875
+        ],
+        "location": [
+          0.9932900749480938,
+          -0.32437234184833297,
+          0.4244148849870473
+        ],
+        "ortho_scale": 1.4e-05,
+        "clip_start": 1e-06,
+        "clip_end": 0.1
+      },
+      "samples": 32,
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 1.15,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  },
+  {
+    "name": "corrected-14-micro-edges",
+    "obj": "evidence/corrected/14/output/eroded.obj",
+    "status": "Candidate corrected C++ export",
+    "camera_target_evidence": {
+      "removed_vertex": [
+        0.984375,
+        -0.3281233981888363,
+        0.421875
+      ],
+      "retained_vertex": [
+        0.9843756741374818,
+        -0.328125,
+        0.421875
+      ],
+      "target": "midpoint of actual vertices",
+      "camera_direction": "retained source OBJ vertex normal",
+      "magnification_vs_main_view": 192857.14285714287,
+      "ortho_view_width_meters": 1.4e-05,
+      "source_removed_vertex_one_based": 5826,
+      "source_retained_vertex_one_based": 5805
+    },
+    "settings": {
+      "camera": {
+        "target": [
+          0.9843753370687409,
+          -0.32812419909441815,
+          0.421875
+        ],
+        "location": [
+          0.9932900749480938,
+          -0.32437234184833297,
+          0.4244148849870473
+        ],
+        "ortho_scale": 1.4e-05,
+        "clip_start": 1e-06,
+        "clip_end": 0.1
+      },
+      "samples": 32,
+      "wireframe": {
+        "shader": "ShaderNodeWireframe",
+        "width_pixels": 1.15,
+        "color": [
+          0.015,
+          0.08,
+          0.115
+        ],
+        "all_imported_triangle_edges": true
+      }
+    }
+  }
+]

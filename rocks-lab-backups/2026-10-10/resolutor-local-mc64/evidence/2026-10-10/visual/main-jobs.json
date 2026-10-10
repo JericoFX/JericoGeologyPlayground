@@ -1,0 +1,59 @@
+[
+  {
+    "name": "approved-48-hero",
+    "obj": "evidence/corrected/48/output/eroded.obj",
+    "status": "Previously accepted, byte-identical",
+    "settings": {
+      "resolution": [
+        1200,
+        1200
+      ],
+      "samples": 32
+    }
+  },
+  {
+    "name": "corrected-4-main",
+    "obj": "evidence/corrected/4/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-5-main",
+    "obj": "evidence/corrected/5/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-8-main",
+    "obj": "evidence/corrected/8/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-14-main",
+    "obj": "evidence/corrected/14/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-25-main",
+    "obj": "evidence/corrected/25/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-29-main",
+    "obj": "evidence/corrected/29/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "corrected-31-main",
+    "obj": "evidence/corrected/31/output/eroded.obj",
+    "status": "Candidate correction; CLI accepted; code review pending"
+  },
+  {
+    "name": "rejected-14-main",
+    "obj": "evidence/baseline-diagnostic/14/2.obj",
+    "status": "Rejected diagnostic export; not the current PC model"
+  },
+  {
+    "name": "rejected-31-main",
+    "obj": "evidence/baseline-diagnostic/31/2.obj",
+    "status": "Rejected diagnostic export; not the current PC model"
+  }
+]

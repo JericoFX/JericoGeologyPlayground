@@ -1,0 +1,13 @@
+columnar_basalt accepted=1 ambiguous=0 triangles=5494
+columnar_basalt bound=0 accepted=1 ambiguous=0
+columnar_basalt bound=1 accepted=1 ambiguous=0
+columnar_basalt bound=2 accepted=1 ambiguous=0
+columnar_basalt bound=3 accepted=1 ambiguous=0
+columnar_basalt bound=4 accepted=1 ambiguous=0
+jointed_granite accepted=1 ambiguous=0 triangles=15204
+fine accepted=1 ambiguous=0
+quiet face triangles=6276
+jointed_granite bound=0 accepted=1 ambiguous=0
+jointed_granite bound=1 accepted=1 ambiguous=0
+jointed_granite bound=2 accepted=1 ambiguous=0
+jointed_granite bound=3 accepted=1 ambiguous=0

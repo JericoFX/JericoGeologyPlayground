@@ -43,6 +43,49 @@ inline std::optional<bool> tableConnectsNegative(unsigned mask,unsigned face){
  if(arcs==aroundOne)return zeroNegative;
  return {};
 }
+// Narrow extension: one alternating face, or two opposite alternating faces.
+// Interior-only, adjacent multi-face and higher-order configurations stay out.
+inline std::vector<unsigned> alternatingFaces(unsigned mask){
+ std::vector<unsigned> faces;if(mask>255)return faces;
+ for(unsigned face=0;face<6;face++){
+  unsigned bits=0;for(unsigned k=0;k<4;k++)bits|=((mask>>cubeFaces[face][k])&1)<<k;
+  if(bits==5||bits==10)faces.push_back(face);
+ }return faces;
+}
+inline bool supportedFaceMask(unsigned mask){
+ auto faces=alternatingFaces(mask);
+ return faces.size()==1||(faces.size()==2&&(faces[0]^1u)==faces[1]);
+}
+// A cell has only two pinned triangulations. Every face must ask for the same
+// one; a missing/duplicate face or mixed choices cannot be represented safely.
+inline std::optional<bool> chooseFaceAlternative(unsigned mask,const std::vector<std::pair<unsigned,bool>>&wanted){
+ if(!supportedFaceMask(mask))return {};
+ auto faces=alternatingFaces(mask);if(wanted.size()!=faces.size())return {};
+ std::set<unsigned> seen;std::optional<bool> alternate;
+ for(auto [face,negativeConnected]:wanted){
+  if(std::find(faces.begin(),faces.end(),face)==faces.end()||!seen.insert(face).second)return {};
+  auto original=tableConnectsNegative(mask,face),complement=tableConnectsNegative(255-mask,face);
+  if(!original||!complement||*original!=*complement)return {};
+  bool choice=*original!=negativeConnected;
+  if(alternate.has_value()&&*alternate!=choice)return {};
+  alternate=choice;
+ }return alternate;
+}
+// Graph edges join cells across every alternating shared face, including
+// unsupported cells. An unresolved downstream cell rejects the entire patch.
+inline std::vector<bool> atomicComponentAcceptance(const std::vector<std::optional<bool>>&candidates,const std::vector<std::vector<std::size_t>>&neighbors){
+ std::vector<bool> accepted(candidates.size(),false),seen(candidates.size(),false);
+ for(std::size_t start=0;start<candidates.size();start++){
+  if(seen[start])continue;
+  std::vector<std::size_t> component,pending{start};bool valid=true;
+  while(!pending.empty()){
+   auto cell=pending.back();pending.pop_back();if(seen[cell])continue;seen[cell]=true;component.push_back(cell);
+   valid=valid&&candidates[cell].has_value();
+   for(auto neighbor:neighbors[cell])if(!seen[neighbor])pending.push_back(neighbor);
+  }
+  if(valid)for(auto cell:component)accepted[cell]=true;
+ }return accepted;
+}
 struct PathEvidence {bool connected=false;unsigned evaluations=0;double minimumClearance=INFINITY;};
 // Conservative continuity bound plus an explicit floating-point safety margin.
 // This is not interval arithmetic or a proof of absent hidden intra-cell loops.

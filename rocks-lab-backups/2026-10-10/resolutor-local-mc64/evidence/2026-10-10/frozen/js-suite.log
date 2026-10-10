@@ -1,0 +1,29 @@
+Camera target bounds PASS
+✔ tests/camera_bounds_test.mjs (72.551698ms)
+v4 viewer recipe acceptance and version rejection PASS (no WebGL).
+✔ tests/family_viewer_test.mjs (95.788003ms)
+Heightfield UI controls, route labels, exact import, invalid retention PASS (mocked DOM, no WebGL).
+✔ tests/heightfield_ui_lifecycle_test.mjs (92.353781ms)
+Heightfield validation, exact preservation and route switching PASS (Node, no WebGL).
+✔ tests/heightfield_viewer_test.mjs (71.937317ms)
+v12 UI parameter edits, scale, route switch and exact import PASS (mocked DOM, no WebGL).
+✔ tests/igneous_ui_lifecycle_test.mjs (86.601561ms)
+v12 exact family controls, import validation, switch cleanup PASS (no WebGL)
+✔ tests/igneous_viewer_test.mjs (68.226085ms)
+Texture latest-selection regression PASS (mocked GL)
+✔ tests/texture_order_test.mjs (94.872625ms)
+Camera wheel saved: true
+Camera preset saved: true
+Camera import saved: true
+These are mocked Node state tests; no browser or WebGL validation.
+✔ tests/viewer_default_race_test.mjs (111.809178ms)
+These are mocked Node state tests; no browser or WebGL validation.
+✔ tests/viewer_state_test.mjs (73.581145ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156.247761

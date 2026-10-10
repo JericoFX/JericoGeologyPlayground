@@ -1,0 +1,162 @@
+{
+  "verified_manifest_sha256": "6a6e42e29301283545fcf20a26095e73e0223410c21d5c13cc168c4fbf879400",
+  "files": [
+    {
+      "path": "SHA256SUMS",
+      "bytes": 4539,
+      "sha256": "7d83894b0f0ed86d5cf7533572bd2757a19e47c18946cf84f588a16b46f9980f"
+    },
+    {
+      "path": "antes-despues-micro-14.png",
+      "bytes": 1107284,
+      "sha256": "97f862bfa7e5b0ad5272afba423b943f84291146cb4b2745b868828cbf03d0c5"
+    },
+    {
+      "path": "antes-despues-union-31.png",
+      "bytes": 1739855,
+      "sha256": "e45811da2ebbe57911da22828e71d6859304acd9e4192da598d62e87bf6c5bab"
+    },
+    {
+      "path": "compose_evidence.py",
+      "bytes": 5519,
+      "sha256": "c949e2df972d58aa3f0006fe8b60e33a9d962b91ebac9b5400c6f9e2db106047"
+    },
+    {
+      "path": "composition-record.json",
+      "bytes": 5625,
+      "sha256": "a759a5f9793ab2fbbcf671d9ec4c08579db6a3f6c6f17584db61c07056099e7c"
+    },
+    {
+      "path": "detail-jobs.json",
+      "bytes": 5662,
+      "sha256": "341460031040e8d31a762bfe121248338fe2962e56803c7acc8fe59757a1c24e"
+    },
+    {
+      "path": "hero-aprobada-48.png",
+      "bytes": 838713,
+      "sha256": "55571b632dfc7697bdb50a1dfd127f5aa054edbc6a1f77cf8fa9e173222a8388"
+    },
+    {
+      "path": "join-jobs.json",
+      "bytes": 3033,
+      "sha256": "2cb08d49def6bd4a8d2e2eaec3f99bfa20909e120aad68cec5944f3db83e7254"
+    },
+    {
+      "path": "main-jobs.json",
+      "bytes": 1747,
+      "sha256": "b5db27e581721f83cdf86e765766699fa6587bc58015465974efb471a7fb0c19"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 76479,
+      "sha256": "6a6e42e29301283545fcf20a26095e73e0223410c21d5c13cc168c4fbf879400"
+    },
+    {
+      "path": "micro-jobs.json",
+      "bytes": 2632,
+      "sha256": "3cffeea1aab381d7a30083a2f4f748f35d36b03559318033a29b4ce32ffb7ab0"
+    },
+    {
+      "path": "original-source-snapshot.json",
+      "bytes": 62651,
+      "sha256": "ea84bdcb249c0ec9c53f52d67c1827ee3971484080d35b6296058c94618c0fdd"
+    },
+    {
+      "path": "render_evidence.py",
+      "bytes": 4470,
+      "sha256": "7c3bc46e57353ea0abc65f55bb77a541de5f1ccdc930d00baaea90a3d51a6c46"
+    },
+    {
+      "path": "renders/approved-48-hero.provenance.json",
+      "bytes": 3354,
+      "sha256": "7c42dbfc9c8e6f6b405dfa1a7667bceef3df2f9705bb0854bb5f9045f7227e7a"
+    },
+    {
+      "path": "renders/corrected-14-main.provenance.json",
+      "bytes": 3270,
+      "sha256": "d81bfa4c20636fe9bf9d93637504be4e340ec39c30095e2f817923c4d471e1b2"
+    },
+    {
+      "path": "renders/corrected-14-micro-edges.provenance.json",
+      "bytes": 4675,
+      "sha256": "188f68cfc1daa50b0f650731c02d309270b705767a87777397a0ccc333c0263b"
+    },
+    {
+      "path": "renders/corrected-25-main.provenance.json",
+      "bytes": 3269,
+      "sha256": "7a2f04273bf9a3459579f2c9944d9a0aab3d14ee1efe7a36095703d65cc81660"
+    },
+    {
+      "path": "renders/corrected-29-main.provenance.json",
+      "bytes": 3270,
+      "sha256": "85235f1b4798d6f910638479fd959a6cc83486f2b953821c63bace3bfd100cdd"
+    },
+    {
+      "path": "renders/corrected-31-join-edges.provenance.json",
+      "bytes": 4186,
+      "sha256": "f33928ce659d007b5630a990bfbb9feb12cff2bb8e2a24ee3643e9cb792d134c"
+    },
+    {
+      "path": "renders/corrected-31-join-neutral.provenance.json",
+      "bytes": 3785,
+      "sha256": "dcf4dda2586420dff4eb583522172a5b5f09d6c9bd3ea3df6a7cacffb1fb719e"
+    },
+    {
+      "path": "renders/corrected-31-main.provenance.json",
+      "bytes": 3270,
+      "sha256": "b2b369f29692c1c3c4e3daf88d8697f29c49eb8f364ec02c75d77ef3b2fa24f7"
+    },
+    {
+      "path": "renders/corrected-4-main.provenance.json",
+      "bytes": 3267,
+      "sha256": "6dd4464ad0e2fc5d8d018d068feeebadbe1510eaed89e7dd3ee27415993f8796"
+    },
+    {
+      "path": "renders/corrected-5-main.provenance.json",
+      "bytes": 3267,
+      "sha256": "5fc6d35ad991dff4c326bba364b6023230c0462ece2dadaf3ada891f9bf65208"
+    },
+    {
+      "path": "renders/corrected-8-main.provenance.json",
+      "bytes": 3267,
+      "sha256": "51f7a997061f40a2fc3659bd6fc3a98a38aafd8ffa64ba943f4a661a9ae1ddcd"
+    },
+    {
+      "path": "renders/rejected-14-main.provenance.json",
+      "bytes": 3251,
+      "sha256": "3a62729a29dc7695d5229532c89dc1b112d95bb2ef617fce79a22f30d4e772e4"
+    },
+    {
+      "path": "renders/rejected-14-micro-edges.provenance.json",
+      "bytes": 4679,
+      "sha256": "54665ab490908284d48315db92e0693d06666ab322d02cd2fa131aa9d3af2747"
+    },
+    {
+      "path": "renders/rejected-31-join-edges.provenance.json",
+      "bytes": 4178,
+      "sha256": "718bda22a178593bc4381fd02452cdbd2dd9f287c0a558ec1664c207e0fbe714"
+    },
+    {
+      "path": "renders/rejected-31-join-neutral.provenance.json",
+      "bytes": 3777,
+      "sha256": "40fdfd3c1cd3f8871dcf57630246a88d96268b368d0cef64831ac01052f1908d"
+    },
+    {
+      "path": "renders/rejected-31-main.provenance.json",
+      "bytes": 3252,
+      "sha256": "ea4da1b818323b1e8c77eaab6f30e859a732cc4592262d0bbce551cdaddaf505"
+    },
+    {
+      "path": "siete-corregidas.png",
+      "bytes": 839590,
+      "sha256": "d1bc9e6b432b5d373f4bf756ab8cc100d85cead9bed8ddced651cce2dced67ce"
+    },
+    {
+      "path": "verify_evidence.py",
+      "bytes": 4413,
+      "sha256": "b832fa4104c76944710489be6be21829896447363e8874695c72d7e8b3e80408"
+    }
+  ],
+  "raw_render_pngs_included": false,
+  "final_sheets_included": 4
+}

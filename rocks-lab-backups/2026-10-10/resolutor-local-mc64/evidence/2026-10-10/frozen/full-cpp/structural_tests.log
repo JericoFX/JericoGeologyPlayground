@@ -1,0 +1,9 @@
+fractured_wall direct-polyhedral 0 amb 0 bad 0,0 deg 0
+fractured_wall direct-polyhedral 1 amb 0 bad 0,0 deg 0
+fractured_wall direct-polyhedral 2 amb 0 bad 0,0 deg 0
+irregular_beds direct-polyhedral 0 amb 0 bad 0,0 deg 0
+irregular_beds direct-polyhedral 1 amb 0 bad 0,0 deg 0
+irregular_beds direct-polyhedral 2 amb 0 bad 0,0 deg 0
+overhang direct-polyhedral 0 amb 0 bad 0,0 deg 0
+overhang direct-polyhedral 1 amb 0 bad 0,0 deg 0
+overhang direct-polyhedral 2 amb 0 bad 0,0 deg 0

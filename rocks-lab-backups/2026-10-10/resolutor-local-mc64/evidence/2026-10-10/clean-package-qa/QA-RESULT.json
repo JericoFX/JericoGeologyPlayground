@@ -1,0 +1,986 @@
+{
+  "status": "passed",
+  "source_manifest_sha256": "6b8700d010d31788beaf160bd14292d70afd02977cc7b0dcb320721457d349a6",
+  "snapshot": "verification-corrected-20261010/snapshot",
+  "records": [
+    {
+      "name": "approved-build-runner",
+      "command": [
+        "bash",
+        "build_erosion_probe.sh"
+      ],
+      "exit_code": 0,
+      "seconds": 39.757,
+      "log": "logs/approved-build-runner.log"
+    },
+    {
+      "name": "audit-intersections-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "tools/audit_intersections.cpp",
+        "-o",
+        "build/audit_intersections"
+      ],
+      "exit_code": 0,
+      "seconds": 1.098,
+      "log": "logs/audit-intersections-build.log"
+    },
+    {
+      "name": "alveolar_guide_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/alveolar_guide_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/alveolar_guide_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.526,
+      "log": "logs/alveolar_guide_tests-build.log"
+    },
+    {
+      "name": "alveolar_reconstruction_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/alveolar_reconstruction_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/alveolar_reconstruction_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.579,
+      "log": "logs/alveolar_reconstruction_tests-build.log"
+    },
+    {
+      "name": "alveolar_invariant_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/alveolar_invariant_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/alveolar_invariant_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.804,
+      "log": "logs/alveolar_invariant_tests-build.log"
+    },
+    {
+      "name": "alveolar_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/alveolar_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/alveolar_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.564,
+      "log": "logs/alveolar_tests-build.log"
+    },
+    {
+      "name": "atomic_resolution_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/atomic_resolution_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/atomic_resolution_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.042,
+      "log": "logs/atomic_resolution_tests-build.log"
+    },
+    {
+      "name": "cliff_profile_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/cliff_profile_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/cliff_profile_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.838,
+      "log": "logs/cliff_profile_tests-build.log"
+    },
+    {
+      "name": "contraction_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/contraction_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/contraction_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.692,
+      "log": "logs/contraction_tests-build.log"
+    },
+    {
+      "name": "erosion_seed_regression_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/erosion_seed_regression_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/erosion_seed_regression_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.597,
+      "log": "logs/erosion_seed_regression_tests-build.log"
+    },
+    {
+      "name": "family_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/family_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/family_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.76,
+      "log": "logs/family_tests-build.log"
+    },
+    {
+      "name": "face_resolution_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/face_resolution_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/face_resolution_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.126,
+      "log": "logs/face_resolution_tests-build.log"
+    },
+    {
+      "name": "field_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/field_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/field_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.673,
+      "log": "logs/field_tests-build.log"
+    },
+    {
+      "name": "heightfield_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/heightfield_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/heightfield_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.764,
+      "log": "logs/heightfield_tests-build.log"
+    },
+    {
+      "name": "igneous_studies_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/igneous_studies_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/igneous_studies_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.868,
+      "log": "logs/igneous_studies_tests-build.log"
+    },
+    {
+      "name": "mesh_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/mesh_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/mesh_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.862,
+      "log": "logs/mesh_tests-build.log"
+    },
+    {
+      "name": "plateau_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/plateau_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/plateau_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.696,
+      "log": "logs/plateau_tests-build.log"
+    },
+    {
+      "name": "poly_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/poly_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/poly_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.761,
+      "log": "logs/poly_tests-build.log"
+    },
+    {
+      "name": "reference_studies_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/reference_studies_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/reference_studies_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.682,
+      "log": "logs/reference_studies_tests-build.log"
+    },
+    {
+      "name": "structural_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/structural_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/structural_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.653,
+      "log": "logs/structural_tests-build.log"
+    },
+    {
+      "name": "slate_envelope_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/slate_envelope_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/slate_envelope_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.332,
+      "log": "logs/slate_envelope_tests-build.log"
+    },
+    {
+      "name": "slate_incision_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/slate_incision_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/slate_incision_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.333,
+      "log": "logs/slate_incision_tests-build.log"
+    },
+    {
+      "name": "surface_detail_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/surface_detail_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/surface_detail_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.624,
+      "log": "logs/surface_detail_tests-build.log"
+    },
+    {
+      "name": "surface_family_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/surface_family_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/surface_family_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.674,
+      "log": "logs/surface_family_tests-build.log"
+    },
+    {
+      "name": "surface_host_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/surface_host_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/surface_host_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.608,
+      "log": "logs/surface_host_tests-build.log"
+    },
+    {
+      "name": "surface_continuity_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/surface_continuity_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/surface_continuity_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.48,
+      "log": "logs/surface_continuity_tests-build.log"
+    },
+    {
+      "name": "surface_morphology_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/surface_morphology_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/surface_morphology_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.648,
+      "log": "logs/surface_morphology_tests-build.log"
+    },
+    {
+      "name": "v3_erosion_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/v3_erosion_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/v3_erosion_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.555,
+      "log": "logs/v3_erosion_tests-build.log"
+    },
+    {
+      "name": "union_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/union_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/union_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.704,
+      "log": "logs/union_tests-build.log"
+    },
+    {
+      "name": "weathered_tests-build",
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++20",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Icore/include",
+        "tests/weathered_tests.cpp",
+        "build/librocks_core.a",
+        "build/liboriginal_damage.a",
+        "-Wl,--gc-sections",
+        "-o",
+        "build/weathered_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.604,
+      "log": "logs/weathered_tests-build.log"
+    },
+    {
+      "name": "alveolar_guide_tests",
+      "command": [
+        "build/alveolar_guide_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.003,
+      "log": "logs/alveolar_guide_tests.log"
+    },
+    {
+      "name": "alveolar_invariant_tests",
+      "command": [
+        "build/alveolar_invariant_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 55.517,
+      "log": "logs/alveolar_invariant_tests.log"
+    },
+    {
+      "name": "alveolar_reconstruction_tests",
+      "command": [
+        "build/alveolar_reconstruction_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 3.112,
+      "log": "logs/alveolar_reconstruction_tests.log"
+    },
+    {
+      "name": "alveolar_tests",
+      "command": [
+        "build/alveolar_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 7.577,
+      "log": "logs/alveolar_tests.log"
+    },
+    {
+      "name": "atomic_resolution_tests",
+      "command": [
+        "build/atomic_resolution_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.005,
+      "log": "logs/atomic_resolution_tests.log"
+    },
+    {
+      "name": "cliff_profile_tests",
+      "command": [
+        "build/cliff_profile_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.233,
+      "log": "logs/cliff_profile_tests.log"
+    },
+    {
+      "name": "contraction_tests",
+      "command": [
+        "build/contraction_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.004,
+      "log": "logs/contraction_tests.log"
+    },
+    {
+      "name": "erosion_seed_regression_tests",
+      "command": [
+        "build/erosion_seed_regression_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 4.493,
+      "log": "logs/erosion_seed_regression_tests.log"
+    },
+    {
+      "name": "face_resolution_tests",
+      "command": [
+        "build/face_resolution_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.004,
+      "log": "logs/face_resolution_tests.log"
+    },
+    {
+      "name": "family_tests",
+      "command": [
+        "build/family_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.319,
+      "log": "logs/family_tests.log"
+    },
+    {
+      "name": "field_tests",
+      "command": [
+        "build/field_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.431,
+      "log": "logs/field_tests.log"
+    },
+    {
+      "name": "heightfield_tests",
+      "command": [
+        "build/heightfield_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.283,
+      "log": "logs/heightfield_tests.log"
+    },
+    {
+      "name": "igneous_studies_tests",
+      "command": [
+        "build/igneous_studies_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 3.919,
+      "log": "logs/igneous_studies_tests.log"
+    },
+    {
+      "name": "mesh_tests",
+      "command": [
+        "build/mesh_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.754,
+      "log": "logs/mesh_tests.log"
+    },
+    {
+      "name": "plateau_tests",
+      "command": [
+        "build/plateau_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.336,
+      "log": "logs/plateau_tests.log"
+    },
+    {
+      "name": "poly_tests",
+      "command": [
+        "build/poly_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.004,
+      "log": "logs/poly_tests.log"
+    },
+    {
+      "name": "reference_studies_tests",
+      "command": [
+        "build/reference_studies_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.88,
+      "log": "logs/reference_studies_tests.log"
+    },
+    {
+      "name": "slate_envelope_tests",
+      "command": [
+        "build/slate_envelope_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.003,
+      "log": "logs/slate_envelope_tests.log"
+    },
+    {
+      "name": "slate_incision_tests",
+      "command": [
+        "build/slate_incision_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 3.993,
+      "log": "logs/slate_incision_tests.log"
+    },
+    {
+      "name": "structural_tests",
+      "command": [
+        "build/structural_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.22,
+      "log": "logs/structural_tests.log"
+    },
+    {
+      "name": "surface_continuity_tests",
+      "command": [
+        "build/surface_continuity_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.261,
+      "log": "logs/surface_continuity_tests.log"
+    },
+    {
+      "name": "surface_detail_tests",
+      "command": [
+        "build/surface_detail_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.141,
+      "log": "logs/surface_detail_tests.log"
+    },
+    {
+      "name": "surface_family_tests",
+      "command": [
+        "build/surface_family_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.639,
+      "log": "logs/surface_family_tests.log"
+    },
+    {
+      "name": "surface_host_tests",
+      "command": [
+        "build/surface_host_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 35.323,
+      "log": "logs/surface_host_tests.log"
+    },
+    {
+      "name": "surface_morphology_tests",
+      "command": [
+        "build/surface_morphology_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 1.006,
+      "log": "logs/surface_morphology_tests.log"
+    },
+    {
+      "name": "union_tests",
+      "command": [
+        "build/union_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.024,
+      "log": "logs/union_tests.log"
+    },
+    {
+      "name": "v3_erosion_tests",
+      "command": [
+        "build/v3_erosion_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 0.298,
+      "log": "logs/v3_erosion_tests.log"
+    },
+    {
+      "name": "weathered_tests",
+      "command": [
+        "build/weathered_tests"
+      ],
+      "exit_code": 0,
+      "seconds": 5.404,
+      "log": "logs/weathered_tests.log"
+    },
+    {
+      "name": "surface-family-shale_laminated",
+      "command": [
+        "build/surface_family_tests",
+        "shale_laminated"
+      ],
+      "exit_code": 0,
+      "seconds": 1.456,
+      "log": "logs/surface-family-shale_laminated.log"
+    },
+    {
+      "name": "surface-family-slate_foliated",
+      "command": [
+        "build/surface_family_tests",
+        "slate_foliated"
+      ],
+      "exit_code": 0,
+      "seconds": 21.064,
+      "log": "logs/surface-family-slate_foliated.log"
+    },
+    {
+      "name": "surface-family-limestone_dissolution",
+      "command": [
+        "build/surface_family_tests",
+        "limestone_dissolution"
+      ],
+      "exit_code": 0,
+      "seconds": 21.544,
+      "log": "logs/surface-family-limestone_dissolution.log"
+    },
+    {
+      "name": "slate-incision-finite_span",
+      "command": [
+        "build/slate_incision_tests",
+        "finite_span"
+      ],
+      "exit_code": 0,
+      "seconds": 3.943,
+      "log": "logs/slate-incision-finite_span.log"
+    },
+    {
+      "name": "slate-incision-unequal_ends",
+      "command": [
+        "build/slate_incision_tests",
+        "unequal_ends"
+      ],
+      "exit_code": 0,
+      "seconds": 4.001,
+      "log": "logs/slate-incision-unequal_ends.log"
+    },
+    {
+      "name": "slate-incision-continuous_ends",
+      "command": [
+        "build/slate_incision_tests",
+        "continuous_ends"
+      ],
+      "exit_code": 0,
+      "seconds": 12.199,
+      "log": "logs/slate-incision-continuous_ends.log"
+    },
+    {
+      "name": "node-suite",
+      "command": [
+        "node",
+        "--test",
+        "tests/camera_bounds_test.mjs",
+        "tests/family_viewer_test.mjs",
+        "tests/heightfield_ui_lifecycle_test.mjs",
+        "tests/heightfield_viewer_test.mjs",
+        "tests/igneous_ui_lifecycle_test.mjs",
+        "tests/igneous_viewer_test.mjs",
+        "tests/texture_order_test.mjs",
+        "tests/viewer_default_race_test.mjs",
+        "tests/viewer_state_test.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.227,
+      "log": "logs/node-suite.log"
+    },
+    {
+      "name": "python-suite",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "seconds": 46.754,
+      "log": "logs/python-suite.log"
+    },
+    {
+      "name": "approved-source-hashes",
+      "command": [
+        "sha256sum",
+        "-c",
+        "MANIFEST.sha256"
+      ],
+      "exit_code": 0,
+      "seconds": 0.006,
+      "log": "logs/approved-source-hashes.log"
+    },
+    {
+      "name": "project-dependency-isolation",
+      "translation_units": 45,
+      "exit_code": 0,
+      "project_inputs_outside_snapshot": 0
+    }
+  ],
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "python": "Python 3.12.14",
+  "node": "v24.19.0",
+  "source_inputs_outside_snapshot": 0,
+  "scope": "Packaging QA of exact frozen correction; mocked Node tests are not browser/WebGL validation.",
+  "known_scope": {
+    "unique_seeds": 130,
+    "unique_accepted": 125,
+    "preserved_rejections": [
+      40,
+      73,
+      98,
+      111,
+      120
+    ],
+    "evidence_origin": "Approved frozen implementation evidence; this packaging run repeats the build/34 C++/53 Python/9 Node suites, not the entire expanded sweep."
+  },
+  "commit_created": false,
+  "push_performed": false,
+  "cpp_executions": 34,
+  "cpp_failures": 0,
+  "python_tests": 53,
+  "python_failures": 0,
+  "node_tests": 9,
+  "node_failures": 0,
+  "visual_evidence": {
+    "manifest_sha256": "6a6e42e29301283545fcf20a26095e73e0223410c21d5c13cc168c4fbf879400",
+    "final_sheets": 4,
+    "source_and_review": "Copied byte-identically from reviewed visual evidence; rendering is not repeated during packaging QA."
+  }
+}
