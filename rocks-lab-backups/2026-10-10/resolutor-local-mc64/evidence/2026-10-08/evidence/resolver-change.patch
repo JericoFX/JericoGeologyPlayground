@@ -1,0 +1,92 @@
+--- approved/build_erosion_probe.sh
++++ resolver/build_erosion_probe.sh
+@@ -9,6 +9,6 @@
+ g++ "${flags[@]}" "${incs[@]}" -c "$engine/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp" -o build/original_GeologyNoise.o
+ ar rcs build/liboriginal_damage.a build/original_*.o
+ for test in DamageField RockAddonMath; do g++ "${flags[@]}" "${incs[@]}" "$checkpoint/tests/original/${test}Tests.cpp" build/liboriginal_damage.a -Wl,--gc-sections -o "build/original_${test}_tests"; "build/original_${test}_tests"; done
+-g++ "${flags[@]}" "${incs[@]}" -Wall -Wextra -Wpedantic -c core/src/field.cpp -o build/field.o
++for file in core/src/*.cpp; do g++ "${flags[@]}" "${incs[@]}" -Wall -Wextra -Wpedantic -c "$file" -o "build/$(basename "$file" .cpp).o"; done
+ ar rcs build/librocks_core.a build/alveolar_surface.o build/compare.o build/extract.o build/field.o build/heightfield.o build/polyhedral.o build/reference_studies.o build/surface_detail.o build/surface_families.o build/validate.o
+ for app in 'cli/main.cpp rocks_cli' 'tests/v3_erosion_tests.cpp v3_erosion_tests' 'tests/erosion_diagnose.cpp erosion_diagnose'; do read -r file name <<<"$app"; g++ "${flags[@]}" "${incs[@]}" "$file" build/librocks_core.a build/liboriginal_damage.a -Wl,--gc-sections -o "build/$name"; done
+--- approved/cli/main.cpp
++++ resolver/cli/main.cpp
+@@ -95,6 +95,6 @@
+  std::ofstream raw(out/"height.u16",std::ios::binary);for(auto value:samples.samples){raw.put(char(value&255));raw.put(char(value>>8));}if(!raw)throw std::runtime_error("cannot export height samples");std::cout<<metrics.dump(2)<<'\n';return 0;
+ }
+ int main(int argc,char**argv){try{if(argc>1&&(std::string(argv[1])=="heightmap-reference"||std::string(argv[1])=="procedural-heightfield"))return heightmapCommand(argc,argv);if(argc>1&&std::string(argv[1])=="compare")return compareCommand(argc,argv);if(argc!=6||std::string(argv[1])!="generate"||std::string(argv[2])!="--recipe"||std::string(argv[4])!="--out")throw std::invalid_argument("usage: rocks_cli generate --recipe file --out directory");json recipe=read(argv[3]);if(recipe.is_object()&&recipe.value("schemaVersion",0)==3)return generateHeightfieldRecipe(recipe,argv[5]);unsigned cells;Recipe r=parse(recipe,cells);auto begin=Clock::now();auto f=makeField(r);double prep=std::chrono::duration<double,std::milli>(Clock::now()-begin).count();auto grid=makeGrid(r,cells);std::array<Extraction,3> results;json metrics={{"accepted",true},{"preparationMs",prep},{"seed",r.seed},{"cells",cells},{"generatorVersion",r.generatorVersion},{"extractorVersion",r.extractorVersion},{"coreBufferAccounting","sample + edge-cache + mesh vector capacities; excludes allocator overhead, validation maps, JSON and process RSS"}};if(r.generatorVersion=="rocks-v12"){metrics["sourceKind"]="procedural_volume";metrics["family"]=r.family;metrics["stageSemantics"]="base = parent envelope; stratified = joint-controlled 3D study; eroded = identical structure, no erosion simulation";metrics["resistanceMeaning"]="not modeled; constant 0.5 placeholder";}const char*names[]={"base","stratified","eroded"};
+- for(int i=0;i<3;i++){results[i]=r.extractorVersion=="poly-csg-v1"?extractPolyhedral(f,Stage(i)):extract(f,grid,Stage(i));auto t=Clock::now();auto report=validate(results[i].mesh,r.size);double ms=std::chrono::duration<double,std::milli>(Clock::now()-t).count();auto&ex=results[i];bool ok=report.accepted&&!ex.ambiguousCells&&!ex.boundaryTouched;metrics["stages"][names[i]]={{"accepted",ok},{"vertices",ex.mesh.positions.size()},{"triangles",ex.mesh.indices.size()/3},{"signedVolume",report.signedVolume},{"components",report.components},{"degenerateFaces",report.degenerateFaces},{"duplicateFaces",report.duplicateFaces},{"badEdges",report.badEdges},{"badVertices",report.badVertices},{"ambiguousCells",ex.ambiguousCells},{"boundaryTouched",ex.boundaryTouched},{"fieldMs",ex.fieldMs},{"extractNormalsMs",ex.extractNormalsMs},{"validationMs",ms},{"coreBufferBytes",ex.coreBufferBytes},{"surfaceDetailMs",ex.surfaceDetailMs},{"maxDisplacement",ex.maxDisplacement},{"jacobianLowerBound",ex.jacobianLowerBound},{"flippedTriangles",ex.flippedTriangles},{"preservedSharpVertices",ex.preservedSharpVertices},{"contractedEdges",ex.contractedEdges},{"contractedFaces",ex.contractedFaces},{"maxContractionDistance",ex.maxContractionDistance},{"errors",report.errors}};if(r.extractorVersion=="poly-csg-v1")metrics["stages"][names[i]]["ambiguousCells"]=nullptr;if(!ok){std::cerr<<names[i]<<": "<<metrics["stages"][names[i]].dump()<<'\n';return 2;}}
++ for(int i=0;i<3;i++){results[i]=r.extractorVersion=="poly-csg-v1"?extractPolyhedral(f,Stage(i)):extract(f,grid,Stage(i));auto t=Clock::now();auto report=validate(results[i].mesh,r.size);double ms=std::chrono::duration<double,std::milli>(Clock::now()-t).count();auto&ex=results[i];bool ok=report.accepted&&!ex.unresolvedAmbiguousCells&&!ex.boundaryTouched;metrics["stages"][names[i]]={{"accepted",ok},{"vertices",ex.mesh.positions.size()},{"triangles",ex.mesh.indices.size()/3},{"signedVolume",report.signedVolume},{"components",report.components},{"degenerateFaces",report.degenerateFaces},{"duplicateFaces",report.duplicateFaces},{"badEdges",report.badEdges},{"badVertices",report.badVertices},{"ambiguousCells",ex.ambiguousCells},{ "resolvedAmbiguousCells",ex.resolvedAmbiguousCells},{"unresolvedAmbiguousCells",ex.unresolvedAmbiguousCells},{"resolvedAmbiguousFaces",ex.resolvedAmbiguousFaces},{"faceCertificateSamples",ex.faceCertificateSamples},{"ambiguityResolutionMs",ex.ambiguityResolutionMs},{"boundaryTouched",ex.boundaryTouched},{"fieldMs",ex.fieldMs},{"extractNormalsMs",ex.extractNormalsMs},{"validationMs",ms},{"coreBufferBytes",ex.coreBufferBytes},{"surfaceDetailMs",ex.surfaceDetailMs},{"maxDisplacement",ex.maxDisplacement},{"jacobianLowerBound",ex.jacobianLowerBound},{"flippedTriangles",ex.flippedTriangles},{"preservedSharpVertices",ex.preservedSharpVertices},{"contractedEdges",ex.contractedEdges},{"contractedFaces",ex.contractedFaces},{"maxContractionDistance",ex.maxContractionDistance},{"errors",report.errors}};if(r.extractorVersion=="poly-csg-v1")metrics["stages"][names[i]]["ambiguousCells"]=nullptr;if(!ok){std::cerr<<names[i]<<": "<<metrics["stages"][names[i]].dump()<<'\n';return 2;}}
+  fs::path out=argv[5];fs::create_directories(out);auto t=Clock::now();json transport={{"schemaVersion",1},{"domain",{{"min",{grid.min.x,grid.min.y,grid.min.z}},{"max",{grid.max.x,grid.max.y,grid.max.z}}}}};for(int i=0;i<3;i++){transport["stages"][names[i]]=meshjson(results[i].mesh);obj(out/(std::string(names[i])+".obj"),results[i].mesh);}write(out/"viewer.json",transport);write(out/"recipe.json",recipe);metrics["serializationMs"]=std::chrono::duration<double,std::milli>(Clock::now()-t).count();if(r.extractorVersion=="poly-csg-v1"){metrics["coreBufferAccounting"]="accounted mesh and planar polygon vector capacities, excluding map/allocator overhead; not RSS or certified peak";metrics["gridUsedForExtraction"]=false;if(r.generatorVersion!="rocks-v12")metrics["stageSemantics"]="base=macro mass; stratified=structural fractures; eroded identical because wear0 (curved wear unsupported on direct route)";}write(out/"metrics.json",metrics);std::cout<<metrics.dump(2)<<'\n';return 0;
+  }catch(const json::exception&e){std::cerr<<"invalid JSON/recipe: "<<e.what()<<'\n';return 2;}catch(const std::invalid_argument&e){std::cerr<<e.what()<<'\n';return 2;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}
+--- approved/core/src/extract.cpp
++++ resolver/core/src/extract.cpp
+@@ -1,4 +1,7 @@
+ #include "rocks/mesh.hpp"
++#include "face_resolution.hpp"
++#include <map>
++#include <tuple>
+ #include "../../third_party/paris/mc_table.hpp"
+ #include <array>
+ #include <chrono>
+@@ -62,10 +65,48 @@
+ Extraction extract(const RockField&f,const GridSpec&g,Stage stage){auto errors=validateRecipe(f.recipe,g);if(!errors.empty())throw std::invalid_argument(errors.front());using Clock=std::chrono::steady_clock;auto start=Clock::now();Extraction ex;auto &m=ex.mesh;unsigned n=g.cells,N=n+1;std::size_t total=std::size_t(N)*N*N;std::vector<double> values(total);std::vector<int32_t> cache(total*3,-1);double h=(g.max.x-g.min.x)/n;auto id=[&](unsigned x,unsigned y,unsigned z){return (std::size_t(z)*N+y)*N+x;};auto point=[&](unsigned x,unsigned y,unsigned z){return g.min+Vec3{double(x),double(y),double(z)}*h;};
+  for(unsigned z=0;z<N;z++)for(unsigned y=0;y<N;y++)for(unsigned x=0;x<N;x++){double v=fieldValue(f,point(x,y,z),stage);if(!std::isfinite(v))throw std::runtime_error("nonfinite field sample");values[id(x,y,z)]=v;if((x==0||y==0||z==0||x==n||y==n||z==n)&&v<=0)ex.boundaryTouched=true;}
+  auto sampled=Clock::now();ex.fieldMs=std::chrono::duration<double,std::milli>(sampled-start).count();
++ // One canonical entry per grid face; both incident cells consume one decision.
++ using FaceKey=std::tuple<unsigned,unsigned,unsigned,unsigned>;
++ std::map<FaceKey,detail::FaceDecision> faceDecisions;
++ const bool resolveFaces=detail::eligibleErosionResolver(f,g);
+  for(unsigned z=0;z<n;z++)for(unsigned y=0;y<n;y++)for(unsigned x=0;x<n;x++){
+- std::array<std::size_t,8> ids;std::array<double,8> v;unsigned mask=0;for(unsigned k=0;k<8;k++){ids[k]=id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));v[k]=values[ids[k]];if(v[k]<0)mask|=1u<<k;}if(mask==0||mask==255)continue;if(ambiguousCase(mask))ex.ambiguousCells++;
++ std::array<std::size_t,8> ids;std::array<double,8> v;unsigned mask=0;for(unsigned k=0;k<8;k++){ids[k]=id(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));v[k]=values[ids[k]];if(v[k]<0)mask|=1u<<k;}if(mask==0||mask==255)continue;
++ bool alternate=false;
++ if(ambiguousCase(mask)){
++  ex.ambiguousCells++;bool resolved=false;auto resolutionStart=Clock::now();
++  if(resolveFaces)if(auto face=detail::simpleAmbiguousFace(mask)){
++   unsigned axis=*face<2?2:*face<4?1:0;
++   FaceKey key=axis==0?FaceKey{axis,x+(*face==5),y,z}:axis==1?FaceKey{axis,y+(*face==3),x,z}:FaceKey{axis,z+(*face==1),x,y};
++   // A shared face is atomic: never change one incident cell while its
++   // neighbor remains on an unsupported configuration and a different pairing.
++   int nx=int(x),ny=int(y),nz=int(z);int delta=(*face%2)?1:-1;
++   if(axis==0)nx+=delta;else if(axis==1)ny+=delta;else nz+=delta;
++   bool neighborCompatible=nx>=0&&ny>=0&&nz>=0&&nx<int(n)&&ny<int(n)&&nz<int(n);
++   if(neighborCompatible){
++    unsigned neighborMask=0;for(unsigned k=0;k<8;k++)if(values[id(unsigned(nx)+(k&1),unsigned(ny)+((k>>1)&1),unsigned(nz)+((k>>2)&1))]<0)neighborMask|=1u<<k;
++    auto neighborFace=detail::simpleAmbiguousFace(neighborMask);
++    neighborCompatible=neighborFace.has_value()&&*neighborFace==(*face^1u);
++   }
++   if(neighborCompatible){
++   auto it=faceDecisions.find(key);
++   if(it==faceDecisions.end()){
++    std::array<Vec3,4> points;std::array<double,4> faceValues;
++    for(unsigned j=0;j<4;j++){unsigned k=detail::cubeFaces[*face][j];points[j]=point(x+(k&1),y+((k>>1)&1),z+((k>>2)&1));faceValues[j]=v[k];}
++    auto decision=detail::decideErosionFace(f,stage,points,faceValues);ex.faceCertificateSamples+=decision.evaluations;
++    if(decision.negativeConnected.has_value())ex.resolvedAmbiguousFaces++;
++    it=faceDecisions.emplace(key,std::move(decision)).first;
++   }
++   auto original=detail::tableConnectsNegative(mask,*face),complement=detail::tableConnectsNegative(255-mask,*face);
++   if(it->second.negativeConnected.has_value()&&original.has_value()&&complement.has_value()&&*original!=(!*complement)){alternate=*original!=*it->second.negativeConnected;resolved=true;}
++   }
++  }
++  if(resolved)ex.resolvedAmbiguousCells++;else ex.unresolvedAmbiguousCells++;
++  ex.ambiguityResolutionMs+=std::chrono::duration<double,std::milli>(Clock::now()-resolutionStart).count();
++ }
+  std::uint32_t vi[12]{};for(unsigned e=0;e<12;e++){int a=edges[e][0],b=edges[e][1];if((v[a]<0)==(v[b]<0))continue;unsigned axis=e<4?0:e<8?1:2;auto key=ids[a]*3+axis;if(cache[key]<0){double t=v[a]/(v[a]-v[b]);Vec3 pa=point(x+(a&1),y+((a>>1)&1),z+((a>>2)&1));Vec3 pb=point(x+(b&1),y+((b>>1)&1),z+((b>>2)&1));double lo=0,hi=1; for(int refine=0;refine<32;refine++){double mid=(lo+hi)*.5;double vm=fieldValue(f,pa+(pb-pa)*mid,stage);if((vm<0)==(v[a]<0))lo=mid;else hi=mid;} t=(lo+hi)*.5;Vec3 p=pa+(pb-pa)*t;cache[key]=int32_t(m.positions.size());m.positions.push_back(p);auto sample=evaluate(f,p,stage);m.normals.push_back(normalized(sample.gradient));m.resistance.push_back(sample.resistance);}vi[e]=std::uint32_t(cache[key]);}
+- auto conf=marching_cube_tris[mask];unsigned count=conf&15;for(unsigned j=0;j<count;j++){std::uint32_t a=vi[(conf>>(4+12*j))&15],b=vi[(conf>>(8+12*j))&15],c=vi[(conf>>(12+12*j))&15];// Pinned table uses outward winding for negative-inside; never flip individual faces.
++ auto conf=marching_cube_tris[alternate?255-mask:mask];unsigned count=conf&15;for(unsigned j=0;j<count;j++){std::uint32_t a=vi[(conf>>(4+12*j))&15],b=vi[(conf>>(8+12*j))&15],c=vi[(conf>>(12+12*j))&15];// Complement configuration swaps inside/outside, so reverse ALL its faces.
++// The unambiguous branch retains the exact original table and vertex order.
++if(alternate)std::swap(b,c);
+ m.indices.insert(m.indices.end(),{a,b,c});}}
+  if((f.recipe.generatorVersion=="rocks-v7"||(f.recipe.generatorVersion=="rocks-v12"&&f.recipe.family=="jointed_granite"))&&!ex.ambiguousCells&&!ex.boundaryTouched)contractSubresolutionEdges(ex,f.recipe.size);
+  ex.extractNormalsMs=std::chrono::duration<double,std::milli>(Clock::now()-sampled).count();ex.coreBufferBytes=values.capacity()*sizeof(double)+cache.capacity()*sizeof(int32_t)+(m.positions.capacity()+m.normals.capacity())*sizeof(Vec3)+m.resistance.capacity()*sizeof(double)+m.indices.capacity()*sizeof(std::uint32_t);return ex;
+--- approved/core/include/rocks/mesh.hpp
++++ resolver/core/include/rocks/mesh.hpp
+@@ -2,7 +2,7 @@
+ #include "field.hpp"
+ namespace rocks {
+ struct Mesh {std::vector<Vec3> positions,normals;std::vector<double> resistance;std::vector<std::uint32_t> indices;std::vector<Vec3> cornerNormals;};
+-struct Extraction {Mesh mesh;std::uint64_t ambiguousCells=0;bool boundaryTouched=false;double fieldMs=0,extractNormalsMs=0;std::uint64_t coreBufferBytes=0;double surfaceDetailMs=0,maxDisplacement=0,jacobianLowerBound=1;std::uint64_t flippedTriangles=0,preservedSharpVertices=0,contractedEdges=0,contractedFaces=0;double maxContractionDistance=0;};
++struct Extraction {Mesh mesh;std::uint64_t ambiguousCells=0;bool boundaryTouched=false;double fieldMs=0,extractNormalsMs=0;std::uint64_t coreBufferBytes=0;double surfaceDetailMs=0,maxDisplacement=0,jacobianLowerBound=1;std::uint64_t flippedTriangles=0,preservedSharpVertices=0,contractedEdges=0,contractedFaces=0;double maxContractionDistance=0;std::uint64_t resolvedAmbiguousCells=0,unresolvedAmbiguousCells=0,resolvedAmbiguousFaces=0,faceCertificateSamples=0;double ambiguityResolutionMs=0;};
+ struct Report {bool accepted=false;std::vector<std::string> errors;std::uint64_t components=0,degenerateFaces=0,duplicateFaces=0,badEdges=0,badVertices=0;double signedVolume=0;};
+ struct HeightfieldSpec {std::uint32_t width=0,height=0,cells=128;double size=2,relief=.5,backDepth=.3;bool fixedMapping=false;};
+ // Versioned procedural recipe: scalar codes always map [0,65535] to [0,relief] metres.

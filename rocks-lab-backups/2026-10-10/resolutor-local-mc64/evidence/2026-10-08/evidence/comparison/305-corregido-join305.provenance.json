@@ -1,0 +1,103 @@
+{
+  "obj": "/workspace/scratch/8891ccba612f/rocks-cloud-prep/erosion-robustness/resolved/305/base.obj",
+  "obj_sha256": "38ff2f37c9e3a3df65e046a421ea87b2714af0ef4a29f9acff78d1af24a7d245",
+  "png_sha256": "5170b0f2da11b56e50d0f810ae4a2e0cca5fde774f57c10a9fa5db5f27a60576",
+  "settings": {
+    "samples": 24,
+    "resolution": [
+      800,
+      800
+    ],
+    "color_management": {
+      "view_transform": "AgX",
+      "look": "AgX - Medium High Contrast",
+      "exposure": 0.0,
+      "gamma": 1.0
+    },
+    "world": {
+      "color": [
+        0.22,
+        0.22,
+        0.22
+      ],
+      "strength": 0.5
+    },
+    "camera": {
+      "location": [
+        -2.8,
+        -0.8,
+        -1.15
+      ],
+      "target": [
+        -0.9375,
+        -0.5390625,
+        -0.3515625
+      ],
+      "ortho_scale": 0.18,
+      "clip_start": 0.002,
+      "clip_end": 200.0,
+      "world_up": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "lights": [
+      {
+        "name": "Key",
+        "location": [
+          -3.6,
+          3.8,
+          6.0
+        ],
+        "power_watts": 1680.0,
+        "disk_diameter_meters": 2.5
+      },
+      {
+        "name": "Fill",
+        "location": [
+          4.8,
+          0.8,
+          4.4
+        ],
+        "power_watts": 260.0,
+        "disk_diameter_meters": 3.8
+      },
+      {
+        "name": "Rim",
+        "location": [
+          -1.0,
+          4.6,
+          -3.0
+        ],
+        "power_watts": 560.0,
+        "disk_diameter_meters": 2.8
+      }
+    ],
+    "material": {
+      "base_color": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "roughness": 0.87
+    },
+    "wireframe": {
+      "width_pixels": 0.8,
+      "color": [
+        0.015,
+        0.08,
+        0.115
+      ]
+    }
+  },
+  "blender_version": "4.3.2",
+  "imported_geometry_normals_transforms_unchanged": true,
+  "triangles": 14132,
+  "imported_fingerprint": {
+    "base": "e5906bd39efadf9ea40fc76448da8212287b6ac7b1c8bc7c3d5dd5abc8252fbf"
+  },
+  "renderer_source_sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+  "wrapper_sha256": "5209d8b7fb79445d24db259e496ef46f9fd09bf7c0571b7936a52048b5e1790c",
+  "seconds": 16.93993752499955
+}

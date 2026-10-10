@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "surface-families-v13",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "profile": "limestone_dissolution",
+  "seed": 305,
+  "size": 2.0,
+  "relief": 0.55,
+  "backDepth": 0.3,
+  "directionDegrees": 0,
+  "featureDepth": 0.85,
+  "fractures": 0.7,
+  "irregularity": 0.65,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  },
+  "channelSpacingMeters": 0.32,
+  "channelWidthMeters": 0.075,
+  "pocketRadiusMeters": 0.12,
+  "pocketCount": 3
+}

@@ -1,0 +1,12 @@
+# Ignore generated outputs only; keep historical build-chain source dependencies.
+/prototype-v3-erosion-resolved/build/
+/prototype-v3-erosion-resolved/out/
+**/__pycache__/
+*.pyc
+*.o
+*.a
+*.so
+*.dll
+*.exe
+*.zip
+*.blend

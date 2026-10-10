@@ -1,0 +1,23 @@
+Bundled source notices
+
+Manifold 3.5.2
+Upstream: https://github.com/elalish/manifold
+Recorded source commit: 11235e6b8ebea2dbed8aec4285685aafd3d95667
+License: Apache License 2.0.
+Complete license: deps/manifold/LICENSE
+Authors: deps/manifold/AUTHORS
+Source copyright and embedded component attribution notices are retained,
+including the linalg attribution in include/manifold/linalg.h.
+The selected files are unmodified; this archive omits optional upstream
+components that are not required by the lab's default native build.
+
+nlohmann JSON 3.11.3
+Upstream: https://github.com/nlohmann/json
+License: MIT.
+Complete notice and license: third_party/nlohmann/LICENSE.MIT
+The single-header distribution and its embedded notices are retained unchanged.
+
+Jerico / Playground and laboratory sources
+These are supplied project sources and laboratory additions. The notices above
+apply to their named third-party components only and do not grant a separate
+license to the Jerico / Playground project sources or to any excluded assets.

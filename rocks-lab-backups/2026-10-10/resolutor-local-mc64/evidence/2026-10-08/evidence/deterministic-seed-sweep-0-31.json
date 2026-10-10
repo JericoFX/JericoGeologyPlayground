@@ -1,0 +1,819 @@
+[
+  {
+    "seed": 0,
+    "exit": 0,
+    "seconds": 1.3173346699986723,
+    "stages": {
+      "base": {
+        "triangles": 14088,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15804,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15804,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 1,
+    "exit": 0,
+    "seconds": 1.2530802059991402,
+    "stages": {
+      "base": {
+        "triangles": 14104,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15976,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15976,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 2,
+    "exit": 0,
+    "seconds": 1.1953945409986773,
+    "stages": {
+      "base": {
+        "triangles": 14136,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16200,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16200,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 3,
+    "exit": 0,
+    "seconds": 1.106793295002717,
+    "stages": {
+      "base": {
+        "triangles": 13992,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15784,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15784,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 4,
+    "exit": 2,
+    "seconds": 0.6714144319994375,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":0.285082,\"ambiguousCells\":2,\"badEdges\":4,\"badVertices\":4,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":1,\"duplicateFaces\":0,\"errors\":[\"unpaired/inconsistently oriented edges: 4\",\"noncircular vertex link or reversed normal: 4\",\"degenerate faces: 1\"],\"extractNormalsMs\":281.849259,\"faceCertificateSamples\":268,\"fieldMs\":194.355663,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":1,\"resolvedAmbiguousFaces\":1,\"signedVolume\":3.012913385679866,\"surfaceDetailMs\":0.0,\"triangles\":16130,\"unresolvedAmbiguousCells\":1,\"validationMs\":39.200126,\"vertices\":8068}"
+  },
+  {
+    "seed": 5,
+    "exit": 2,
+    "seconds": 0.9132156869964092,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":0.007843000000000001,\"ambiguousCells\":2,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":414.82259,\"faceCertificateSamples\":0,\"fieldMs\":257.009107,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.0366008832582936,\"surfaceDetailMs\":0.0,\"triangles\":15916,\"unresolvedAmbiguousCells\":2,\"validationMs\":93.715237,\"vertices\":7960}"
+  },
+  {
+    "seed": 6,
+    "exit": 0,
+    "seconds": 3.111760484003753,
+    "stages": {
+      "base": {
+        "triangles": 14004,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15848,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15848,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 7,
+    "exit": 0,
+    "seconds": 3.9862595459999284,
+    "stages": {
+      "base": {
+        "triangles": 14116,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16092,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.245589
+      },
+      "stratified": {
+        "triangles": 16092,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.985242
+      }
+    }
+  },
+  {
+    "seed": 8,
+    "exit": 2,
+    "seconds": 0.1001520529971458,
+    "rejection": "base: {\"accepted\":false,\"ambiguityResolutionMs\":0.0,\"ambiguousCells\":0,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":1,\"duplicateFaces\":0,\"errors\":[\"degenerate faces: 1\"],\"extractNormalsMs\":38.347946,\"faceCertificateSamples\":0,\"fieldMs\":29.56868,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.488580021795349,\"surfaceDetailMs\":0.0,\"triangles\":13996,\"unresolvedAmbiguousCells\":0,\"validationMs\":26.289543,\"vertices\":7000}"
+  },
+  {
+    "seed": 9,
+    "exit": 0,
+    "seconds": 2.5580593170016073,
+    "stages": {
+      "base": {
+        "triangles": 14088,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15968,
+        "ambiguousCells": 4,
+        "resolvedAmbiguousCells": 4,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 2,
+        "ambiguityResolutionMs": 1.4233650000000002
+      },
+      "stratified": {
+        "triangles": 15968,
+        "ambiguousCells": 4,
+        "resolvedAmbiguousCells": 4,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 2,
+        "ambiguityResolutionMs": 3.9686420000000004
+      }
+    }
+  },
+  {
+    "seed": 10,
+    "exit": 0,
+    "seconds": 1.307910120995075,
+    "stages": {
+      "base": {
+        "triangles": 14052,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16028,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16028,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 11,
+    "exit": 0,
+    "seconds": 1.4528304370032856,
+    "stages": {
+      "base": {
+        "triangles": 14172,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16080,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.11615
+      },
+      "stratified": {
+        "triangles": 16080,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.128353
+      }
+    }
+  },
+  {
+    "seed": 12,
+    "exit": 0,
+    "seconds": 0.969045254001685,
+    "stages": {
+      "base": {
+        "triangles": 14152,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16192,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.13189800000000002
+      },
+      "stratified": {
+        "triangles": 16192,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.14422
+      }
+    }
+  },
+  {
+    "seed": 13,
+    "exit": 0,
+    "seconds": 1.2860350390037638,
+    "stages": {
+      "base": {
+        "triangles": 14040,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15892,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15892,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 14,
+    "exit": 2,
+    "seconds": 0.7174826589980512,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":0.0,\"ambiguousCells\":0,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":1,\"duplicateFaces\":0,\"errors\":[\"degenerate faces: 1\"],\"extractNormalsMs\":256.003887,\"faceCertificateSamples\":0,\"fieldMs\":242.317531,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.016382706165672,\"surfaceDetailMs\":0.0,\"triangles\":15824,\"unresolvedAmbiguousCells\":0,\"validationMs\":33.721456,\"vertices\":7914}"
+  },
+  {
+    "seed": 15,
+    "exit": 0,
+    "seconds": 1.2245826790021965,
+    "stages": {
+      "base": {
+        "triangles": 14112,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16132,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16132,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 16,
+    "exit": 0,
+    "seconds": 1.0151373839980806,
+    "stages": {
+      "base": {
+        "triangles": 14124,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15984,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15984,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 17,
+    "exit": 0,
+    "seconds": 1.1863994619998266,
+    "stages": {
+      "base": {
+        "triangles": 14068,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16052,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16052,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 18,
+    "exit": 0,
+    "seconds": 1.1470595219943789,
+    "stages": {
+      "base": {
+        "triangles": 14084,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15920,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15920,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 19,
+    "exit": 0,
+    "seconds": 1.0367482130022836,
+    "stages": {
+      "base": {
+        "triangles": 14016,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15988,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.852796
+      },
+      "stratified": {
+        "triangles": 15988,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.382438
+      }
+    }
+  },
+  {
+    "seed": 20,
+    "exit": 0,
+    "seconds": 2.2932952209957875,
+    "stages": {
+      "base": {
+        "triangles": 14000,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15764,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15764,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 21,
+    "exit": 0,
+    "seconds": 1.4568588430047384,
+    "stages": {
+      "base": {
+        "triangles": 14008,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15828,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15828,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 22,
+    "exit": 0,
+    "seconds": 1.0001024769953801,
+    "stages": {
+      "base": {
+        "triangles": 14072,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15964,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 15964,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 23,
+    "exit": 0,
+    "seconds": 1.1863177359991823,
+    "stages": {
+      "base": {
+        "triangles": 14180,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16196,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16196,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 24,
+    "exit": 0,
+    "seconds": 1.089971212000819,
+    "stages": {
+      "base": {
+        "triangles": 14120,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15996,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.229495
+      },
+      "stratified": {
+        "triangles": 15996,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.26118
+      }
+    }
+  },
+  {
+    "seed": 25,
+    "exit": 2,
+    "seconds": 0.4958075300019118,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":2.271415,\"ambiguousCells\":4,\"badEdges\":4,\"badVertices\":4,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":1,\"duplicateFaces\":0,\"errors\":[\"unpaired/inconsistently oriented edges: 4\",\"noncircular vertex link or reversed normal: 4\",\"degenerate faces: 1\"],\"extractNormalsMs\":209.847405,\"faceCertificateSamples\":3030,\"fieldMs\":157.577929,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":3,\"resolvedAmbiguousFaces\":2,\"signedVolume\":3.0603655742854725,\"surfaceDetailMs\":0.0,\"triangles\":15874,\"unresolvedAmbiguousCells\":1,\"validationMs\":28.394106,\"vertices\":7938}"
+  },
+  {
+    "seed": 26,
+    "exit": 0,
+    "seconds": 1.0459665879970999,
+    "stages": {
+      "base": {
+        "triangles": 14048,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.013069
+      },
+      "eroded": {
+        "triangles": 15792,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.494763
+      },
+      "stratified": {
+        "triangles": 15792,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.43388699999999997
+      }
+    }
+  },
+  {
+    "seed": 27,
+    "exit": 0,
+    "seconds": 0.9992230019997805,
+    "stages": {
+      "base": {
+        "triangles": 14116,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16016,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "stratified": {
+        "triangles": 16016,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      }
+    }
+  },
+  {
+    "seed": 28,
+    "exit": 0,
+    "seconds": 1.8408671649958706,
+    "stages": {
+      "base": {
+        "triangles": 14048,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 16116,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.242618
+      },
+      "stratified": {
+        "triangles": 16116,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.256998
+      }
+    }
+  },
+  {
+    "seed": 29,
+    "exit": 2,
+    "seconds": 0.4881181149976328,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":0.005893,\"ambiguousCells\":2,\"badEdges\":0,\"badVertices\":0,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[],\"extractNormalsMs\":191.946592,\"faceCertificateSamples\":0,\"fieldMs\":160.371791,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":0,\"resolvedAmbiguousFaces\":0,\"signedVolume\":3.0282986621824293,\"surfaceDetailMs\":0.0,\"triangles\":15836,\"unresolvedAmbiguousCells\":2,\"validationMs\":28.399768,\"vertices\":7920}"
+  },
+  {
+    "seed": 30,
+    "exit": 0,
+    "seconds": 0.9635202819990809,
+    "stages": {
+      "base": {
+        "triangles": 14140,
+        "ambiguousCells": 0,
+        "resolvedAmbiguousCells": 0,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 0,
+        "ambiguityResolutionMs": 0.0
+      },
+      "eroded": {
+        "triangles": 15904,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.370145
+      },
+      "stratified": {
+        "triangles": 15904,
+        "ambiguousCells": 2,
+        "resolvedAmbiguousCells": 2,
+        "unresolvedAmbiguousCells": 0,
+        "resolvedAmbiguousFaces": 1,
+        "ambiguityResolutionMs": 0.337207
+      }
+    }
+  },
+  {
+    "seed": 31,
+    "exit": 2,
+    "seconds": 0.49620865599717945,
+    "rejection": "stratified: {\"accepted\":false,\"ambiguityResolutionMs\":0.250864,\"ambiguousCells\":3,\"badEdges\":4,\"badVertices\":4,\"boundaryTouched\":false,\"components\":1,\"contractedEdges\":0,\"contractedFaces\":0,\"coreBufferBytes\":6147860,\"degenerateFaces\":0,\"duplicateFaces\":0,\"errors\":[\"unpaired/inconsistently oriented edges: 4\",\"noncircular vertex link or reversed normal: 4\"],\"extractNormalsMs\":202.898123,\"faceCertificateSamples\":334,\"fieldMs\":140.914966,\"flippedTriangles\":0,\"jacobianLowerBound\":1.0,\"maxContractionDistance\":0.0,\"maxDisplacement\":0.0,\"preservedSharpVertices\":0,\"resolvedAmbiguousCells\":1,\"resolvedAmbiguousFaces\":1,\"signedVolume\":3.0495391272342873,\"surfaceDetailMs\":0.0,\"triangles\":15882,\"unresolvedAmbiguousCells\":2,\"validationMs\":24.112011,\"vertices\":7942}"
+  }
+]

@@ -1,0 +1,3025 @@
+{
+  "schema": "jerico-rocks-source-backup-v1",
+  "snapshot": "original-2026-10-08",
+  "prepared_utc_date": "2026-10-10",
+  "repository": "JericoFX/JericoGeologyPlayground",
+  "branch": "dot/rocks-lab-recovery-2026-10-05",
+  "repository_path": "rocks-lab-backups/2026-10-10/resolutor-local-mc64",
+  "original_archive": {
+    "name": "JericoRocas-Resolutor-Local-MC64-20261008.zip",
+    "library_file_id": "libfile_cfa96f89c5048191afddb8d142e09857",
+    "bytes": 7495030,
+    "sha256": "728612df6473b86b880167c3be9817d6eba77fba28eef0551dc88fcf47002ab2",
+    "reference_type": "ChatGPT Library file identity; request or attach this exact Library item",
+    "public_download_url": null,
+    "drive_backup_verified": false
+  },
+  "source_files_audited": 355,
+  "source_files_included": 230,
+  "source_files_excluded": 125,
+  "source_bytes_included": 1603264,
+  "dependencies": {
+    "compiler_dependency_scan": "g++ -std=c++20 -MM; header dependency discovery only, no executable build or test run",
+    "translation_units_scanned": 43,
+    "checkpoint_required_files": [
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.cpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/Model.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.cpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/EngineError.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Guid.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Result.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Jobs/Include/Jerico/Jobs/Cancellation.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyDirectionalWarp.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyLayer.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyMask.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyTypes.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geometry.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyValueNoiseReference.hpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/DamageFieldTests.cpp",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/RockAddonMathTests.cpp"
+    ],
+    "checkpoint_provenance_files": [
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SOURCE_MANIFEST.json",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SHA256SUMS.txt",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/THIRD_PARTY_NOTICES.txt",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/LICENSE",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/AUTHORS",
+      "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/third_party/nlohmann/LICENSE.MIT"
+    ],
+    "build_chain_exception": "original/build-chain/deps/engine-inputs contains required source files, not build caches or binaries."
+  },
+  "historical_evidence": {
+    "scope": "Original 2026-10-08 evidence; not a new validation claim.",
+    "known_status": "25 accepted and 7 rejected in the historical seed sweep 0..31; full project suite not executed in that historical delivery.",
+    "text_files_included": 33,
+    "mesh_and_image_witnesses": [
+      {
+        "archive_path": "corrected/305/base.obj",
+        "bytes": 1051345,
+        "sha256": "38ff2f37c9e3a3df65e046a421ea87b2714af0ef4a29f9acff78d1af24a7d245",
+        "git_blob_sha1": "cf353b72144534d385c42a65c61f182e84b3e1fb",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "corrected/305/eroded.obj",
+        "bytes": 1230760,
+        "sha256": "8841b63d70ec3ea4a5fcbb710d44123af5629cb0c998e23b689c5833a9601a69",
+        "git_blob_sha1": "2902902ec0d268f6fcaec85ad6b13281aed2bd62",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "corrected/305/stratified.obj",
+        "bytes": 1230760,
+        "sha256": "8841b63d70ec3ea4a5fcbb710d44123af5629cb0c998e23b689c5833a9601a69",
+        "git_blob_sha1": "2902902ec0d268f6fcaec85ad6b13281aed2bd62",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "corrected/999/base.obj",
+        "bytes": 1049661,
+        "sha256": "ed29e3ea81f0494974e4487c89ad7d5587d7da33f029e5c303560d0b2153a805",
+        "git_blob_sha1": "3f51368cefb9e5797a03926431217fc4487413b9",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "corrected/999/eroded.obj",
+        "bytes": 1218246,
+        "sha256": "b9080ef879eb5c24d7ac46909afe8a37866a89292caf77e5cf2d31c3b76a8229",
+        "git_blob_sha1": "b5595f042aa24313e262db8d996d27c9d0aa2532",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "corrected/999/stratified.obj",
+        "bytes": 1218246,
+        "sha256": "b9080ef879eb5c24d7ac46909afe8a37866a89292caf77e5cf2d31c3b76a8229",
+        "git_blob_sha1": "b5595f042aa24313e262db8d996d27c9d0aa2532",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/305-antes-join305.png",
+        "bytes": 662500,
+        "sha256": "9314254c9050aae6816347afab4c13b0a232727d309d7d8ec3b2a603ede93963",
+        "git_blob_sha1": "60b3da20a68b2e921cad25741581a1bd942f69c3",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/305-antes-main.png",
+        "bytes": 413031,
+        "sha256": "796a35cd68635250825eba0f6a857d20ff891167f3d6982552ed2785fa2ce325",
+        "git_blob_sha1": "f4e3f4870cf8511b02a3914fe8ac7f7c579d567b",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/305-antes-rechazado.obj",
+        "bytes": 1051360,
+        "sha256": "57e87e70af348959dfe6d9d949d51a251c9a807ec711b80cb098f8fba9fb3ed9",
+        "git_blob_sha1": "ad3c40112f4bad4433e748e6e1a7f48b40212ad1",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/305-corregido-join305.png",
+        "bytes": 660512,
+        "sha256": "5170b0f2da11b56e50d0f810ae4a2e0cca5fde774f57c10a9fa5db5f27a60576",
+        "git_blob_sha1": "91b9183a5cbcd290aa8832d2b104ef5f2603f69e",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/305-corregido-main.png",
+        "bytes": 413031,
+        "sha256": "1aa5387c213d82c8f5b456e6fcbf9eaa12113a8debaf916dbba07ff8e21aeb3c",
+        "git_blob_sha1": "1c93ffb934f1200c3202da0bf818fb09e48bf5ab",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/999-antes-join999.png",
+        "bytes": 840171,
+        "sha256": "843c7db5840157003bff9dc4e0e3cef18c47bfe63eb477797cb85bb9dcb3acdc",
+        "git_blob_sha1": "90c20f2a33e3f3437f85b4a604aea18e499e1d52",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/999-antes-main.png",
+        "bytes": 440624,
+        "sha256": "47ebd95915cfbd421faddb3a6bb91e65e241470dc7dcfd3ccee0171992f29eb1",
+        "git_blob_sha1": "a4d2b3e60df0cbf0fc815fb4f9969d7946c8dde6",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/999-antes-rechazado.obj",
+        "bytes": 1218261,
+        "sha256": "88eb569b9e471fa83bceeddb0b3dc2f5ba45fdff5d21da0742b55894d106aa9a",
+        "git_blob_sha1": "aa74de9888ed94a326dca08de83316c595d41bdf",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/999-corregido-join999.png",
+        "bytes": 833092,
+        "sha256": "d315edc0173cf84a6da0db09700412cb832394b4083ebd1598e1d39bf4525cec",
+        "git_blob_sha1": "a0a3c4e54dae770c5f94ec7fd83adce13aa41778",
+        "preserved_in": "original_library_archive"
+      },
+      {
+        "archive_path": "evidence/comparison/999-corregido-main.png",
+        "bytes": 440582,
+        "sha256": "0c88690b9ebd2d3a3348789f058d6bbfa0c6693c18221b03f3db7d11a7479d94",
+        "git_blob_sha1": "9fe0353e9c62bc0e4c4f23ecd1bc2e75574cdc19",
+        "preserved_in": "original_library_archive"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SHA256SUMS.txt",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SHA256SUMS.txt",
+      "bytes": 16673,
+      "sha256": "f17ac477eb62ed3c1ba7f45be3e88c7dbc3277b72f2d1b7931dffb6022b5d874",
+      "git_blob_sha1": "7b729962fad7dc446ddac89d1899b86d0fe52232"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SOURCE_MANIFEST.json",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/SOURCE_MANIFEST.json",
+      "bytes": 26481,
+      "sha256": "25f78f565373bd5d22de384965efa42bc6c9939d6729a5249373328c01b96d85",
+      "git_blob_sha1": "6db78261126d799ae8893ba18cc6b2dca2e6edb9"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/THIRD_PARTY_NOTICES.txt",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/THIRD_PARTY_NOTICES.txt",
+      "bytes": 1026,
+      "sha256": "4e45b333b48a75b7e9c1cc6989b56aa10db3fd473164c52853ae1bfb0ab9c669",
+      "git_blob_sha1": "9a47eb9f3581e926d256ab1bc827bfd834386a30"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/AUTHORS",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/AUTHORS",
+      "bytes": 378,
+      "sha256": "074a43d4b1626a34a0a14a036d00100524dd463604b2570c4d76c7baa63608f3",
+      "git_blob_sha1": "a3e3c587f416e7846634bd9d89e3941c00601f94"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/LICENSE",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "git_blob_sha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.cpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.cpp",
+      "bytes": 22522,
+      "sha256": "592d7268b4ada38ed0529d8c36e265a5133a1d22bc73407d574cb69fc6d6b640",
+      "git_blob_sha1": "18263659eca9659df930dd564694b93bc726da82"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageField.hpp",
+      "bytes": 5698,
+      "sha256": "79c11f207d6d89445420edb307b9a864ec490b73630e5ddb18583abc0ef333a2",
+      "git_blob_sha1": "401d4afe18d85453670af1dd4028be3e2cfe2c87"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/Model.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/Model.hpp",
+      "bytes": 6295,
+      "sha256": "6c86c6c917ed563f26439af5488441a2265753bd9b0b2e32d8fd50ddddd30c6e",
+      "git_blob_sha1": "2b0b4f2fa93ca80d3510b2350d75d668f2c5820e"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.cpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.cpp",
+      "bytes": 9684,
+      "sha256": "69a66e58f0c71e6f76d4ce650d23d09a7b9ddea85006009622673a427d5dffc2",
+      "git_blob_sha1": "24bea7a9ab2e83d3aafc162e3d2ab50ef9740b78"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/RockAddonMath.hpp",
+      "bytes": 2097,
+      "sha256": "5a8fd9b3547c82783cc27ee3129258d9ca03742cd7608e3c31fa9d3fc7e0f934",
+      "git_blob_sha1": "c3c3eac6c0d40f63de0096c40903866af72d4724"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/EngineError.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/EngineError.hpp",
+      "bytes": 354,
+      "sha256": "7dd19f6e871acae409ead95c64005fe1088ff2e9cc6247231c96c4acbcc94644",
+      "git_blob_sha1": "b953ec7445c85edd0c5bf11bb412eae5f3bd3cf2"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Guid.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Guid.hpp",
+      "bytes": 711,
+      "sha256": "a13835e8bbd634a839fab3e0e16743c857e44fc54c07df71e0338d48f6ef59d9",
+      "git_blob_sha1": "e4dd12386cb79bb2ebac51d04ecdb20234825b29"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Result.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Result.hpp",
+      "bytes": 2639,
+      "sha256": "91439ce800360479ac87b45e4eaa32f2cf9608534bf340006317ed1abdd747ef",
+      "git_blob_sha1": "dab24257731010ba123d03e33520921244d53cca"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Jobs/Include/Jerico/Jobs/Cancellation.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Jobs/Include/Jerico/Jobs/Cancellation.hpp",
+      "bytes": 1412,
+      "sha256": "9125e6dd955b6c382294ea1a8eaf8255a8b17519e25653324497f8fcda5362b0",
+      "git_blob_sha1": "62c015203e382e82a2526968075f6a0c28ab2dab"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyDirectionalWarp.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyDirectionalWarp.hpp",
+      "bytes": 771,
+      "sha256": "2ff805156ed7d4f7c73208826ba85289a2feeafa663359c93642d1c491baacef",
+      "git_blob_sha1": "cc6ebe55b4cec2bc0d3772e08a591097a6df88ed"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyLayer.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyLayer.hpp",
+      "bytes": 18444,
+      "sha256": "4b350c4f09fee25aca8361441af42851edbe1a054b709adf29e4b6c9f4a2f5b3",
+      "git_blob_sha1": "479e88b50fbffd123b55ccc7b708943e17583cc2"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyMask.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyMask.hpp",
+      "bytes": 5073,
+      "sha256": "062b2fbc11067e65488c5cdf0a5c57ffe68f0a2059a9ee5e28049a0922270d1c",
+      "git_blob_sha1": "a307ae7b6539064e8c63f5ec315de027a4bdec38"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp",
+      "bytes": 872,
+      "sha256": "f0dc27c653d17ceba847ad1ee85f99b0e74d3fa90ba43e90207a2a4b481a524d",
+      "git_blob_sha1": "5db8ab760708062f8cc7e5f443908572512b67be"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyTypes.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyTypes.hpp",
+      "bytes": 2246,
+      "sha256": "f35e9437f1130837a92f3ef68af9f4d1462c0251fbb1c6ab0f6d73523bf31824",
+      "git_blob_sha1": "4259cbbe0753e83e14f43f88d77e33f4744f25f5"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geometry.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geometry.hpp",
+      "bytes": 416,
+      "sha256": "41318192962ad16cc1a266869179df9aa6705850a4c0d313a3b6f4459195b7d3",
+      "git_blob_sha1": "1dbd66848525cdaa1df5a704cfa8b81934a23ab8"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp",
+      "bytes": 6249,
+      "sha256": "9e3d09cf4cbc607edb49e91a4551f0b12057b6ed0fc47c0f9f936a4476a935b2",
+      "git_blob_sha1": "722b66b646b73fa1c95d74c5dd3d93e8b3f1c233"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyValueNoiseReference.hpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyValueNoiseReference.hpp",
+      "bytes": 3936,
+      "sha256": "0b2eb9682617d6c4806eac426c4ac0d6db1b5d44fc133f4a21e5d8f7dc19b458",
+      "git_blob_sha1": "1419588b0fd76d09db390415a62456442390ec89"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/DamageFieldTests.cpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/DamageFieldTests.cpp",
+      "bytes": 9526,
+      "sha256": "7ed7ae1a0b3a2f984bee1e900783f2ad8813c1dc8a60e887b3a8a6047863023b",
+      "git_blob_sha1": "37e84aed2626b168ee4bff2a0cf6a15af6a9020e"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/RockAddonMathTests.cpp",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/RockAddonMathTests.cpp",
+      "bytes": 5846,
+      "sha256": "06c4efff6f9d08ee1566557bee7af2c2f6d4b3ec0c963a836dd9123cb61a6117",
+      "git_blob_sha1": "4f817c96e0ee7cd9a6a62bf307b6e9a359d88373"
+    },
+    {
+      "path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/third_party/nlohmann/LICENSE.MIT",
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/third_party/nlohmann/LICENSE.MIT",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14",
+      "git_blob_sha1": "1c1f7a690d815db3a79ea3d4c9138a497e2e7702"
+    },
+    {
+      "path": "evidence/2026-10-08/corrected/305/metrics.json",
+      "archive_path": "corrected/305/metrics.json",
+      "bytes": 2300,
+      "sha256": "614e415176165da8fdd10025daeaab6a134ac70540190419cbc5fee7905a6e3a",
+      "git_blob_sha1": "0f182931ea789fcb681e48f3f146d0d8a03aeca2"
+    },
+    {
+      "path": "evidence/2026-10-08/corrected/305/recipe.json",
+      "archive_path": "corrected/305/recipe.json",
+      "bytes": 217,
+      "sha256": "7a3a38e00215ccfa98a0ae90be82830d2869fa0d10609a4a31abaed5ab9d0f60",
+      "git_blob_sha1": "1946865d060cac62cfd1eb6aa06687877f2fff5b"
+    },
+    {
+      "path": "evidence/2026-10-08/corrected/999/metrics.json",
+      "archive_path": "corrected/999/metrics.json",
+      "bytes": 2315,
+      "sha256": "71346cb5100511bdfae3abdedaaf2af20590cd2919faf665262c279057994f2f",
+      "git_blob_sha1": "d64a46b5eab6639deba1bb2be43365a59aeeb0fa"
+    },
+    {
+      "path": "evidence/2026-10-08/corrected/999/recipe.json",
+      "archive_path": "corrected/999/recipe.json",
+      "bytes": 217,
+      "sha256": "ed6afe1e96e626fe56d5476186af7181563ec9230f8e474f6219822e8d02d817",
+      "git_blob_sha1": "144fbdc029821399c60d4b5d6442720912d73744"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/LEEME-RESOLUTOR.txt",
+      "archive_path": "evidence/LEEME-RESOLUTOR.txt",
+      "bytes": 2810,
+      "sha256": "ed60b693611bf1995959408fdd53dd86c03eb187b0a5ce3fc47827b3e62c2b94",
+      "git_blob_sha1": "0aebe5171d7a528ce56156a9259a20f1146d1663"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/MANIFEST-RESOLUTOR.json",
+      "archive_path": "evidence/MANIFEST-RESOLUTOR.json",
+      "bytes": 22064,
+      "sha256": "750cb51ac82aa9d2167c084c4bded94da246ef35aeaa0df0cf8384cd7d502917",
+      "git_blob_sha1": "4eeb8dc76ecc72f1ae506ee4f4e9e61ec587b0fc"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/cells.json",
+      "archive_path": "evidence/cells.json",
+      "bytes": 17635,
+      "sha256": "c462cabbc1e670eb6244eb661e93b48e467f86f7ae4fcaa024fda9ff1d217c58",
+      "git_blob_sha1": "e73936fbfcfb0ed846ab20a2446c706140aa860b"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/305-antes-join305.provenance.json",
+      "archive_path": "evidence/comparison/305-antes-join305.provenance.json",
+      "bytes": 2224,
+      "sha256": "0e9d522d4d89a0e30df92340c87e8025fe46f8e7e96aeac65954b91c7f374877",
+      "git_blob_sha1": "e22ae6975a702bffcbd414a013726ef5e949666e"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/305-antes-main.provenance.json",
+      "archive_path": "evidence/comparison/305-antes-main.provenance.json",
+      "bytes": 2105,
+      "sha256": "38d391ec3f2a8a7fd653f1738c6b1602ec3c36634c848c4fe2d33a9d06604f2f",
+      "git_blob_sha1": "9cd8f1c7c2a165e6cd19dcebc1ab7361f0dc0262"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/305-corregido-join305.provenance.json",
+      "archive_path": "evidence/comparison/305-corregido-join305.provenance.json",
+      "bytes": 2196,
+      "sha256": "5c466158b02ebea97887c526929fe61fe44da6a8d19c9aade6f062655546ea77",
+      "git_blob_sha1": "dfc1a64d6932c5f46d5d618f21f756086070149c"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/305-corregido-main.provenance.json",
+      "archive_path": "evidence/comparison/305-corregido-main.provenance.json",
+      "bytes": 2077,
+      "sha256": "ed868bd94ef06564b7e624f5ca1790a05efd7f5fb35b1a7ecbd2dae4ea585978",
+      "git_blob_sha1": "a0c8050eb49a150695dafa579497d3672993c11d"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/999-antes-join999.provenance.json",
+      "archive_path": "evidence/comparison/999-antes-join999.provenance.json",
+      "bytes": 2217,
+      "sha256": "21528e8379ba7008715117a771f25b15995ff89b29d8256d49e335c9d59b7b99",
+      "git_blob_sha1": "b135b36b4780ddcfe0cea8fe3f402d7bb0e45a20"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/999-antes-main.provenance.json",
+      "archive_path": "evidence/comparison/999-antes-main.provenance.json",
+      "bytes": 2105,
+      "sha256": "bc873914ced78c621261d35eec805d91a28354e2785d91df1ff012234cedfd9f",
+      "git_blob_sha1": "7ce5016cd8aea4db2266b926217b214858b185fb"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/999-corregido-join999.provenance.json",
+      "archive_path": "evidence/comparison/999-corregido-join999.provenance.json",
+      "bytes": 2201,
+      "sha256": "543782c5c92319020bd92dc4b4fae835c788f556bc6a35af3559faeca0fa4580",
+      "git_blob_sha1": "53e5d0388d690ecdb66d627c490655a2ff22fc38"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/comparison/999-corregido-main.provenance.json",
+      "archive_path": "evidence/comparison/999-corregido-main.provenance.json",
+      "bytes": 2089,
+      "sha256": "8e2c4e960ac1451eb7000d3960e508984ab70da3f9d27139a2810c3509ce5008",
+      "git_blob_sha1": "9dab096d22b78a07dd1360c17e9b0526d4567d9a"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/deterministic-seed-sweep-0-31.json",
+      "archive_path": "evidence/deterministic-seed-sweep-0-31.json",
+      "bytes": 26237,
+      "sha256": "c0e0d13deb44a03120c7739eb2f04051f6c527ebd594be2f35db54a64a4db107",
+      "git_blob_sha1": "bc8ed844c60d9bf872d7dd70315dda2a761bd840"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/diagnose_ambiguity.cpp",
+      "archive_path": "evidence/diagnose_ambiguity.cpp",
+      "bytes": 3842,
+      "sha256": "360bd0a5ca05c8bda7fb8ee7aababf9ef828e5ee3d263389b4c08498b4fd5c0a",
+      "git_blob_sha1": "ea740a245ed17dff8543b6b530db17ce145ed357"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/export_diagnostic.cpp",
+      "archive_path": "evidence/export_diagnostic.cpp",
+      "bytes": 956,
+      "sha256": "f5c34e72d43494e2b1ece274f71ef32ba5290af86e623bffb7651bf6ec5d1c61",
+      "git_blob_sha1": "39417e32f2ee3ba855686dd0438d1bf650fe69de"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-face_resolution.log",
+      "archive_path": "evidence/final-face_resolution.log",
+      "bytes": 126,
+      "sha256": "6384dad0f3aadb034098fd5b3a9009d062e9662464e2509a126228fe2abe3099",
+      "git_blob_sha1": "dd54ae2daa251855e668af7cb2e7a5a2fbda6cf0"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-family.log",
+      "archive_path": "evidence/final-family.log",
+      "bytes": 1632,
+      "sha256": "7575b04beccf5ea33fe7f46f2731df1e48e2919d16603dbc3ba05491e4ed0b78",
+      "git_blob_sha1": "f92bfdf8e0d08b36b05d4e82183c08e0951aad2f"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-field.log",
+      "archive_path": "evidence/final-field.log",
+      "bytes": 23,
+      "sha256": "7d809c4b307d80bd8167b0f24ff7567fbb2d46663d971b0dd1a8e1b62a16856b",
+      "git_blob_sha1": "4803c0c42e5062417ddb264916e24f224d00f157"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-guard-replay.json",
+      "archive_path": "evidence/final-guard-replay.json",
+      "bytes": 17820,
+      "sha256": "7320f51e7c77571d2e1030b9b5fd58d0086098df7322a413e7fed7c681de893b",
+      "git_blob_sha1": "95a1a21559b5e1a064ca234e8f1afa693f1aa8ea"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-integration.log",
+      "archive_path": "evidence/final-integration.log",
+      "bytes": 100,
+      "sha256": "02a0c958c80e8e3f43d931e3d89fbb213ba1cdbd6973b9e9310525ea6693a565",
+      "git_blob_sha1": "d8468c2328f3b5773040312ed2757707c763cb12"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-mesh.log",
+      "archive_path": "evidence/final-mesh.log",
+      "bytes": 338,
+      "sha256": "72b2ca8b769b48df768c794fd6b05db5f7f1f8a6938086cdaf6e1bd22ed9d161",
+      "git_blob_sha1": "ccde9cc47543243c849da7e55cba1aef7da43499"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-poly.log",
+      "archive_path": "evidence/final-poly.log",
+      "bytes": 73,
+      "sha256": "5a32ad00f44dd5fd90b58c7ddd6403207e9f4c1886e92d08fe5b99c652ac73ab",
+      "git_blob_sha1": "ac6e7c7d9cfab5eef8ca858d6b976892c2fa1e6c"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-structural.log",
+      "archive_path": "evidence/final-structural.log",
+      "bytes": 477,
+      "sha256": "3166398e87dca19387a342bec697b981d4cd6d1cf5debcc55f03008ac3faff01",
+      "git_blob_sha1": "6fa90ab70a46792d6b16790c402ce47dc8787873"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-surface_detail.log",
+      "archive_path": "evidence/final-surface_detail.log",
+      "bytes": 136,
+      "sha256": "81c0d50fda1d606ac2a9fe8cd1c29d548b8d9ded805c78a94414c4f89c19ccfc",
+      "git_blob_sha1": "c83f3427b4a27462408b18480621a1d5317d85c9"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/final-union.log",
+      "archive_path": "evidence/final-union.log",
+      "bytes": 63,
+      "sha256": "98c83551ff730722910b6999776d2a3050f181c10e9f87e423478a5a55d5335e",
+      "git_blob_sha1": "eefc3f7e46ef99caedb2556a5c20a98bce5efe92"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/render_compare.py",
+      "archive_path": "evidence/render_compare.py",
+      "bytes": 3661,
+      "sha256": "5209d8b7fb79445d24db259e496ef46f9fd09bf7c0571b7936a52048b5e1790c",
+      "git_blob_sha1": "503e4bff402da918a003f3c6fc4b6423fb9b8dcd"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/resolved-intersections.log",
+      "archive_path": "evidence/resolved-intersections.log",
+      "bytes": 2103,
+      "sha256": "a458c16ad356259135f17f163d2cff0a7740ad5c4cf32644f1e3ed6c397119f9",
+      "git_blob_sha1": "0b901032e92f5384be8264c59f17abd4cc032a4e"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/resolver-change.patch",
+      "archive_path": "evidence/resolver-change.patch",
+      "bytes": 15213,
+      "sha256": "50713ae899d63e96d93766e03056a105c78b514e7343aa503b1ff9db28ddae35",
+      "git_blob_sha1": "a51b17494de5994429aa4c96949cf9fd687c6a3b"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/seed-sweep-final.json",
+      "archive_path": "evidence/seed-sweep-final.json",
+      "bytes": 27696,
+      "sha256": "97aa947ddbe8fe736f840aaf58c0d2c652cba9d6b704f29be2b5a9a873b711ed",
+      "git_blob_sha1": "c2f976b88d0fd18a225a695d2e255687f9c234a5"
+    },
+    {
+      "path": "evidence/2026-10-08/evidence/strata-preservation.json",
+      "archive_path": "evidence/strata-preservation.json",
+      "bytes": 50,
+      "sha256": "4d7a878f0d36e2b21bc61333dfe494713bf9e5c083d8a2f4fc5aa4c86720c955",
+      "git_blob_sha1": "9294d88670a0214f97e74f22a56a842bc3e347d9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/CMakeLists.txt",
+      "archive_path": "prototype-v3-erosion-resolved/CMakeLists.txt",
+      "bytes": 5224,
+      "sha256": "93704ce31f6756bd45575586705ae64167f530c2ed163c8d55c95d4740ec8e5a",
+      "git_blob_sha1": "d0a83d8d2668f60505aa0cbce289d4c0250e39e3"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/MANIFEST.sha256",
+      "archive_path": "prototype-v3-erosion-resolved/MANIFEST.sha256",
+      "bytes": 19688,
+      "sha256": "f362bf6d0dcd563b019cc44fb10fcc74793f7a7c14f2224c69f2d23e8e468859",
+      "git_blob_sha1": "01487740f67a12758958eabe4230242a80785d22"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/README.md",
+      "archive_path": "prototype-v3-erosion-resolved/README.md",
+      "bytes": 1476,
+      "sha256": "0a315816bfed1c79d8b71f3320ae0ce51a839aa995e5f9b28fae4ec976f413fa",
+      "git_blob_sha1": "63bb9bdd5ecbbb168fcca690a6c1030747302bf0"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/build_direct.sh",
+      "archive_path": "prototype-v3-erosion-resolved/build_direct.sh",
+      "bytes": 602,
+      "sha256": "c06308ade4094ed42dc1600b90ca0eb3402b0362c470791169c40fa36f33da89",
+      "git_blob_sha1": "0a552df9202b8bad942ba24f4b4c0f34cbaf4d11"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/build_erosion_probe.sh",
+      "archive_path": "prototype-v3-erosion-resolved/build_erosion_probe.sh",
+      "bytes": 1681,
+      "sha256": "581c61b5e3f8f1d169eeef49771b0efc24470eded380f8b6ba446ae6b42ca3ca",
+      "git_blob_sha1": "6a6c94c772ddf5384c6dd48105f77bdbc74f9834"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/cli/main.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/cli/main.cpp",
+      "bytes": 26423,
+      "sha256": "9ed782f25d448ba9c82d24c5985c9eff307dbfb207b445b8082861e176eba328",
+      "git_blob_sha1": "0ba0e859ce9b14b1176c67c7107b13e3a8d2e319"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/include/rocks/field.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/include/rocks/field.hpp",
+      "bytes": 868,
+      "sha256": "2e8ad48b9aba9fc28492c384a151577bd1877ec213f186a866d551ce8726746e",
+      "git_blob_sha1": "a14c30171e9fc31ef1b29af7f8950bbeff31d5f5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/include/rocks/mesh.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/include/rocks/mesh.hpp",
+      "bytes": 2935,
+      "sha256": "50450916122fc18864ce4853f2e0c54f0f8a7c11c193da16dc38e2c2a86dfa50",
+      "git_blob_sha1": "4d5ef4fe9d19c335e5ef4dd84e7a5c07a23695e6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/include/rocks/types.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/include/rocks/types.hpp",
+      "bytes": 1366,
+      "sha256": "abcca1249bca712f61b73d4e653a249a4d3f4ff47d60da329d0b0178b02f950d",
+      "git_blob_sha1": "ae71573c4b70c2882e9ec83e78264346f28a6e03"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/alveolar_surface.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/alveolar_surface.cpp",
+      "bytes": 8983,
+      "sha256": "1c80af4c2ab2124f506c4c1446e977deb8bb5e387434695856435cf6f2f53a80",
+      "git_blob_sha1": "f4751c1243a01b5579b196646c9cb9c651d297c0"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/alveolar_surface.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/alveolar_surface.hpp",
+      "bytes": 1330,
+      "sha256": "0fdbc5fd4c064536f27abe4c8e5293026c78198e299df5efd4a46480d90406a1",
+      "git_blob_sha1": "6e35cbb71ad9ae233bd7cc79a66fdd401686f9bb"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/compare.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/compare.cpp",
+      "bytes": 4041,
+      "sha256": "9e607c536a895e9c89bd56207fd05fe734e35afeccc66b7a5f2f0d67aa3d6078",
+      "git_blob_sha1": "54c85fd2163f9736971551008a0c71031309666a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/extract.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/extract.cpp",
+      "bytes": 10626,
+      "sha256": "c8ab08a60080ee6b47e559131c175be0718017a9c70e8b820f729702d7b70593",
+      "git_blob_sha1": "54c44b8aec4f7f6bbb1b500e0171cb3d27c0da18"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/face_resolution.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/face_resolution.hpp",
+      "bytes": 5983,
+      "sha256": "01d295358a84841721e0fea78cafaf71c8065ad536970e0923c8135591d05e73",
+      "git_blob_sha1": "26d60f34068a27bc578302cd906da1d0d36ccf14"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/field.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/field.cpp",
+      "bytes": 30870,
+      "sha256": "2ddf7b9a15d3c4fa83bb33f5554c888f62d67cb3bcba62c50141c8017c4abdc7",
+      "git_blob_sha1": "dd4215e1ff9030730b8ac0bc7bdb34f20a21d0f6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/heightfield.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/heightfield.cpp",
+      "bytes": 19132,
+      "sha256": "dc4837673171760af5c713305b8afdab137e4a143ff006e984b6183485ad464d",
+      "git_blob_sha1": "1500ad4bdf1f920acf48340a0d88b8ecfe0255e2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/polyhedral.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/polyhedral.cpp",
+      "bytes": 10681,
+      "sha256": "3e2e6929f0a18bc4ed785513c8559cac6ad5dc2c0406ce0d6d430ef58531c87c",
+      "git_blob_sha1": "bd94d0a473df9e546725bfa01c9f94d182e81375"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/reference_studies.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/reference_studies.cpp",
+      "bytes": 7618,
+      "sha256": "6eab13c13424e201fb1b7188994b49d1918aff345d0e44f0ff3d7eb14336c697",
+      "git_blob_sha1": "96b2e09e064ea0949bd2fe322a650183c6094406"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/reference_studies.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/reference_studies.hpp",
+      "bytes": 225,
+      "sha256": "401412a8d9ecff0337d82c76ebbc07e400f25c2f6d5167aedf5f1768aa093168",
+      "git_blob_sha1": "6cb73f8f2774767573e7a3ce1d3412096e01b622"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/surface_detail.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/surface_detail.cpp",
+      "bytes": 7320,
+      "sha256": "51da7466f4f74440194beb134e54ed0ff89a57e30af5fc4e8ba3256247636446",
+      "git_blob_sha1": "e0872eebbcbf84ca0349fde0e4af7d6b2d50eb4c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/surface_families.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/surface_families.cpp",
+      "bytes": 16969,
+      "sha256": "f5aa6beee70528a487317c7d168aaee879b157b05b72e54aa8b7d3a205cb2a24",
+      "git_blob_sha1": "5f87ea8a9b7c2fbe34235f67c42e3dd4a7b87b0b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/surface_families.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/surface_families.hpp",
+      "bytes": 342,
+      "sha256": "6607e4d289ad1fa7e008f9cc86d3381da0edb0ce51f892d40c94546cc08968f3",
+      "git_blob_sha1": "a79a26585f1de8180cc08d04511574c472aa1eec"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/core/src/validate.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/core/src/validate.cpp",
+      "bytes": 3236,
+      "sha256": "fbca1521ae4786b5a5bcb9470079be38efb8761827c87b58c3b8fe98ef2a67b6",
+      "git_blob_sha1": "7e25f285397688e0f5a2c3be2dd8b72d3aab55a6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/alveolar-117-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/alveolar-117-comparison.json",
+      "bytes": 511,
+      "sha256": "04a61c827ae125cba735c8ff0acdb6fe5c93bb17a45f531dfc2bd8476c32ae92",
+      "git_blob_sha1": "f4f8cc2caa25ce36468ccb9722365a9ebbc491cd"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/alveolar-305-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/alveolar-305-comparison.json",
+      "bytes": 511,
+      "sha256": "507cd4827d2ed0c9daae01a5111e9b4b6accb21124874f99fceca48498b15e8b",
+      "git_blob_sha1": "4b0503a3f89d56546753673c5ae57d69809b5edf"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/alveolar-48-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/alveolar-48-comparison.json",
+      "bytes": 510,
+      "sha256": "93b0a85ac48e8fec7d7561b05b543b15d1632a2f09788e4a1a769abb677ff460",
+      "git_blob_sha1": "c4e691da191339328523c16cc30e630c25cf9257"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/alveolar_blocks-48-v14.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/alveolar_blocks-48-v14.json",
+      "bytes": 510,
+      "sha256": "93b0a85ac48e8fec7d7561b05b543b15d1632a2f09788e4a1a769abb677ff460",
+      "git_blob_sha1": "c4e691da191339328523c16cc30e630c25cf9257"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/angular_scree-48-v15.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/angular_scree-48-v15.json",
+      "bytes": 481,
+      "sha256": "4949d5a87ba48816196b91ea6c483d314f943ca90f45bc4f11228d865b22c310",
+      "git_blob_sha1": "a12b64d56a96fe894660f235db523c9a70d52692"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/before-angular-v1.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/before-angular-v1.json",
+      "bytes": 182,
+      "sha256": "bf7bf00234d134154bd4adf41f88ef79546f34b7a9d8ff63ece5659dd5d82fc0",
+      "git_blob_sha1": "b4018276a7dfff49b60128c8dc17f82b01bcd516"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-117-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-117-detail-v5.json",
+      "bytes": 268,
+      "sha256": "f8c9750aafde1f329981c4505b00d06026e5e908ec6518d24e536fad2ffe5d5e",
+      "git_blob_sha1": "9ec9bfa85529ce538b20fda1c38bf24dc0083abe"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-117-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-117-v4.json",
+      "bytes": 268,
+      "sha256": "4ba8407ea32542bb578203a121b3017cd36cef5853a09e09be19811176437e40",
+      "git_blob_sha1": "15dde84ccd7681f7d25f77f957084336ecd77df2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-117-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-117-v5.json",
+      "bytes": 268,
+      "sha256": "93804f32c2d774410637d1da00b91d009deca3b6a9b83f4779f0cb6466255386",
+      "git_blob_sha1": "0f818e2136a42244e8b306fba7321f6e9235bbc0"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-305-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-305-detail-v5.json",
+      "bytes": 268,
+      "sha256": "a11194b7c00d7991d9c9204a8ce6f420f3c08a93460c55df205bfd3b28789a8b",
+      "git_blob_sha1": "54edb522e305a1a2a28b8e23306505be3f85c2af"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-305-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-305-v4.json",
+      "bytes": 268,
+      "sha256": "433b7871c5926aeab4fa85e3eef2755ac2ea1611bf56f30448b31dfe848bf334",
+      "git_blob_sha1": "64e6719504a200a56d7f7869d6c26df78b0c73f1"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-305-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-305-v5.json",
+      "bytes": 268,
+      "sha256": "87ddf2915d4a7167d1573350bd24ab73131565a8b8c0bcfc6ded49ce63837d1e",
+      "git_blob_sha1": "e752eaab2d3467bff81d80f6b3297121b3a73333"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-48-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-48-detail-v5.json",
+      "bytes": 267,
+      "sha256": "ef79d1b40fdad4dd353ae9eb6903c395f99fd07bf11a2e5de271919477bb7f50",
+      "git_blob_sha1": "9a39c46e7a1d563ef493009b6c5c1c1280aa6421"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-48-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-48-v4.json",
+      "bytes": 267,
+      "sha256": "361bfdef4113eebd56090615f0a08dd25e66d756628def3b976cfe126fda84e7",
+      "git_blob_sha1": "650d2cfeecbafabf5cfd765bd7c90f36981b83d9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff-48-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff-48-v5.json",
+      "bytes": 267,
+      "sha256": "0dec4c034b781cd9d0eefa560a0b9129993bbf74323a0ee9eb959da60c71784e",
+      "git_blob_sha1": "04aa33c3971d59a11a4d5b10386b023dd8bd187d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/cliff_plateau-48-v8.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/cliff_plateau-48-v8.json",
+      "bytes": 275,
+      "sha256": "dfeb557fae7754c3afdfce5d65180e6260eae453e05a128d934b34fd010db26d",
+      "git_blob_sha1": "edc9e8058fe4aa96570a338945158249a499ba44"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-117-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-117-v12.json",
+      "bytes": 365,
+      "sha256": "c2fd5d86caf1d2ee25b0a2c3f197d98158b39e542d4084ef2f07eb87a14e62fc",
+      "git_blob_sha1": "e133935aa2a8c996fabd7d096fb6cf69845e4b9e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-305-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-305-v12.json",
+      "bytes": 365,
+      "sha256": "7fe3fe32f373816bc0b6cfc899365329e137749c8aae411bec052fcf638a6290",
+      "git_blob_sha1": "8d78e46e675b693aec1db0039e5f95fb21e457b2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-48-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/columnar_basalt-48-v12.json",
+      "bytes": 364,
+      "sha256": "6a705f8389e4f7acca13f9c9e359c59799ea9a4e4a8fd4c8b6a0e8215acc8f52",
+      "git_blob_sha1": "e3731f2fbb75db9f8be7022838ad69b7e0f2aee5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-117-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-117-detail-v5.json",
+      "bytes": 274,
+      "sha256": "ab2bbea5887136feb423609958c284d64908dfdf7f95af00a4e7178ca2c0d736",
+      "git_blob_sha1": "c027dc28b1489658c3cd05dfa9f9658c7a8773c7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-117-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-117-v4.json",
+      "bytes": 274,
+      "sha256": "cba0eee5c8ee822c47a18a3eb9b658b70aba5fa76af50a99cba76cc8388d9c49",
+      "git_blob_sha1": "7d3099c794b83c7ed5cb79adb8562712ac69b46a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-117-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-117-v5.json",
+      "bytes": 274,
+      "sha256": "8b9b91c246cbc77b73be7de130364979f0284aa6b30ea4b7960523f5bcfe6708",
+      "git_blob_sha1": "e117b491e8272bf97a1b552ee5d360f3cdfb386c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-305-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-305-detail-v5.json",
+      "bytes": 274,
+      "sha256": "8f460e5946940a8200a0734fa16dded62d74f91200f54316fd8a1fbf754f8f13",
+      "git_blob_sha1": "14f8431185202165a66115608920135a4d03faee"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-305-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-305-v4.json",
+      "bytes": 274,
+      "sha256": "4be1c84b79acd64acd60e69630a2476f55dd38e0a55974ae353b7ffe27d0c910",
+      "git_blob_sha1": "f9339a61d41f9e8f85cd49276f7dc9830aecf4c5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-305-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-305-v5.json",
+      "bytes": 274,
+      "sha256": "4c4c697c0a61d9cf3cdf9b68dde11585a91d7b7276a362d8ba1c35f0e489afc1",
+      "git_blob_sha1": "495b98226d95efebcae0783560983da7c6f2c2cf"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail-v5.json",
+      "bytes": 273,
+      "sha256": "c15fe4b7a14976252382d12fd7ed5013e851667ad83d27241f454007b6b42e38",
+      "git_blob_sha1": "ceda95d205b2a913368437ae51835649e1b7285c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail0-v6.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail0-v6.json",
+      "bytes": 273,
+      "sha256": "e9b847db133806af07d80ed1285de773a7c025fa79908651a7c6e0e834c0fb39",
+      "git_blob_sha1": "acf9b869a6dada1a1527af5dabfc5653036c4be2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail1-v6.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-48-detail1-v6.json",
+      "bytes": 273,
+      "sha256": "b326d1b509ed2f58f03c44362387d233b8b7723d10b5268681d5b16ca305291c",
+      "git_blob_sha1": "ec7090796580b27c5bf535cbeb7168ec27ac9635"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-48-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-48-v4.json",
+      "bytes": 273,
+      "sha256": "97ffd79def1a5e8f77e89e47d41c9a5efc87692668cdff383b2256aef6bd228e",
+      "git_blob_sha1": "00c289ea8e4f87bd21196c2ca7de9894885bf399"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/common_rock-48-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/common_rock-48-v5.json",
+      "bytes": 273,
+      "sha256": "6b4a7437365bc6d7ef9f826cbe6c26b998a274c4d7d295f5d9bde2367808806c",
+      "git_blob_sha1": "f93919854e313e82b66fc007bda246ca66fa19c9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-angular_scree-48-v15.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-angular_scree-48-v15.json",
+      "bytes": 481,
+      "sha256": "446161a0c194a6098586d713d92f51eb49e7381ec092658752035df938377e79",
+      "git_blob_sha1": "65a1d44dd438badb680389b9484ee7af7266bb20"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-lava_rope_lobes-48-v15.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-lava_rope_lobes-48-v15.json",
+      "bytes": 532,
+      "sha256": "85fc2abed0e6c3ff0f7b82d4d9b24702dee95ea4acf6cae0c6fae8e1c7c20fa9",
+      "git_blob_sha1": "6b2ff02ba6eb5b55c6c81bbf7695f298ff5a4349"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-117-v13.json",
+      "bytes": 548,
+      "sha256": "ea75a6c693dd5e71af9edf747c68ed78e6feb5632a66a33dc1ed39e5c5375ca9",
+      "git_blob_sha1": "0ff8272314378fb03a944b1f704122fcf8337cb8"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-305-v13.json",
+      "bytes": 548,
+      "sha256": "7ffbf0dc0db61906ee3d5ae78bc4aa041d274aea0bdd01200bc4251702eceb8d",
+      "git_blob_sha1": "e3e555375f151fcc404cfcbe1e475a6ddd88fc53"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-limestone_dissolution-48-v13.json",
+      "bytes": 547,
+      "sha256": "613437038d088ca11027d5fb5f24f33158b550c72b6d34cf1d4bd7be68f6ff38",
+      "git_blob_sha1": "f279d4c59a462713e2f2d682fc74b6d9e5e195f6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-117-v13.json",
+      "bytes": 521,
+      "sha256": "af2ae2f270a13b716111a24a4a8839f876c4b4ff705fd35f370c1431dad7afa3",
+      "git_blob_sha1": "ae8a143764ba4e867a23f0b1a4ce131afb253f1f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-305-v13.json",
+      "bytes": 521,
+      "sha256": "afc225b4a8d1e2b9ac2965cc56c3934c001ef82db56887a0fbdc62bfdceb9bd8",
+      "git_blob_sha1": "339004d5a1871dab226373ed477e8d5e63f7ffc5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-shale_laminated-48-v13.json",
+      "bytes": 520,
+      "sha256": "c8446573287b6e4bf7b9eef19060309d330c8cd2016356b638f4ebe8d2b7cdf1",
+      "git_blob_sha1": "42cbc905f1fdf1e2210207a665792c0e5df18ce4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-117-v13.json",
+      "bytes": 522,
+      "sha256": "697a3029c1067260e32e7ffede8712bf8c6800f583f4acec2f5e57be67415054",
+      "git_blob_sha1": "30fc1fdeff6da45f89e4518b41afb016c9741169"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-305-v13.json",
+      "bytes": 522,
+      "sha256": "cbb3a8e40cedd631dba600cb9e09e8a029cef0f42383362f5db6c7b00a71926a",
+      "git_blob_sha1": "370f9eeb5bc1eec9b5e15d74e61ddbff1fd87613"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/control-slate_foliated-48-v13.json",
+      "bytes": 521,
+      "sha256": "70c273d81ad9ac43fd10f6edb0bb1195cd4b55bf3a9e2b8e3ca6d62f42e5b65e",
+      "git_blob_sha1": "dcc059be2df77c0eff1757db78686585fc1dabac"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/fractured_wall-noise-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/fractured_wall-noise-v3.json",
+      "bytes": 241,
+      "sha256": "5feb1f552f2a243948d210ea3af524eb1dde7719b3f9ae186ffd8e68ff04ac79",
+      "git_blob_sha1": "c428796e7f0b013ff43e026f81168690de5bbcfe"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/fractured_wall-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/fractured_wall-v3.json",
+      "bytes": 241,
+      "sha256": "544f21790f0152f3440e2c68dc3625cf9d2b8b8b582f1a0d37f0ddaf40a59a7a",
+      "git_blob_sha1": "47c8f4f6a910eda4ff306cedd7b0e3c7c7569969"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/heightfield-cliff-48-v10.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/heightfield-cliff-48-v10.json",
+      "bytes": 434,
+      "sha256": "d42ba0dee96b97835b7eb0fc4cb5b403ad66f4e925ea4581d461d28a9355212f",
+      "git_blob_sha1": "b2b6d1647684436b7856df6931b07f0e870ff9a2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/heightfield-massive-oblique-48-v11.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/heightfield-massive-oblique-48-v11.json",
+      "bytes": 465,
+      "sha256": "08b5121b33af9383dd0af88abdadc221c97075ec52b02d9928d496cfe4834ab5",
+      "git_blob_sha1": "8aa3871ac126401cc425a5269ac43db987ea0d60"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/heightfield-vertical-channels-48-v11.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/heightfield-vertical-channels-48-v11.json",
+      "bytes": 467,
+      "sha256": "55e4b940fc51a5869db7c5e7481a0109db9f098ad477c61c408ba298c805ea7d",
+      "git_blob_sha1": "80343c402e99dfe87375348f60ae5811fc549811"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/irregular_beds-noise-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/irregular_beds-noise-v3.json",
+      "bytes": 241,
+      "sha256": "7b8cea41a4a2377260e796ae8bc282c6ac2a738fcdbe4a2001d6b73ad7d8f0ff",
+      "git_blob_sha1": "243060c1f2080c27573ad02a66d62be1af6ac651"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/irregular_beds-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/irregular_beds-v3.json",
+      "bytes": 241,
+      "sha256": "d5302d6a53f65a59422b96fc3c2fea3ab5def794cd911bbdeca797dcdb7e71af",
+      "git_blob_sha1": "25b1c4cdca63ab268fc7abe10ab589c1363ea142"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/jointed_granite-117-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/jointed_granite-117-v12.json",
+      "bytes": 343,
+      "sha256": "5d51d1bbb1084b0d9a0c3ea34f5f24703f1604a77cf7c64e2f5f122593a1bf32",
+      "git_blob_sha1": "7d0aaae4277462b6ab9af623a075189812a6b6e4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/jointed_granite-305-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/jointed_granite-305-v12.json",
+      "bytes": 343,
+      "sha256": "d48a1a15b28ebbbcf4e92767254c57de4f2e18521381d58c411da3aa62c7bc0b",
+      "git_blob_sha1": "5388e2adcf7ae7d49a4819c86b31864124be350e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/jointed_granite-48-v12.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/jointed_granite-48-v12.json",
+      "bytes": 342,
+      "sha256": "58b9c7e71a9c0d0f0a994e05945d5a3fe273b2f6df863f84c49e2269246522ec",
+      "git_blob_sha1": "ecd18ec94785bbc317f6306ddfd7dfd69e1976c1"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/kayenta-angular-v2.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/kayenta-angular-v2.json",
+      "bytes": 199,
+      "sha256": "b52d30c04f9435513126b508369fe8a76297e31a3469f839abe3ece275ed5033",
+      "git_blob_sha1": "ba5f3293879c82e20c7c189c9583645b0801ac8a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/kayenta-block-v1.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/kayenta-block-v1.json",
+      "bytes": 182,
+      "sha256": "bf7bf00234d134154bd4adf41f88ef79546f34b7a9d8ff63ece5659dd5d82fc0",
+      "git_blob_sha1": "b4018276a7dfff49b60128c8dc17f82b01bcd516"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/lava_rope_lobes-48-v15.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/lava_rope_lobes-48-v15.json",
+      "bytes": 532,
+      "sha256": "f5302c63749a233496b7453ef87baf25b140b4465002258cfd42438da76abd7d",
+      "git_blob_sha1": "900e7d514307667f027e22366f758c42040977c5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-117-v13.json",
+      "bytes": 474,
+      "sha256": "864afc953b804e4da03c540527130caab9fb9afc1895cc46101a818ef13ddf74",
+      "git_blob_sha1": "c774fc0f2b5fd895dc350cafa5a06722a59aed35"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-305-v13.json",
+      "bytes": 474,
+      "sha256": "0e99bfbb0af490cbbc04923d6a208ac592d89ca450f7855a54a1b0173667322b",
+      "git_blob_sha1": "4bb294aed0d4cd3e2614589567ea27bf7099c6f1"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-limestone_dissolution-48-v13.json",
+      "bytes": 473,
+      "sha256": "fde7ffc222009221e280b5ebe1c39291a3ce9e1cca7c665c2c9574c4f9cb3bf4",
+      "git_blob_sha1": "ad3db7553e9e7e84786b75967091b52f52a15815"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-117-v13.json",
+      "bytes": 459,
+      "sha256": "bd654d2e7d31b05af7ba5404d8368ea3213700ce139614aeb7337df4d98a7948",
+      "git_blob_sha1": "83a84b8e5e1b3158ed57c6a83b8b3552d0cd2985"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-305-v13.json",
+      "bytes": 459,
+      "sha256": "68bdc6a67d7474618757cf6ecb6003620abce384d59f0a1e1c455d0508d371b9",
+      "git_blob_sha1": "997555313c2ccd525a2e69b620893eef944f7e67"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-shale_laminated-48-v13.json",
+      "bytes": 458,
+      "sha256": "901f8bd0d40bd68d6dc1e1007986d03280350acabd3e75dc31e781568deb8206",
+      "git_blob_sha1": "cb0241fc35c03489357e5509c4b5ec80cb251d20"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-117-v13.json",
+      "bytes": 475,
+      "sha256": "937a115c2c15d13f44cb8fa99c1002c20126d290ede46c05bd92b2f949e2982f",
+      "git_blob_sha1": "c82bf6576a875825c3661944637edf1f2184b3da"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-305-v13.json",
+      "bytes": 475,
+      "sha256": "0d1f03b6276916aafe1f00047249e53f90c616dbcc3b33f47c632e559081de18",
+      "git_blob_sha1": "6dc319b18f68c99d4472debbf2c2ad47cc8f6f05"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/legacy-slate_foliated-48-v13.json",
+      "bytes": 474,
+      "sha256": "0f770f367af212e08b583ef9476f45a31b20e28fc1aff618ba60e0875095b9bd",
+      "git_blob_sha1": "31ec2f1df8c410f24aad5dfc6e26adde32c0420c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone-117-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone-117-comparison.json",
+      "bytes": 551,
+      "sha256": "c5334a8aee956f367412e49cf0105bbd8bd3b4aeefedc61a7e35bfeb69edabf7",
+      "git_blob_sha1": "b589031297d13d525bbd05b5e458c2a5e5bfde0c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone-305-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone-305-comparison.json",
+      "bytes": 551,
+      "sha256": "035ec41fb33ac99ec18bd3bbf892862a130ba9d9fa65d5d3a157ef8005ad6fa7",
+      "git_blob_sha1": "76c73bce3ad8ad62566e954036975df5256e4301"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone-48-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone-48-comparison.json",
+      "bytes": 550,
+      "sha256": "e4993c3c78babe919da1332b77e12ffe97fcb389c511975c6ed9bfb414c645bf",
+      "git_blob_sha1": "b01416ac3276e8842cee74707bd4137ed7f6b0f4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-117-v13.json",
+      "bytes": 551,
+      "sha256": "c5334a8aee956f367412e49cf0105bbd8bd3b4aeefedc61a7e35bfeb69edabf7",
+      "git_blob_sha1": "b589031297d13d525bbd05b5e458c2a5e5bfde0c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-305-v13.json",
+      "bytes": 551,
+      "sha256": "035ec41fb33ac99ec18bd3bbf892862a130ba9d9fa65d5d3a157ef8005ad6fa7",
+      "git_blob_sha1": "76c73bce3ad8ad62566e954036975df5256e4301"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/limestone_dissolution-48-v13.json",
+      "bytes": 550,
+      "sha256": "e4993c3c78babe919da1332b77e12ffe97fcb389c511975c6ed9bfb414c645bf",
+      "git_blob_sha1": "b01416ac3276e8842cee74707bd4137ed7f6b0f4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/overhang-noise-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/overhang-noise-v3.json",
+      "bytes": 235,
+      "sha256": "dc9be6b54db40e313c595abdf009a7c288b7f1739cfce0ab39d384c648bbad83",
+      "git_blob_sha1": "1f22a10f882a8638895793053d02b08018682e1e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/overhang-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/overhang-v3.json",
+      "bytes": 235,
+      "sha256": "8dd76c2e15d036749711da0885457264fd426228ee674c9142ca06b8c78efbec",
+      "git_blob_sha1": "42af97f4a0e20d91e5e40a161dea43c040be4bd5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-117-12beds-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-117-12beds-v9.json",
+      "bytes": 260,
+      "sha256": "65cd1958f0cca13973b7c9afbcd0eea8acb84122a021ead69dfff40235752750",
+      "git_blob_sha1": "8eeee1beca34bb7b76214ba66ad3292d63002e46"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-117-fragmented-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-117-fragmented-v9.json",
+      "bytes": 288,
+      "sha256": "56e01d631dde1ac48c5962c4f2336623d9a5e86ba3bdcb512dcb7fef4c9651ea",
+      "git_blob_sha1": "9c646d7d94631ec4a6338681405baf5d96fcee4b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-305-12beds-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-305-12beds-v9.json",
+      "bytes": 260,
+      "sha256": "69ea982c929582be97d9c8f9c9ca33305b9737f6011913baff5b8c2d07eb0750",
+      "git_blob_sha1": "743386c8436035aa43f334ad88f405f4286df83f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-305-fragmented-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-305-fragmented-v9.json",
+      "bytes": 288,
+      "sha256": "53e339f7450f7fa740b9e214c39e2f6d1da188df2b215a1c9e4af59cb117f358",
+      "git_blob_sha1": "ef2519e57895ac9949f0d14c20b0581d59ab3482"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-12beds-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-12beds-v9.json",
+      "bytes": 259,
+      "sha256": "c3b7945ee463c614ef9e7feebad7bb861ed5c8870d5d4b78023e2e51d57a6a22",
+      "git_blob_sha1": "2789711ef3303c28473869e4966c51561424d3fe"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-fragmented-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-fragmented-v9.json",
+      "bytes": 287,
+      "sha256": "60b0d660df3d5f057d047560a17ae1a5443c701d0813af2b25c9f43470cb742c",
+      "git_blob_sha1": "7f4d5232da71ecec4663d2834ae8354756c98a6d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-v9.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/procedural-cliff-heightfield-48-v9.json",
+      "bytes": 303,
+      "sha256": "abee2af6e73186cbcfefab3ab9ef37920331d91214d3e9e49fbdb489c5996e9d",
+      "git_blob_sha1": "430fdbcec2a48ec371f9b939066257f6d83e91d9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/reference-cliff-side-128.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/reference-cliff-side-128.json",
+      "bytes": 416,
+      "sha256": "5b5a16bd7266f85ecba40c816de03216add1dd30cc9a6bf57b525e7acd7baa32",
+      "git_blob_sha1": "4cdf12000a20500ac6bb5ce5ad0f3ed222da2a5e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/reference-cliff-side-256.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/reference-cliff-side-256.json",
+      "bytes": 416,
+      "sha256": "52765c6339084fdc0853373fddf2aa53f46cbcacddcd3aa99400f86251259254",
+      "git_blob_sha1": "41fa46c0a6106d10084e25bdbab07b450d1562f4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/shale_laminated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/shale_laminated-117-v13.json",
+      "bytes": 524,
+      "sha256": "eba831cd6787ec7a86a5f8ed74803ac8a835d6bc4d6f6778ef694b0a7540d991",
+      "git_blob_sha1": "687b556bd63a5d7cfdd1425a56702a038e91482a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/shale_laminated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/shale_laminated-305-v13.json",
+      "bytes": 524,
+      "sha256": "1e7c81e6b895da7ef5b05505a4eae4a7c96197215b01209ee5a134d10a4aa8b9",
+      "git_blob_sha1": "803befb3bad5c0fe633864e560cb36836ace256e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/shale_laminated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/shale_laminated-48-v13.json",
+      "bytes": 523,
+      "sha256": "986e6d6be7eb6bdb18123f969d4bb1aa323629711afe7e66b504bb8da2a2953a",
+      "git_blob_sha1": "831dc019a73f45ed851677231dfded8dfd99cb3d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/slate_foliated-117-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/slate_foliated-117-v13.json",
+      "bytes": 525,
+      "sha256": "d3ca27f1cc03d5dc0eafbcd17647f3bb5b1e588688c7c75ccf44c6465680e6ea",
+      "git_blob_sha1": "efc13c642f8270d6e501bbf63b5110c1954ebdb7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/slate_foliated-305-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/slate_foliated-305-v13.json",
+      "bytes": 525,
+      "sha256": "dce31743ed6dc6f8cdc2d17bc224f55105d0a79c28409c3c97d8bf4339477f06",
+      "git_blob_sha1": "4f19daa362935354916dc7c42a1229f2226fe439"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/slate_foliated-48-v13.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/slate_foliated-48-v13.json",
+      "bytes": 524,
+      "sha256": "cf10582b4d2d37d77ed6e401b438b23dc16c687adc865df039911ededdfb19ba",
+      "git_blob_sha1": "a0a96ee9bc8fb347b5147732e2b64ad31eaaa7e7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-117-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-117-detail-v5.json",
+      "bytes": 269,
+      "sha256": "e2c005f1db126ffb3a7d9e0e672529d38c4d0a7cc636beb97772ce1644467a12",
+      "git_blob_sha1": "6ad72d833e9a33f51a88e640b66d2016dc9615ad"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-117-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-117-v4.json",
+      "bytes": 269,
+      "sha256": "b6cea3b81931116a1f3e2d2a05ad0ff83d894a845a839c0766d0429d5792c049",
+      "git_blob_sha1": "cf09da2ec6c7ab36db7022d4622f33c282b6662f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-117-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-117-v5.json",
+      "bytes": 269,
+      "sha256": "e581b58c2a23a1434717ebf8f9a7824122566c6d6483487cde16bfc8dca4fd6d",
+      "git_blob_sha1": "80d059327ea9bbab175646752570a5ff49f8fbd9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-305-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-305-detail-v5.json",
+      "bytes": 269,
+      "sha256": "08b7d0418ad4c83e4a6edc6685ff7c83718f1b67dac7ada548ee26d0b5c1f7da",
+      "git_blob_sha1": "49b6d80a836022934114d509a3377e8e52e14940"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-305-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-305-v4.json",
+      "bytes": 269,
+      "sha256": "48c83e3e0070b7308916cf38501604b1501a4287b6ba7e3773b78806e88b3ca9",
+      "git_blob_sha1": "45931b0dccd394ffb5da77d501f7e4c9b4fbc7e7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-305-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-305-v5.json",
+      "bytes": 269,
+      "sha256": "d4445867dfb0f99bc71ad9c9ab3241938c2225ae9b60dc36fd12e50feb8a5570",
+      "git_blob_sha1": "0fc3b03bae42a9950b9d48421c831ebcbcfbaa2b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-48-detail-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-48-detail-v5.json",
+      "bytes": 268,
+      "sha256": "a1836d309ab09c65218afeae6870150322c438900475c82e179b9d1e983b8c91",
+      "git_blob_sha1": "1077301ecade310583e68a028569174bb3cb2782"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-48-v4.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-48-v4.json",
+      "bytes": 268,
+      "sha256": "8e417f48cd04740a69dc5d52354cb51b7a6de788681fd2fc0a57b4acee15a029",
+      "git_blob_sha1": "c18a84b5c08e1d2893bcd7c69ad0ab1c9bd4428b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/strata-48-v5.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/strata-48-v5.json",
+      "bytes": 268,
+      "sha256": "465944cbd45da012655267743d650d12b26d12f25a457ba58694128700d6c43a",
+      "git_blob_sha1": "3bc48ab55354e1fcae1cb5b483ccd719d11fffab"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/structural-diagnostic-v3.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/structural-diagnostic-v3.json",
+      "bytes": 227,
+      "sha256": "e68244684cf7e7e67165bb6d26c6268e79291c8f0d738879baa68da6e7977953",
+      "git_blob_sha1": "0fbca194197934ab44b73413a7a21e79f525c330"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/support-117-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/support-117-comparison.json",
+      "bytes": 478,
+      "sha256": "88df7ba9ca21453e511a31604f692fc9fb37fbd4c8ffad29540cb22d1ebe3655",
+      "git_blob_sha1": "0d44229d97102da2b0594ad67be8c05d2b6e3d93"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/support-305-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/support-305-comparison.json",
+      "bytes": 478,
+      "sha256": "a5f6d10a38ae0946a0b6c965bcf7991486ecdba9c3b5b65f420f24f2d1bfff6c",
+      "git_blob_sha1": "76e31030e6f3dace13c391c004e67ccfb395f658"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/support-48-comparison.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/support-48-comparison.json",
+      "bytes": 477,
+      "sha256": "3b6546490ddeacf7e01f78f40bf1562acc35530a2b54d880c97c0da42ed01232",
+      "git_blob_sha1": "287c4523247605368cefee2f69dcaaa6d4a8317b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-117-64-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-117-64-v7.json",
+      "bytes": 279,
+      "sha256": "0e180cb45b153877a1f1b4bd86f5ef73793ed4e46e30b12f22cdd265f07a9d91",
+      "git_blob_sha1": "b8b4234f01bc9b0ae8d0d15619ac03a7d59dd2a6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-117-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-117-v7.json",
+      "bytes": 280,
+      "sha256": "4ce1d35159a1bb27a36fc09cc8e7c0202786eeb47e7ebf89e611cf76db317276",
+      "git_blob_sha1": "55b7880bc49b55e9e0f27363cd993599971f1936"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-305-64-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-305-64-v7.json",
+      "bytes": 279,
+      "sha256": "add6d93af65fa05d52b6666413be115d8e0b366e3ec30f9e0a569e8b57360921",
+      "git_blob_sha1": "e6e7a59338db14079292cc728e50de9562b1d905"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-305-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-305-v7.json",
+      "bytes": 280,
+      "sha256": "88f382ffb1b39d50ad7e566c6184e1cd34717ae9f2c5634891935fc55beb99ba",
+      "git_blob_sha1": "83c44ce2f50f5ea2ade8ec52deebd334e5a6dc73"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-48-64-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-48-64-v7.json",
+      "bytes": 278,
+      "sha256": "ef5ea27b3ff1bae643b4a708d14d7c1fe97f06f4f0cf49506091fa2d94d278a0",
+      "git_blob_sha1": "9045406f6e0006385e4238756c6c19c33ea0e435"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-48-v7.json",
+      "archive_path": "prototype-v3-erosion-resolved/recipes/weathered_boulder-48-v7.json",
+      "bytes": 279,
+      "sha256": "33c765a084cad63b92b288378a82f38c0ea82fbbd04af6d2f2e6e970bbe0aa15",
+      "git_blob_sha1": "f920f6a45b8e1017bc2eab62b8b5a90658c39bf3"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/alveolar_guide_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/alveolar_guide_tests.cpp",
+      "bytes": 1348,
+      "sha256": "da8214f6a7d7135a24986d966df2ddc53b2a6207ee423ce132455c4f6412cfe5",
+      "git_blob_sha1": "2f639c045bdd045cc0be5f9a1f40e6f5bb7a3d4a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/alveolar_invariant_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/alveolar_invariant_tests.cpp",
+      "bytes": 5099,
+      "sha256": "0fe723981d6cbfd8f708d12cd247b84245496319ca32154aa998d657206cd1fc",
+      "git_blob_sha1": "d7caf214dde08cca48e92c79e8c6630d2b5ae5f5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/alveolar_reconstruction_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/alveolar_reconstruction_tests.cpp",
+      "bytes": 2508,
+      "sha256": "04c06c811650b184a56fb242baa7b4a7357f1abbc141cac1130c25517e4fe411",
+      "git_blob_sha1": "6188a5fdfc1c5e07d33f888df39a88be2b41a999"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/alveolar_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/alveolar_tests.cpp",
+      "bytes": 986,
+      "sha256": "4eef7bedbff347f50686fb872975f3ce4e56786c8278a258ab14b9d34245c8c7",
+      "git_blob_sha1": "7ef601b89c2012462231f4e85b77932b22fd4a2f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/camera_bounds_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/camera_bounds_test.mjs",
+      "bytes": 245,
+      "sha256": "fec22d139f6e557c194832c3f73bb01d63799c3fcaeeab65632bc61d2a03a613",
+      "git_blob_sha1": "a5c361301ab3b9ef87f2e8a28f3da8015b6ecbfc"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/cliff_profile_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/cliff_profile_tests.cpp",
+      "bytes": 4411,
+      "sha256": "a2e08f6d3f79e7835c28fd6ddc61dc7cff7eb84fd1f82bc989cf8e47b3d1658a",
+      "git_blob_sha1": "8d7db6dc14d8a0498cca02ff9ffb2bf6bfd5ff15"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/contraction_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/contraction_tests.cpp",
+      "bytes": 2624,
+      "sha256": "1573da7cde46e001780c9dd6c356176bcf57fb0a7173764a6ef3d4562388d9db",
+      "git_blob_sha1": "613fef25c750c8508c33a1ddfbe862ed458d55a5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/erosion_diagnose.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/erosion_diagnose.cpp",
+      "bytes": 1372,
+      "sha256": "2a6e2d2d6859efe43eed7ec646be6abf2a10b9f5b841131e2572c7c0220da62d",
+      "git_blob_sha1": "ce7063faf5d43bd2d1220ca8c82f5c0fa8f70319"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/face_resolution_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/face_resolution_tests.cpp",
+      "bytes": 2664,
+      "sha256": "afa11e08f8db2940f78a58b13a1859403727ea38a0de3e40cf526884d2714e44",
+      "git_blob_sha1": "28f894ca478183cfe0b39b9f3ae02f3b9a4eb27f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/family_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/family_tests.cpp",
+      "bytes": 1892,
+      "sha256": "83feb7b420ebee1fb1d63bce403a6d658ab8c5e0b8a5dd922e084122f80e3fde",
+      "git_blob_sha1": "f9001173e3f152915f3a5d218e3c4605abd521ea"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/family_viewer_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/family_viewer_test.mjs",
+      "bytes": 1420,
+      "sha256": "b6397a3d8bd62bba05a63aab0599849cb7e463c03b131e2995e458fcc8b1cbd6",
+      "git_blob_sha1": "114ea7c4778a67bdbd81b02486bafefc76281a0a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/field_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/field_tests.cpp",
+      "bytes": 2232,
+      "sha256": "809f8c487effd00b3414d6aa0b8371a7c1cb03fc0440904586b9842197c77e4d",
+      "git_blob_sha1": "f024c1abf6872a121f7ca556f5a84caa19be6200"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/fixtures/audit_near_parallel_pairs.json",
+      "archive_path": "prototype-v3-erosion-resolved/tests/fixtures/audit_near_parallel_pairs.json",
+      "bytes": 3554,
+      "sha256": "4baac5f452ef891622a00fc496b1bea1d264588073dd296e77d4d20d80594ef6",
+      "git_blob_sha1": "ae586199b162644925bbf847058d98f8f7e139d3"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/heightfield_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/heightfield_tests.cpp",
+      "bytes": 6906,
+      "sha256": "506b5919838c08cfa9cb4bdc8615c97f42c31f4d693ba6c50501d6ff42df1dfc",
+      "git_blob_sha1": "1ac18dc32330e26e18178df1c391436c05d391d7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/heightfield_ui_lifecycle_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/heightfield_ui_lifecycle_test.mjs",
+      "bytes": 5535,
+      "sha256": "381dccb1c21f7b5c455edf4d2d94682e6e89c378f31f20b16a0ec9b5b46c04a6",
+      "git_blob_sha1": "9536c183eeabc362a2c9d12e000bc38271e0158d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/heightfield_viewer_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/heightfield_viewer_test.mjs",
+      "bytes": 1840,
+      "sha256": "11c2f6f6c86a095622f1350ff25618a23359ad34d9ee816c48d6bed844b9d641",
+      "git_blob_sha1": "02b5eaf4e36ebfd3b6b68fb72596fd5fbd4b6ad7"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/igneous_studies_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/igneous_studies_tests.cpp",
+      "bytes": 3970,
+      "sha256": "6e51bebd92b976ca9b888360e1f99f7cac5c0a99a56fdab534bf14b779fcd279",
+      "git_blob_sha1": "2143a18845b5f275a185d2ee4f91420543113f55"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/igneous_ui_lifecycle_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/igneous_ui_lifecycle_test.mjs",
+      "bytes": 3409,
+      "sha256": "18f4e92635e662e9212aec3d67c7d8371a4f52aac2664fe68b8fb0cd3eb89d8d",
+      "git_blob_sha1": "ac4f26a4bcb7d2efa8a02a7d9aff0e8ba27d15fc"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/igneous_viewer_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/igneous_viewer_test.mjs",
+      "bytes": 1848,
+      "sha256": "8f9f7f1522c222d95e9f108abcd43528d3f2f62b35f4eece29b0bffaadcd05b8",
+      "git_blob_sha1": "3af43ec99ee4515047ab4b45d46fb8280e4c2dbc"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/mesh_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/mesh_tests.cpp",
+      "bytes": 2052,
+      "sha256": "0d4ab86f0185b3cb94794ffca6c66bdc228549274b89946cadcd8c040dba20de",
+      "git_blob_sha1": "962859d21c12b9571e982bafeca997ee435b5dab"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/plateau_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/plateau_tests.cpp",
+      "bytes": 1517,
+      "sha256": "d44a59f58549b48e3753351d789adca357d4a491199c401cf260546d40dd640d",
+      "git_blob_sha1": "fd8f9422d6467122e489c1e6a7f7db714ce06f3e"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/poly_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/poly_tests.cpp",
+      "bytes": 2198,
+      "sha256": "1e073b37e10ae94c99e3def7d8ec6b4e2809dea334164a30f348fc77972cf113",
+      "git_blob_sha1": "91042d7b311f8937e8def82b5dacb1f9493c8e57"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/reference_studies_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/reference_studies_tests.cpp",
+      "bytes": 2747,
+      "sha256": "afb3d29005d5831fd19b90a94baea2f0a18ef255620a9fbbfdaebe8308c2299a",
+      "git_blob_sha1": "681f4cb7f9c3ce5d61a95de90e69629261571efe"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/slate_envelope_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/slate_envelope_tests.cpp",
+      "bytes": 2565,
+      "sha256": "188dc0302d993291e300c079546ca4c5e7eb5d79a3e62e5d5c053aadd8d01133",
+      "git_blob_sha1": "d65cee937b646ba92bbcb9facc1102584afd131d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/slate_incision_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/slate_incision_tests.cpp",
+      "bytes": 2647,
+      "sha256": "53161eadfdb18198094796a85a2eb86325f939e53c170ed6081c641e12c4cd35",
+      "git_blob_sha1": "2bf087a6ef2d0dac896228655101261a6b84ce8c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/structural_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/structural_tests.cpp",
+      "bytes": 1640,
+      "sha256": "0a2507f77cdad63c732111a1b3821e0e1fc91c3737499b9c5366d45901b188a6",
+      "git_blob_sha1": "00fea0dda1f7e3ca18cb93ed3b401ab7e5464723"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/surface_continuity_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/surface_continuity_tests.cpp",
+      "bytes": 2683,
+      "sha256": "303ae4b7ea26851ac249da3901439dad20d7f91d868f3bf195df829ff3629952",
+      "git_blob_sha1": "336653606504919ff0cc1453094a47638b19e56c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/surface_detail_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/surface_detail_tests.cpp",
+      "bytes": 1872,
+      "sha256": "b3c2c106e400a4ff8116746a513b9f06de663d71d8c9ea40ed0082b547435de5",
+      "git_blob_sha1": "e44ec18752812de1aaeaba85d7f1f020fff1e8d9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/surface_family_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/surface_family_tests.cpp",
+      "bytes": 2043,
+      "sha256": "55cf73e88f018ef5b4b6c0e165d9188646b3b1f1e74abcdd12ab57c6877b083d",
+      "git_blob_sha1": "c542ca5945a8f6f4c625a105bd686fd44381c273"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/surface_host_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/surface_host_tests.cpp",
+      "bytes": 1502,
+      "sha256": "c482710652176c753d8ac9de79dacd14296d52ff2f224ef4f9b4dc3b09f85590",
+      "git_blob_sha1": "837b25371cd160a6f9b1fdde8c9a0981614381db"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/surface_morphology_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/surface_morphology_tests.cpp",
+      "bytes": 1519,
+      "sha256": "7aa4a1fb5989f5b02c74460867cecba2a2a28c904eecf8a78e92d21a47c9274c",
+      "git_blob_sha1": "65b22605d6e98da322cbb48ee7c5d03efa77fa73"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_alveolar.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_alveolar.py",
+      "bytes": 2203,
+      "sha256": "0daef131e79c17920cebc79a3978df1684c5ce298c668acdccd6f65e11976d41",
+      "git_blob_sha1": "005c3ce6236475b220389ef2780c47a5f6d830de"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_alveolar_ao.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_alveolar_ao.py",
+      "bytes": 5004,
+      "sha256": "9b13678b8a761ed5eb62d3ca8f6db512cb6ddee114ecd53949153e76f1290172",
+      "git_blob_sha1": "66d80770292ec0ffe9435dfedc5427a44c27cbe8"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_alveolar_collection.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_alveolar_collection.py",
+      "bytes": 845,
+      "sha256": "dbd8839d7af7fea9f5447758f5e04c09133a6330bf2846e959f9b648a800d9fc",
+      "git_blob_sha1": "47bcaf439178052fb913cd5cef6be9afcc641892"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_alveolar_render.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_alveolar_render.py",
+      "bytes": 9179,
+      "sha256": "0012961aec646b896c3d3e2b1589401520b48cefe707f79c2f9a29332c2e96ce",
+      "git_blob_sha1": "af1e3604bf97c08b721b477a9253becb46e6d90d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_audit_cli.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_audit_cli.py",
+      "bytes": 5291,
+      "sha256": "843cbd05be03c3c6176b6387f3915ae70f8a96bf634bf0a959d18d4f842d403c",
+      "git_blob_sha1": "955dc72031994907dea70eb0a7033be0f4b28fc4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_cli.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_cli.py",
+      "bytes": 7358,
+      "sha256": "ebc8d91560f88ae193ad80efe0e4ba8f1c42870e6653b864db927a3c00b09629",
+      "git_blob_sha1": "66a52f05b81e8e8118063f86b04a21ee6ae4e4c2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_igneous_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_igneous_studies.py",
+      "bytes": 2558,
+      "sha256": "2d893bf5262bcd8af2a5c9e1b4529830aac1a26ebfdbb54936303a22c2f7c2bf",
+      "git_blob_sha1": "ff25e701c18a25a0145363b956579103bee6b6d4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_localized_resolver.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_localized_resolver.py",
+      "bytes": 1992,
+      "sha256": "76b5b392a73ddb2039980f4018054db3c2885a84c6511d0fd8d870c32c612f71",
+      "git_blob_sha1": "510a26621be9b193285bf6e3219d9f6978ebb641"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_reference_render.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_reference_render.py",
+      "bytes": 1164,
+      "sha256": "c0334c1d34e27b564fdf989d8dfa220fac234476c3363e37109b09f4d5ed2dbe",
+      "git_blob_sha1": "a72e2a4e739ee83ee5367527c82b4259394626d1"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_reference_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_reference_studies.py",
+      "bytes": 1928,
+      "sha256": "e7a9d7615d6caa9baed6678b606ce7030a4076253369d8981fd94200a48c008c",
+      "git_blob_sha1": "10984e5955b2d01a67722cc9f25ca4ee2f6a92c3"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_server.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_server.py",
+      "bytes": 6645,
+      "sha256": "9632bf66be62705aa87bb5685513ca97f25d94072f261adbc3b925e01428e434",
+      "git_blob_sha1": "a492783a457b7d305fd7bbb95d63dc413dc43a6c"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/test_surface_families.py",
+      "archive_path": "prototype-v3-erosion-resolved/tests/test_surface_families.py",
+      "bytes": 4471,
+      "sha256": "ad0a5ae7d06ad6a000823bdc1224cda136c7c9c1bf02b282d3071b05a0288580",
+      "git_blob_sha1": "c6d6dce6813e443bfe7839d9b989f3d78db00870"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/texture_order_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/texture_order_test.mjs",
+      "bytes": 862,
+      "sha256": "1e36b9cc5ef170a7faa7b8e7fd372d9b06d507aded38f0b64765bb3fb3a640cc",
+      "git_blob_sha1": "292830e0d3ff4310d822bc48297618ed062b3fe8"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/union_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/union_tests.cpp",
+      "bytes": 2243,
+      "sha256": "421751d2f0f166208b245cc57413a4fe3001024550f7e27fedf324e5fb6265a7",
+      "git_blob_sha1": "f4bc333b4c2c71f621348d55ca3d7956391fa485"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/v3_erosion_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/v3_erosion_tests.cpp",
+      "bytes": 1276,
+      "sha256": "7af6c45045c370739b096b998772c6bcc07c993d6dfb5c4bf74e49b13003a0c4",
+      "git_blob_sha1": "1d53861ec16e9bdc816ffc6261543d965fba8ed3"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/viewer_default_race_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/viewer_default_race_test.mjs",
+      "bytes": 2866,
+      "sha256": "be58790984e582f2cb993f0e20d8d4d05a256f8452f2a36d82079cdeea3a53af",
+      "git_blob_sha1": "7452f3292bffaff4cdc82889cd1eb07fc46ce192"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/viewer_state_test.mjs",
+      "archive_path": "prototype-v3-erosion-resolved/tests/viewer_state_test.mjs",
+      "bytes": 2875,
+      "sha256": "02a5186f8d6e4b7a3f6bd57ce7861669a7bcd30b453965292f9391d66ccae19e",
+      "git_blob_sha1": "3e9d7320c856771713ea3faeda89ab78d3bdb7f9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/viewer_tests.html",
+      "archive_path": "prototype-v3-erosion-resolved/tests/viewer_tests.html",
+      "bytes": 133,
+      "sha256": "2f9b263d3bbafb43c40036804872ba05364fa8cbf4223abba2b81959a4aeec70",
+      "git_blob_sha1": "2885a2ab24bd1fcae292fd8288b1d61947cf4cda"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/viewer_tests.js",
+      "archive_path": "prototype-v3-erosion-resolved/tests/viewer_tests.js",
+      "bytes": 874,
+      "sha256": "58b327ad2857ac0d4deeb9ac365b111ac5350ebdd2f32f08b3fc2a5289d5cbee",
+      "git_blob_sha1": "674b5ca6218cf9f2270ff0bf9c65c75b0ac06362"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tests/weathered_tests.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tests/weathered_tests.cpp",
+      "bytes": 1490,
+      "sha256": "186aacd881c60c9d4e80eac62d3241ac4092dade0826770cf2a260a5e7810fd7",
+      "git_blob_sha1": "c3d7445de41a22a200f7eb11a2bdfb100299dc3b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/third_party/nlohmann/LICENSE.MIT",
+      "archive_path": "prototype-v3-erosion-resolved/third_party/nlohmann/LICENSE.MIT",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14",
+      "git_blob_sha1": "1c1f7a690d815db3a79ea3d4c9138a497e2e7702"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/third_party/nlohmann/json.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/third_party/nlohmann/json.hpp",
+      "bytes": 919975,
+      "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6",
+      "git_blob_sha1": "8b72ea6539f40e4e3f7762d17e30c67f2a8308ed"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/third_party/paris/LICENSE",
+      "archive_path": "prototype-v3-erosion-resolved/third_party/paris/LICENSE",
+      "bytes": 1054,
+      "sha256": "3076088b83fcc3ffc85d82ba8bcc98507d4dbf5dc76182340ffc8ce88ce0fb17",
+      "git_blob_sha1": "ca3223fd325cba2c5533b0ebecf4d8f19131194b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/third_party/paris/mc_table.hpp",
+      "archive_path": "prototype-v3-erosion-resolved/third_party/paris/mc_table.hpp",
+      "bytes": 4781,
+      "sha256": "92257e74f5f00e147d6430717dea060473b2a07ba93e0161bd1a875d79cf716f",
+      "git_blob_sha1": "06416499aa08b8b7a3ff8b7f1f9939704845cacc"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/audit_intersections.cpp",
+      "archive_path": "prototype-v3-erosion-resolved/tools/audit_intersections.cpp",
+      "bytes": 7945,
+      "sha256": "3309187adb8f4e5943ee1a0549908ff2d585913022639286c85d61eba4b418d7",
+      "git_blob_sha1": "f78243b67326229ae6ae29b29823f2b09964d7d5"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_alveolar.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_alveolar.py",
+      "bytes": 5664,
+      "sha256": "2c1a244efe5ce6c8581382a3c0a1d04d709bfa4247cbdbd86f7e56af9d12ff88",
+      "git_blob_sha1": "37759eb189d124278c4dfaedf4f60751124690b2"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_cliff_profiles.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_cliff_profiles.py",
+      "bytes": 2526,
+      "sha256": "ec3ac15041618c4dca8913c4bee7a3d906ea2f880674c99bd9a0cd2a52bbb75f",
+      "git_blob_sha1": "66a3e03ede0c2f2cf56366bb5e06fd5116dfcf17"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_evidence.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_evidence.py",
+      "bytes": 3401,
+      "sha256": "ef24c24e45687a66ae4a37eda2a24ac784093f3dd96e404c77af963fae8f1854",
+      "git_blob_sha1": "e35efecf9c19c2237dc4e1acd12dda90c3714ca9"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_heightfield_controls.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_heightfield_controls.py",
+      "bytes": 2515,
+      "sha256": "31896489fcb8ab8a80572e67bd6eb41b4fc13de6eb35f844a0acbf5a9b1dd777",
+      "git_blob_sha1": "6f71bd594d9adfc817f42ff5415033cbbbdc1ef6"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_structural_evidence.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_structural_evidence.py",
+      "bytes": 2550,
+      "sha256": "75856b8e5d57ae728f8d177cf9bf4eef0361aa4323e6d5cc42ce3ec40925b651",
+      "git_blob_sha1": "e9972954c780da79cc0bca66aede41a7505f5340"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/collect_surface_families.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/collect_surface_families.py",
+      "bytes": 3084,
+      "sha256": "b76419f6826d220c80b94d4188a7ee52b2a15f94e6427e15ff4df48c1a6cd357",
+      "git_blob_sha1": "7d5a794a3c39f93df50aeeec8c9c25150f55805b"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/compare_height_profiles.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/compare_height_profiles.py",
+      "bytes": 1469,
+      "sha256": "bc49dba829a177f13e593a0a3e674bc1d6f0afe0de25db0fa03bab7b6e3028de",
+      "git_blob_sha1": "d0e66055c910eee93186fd6e4b6c1e648ac44cbb"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/compose_alveolar_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/compose_alveolar_studies.py",
+      "bytes": 7713,
+      "sha256": "f62a3cec62d6934259a4fba77e412ddeecc62f9eb49ecd39a6637941249e9d56",
+      "git_blob_sha1": "09edce2031c867253d60d83156ceb0cd77dc394a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/compose_candidate7_comparison.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/compose_candidate7_comparison.py",
+      "bytes": 4156,
+      "sha256": "11c14d6115a4fe11147d45b16810c6e2fdbe3614c8a892b84aecd32b1e30c772",
+      "git_blob_sha1": "7b2721327ac525a2f4ed36099562f587d2cfc19a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/compose_reference_study.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/compose_reference_study.py",
+      "bytes": 1321,
+      "sha256": "e9d495e62af1b36288fb10b7167852850e649de2e79965015a2ce230ddc4eb21",
+      "git_blob_sha1": "0a8274df654e5f46528be6f3ec802f350fe26fc0"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/compose_surface_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/compose_surface_studies.py",
+      "bytes": 16410,
+      "sha256": "318236b17bb7aaa326c15d59dacd23846cb9ef51548c6283769b84b2e5ff246b",
+      "git_blob_sha1": "ad3ed36827b67a4852fec3b674ee84f6dea8a340"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/package_surface_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/package_surface_studies.py",
+      "bytes": 1088,
+      "sha256": "fee958e3a3762ab4fe71ad29569b3220addc38ef6a3196e95432e3af4b1f0e42",
+      "git_blob_sha1": "277ea9e3ff453554da4e9263a97c3c32ef87f18f"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/render_alveolar_ao.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/render_alveolar_ao.py",
+      "bytes": 11647,
+      "sha256": "d4ff886fced7ee6142402551f908efc4590981e0901cb3cadfb3d1fe4edd6681",
+      "git_blob_sha1": "869008a35281d887264afc56c9011f4bdb1b1a39"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/render_alveolar_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/render_alveolar_studies.py",
+      "bytes": 13592,
+      "sha256": "b62283dd23b157fe46377def69c2d6b1a3fe6a699bf9f6f743b8d31101787296",
+      "git_blob_sha1": "7ff1a73dfd5961d1a3738e0a02de8c9ef0169954"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/render_reference_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/render_reference_studies.py",
+      "bytes": 2316,
+      "sha256": "dd07308b91fb92cf1fbb4cd1e85b50eb421f1a8e055b1580ee0b5b7f2af0ed9b",
+      "git_blob_sha1": "52e16498f2b9e863c49c2534708845933d1444c1"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/render_surface_studies.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/render_surface_studies.py",
+      "bytes": 15209,
+      "sha256": "a18dffb37cb5746ab8a8bc55e1988948008a4ef0a25391be86f9355b6ca650ff",
+      "git_blob_sha1": "1ad9f2220d9db0292201ebb2c1021d3cd5a2bb0d"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/tools/serve.py",
+      "archive_path": "prototype-v3-erosion-resolved/tools/serve.py",
+      "bytes": 11970,
+      "sha256": "dc01d6cb00f6f84c396ff459a6b46c6d01f0e1e3609ba26d6623be53a9578b06",
+      "git_blob_sha1": "fb8a64eb6a0bb13bfa3329f347c52d6d48233d85"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/viewer/app.js",
+      "archive_path": "prototype-v3-erosion-resolved/viewer/app.js",
+      "bytes": 17638,
+      "sha256": "7438a6b5b85ee2b8680f5560c86c89cc4e6cc02c4e1bee8a4991e4eda30f6b22",
+      "git_blob_sha1": "43c38d001d5e9298b6738ff03f8543ff53bfbe35"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/viewer/index.html",
+      "archive_path": "prototype-v3-erosion-resolved/viewer/index.html",
+      "bytes": 6683,
+      "sha256": "1528d2b6bfbad0bd7bc6f6ab1951056e6cc34e281d2fe0e044c872e67986684f",
+      "git_blob_sha1": "4695582cc0b2758e6cca8656a887d83c2e66b90a"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/viewer/renderer.js",
+      "archive_path": "prototype-v3-erosion-resolved/viewer/renderer.js",
+      "bytes": 5459,
+      "sha256": "e62d4879d2f87ba9fef0c1707dda6611dd6d5e93be1c7a7e6e78cd5c70b231a2",
+      "git_blob_sha1": "8762eeb3dfdfe8382258f6ac16640e8f8eeff6b4"
+    },
+    {
+      "path": "prototype-v3-erosion-resolved/viewer/style.css",
+      "archive_path": "prototype-v3-erosion-resolved/viewer/style.css",
+      "bytes": 3300,
+      "sha256": "c556d1821df89b3f59fc48c87fb6b6b9ac2946dbf7984c78cc294b38edc78081",
+      "git_blob_sha1": "37b7a4dacf53ab7523d0b5299b38fafe2f68bbf7"
+    }
+  ],
+  "excluded_source_files": [
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/CHECKPOINT.txt",
+      "bytes": 2218,
+      "sha256": "933316fe42d176afaf808838ca721a7e24913e2d86b0d38617aff680e53596ef",
+      "git_blob_sha1": "7908bbfac41e4638b60dc8d963ed506c65780944",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/CMakeLists.txt",
+      "bytes": 6536,
+      "sha256": "adf6f819e53fb08046c9c94ba790b56eedf4f48bee38fb613e23851243c0d79c",
+      "git_blob_sha1": "6f2a6fa90aca77edf1055eaef84f476a7ba087b3",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/README.md",
+      "bytes": 4028,
+      "sha256": "b8f43d6b89bd581f3a07ed337c3831b29190eb88651545352453ce4dfe002d10",
+      "git_blob_sha1": "8960afc52474ea540ddd34955d08404af2d26e68",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/VERIFICATION.txt",
+      "bytes": 2320,
+      "sha256": "cd341e8340d3d8813d03dbb0ca6bbee4c294f302482f8371cf4ce7b6e9db8fc5",
+      "git_blob_sha1": "e86951b26bd647cff9cc96acbc58df800a7e5117",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/CMakeLists.txt",
+      "bytes": 10951,
+      "sha256": "9ffaaf7b711e8ffd8db88124145dfc26f67d9d217b48ea102c726ce39da29182",
+      "git_blob_sha1": "31fb959709e18edc8e7af9b180ba5cbcfbc6d11d",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/README.md",
+      "bytes": 19948,
+      "sha256": "3865bbf147e2c6c38c1aa1d0707c4101991537e35f3ff49ed85326b59e9436a9",
+      "git_blob_sha1": "da56cd7634032cf393a4b6ef0b0e403d34c94613",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/bindings/CMakeLists.txt",
+      "bytes": 831,
+      "sha256": "3cf2b1663f02ec423fb2ec63721cb740adb62511b4a54682091e4147381714a9",
+      "git_blob_sha1": "bf7614498cd2114a09a526f57e37052a1e091111",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/configHelper.cmake",
+      "bytes": 1281,
+      "sha256": "5190060b3a681f6627b1a091686e440901007a47113ee3ed4d09aa1d3964b012",
+      "git_blob_sha1": "bed2c85c6e5dfb95db17e4c8fa44fd56a507c8d9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/info.cmake",
+      "bytes": 4024,
+      "sha256": "2f6fc31dd4b53295b7f90e5da06e60c47324b8a604f9f137270ef5261405ed29",
+      "git_blob_sha1": "ae2afaa689228d2abcef9323a6e3b9c648b7be95",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/manifold.pc.in",
+      "bytes": 444,
+      "sha256": "50da3dc009e541fe8cd4f40c7f9b00177cb4be62f5c78340eb080fe2ab3e2f43",
+      "git_blob_sha1": "6d0da0d85888edeb9f4041e3a166cf1b16d0dc11",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/manifoldConfig.cmake.in",
+      "bytes": 1513,
+      "sha256": "cdb44382ef3b3c59fa341e706fc7f7250dd245de11c0181c39b64f53afea06d9",
+      "git_blob_sha1": "0c5d8ab6593760ee18a90453964f3e8f8075a451",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/manifoldDeps.cmake",
+      "bytes": 9357,
+      "sha256": "8ba068a7d2dcc6d6a66a4fe88cb5287c538ab46714c340a0e2b30544c98c27c1",
+      "git_blob_sha1": "07aaf98d8370574ed7c86e22b146214563603011",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/patches/0001-clipper2-no-iostream.patch",
+      "bytes": 5097,
+      "sha256": "88763e9a0b2ad9ec036baeaf00317090621aa98c9754869e856ba16080ea8039",
+      "git_blob_sha1": "4f4c78199d3b1f7dd0a3d36bd5250e5fd35f4940",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/patches/apply-clipper2-patch.cmake",
+      "bytes": 1118,
+      "sha256": "9a2d3164c7778931c750ba19b28aa0567161fa26ebf6b3f647000cfebe14ecc9",
+      "git_blob_sha1": "31518fcdadbeb0138401b4e3c6ed2d59d08f9835",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/cmake/version.h.in",
+      "bytes": 1312,
+      "sha256": "61cfc1d044f19c3ba32c52931ee4ff1397ff66d13cb5d5fdd0cd762da2db1f2a",
+      "git_blob_sha1": "c9a0b0ea675ed4ca488c174d04aa4119b9529bff",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/common.h",
+      "bytes": 21729,
+      "sha256": "486d5b2afdfc184b200e3b25f5f659f282728f40fc5ca1db1358a74f6cd4cdea",
+      "git_blob_sha1": "1e890f1de27e43a4abd93ff39c9995cde8c046c5",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/cross_section.h",
+      "bytes": 6874,
+      "sha256": "c7f1cd9744d99ab4765641766645ae087f03580c8deebcee7699fd20f28ad832",
+      "git_blob_sha1": "8bd15bd428e9b7fd4528180ceee3be106afe70d1",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/linalg.h",
+      "bytes": 79516,
+      "sha256": "0a1ae64ec20c3e38f1f90d5d4a43942ea9a076fe91acaf0f9937404634858426",
+      "git_blob_sha1": "e2a5a5084269a3e817cda4a45f94efd71ae6d8fc",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/manifold.h",
+      "bytes": 14410,
+      "sha256": "aabb3f78ec9bc92c78bdb6952980aa94e0a0ab2aba71463b3b9c92080c9001cf",
+      "git_blob_sha1": "ff4e04b86ddff563d88ef4e85f6e141d4eed4479",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/math.h",
+      "bytes": 15491,
+      "sha256": "b2c9bcf8dc3db0e569a7f2c9fdc88aa6279c544a21274dedc1cd528f41a15b5c",
+      "git_blob_sha1": "7a0b10aa9a5547f6e9c8b9f20c856674e6937058",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/mesh.h",
+      "bytes": 12883,
+      "sha256": "b729d5033ef5492fb990b95596b46a785f9a56f0da9e167dbf7e748eccf5302b",
+      "git_blob_sha1": "984af936d370121878f40a325af52066fe0040cd",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/optional_assert.h",
+      "bytes": 2212,
+      "sha256": "0ee34e61e838a0d8f9c5600507067d486e68452be39b9f8b37e44458acf1e233",
+      "git_blob_sha1": "d08a6318fcce1a1937be64d0985d1f112e443dcd",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/polygon.h",
+      "bytes": 1912,
+      "sha256": "763fea1260aa2fee3761da5a6345311f06d0647c32e4f0756b567ccba0d9e73a",
+      "git_blob_sha1": "35968ad045c3ad22d9c4b13da24e7675ab80e1da",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/include/manifold/vec_view.h",
+      "bytes": 4012,
+      "sha256": "47dad88de84a0662b42473dc3ef1cce90ad316fa97c6075881e2196c5cc44c67",
+      "git_blob_sha1": "b5fcc8288ef72d3fcc579fb8dddf376ee211c7a8",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/CMakeLists.txt",
+      "bytes": 3489,
+      "sha256": "d47b881474b267632d1d11b60c4445c2d57cd7ff8f1d12d3e5f9b2be6a97d66c",
+      "git_blob_sha1": "8e402e9117aeafc9c7ad2d9cbe714657fa0e2050",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/boolean3.cpp",
+      "bytes": 22380,
+      "sha256": "2b9af613a4ac5ab4f4f2885241ec5b9fee2208a417a044e99849cd0cd568a97e",
+      "git_blob_sha1": "96a410fe4600321610c91a20c2c44f0ab06ddfd2",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/boolean3.h",
+      "bytes": 2617,
+      "sha256": "b0af003ecf1e71453ee11e4862f5b185a001b293f4426cbeeec3eda0cda4a895",
+      "git_blob_sha1": "e5014ffc1db6c86ccee136d1dc70e669bdad09ee",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/boolean_result.cpp",
+      "bytes": 36444,
+      "sha256": "b04121434ee5627f8180affb94077abbcd765f50a9581d44f9ab8492c17c9a2a",
+      "git_blob_sha1": "eb19641e183445c6618ed8314f9aa90a2e434063",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/collider.h",
+      "bytes": 12448,
+      "sha256": "838d7d1dcfadf0f26f084a49b2dec197344e2c756105d56bc407a94e945b3f7b",
+      "git_blob_sha1": "da3834ed6fd81c137a759555902fd3624d4f6398",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/constructors.cpp",
+      "bytes": 19981,
+      "sha256": "91ad2b4222f01df20b47968ddc3f7e9210c10021b35fad25e9aed7c837a677ca",
+      "git_blob_sha1": "d94f9cb685ab4d0760e08ea35bffe08b38b08eaa",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/cross_section/cross_section.cpp",
+      "bytes": 24975,
+      "sha256": "47a7b03fe85564ced8ae940e96249e3942dc6afbfcc7f083bd55efd7e631563b",
+      "git_blob_sha1": "68d875901c41c564f92d914504bfea1f95700083",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/cross_section/cross_section_boolean2.cpp",
+      "bytes": 5732,
+      "sha256": "243d0d876af7a4525e675bf1daae1bf0b93385cf5465cda9f252326119b7e742",
+      "git_blob_sha1": "1091555dc1975be6459d44de42094d337c1a87ac",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/csg_tree.cpp",
+      "bytes": 36199,
+      "sha256": "b26c69ab2eef1102138029f7cda9bb813c6057a7e192e30699d941bb681a34e9",
+      "git_blob_sha1": "78417dea1bc55a62b48b510da8781a7ca4810791",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/csg_tree.h",
+      "bytes": 3941,
+      "sha256": "ebcec03aed52e3a05c7ff2ece61e4e547bcfc194339c88521c77bee58bf9741c",
+      "git_blob_sha1": "0337e69485d09e334b780cdd96d3f0506e71cfff",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/disjoint_sets.h",
+      "bytes": 4397,
+      "sha256": "850b1af57ee36d68a9d93b02438fbe505cecddf8ca5cd1e67e1e957dc9393f84",
+      "git_blob_sha1": "f8f23776613689a2a5f5f5b92cbf406624fe4891",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/edge_op.cpp",
+      "bytes": 34859,
+      "sha256": "c18884a2acfc052752d3236a58ce3db3fd5b96e9f9d8fa55db15ee55de5c9025",
+      "git_blob_sha1": "0587b4672a1c72fdd98fc027e2bc84ba92e9d9ce",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/execution_impl.cpp",
+      "bytes": 5543,
+      "sha256": "cdb9d834a41265db178492ed10fe0129bc084d64b73e0c705e886d63d96a8ce2",
+      "git_blob_sha1": "062639fe38a0548166c66688deb0dd752072cbc9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/execution_impl.h",
+      "bytes": 6321,
+      "sha256": "22ca4de4abc7cbe51ff77a8aaa0e70581f3a8f46461ba770eb05f6b592eca71f",
+      "git_blob_sha1": "e3608743e7e11000091f6ec1218382bc90e9470e",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/face_op.cpp",
+      "bytes": 17373,
+      "sha256": "81ddb9717147f42c670fcccdbdcec8347373bb5dc10e733173ef71ef515d1f06",
+      "git_blob_sha1": "9ada39bdd5cfd616d7a99f142a589ee0ecafbb3d",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/hashtable.h",
+      "bytes": 5426,
+      "sha256": "b9124c341f035e621bd9f211338660c6f839264fc2d76a569f2b1de5061ba73c",
+      "git_blob_sha1": "05dc9da0e2c5466e6ed272919cfd36aba53915b4",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/impl.cpp",
+      "bytes": 33222,
+      "sha256": "3ca97e39cf98f69ef9b5af292d7091678999cec29fca4966340ac078002a6c3d",
+      "git_blob_sha1": "0267a339a9797349aee5da1b27a5165717e1b021",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/impl.h",
+      "bytes": 26487,
+      "sha256": "edf4959215a7843c861c67b353479c0f9065f124ae4f9363dc2758793ba18a36",
+      "git_blob_sha1": "00f9c6bbace804c21ba076f9c7bf2c60901f83e9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/iters.h",
+      "bytes": 8518,
+      "sha256": "96721613142b489c4913cc06faf162779ca90a6c5e385faa9429fb55eeb3ad4d",
+      "git_blob_sha1": "5b3ebbc9488e3a561776efb1ae1faa5366f1e733",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/manifold.cpp",
+      "bytes": 44786,
+      "sha256": "c3072a039d66e6771508a960597a98a78738684c4bb6eeb526ca600400a0823b",
+      "git_blob_sha1": "4d28483cf277fc6a303d9dfc88d99ef6f811dde8",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/mesh_fixes.h",
+      "bytes": 2116,
+      "sha256": "5f9303e1086f39a2b58545d0c0a455485e25e9fdbca1d3aa76909f8edf71494b",
+      "git_blob_sha1": "46df8972cc592027c40bc67eb1483d66ff2c2466",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/minkowski.cpp",
+      "bytes": 8133,
+      "sha256": "46fc7cb3d69f158dc9adfea9bf7e52029979e85188df2609f4c049050d871faf",
+      "git_blob_sha1": "570a1fc7462b000e4eac66f85f31a091a5b2c944",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/parallel.h",
+      "bytes": 47212,
+      "sha256": "85fc74de9b8b1f4b257eb4b5d505ce4fab2b0a1ebd3b7151d6c6e9aedf2aa603",
+      "git_blob_sha1": "3d0a0aabbbe5ca9d4fdb6a1e127891d70aba4d96",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/polygon.cpp",
+      "bytes": 35402,
+      "sha256": "611059c3ff61a2df864eb4b206967d4732b9dd915820e922e9be8e813d303ad7",
+      "git_blob_sha1": "5f65e7aac8d52e60c366a50ef31a08b88dd190c2",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/polygon_internal.h",
+      "bytes": 4165,
+      "sha256": "9617eb390cf43812c0eea111f92b2aa53ae5a814588c3c5e54967e3282e722a4",
+      "git_blob_sha1": "b29d7f85ca4eab6141c7c1f0e23d776c4d9bffc7",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/properties.cpp",
+      "bytes": 15687,
+      "sha256": "2e16cec8cdaba41208dadf7922bd7aaaee9ff20f2e7f07e3349fd5af735a5e66",
+      "git_blob_sha1": "289a119d7ae003f065bb9d048e7b1681674accf0",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/quickhull.cpp",
+      "bytes": 30621,
+      "sha256": "e7efedb4df05798c6bdc72f508cff58313a2239d779da1118b5da58f8297f755",
+      "git_blob_sha1": "d62d1dcc08537dfdbbbbaab035f65432bac2a7f0",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/quickhull.h",
+      "bytes": 9597,
+      "sha256": "ff397d52d17679eb270f0b88f9b2f060ab3cf1de472d31678b2e54bd8ecc5a10",
+      "git_blob_sha1": "f1b9c29365d3f18c48d989982eae59d187f9abc6",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/sdf.cpp",
+      "bytes": 22250,
+      "sha256": "d6faea922252b257e94399e5ba2b65e7a39d12c8993e1782b486e1a8940a6246",
+      "git_blob_sha1": "7ef0ca810b03900e26b62d5f94a127dabb115215",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/shared.h",
+      "bytes": 11935,
+      "sha256": "a52dc33041f3c837b6ba0c09bfb4b03732debdb0fc4018c86a25e48d282cb9fe",
+      "git_blob_sha1": "900b15a30ca2dd5416c63c8b27fc31998d3bfec0",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/smoothing.cpp",
+      "bytes": 44694,
+      "sha256": "115e6d1ecb9fbd8b12fc71a4da25e187389c9c79b25295dce578b1b402f197db",
+      "git_blob_sha1": "2295c2ea17b9d7f86d22a87d2f60544ab2fb5d53",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/sort.cpp",
+      "bytes": 21713,
+      "sha256": "0a568d9c19651698a46a89eff5903bba51debb3e8440d1b17135bc8dea06fae4",
+      "git_blob_sha1": "93a4167767e824a4bca31c9db1c817189e023c79",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/subdivision.cpp",
+      "bytes": 31384,
+      "sha256": "d8d32537d2e64e9c60649ffe7d22768f3c32b2feefa8983a18035267a209a533",
+      "git_blob_sha1": "c1ac24b3534b72c376793cd9b461f29bc0c128f2",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/svd.h",
+      "bytes": 10732,
+      "sha256": "afa69ed18d35d8210afedece8c6a43730ac2edbea1896b44f1ff4b9fa7a491d8",
+      "git_blob_sha1": "cad9b4fbc1978b6a316ad1a5960635137c010095",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/tree2d.cpp",
+      "bytes": 1969,
+      "sha256": "ebfed8c712d0f481964ffafa59a33987df65721b3777967c4036be8006f59769",
+      "git_blob_sha1": "b0c88627421ae0b54eea313f749793173d72be29",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/tree2d.h",
+      "bytes": 2645,
+      "sha256": "80b1741bda162e7fc6f0f7014fd3baecddf8f77823ab2884eecda4f49aa98dba",
+      "git_blob_sha1": "1bade1fadbfc486bbdcc78d6de2a2d2da6fb54b3",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/tri_dist.h",
+      "bytes": 6638,
+      "sha256": "549ebdd4accdb3f4d49671039221f588cf92a293611df6748670576743982ef1",
+      "git_blob_sha1": "123d71f8058ef8b42eb856a52d6f66ffb164e3ef",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/utils.h",
+      "bytes": 4701,
+      "sha256": "44a3872882c2977f703e191c489d050f4ad9e0cb2254609b9693008baa9b2743",
+      "git_blob_sha1": "724e11dd0cc1ca74804d21ce7423b7929a48c872",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/deps/manifold/src/vec.h",
+      "bytes": 10385,
+      "sha256": "240cc8f9511724b119ebb921e3a3cea1c706b8ed56f2d55349e230fcb7b6062b",
+      "git_blob_sha1": "a316a3bd8aee66b16f1245531bc290c85214545f",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/elbow-original.sockets.json",
+      "bytes": 1128,
+      "sha256": "e56d1717bc6c09fa2346bd602c2553421400b29b1a7f5e5fb54f3c580273b2f9",
+      "git_blob_sha1": "e4854f61c9f55cec9b84dcf30b3084a47434f569",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/elbow-reviewed.sockets.json",
+      "bytes": 1048,
+      "sha256": "ec2ba09b396eb3a787890cc40a2d7320c2767f7e9d15694539ea63cf301ee26a",
+      "git_blob_sha1": "07ecdd3a4adb426ef85312d3224bbe05eb649fb9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/reviewed/CALIBRATION_SCOPE.txt",
+      "bytes": 539,
+      "sha256": "f6e7e20311679ad0f22af9cf5574543e7058f0a745e7258d11f4e6e411a17f2c",
+      "git_blob_sha1": "c4256d41ba903670c87e495113df4339a07b6371",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/reviewed/Valve.sockets.json",
+      "bytes": 648,
+      "sha256": "55bbbfe9f4b6c6262434a4534afbb9bb28177d7c86bfabfded56480902e63048",
+      "git_blob_sha1": "d7bbf1a55328a72f01298511527c9eee34719a9a",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/reviewed/industrial+pipe+elbow+3d+model (1).sockets.json",
+      "bytes": 691,
+      "sha256": "13a2311f604980f2c3922dc3444b766f8bc024612d60b5e83ef03e8510d7b0ac",
+      "git_blob_sha1": "ec4881fe7b91ce8621ea725ea670e3cf500d3cf9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/reviewed/industrial+pipe+elbow+3d+model.sockets.json",
+      "bytes": 1048,
+      "sha256": "ec2ba09b396eb3a787890cc40a2d7320c2767f7e9d15694539ea63cf301ee26a",
+      "git_blob_sha1": "07ecdd3a4adb426ef85312d3224bbe05eb649fb9",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/fixtures/reviewed/rusty+pipe+3d+model.sockets.json",
+      "bytes": 963,
+      "sha256": "51a83300a33a1078199af968fa1c2313b4ba3f30557923a515586c0297f6fc28",
+      "git_blob_sha1": "e6cfbe6821ee6da3f239c9c99f906807313474a6",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/include/PipeAssemblyDemo.hpp",
+      "bytes": 325,
+      "sha256": "8ad39e846b973fad89b3d43a7edac0e7a70832967ba629b415ff4cc4fe56a764",
+      "git_blob_sha1": "adb72ae4a93818ba047ba42ae62896b4b574e276",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/include/PipeCatalog.hpp",
+      "bytes": 700,
+      "sha256": "abc8a00862a2d70064746f256235eccb5e655060cb25e9c51ec7fd333ffafa2c",
+      "git_blob_sha1": "9b601614a50065af42f3581831cee89258eb4ccd",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/include/PipeObj.hpp",
+      "bytes": 323,
+      "sha256": "6b7c6f1c2b5679ab6b76394759af25f1f528f262c674e3d4abf39d9e832b6963",
+      "git_blob_sha1": "35b908b4d5ac8e262b5dffaba3d851a3fc381ee3",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/AutoUv.cpp",
+      "bytes": 20836,
+      "sha256": "ee7f37a3e66b392d4492d43d99515fdc8ecf10bc3b8fe139d96129d6cb7c23f3",
+      "git_blob_sha1": "b62c87048bdca0c7fa0d998da704ad52f71d2138",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/AutoUv.hpp",
+      "bytes": 831,
+      "sha256": "3a5004341de748778e36ed0edb6c0d2bc1f5006a9a2ed6b04512a3c541ede100",
+      "git_blob_sha1": "e64fc11d92f997fbc9f5ab2d5f779c70416069a8",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageGeometry.cpp",
+      "bytes": 21681,
+      "sha256": "fdec1ca7a54503b2c14d7da63abd95c877407f31f7ee96a7131f96f6d55982f4",
+      "git_blob_sha1": "3578f913365360f0bbbd0164b9ff3c895357ef51",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageGeometry.hpp",
+      "bytes": 909,
+      "sha256": "cfc05511d55dbe23fd14a96d8f6cb04308f75f16305bc3b048c8e7f05e82dbf6",
+      "git_blob_sha1": "e77c7f01d37669d29d506ad05772acebb0e06054",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageUvTransfer.cpp",
+      "bytes": 8361,
+      "sha256": "4c67f8c7924d7156e22b79544c0a8f5a40104c84bfb6e2e1d22ef9b82682c63d",
+      "git_blob_sha1": "b0fead68ff4d5a19ee3f6842a6730b1118f724dc",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/DamageUvTransfer.hpp",
+      "bytes": 461,
+      "sha256": "4bcfaea5ef1fc9ac5c94a051ef719a7dda81208cad0606ff55a98709e4a3c610",
+      "git_blob_sha1": "3029500226608af5199a6c113fdaffabdbfdc190",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/MeshIdentity.cpp",
+      "bytes": 631,
+      "sha256": "eb180a71c80f41f66fd51150a6019c28ef743e162d7747ecaaa2eeada03bc2cd",
+      "git_blob_sha1": "cf4cef1e9f414993d91205563254b2195b65f67d",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/PipeSockets.cpp",
+      "bytes": 12969,
+      "sha256": "07697cb01e80302496360bf524794a3606f12cfa2912aa5e598c1b08f384c80e",
+      "git_blob_sha1": "879f2a3c97902da34e1ef8104a8947429c51c400",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/PipeSockets.hpp",
+      "bytes": 3113,
+      "sha256": "91c5c3bb92805535952e2a65de6ca0a79ba46545f139b0baab5128add3935d19",
+      "git_blob_sha1": "881eab2aa492fc9bef944222ce5388a697cb3b01",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/SolidGeometry.cpp",
+      "bytes": 26046,
+      "sha256": "5dc4079565887ad57c762a8f3bfbd39ce55c2cf838d9927a9c1122b12b4c66a7",
+      "git_blob_sha1": "12d47b5ca31bfe22806b82c9672b81575e8e29ea",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/SolidGeometry.hpp",
+      "bytes": 925,
+      "sha256": "212f749005ca00e0d6ef876df5218c425d82519995a42f3746a134b3000c0743",
+      "git_blob_sha1": "e1999f60d0f221fe92fc1caa3e464c5e77910337",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/SplineConstruction.cpp",
+      "bytes": 43752,
+      "sha256": "ed323c7d34be5388889fdf3eb6d90dd86835b0355046ad4a3fc3f4349753fc11",
+      "git_blob_sha1": "6af7963108ff95c7cc677dc442b77fe21e71226c",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/Source/SplineConstruction.hpp",
+      "bytes": 2894,
+      "sha256": "4a864573b57f7973f36c1d3d6db4789f6b42d5ae78fba6c06e1ada33ebe3e7ae",
+      "git_blob_sha1": "a3bb34090524283c329419714ae2aa1f7fc7117b",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/CMakeLists.txt",
+      "bytes": 365,
+      "sha256": "9ee0f6dd796b35053841ea6178a0fd1ff6465a238b3f5c1c7101ccafb39b84ff",
+      "git_blob_sha1": "643ec7af90a51a9d90f4561d6493cea5a4d438f1",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Core/Source/Guid.cpp",
+      "bytes": 2676,
+      "sha256": "ea33f4979f0242db7d01773b2ddcb8ecdd13d0862a72904cc9be6770fc4ad2bd",
+      "git_blob_sha1": "185976adc3cae36623399a07af86f55612165f28",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Engine/Jobs/CMakeLists.txt",
+      "bytes": 446,
+      "sha256": "2bef844359af9845572f82e15572b4ae0a3c4c89353b38a9ee3b78714210d127",
+      "git_blob_sha1": "73d2328548461d65dd630db762a9cb912d0b1f7a",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/CMakeLists.txt",
+      "bytes": 5809,
+      "sha256": "e8b3504e74516c6f5f6d0b9439e979523976b86990224d46dbba6950b1d33d92",
+      "git_blob_sha1": "55bc2ba080acd0d28a25513eeff30364bfd2e175",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BrushEdits.hpp",
+      "bytes": 1001,
+      "sha256": "4a6bb9b918a0afe51e9999d17bd3d718421eb0942d0a3028920fa8b49ff9ec72",
+      "git_blob_sha1": "33171ad602db45a3c6319782aa4b0b8c37a836c1",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BspDocument.hpp",
+      "bytes": 1052,
+      "sha256": "a2d68d12e1d6303638c34e06dac0cefdc186552dc6e576343a9bed6a2da48c41",
+      "git_blob_sha1": "2cb1a786714363eaf84dc4648d3bacc150a1b0d4",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BspDocumentSession.hpp",
+      "bytes": 4263,
+      "sha256": "a60bbb1865feea95bb8206ea6dc12c52a21b31c0d9a63dc602e0c8796046adef",
+      "git_blob_sha1": "aa2e230fcae3f46db8594c094ede5b39b2e9a1fa",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/HardSurfaceStack.hpp",
+      "bytes": 1123,
+      "sha256": "0915a3e69c76a05b1de86923dd76965f64d169e0c39586d730d741e99b94a061",
+      "git_blob_sha1": "851e29eec962f21857e580bdef710f9ed8262076",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/ProceduralSpline.hpp",
+      "bytes": 2101,
+      "sha256": "31dd81d819d6cb0deea1de93aab5a449daa62061d1f43160af0c706a19a8d3cb",
+      "git_blob_sha1": "851ef4c6eb680896e861e91242e0b14c887fc47d",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SdfRegionRecipe.hpp",
+      "bytes": 1918,
+      "sha256": "75ef68f27ec1d7c09ac0d35716afa26a70eee31fa201ed86f68bf9cc526de59d",
+      "git_blob_sha1": "81fd19eec99ad1bd514276faaea0b0ae60295b15",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SolidEvaluator.hpp",
+      "bytes": 3498,
+      "sha256": "fb98c9c1eaa17db581c10781da2f4f9b4d4fcc9102b39f6d66a8096c90cee507",
+      "git_blob_sha1": "194260e9c78be5b4b2b6516bbc644dd1863d8d79",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SparseSdfField.hpp",
+      "bytes": 3824,
+      "sha256": "72cef017fcf92beb3013f4ba81b85a6575ee87e6fefa316c49201bc9987e1463",
+      "git_blob_sha1": "53349399379390579423ef734c55e770e1a01d65",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/BspDocument.cpp",
+      "bytes": 10309,
+      "sha256": "d7baa278f2f3be19881392055756a70522a973dabb1f06cf2df651415e689724",
+      "git_blob_sha1": "bbf254a03dd3664a0e3fd31016ac194cff9ed7d2",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp",
+      "bytes": 33312,
+      "sha256": "821979416dc6c270fe69c71d5f3e6d1e40ba1837d8774c82b797018be1e506b1",
+      "git_blob_sha1": "ce340849be83a556b5f6a59bfbc60253913facce",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/SolidEvaluatorManifold.cpp",
+      "bytes": 76535,
+      "sha256": "75b1f9109cb8b05bfcc2387636a9c649df3103781c9a5effaa77d8863713fbc6",
+      "git_blob_sha1": "f9e7fd4e30c5e26799b41cd7b7b3e02ea91b9c19",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/TriangleBvh.hpp",
+      "bytes": 13967,
+      "sha256": "bffe8f5a4266ef12450463a8e900ad11a962c98c7bd2f53d7d54ec1febf4cd51",
+      "git_blob_sha1": "ff175bf9ad3dce939494d7c5e74dfb1616947ed0",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/platform/PipeSockets.cpp",
+      "bytes": 13173,
+      "sha256": "7e3112673ec65dcf30e6fbe6df6cfc8753afaab6496b43c284bdf3afdbef0bf9",
+      "git_blob_sha1": "b98043303d86727d3244578d824ca595d56dda73",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/reference/PipeSockets.cpp",
+      "bytes": 12969,
+      "sha256": "07697cb01e80302496360bf524794a3606f12cfa2912aa5e598c1b08f384c80e",
+      "git_blob_sha1": "879f2a3c97902da34e1ef8104a8947429c51c400",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/reference/PipeSockets.hpp",
+      "bytes": 3113,
+      "sha256": "91c5c3bb92805535952e2a65de6ca0a79ba46545f139b0baab5128add3935d19",
+      "git_blob_sha1": "881eab2aa492fc9bef944222ce5388a697cb3b01",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/src/PipeAssemblyDemo.cpp",
+      "bytes": 1064,
+      "sha256": "0b2190cfa5e3462a0f0f84889e1dce52ce5e9455e9ec8a36188e89a3197ce88b",
+      "git_blob_sha1": "57c49c5eb7525c8ae7b89cc2566dba6c10eb6684",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/src/PipeCatalog.cpp",
+      "bytes": 1975,
+      "sha256": "14e3863b745d5184daf9f1c28acedbb5558ceb6fc0fa1d054d37094f69d1b90b",
+      "git_blob_sha1": "be261c995a77ea79e153ab4cd4ce8aca2358eb81",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/src/PipeObj.cpp",
+      "bytes": 2019,
+      "sha256": "819b0557bbf348d6eb245113d5b4d01a0bfabec594fa376eade9e4446fdbd01c",
+      "git_blob_sha1": "b98efd20570411ae5da86af973df446cdf7e0718",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/src/elbow_demo.cpp",
+      "bytes": 1621,
+      "sha256": "07a83491ef263e7fe14b9fd41058ffd468c73cfd46efd8cc4514b37145ce6bc7",
+      "git_blob_sha1": "c8d46c84a4cee746b888c13396ffb9c2c8bb02ff",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/src/pipe_demo.cpp",
+      "bytes": 2479,
+      "sha256": "9ac42ba8aaeaa67000658e9aa2db83e9bdca14d45a1233ff95a8b338e7bb2f03",
+      "git_blob_sha1": "57f7d1bfde92e39039129a530f6a4007712983d1",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/catalog_matrix_tests.cpp",
+      "bytes": 2111,
+      "sha256": "b6a58fc246f9250c8e33c4232a17511f398a1dd24b6cc2d4eae7fea1f4700de5",
+      "git_blob_sha1": "07e7e00ae26af1ff1afe60010d78a20efe053caf",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/catalog_tests.cpp",
+      "bytes": 3724,
+      "sha256": "8f94a65f9ccbeaa9d528b362464235249c12864881ff9d0746fbe9c15949b4d4",
+      "git_blob_sha1": "b8b246acf8031f3343333b308611afeca64cb7df",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/elbow_assembly_tests.cpp",
+      "bytes": 1576,
+      "sha256": "c597dba0d8f81ac109b10ba7e85a053bebb82254bbc9f3b808031b0c76c29cbb",
+      "git_blob_sha1": "6b6f7f6bd3de46c8de331c9c2c0507a4e18be07d",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/elbow_direction_tests.cpp",
+      "bytes": 1424,
+      "sha256": "4b660c94c90dc7e58e08f3152bc1d7586d32eb06d47c8fc03ae638601a740939",
+      "git_blob_sha1": "50f6939036d24d79627b779492a699a8d6069393",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/fitting_catalog_tests.cpp",
+      "bytes": 2078,
+      "sha256": "c01f40526f7afcb95897b06f3e299ac02d99bfecefc6eebaa57f3a9fcd5e2e45",
+      "git_blob_sha1": "0f4832f8b56dc50b117a129c15cd13fafab1c7b3",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/fitting_demo_test.py",
+      "bytes": 955,
+      "sha256": "4119b4251e44e423afb5f82fb46ee4b10e0d95156a50eb0a88a6425b1e8e3448",
+      "git_blob_sha1": "e4d0cda6617352cb1ebc585f7dc5a9bd1b78058e",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/fixture/OriginalSocketMath.cpp",
+      "bytes": 6151,
+      "sha256": "6424234f85615cc09d32efd0dac2f69e65f7d51225bc45be88c445051e5ba559",
+      "git_blob_sha1": "af060b562af52609de8d93013b93610f2f570474",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/fixture/PipeSockets.hpp",
+      "bytes": 1770,
+      "sha256": "065fbd75433604bf43c8633177eb2345e3145566d2ee3ded03aa3ecc1939884a",
+      "git_blob_sha1": "c15520e2d5f5833e48ca6b2d20fd2e0b016c1cad",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/long_pipe_tests.cpp",
+      "bytes": 3166,
+      "sha256": "c6024035ea317cee8e113cb253c039ddb6b9a39a8b3dd358941edea59161ff5a",
+      "git_blob_sha1": "e35005ee0ceca2510ec8bfd2271a57974062b568",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/original/SplineConstructionTests.cpp",
+      "bytes": 18650,
+      "sha256": "acbfb6b7868c75361b6024a55581a7d74f4374af28fda5aba343198cca46f0bc",
+      "git_blob_sha1": "7aee26ba4ca3acb5191132afe1415e6261a04b18",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/pipe_obj_tests.cpp",
+      "bytes": 2639,
+      "sha256": "56beb7ed0c5a1a032ea8593534ddf7d81f0881007b5563485ecbfa34e7b8b35f",
+      "git_blob_sha1": "8c396a97a9fe81c76cd0ce88301b355311fa59ac",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tests/recipe_precision_test.py",
+      "bytes": 660,
+      "sha256": "550d5b47f0763e06d26fc985434d07e276fb5589dfbf55c77d83d55db0fb8310",
+      "git_blob_sha1": "da3e1f99a9cc812eb2754f56ce1ead7b7c3808bf",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/third_party/nlohmann/json.hpp",
+      "bytes": 919975,
+      "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6",
+      "git_blob_sha1": "8b72ea6539f40e4e3f7762d17e30c67f2a8308ed",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tools/view_imported_pipe.py",
+      "bytes": 2057,
+      "sha256": "0cd722791f7618b632cabdecb65a55ee40849409c65d539bdf4b2f13b9e54067",
+      "git_blob_sha1": "e3fb176309cd5520f292d2ace4e90471236fce2c",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    },
+    {
+      "archive_path": "damage-checkpoint/JericoPipeCppCheckpoint01_20261007/tools/view_pipe_comparison.py",
+      "bytes": 1902,
+      "sha256": "2e271b7ed5582c1d6180d6ad21b7e2d09b2e88341b703763b5b173f0cfa64507",
+      "git_blob_sha1": "1e4b5ecb36272b820865f8cd14f05b3254827c67",
+      "decision": "exclude",
+      "reason": "Unneeded pipe demos, tests, build definitions or Manifold implementation outside the erosion dependency closure. Preserved in the original archive."
+    }
+  ],
+  "validation_limits": [
+    "The first commit is an immutable source import, not a claim that the known defect is fixed.",
+    "Historical README, SOURCE_MANIFEST and SHA256SUMS files describe their original full packages. This manifest describes the selected Git snapshot.",
+    "Existing other-family code within the original rock laboratory is preserved without edits; no engine integration is performed.",
+    "No private download URI, credentials, source archive binary, build caches or compiled binaries are included."
+  ]
+}

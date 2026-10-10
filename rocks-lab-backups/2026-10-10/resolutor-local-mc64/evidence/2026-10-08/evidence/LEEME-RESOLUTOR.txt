@@ -1,0 +1,44 @@
+CORRECCIÓN LOCAL EXPERIMENTAL — UNIONES MC64 / IRREGULAR_BEDS
+
+La roca aprobada seed48 no cambia: sus tres OBJ y los de117/1 son idénticos
+byte por byte. El campo, semillas, recetas/defaults y estratos permanecen iguales.
+También se verificaron los tres OBJ de strata-v4 seed48. No hay instalaciónPC.
+
+305: corrección en una cara compartida de Base, conservada después de erosionar.
+999: corrección en una cara compartida del labio erosionado.
+Cada caso mantiene2 celdas ambiguas contabilizadas, ahora2 resueltas y0 pendientes.
+La conexión se decide una sola vez por cara y se aplica a ambas celdas, o a ninguna
+si la vecina no soporta el caso. Sólo se cambia una unión local:6 triángulos por
+otros6; vértices y normales no se desplazan. Cero intersecciones en6 mallas objetivo.
+El coste adicional medido es aproximadamente0,01–1,4 ms por etapa, sujeto al equipo.
+
+NO ES UN EXTRACTOR UNIVERSAL: en el barrido fijo0–31 pasan25 y se rechazan7:
+4,5,8,14,25,29,31. Esos rechazos se conservan, junto con sus diagnósticos.
+No se escogieron semillas nuevas para ocultarlos. La suite completa no se ejecutó.
+
+PRUEBA NUMÉRICA: cota conservadora del campo real (L=8), recorrido diagonal
+subdividido y guarda numérica. No es aritmética de intervalos ni una demostración
+de ausencia de bucles ocultos dentro de voxels. Mantiene las hipótesis originales
+de MC sobre una raíz por arista y detalle resuelto por la rejilla. Los casos fuera
+de la clase admitida, casi nulos, no finitos o sin evidencia suficiente se rechazan.
+
+REVISIÓN INDEPENDIENTE: corrigió la interpretación de signos complementarios;
+verificó orientación, claves compartidas, contadores y el rechazo atómico si una
+celda vecina no es compatible. Sin bloqueo restante en este alcance.
+
+IMÁGENES: parejas reales antes/corregido con cámara, iluminación y material
+idénticos. Los acercamientos añaden únicamente wireframe como material, sin
+modificar geometría.305-main muestra Base porque ahí estaba el fallo;999-main
+muestra la roca erosionada. «Antes» son mallas diagnósticas RECHAZADAS del campo
+cloud aprobado con la conectividad anterior. No representan el producto actualPC.
+El cambio es técnico y local; no se presenta como un nuevo cambio de estilo.
+
+REPRODUCIR EN LABORATORIO, no instalar:
+En prototype-v3-erosion-resolved ejecutar bash build_erosion_probe.sh.
+Ejecutar python3 tests/test_localized_resolver.py.
+Los tests de cara se compilan con g++ -O2 -std=c++20 -Icore/include
+ tests/face_resolution_tests.cpp build/librocks_core.a build/liboriginal_damage.a
+ -Wl,--gc-sections -o build/face_resolution_tests
+ y se ejecutan con build/face_resolution_tests.
+Las dependencias matemáticas originales se incluyen sin stubs; no se usa Blender
+para generar/alterar roca. Blender sólo renderiza los OBJ C++.

@@ -1,0 +1,30 @@
+fixture crossing result=1 expected=1
+fixture separated result=0 expected=0
+fixture parallel_separated result=0 expected=0
+fixture coplanar_overlap result=2 expected=2
+fixture coplanar_crossing_overlap result=2 expected=2
+fixture coplanar_shared_edge_overlap result=2 expected=2
+fixture coplanar_disjoint result=0 expected=0
+fixture shared_edge result=0 expected=0
+fixture coplanar_shared_edge result=0 expected=0
+fixture shared_vertex_only result=0 expected=0
+fixture shared_vertex_crossing result=1 expected=1
+fixture tiny_adjacent_planar result=0 expected=0
+fixture near_planar_crossing_overlap scale=1e-05 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=1e-05 result=2 expected=2
+fixture near_planar_crossing_overlap scale=1 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=1 result=2 expected=2
+fixture near_planar_crossing_overlap scale=100000 result=2 expected=2
+fixture near_planar_shared_edge_overlap scale=100000 result=2 expected=2
+MESH rocks-cloud-prep/erosion-robustness/resolved/305/base.obj vertices=7068 faces=14132 triangles=14132 eps=2.9189e-09 degenerate=0
+RESULT candidates=109456 intersections=0 coplanar=0
+MESH rocks-cloud-prep/erosion-robustness/resolved/305/stratified.obj vertices=8010 faces=16016 triangles=16016 eps=2.9189e-09 degenerate=0
+RESULT candidates=123070 intersections=0 coplanar=0
+MESH rocks-cloud-prep/erosion-robustness/resolved/305/eroded.obj vertices=8010 faces=16016 triangles=16016 eps=2.9189e-09 degenerate=0
+RESULT candidates=123070 intersections=0 coplanar=0
+MESH rocks-cloud-prep/erosion-robustness/resolved/999/base.obj vertices=7038 faces=14072 triangles=14072 eps=2.9189e-09 degenerate=0
+RESULT candidates=109214 intersections=0 coplanar=0
+MESH rocks-cloud-prep/erosion-robustness/resolved/999/stratified.obj vertices=7912 faces=15820 triangles=15820 eps=2.9189e-09 degenerate=0
+RESULT candidates=121537 intersections=0 coplanar=0
+MESH rocks-cloud-prep/erosion-robustness/resolved/999/eroded.obj vertices=7912 faces=15820 triangles=15820 eps=2.9189e-09 degenerate=0
+RESULT candidates=121537 intersections=0 coplanar=0

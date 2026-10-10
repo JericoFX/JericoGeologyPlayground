@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "reference-studies-v15",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "seed": 48,
+  "size": 2,
+  "relief": 0.55,
+  "backDepth": 0.3,
+  "directionDegrees": 0,
+  "featureDepth": 1,
+  "fractures": 0.72,
+  "irregularity": 0.7,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  },
+  "profile": "angular_scree",
+  "fragmentScaleMeters": 0.235,
+  "fragmentCount": 155
+}

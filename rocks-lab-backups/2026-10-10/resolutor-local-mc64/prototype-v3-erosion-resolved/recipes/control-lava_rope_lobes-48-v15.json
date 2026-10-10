@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 3,
+  "generatorVersion": "reference-studies-v15",
+  "extractorVersion": "heightfield-solid-v2",
+  "family": "heightfield_cliff",
+  "units": "m",
+  "seed": 48,
+  "size": 2,
+  "relief": 0.55,
+  "backDepth": 0.3,
+  "directionDegrees": 0,
+  "featureDepth": 0,
+  "fractures": 0.72,
+  "irregularity": 0.7,
+  "grid": {
+    "cells": 256,
+    "width": 1025,
+    "height": 1025
+  },
+  "profile": "lava_rope_lobes",
+  "ridgeSpacingMeters": 0.11,
+  "ridgeWidthMeters": 0.042,
+  "lobeRadiusMeters": 0.68,
+  "lobeCount": 7
+}

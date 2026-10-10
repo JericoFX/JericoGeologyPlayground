@@ -1,0 +1,731 @@
+{
+  "format_version": 1,
+  "description": "All copied laboratory and dependency files, byte-identical to the laboratory at checkpoint capture. Paths are relative to this source root. Packaging-only notices and verification summaries are excluded.",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 6536,
+      "sha256": "adf6f819e53fb08046c9c94ba790b56eedf4f48bee38fb613e23851243c0d79c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4028,
+      "sha256": "b8f43d6b89bd581f3a07ed337c3831b29190eb88651545352453ce4dfe002d10"
+    },
+    {
+      "path": "deps/manifold/AUTHORS",
+      "bytes": 378,
+      "sha256": "074a43d4b1626a34a0a14a036d00100524dd463604b2570c4d76c7baa63608f3"
+    },
+    {
+      "path": "deps/manifold/CMakeLists.txt",
+      "bytes": 10951,
+      "sha256": "9ffaaf7b711e8ffd8db88124145dfc26f67d9d217b48ea102c726ce39da29182"
+    },
+    {
+      "path": "deps/manifold/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "deps/manifold/README.md",
+      "bytes": 19948,
+      "sha256": "3865bbf147e2c6c38c1aa1d0707c4101991537e35f3ff49ed85326b59e9436a9"
+    },
+    {
+      "path": "deps/manifold/bindings/CMakeLists.txt",
+      "bytes": 831,
+      "sha256": "3cf2b1663f02ec423fb2ec63721cb740adb62511b4a54682091e4147381714a9"
+    },
+    {
+      "path": "deps/manifold/cmake/configHelper.cmake",
+      "bytes": 1281,
+      "sha256": "5190060b3a681f6627b1a091686e440901007a47113ee3ed4d09aa1d3964b012"
+    },
+    {
+      "path": "deps/manifold/cmake/info.cmake",
+      "bytes": 4024,
+      "sha256": "2f6fc31dd4b53295b7f90e5da06e60c47324b8a604f9f137270ef5261405ed29"
+    },
+    {
+      "path": "deps/manifold/cmake/manifold.pc.in",
+      "bytes": 444,
+      "sha256": "50da3dc009e541fe8cd4f40c7f9b00177cb4be62f5c78340eb080fe2ab3e2f43"
+    },
+    {
+      "path": "deps/manifold/cmake/manifoldConfig.cmake.in",
+      "bytes": 1513,
+      "sha256": "cdb44382ef3b3c59fa341e706fc7f7250dd245de11c0181c39b64f53afea06d9"
+    },
+    {
+      "path": "deps/manifold/cmake/manifoldDeps.cmake",
+      "bytes": 9357,
+      "sha256": "8ba068a7d2dcc6d6a66a4fe88cb5287c538ab46714c340a0e2b30544c98c27c1"
+    },
+    {
+      "path": "deps/manifold/cmake/patches/0001-clipper2-no-iostream.patch",
+      "bytes": 5097,
+      "sha256": "88763e9a0b2ad9ec036baeaf00317090621aa98c9754869e856ba16080ea8039"
+    },
+    {
+      "path": "deps/manifold/cmake/patches/apply-clipper2-patch.cmake",
+      "bytes": 1118,
+      "sha256": "9a2d3164c7778931c750ba19b28aa0567161fa26ebf6b3f647000cfebe14ecc9"
+    },
+    {
+      "path": "deps/manifold/cmake/version.h.in",
+      "bytes": 1312,
+      "sha256": "61cfc1d044f19c3ba32c52931ee4ff1397ff66d13cb5d5fdd0cd762da2db1f2a"
+    },
+    {
+      "path": "deps/manifold/include/manifold/common.h",
+      "bytes": 21729,
+      "sha256": "486d5b2afdfc184b200e3b25f5f659f282728f40fc5ca1db1358a74f6cd4cdea"
+    },
+    {
+      "path": "deps/manifold/include/manifold/cross_section.h",
+      "bytes": 6874,
+      "sha256": "c7f1cd9744d99ab4765641766645ae087f03580c8deebcee7699fd20f28ad832"
+    },
+    {
+      "path": "deps/manifold/include/manifold/linalg.h",
+      "bytes": 79516,
+      "sha256": "0a1ae64ec20c3e38f1f90d5d4a43942ea9a076fe91acaf0f9937404634858426"
+    },
+    {
+      "path": "deps/manifold/include/manifold/manifold.h",
+      "bytes": 14410,
+      "sha256": "aabb3f78ec9bc92c78bdb6952980aa94e0a0ab2aba71463b3b9c92080c9001cf"
+    },
+    {
+      "path": "deps/manifold/include/manifold/math.h",
+      "bytes": 15491,
+      "sha256": "b2c9bcf8dc3db0e569a7f2c9fdc88aa6279c544a21274dedc1cd528f41a15b5c"
+    },
+    {
+      "path": "deps/manifold/include/manifold/mesh.h",
+      "bytes": 12883,
+      "sha256": "b729d5033ef5492fb990b95596b46a785f9a56f0da9e167dbf7e748eccf5302b"
+    },
+    {
+      "path": "deps/manifold/include/manifold/optional_assert.h",
+      "bytes": 2212,
+      "sha256": "0ee34e61e838a0d8f9c5600507067d486e68452be39b9f8b37e44458acf1e233"
+    },
+    {
+      "path": "deps/manifold/include/manifold/polygon.h",
+      "bytes": 1912,
+      "sha256": "763fea1260aa2fee3761da5a6345311f06d0647c32e4f0756b567ccba0d9e73a"
+    },
+    {
+      "path": "deps/manifold/include/manifold/vec_view.h",
+      "bytes": 4012,
+      "sha256": "47dad88de84a0662b42473dc3ef1cce90ad316fa97c6075881e2196c5cc44c67"
+    },
+    {
+      "path": "deps/manifold/src/CMakeLists.txt",
+      "bytes": 3489,
+      "sha256": "d47b881474b267632d1d11b60c4445c2d57cd7ff8f1d12d3e5f9b2be6a97d66c"
+    },
+    {
+      "path": "deps/manifold/src/boolean3.cpp",
+      "bytes": 22380,
+      "sha256": "2b9af613a4ac5ab4f4f2885241ec5b9fee2208a417a044e99849cd0cd568a97e"
+    },
+    {
+      "path": "deps/manifold/src/boolean3.h",
+      "bytes": 2617,
+      "sha256": "b0af003ecf1e71453ee11e4862f5b185a001b293f4426cbeeec3eda0cda4a895"
+    },
+    {
+      "path": "deps/manifold/src/boolean_result.cpp",
+      "bytes": 36444,
+      "sha256": "b04121434ee5627f8180affb94077abbcd765f50a9581d44f9ab8492c17c9a2a"
+    },
+    {
+      "path": "deps/manifold/src/collider.h",
+      "bytes": 12448,
+      "sha256": "838d7d1dcfadf0f26f084a49b2dec197344e2c756105d56bc407a94e945b3f7b"
+    },
+    {
+      "path": "deps/manifold/src/constructors.cpp",
+      "bytes": 19981,
+      "sha256": "91ad2b4222f01df20b47968ddc3f7e9210c10021b35fad25e9aed7c837a677ca"
+    },
+    {
+      "path": "deps/manifold/src/cross_section/cross_section.cpp",
+      "bytes": 24975,
+      "sha256": "47a7b03fe85564ced8ae940e96249e3942dc6afbfcc7f083bd55efd7e631563b"
+    },
+    {
+      "path": "deps/manifold/src/cross_section/cross_section_boolean2.cpp",
+      "bytes": 5732,
+      "sha256": "243d0d876af7a4525e675bf1daae1bf0b93385cf5465cda9f252326119b7e742"
+    },
+    {
+      "path": "deps/manifold/src/csg_tree.cpp",
+      "bytes": 36199,
+      "sha256": "b26c69ab2eef1102138029f7cda9bb813c6057a7e192e30699d941bb681a34e9"
+    },
+    {
+      "path": "deps/manifold/src/csg_tree.h",
+      "bytes": 3941,
+      "sha256": "ebcec03aed52e3a05c7ff2ece61e4e547bcfc194339c88521c77bee58bf9741c"
+    },
+    {
+      "path": "deps/manifold/src/disjoint_sets.h",
+      "bytes": 4397,
+      "sha256": "850b1af57ee36d68a9d93b02438fbe505cecddf8ca5cd1e67e1e957dc9393f84"
+    },
+    {
+      "path": "deps/manifold/src/edge_op.cpp",
+      "bytes": 34859,
+      "sha256": "c18884a2acfc052752d3236a58ce3db3fd5b96e9f9d8fa55db15ee55de5c9025"
+    },
+    {
+      "path": "deps/manifold/src/execution_impl.cpp",
+      "bytes": 5543,
+      "sha256": "cdb9d834a41265db178492ed10fe0129bc084d64b73e0c705e886d63d96a8ce2"
+    },
+    {
+      "path": "deps/manifold/src/execution_impl.h",
+      "bytes": 6321,
+      "sha256": "22ca4de4abc7cbe51ff77a8aaa0e70581f3a8f46461ba770eb05f6b592eca71f"
+    },
+    {
+      "path": "deps/manifold/src/face_op.cpp",
+      "bytes": 17373,
+      "sha256": "81ddb9717147f42c670fcccdbdcec8347373bb5dc10e733173ef71ef515d1f06"
+    },
+    {
+      "path": "deps/manifold/src/hashtable.h",
+      "bytes": 5426,
+      "sha256": "b9124c341f035e621bd9f211338660c6f839264fc2d76a569f2b1de5061ba73c"
+    },
+    {
+      "path": "deps/manifold/src/impl.cpp",
+      "bytes": 33222,
+      "sha256": "3ca97e39cf98f69ef9b5af292d7091678999cec29fca4966340ac078002a6c3d"
+    },
+    {
+      "path": "deps/manifold/src/impl.h",
+      "bytes": 26487,
+      "sha256": "edf4959215a7843c861c67b353479c0f9065f124ae4f9363dc2758793ba18a36"
+    },
+    {
+      "path": "deps/manifold/src/iters.h",
+      "bytes": 8518,
+      "sha256": "96721613142b489c4913cc06faf162779ca90a6c5e385faa9429fb55eeb3ad4d"
+    },
+    {
+      "path": "deps/manifold/src/manifold.cpp",
+      "bytes": 44786,
+      "sha256": "c3072a039d66e6771508a960597a98a78738684c4bb6eeb526ca600400a0823b"
+    },
+    {
+      "path": "deps/manifold/src/mesh_fixes.h",
+      "bytes": 2116,
+      "sha256": "5f9303e1086f39a2b58545d0c0a455485e25e9fdbca1d3aa76909f8edf71494b"
+    },
+    {
+      "path": "deps/manifold/src/minkowski.cpp",
+      "bytes": 8133,
+      "sha256": "46fc7cb3d69f158dc9adfea9bf7e52029979e85188df2609f4c049050d871faf"
+    },
+    {
+      "path": "deps/manifold/src/parallel.h",
+      "bytes": 47212,
+      "sha256": "85fc74de9b8b1f4b257eb4b5d505ce4fab2b0a1ebd3b7151d6c6e9aedf2aa603"
+    },
+    {
+      "path": "deps/manifold/src/polygon.cpp",
+      "bytes": 35402,
+      "sha256": "611059c3ff61a2df864eb4b206967d4732b9dd915820e922e9be8e813d303ad7"
+    },
+    {
+      "path": "deps/manifold/src/polygon_internal.h",
+      "bytes": 4165,
+      "sha256": "9617eb390cf43812c0eea111f92b2aa53ae5a814588c3c5e54967e3282e722a4"
+    },
+    {
+      "path": "deps/manifold/src/properties.cpp",
+      "bytes": 15687,
+      "sha256": "2e16cec8cdaba41208dadf7922bd7aaaee9ff20f2e7f07e3349fd5af735a5e66"
+    },
+    {
+      "path": "deps/manifold/src/quickhull.cpp",
+      "bytes": 30621,
+      "sha256": "e7efedb4df05798c6bdc72f508cff58313a2239d779da1118b5da58f8297f755"
+    },
+    {
+      "path": "deps/manifold/src/quickhull.h",
+      "bytes": 9597,
+      "sha256": "ff397d52d17679eb270f0b88f9b2f060ab3cf1de472d31678b2e54bd8ecc5a10"
+    },
+    {
+      "path": "deps/manifold/src/sdf.cpp",
+      "bytes": 22250,
+      "sha256": "d6faea922252b257e94399e5ba2b65e7a39d12c8993e1782b486e1a8940a6246"
+    },
+    {
+      "path": "deps/manifold/src/shared.h",
+      "bytes": 11935,
+      "sha256": "a52dc33041f3c837b6ba0c09bfb4b03732debdb0fc4018c86a25e48d282cb9fe"
+    },
+    {
+      "path": "deps/manifold/src/smoothing.cpp",
+      "bytes": 44694,
+      "sha256": "115e6d1ecb9fbd8b12fc71a4da25e187389c9c79b25295dce578b1b402f197db"
+    },
+    {
+      "path": "deps/manifold/src/sort.cpp",
+      "bytes": 21713,
+      "sha256": "0a568d9c19651698a46a89eff5903bba51debb3e8440d1b17135bc8dea06fae4"
+    },
+    {
+      "path": "deps/manifold/src/subdivision.cpp",
+      "bytes": 31384,
+      "sha256": "d8d32537d2e64e9c60649ffe7d22768f3c32b2feefa8983a18035267a209a533"
+    },
+    {
+      "path": "deps/manifold/src/svd.h",
+      "bytes": 10732,
+      "sha256": "afa69ed18d35d8210afedece8c6a43730ac2edbea1896b44f1ff4b9fa7a491d8"
+    },
+    {
+      "path": "deps/manifold/src/tree2d.cpp",
+      "bytes": 1969,
+      "sha256": "ebfed8c712d0f481964ffafa59a33987df65721b3777967c4036be8006f59769"
+    },
+    {
+      "path": "deps/manifold/src/tree2d.h",
+      "bytes": 2645,
+      "sha256": "80b1741bda162e7fc6f0f7014fd3baecddf8f77823ab2884eecda4f49aa98dba"
+    },
+    {
+      "path": "deps/manifold/src/tri_dist.h",
+      "bytes": 6638,
+      "sha256": "549ebdd4accdb3f4d49671039221f588cf92a293611df6748670576743982ef1"
+    },
+    {
+      "path": "deps/manifold/src/utils.h",
+      "bytes": 4701,
+      "sha256": "44a3872882c2977f703e191c489d050f4ad9e0cb2254609b9693008baa9b2743"
+    },
+    {
+      "path": "deps/manifold/src/vec.h",
+      "bytes": 10385,
+      "sha256": "240cc8f9511724b119ebb921e3a3cea1c706b8ed56f2d55349e230fcb7b6062b"
+    },
+    {
+      "path": "fixtures/elbow-original.sockets.json",
+      "bytes": 1128,
+      "sha256": "e56d1717bc6c09fa2346bd602c2553421400b29b1a7f5e5fb54f3c580273b2f9"
+    },
+    {
+      "path": "fixtures/elbow-reviewed.sockets.json",
+      "bytes": 1048,
+      "sha256": "ec2ba09b396eb3a787890cc40a2d7320c2767f7e9d15694539ea63cf301ee26a"
+    },
+    {
+      "path": "fixtures/reviewed/CALIBRATION_SCOPE.txt",
+      "bytes": 539,
+      "sha256": "f6e7e20311679ad0f22af9cf5574543e7058f0a745e7258d11f4e6e411a17f2c"
+    },
+    {
+      "path": "fixtures/reviewed/Valve.sockets.json",
+      "bytes": 648,
+      "sha256": "55bbbfe9f4b6c6262434a4534afbb9bb28177d7c86bfabfded56480902e63048"
+    },
+    {
+      "path": "fixtures/reviewed/industrial+pipe+elbow+3d+model (1).sockets.json",
+      "bytes": 691,
+      "sha256": "13a2311f604980f2c3922dc3444b766f8bc024612d60b5e83ef03e8510d7b0ac"
+    },
+    {
+      "path": "fixtures/reviewed/industrial+pipe+elbow+3d+model.sockets.json",
+      "bytes": 1048,
+      "sha256": "ec2ba09b396eb3a787890cc40a2d7320c2767f7e9d15694539ea63cf301ee26a"
+    },
+    {
+      "path": "fixtures/reviewed/rusty+pipe+3d+model.sockets.json",
+      "bytes": 963,
+      "sha256": "51a83300a33a1078199af968fa1c2313b4ba3f30557923a515586c0297f6fc28"
+    },
+    {
+      "path": "include/PipeAssemblyDemo.hpp",
+      "bytes": 325,
+      "sha256": "8ad39e846b973fad89b3d43a7edac0e7a70832967ba629b415ff4cc4fe56a764"
+    },
+    {
+      "path": "include/PipeCatalog.hpp",
+      "bytes": 700,
+      "sha256": "abc8a00862a2d70064746f256235eccb5e655060cb25e9c51ec7fd333ffafa2c"
+    },
+    {
+      "path": "include/PipeObj.hpp",
+      "bytes": 323,
+      "sha256": "6b7c6f1c2b5679ab6b76394759af25f1f528f262c674e3d4abf39d9e832b6963"
+    },
+    {
+      "path": "original/Source/AutoUv.cpp",
+      "bytes": 20836,
+      "sha256": "ee7f37a3e66b392d4492d43d99515fdc8ecf10bc3b8fe139d96129d6cb7c23f3"
+    },
+    {
+      "path": "original/Source/AutoUv.hpp",
+      "bytes": 831,
+      "sha256": "3a5004341de748778e36ed0edb6c0d2bc1f5006a9a2ed6b04512a3c541ede100"
+    },
+    {
+      "path": "original/Source/DamageField.cpp",
+      "bytes": 22522,
+      "sha256": "592d7268b4ada38ed0529d8c36e265a5133a1d22bc73407d574cb69fc6d6b640"
+    },
+    {
+      "path": "original/Source/DamageField.hpp",
+      "bytes": 5698,
+      "sha256": "79c11f207d6d89445420edb307b9a864ec490b73630e5ddb18583abc0ef333a2"
+    },
+    {
+      "path": "original/Source/DamageGeometry.cpp",
+      "bytes": 21681,
+      "sha256": "fdec1ca7a54503b2c14d7da63abd95c877407f31f7ee96a7131f96f6d55982f4"
+    },
+    {
+      "path": "original/Source/DamageGeometry.hpp",
+      "bytes": 909,
+      "sha256": "cfc05511d55dbe23fd14a96d8f6cb04308f75f16305bc3b048c8e7f05e82dbf6"
+    },
+    {
+      "path": "original/Source/DamageUvTransfer.cpp",
+      "bytes": 8361,
+      "sha256": "4c67f8c7924d7156e22b79544c0a8f5a40104c84bfb6e2e1d22ef9b82682c63d"
+    },
+    {
+      "path": "original/Source/DamageUvTransfer.hpp",
+      "bytes": 461,
+      "sha256": "4bcfaea5ef1fc9ac5c94a051ef719a7dda81208cad0606ff55a98709e4a3c610"
+    },
+    {
+      "path": "original/Source/MeshIdentity.cpp",
+      "bytes": 631,
+      "sha256": "eb180a71c80f41f66fd51150a6019c28ef743e162d7747ecaaa2eeada03bc2cd"
+    },
+    {
+      "path": "original/Source/Model.hpp",
+      "bytes": 6295,
+      "sha256": "6c86c6c917ed563f26439af5488441a2265753bd9b0b2e32d8fd50ddddd30c6e"
+    },
+    {
+      "path": "original/Source/PipeSockets.cpp",
+      "bytes": 12969,
+      "sha256": "07697cb01e80302496360bf524794a3606f12cfa2912aa5e598c1b08f384c80e"
+    },
+    {
+      "path": "original/Source/PipeSockets.hpp",
+      "bytes": 3113,
+      "sha256": "91c5c3bb92805535952e2a65de6ca0a79ba46545f139b0baab5128add3935d19"
+    },
+    {
+      "path": "original/Source/RockAddonMath.cpp",
+      "bytes": 9684,
+      "sha256": "69a66e58f0c71e6f76d4ce650d23d09a7b9ddea85006009622673a427d5dffc2"
+    },
+    {
+      "path": "original/Source/RockAddonMath.hpp",
+      "bytes": 2097,
+      "sha256": "5a8fd9b3547c82783cc27ee3129258d9ca03742cd7608e3c31fa9d3fc7e0f934"
+    },
+    {
+      "path": "original/Source/SolidGeometry.cpp",
+      "bytes": 26046,
+      "sha256": "5dc4079565887ad57c762a8f3bfbd39ce55c2cf838d9927a9c1122b12b4c66a7"
+    },
+    {
+      "path": "original/Source/SolidGeometry.hpp",
+      "bytes": 925,
+      "sha256": "212f749005ca00e0d6ef876df5218c425d82519995a42f3746a134b3000c0743"
+    },
+    {
+      "path": "original/Source/SplineConstruction.cpp",
+      "bytes": 43752,
+      "sha256": "ed323c7d34be5388889fdf3eb6d90dd86835b0355046ad4a3fc3f4349753fc11"
+    },
+    {
+      "path": "original/Source/SplineConstruction.hpp",
+      "bytes": 2894,
+      "sha256": "4a864573b57f7973f36c1d3d6db4789f6b42d5ae78fba6c06e1ada33ebe3e7ae"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Core/CMakeLists.txt",
+      "bytes": 365,
+      "sha256": "9ee0f6dd796b35053841ea6178a0fd1ff6465a238b3f5c1c7101ccafb39b84ff"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/EngineError.hpp",
+      "bytes": 354,
+      "sha256": "7dd19f6e871acae409ead95c64005fe1088ff2e9cc6247231c96c4acbcc94644"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Guid.hpp",
+      "bytes": 711,
+      "sha256": "a13835e8bbd634a839fab3e0e16743c857e44fc54c07df71e0338d48f6ef59d9"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Core/Include/Jerico/Core/Result.hpp",
+      "bytes": 2639,
+      "sha256": "91439ce800360479ac87b45e4eaa32f2cf9608534bf340006317ed1abdd747ef"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Core/Source/Guid.cpp",
+      "bytes": 2676,
+      "sha256": "ea33f4979f0242db7d01773b2ddcb8ecdd13d0862a72904cc9be6770fc4ad2bd"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Jobs/CMakeLists.txt",
+      "bytes": 446,
+      "sha256": "2bef844359af9845572f82e15572b4ae0a3c4c89353b38a9ee3b78714210d127"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Engine/Jobs/Include/Jerico/Jobs/Cancellation.hpp",
+      "bytes": 1412,
+      "sha256": "9125e6dd955b6c382294ea1a8eaf8255a8b17519e25653324497f8fcda5362b0"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/CMakeLists.txt",
+      "bytes": 5809,
+      "sha256": "e8b3504e74516c6f5f6d0b9439e979523976b86990224d46dbba6950b1d33d92"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BrushEdits.hpp",
+      "bytes": 1001,
+      "sha256": "4a6bb9b918a0afe51e9999d17bd3d718421eb0942d0a3028920fa8b49ff9ec72"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BspDocument.hpp",
+      "bytes": 1052,
+      "sha256": "a2d68d12e1d6303638c34e06dac0cefdc186552dc6e576343a9bed6a2da48c41"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/BspDocumentSession.hpp",
+      "bytes": 4263,
+      "sha256": "a60bbb1865feea95bb8206ea6dc12c52a21b31c0d9a63dc602e0c8796046adef"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyDirectionalWarp.hpp",
+      "bytes": 771,
+      "sha256": "2ff805156ed7d4f7c73208826ba85289a2feeafa663359c93642d1c491baacef"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyLayer.hpp",
+      "bytes": 18444,
+      "sha256": "4b350c4f09fee25aca8361441af42851edbe1a054b709adf29e4b6c9f4a2f5b3"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyMask.hpp",
+      "bytes": 5073,
+      "sha256": "062b2fbc11067e65488c5cdf0a5c57ffe68f0a2059a9ee5e28049a0922270d1c"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyNoise.hpp",
+      "bytes": 872,
+      "sha256": "f0dc27c653d17ceba847ad1ee85f99b0e74d3fa90ba43e90207a2a4b481a524d"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geology/GeologyTypes.hpp",
+      "bytes": 2246,
+      "sha256": "f35e9437f1130837a92f3ef68af9f4d1462c0251fbb1c6ab0f6d73523bf31824"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/Geometry.hpp",
+      "bytes": 416,
+      "sha256": "41318192962ad16cc1a266869179df9aa6705850a4c0d313a3b6f4459195b7d3"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/HardSurfaceStack.hpp",
+      "bytes": 1123,
+      "sha256": "0915a3e69c76a05b1de86923dd76965f64d169e0c39586d730d741e99b94a061"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/ProceduralSpline.hpp",
+      "bytes": 2101,
+      "sha256": "31dd81d819d6cb0deea1de93aab5a449daa62061d1f43160af0c706a19a8d3cb"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SdfRegionRecipe.hpp",
+      "bytes": 1918,
+      "sha256": "75ef68f27ec1d7c09ac0d35716afa26a70eee31fa201ed86f68bf9cc526de59d"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SolidEvaluator.hpp",
+      "bytes": 3498,
+      "sha256": "fb98c9c1eaa17db581c10781da2f4f9b4d4fcc9102b39f6d66a8096c90cee507"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Include/Jerico/ProceduralAuthoring/SparseSdfField.hpp",
+      "bytes": 3824,
+      "sha256": "72cef017fcf92beb3013f4ba81b85a6575ee87e6fefa316c49201bc9987e1463"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/BspDocument.cpp",
+      "bytes": 10309,
+      "sha256": "d7baa278f2f3be19881392055756a70522a973dabb1f06cf2df651415e689724"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyNoise.cpp",
+      "bytes": 6249,
+      "sha256": "9e3d09cf4cbc607edb49e91a4551f0b12057b6ed0fc47c0f9f936a4476a935b2"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/Geology/GeologyValueNoiseReference.hpp",
+      "bytes": 3936,
+      "sha256": "0b2eb9682617d6c4806eac426c4ac0d6db1b5d44fc133f4a21e5d8f7dc19b458"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/ProceduralSpline.cpp",
+      "bytes": 33312,
+      "sha256": "821979416dc6c270fe69c71d5f3e6d1e40ba1837d8774c82b797018be1e506b1"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/SolidEvaluatorManifold.cpp",
+      "bytes": 76535,
+      "sha256": "75b1f9109cb8b05bfcc2387636a9c649df3103781c9a5effaa77d8863713fbc6"
+    },
+    {
+      "path": "original/build-chain/deps/engine-inputs/Tools/ProceduralAuthoring/Source/TriangleBvh.hpp",
+      "bytes": 13967,
+      "sha256": "bffe8f5a4266ef12450463a8e900ad11a962c98c7bd2f53d7d54ec1febf4cd51"
+    },
+    {
+      "path": "platform/PipeSockets.cpp",
+      "bytes": 13173,
+      "sha256": "7e3112673ec65dcf30e6fbe6df6cfc8753afaab6496b43c284bdf3afdbef0bf9"
+    },
+    {
+      "path": "reference/PipeSockets.cpp",
+      "bytes": 12969,
+      "sha256": "07697cb01e80302496360bf524794a3606f12cfa2912aa5e598c1b08f384c80e"
+    },
+    {
+      "path": "reference/PipeSockets.hpp",
+      "bytes": 3113,
+      "sha256": "91c5c3bb92805535952e2a65de6ca0a79ba46545f139b0baab5128add3935d19"
+    },
+    {
+      "path": "src/PipeAssemblyDemo.cpp",
+      "bytes": 1064,
+      "sha256": "0b2190cfa5e3462a0f0f84889e1dce52ce5e9455e9ec8a36188e89a3197ce88b"
+    },
+    {
+      "path": "src/PipeCatalog.cpp",
+      "bytes": 1975,
+      "sha256": "14e3863b745d5184daf9f1c28acedbb5558ceb6fc0fa1d054d37094f69d1b90b"
+    },
+    {
+      "path": "src/PipeObj.cpp",
+      "bytes": 2019,
+      "sha256": "819b0557bbf348d6eb245113d5b4d01a0bfabec594fa376eade9e4446fdbd01c"
+    },
+    {
+      "path": "src/elbow_demo.cpp",
+      "bytes": 1621,
+      "sha256": "07a83491ef263e7fe14b9fd41058ffd468c73cfd46efd8cc4514b37145ce6bc7"
+    },
+    {
+      "path": "src/pipe_demo.cpp",
+      "bytes": 2479,
+      "sha256": "9ac42ba8aaeaa67000658e9aa2db83e9bdca14d45a1233ff95a8b338e7bb2f03"
+    },
+    {
+      "path": "tests/catalog_matrix_tests.cpp",
+      "bytes": 2111,
+      "sha256": "b6a58fc246f9250c8e33c4232a17511f398a1dd24b6cc2d4eae7fea1f4700de5"
+    },
+    {
+      "path": "tests/catalog_tests.cpp",
+      "bytes": 3724,
+      "sha256": "8f94a65f9ccbeaa9d528b362464235249c12864881ff9d0746fbe9c15949b4d4"
+    },
+    {
+      "path": "tests/elbow_assembly_tests.cpp",
+      "bytes": 1576,
+      "sha256": "c597dba0d8f81ac109b10ba7e85a053bebb82254bbc9f3b808031b0c76c29cbb"
+    },
+    {
+      "path": "tests/elbow_direction_tests.cpp",
+      "bytes": 1424,
+      "sha256": "4b660c94c90dc7e58e08f3152bc1d7586d32eb06d47c8fc03ae638601a740939"
+    },
+    {
+      "path": "tests/fitting_catalog_tests.cpp",
+      "bytes": 2078,
+      "sha256": "c01f40526f7afcb95897b06f3e299ac02d99bfecefc6eebaa57f3a9fcd5e2e45"
+    },
+    {
+      "path": "tests/fitting_demo_test.py",
+      "bytes": 955,
+      "sha256": "4119b4251e44e423afb5f82fb46ee4b10e0d95156a50eb0a88a6425b1e8e3448"
+    },
+    {
+      "path": "tests/fixture/OriginalSocketMath.cpp",
+      "bytes": 6151,
+      "sha256": "6424234f85615cc09d32efd0dac2f69e65f7d51225bc45be88c445051e5ba559"
+    },
+    {
+      "path": "tests/fixture/PipeSockets.hpp",
+      "bytes": 1770,
+      "sha256": "065fbd75433604bf43c8633177eb2345e3145566d2ee3ded03aa3ecc1939884a"
+    },
+    {
+      "path": "tests/long_pipe_tests.cpp",
+      "bytes": 3166,
+      "sha256": "c6024035ea317cee8e113cb253c039ddb6b9a39a8b3dd358941edea59161ff5a"
+    },
+    {
+      "path": "tests/original/DamageFieldTests.cpp",
+      "bytes": 9526,
+      "sha256": "7ed7ae1a0b3a2f984bee1e900783f2ad8813c1dc8a60e887b3a8a6047863023b"
+    },
+    {
+      "path": "tests/original/RockAddonMathTests.cpp",
+      "bytes": 5846,
+      "sha256": "06c4efff6f9d08ee1566557bee7af2c2f6d4b3ec0c963a836dd9123cb61a6117"
+    },
+    {
+      "path": "tests/original/SplineConstructionTests.cpp",
+      "bytes": 18650,
+      "sha256": "acbfb6b7868c75361b6024a55581a7d74f4374af28fda5aba343198cca46f0bc"
+    },
+    {
+      "path": "tests/pipe_obj_tests.cpp",
+      "bytes": 2639,
+      "sha256": "56beb7ed0c5a1a032ea8593534ddf7d81f0881007b5563485ecbfa34e7b8b35f"
+    },
+    {
+      "path": "tests/recipe_precision_test.py",
+      "bytes": 660,
+      "sha256": "550d5b47f0763e06d26fc985434d07e276fb5589dfbf55c77d83d55db0fb8310"
+    },
+    {
+      "path": "third_party/nlohmann/LICENSE.MIT",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14"
+    },
+    {
+      "path": "third_party/nlohmann/json.hpp",
+      "bytes": 919975,
+      "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6"
+    },
+    {
+      "path": "tools/view_imported_pipe.py",
+      "bytes": 2057,
+      "sha256": "0cd722791f7618b632cabdecb65a55ee40849409c65d539bdf4b2f13b9e54067"
+    },
+    {
+      "path": "tools/view_pipe_comparison.py",
+      "bytes": 1902,
+      "sha256": "2e271b7ed5582c1d6180d6ad21b7e2d09b2e88341b703763b5b173f0cfa64507"
+    }
+  ]
+}
