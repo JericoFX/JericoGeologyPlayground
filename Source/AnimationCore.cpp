@@ -1,4 +1,5 @@
 #include "AnimationCore.hpp"
+#include "AnimationInteraction.hpp"
 #include "../External/AnimationNative/examples/coupled_system/products.hpp"
 #include <nlohmann/json.hpp>
 #include <chrono>
@@ -45,6 +46,55 @@ Pose readBones(const Json& j) {
     for(const auto& b:j) result.push_back({b.at("id").get<std::string>(),b.at("parent").get<std::string>(),readTransform(b.at("local"))});
     return result;
 }
+Json documentJson(const Document& document) {
+    auto tracks=Json::array();
+    for(const auto& t:document.tracks) {
+        auto keys=Json::array();for(const auto& k:t.keys)keys.push_back({{"time",k.time},{"local",transformJson(k.local)},{"velocity",vectorJson(k.position_velocity)}});
+        tracks.push_back({{"bone",t.bone_id},{"keys",keys}});
+    }
+    return {{"bones",bonesJson(document.bones)},{"tracks",tracks}};
+}
+Document readDocument(const Json& j) {
+    Document d;d.bones=readBones(j.at("bones"));
+    for(const auto& t:j.at("tracks")){Examples::BoneTrack track{t.at("bone").get<std::string>(),{}};for(const auto& k:t.at("keys"))track.keys.push_back({k.at("time").get<double>(),readTransform(k.at("local")),readVector(k.at("velocity"))});d.tracks.push_back(std::move(track));}
+    Examples::Validate(d);return d;
+}
+Json interactionJson(const InteractionState& state) {
+    auto objects=Json::array(),points=Json::array(),limbs=Json::array(),limits=Json::array(),overrides=Json::array(),takes=Json::array();
+    for(const auto& [id,o]:state.objects)objects.push_back({{"id",id},{"world",transformJson(o.world)},{"authority",static_cast<int>(o.authority)}});
+    for(const auto& [id,p]:state.grabPoints)points.push_back({{"id",id},{"object_id",p.objectId},{"local",transformJson(p.local)},{"hands",static_cast<int>(p.permittedHands)},{"type",static_cast<int>(p.type)},{"status",static_cast<int>(p.status)},{"occupant",p.occupant},
+        {"translation_min",vectorJson(p.limits.translationMin)},{"translation_max",vectorJson(p.limits.translationMax)},{"rotation_min",vectorJson(p.limits.rotationMin)},{"rotation_max",vectorJson(p.limits.rotationMax)}});
+    for(const auto& [id,l]:state.limbs)limbs.push_back({{"id",id},{"bones",l.chain.bones},{"tip",vectorJson(l.chain.tipOffset)},{"shared",l.sharedJoints},{"hand",static_cast<int>(l.hand)},{"mode",static_cast<int>(l.mode)},{"enabled",l.enabled},
+        {"weight",l.weight},{"weight_from",l.weightFrom},{"weight_start",l.weightStart},{"weight_duration",l.weightDuration},{"target",transformJson(l.target)},{"target_from",transformJson(l.targetFrom)},{"target_start",l.targetStart},{"target_duration",l.targetDuration},
+        {"pole",l.pole?vectorJson(*l.pole):Json(nullptr)},{"grab_point",l.grabPointId},{"grab_offset",transformJson(l.grabOffset)},{"motor_target_enabled",l.motorTargetEnabled}});
+    for(const auto& [id,l]:state.jointLimits)limits.push_back({{"id",id},{"axis",vectorJson(l.twistAxis)},{"swing",l.swingRadians},{"twist_min",l.twistMin},{"twist_max",l.twistMax}});
+    for(const auto& [id,o]:state.overrides)overrides.push_back({{"id",id},{"delta",transformJson(o.delta)},{"start",o.startTime},{"duration",o.fadeDuration},{"fade",o.fadeToBase}});
+    for(const auto& [id,t]:state.takes)takes.push_back({{"id",id},{"start",t.start},{"end",t.end},{"document",documentJson(t.document)}});
+    const auto& s=state.settings;
+    return {{"schema","je-animation-interaction-v1"},{"scene_id",state.sceneId},{"objects",objects},{"grab_points",points},{"limbs",limbs},{"limits",limits},{"overrides",overrides},{"takes",takes},
+        {"settings",{{"iterations",s.maxIterations},{"position_tolerance",s.positionTolerance},{"angular_tolerance",s.angularTolerance},{"angular_scale",s.angularLengthScale},{"damping",s.damping},{"max_step",s.maxJointStep},{"pole_weight",s.poleWeight}}}};
+}
+InteractionState readInteraction(const Json& j) {
+    if(j.at("schema")!="je-animation-interaction-v1")throw std::invalid_argument("Unsupported interaction schema");
+    InteractionState state;state.sceneId=j.at("scene_id").get<std::string>();
+    for(const auto& o:j.at("objects")){SceneObject object{o.at("id").get<std::string>(),readTransform(o.at("world")),static_cast<TransformAuthority>(o.at("authority").get<int>())};if(!state.objects.emplace(object.id,object).second)throw std::invalid_argument("Duplicate object ID");}
+    for(const auto& p:j.at("grab_points")) {
+        GrabPoint point;point.id=p.at("id").get<std::string>();point.objectId=p.at("object_id").get<std::string>();point.local=readTransform(p.at("local"));point.permittedHands=static_cast<Hand>(p.at("hands").get<int>());point.type=static_cast<GrabType>(p.at("type").get<int>());point.status=static_cast<GrabStatus>(p.at("status").get<int>());point.occupant=p.at("occupant").get<std::string>();
+        point.limits={readVector(p.at("translation_min")),readVector(p.at("translation_max")),readVector(p.at("rotation_min")),readVector(p.at("rotation_max"))};
+        if(!state.grabPoints.emplace(point.id,point).second)throw std::invalid_argument("Duplicate GrabPoint ID");
+    }
+    for(const auto& l:j.at("limbs")) {
+        const auto id=l.at("id").get<std::string>();LimbControl limb;limb.chain={id,l.at("bones").get<std::vector<std::string>>(),readVector(l.at("tip"))};limb.sharedJoints=l.at("shared").get<std::vector<std::string>>();limb.hand=static_cast<Hand>(l.at("hand").get<int>());limb.mode=static_cast<LimbMode>(l.at("mode").get<int>());limb.enabled=l.at("enabled").get<bool>();
+        limb.weight=l.at("weight").get<double>();limb.weightFrom=l.at("weight_from").get<double>();limb.weightStart=l.at("weight_start").get<double>();limb.weightDuration=l.at("weight_duration").get<double>();limb.target=readTransform(l.at("target"));limb.targetFrom=readTransform(l.at("target_from"));limb.targetStart=l.at("target_start").get<double>();limb.targetDuration=l.at("target_duration").get<double>();
+        if(!l.at("pole").is_null())limb.pole=readVector(l.at("pole"));limb.grabPointId=l.at("grab_point").get<std::string>();limb.grabOffset=readTransform(l.at("grab_offset"));
+        limb.motorTargetEnabled=l.value("motor_target_enabled",false);
+        if(!state.limbs.emplace(id,limb).second)throw std::invalid_argument("Duplicate limb ID");
+    }
+    for(const auto& l:j.at("limits")){const auto id=l.at("id").get<std::string>();if(!state.jointLimits.emplace(id,JointLimit{id,readVector(l.at("axis")),l.at("swing").get<double>(),l.at("twist_min").get<double>(),l.at("twist_max").get<double>()}).second)throw std::invalid_argument("Duplicate joint limit ID");}
+    for(const auto& o:j.at("overrides")){const auto id=o.at("id").get<std::string>();if(!state.overrides.emplace(id,PoseOverride{readTransform(o.at("delta")),o.at("start").get<double>(),o.at("duration").get<double>(),o.at("fade").get<bool>()}).second)throw std::invalid_argument("Duplicate override ID");}
+    for(const auto& t:j.at("takes")){const auto id=t.at("id").get<std::string>();if(!state.takes.emplace(id,BakedTake{id,readDocument(t.at("document")),t.at("start").get<double>(),t.at("end").get<double>()}).second)throw std::invalid_argument("Duplicate take ID");}
+    const auto& s=j.at("settings");state.settings={s.at("iterations").get<std::size_t>(),s.at("position_tolerance").get<double>(),s.at("angular_tolerance").get<double>(),s.at("angular_scale").get<double>(),s.at("damping").get<double>(),s.at("max_step").get<double>(),s.at("pole_weight").get<double>()};return state;
+}
 Json stateJson(const EditorState& state) {
     auto tracks=Json::array();
     for(const auto& track:state.asset.document.tracks) {
@@ -61,13 +111,14 @@ Json stateJson(const EditorState& state) {
     for(const auto& c:state.asset.chains) chains.push_back({{"id",c.id},{"bones",c.bones},{"tip",vectorJson(c.tipOffset)}});
     return {{"schema","je-animation-document-v1"},{"units","metres-seconds"},{"basis","right-handed-y-up"},
         {"bones",bonesJson(state.asset.document.bones)},{"tracks",tracks},{"pose",bonesJson(state.pose)},
-        {"locks",state.locks},{"time",state.time},{"chains",chains},
+        {"locks",state.locks},{"time",state.time},{"interaction_time",state.interactionTime},{"interaction",state.interaction?interactionJson(*state.interaction):Json(nullptr)},{"chains",chains},
         {"mesh",{{"positions",positions},{"triangles",state.asset.mesh.triangles},{"influences",influences},
         {"joint_ids",state.asset.mesh.binding.joint_ids},{"inverse_bind",inverseBind}}}};
 }
 void validateState(const EditorState& state) {
-    validateAsset(state.asset); Math::Finite(state.time);
-    if(state.time<0) throw std::invalid_argument("Negative time");
+    validateAsset(state.asset); Math::Finite(state.time);Math::Finite(state.interactionTime);
+    if(state.time<0||state.interactionTime<0) throw std::invalid_argument("Negative time");
+    if(state.interaction)validateInteraction(state.asset.document,*state.interaction);
     const auto world=Math::ForwardKinematics(state.pose);
     if(state.pose.size()!=state.asset.document.bones.size()) throw std::invalid_argument("Pose skeleton mismatch");
     std::map<std::string,std::string> parents;
@@ -80,6 +131,8 @@ EditorState readState(const Json& j) {
         throw std::invalid_argument("Unsupported animation schema, units or coordinates");
     EditorState s; s.asset.document.bones=readBones(j.at("bones")); s.pose=readBones(j.at("pose"));
     s.time=j.at("time").get<double>(); s.locks=j.at("locks").get<std::set<std::string>>();
+    s.interactionTime=j.value("interaction_time",0.0);
+    if(j.contains("interaction")&&!j.at("interaction").is_null())s.interaction=std::make_shared<const InteractionState>(readInteraction(j.at("interaction")));
     for(const auto& t:j.at("tracks")) {
         Examples::BoneTrack track{t.at("bone").get<std::string>(),{}};
         for(const auto& k:t.at("keys")) track.keys.push_back({k.at("time").get<double>(),readTransform(k.at("local")),readVector(k.at("velocity"))});
@@ -99,6 +152,17 @@ EditorState readState(const Json& j) {
     validateState(s); return s;
 }
 bool same(const EditorState& a,const EditorState& b) { return stateJson(a)==stateJson(b); }
+std::shared_ptr<const InteractionState> runtimeFromAuthored(
+    const std::shared_ptr<const InteractionState>& authored,
+    const std::shared_ptr<const InteractionState>& previous) {
+    if(!authored||!previous)return {};
+    auto live=*authored;
+    for(auto& [id,object]:live.objects) {
+        const auto old=previous->objects.find(id);
+        if(object.authority==TransformAuthority::PhysicsBody&&old!=previous->objects.end()&&old->second.authority==TransformAuthority::PhysicsBody)object.world=old->second.world;
+    }
+    return std::make_shared<const InteractionState>(std::move(live));
+}
 
 // Original CCD adaptation: unavailable rotational DOFs are skipped, including
 // ancestors whose rotation would move a hard world-transform lock.
@@ -163,9 +227,39 @@ void validateAsset(const AnimationAsset& asset) {
     for(const auto& t:asset.mesh.triangles) for(const auto v:t) if(v>=asset.mesh.positions.size()) throw std::invalid_argument("Invalid triangle vertex");
     (void)skinPositions(asset.mesh,asset.document.bones);
 }
-std::vector<Math::Vec3> skinPositions(const SkinMesh& mesh,const Pose& pose) {
-    return Examples::SkinMeshPositions(mesh.positions,mesh.influences,mesh.binding,pose);
+SkinPalette prepareSkinPalette(const SkinBinding& binding,const Pose& pose) {
+    if(binding.joint_ids.size()!=binding.inverse_bind.size())throw std::invalid_argument("Skin binding cardinality mismatch");
+    const auto world=Math::ForwardKinematics(pose);SkinPalette result;result.reserve(binding.joint_ids.size());std::set<std::string> ids;
+    for(std::size_t i=0;i<binding.joint_ids.size();++i) {
+        const auto& id=binding.joint_ids[i];
+        if(id.empty()||!ids.insert(id).second||!world.contains(id))throw std::invalid_argument("Invalid posed binding joint ID");
+        const auto transform=Math::Compose(world.at(id),binding.inverse_bind[i]);const auto q=Math::Unit(transform.rotation);
+        Math::Finite(transform.position);
+        const double xx=q.x*q.x,yy=q.y*q.y,zz=q.z*q.z,xy=q.x*q.y,xz=q.x*q.z,yz=q.y*q.z,wx=q.w*q.x,wy=q.w*q.y,wz=q.w*q.z;
+        result.push_back({{1-2*(yy+zz),2*(xy-wz),2*(xz+wy),2*(xy+wz),1-2*(xx+zz),2*(yz-wx),2*(xz-wy),2*(yz+wx),1-2*(xx+yy)},transform.position});
+    }return result;
 }
+std::vector<Math::Vec3> skinPositions(const SkinMesh& mesh,const SkinPalette& palette) {
+    if(mesh.positions.size()!=mesh.influences.size()||palette.size()!=mesh.binding.joint_ids.size()||mesh.binding.joint_ids.size()!=mesh.binding.inverse_bind.size())throw std::invalid_argument("Skin mesh/palette cardinality mismatch");
+    for(const auto& entry:palette) {
+        Math::Finite(entry.translation);for(const auto coefficient:entry.rotation)Math::Finite(coefficient);
+        const Math::Vec3 a{entry.rotation[0],entry.rotation[1],entry.rotation[2]},b{entry.rotation[3],entry.rotation[4],entry.rotation[5]},c{entry.rotation[6],entry.rotation[7],entry.rotation[8]};
+        if(std::abs(Math::Dot(a,a)-1)>1e-8||std::abs(Math::Dot(b,b)-1)>1e-8||std::abs(Math::Dot(c,c)-1)>1e-8||std::abs(Math::Dot(a,b))>1e-8||std::abs(Math::Dot(a,c))>1e-8||std::abs(Math::Dot(b,c))>1e-8||std::abs(Math::Dot(a,Math::Cross(b,c))-1)>1e-8)throw std::invalid_argument("Skin palette must contain rigid rotations");
+    }
+    std::vector<Math::Vec3> result;result.reserve(mesh.positions.size());
+    for(std::size_t vertex=0;vertex<mesh.positions.size();++vertex) {
+        Math::Finite(mesh.positions[vertex]);const auto& row=mesh.influences[vertex];Math::Vec3 position{};double total{};
+        for(std::size_t i=0;i<row.size();++i) {
+            const auto& influence=row[i];Math::Finite(influence.weight);
+            if(influence.weight<0||influence.joint>=palette.size())throw std::invalid_argument("Invalid skin influence");
+            for(std::size_t previous=0;previous<i;++previous)if(row[previous].joint==influence.joint)throw std::invalid_argument("Duplicate skin influence");
+            total+=influence.weight;position=position+applySkinPoint(palette[influence.joint],mesh.positions[vertex])*influence.weight;
+        }
+        if(!std::isfinite(total)||std::abs(total-1)>1e-8)throw std::invalid_argument("Skin weights must sum to one");
+        Math::Finite(position);result.push_back(position);
+    }return result;
+}
+std::vector<Math::Vec3> skinPositions(const SkinMesh& mesh,const Pose& pose) {return skinPositions(mesh,prepareSkinPalette(mesh.binding,pose));}
 AnimationAsset ownSpiderFixture() {
     AnimationAsset a;
     a.document.bones.push_back({"spider/body","",{{0,1.3,0},{}}});
@@ -199,18 +293,59 @@ AnimationAsset ownSpiderFixture() {
 Editor::Editor(AnimationAsset asset) { state_.asset=std::move(asset);state_.pose=Examples::EvaluateLocals(state_.asset.document,0);validateState(state_); }
 bool Editor::locked(const std::string& id) const { if(!worldPose().contains(id)) throw std::invalid_argument("Unknown bone ID");return state_.locks.contains(id); }
 Math::WorldPose Editor::worldPose() const {return Math::ForwardKinematics(state_.pose);}
-void Editor::beginEdit() {if(transaction_)throw std::logic_error("Edit already active");transaction_=state_;}
+void Editor::beginEdit() {if(transaction_)throw std::logic_error("Edit already active");transaction_=state_;transactionAuthoredChanged_=false;}
 bool Editor::commitEdit() {
     if(!transaction_)throw std::logic_error("No edit active");
-    if(same(*transaction_,state_)) {transaction_.reset();return false;}
-    undo_.push_back(*transaction_);transaction_.reset();redo_.clear();++revision_;return true;
+    if(!transactionAuthoredChanged_||same(*transaction_,state_)) {transaction_.reset();transactionAuthoredChanged_=false;return false;}
+    undo_.push_back(*transaction_);transaction_.reset();transactionAuthoredChanged_=false;redo_.clear();++revision_;return true;
 }
-void Editor::cancelEdit() {if(!transaction_)throw std::logic_error("No edit active");std::swap(state_,*transaction_);transaction_.reset();}
+void Editor::cancelEdit() {
+    if(!transaction_)throw std::logic_error("No edit active");
+    auto restored=*transaction_;
+    auto restoredRuntime=runtimeFromAuthored(restored.interaction,runtimeInteraction_);
+    if(restored.time!=state_.time||restored.interactionTime!=state_.interactionTime) {
+        restored.time=state_.time;restored.interactionTime=state_.interactionTime;
+        if(restored.interaction)restored.pose=sampleInteraction(restored.asset.document,restoredRuntime?*restoredRuntime:*restored.interaction,restored.time,restored.interactionTime,restored.locks).locals;
+        else restored.pose=Examples::EvaluateLocals(restored.asset.document,restored.time);
+    }
+    std::swap(state_,restored);transaction_.reset();transactionAuthoredChanged_=false;runtimeInteraction_=std::move(restoredRuntime);
+}
 void Editor::publish(EditorState next) {
     validateState(next);
     if(same(state_,next))return;
     if(!transaction_) {undo_.push_back(state_);redo_.clear();++revision_;}
-    std::swap(state_,next);
+    else transactionAuthoredChanged_=true;
+    std::swap(state_,next);runtimeInteraction_.reset();
+}
+const InteractionState& Editor::interaction() const {static const InteractionState empty;return state_.interaction?*state_.interaction:empty;}
+const InteractionState& Editor::runtimeInteraction() const {return runtimeInteraction_?*runtimeInteraction_:interaction();}
+void Editor::setInteraction(InteractionState candidate) {
+    validateInteraction(document(),candidate);
+    for(auto& [id,object]:candidate.objects) {
+        const auto old=interaction().objects.find(id);
+        if(object.authority==TransformAuthority::PhysicsBody&&old!=interaction().objects.end()&&old->second.authority==TransformAuthority::PhysicsBody)object.world=old->second.world;
+    }
+    if(interactionJson(candidate)==interactionJson(interaction()))return;
+    auto next=state_;next.interaction=std::make_shared<const InteractionState>(std::move(candidate));
+    auto live=runtimeFromAuthored(next.interaction,runtimeInteraction_);
+    next.pose=sampleInteraction(next.asset.document,live?*live:*next.interaction,next.time,next.interactionTime,next.locks).locals;
+    publish(std::move(next));runtimeInteraction_=std::move(live);
+}
+RuntimePose Editor::evaluateRuntime(double time,const InteractionState* transient) {
+    Math::Finite(time);if(time<0)throw std::invalid_argument("Negative interaction time");
+    auto candidate=transient?std::make_shared<const InteractionState>(*transient):runtimeInteraction_;
+    const auto& evaluated=candidate?*candidate:interaction();
+    auto result=sampleInteraction(document(),evaluated,state_.time,time,state_.locks);
+    auto pose=result.locals;state_.pose.swap(pose);state_.interactionTime=time;runtimeInteraction_=std::move(candidate);return result;
+}
+void Editor::applyTake(const std::string& id) {
+    if(transaction_)throw std::logic_error("Apply take during edit");const auto& take=interaction().takes.at(id);
+    auto next=state_;next.asset.document=take.document;next.time=take.start;
+    auto controls=interaction();controls.overrides.clear();
+    for(auto& [_,limb]:controls.limbs){limb.mode=LimbMode::Fk;limb.grabPointId.clear();limb.grabOffset={};limb.motorTargetEnabled=false;}
+    for(auto& [_,point]:controls.grabPoints){if(point.status==GrabStatus::Occupied)point.status=GrabStatus::Released;point.occupant.clear();}
+    next.interaction=std::make_shared<const InteractionState>(std::move(controls));
+    next.pose=Examples::EvaluateLocals(next.asset.document,next.time);publish(std::move(next));
 }
 void Editor::preserveLocks(Pose& next) const {
     const auto lockedWorld=worldPose();
@@ -273,11 +408,11 @@ void Editor::advance(double delta,double start,double end,bool loop) {
 }
 bool Editor::undo() {
     if(transaction_)throw std::logic_error("Undo during edit");if(undo_.empty())return false;
-    redo_.push_back(state_);std::swap(state_,undo_.back());undo_.pop_back();++revision_;return true;
+    redo_.push_back(state_);std::swap(state_,undo_.back());undo_.pop_back();runtimeInteraction_.reset();++revision_;return true;
 }
 bool Editor::redo() {
     if(transaction_)throw std::logic_error("Redo during edit");if(redo_.empty())return false;
-    undo_.push_back(state_);std::swap(state_,redo_.back());redo_.pop_back();++revision_;return true;
+    undo_.push_back(state_);std::swap(state_,redo_.back());redo_.pop_back();runtimeInteraction_.reset();++revision_;return true;
 }
 std::string Editor::serialize() const {return stateJson(state_).dump(2);}
 void Editor::loadText(const std::string& text) {if(transaction_)throw std::logic_error("Load during edit");publish(readState(Json::parse(text)));}

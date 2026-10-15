@@ -4,7 +4,8 @@ get_filename_component(PLAYGROUND_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOL
 find_path(ANIMATION_JSON_INCLUDE_DIR nlohmann/json.hpp
     HINTS "${PLAYGROUND_ROOT}/build-chain/deps/json" REQUIRED)
 option(ANIMATION_TOOLS_ASAN "Validate the portable core with AddressSanitizer" OFF)
-add_library(JEAnimationToolsCore "${PLAYGROUND_ROOT}/Source/AnimationCore.cpp")
+add_library(JEAnimationToolsCore "${PLAYGROUND_ROOT}/Source/AnimationCore.cpp"
+    "${PLAYGROUND_ROOT}/Source/AnimationInteraction.cpp")
 add_library(JE::AnimationTools ALIAS JEAnimationToolsCore)
 target_compile_features(JEAnimationToolsCore PUBLIC cxx_std_20)
 target_include_directories(JEAnimationToolsCore PUBLIC "${PLAYGROUND_ROOT}/Source"
@@ -12,8 +13,10 @@ target_include_directories(JEAnimationToolsCore PUBLIC "${PLAYGROUND_ROOT}/Sourc
 add_executable(AnimationCoreTests "${PLAYGROUND_ROOT}/Tests/AnimationCoreTests.cpp")
 target_link_libraries(AnimationCoreTests PRIVATE JEAnimationToolsCore)
 target_include_directories(AnimationCoreTests PRIVATE "${ANIMATION_JSON_INCLUDE_DIR}")
+add_executable(AnimationInteractionTests "${PLAYGROUND_ROOT}/Tests/AnimationInteractionTests.cpp")
+target_link_libraries(AnimationInteractionTests PRIVATE JEAnimationToolsCore)
 if(MSVC)
-    foreach(target JEAnimationToolsCore AnimationCoreTests)
+    foreach(target JEAnimationToolsCore AnimationCoreTests AnimationInteractionTests)
         target_compile_options(${target} PRIVATE /W4 /utf-8 /EHsc)
         if(ANIMATION_TOOLS_ASAN)
             target_compile_options(${target} PRIVATE /fsanitize=address /Zi)
@@ -23,4 +26,6 @@ if(MSVC)
 endif()
 enable_testing()
 add_test(NAME JE.AnimationCore COMMAND AnimationCoreTests)
+add_test(NAME JE.AnimationInteraction COMMAND AnimationInteractionTests)
 set_tests_properties(JE.AnimationCore PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
+set_tests_properties(JE.AnimationInteraction PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")

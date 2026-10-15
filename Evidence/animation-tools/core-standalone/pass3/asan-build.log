@@ -1,0 +1,25 @@
+CMake is re-running because F:/JericoGeologyPlayground/build-chain/animation-core-standalone-asan/CMakeFiles/generate.stamp is out-of-date.
+  the file 'F:/JericoGeologyPlayground/Tests/AnimationCore/CMakeLists.txt'
+  is newer than 'F:/JericoGeologyPlayground/build-chain/animation-core-standalone-asan/CMakeFiles/generate.stamp.depend'
+  result='-1'
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26300.
+-- Configuring done (0.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: F:/JericoGeologyPlayground/build-chain/animation-core-standalone-asan
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule F:/JericoGeologyPlayground/Tests/AnimationCore/CMakeLists.txt
+  AnimationCore.cpp
+  AnimationInteraction.cpp
+  Generando código...
+  JEAnimationToolsCore.vcxproj -> F:\JericoGeologyPlayground\build-chain\animation-core-standalone-asan\Release\JEAnimationToolsCore.lib
+  Building Custom Rule F:/JericoGeologyPlayground/Tests/AnimationCore/CMakeLists.txt
+  AnimationCoreTests.cpp
+  AnimationCoreTests.vcxproj -> F:\JericoGeologyPlayground\build-chain\animation-core-standalone-asan\Release\AnimationCoreTests.exe
+Versión de MSBuild 17.14.40+3e7442088 para .NET Framework
+
+  JEAnimationToolsCore.vcxproj -> F:\JericoGeologyPlayground\build-chain\animation-core-standalone-asan\Release\JEAnimationToolsCore.lib
+  Building Custom Rule F:/JericoGeologyPlayground/Tests/AnimationCore/CMakeLists.txt
+  AnimationInteractionTests.cpp
+  AnimationInteractionTests.vcxproj -> F:\JericoGeologyPlayground\build-chain\animation-core-standalone-asan\Release\AnimationInteractionTests.exe

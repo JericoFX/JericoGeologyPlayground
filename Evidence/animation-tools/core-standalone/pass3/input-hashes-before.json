@@ -1,0 +1,186 @@
+[
+  {
+    "path": "build-chain\\deps\\json\\nlohmann\\json.hpp",
+    "sha256": "9BEA4C8066EF4A1C206B2BE5A36302F8926F7FDC6087AF5D20B417D0CF103EA6"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\coupled_system\\checks.cpp",
+    "sha256": "E5DDE613EB1E06AE7BF67833124B02515503DDD54B18E55507A5E15B2B2F53DE"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\coupled_system\\CMakeLists.txt",
+    "sha256": "319F8B037A5A691D7791D0E22368AE7045228813A839CA1B1E702E95F6774741"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\coupled_system\\LICENSE",
+    "sha256": "D0F02BEB74D289FA6BD7A4675E6C02577308FACFD0B9178ECD724AD389738E74"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\coupled_system\\native_fixtures_v1.hpp",
+    "sha256": "B39177AE8C5490BFB96DCC67E9FD5F79976BB8709777B9A6A044F52C44BCE152"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\coupled_system\\products.hpp",
+    "sha256": "40C0DCBABD6E62D86314C9D33680A23BCB656CDC6620AC962404390CD0074DCB"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\animation_suite_types.hpp",
+    "sha256": "8352415011680DEACFB7463AE1539C01E029E45C59CADE528B5E1066E8B98596"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\animation_tools_contract.hpp",
+    "sha256": "D630BBB7FE822C4B29D76D827829E86897EAE5315B2CF9E5502F339EA3BB05D4"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\authoring_example.hpp",
+    "sha256": "1C6106647A9AAB70F12F6D9D3DA7D2CEDE969A31E99B4022AE8AB6190EBE71BE"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\CMakeLists.txt",
+    "sha256": "DB50D8E73D462F29053C3ED7AAAF3A75AA6B9E5CE94BDAF8112C758A271E9597"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\evaluation_example.hpp",
+    "sha256": "B6ABC946D4B692053C7BBC1B59EABD5E35CCC8856B2A41137C2EB98D6642D1EE"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\physics_example.hpp",
+    "sha256": "4801155D1250B6B3AB8C3A203AA36A850146DFC532F11D3B9257A79C6FC5CE9D"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\rigging_checks.hpp",
+    "sha256": "42D1925598523A27F519F232272D4245DA04CE6BEFD9221C698B0FD56C68D3E2"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\rigging_example.hpp",
+    "sha256": "7BCD2CB0E5582B82747D77735B4C610E97629C270CBE5D7E5E28A6A389BE204D"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\rotation_example.hpp",
+    "sha256": "1CEDB219DA0AD1C34CD2A7FF9259EA400AFCC0A736C3EBE077E923D41DE0F959"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\skinning_checks.hpp",
+    "sha256": "35A1A3CD3C3D56BE2B1C379E30D1E7FB97E31E9BC8D455BD0889EA71565E6872"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\skinning_example.hpp",
+    "sha256": "34EBFABCF8F15B7AE09D17E4BD6742A66A9313733BE45C6AEBADC300EDCBC48C"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\suite_example.cpp",
+    "sha256": "640F614F9C3FCA6896069A6C819735A03D34CE1C66DF3E0A8E11542196026B14"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\cpp\\suite_fixture.cpp",
+    "sha256": "D32421828E757C1BBB4EC5DDC543516959738D8B1E7D1BD70E5F9F06F88D329C"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\CMakeLists.txt",
+    "sha256": "861FA25BFC815EDBD27712F6BBEB41BEEE978B6ED09A809908555A4B5959EF39"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\motion_chain_checks.cpp",
+    "sha256": "DC68EC0440B5E38842FB49ADAD5443A3D1E4E66BCAF6D711BEA62532C19A1FF3"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\motion_chain.hpp",
+    "sha256": "F5957F9FBEF5E8E3F7A4579B94C38B2E7BC237EF76FCE1551F27B04FF64D4A49"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\physical_refinement_checks.cpp",
+    "sha256": "D50ED78C95559BDD1F30E014DB48D487E1A420166E97D4547CB87D252914C97D"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\physical_refinement.hpp",
+    "sha256": "CC2B0B3A05FD22126A5AC4BCDEADB8593E4CA7D0CFCB701325F1DECE8D60F37F"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\rig_application_checks.cpp",
+    "sha256": "E265A6AC8D869532C5469AAF38CD79245CDDA9E29698E8CCD5735A2CA4752763"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\motion_pipeline\\rig_application.hpp",
+    "sha256": "FD133D513B080D9BAD8ACC180DD64A780BF6D01DC062638CE6A7296BFFD0CFA3"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\spd_system\\checks.cpp",
+    "sha256": "FD17F1E368E0D91F9DCEC68D817F930CB5116725F9D31AF43F769BFD7B104BA4"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\spd_system\\CMakeLists.txt",
+    "sha256": "B9DE7CC28B187B4E0197697F34380474144F5906622F92A32189371E8C808024"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\spd_system\\LICENSE",
+    "sha256": "D0F02BEB74D289FA6BD7A4675E6C02577308FACFD0B9178ECD724AD389738E74"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\spd_system\\native_fixtures_v1.hpp",
+    "sha256": "60322422193ADAF91025A43BAE6478635F309C814BB7C8855D03510774E79ACC"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\spd_system\\spd_system.hpp",
+    "sha256": "B6F0724BB23BEE6A0B666FE18E75EBE5D325B8A173E704D7DE611707BBC65CB2"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\viewport\\CMakeLists.txt",
+    "sha256": "FBDB69940F189D5408ACE21C0EA4347C9F39F9030C5E39912900F9BC4AC8161C"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\viewport\\LICENSE",
+    "sha256": "D0F02BEB74D289FA6BD7A4675E6C02577308FACFD0B9178ECD724AD389738E74"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\viewport\\viewport_edit_checks.cpp",
+    "sha256": "F18E864BE55AE8F5A3F4D9594B0A5CF3DFF5DE2839D0FE5DEC162506203709B2"
+  },
+  {
+    "path": "External\\AnimationNative\\examples\\viewport\\viewport_edit_example.hpp",
+    "sha256": "B93CE68F81DF5792F9A4E19375DB140277A42F2491073E130CAF8CC55B617A4D"
+  },
+  {
+    "path": "External\\AnimationNative\\playground\\animation_core.hpp",
+    "sha256": "04160365585C3534B29CD28188DF4FD23612D37DD288617EC2F65B5654C5B26C"
+  },
+  {
+    "path": "External\\AnimationNative\\playground\\fixtures\\own-spider-cpp.json",
+    "sha256": "37DB101C2CED55B617111711C982C6D456A9D11003E14101795070990932E1B3"
+  },
+  {
+    "path": "External\\AnimationNative\\playground\\fixtures\\own-suite-cpp.json",
+    "sha256": "B94D5FAD6485A222562A2459C54BE4CC444AE9BCF7B9C025A9811EBDAB877B12"
+  },
+  {
+    "path": "External\\AnimationNative\\PROVENANCE.md",
+    "sha256": "72D540D85862E5A54E9713CEC2FD70BF9CECAC6A23579D1C0FDD8FC02B4347FB"
+  },
+  {
+    "path": "Source\\AnimationCore.cpp",
+    "sha256": "154BE33CDF2C61F822D20C446DB3CA27CDFF8F4B740E2685035FFDE5130EA88A"
+  },
+  {
+    "path": "Source\\AnimationCore.hpp",
+    "sha256": "69E336BF85589363B787A3A8615A3A46F436E590B278CE222C0719A739875ECF"
+  },
+  {
+    "path": "Source\\AnimationInteraction.cpp",
+    "sha256": "D79D56759B4B80F27C46B87047B7B41E9D38A6EB43F6677F63FAB1B42B76EA6A"
+  },
+  {
+    "path": "Source\\AnimationInteraction.hpp",
+    "sha256": "8F0675AECB3E2D6D57BDD299D89C600D3B35DF1537B037939D5CF8CB05438E60"
+  },
+  {
+    "path": "Tests\\AnimationCore\\CMakeLists.txt",
+    "sha256": "D3C40EF0E7009BC9BF20899860D719444DE33DF7311823ACE00E6D464653801C"
+  },
+  {
+    "path": "Tests\\AnimationCoreTests.cpp",
+    "sha256": "AA0A95E4640FE07A11C9BE88CB245E91C43F997A96F88588F4F748FF21E1B613"
+  },
+  {
+    "path": "Tests\\AnimationInteractionTests.cpp",
+    "sha256": "548F5C53A3FF850F72D2B4ABC26B94BA3C3EC65C37E1E0AEF0F384227D2589ED"
+  }
+]

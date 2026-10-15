@@ -1,4 +1,5 @@
 #include "AnimationCore.hpp"
+#include "AnimationInteraction.hpp"
 #include <nlohmann/json.hpp>
 #include <algorithm>
 #include <chrono>
@@ -120,8 +121,104 @@ void correction() {
     check(!conflict.converged&&conflict.residualAfter==conflict.residualBefore,"locked conflict hidden");
     check(blocked.serialize()==before,"locked correction mutation");
 }
+void interactionHistoryAndPersistence() {
+    const auto fixture=AT::humanoidInteractionFixture();AT::Editor editor(fixture.actor);
+    editor.setInteraction(fixture.interaction);editor.seek(.1);(void)editor.evaluateRuntime(.1);
+    const auto initialHistory=editor.undoCount();
+    editor.beginEdit();
+    editor.setInteraction(AT::acquireGrab(editor.document(),editor.interaction(),"left-arm","cube/left",.1,.1,.25));
+    editor.setKey("left/wrist");editor.setLocked("left/foot",true);
+    check(editor.commitEdit(),"interactive transaction not committed");
+    check(editor.undoCount()==initialHistory+1,"interaction created a second history");
+    check(editor.undo(),"interaction undo");
+    check(editor.interaction().grabPoints.at("cube/left").status==AT::GrabStatus::Free&&!editor.locked("left/foot"),"undo failed to restore grip and locks");
+    check(editor.redo(),"interaction redo");
+    const auto history=editor.undoCount();const auto revision=editor.revision();
+    auto authored=editor.interaction();authored.objects.at("cube").authority=AT::TransformAuthority::PhysicsBody;editor.setInteraction(authored);
+    auto transient=AT::withPhysicsSnapshot(editor.interaction(),"cube",{{0,1.6,.6},{}});
+    const auto historyAfterAuthority=editor.undoCount();const auto revisionAfterAuthority=editor.revision();
+    (void)editor.evaluateRuntime(.5,&transient);(void)editor.evaluateRuntime(.6);
+    check(editor.undoCount()==historyAfterAuthority&&editor.revision()==revisionAfterAuthority,"runtime physics snapshot entered authored history");
+    check(editor.interaction().objects.at("cube").world.position.y==1.55&&editor.runtimeInteraction().objects.at("cube").world.position.y==1.6,"runtime object snapshot changed authored object");
+    check(historyAfterAuthority==history+1&&revisionAfterAuthority==revision+1,"authority edit history missing");
+    editor.beginEdit();editor.seek(.3);(void)editor.evaluateRuntime(.7);check(!editor.commitEdit(),"playback-only transaction created history");
+    const auto beforeCancel=editor.undoCount();editor.beginEdit();
+    const auto heldBeforeRelease=editor.worldPose().at("left/wrist");
+    editor.setInteraction(AT::releaseGrab(editor.document(),editor.runtimeInteraction(),"left-arm",.3,.7));
+    check(near(editor.worldPose().at("left/wrist").position,heldBeforeRelease.position),"physics release captured stale authored object pose");
+    check(editor.interaction().objects.at("cube").world.position.y==1.55,"release persisted a continuous physics snapshot");
+    editor.seek(.4);(void)editor.evaluateRuntime(.8);editor.cancelEdit();
+    check(editor.undoCount()==beforeCancel&&editor.interaction().grabPoints.at("cube/left").status==AT::GrabStatus::Occupied,"cancel did not restore grip");
+    check(editor.currentTime()==.4&&editor.interactionTime()==.8,"cancel rewound active playback clocks");
+    const M::RigidTransform motorRequest{{-.2,1.65,.65},M::AxisAngle({0,1,0},.1)};
+    editor.setInteraction(AT::withLimbTarget(editor.runtimeInteraction(),"left-arm",motorRequest,.8));
+    check(editor.undoCount()==beforeCancel+1&&editor.interaction().limbs.at("left-arm").motorTargetEnabled,"motor request did not enter shared history");
+    check(editor.undo()&&!editor.interaction().limbs.at("left-arm").motorTargetEnabled,"motor request undo lost authored controls");
+    check(editor.redo()&&editor.interaction().limbs.at("left-arm").motorTargetEnabled,"motor request redo lost drive flag");
+    const auto encoded=editor.serialize();AT::Editor restored(fixture.actor);restored.loadText(encoded);
+    check(restored.serialize()==encoded,"interactive document roundtrip");
+    check(restored.interaction().sceneId=="cube"&&restored.interaction().objects.at("cube").authority==AT::TransformAuthority::PhysicsBody,"scene authority not persisted");
+    check(restored.interaction().objects.at("cube").world.position.y==1.55,"transient physics object saved as authored pose");
+    const auto& restoredMotor=restored.interaction().limbs.at("left-arm");
+    check(restoredMotor.motorTargetEnabled&&near(restoredMotor.target.position,motorRequest.position)&&near(M::Rotate(restoredMotor.target.rotation,{1,0,0}),M::Rotate(motorRequest.rotation,{1,0,0})),"physical motor request not persisted");
+    auto legacy=nlohmann::json::parse(encoded);for(auto& limb:legacy["interaction"]["limbs"])limb.erase("motor_target_enabled");
+    AT::Editor legacyRestored(fixture.actor);legacyRestored.loadText(legacy.dump());
+    check(!legacyRestored.interaction().limbs.at("left-arm").motorTargetEnabled,"legacy interaction enabled a motor request");
+    auto invalid=nlohmann::json::parse(encoded);invalid["interaction"]["grab_points"][0]["object_id"]="missing-object";
+    const auto before=restored.serialize();const auto count=restored.undoCount();
+    rejects([&]{restored.loadText(invalid.dump());});check(restored.serialize()==before&&restored.undoCount()==count,"invalid interaction load published partial scene");
+    std::vector<AT::RecordedPose> frames;
+    for(const double time:{0.,.2})frames.push_back({time,AT::Examples::EvaluateLocals(fixture.actor.document,time)});
+    restored.setInteraction(AT::withBakedTake(restored.interaction(),restored.document(),"walk-bake",frames));
+    const auto priorTracks=restored.document().tracks.size();restored.applyTake("walk-bake");
+    check(restored.document().tracks.size()==fixture.actor.document.bones.size(),"apply take did not select recorded tracks");
+    for(const auto& [_,control]:restored.interaction().limbs)check(control.mode==AT::LimbMode::Fk&&control.grabPointId.empty(),"apply take double-applied procedural grip");
+    const auto result=restored.evaluateRuntime(1);
+    const auto reference=AT::Examples::EvaluateWorld(restored.interaction().takes.at("walk-bake").document,0);
+    for(const auto& [id,t]:reference)check(near(result.world.at(id).position,t.position),"selected take replay changed recorded pose");
+    check(restored.undo()&&restored.document().tracks.size()==priorTracks,"take selection undo failed");
+    const auto saved=restored.serialize();AT::Editor again(fixture.actor);again.loadText(saved);
+    check(again.interaction().takes.contains("walk-bake")&&again.serialize()==saved,"baked take not persisted");
+}
+void preparedPaletteMatchesOriginalReference() {
+    const auto asset=AT::ownSpiderFixture();
+    double maxError{};
+    for(int sample=0;sample<=20;++sample) {
+        const auto pose=AT::Examples::EvaluateLocals(asset.document,sample/10.);
+        const auto palette=AT::prepareSkinPalette(asset.mesh.binding,pose);
+        const auto actual=AT::skinPositions(asset.mesh,palette);
+        const auto reference=AT::Examples::SkinMeshPositions(asset.mesh.positions,asset.mesh.influences,asset.mesh.binding,pose);
+        for(std::size_t i=0;i<actual.size();++i)maxError=std::max(maxError,M::Length(actual[i]-reference[i]));
+    }
+    auto weighted=chain();
+    weighted.mesh.positions={{.5,.2,.1},{1.3,-.4,.2},{1.5,.6,-.2}};weighted.mesh.triangles={{{0,1,2}}};
+    weighted.mesh.binding=AT::Examples::BuildSkinBinding(weighted.document.bones,{"tip","root","joint"});
+    weighted.mesh.influences={{{0,.5},{1,.2},{2,.3}},{{0,.75},{2,.25}},{{0,.5},{1,.5}}};
+    for(int sample=0;sample<=12;++sample) {
+        auto pose=weighted.document.bones;const double time=sample/12.;
+        pose[0].local={{.2*time,.1,-.3},M::AxisAngle({0,1,0},.4*time)};
+        pose[1].local.rotation=M::AxisAngle({0,0,1},-1.2*time);pose[2].local.rotation=M::AxisAngle({1,0,0},.6*time);
+        const auto palette=AT::prepareSkinPalette(weighted.mesh.binding,pose);
+        const auto actual=AT::skinPositions(weighted.mesh,palette);
+        const auto reference=AT::Examples::SkinMeshPositions(weighted.mesh.positions,weighted.mesh.influences,weighted.mesh.binding,pose);
+        const auto world=M::ForwardKinematics(pose);
+        for(std::size_t i=0;i<actual.size();++i)maxError=std::max(maxError,M::Length(actual[i]-reference[i]));
+        for(std::size_t joint=0;joint<palette.size();++joint) {
+            const auto transform=M::Compose(world.at(weighted.mesh.binding.joint_ids[joint]),weighted.mesh.binding.inverse_bind[joint]);
+            check(near(AT::applySkinVector(palette[joint],{.2,.7,-.3}),M::Rotate(transform.rotation,{.2,.7,-.3}),1e-12),"palette vector rotation differs from original quaternion math");
+        }
+    }
+    check(maxError<1e-10,"prepared matrix palette differs from original rigid LBS");
+    auto mesh=asset.mesh;mesh.influences.front().push_back(mesh.influences.front().front());
+    rejects([&]{(void)AT::skinPositions(mesh,asset.document.bones);});
+    mesh=asset.mesh;mesh.influences.front().front().weight=.9;
+    rejects([&]{(void)AT::skinPositions(mesh,asset.document.bones);});
+    auto invalid=AT::prepareSkinPalette(asset.mesh.binding,asset.document.bones);invalid.front().rotation[0]=2;
+    rejects([&]{(void)AT::skinPositions(asset.mesh,invalid);});
+    std::cout<<"Prepared palette max original-reference error "<<maxError<<" m\n";
+}
 }
 int main() {
-    try { skinAndFixture(); curvesAndHistory(); ikAndLocks(); correction(); std::cout<<"AnimationCore "<<checks<<" checks passed\n"; return 0; }
+    try { skinAndFixture(); curvesAndHistory(); ikAndLocks(); correction(); interactionHistoryAndPersistence(); preparedPaletteMatchesOriginalReference(); std::cout<<"AnimationCore "<<checks<<" checks passed\n"; return 0; }
     catch(const std::exception& e) { std::cerr<<"AnimationCore: "<<e.what()<<'\n'; return 1; }
 }

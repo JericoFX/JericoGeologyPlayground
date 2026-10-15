@@ -1,0 +1,52 @@
+{
+  "pass": "standalone-core-interaction",
+  "hashedInputFiles": 46,
+  "hashDifferences": 0,
+  "configuration": "Release",
+  "generator": "Visual Studio 17 2022 x64",
+  "msbuild": "17.14.40",
+  "targets": [
+    "AnimationCoreTests",
+    "AnimationInteractionTests"
+  ],
+  "release": {
+    "asanOption": false,
+    "buildExitCode": 0,
+    "ctestExitCode": 0,
+    "tests": [
+      {
+        "name": "JE.AnimationCore",
+        "result": "PASS",
+        "checks": 1895
+      },
+      {
+        "name": "JE.AnimationInteraction",
+        "result": "PASS",
+        "checks": 109
+      }
+    ]
+  },
+  "asan": {
+    "asanOption": true,
+    "buildExitCode": 0,
+    "ctestExitCode": 0,
+    "runtimePath": "MSVC 14.44.35207 Hostx64/x64 prepended for test process; no DLL copied",
+    "tests": [
+      {
+        "name": "JE.AnimationCore",
+        "result": "PASS",
+        "checks": 1895
+      },
+      {
+        "name": "JE.AnimationInteraction",
+        "result": "PASS",
+        "checks": 109
+      }
+    ]
+  },
+  "resourceAfter": {
+    "freeGiB": 13.25,
+    "usedPct": 58.5
+  },
+  "warnings": "none observed in build logs"
+}
