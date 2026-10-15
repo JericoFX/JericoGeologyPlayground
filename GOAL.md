@@ -1,5 +1,18 @@
 # Goal de laboratorio — JericoGeologyPlayground
 
+## Misión vigente: JE::AnimationTools (2026-10-14)
+
+**ACTIVE / implementación en curso.** El owner cerró la investigación inversa de Cascadeur y pidió integrar Animation Tools en este playground real. No retomar DLL/Ghidra/paridad ni modificar JericoEngine. La integración futura será un Gem O3DE; el núcleo portable no depende del renderer, UI, Torch ni ONNX.
+
+La [directiva de interacción recibida el 2026-10-14](docs/ANIMATION_TOOLS_INTERACTION_DIRECTIVE_2026_10_14.md) se conserva íntegra. Amplía el cierre funcional: playback con intervención de una mano, GrabPoints persistentes, objetivos que siguen objetos, IK/FK continuo y sin saltos, release hacia la base, bake y repetición bimanual; medir discontinuidad de posición/orientación, residuos, contactos y estabilidad física. Las escenas A–E y los modos de autoridad cinemática/física forman parte de la aceptación. El incremento inicial de rig/timeline/deformación queda como primer hito verificable; por sí solo no completa esta misión. No copiar código, pesos ni recursos propietarios de Cascadeur.
+
+Plan y aceptación de esta misión:
+1. Adaptar los C++ originales de `JericoFX/cascadeur-engine-research`, conservar su procedencia y fixture de ocho patas, verificar sus suites y los contratos de importación/autoría/deformación.
+2. Integrar viewport, jerarquía, FK/IK, locks, timeline, claves, playback y un historial Undo/Redo. Abrir un rig, editar huesos, insertar claves y demostrar deformación de malla dentro de la aplicación normal.
+3. Demostrar ocho patas y corrección restringida con residuos antes/después; compilar, ejecutar regresiones y revisar capturas originales, documentar límites y realizar commits de funcionalidades comprobadas. Compilación o tests aislados no cierran la integración.
+
+Checkout receptor confirmado: `F:/JericoGeologyPlayground`, remote `JericoFX/JericoGeologyPlayground`. Donor congelado en `55982ca6ef330c4a9576f3e10a267f32623ad404`. Los dos GLB de criatura son estáticos: sus rigs serán creados explícitamente aquí, sin atribuirles un rig importado. Los registros geológicos inferiores conservan su estado histórico y su alcance.
+
 Desarrollar y verificar en este playground las matemáticas nativas C++ de geología, con prioridad actual en la creación y calidad visual de rocas, cliffs y estratos; retomar bakes high→low después. Investigar y probar compatibilidad matemática con RBrush leyendo `F:\JericoEngine`, sin modificar ese checkout ni ejecutar Blender. Conservar pruebas, capturas, métricas, procedencia de referencias y un inventario honesto de lo demostrado y lo pendiente para la futura integración M8 en JericoEngine.
 
 **Estado actual (2026-09-28): PAUSED / PARTIAL por instrucción del owner.** Se detiene el Goal del Playground después del último incremento de daño en spline y se entrega un MD de extracción M8 a JericoEngine. Las declaraciones históricas `ACTIVE` de abajo describen checkpoints previos; no acreditan la directiva transversal completa ni la Beauty geológica.
