@@ -1,0 +1,30 @@
+{
+  "schema": "je-animation-core-validation-v1",
+  "donorCommit": "55982ca6ef330c4a9576f3e10a267f32623ad404",
+  "checks": 1808,
+  "release": "PASS",
+  "asan": "PASS",
+  "asanRuntime": "MSVC 19.44.35228, task-local PATH to its Hostx64/x64 directory",
+  "compiler": "MSVC 19.44.35228.0",
+  "sourceHashes": [
+    {
+      "path": "Source/AnimationCore.hpp",
+      "sha256": "CE678211B3A83B577428365802B3D4EE94ADD7ABCE0F40C9E22BA031F0A90D35"
+    },
+    {
+      "path": "Source/AnimationCore.cpp",
+      "sha256": "96B56C898E22B0654FED74DA991BBBD12C1151DD3C7B293A4D33E4C99FD32DCB"
+    },
+    {
+      "path": "Tests/AnimationCoreTests.cpp",
+      "sha256": "472382F4AB684C9830C4F78446F3FE4B7AF49F81CCA7682A8982D4C5E36B9A0D"
+    },
+    {
+      "path": "Tests/AnimationCore/CMakeLists.txt",
+      "sha256": "9B4A19CB53BD6F436EEC9C0998CB6B18D8C6A92D7CC643939F4E5EF87C3B6271"
+    }
+  ],
+  "originalFilesVerifiedIdentical": 37,
+  "logs": "Evidence/animation-tools/core-standalone",
+  "scope": "Portable authoring core; integrated visual and interaction acceptance remains pending"
+}
