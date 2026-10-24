@@ -43,6 +43,10 @@ ctest --test-dir build-surface -C Release --output-on-failure
 
 The historical executable was launched from `build/Release/JericoGeologyPlayground.exe` or `Run.cmd` where those artifacts existed. Existing `Evidence/` snapshots are not proof that this workspace can be rebuilt today without its original dependencies.
 
+## License
+
+JericoFX-owned original code is offered under **GNU GPL v3.0 only** ([full GPLv3 license](LICENSE); [scope and exceptions](LICENSE_POLICY.md)). This does not relicense third-party files or the older engine/dependencies used by historical builds. Redistribution of a linked executable must be checked against those separate licenses; no complete legal-release audit is claimed here.
+
 ## Reference material
 
 - [Laboratory goal and pause status](GOAL.md)
