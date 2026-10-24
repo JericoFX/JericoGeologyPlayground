@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Jerico J</title>
+  <desc id="desc">Orange and white modular J mark on a graphite tile.</desc>
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c4d0d7"/>
+    </linearGradient>
+    <linearGradient id="ember" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb060"/>
+      <stop offset="1" stop-color="#ee641f"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="122" height="122" rx="26" fill="#131a24" stroke="#3b4653" stroke-width="2"/>
+  <path d="M26 26h77v19H76v35c0 17-12 28-31 28-17 0-29-9-33-24l19-7c2 8 7 12 14 12 8 0 12-5 12-13V45H26z" fill="url(#steel)"/>
+  <path d="M57 62h19v18c0 17-12 28-31 28-17 0-29-9-33-24l19-7c2 8 7 12 14 12 8 0 12-5 12-13z" fill="url(#ember)"/>
+  <path d="M77 26h26v19H77z" fill="url(#ember)"/>
+  <path d="M26 26h51v5H26z" fill="#ffffff" opacity=".45"/>
+  <path d="M14 112h100" stroke="#f47b28" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+</svg>
