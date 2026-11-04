@@ -1,0 +1,5595 @@
+{
+  "published_collection_date": "2026-11-04",
+  "images": [
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-0-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-0-ui.png",
+      "sha256": "5612f198f7017dbefb5d226728d691579c8f81f86249c5448fdad530e9a2f2d0",
+      "bytes": 272404,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:21.079595+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-0-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-0-viewport.png",
+      "sha256": "c8b2dabe0131d65d748ed2d7884527b146995212b5e8bb00483fb0a0405daf4f",
+      "bytes": 68865,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:19.193037+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-1-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-1-ui.png",
+      "sha256": "e65a370aa241dd56e8ca14a35a18c951d8c0049cafde3e85e82913e6f892d25a",
+      "bytes": 246110,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:22.885616+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-1-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-1-viewport.png",
+      "sha256": "d79458e90689dc5273bc85e19b6974a90a9bbe17b07b047622dd71fdf4f25868",
+      "bytes": 89512,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:21.168267+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-2-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-2-ui.png",
+      "sha256": "e2996b9912b1c93e0ce4ec88611f5d11354a62d03e9eafaf4cb2c696f91c76de",
+      "bytes": 190220,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:24.688939+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-2-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-2-viewport.png",
+      "sha256": "9ceb7027651136f390a26b5cc8056cd674fd9cb7adbb8609d95e8e6d748ccbb1",
+      "bytes": 75072,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:22.969567+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-3-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-3-ui.png",
+      "sha256": "897c4fc2b828c03e7765f2f523fcdd390f9d22c61072cd2497647b75a7068d7d",
+      "bytes": 242114,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:26.476386+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-3-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-3-viewport.png",
+      "sha256": "1c9e3a245a3443b8bc2ce12532ec9418d9fa7f7fa82d82f206cf7b1766531533",
+      "bytes": 80225,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:24.773907+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-4-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-4-ui.png",
+      "sha256": "69b5a52e3adb257f2aef1072745a19c44a1b21a3400ec1ce33c8e085f2e697be",
+      "bytes": 281429,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:30.505550+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-4-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-4-viewport.png",
+      "sha256": "1238fe6993f07b3f598af789045c018e7440a2180ecf62a7eb83334177073302",
+      "bytes": 78940,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:29.845195+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-5-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-5-ui.png",
+      "sha256": "6a4e73287568a701805051aecc77029f90785ebe6e04e9ef17d86c08bd3a7e31",
+      "bytes": 242239,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:31.215853+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-5-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-5-viewport.png",
+      "sha256": "17b0c5d5386801f2dc8ba488c9d447b4cff0a4c6e0d2aaf2f3249dfdb0918a0e",
+      "bytes": 83871,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:30.570767+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-6-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-6-ui.png",
+      "sha256": "6ccc7d7ba0678db1bd5d6a9ea9ac7f7956de79fa85e152580ce263a74f267be9",
+      "bytes": 193331,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:31.933312+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-6-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-6-viewport.png",
+      "sha256": "4e42fc32fd4191fd546e9dca0e0456f0bd32a15888c5b248336edfca5ee7f182",
+      "bytes": 78127,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:31.279519+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-7-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-7-ui.png",
+      "sha256": "079bfb847c26af87e8c879d3032b76fa6d560f0b4892fb19c3e69fbb96239cd7",
+      "bytes": 251640,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:32.639701+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-7-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-7-viewport.png",
+      "sha256": "07a391257f10694744fb8e6e40a19d96cb4c663f084bffa547db0c6920998515",
+      "bytes": 90460,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:31.996538+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-8-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-8-ui.png",
+      "sha256": "f79e13b61a8220fc3a0ac3b2fd0906c34f6343ff538402feb6e18d97a581fff6",
+      "bytes": 288641,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:36.958864+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-8-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-8-viewport.png",
+      "sha256": "a7af0a491995635d508cabd323e8553d33e7aeb92de1f4fd46e92591dc154c05",
+      "bytes": 91650,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:36.184645+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-9-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-9-ui.png",
+      "sha256": "fa0bdfb593797b560dddb995ae14f4ed4b1243b65f94faa7fa40027584e5b299",
+      "bytes": 201582,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:37.787382+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-9-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-9-viewport.png",
+      "sha256": "b1e63e77ecec3a91ab083ccf716452659248d42bf4ea68f5437f1f3b745de249",
+      "bytes": 86313,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:37.025199+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-10-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-10-ui.png",
+      "sha256": "44ed26b73db687ca5c81ae43f4bd398d370f13c4e6de2cfe7bc9708d9f96b2ef",
+      "bytes": 173682,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:38.622145+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-10-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-10-viewport.png",
+      "sha256": "6446cbc5a1a7c0780a4831a0be40fcbd091ba4a00e906e2d4a555e4a100828b5",
+      "bytes": 61884,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:37.853320+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-11-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-11-ui.png",
+      "sha256": "613513f7bddf07cdcc3c14b674656f16d2c593116b355c47e808de883307a75d",
+      "bytes": 239460,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:39.431743+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-11-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-11-viewport.png",
+      "sha256": "96c7361b4e617e14838223e7967a4265fb6b3ecefaf82fc84de45b75fa11422f",
+      "bytes": 85045,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:38.689986+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-12-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-12-ui.png",
+      "sha256": "4e0c8f021f2a038a55e943de4dfad518e463511333bae26be2942880675a0c84",
+      "bytes": 326765,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:44.297162+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-12-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-12-viewport.png",
+      "sha256": "f197f3097e4bf4161a18d9be7f68770707cb9fdc97a0943582ae2289390e7d2e",
+      "bytes": 131727,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:43.626440+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-13-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-13-ui.png",
+      "sha256": "2e0b2bb88d4f2c404bdc9d16dfb689505136a328af619f4b58e7312ee99b53c9",
+      "bytes": 276898,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:45.314072+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-13-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-13-viewport.png",
+      "sha256": "ab4bab5bee1ca0a0fc03035e7f807d3bea7084a200152f06197ee8e3d40866b6",
+      "bytes": 121979,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:44.645157+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-14-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-14-ui.png",
+      "sha256": "e0fb7c8e813d4c9b05b3de3140699b31ed996ddc40912c908c30464443686bef",
+      "bytes": 214990,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:46.355168+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-14-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-14-viewport.png",
+      "sha256": "974e41563e59bdd4f77174c0df71eec9154e5a7a9cc0d6a369b4d32208130423",
+      "bytes": 107338,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:45.661735+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-15-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-15-ui.png",
+      "sha256": "83edf7c9c7cfb38b7744458382303b0bb38042f99740bddd978c2863a5df1fab",
+      "bytes": 251521,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:47.381491+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-15-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-15-viewport.png",
+      "sha256": "4f74ce6138c4a778ea1610b11c169d9865094fccbdd6161be78e824710ac82a0",
+      "bytes": 93811,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:46.701187+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-16-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-16-ui.png",
+      "sha256": "744801c2b1f54bc43bc7bc1b3dc859feb9e8c43ec8b149fb937f7ac86b3a33ae",
+      "bytes": 280179,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:50.599193+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-16-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-16-viewport.png",
+      "sha256": "0f1e0f272d38e1515a90c72ab0010a105826be51f7995bc7c5c658cf0fad13bd",
+      "bytes": 83373,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:50.040529+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-17-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-17-ui.png",
+      "sha256": "ff42dd913f13e35e0a7d07b1fb4d9321250c087a38bf4fcdc1b8739a186a0a24",
+      "bytes": 248132,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:51.216972+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-17-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-17-viewport.png",
+      "sha256": "673a4e9cd8284e485f87e2ca54c4832b59a69f9c183096ea1cd5aca4c335ddf8",
+      "bytes": 90219,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:50.665148+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-18-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-18-ui.png",
+      "sha256": "850c0e98624cae3147fbf16ed3372954620bf66d7be47717fd88b3f2191c002c",
+      "bytes": 205690,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:51.842637+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-18-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-18-viewport.png",
+      "sha256": "821f658a0f79b8cdeebe92b901c47a56b35c48dd51071a46f0b7dcbdd32dab88",
+      "bytes": 90147,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:51.283697+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-19-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-19-ui.png",
+      "sha256": "3a391e9e1fdf32952f34df825f9ee00ef08f3b2c15fd24b10dae1cd79ef8a0c6",
+      "bytes": 255368,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:52.461500+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-19-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-19-viewport.png",
+      "sha256": "bd78f810d562e0d4097a45e9c5a3acf87bf19dbf1c0b1a7a5d997a426f78f6bc",
+      "bytes": 95671,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:51.909155+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-20-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-20-ui.png",
+      "sha256": "03c7865743852f46b1e38150efdb72b1c8fdd05867c494c6a3911e98dcb6d9f8",
+      "bytes": 289162,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:58.373805+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-20-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-20-viewport.png",
+      "sha256": "7eabf44a33bdc0992b60a5fae893850e99983dcdc364705a249b1cf75b67b284",
+      "bytes": 86139,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:57.372087+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-21-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-21-ui.png",
+      "sha256": "d9b9575132dbd6aa209524c2d5b1c0feca9985ebaf858f40bde3c2f5c0e9e64e",
+      "bytes": 220348,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:59.423863+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-21-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-21-viewport.png",
+      "sha256": "b059c9bf08ad5196f89d368c43fa8c4eb7905c3c520a632fe26cfb892925ad16",
+      "bytes": 66960,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:58.445921+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-22-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-22-ui.png",
+      "sha256": "9960544d29d0379716cdeba500c6c53938cd64aba6efbd154176a26d8aa4eb8b",
+      "bytes": 215463,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:00.458243+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-22-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-22-viewport.png",
+      "sha256": "38d283d52e8d9f3823386c3076c72f46d06984d2396ebd535786cc98d85500a3",
+      "bytes": 100300,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:40:59.491248+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-23-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-23-ui.png",
+      "sha256": "e75fffd1561b22f90dc2cdbf2a1db26bbd60a2c7c57dc8dacce112840e449c69",
+      "bytes": 244283,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:01.498032+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-23-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-23-viewport.png",
+      "sha256": "aae160351ee989b599641858e415778ba94ad7a6e849039a457b20a94e5640b2",
+      "bytes": 84993,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:00.525629+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-24-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-24-ui.png",
+      "sha256": "41a521b61f5e8637369f3dc95cb755e84ef271fb1d852a45bf341fa6c3cf94bf",
+      "bytes": 316952,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.246157+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-24-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-24-viewport.png",
+      "sha256": "6b58f5a5a0dd50c237f94ff6a88170aeea0e09654f5baddb3d9cc572b51f2598",
+      "bytes": 133184,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.157213+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-25-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-25-ui.png",
+      "sha256": "8c776a8bd89b5fc9635acc94e612d28b1d74432eb56670d2d82a63e8a4341523",
+      "bytes": 292291,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.405535+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-25-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-25-viewport.png",
+      "sha256": "cb3cc8cad232a0b791cf6baada5d92b1c540fc7a4adee3235e1bdc122484e06e",
+      "bytes": 156110,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.317827+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-26-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-26-ui.png",
+      "sha256": "48b24c6752bef66ef5703227e7b303bfef04a72c1d7472873fe8b424ebf2eae9",
+      "bytes": 198993,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.546169+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-26-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-26-viewport.png",
+      "sha256": "054185bf5ae057cbc9830da037445c67d96b951a3e81180982d5fdd1f751dad6",
+      "bytes": 65433,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.463276+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-27-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-27-ui.png",
+      "sha256": "cc584322041ea52a92d8221325e40f7a73b303125c3c37c439e48f8192703dcb",
+      "bytes": 222849,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.695021+00:00"
+    },
+    {
+      "category": "rigs",
+      "file": "rigs/anatomia/stage-27-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/anatomy-region-native/stage-27-viewport.png",
+      "sha256": "cb787b4fa1bd97a1646d5ee36b78bab5af53f8eb68712e051c3085475c890bd0",
+      "bytes": 78756,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:41:02.614308+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-0-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-0-ui.png",
+      "sha256": "79bd852d5f434bbf20a3e1703b34723be9ed097c323ede3f3bb6e173df08c97f",
+      "bytes": 405433,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:43.701118+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-0-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-0-viewport.png",
+      "sha256": "181e412339189317acb6036c5e79149ba00571450f3853793c747259c1e58a20",
+      "bytes": 286691,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:42.995167+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-1-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-1-ui.png",
+      "sha256": "46cff9907bf410cac89792a5fded4f9b938721843198f8c83544956a5c331d9d",
+      "bytes": 428147,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:44.480030+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-1-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-1-viewport.png",
+      "sha256": "67184871f805abbbe8437f05db99f0adb7bb82977bc490d4a116f48b648105bc",
+      "bytes": 306959,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:43.777208+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-2-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-2-ui.png",
+      "sha256": "7b36e8ef949e50bdc1195fc21d493f76895aba33ac7237a6f8b60d63ce863c55",
+      "bytes": 410916,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:45.255443+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-2-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-2-viewport.png",
+      "sha256": "08072d1193f51eb3554a51162055374b5e642d8d00c02a5b60c4bb86831368b5",
+      "bytes": 292162,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:44.554072+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-3-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-3-ui.png",
+      "sha256": "c464879ea719c8b2e40c5959dff273781de6acf7012ee2392055cebe4fbec6f1",
+      "bytes": 490400,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:46.034307+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-3-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-3-viewport.png",
+      "sha256": "e111a8a3f9ea7001cb6b34dbbd365fdc051bd52dc7c650745b66064e8cd0a0e1",
+      "bytes": 328209,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:45.331127+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-4-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-4-ui.png",
+      "sha256": "8d83e652d078280202fad95aa17f512b4124dd137826a5527352e67cfec903b9",
+      "bytes": 393544,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:47.711467+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-4-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-4-viewport.png",
+      "sha256": "28eaed790cf20b3e7bef190a47b2b2173067ac4517eb3bf0983ad6a594834789",
+      "bytes": 274910,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:47.010119+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-5-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-5-ui.png",
+      "sha256": "cc37d728553ff4a5cb6947632449a3575559407c23912ce434c4876bbb119f3d",
+      "bytes": 419447,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:48.507289+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-5-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-5-viewport.png",
+      "sha256": "1bc9e95b4127cc4a5b6910fa5fd0a94afec9b562d7345fc8da6b5ba9c95b3380",
+      "bytes": 298800,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:47.792552+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-6-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-6-ui.png",
+      "sha256": "511e4a41487d8e6fbf471e3693d33362b43fec7c13e045d2821bd394955272b7",
+      "bytes": 402749,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:49.290254+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-6-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-6-viewport.png",
+      "sha256": "182279cdf99a2b1a1889da2a1e23a777b48f78e4769a52cd31fdb5e6ae668cc6",
+      "bytes": 283265,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:48.582007+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-7-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-7-ui.png",
+      "sha256": "b097c2e770ab9ae28f3b18270a73d72d07bc78ccfcc79e2fe5b353bdf7aa0ac3",
+      "bytes": 485344,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:50.072356+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-7-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-7-viewport.png",
+      "sha256": "d432df5c87f3e4622f5206df29a5d9d1b1733d0d3b04c9c5d8c4038aacfad15e",
+      "bytes": 322727,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:49.368827+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-8-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-8-ui.png",
+      "sha256": "170f08f51b9fec51efbb94f192ce4c76877091eb17e7f8d190bbd7f824f81efd",
+      "bytes": 413948,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:52.006260+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-8-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-8-viewport.png",
+      "sha256": "181e412339189317acb6036c5e79149ba00571450f3853793c747259c1e58a20",
+      "bytes": 286691,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:51.302697+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-9-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-9-ui.png",
+      "sha256": "8ca1a59a7c91901f0a68114a7600e2900603a3943b677eee6178931bbd68f66f",
+      "bytes": 445794,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:53.055474+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-9-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-9-viewport.png",
+      "sha256": "67184871f805abbbe8437f05db99f0adb7bb82977bc490d4a116f48b648105bc",
+      "bytes": 306959,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:52.354952+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-10-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-10-ui.png",
+      "sha256": "cb4c19682127b3c84dcd69addb704c53e9cbaa0d7cbe47fd182f3fb0c2d54b17",
+      "bytes": 425262,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:54.104700+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-10-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-10-viewport.png",
+      "sha256": "08072d1193f51eb3554a51162055374b5e642d8d00c02a5b60c4bb86831368b5",
+      "bytes": 292162,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:53.404544+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-11-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-11-ui.png",
+      "sha256": "5ef0b76b7e6280307be83e2f4741243ef69d9272a682ff51cd396cd8cd9aca74",
+      "bytes": 501551,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:55.161895+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-11-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-11-viewport.png",
+      "sha256": "e111a8a3f9ea7001cb6b34dbbd365fdc051bd52dc7c650745b66064e8cd0a0e1",
+      "bytes": 328209,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:54.457442+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-12-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-12-ui.png",
+      "sha256": "ce0398945118596530d1cf7d4f597dfe108f1e5e72af8bdb639dfeb3728010a5",
+      "bytes": 397403,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:57.086281+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-12-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-12-viewport.png",
+      "sha256": "28eaed790cf20b3e7bef190a47b2b2173067ac4517eb3bf0983ad6a594834789",
+      "bytes": 274910,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:56.384982+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-13-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-13-ui.png",
+      "sha256": "4b8b97483361e3c499b1b09760fdd22326010df5218d7663ea149a7854778713",
+      "bytes": 428502,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:58.134853+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-13-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-13-viewport.png",
+      "sha256": "1bc9e95b4127cc4a5b6910fa5fd0a94afec9b562d7345fc8da6b5ba9c95b3380",
+      "bytes": 298800,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:57.433486+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-14-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-14-ui.png",
+      "sha256": "9a89353053faa0579f6fac984b066bfc19b71a42c0d4555d7958665c5c12dad2",
+      "bytes": 408696,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:59.188259+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-14-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-14-viewport.png",
+      "sha256": "182279cdf99a2b1a1889da2a1e23a777b48f78e4769a52cd31fdb5e6ae668cc6",
+      "bytes": 283265,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:58.482877+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-15-ui.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-15-ui.png",
+      "sha256": "544421a7783897265f360c2dc8e17ddeb927c7c3169ea3fa8e5f45f2e6b449ce",
+      "bytes": 488947,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:11:00.240488+00:00"
+    },
+    {
+      "category": "boca",
+      "file": "boca/contactos/stage-15-viewport.png",
+      "source": "Evidence/animation-tools/resume-2026-11-03/mouth-contact-native/stage-15-viewport.png",
+      "sha256": "d432df5c87f3e4622f5206df29a5d9d1b1733d0d3b04c9c5d8c4038aacfad15e",
+      "bytes": 322727,
+      "dimensions": [
+        768,
+        501
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T09:10:59.538182+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/cable-tray-crossbars.png",
+      "source": "Evidence/spline-construction/cable-tray-crossbars.png",
+      "sha256": "14b53da3df5ba3e104db74822c48b3714c3aee4f8e0fd57104981ad85420ea24",
+      "bytes": 58112,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.479928+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/cable.png",
+      "source": "Evidence/spline-construction/cable.png",
+      "sha256": "8722412f86e5bdd40723eab227386ec841f1c37715d36378e665291853e106d6",
+      "bytes": 65637,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.808165+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/corrugated-hose.png",
+      "source": "Evidence/spline-construction/corrugated-hose.png",
+      "sha256": "3404d45b540921db098744bb413a65eb70c6c10d19a7e800868ff7832198bb91",
+      "bytes": 77560,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.938347+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/fractured-pipe.png",
+      "source": "Evidence/spline-construction/fractured-pipe.png",
+      "sha256": "a6127360bc6167876eae750acbeaeccc90fdc77847824671af727a82c1aad4aa",
+      "bytes": 90013,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:01.049134+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/high-curvature-bend.png",
+      "source": "Evidence/spline-construction/high-curvature-bend.png",
+      "sha256": "5122424739d201eeed224cb8f8d3ebf7e57f7790e6b5bd125d44b845e1e2c26a",
+      "bytes": 109780,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.701290+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/i-beam-run.png",
+      "source": "Evidence/spline-construction/i-beam-run.png",
+      "sha256": "6b044a974e5d460b725904aa062bc6b757c70f33718c6827b97d17f99a6e47f5",
+      "bytes": 56891,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.596368+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/pipe-s-curve.png",
+      "source": "Evidence/spline-construction/pipe-s-curve.png",
+      "sha256": "db3b68662f6aa4d5133840529b5acd7921a26615868cd070628f5ad6cc320a46",
+      "bytes": 85408,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:44:59.922497+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/pipe-seam.png",
+      "source": "Evidence/spline-construction/pipe-seam.png",
+      "sha256": "db0905677f54d2e80fc4c05b5addb5427ae8554cd4651a0144f583079e574542",
+      "bytes": 51743,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.257392+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/pipe-straight.png",
+      "source": "Evidence/spline-construction/pipe-straight.png",
+      "sha256": "4a8522a52bb865692fea64475c6de3fbd33347ca14b7395d899c8652a3bb47c6",
+      "bytes": 61253,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:44:59.809425+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/pipe-uv-checker.png",
+      "source": "Evidence/spline-construction/pipe-uv-checker.png",
+      "sha256": "ed7dc9507fbd57eccf1eda197b6498b012a8457d227438b781f5ba886d6f26b6",
+      "bytes": 53560,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.037831+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/pipe-vertical-rmf.png",
+      "source": "Evidence/spline-construction/pipe-vertical-rmf.png",
+      "sha256": "588d1854b9ef5edc6075264cb83bcec33aa8534a2bac84bd1544658d9fd7fed2",
+      "bytes": 52218,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.153461+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/rectangular-duct.png",
+      "source": "Evidence/spline-construction/rectangular-duct.png",
+      "sha256": "261872f77354dbdc9ebe4bfcf9e12f602cea5aaf8ebab614a1215fdf2565ada0",
+      "bytes": 54569,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:00.369095+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/shared-crack-bake-uv.png",
+      "source": "Evidence/spline-construction/shared-crack-bake-uv.png",
+      "sha256": "8e234e372912d25e1e66aaa1b42e16eb1a93d17941a90edbf7a4b3ccbc562fab",
+      "bytes": 53378,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:01.604179+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/shared-crack-lit.png",
+      "source": "Evidence/spline-construction/shared-crack-lit.png",
+      "sha256": "66125689e5582c9d299bab446f0bd07c83615bfa4c9691e44ec57e933d108cc0",
+      "bytes": 113404,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:01.298320+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/shared-crack-wire.png",
+      "source": "Evidence/spline-construction/shared-crack-wire.png",
+      "sha256": "ff56323dde1458b8e0beff0a0aee985a9b7622a2a403517cd871501194fe4831",
+      "bytes": 147920,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:01.450112+00:00"
+    },
+    {
+      "category": "splines",
+      "file": "splines/construccion/twisted-duct.png",
+      "source": "Evidence/spline-construction/twisted-duct.png",
+      "sha256": "db20ca65966dac5dbc94d5c712a138d8d525cdee165c455675d0f892953b292e",
+      "bytes": 58850,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T04:45:01.151678+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/cavidades/panel-through-hole-after.png",
+      "source": "Evidence/2026-09-27-shared-damage-cavity/panel-through-hole-after.png",
+      "sha256": "babf18398020bed8f9be609b965271e30672e6a0de384211ef964cf3d074c061",
+      "bytes": 56465,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T17:29:51.442403+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/cavidades/panel-through-hole-before.png",
+      "source": "Evidence/2026-09-27-shared-damage-cavity/panel-through-hole-before.png",
+      "sha256": "dea0e9781f62b4d13ae02c0c8a4bbd5ac379f9c1e017647e4e8c4357794acfe0",
+      "bytes": 51622,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T17:29:51.363243+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/cavidades/rock-cavity-after.png",
+      "source": "Evidence/2026-09-27-shared-damage-cavity/rock-cavity-after.png",
+      "sha256": "993e0545aaf57d2ccc109388042c8db683b2d6845a6a92764b1e6791265e4022",
+      "bytes": 190667,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T17:29:50.953370+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/cavidades/rock-cavity-before.png",
+      "source": "Evidence/2026-09-27-shared-damage-cavity/rock-cavity-before.png",
+      "sha256": "8190c2e37aecdff38d3f1bc36a8b5524411f06ebd6d640eeef97617324085919",
+      "bytes": 190166,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T17:29:50.869072+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/panel-crack-after.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/panel-crack-after.png",
+      "sha256": "4c7f63e842156ca0ccd00b95274fc4bb0b484c319483d42d46b52db46c55bfa4",
+      "bytes": 58101,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:34.856549+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/panel-crack-before.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/panel-crack-before.png",
+      "sha256": "0a6df00cc8cf5f2b187efc8519e8588ff0701cc1aee333a3d2358ba68b03deb1",
+      "bytes": 49286,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:34.775155+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/panel-crack-fresh-material.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/panel-crack-fresh-material.png",
+      "sha256": "1118a75a493f5adf546dcd194b8d1dede1bc1de9bfc080956e8ec635ee84365f",
+      "bytes": 712701,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:35.091915+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/rock-crack-after.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/rock-crack-after.png",
+      "sha256": "8e286c818d7284a34ab8475066d3513b496eac9bf13a320ea1c9fbcd998a8454",
+      "bytes": 172143,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:34.429867+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/rock-crack-before.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/rock-crack-before.png",
+      "sha256": "add223b5009b2351d57d546c879f346b5eb7ae41ebdc9b26d412ea3f63b38d49",
+      "bytes": 167870,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:34.336393+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/grietas/rock-crack-fresh-material.png",
+      "source": "Evidence/2026-09-27-shared-damage-path/rock-crack-fresh-material.png",
+      "sha256": "b4d1016796ea9fbee70483462f4814d7a44157e6e97b3837fdbd1b3119e36eae",
+      "bytes": 600751,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T21:39:34.657612+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/broken-railing.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/broken-railing.png",
+      "sha256": "bd17d6cc02a404e74bfa031700af84b935b20397608c6ca662e237e7179e2393",
+      "bytes": 55052,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.701147+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/broken-railway.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/broken-railway.png",
+      "sha256": "cba1a4e2976dd19775f72dccd649fb9f28b13f4757090266c79a595f2ea06eb2",
+      "bytes": 57200,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.549035+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/catwalk.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/catwalk.png",
+      "sha256": "5ae1dfe326aa535644849be50e69de6833723958acabfb2396ce5f75207c18bf",
+      "bytes": 65546,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.288936+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pier-area-left.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pier-area-left.png",
+      "sha256": "7f3b9f860907ebdf3c575aa20950b4dffc7861d81d2e246c538cfe17fefdb188",
+      "bytes": 88440,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.929399+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pier-area-right.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pier-area-right.png",
+      "sha256": "fe1b2b0f54515db444b7202c0b4e5abe2377640519a468bd36942b2fcec5f4da",
+      "bytes": 89678,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.989805+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pier-break-closeup.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pier-break-closeup.png",
+      "sha256": "04429cd3bf32113a1823e9e49959984eec9f88bec47b113e8ba31a9c949c6f01",
+      "bytes": 76112,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.143066+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pier-manual-damage.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pier-manual-damage.png",
+      "sha256": "39afa3b0216417bec7514a0451e275592b45690c7f88f7eff3bed732f547114e",
+      "bytes": 61057,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.082667+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-cavity.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-cavity.png",
+      "sha256": "101a81caeed4de5ff4dffb837993696031d10a629189c940706e83497c575b76",
+      "bytes": 61142,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:57.978958+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-couplings.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-couplings.png",
+      "sha256": "84f9833dc62a1fd26b874ae02a93f002838c28d6e0d7ade9019c9213ecb343ea",
+      "bytes": 68735,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:57.851352+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-dent.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-dent.png",
+      "sha256": "166b9f5b20b250015e084aa1afa912ca6fd3490598d7a37522e152bae61cc587",
+      "bytes": 59348,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.105803+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-high-curvature-rmf.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-high-curvature-rmf.png",
+      "sha256": "de297fc1a1bbf6d35a9505b620566713a95db8bcdaf902824642e5b2a3f31e12",
+      "bytes": 51054,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.396680+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-through-hole.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-through-hole.png",
+      "sha256": "a0933b7b3d52aef9c40041dbe2e84f68931ce5a06b60cd6623ce3ea45dff7de6",
+      "bytes": 57800,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.234190+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/pipe-uv.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/pipe-uv.png",
+      "sha256": "932137f565d81aa093b324a41d10aaea6d06692ca522d2ce91cf24c0370f910d",
+      "bytes": 54772,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.314729+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/plank-cavity.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/plank-cavity.png",
+      "sha256": "13ffe42f054e293029b8f4deb536f761f060d1a4d72812b1900f623a4a3cd49a",
+      "bytes": 59503,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.853257+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/plank-dent.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/plank-dent.png",
+      "sha256": "ca85bb6f68d03199576159259febb6396e2a6a27cf7ff96a93268478139d4914",
+      "bytes": 58741,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.929829+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/plank-fracture-isolated.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/plank-fracture-isolated.png",
+      "sha256": "4819b8df11c1130538b4f1b84ebce488ebe706ec755de166a4bc45acf92a0923",
+      "bytes": 63728,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.213774+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/plank-through-hole.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/plank-through-hole.png",
+      "sha256": "313a8cba8bf114564f1065362ff2888034ddb476dafef65506d52ca449706f9b",
+      "bytes": 57663,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.007644+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/railing.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/railing.png",
+      "sha256": "7d50858b4f927689895050631d8bff9ed1c8eb87656c756b768d709de58a5148",
+      "bytes": 55083,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.625229+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/railway.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/railway.png",
+      "sha256": "d843f0b37240095f22ae74599da03ab65046fd0f0497e9b4823eff97b8182f1d",
+      "bytes": 57420,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.472896+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/rope-manual-damage.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/rope-manual-damage.png",
+      "sha256": "47776e5662dce845452bf0851a1e0ae246d71948a22312ebd3ba303e5d4fa816",
+      "bytes": 95314,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.865993+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/rope-plank-bridge.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/rope-plank-bridge.png",
+      "sha256": "c0764518e0bb7663746863a8e91ffbb200e193d7a136f2bbe4f18128bcbf93f5",
+      "bytes": 94798,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.776246+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/suspension-bridge.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/suspension-bridge.png",
+      "sha256": "6a456be6a8c392a11ac3e66a36f773be5f70ff80c068f51419092392f619a4b9",
+      "bytes": 92289,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.604952+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/suspension-hanger-debug.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/suspension-hanger-debug.png",
+      "sha256": "5a38f099239c9e8d6648305aedd080d0242603890199e61970f0edac5a681a1c",
+      "bytes": 57576,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.688824+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/truss-howe.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/truss-howe.png",
+      "sha256": "4b89f9be4f023dd573af83f5a797151ee2c4ac3e0f03f97ae46c19e7d824dd12",
+      "bytes": 75906,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.522124+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/truss-pratt.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/truss-pratt.png",
+      "sha256": "2fa62efa9e1cd728c10905ecd99f2fbf11b1b5e10f0c8031fd7e05452f9feea6",
+      "bytes": 76206,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.443828+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/truss-warren.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/truss-warren.png",
+      "sha256": "5400fa52460de13a4eaea2ff8c0fb4c1412c1a1f47b6020198226a848b717597",
+      "bytes": 76617,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:59.365874+00:00"
+    },
+    {
+      "category": "damage",
+      "file": "damage/estructuras/wooden-pier.png",
+      "source": "Evidence/2026-09-27-universal-damage-candidate/wooden-pier.png",
+      "sha256": "81b09da7d0f323fa531cf8a91f6a56b5fdc41e79e7623a38275c80ae41d7c894",
+      "bytes": 60180,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-28T00:40:58.776479+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/common-source-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/common-source-lit.jpg",
+      "sha256": "e8fd65002462849592df48b7506f068383163502d2fd5893f480117ccce168ee",
+      "bytes": 123730,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:42:06.297827+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f1-after-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f1-after-lit.jpg",
+      "sha256": "7860453a5acaaad57221f74b4c63c29306f11fe46c1af18286fa510fab5283a8",
+      "bytes": 143052,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:45:31.509086+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f1-before-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f1-before-lit.jpg",
+      "sha256": "e7b1f9a1c1dd4f42e7eb93585b15fc1ef475d8c54b394eb2e1135c801ef776c6",
+      "bytes": 143071,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:43:38.320625+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f1-threshold-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f1-threshold-lit.jpg",
+      "sha256": "249870ce72d375447ca59915f00e7f4c811022fb0a0c6c115c645fe06ea052d5",
+      "bytes": 143109,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:45:12.339291+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f2-after-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f2-after-lit.jpg",
+      "sha256": "f849b2b0926e87e25149babe9897f806fb1f3ac7067944770ffedb3c53e15397",
+      "bytes": 143113,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T13:01:41.225332+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f2-amplitude-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f2-amplitude-lit.jpg",
+      "sha256": "2bb8b9542da42eb3b836f6941e999b13641d250f2b66e670c68ca88b3edbfc0c",
+      "bytes": 143149,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T13:03:53.463601+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f2-amplitude-settled-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f2-amplitude-settled-lit.jpg",
+      "sha256": "2bb8b9542da42eb3b836f6941e999b13641d250f2b66e670c68ca88b3edbfc0c",
+      "bytes": 143149,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T13:04:27.710615+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/modificadores/voronoi-f2-before-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/modifiers-ui-red-1/captures/voronoi-f2-before-lit.jpg",
+      "sha256": "70ed9e1ce09197d0f0d08a8f3069ed5a192fce6070426151a9e934f6e01a6c3e",
+      "bytes": 143040,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:52:56.612669+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-default-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-default-lit.jpg",
+      "sha256": "e6fff5406663ab821b749022d477043aa82e04a8398f5bfdb307fcc2c1a198fa",
+      "bytes": 148292,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:06:36.015207+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-default-wireframe.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-default-wireframe.jpg",
+      "sha256": "b9cbb264d4c173e0f26fe5eadae8a8da5f1e7c80bcf82382bc155b1761f856d3",
+      "bytes": 160545,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:07:45.494675+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-edge-then-transform.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-edge-then-transform.jpg",
+      "sha256": "ac03d076dbfe4d1aa01e595f5ebd6428d65e8130c230cce36f628b864cdbca2e",
+      "bytes": 159293,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:09:40.836708+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-negative-redo.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-negative-redo.jpg",
+      "sha256": "f41f596e1f082121439876cdad23988d218df1f2f7f0cd9f20fc0568b05399a1",
+      "bytes": 159183,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:02:52.769069+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-negative-reset.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-negative-reset.jpg",
+      "sha256": "89251c4430702a83fb6c731043204aa66a97d6eae0bd542bdd137c94c4f1e3c9",
+      "bytes": 153395,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:03:06.898293+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-negative-survives.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-negative-survives.jpg",
+      "sha256": "114aa559e83097dc63cbf5301bbfda7ff1fd885157c2225809a57c26d714e9a7",
+      "bytes": 159473,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:01:59.899328+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-negative-undo.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-negative-undo.jpg",
+      "sha256": "6e488022ed24d1b1f45a8e1ae2a8b6a88ced05b0ac3e5cfc716051cf1b730ddf",
+      "bytes": 153401,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:02:31.724961+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-recovery-zero.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-recovery-zero.jpg",
+      "sha256": "607cd4b6ffdbd412a790570f7119df429334dac6141025d61152b0eed5cb0e6e",
+      "bytes": 153791,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:01:28.773928+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-reloaded.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-reloaded.jpg",
+      "sha256": "f4d264b19e1ae59faa512053fe1f2b9bd44352fc4ed161d950970f65bb65b1c9",
+      "bytes": 154021,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:12:54.319674+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-source-lit.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-source-lit.jpg",
+      "sha256": "91b866772f2f541d6a8cc7f76a1e53c0f000363659fc8e1ccc9c0188566f9bfa",
+      "bytes": 146470,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:06:50.627538+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-source-wireframe.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-source-wireframe.jpg",
+      "sha256": "2f38e00149f35942a488b79095a5296a318ae485785b1f83788a424dabe3cc98",
+      "bytes": 162004,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:07:30.871493+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/common-transform-then-edge.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/common-transform-then-edge.jpg",
+      "sha256": "076c0b60c191f37e1bc054f9bdf988b5019c7cbfd5f48a45475ddc5850be2dcc",
+      "bytes": 159138,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:10:57.268472+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/slate-source-material.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/slate-source-material.jpg",
+      "sha256": "48b85c9dcc10b516181ae3487de3e7eed264b04e669816326af5151ef902a63e",
+      "bytes": 177422,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:18:54.434411+00:00"
+    },
+    {
+      "category": "rocas",
+      "file": "rocas/bordes/slate-source-normals.jpg",
+      "source": "Evidence/rocks-authoring-2026-11-04/edge-chains-ui-2/captures/slate-source-normals.jpg",
+      "sha256": "756ba39242e8500678e03828a50d0e0d26090f45aed8de6b1d85497150a47f84",
+      "bytes": 188769,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-11-04T12:20:14.715305+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-0-ui.png",
+      "source": "Evidence/doors-repair/native/stage-0-ui.png",
+      "sha256": "2045a37ab60da11e1cc9b3c224bbd591ddb210fc8815f52c9a679b5ccbdb385f",
+      "bytes": 306558,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.434365+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-0-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-0-viewport.png",
+      "sha256": "86008c79abd0bec89afab9febc7d9375552ac2f1337d8d126a2ab837b58b3b5b",
+      "bytes": 271716,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.343353+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-1-ui.png",
+      "source": "Evidence/doors-repair/native/stage-1-ui.png",
+      "sha256": "4c76b5eb71802342be14327a42f466fbf9eb22471ec876eb49c6a5b327a4e950",
+      "bytes": 320400,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.614338+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-1-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-1-viewport.png",
+      "sha256": "87e16e700489d44ca77408dd4cc2614d5b98c9b071fc0e06fb93cc884c6efde5",
+      "bytes": 285677,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.522230+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-2-ui.png",
+      "source": "Evidence/doors-repair/native/stage-2-ui.png",
+      "sha256": "0a8ea7ec4d914e55140c347e5a910497c1fe44eff3b6677e13df72a9bf0420bb",
+      "bytes": 245536,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.787974+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-2-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-2-viewport.png",
+      "sha256": "eeb2173cd6c2ce7aba3f1fd18ec7ecf74fd959262d9dac0bcbdb14a661503d28",
+      "bytes": 212224,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.700544+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-3-ui.png",
+      "source": "Evidence/doors-repair/native/stage-3-ui.png",
+      "sha256": "d7011401623c8d2b554f56bef5350554c1084b2c835262e941e8d115e02db684",
+      "bytes": 224025,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.951892+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-3-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-3-viewport.png",
+      "sha256": "a595ce2e0a546debe37b79b96cb69c663206274276523b8181f7b45d24e8aec5",
+      "bytes": 190727,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:54.867180+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-4-ui.png",
+      "source": "Evidence/doors-repair/native/stage-4-ui.png",
+      "sha256": "ab62288efc9c3d2339126373c3f6e1900283d081b60083df539ad3e0eb0bec0b",
+      "bytes": 273744,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.275562+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-4-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-4-viewport.png",
+      "sha256": "57ea3ff3069655a70a515ede010cb0d841dd19cf0ed955991b67db173c134e9a",
+      "bytes": 240205,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.184150+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-5-ui.png",
+      "source": "Evidence/doors-repair/native/stage-5-ui.png",
+      "sha256": "89c1c68b504f733c5d9df66bd389208b7fb85e49d70a5a44f182ab27ad1d9853",
+      "bytes": 268302,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.460964+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-5-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-5-viewport.png",
+      "sha256": "927d949ba2462405a66d9a13089393f336744bb991af60c87659524a56c1b76d",
+      "bytes": 235519,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.368105+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-6-ui.png",
+      "source": "Evidence/doors-repair/native/stage-6-ui.png",
+      "sha256": "343e5e74b04468e081319718b27f891211cb7333bf1d9049f4abeec4b683587f",
+      "bytes": 226091,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.632557+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-6-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-6-viewport.png",
+      "sha256": "d8ebca8965da9d4a97c7f8cacaffd317237644614848fb31d7bef74f89e503f1",
+      "bytes": 192904,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.547987+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-7-ui.png",
+      "source": "Evidence/doors-repair/native/stage-7-ui.png",
+      "sha256": "a57ad1e2ea1f7dd7f21678623a7063b7852deb8726e082be4dfd9596cdec19f3",
+      "bytes": 207250,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.807323+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-7-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-7-viewport.png",
+      "sha256": "be5fd6dc9d9d3640e3e3ba0f3d969d150413f5043dad65d629976a420e64d17f",
+      "bytes": 174850,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:55.721483+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-8-ui.png",
+      "source": "Evidence/doors-repair/native/stage-8-ui.png",
+      "sha256": "cf2bcd9b00c74c703cea75cab5bc2b62b76ba4481083d3f838a87322c8f3b4ad",
+      "bytes": 274769,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.113182+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-8-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-8-viewport.png",
+      "sha256": "eba6319ac1160d55d2d4e3249f18e136b6b01958e5b3b85ae9a7a0a1dd18cf3f",
+      "bytes": 241765,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.021589+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-9-ui.png",
+      "source": "Evidence/doors-repair/native/stage-9-ui.png",
+      "sha256": "3ce72a5793e7909481dd86061c5082df51cf9ed68b8302b78164fe7690b5a3ad",
+      "bytes": 259678,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.282953+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-9-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-9-viewport.png",
+      "sha256": "d6c557d80da95b407a183773773d67d1b3ee777de960f0f811d7292b05d69385",
+      "bytes": 226505,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.194672+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-10-ui.png",
+      "source": "Evidence/doors-repair/native/stage-10-ui.png",
+      "sha256": "490448a335effc1a7f906cada09555d3d2a976414254cd3be608d6167a70ed58",
+      "bytes": 322282,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.458089+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-10-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-10-viewport.png",
+      "sha256": "a1fa1c527451beca7b4f9c0976d68d2e11fbe7e8ac676a5707965358ddcab4d9",
+      "bytes": 289640,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.366513+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-11-ui.png",
+      "source": "Evidence/doors-repair/native/stage-11-ui.png",
+      "sha256": "216180130ebea423c77d05fd616640fb102f11a013f4ab079b969a7dc1c922eb",
+      "bytes": 234556,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.626021+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-11-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-11-viewport.png",
+      "sha256": "a1f7eff6da9271d268efe2f8280c22c6fb053e7194ac88d03dbc6181f5122eb3",
+      "bytes": 201867,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:57.538642+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-12-ui.png",
+      "source": "Evidence/doors-repair/native/stage-12-ui.png",
+      "sha256": "bd53ecaa4c2cd42b98b64d5be3804654054f240d64be8462bfd7cd65344e6576",
+      "bytes": 343352,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.070575+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-12-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-12-viewport.png",
+      "sha256": "c35249adf836b09956ae135cc83c6a27d3e24d76d187c204c24cd662e07441be",
+      "bytes": 308407,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:58.977107+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-13-ui.png",
+      "source": "Evidence/doors-repair/native/stage-13-ui.png",
+      "sha256": "62778a2d7182546e75a3b9258c1b1a9700c318cb5fe13e1d01a13eacaab008ae",
+      "bytes": 357815,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.255109+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-13-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-13-viewport.png",
+      "sha256": "dc39bd557327f0e0b67f01cad9581ac3862a8ba52dc79c66ec5c095626b1791a",
+      "bytes": 321196,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.160880+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-14-ui.png",
+      "source": "Evidence/doors-repair/native/stage-14-ui.png",
+      "sha256": "ca7c5f948dbb47b7c04ee0ad509b551f8de8b418094d17eedb6bf7d432a0e75a",
+      "bytes": 320264,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.438025+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-14-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-14-viewport.png",
+      "sha256": "c453cf1dee049a2fcffde849f7490286b99c0d2c8059a380a5bf0072a0dca01d",
+      "bytes": 285267,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.345356+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-15-ui.png",
+      "source": "Evidence/doors-repair/native/stage-15-ui.png",
+      "sha256": "da33cfe61275de70467cbdfa5d09a6f4f601dedac6d92228c180cfb5a59ea37d",
+      "bytes": 293048,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.618194+00:00"
+    },
+    {
+      "category": "puertas",
+      "file": "puertas/nativo/stage-15-viewport.png",
+      "source": "Evidence/doors-repair/native/stage-15-viewport.png",
+      "sha256": "bd41bca3678b5af560d8e6d85236827a409a2f8ad9bf8d9a6fdb85472b6c5ee4",
+      "bytes": 257012,
+      "dimensions": [
+        1118,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-05T01:28:59.525125+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/contact-0.jpg",
+      "source": "Evidence/prop-system/final/contact-0.jpg",
+      "sha256": "600759d791d449c43c8d2e50d661914316b09a3fb4c75d8ae0ea2f4137b3ded2",
+      "bytes": 65253,
+      "dimensions": [
+        1200,
+        1020
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-10-04T23:33:54.956008+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/contact-1.jpg",
+      "source": "Evidence/prop-system/final/contact-1.jpg",
+      "sha256": "8b36ead645a38471ee50e2a3679033fd7cb5f146145191427e9168b50986a3cb",
+      "bytes": 65711,
+      "dimensions": [
+        1200,
+        1020
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-10-04T23:33:55.163807+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/contact-2.jpg",
+      "source": "Evidence/prop-system/final/contact-2.jpg",
+      "sha256": "c7adf9b54e12b86b433cdb8e4cba09e1a7684db55acc49006959b0563b4bddc4",
+      "bytes": 31635,
+      "dimensions": [
+        1200,
+        1020
+      ],
+      "format": "JPG",
+      "source_modified_utc": "2026-10-04T23:33:55.219007+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-0-ui.png",
+      "source": "Evidence/prop-system/final/stage-0-ui.png",
+      "sha256": "49a0764a028548af71f4c4b2f16b27dad635fc686914867089b06ba335585a53",
+      "bytes": 290854,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.378895+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-0-viewport.png",
+      "source": "Evidence/prop-system/final/stage-0-viewport.png",
+      "sha256": "c14df6ee6cacb92366c407c3dd2165084f887865731d2d45650ccf8baabb318b",
+      "bytes": 241122,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.288367+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-1-ui.png",
+      "source": "Evidence/prop-system/final/stage-1-ui.png",
+      "sha256": "29563fbc0ec790de3c180bc025dd1f37dbd6344e3334f985b9a018d645e80fe2",
+      "bytes": 310268,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.540762+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-1-viewport.png",
+      "source": "Evidence/prop-system/final/stage-1-viewport.png",
+      "sha256": "4ed9e7a246e40a6b6054b4f2a2845db9a69e7b4f51fdf4ff008075fa910a8154",
+      "bytes": 260488,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.447368+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-2-ui.png",
+      "source": "Evidence/prop-system/final/stage-2-ui.png",
+      "sha256": "5b9e8b2bcbc2f0a86da92efb9c5f7970272328cc74318e6209cbc36046a91656",
+      "bytes": 376146,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.711825+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-2-viewport.png",
+      "source": "Evidence/prop-system/final/stage-2-viewport.png",
+      "sha256": "6a36a757c37fa1d2cf2cabca145ad892233d8e09bfa23365484a3ddc49f0b70e",
+      "bytes": 324484,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.615011+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-3-ui.png",
+      "source": "Evidence/prop-system/final/stage-3-ui.png",
+      "sha256": "de39d3e16861edebca4fe17f9b78be82d7fe740a968d9c68ca2a563131ecad34",
+      "bytes": 368714,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.881699+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-3-viewport.png",
+      "source": "Evidence/prop-system/final/stage-3-viewport.png",
+      "sha256": "5b02db75a0410d35ec774786cbc5fe03a7903c00751ece96dc13e1e7df62c0b7",
+      "bytes": 317425,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.785324+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-4-ui.png",
+      "source": "Evidence/prop-system/final/stage-4-ui.png",
+      "sha256": "e7eeb9cb5ab106ff2fdf25b4b31fe558d01c0e35bd28a6a11c98f6095fed68d7",
+      "bytes": 366535,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.050094+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-4-viewport.png",
+      "source": "Evidence/prop-system/final/stage-4-viewport.png",
+      "sha256": "f3b6a458dbf654ae3423782279de71d5d0881db848196cdd65a451501711114c",
+      "bytes": 314270,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:05.954301+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-5-ui.png",
+      "source": "Evidence/prop-system/final/stage-5-ui.png",
+      "sha256": "be7b4184b326fd351f9dba218f0014a46366a530e10005aea6e3d12548a5a36b",
+      "bytes": 296780,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.203557+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-5-viewport.png",
+      "source": "Evidence/prop-system/final/stage-5-viewport.png",
+      "sha256": "6996c75db45d5719919a1b55d2c410c69c572cc0308cf0b74b3e8958318fa78d",
+      "bytes": 246590,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.114903+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-6-ui.png",
+      "source": "Evidence/prop-system/final/stage-6-ui.png",
+      "sha256": "dbf002c70c8d7bb9311eb8c31eeb4ab36068dfa255298d2988dd6a0a24de9c30",
+      "bytes": 185915,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.346723+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-6-viewport.png",
+      "source": "Evidence/prop-system/final/stage-6-viewport.png",
+      "sha256": "2a5856b5add9ca7173afff92737ab82efcb1ff413fb90be8155a98a95fe04480",
+      "bytes": 140077,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.263473+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-7-ui.png",
+      "source": "Evidence/prop-system/final/stage-7-ui.png",
+      "sha256": "448064904060dbd3fa58f15d11b8f1ae1ec34e8c731f47beede1b0560c2340fd",
+      "bytes": 380529,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.525719+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-7-viewport.png",
+      "source": "Evidence/prop-system/final/stage-7-viewport.png",
+      "sha256": "65cc58f2789640d1afbed473fb182557cf217d12aba1e3c543df51385eb2335b",
+      "bytes": 330391,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.424262+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-8-ui.png",
+      "source": "Evidence/prop-system/final/stage-8-ui.png",
+      "sha256": "1d7a82f6d19115c89eaba2f98b32d24a55bc1b9f94c4a6d5df0e9c0eb7d934a0",
+      "bytes": 308655,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.686447+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-8-viewport.png",
+      "source": "Evidence/prop-system/final/stage-8-viewport.png",
+      "sha256": "f2aac1cd3e6099d54408b9d1af9a4a3cf780a2b5dc3be32f60c09d153965dd8c",
+      "bytes": 258786,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.594988+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-9-ui.png",
+      "source": "Evidence/prop-system/final/stage-9-ui.png",
+      "sha256": "6bbd768a46e3c154b2a7fe57f8d7367fd5c7009ff5f5f7536c2ab94ad3d28052",
+      "bytes": 172786,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.823027+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-9-viewport.png",
+      "source": "Evidence/prop-system/final/stage-9-viewport.png",
+      "sha256": "dd0deca640fd1819ea297ae84a34d831f36ba5cc9046019a86a25ceeddd3c3e3",
+      "bytes": 126395,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.743723+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-10-ui.png",
+      "source": "Evidence/prop-system/final/stage-10-ui.png",
+      "sha256": "1b2e72565afb5f40f6007dd98bde1154b0c6473ec815276b3130a18df2841333",
+      "bytes": 277543,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.980223+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-10-viewport.png",
+      "source": "Evidence/prop-system/final/stage-10-viewport.png",
+      "sha256": "e549e263bdf01d478f5943c3771ae15f9c8ca1fdc8b2d09ee54fc70283a8ba4d",
+      "bytes": 217213,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:06.889983+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-11-ui.png",
+      "source": "Evidence/prop-system/final/stage-11-ui.png",
+      "sha256": "8bc669f7a1d658b93db42672671284c8b3b87577746b5628f4a224d1928a2c0a",
+      "bytes": 399463,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.160194+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-11-viewport.png",
+      "source": "Evidence/prop-system/final/stage-11-viewport.png",
+      "sha256": "7166284edf2bc77c7540114177084bd39223f566fbc69ecb3b23418b6d71f1f1",
+      "bytes": 345777,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.058702+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-12-ui.png",
+      "source": "Evidence/prop-system/final/stage-12-ui.png",
+      "sha256": "a49799014e25317e49c9d12aed423a047598f9229d172de211831400b82f8abc",
+      "bytes": 215300,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.311677+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-12-viewport.png",
+      "source": "Evidence/prop-system/final/stage-12-viewport.png",
+      "sha256": "0ac91f3552c05ba0a65a52f686df9784b8c55c28492919466dfc389534c4603a",
+      "bytes": 165233,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.223343+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-13-ui.png",
+      "source": "Evidence/prop-system/final/stage-13-ui.png",
+      "sha256": "9eb0a0ae0d04f1132fbc684024a683206b209322b22e35f54258309501fc8fe4",
+      "bytes": 221662,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.463364+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-13-viewport.png",
+      "source": "Evidence/prop-system/final/stage-13-viewport.png",
+      "sha256": "59ce461a225343a9a6b9a14ae9c6a6a188184c3ff645e8fd51c16429fedc9ec4",
+      "bytes": 173908,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.376882+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-14-ui.png",
+      "source": "Evidence/prop-system/final/stage-14-ui.png",
+      "sha256": "f8f0f0c7d52e1a00f6f68250de7af0b66de90b5cea7bc0a6103b97190a798ebb",
+      "bytes": 186133,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.608230+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-14-viewport.png",
+      "source": "Evidence/prop-system/final/stage-14-viewport.png",
+      "sha256": "5b6c215b52057085e5e63d94fa80a8898b6f576020d55a91071d95c9654f08e1",
+      "bytes": 143023,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.524177+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-15-ui.png",
+      "source": "Evidence/prop-system/final/stage-15-ui.png",
+      "sha256": "c54849e2fa562bf478a95af852643dacdd72702a4acfd1fe9d084e701ee4595e",
+      "bytes": 320770,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.775732+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-15-viewport.png",
+      "source": "Evidence/prop-system/final/stage-15-viewport.png",
+      "sha256": "16c9ed775d01c03e9f3dcdbbc88b6ad5ea31cf4840c270a14267f662eb59236b",
+      "bytes": 275866,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.680561+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-16-ui.png",
+      "source": "Evidence/prop-system/final/stage-16-ui.png",
+      "sha256": "70624ecfe8067643bdfa0915c068cd3471fc98f7a193de437b0a0d3fc7b6f501",
+      "bytes": 130536,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.916047+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-16-viewport.png",
+      "source": "Evidence/prop-system/final/stage-16-viewport.png",
+      "sha256": "f63f56e1d63c80dbe22ccc646193f16a92a8cd0d288d4fb2098cac3cce58ffcc",
+      "bytes": 86569,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.834093+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-17-ui.png",
+      "source": "Evidence/prop-system/final/stage-17-ui.png",
+      "sha256": "c3f6d8dcfe4964164ecbced21ae84bd8174a224b29b890292a4a178af1c39bf3",
+      "bytes": 137619,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.053138+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-17-viewport.png",
+      "source": "Evidence/prop-system/final/stage-17-viewport.png",
+      "sha256": "a309d787867c78e01575362247f53217740b7c50a77396e60760b6f977aaaeb2",
+      "bytes": 94167,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:07.971949+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-18-ui.png",
+      "source": "Evidence/prop-system/final/stage-18-ui.png",
+      "sha256": "509276ec46dba17d63bfc83802c7225fec61c71af1b94f919610d51daf09dfbf",
+      "bytes": 135881,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.199241+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-18-viewport.png",
+      "source": "Evidence/prop-system/final/stage-18-viewport.png",
+      "sha256": "509e5016576a5309d64d36f4a52edd4f5cb99edb46c98fdea71a3aa575d188c6",
+      "bytes": 91749,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.118250+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-19-ui.png",
+      "source": "Evidence/prop-system/final/stage-19-ui.png",
+      "sha256": "10f75a9a16d9151cccb99810c10a8d1a3e086eabf8094e7b9cc0435cc692527e",
+      "bytes": 224280,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.342159+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-19-viewport.png",
+      "source": "Evidence/prop-system/final/stage-19-viewport.png",
+      "sha256": "35a9c4e69e8a60cacf38f698f3d76ce153f562842fe2734227dd938893ad4c5d",
+      "bytes": 175912,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.260143+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-20-ui.png",
+      "source": "Evidence/prop-system/final/stage-20-ui.png",
+      "sha256": "f22244cbee722a69a39bf94e105a633fc281782150207cccdb46a9aabfbddc5d",
+      "bytes": 188957,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.482352+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-20-viewport.png",
+      "source": "Evidence/prop-system/final/stage-20-viewport.png",
+      "sha256": "ffbb49928b5d665f819952c427c589c483d0ce8df0f3c220599862acd4882e59",
+      "bytes": 143295,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.399630+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-21-ui.png",
+      "source": "Evidence/prop-system/final/stage-21-ui.png",
+      "sha256": "d83f2f6765fa0ccd126369ffa64844e1ac44faf8a5d60783891b5d110aa792ec",
+      "bytes": 400553,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.661660+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-21-viewport.png",
+      "source": "Evidence/prop-system/final/stage-21-viewport.png",
+      "sha256": "37adcd26b3cabece51375d0886efe8ce27ab5be41a0d8dbecdb6db00584f62c4",
+      "bytes": 348799,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.560196+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-22-ui.png",
+      "source": "Evidence/prop-system/final/stage-22-ui.png",
+      "sha256": "94db367ae1dc9ab976f67043350848f2cf1b8fd1cf227faa883ffa6d69b42438",
+      "bytes": 300643,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.825331+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-22-viewport.png",
+      "source": "Evidence/prop-system/final/stage-22-viewport.png",
+      "sha256": "089b985e0d399efa90f2ffa32bec15c9522f55e32b784a3a142b35e5d0dacc2c",
+      "bytes": 251776,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.732329+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-23-ui.png",
+      "source": "Evidence/prop-system/final/stage-23-ui.png",
+      "sha256": "ddb2510ede5ac8feed25266de361cc707dd64a80122b86b56378c146609266ab",
+      "bytes": 174682,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.964341+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-23-viewport.png",
+      "source": "Evidence/prop-system/final/stage-23-viewport.png",
+      "sha256": "0a6f3b4e3a5df22d19ca3d21023536df90c15a5d67d931f814ec20c24c04476a",
+      "bytes": 126888,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:08.883687+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-24-ui.png",
+      "source": "Evidence/prop-system/final/stage-24-ui.png",
+      "sha256": "b3e0a66a67f6bd39fd1d376f49184b57f589d7b5819fbe31e7fee60800a70d24",
+      "bytes": 236460,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.112738+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-24-viewport.png",
+      "source": "Evidence/prop-system/final/stage-24-viewport.png",
+      "sha256": "0eb9807e0bfe81999595216d23743185fc84d19b756fbeac47159581b3cbb252",
+      "bytes": 187791,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.026936+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-25-ui.png",
+      "source": "Evidence/prop-system/final/stage-25-ui.png",
+      "sha256": "966c56a8c5228a2f88fb6dde8b4212008af628d26638ab3ccc60d59e97689a84",
+      "bytes": 244939,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.269073+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-25-viewport.png",
+      "source": "Evidence/prop-system/final/stage-25-viewport.png",
+      "sha256": "3a47371fa5180f5ea1fe6c9508d94da1ef75f85278553a2ecad7f0d58e398d6a",
+      "bytes": 197279,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.179666+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-26-ui.png",
+      "source": "Evidence/prop-system/final/stage-26-ui.png",
+      "sha256": "966c56a8c5228a2f88fb6dde8b4212008af628d26638ab3ccc60d59e97689a84",
+      "bytes": 244939,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.425318+00:00"
+    },
+    {
+      "category": "props",
+      "file": "props/final/stage-26-viewport.png",
+      "source": "Evidence/prop-system/final/stage-26-viewport.png",
+      "sha256": "3a47371fa5180f5ea1fe6c9508d94da1ef75f85278553a2ecad7f0d58e398d6a",
+      "bytes": 197279,
+      "dimensions": [
+        858,
+        771
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T23:33:09.335072+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-0-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-0-ui.png",
+      "sha256": "cbfe33ea84765612c105f104e2afc22175954130a7d0d16118de47e4a58342c3",
+      "bytes": 169125,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:30.841854+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-0-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-0-viewport.png",
+      "sha256": "2a9e7fba8b7540f16d55614791856c7d1aa70d74640dbcd89554658560407a47",
+      "bytes": 38913,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:30.721591+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-1-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-1-ui.png",
+      "sha256": "fa1dcc636e835145bd51860818cbd23f0051e561370fd5df78e7a52cf531fdf6",
+      "bytes": 175992,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:31.080147+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-1-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-1-viewport.png",
+      "sha256": "faf0ac9f16eb25ccb1606dc2546a36c68e800fe3123c265082f98ce5613e401d",
+      "bytes": 35104,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:30.955534+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-2-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-2-ui.png",
+      "sha256": "6b20f23822618b78732487dddddba1fc92f03ef3435c5db64f55fd91f179f1b4",
+      "bytes": 210246,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:31.383142+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-2-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-2-viewport.png",
+      "sha256": "acf726dbfa72a859e6c57f70428d5a9665172cc5287c26a1a0461f692a693f08",
+      "bytes": 41667,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:31.255849+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-3-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-3-ui.png",
+      "sha256": "1a3fb1ae71b1f8aff3058ee30ff52e6a141a30e28ca73b011946d9ad17b88f13",
+      "bytes": 209543,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:31.678983+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-3-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-3-viewport.png",
+      "sha256": "2c7928d147407ba34d3df21081b15dc04681a1a8491b76734950b5d4f037a7d1",
+      "bytes": 41513,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:31.568714+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-4-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-4-ui.png",
+      "sha256": "ba1ee8183deb0959aa2802b6e68c3eff646c93a220ee1e32deb4b28bcc3206a2",
+      "bytes": 212748,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.273370+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-4-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-4-viewport.png",
+      "sha256": "b0f6ea312cf5e935a2be1f5bc1c1f814feeadbdc534b7c04789b61a4f69be97a",
+      "bytes": 38727,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.170348+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-5-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-5-ui.png",
+      "sha256": "21cfb5c6c781500b784f183969a8165945c61afc056a9ec44c5996e806c63b5c",
+      "bytes": 197834,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.509611+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-5-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-5-viewport.png",
+      "sha256": "ca4ed4d3c484a434c25b29c1af4ebe3c85aad083029ba7adca04c8abecf3a671",
+      "bytes": 37345,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.407097+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-6-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-6-ui.png",
+      "sha256": "cc31cb2a052149b370d809b8d615aa26550a81bdd52fd8766d41c2509741bb58",
+      "bytes": 197825,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.982138+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-6-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-6-viewport.png",
+      "sha256": "ca4ed4d3c484a434c25b29c1af4ebe3c85aad083029ba7adca04c8abecf3a671",
+      "bytes": 37345,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:32.856310+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-7-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-7-ui.png",
+      "sha256": "ca8c82fc2b8eaa636b149493707e55fb1cd8bde8649956fb4de8cad4bfa9bc80",
+      "bytes": 213822,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:33.332108+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-7-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-7-viewport.png",
+      "sha256": "262c3b64c615516b0ccd1f0096773612dad3dc52fe848a698ebcc7819d826b14",
+      "bytes": 34751,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:33.202218+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-8-ui.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-8-ui.png",
+      "sha256": "2045226728d150e2b38d8644753686f29bdd604748a3181af33955039feb06fa",
+      "bytes": 181809,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:33.704000+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/final-runtime/stage-8-viewport.png",
+      "source": "Evidence/dock-spline/final-runtime/stage-8-viewport.png",
+      "sha256": "2781ca2252f3ae142bf66752740410a1a215f25a29ec8710a1ef94ebd8a5b201",
+      "bytes": 31285,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:21:33.581776+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-0-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-0-ui.png",
+      "sha256": "45ca42fbe86b998167f2ec14ff46d71b81406d5798f6b63b93a93ff714db928c",
+      "bytes": 169092,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.503786+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-0-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-0-viewport.png",
+      "sha256": "8c79694b6111be24a9f949e031ada8f714b378221c6647ee62acdaed893431eb",
+      "bytes": 39029,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.411635+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-1-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-1-ui.png",
+      "sha256": "12b3fae231640e8be6253453f0c5d30236cd80d033cf12cfe630ee12e550c1af",
+      "bytes": 175938,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.677835+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-1-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-1-viewport.png",
+      "sha256": "401f4ca01d0d078465e003f837a748774123c3804976671e531fba05959e8826",
+      "bytes": 35051,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.586915+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-2-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-2-ui.png",
+      "sha256": "e8b0cb1b4f9429a732955b4a90870a990f34a16cb73c99944e6b627811d7580b",
+      "bytes": 209916,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.864386+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-2-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-2-viewport.png",
+      "sha256": "a9680ba032bffc87077bd40ec9e4c4c70b9e4589ac72e357b5695ebb9600bd8d",
+      "bytes": 41302,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.776087+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-3-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-3-ui.png",
+      "sha256": "69dd283b2cc22fb19c757faf6f87b1cc47e0e5df7ecb8a3fec02c55e221181d8",
+      "bytes": 209604,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.048233+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-3-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-3-viewport.png",
+      "sha256": "33e52401fd578330c76bfc67f5d4d7bb56a45d8594338cf323ab6abdeb6e5ff8",
+      "bytes": 41383,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:35.949399+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-4-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-4-ui.png",
+      "sha256": "f1b2d220c1a3c8df2c4fba8892f6b1e457b1e3634d8f0bc67cd2b704b2fb7159",
+      "bytes": 212490,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.487992+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-4-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-4-viewport.png",
+      "sha256": "3ec1ae1c0ca4f30a87fe2d3c751d100c008cb1015539e1247f597f0610a8d07e",
+      "bytes": 38596,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.394920+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-5-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-5-ui.png",
+      "sha256": "30a444fb15b8a5061921f1bc7aa59181efd6d6356362b45fe66771b76f0d9e8a",
+      "bytes": 197294,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.676849+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-5-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-5-viewport.png",
+      "sha256": "697ad76335a4f3eb1e195668546a95b39f95779d22882d9291fbbf2e6852b81c",
+      "bytes": 37323,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.590237+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-6-ui.png",
+      "source": "Evidence/dock-spline/runtime/stage-6-ui.png",
+      "sha256": "b0f2c6ef732678e68781f432973a8769fac73068ad65ed4a24ec027ebcdb4bca",
+      "bytes": 197293,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.856491+00:00"
+    },
+    {
+      "category": "muelles",
+      "file": "muelles/spline/runtime/stage-6-viewport.png",
+      "source": "Evidence/dock-spline/runtime/stage-6-viewport.png",
+      "sha256": "697ad76335a4f3eb1e195668546a95b39f95779d22882d9291fbbf2e6852b81c",
+      "bytes": 37323,
+      "dimensions": [
+        402,
+        364
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T22:02:36.770723+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/interaccion/interactive-connected.png",
+      "source": "Evidence/pipe-editor/interactive-connected.png",
+      "sha256": "8c69223d9ba2b4964d09e8aa65cbd759f2d7a8e9e85e0a059b116c4947fc0c1e",
+      "bytes": 216160,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:33:24.376673+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/interaccion/interactive-external-mesh.png",
+      "source": "Evidence/pipe-editor/interactive-external-mesh.png",
+      "sha256": "3fa8813473b52b9ad1ff6538ca29830f6109de513aefab7f9dad7743861b9736",
+      "bytes": 213193,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:32:21.316048+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/interaccion/interactive-gizmos.png",
+      "source": "Evidence/pipe-editor/interactive-gizmos.png",
+      "sha256": "61e4690550432a2675dec52f811c33c0d67d1cc517cc4383e6b3c23c677c042f",
+      "bytes": 235751,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:31:14.545370+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/interaccion/interactive-picked-connected.png",
+      "source": "Evidence/pipe-editor/interactive-picked-connected.png",
+      "sha256": "1649cb7ed2b44aa2b25de22e25c92a8fb8798a48a7ac41dbf38faab013fce106",
+      "bytes": 216030,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:34:19.073169+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/interaccion/interactive-reloaded.png",
+      "source": "Evidence/pipe-editor/interactive-reloaded.png",
+      "sha256": "e9ac9e891b4699b4bba835d5bb2f36eb94393bcac1f33a4ecc337be2c6a9d96b",
+      "bytes": 232589,
+      "dimensions": [
+        1442,
+        932
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:31:41.032665+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-0-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-0-ui.png",
+      "sha256": "1dcee82d0d499e249f2ed417f912ec05f2a2a3e0b968b4ff96702e09a75cf5cf",
+      "bytes": 555109,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.437252+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-0-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-0-viewport.png",
+      "sha256": "dd729640902233e88039ef1bdae73f39c9127dae113d2a0b2e77f6d1a368057f",
+      "bytes": 109196,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.338513+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-1-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-1-ui.png",
+      "sha256": "4dfb01bc4f201b70ad41f0fcde1f76e5d1c89bee7dfa9d554cac123753778bf0",
+      "bytes": 573150,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.573150+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-1-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-1-viewport.png",
+      "sha256": "dd729640902233e88039ef1bdae73f39c9127dae113d2a0b2e77f6d1a368057f",
+      "bytes": 109196,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.466162+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-2-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-2-ui.png",
+      "sha256": "690499e48f8af0a655540b0d373c31979486301028bfadb48aa5568221a623f8",
+      "bytes": 177060,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.677452+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-2-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-2-viewport.png",
+      "sha256": "f1e8b6223fba91203197fd88fda3a87135db8de27595aac266722b6804bf18d9",
+      "bytes": 13681,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.596313+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-3-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-3-ui.png",
+      "sha256": "684388250b2e80ef5dcff998f715a7627640177af5fd70df2344169279339b1f",
+      "bytes": 556075,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.880297+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-3-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-3-viewport.png",
+      "sha256": "dd729640902233e88039ef1bdae73f39c9127dae113d2a0b2e77f6d1a368057f",
+      "bytes": 109196,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.782451+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-4-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-4-ui.png",
+      "sha256": "36e351c59143e7b790d0ea216c03f755b1086d8b0e9736e487c27cc87721a3d3",
+      "bytes": 247289,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.991429+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-4-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-4-viewport.png",
+      "sha256": "4a93fc2204cbfb9ba34ccf57fdf3bdaa5cb4721abe8ba3af19bc43990b51f8c1",
+      "bytes": 8640,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:34.904384+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-5-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-5-ui.png",
+      "sha256": "feab80e7f1c93704aa2f3e3b7d480517857f57aa9a2e5b96d2da54c52d187033",
+      "bytes": 254174,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:35.099135+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-5-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-5-viewport.png",
+      "sha256": "4a93fc2204cbfb9ba34ccf57fdf3bdaa5cb4721abe8ba3af19bc43990b51f8c1",
+      "bytes": 8640,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:35.015490+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-6-ui.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-6-ui.png",
+      "sha256": "80b0405c198c7d5756dda6e6ed3e4dea22917193d8bbccfc9962d1c6ace2fb83",
+      "bytes": 251985,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:35.212477+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/final/stage-6-viewport.png",
+      "source": "Evidence/pipe-editor/final-runtime/stage-6-viewport.png",
+      "sha256": "4a93fc2204cbfb9ba34ccf57fdf3bdaa5cb4721abe8ba3af19bc43990b51f8c1",
+      "bytes": 8640,
+      "dimensions": [
+        382,
+        349
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T20:40:35.123971+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-0-ui.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-0-ui.png",
+      "sha256": "183cb583bbdbc1f24ce2c0cba923c0f7e98cb861cbc7e820bea9f42a51155daf",
+      "bytes": 196930,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.235290+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-0-viewport.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-0-viewport.png",
+      "sha256": "7c53fede7a5093f900c7c02f4de346ee4283e603dbb65985ae23e996831d219f",
+      "bytes": 137452,
+      "dimensions": [
+        804,
+        807
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.143099+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-1-ui.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-1-ui.png",
+      "sha256": "eeeb2fb504385bd693cbf8f39f140d16fc07151bd738fa8c79bfaf2c90600a64",
+      "bytes": 198698,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.391062+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-1-viewport.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-1-viewport.png",
+      "sha256": "fe05576b92f2aa81685160542837cd1e94b688ab3941ad4ef6f24f98032c1764",
+      "bytes": 138329,
+      "dimensions": [
+        804,
+        807
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.303702+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-2-ui.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-2-ui.png",
+      "sha256": "b9ff7ae1f3715bb0ff9be3d5a1ab22d7e22090eeb6c88bd393c634f49ea0db44",
+      "bytes": 198394,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.548615+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-2-viewport.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-2-viewport.png",
+      "sha256": "aa95ea7edbccd32f562d7cac6c5dfe2e0756596ab1f583089bde488aafe35625",
+      "bytes": 138700,
+      "dimensions": [
+        804,
+        807
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.462304+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-3-ui.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-3-ui.png",
+      "sha256": "41c9a5b0160e64887f29ae224bd8aa4f2eecb9a9d78d25a7f50ad6efccc0d8cd",
+      "bytes": 198402,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.703345+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-3-viewport.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-3-viewport.png",
+      "sha256": "aa95ea7edbccd32f562d7cac6c5dfe2e0756596ab1f583089bde488aafe35625",
+      "bytes": 138700,
+      "dimensions": [
+        804,
+        807
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.616007+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-4-ui.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-4-ui.png",
+      "sha256": "c1253f6f94526e399ff8a2ab84ea8f759ef6bd062a8ebd8fe0170a55108c2de9",
+      "bytes": 84263,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.843044+00:00"
+    },
+    {
+      "category": "pipes",
+      "file": "pipes/sockets/stage-4-viewport.png",
+      "source": "Evidence/pipe-sockets/runtime/stage-4-viewport.png",
+      "sha256": "285eb9500e98dd3d3b3fd95964a68fed878c650a3c9df7f08fa073895952da68",
+      "bytes": 33169,
+      "dimensions": [
+        804,
+        807
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-04T18:28:00.758467+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-01-Wood-Vertical.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-01-Wood-Vertical.png",
+      "sha256": "82e273461c199ab6356b6e69c03626c8d4f07a0ab6709723bde5842747903b4f",
+      "bytes": 1160133,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:05:38.835792+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-02-Wood-Hooks-Inclined.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-02-Wood-Hooks-Inclined.png",
+      "sha256": "8cb876bfff8e6d9dd2f13d7d688e5362aa3623febc0012f3863dc3b79836b8c1",
+      "bytes": 1155678,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:06:05.562940+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-03-Metal-Tall-Inclined.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-03-Metal-Tall-Inclined.png",
+      "sha256": "aacdfbe09fa4e4b1fb659838621995afe7ad7d99b52371b271529e8f5c77d96f",
+      "bytes": 1130807,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:28:13.055764+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-04-Metal-68deg.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-04-Metal-68deg.png",
+      "sha256": "8acd0034c6859d509a678400116873e72199fa93bab252bc3a4d462a734e0bf9",
+      "bytes": 1142513,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:27:47.332141+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-05-Grip-Frames-68deg.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-05-Grip-Frames-68deg.png",
+      "sha256": "41d9ca8ebcf21b5775aae867b9a657b9e08ebeef19cd4a36de81286dcda221b4",
+      "bytes": 1163258,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:28:00.671432+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-06-Wood-Detail.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-06-Wood-Detail.png",
+      "sha256": "bded4831645ff8a99d06b88b3dd614406a396d69c81f8602a899c1d2ea6b2527",
+      "bytes": 1177480,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:05:52.863568+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/Delivery/Jerico-Ladder-07-Metal-Detail.png",
+      "source": "Evidence/2026-10-09-ladders/Delivery/Jerico-Ladder-07-Metal-Detail.png",
+      "sha256": "21db08402f5abf44c79cca05c7f81fd342934c2bd35c18e5923b5d6b0e9d5e55",
+      "bytes": 1110910,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:27:34.542505+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-1-detail.png",
+      "source": "Evidence/2026-10-09-ladders/case-1-detail.png",
+      "sha256": "bded4831645ff8a99d06b88b3dd614406a396d69c81f8602a899c1d2ea6b2527",
+      "bytes": 1177480,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:05:52.863568+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-1.png",
+      "source": "Evidence/2026-10-09-ladders/case-1.png",
+      "sha256": "82e273461c199ab6356b6e69c03626c8d4f07a0ab6709723bde5842747903b4f",
+      "bytes": 1160133,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:05:38.835792+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-2.png",
+      "source": "Evidence/2026-10-09-ladders/case-2.png",
+      "sha256": "8cb876bfff8e6d9dd2f13d7d688e5362aa3623febc0012f3863dc3b79836b8c1",
+      "bytes": 1155678,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:06:05.562940+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-3-detail.png",
+      "source": "Evidence/2026-10-09-ladders/case-3-detail.png",
+      "sha256": "21db08402f5abf44c79cca05c7f81fd342934c2bd35c18e5923b5d6b0e9d5e55",
+      "bytes": 1110910,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:27:34.542505+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-3.png",
+      "source": "Evidence/2026-10-09-ladders/case-3.png",
+      "sha256": "3cbaa57e1c5d1d7e1e33cae683518bab59b2be7b424135933cb2c9497d8d6ed1",
+      "bytes": 1156033,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:27:20.864132+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-4-grips.png",
+      "source": "Evidence/2026-10-09-ladders/case-4-grips.png",
+      "sha256": "41d9ca8ebcf21b5775aae867b9a657b9e08ebeef19cd4a36de81286dcda221b4",
+      "bytes": 1163258,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:28:00.671432+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-4.png",
+      "source": "Evidence/2026-10-09-ladders/case-4.png",
+      "sha256": "8acd0034c6859d509a678400116873e72199fa93bab252bc3a4d462a734e0bf9",
+      "bytes": 1142513,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:27:47.332141+00:00"
+    },
+    {
+      "category": "escaleras",
+      "file": "escaleras/casos/case-5.png",
+      "source": "Evidence/2026-10-09-ladders/case-5.png",
+      "sha256": "aacdfbe09fa4e4b1fb659838621995afe7ad7d99b52371b271529e8f5c77d96f",
+      "bytes": 1130807,
+      "dimensions": [
+        1050,
+        1100
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T04:28:13.055764+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-0-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-0-overview.png",
+      "sha256": "8f529826fcdf83b03eb2bc00b1fe018b523407ad0e3639b381fa835a6776c057",
+      "bytes": 1119179,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:30:46.408587+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-1-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-1-overview.png",
+      "sha256": "c6e276a7b762833a496fd1017ed74985e3b8217ee26acfe6f99363d2a9dfc496",
+      "bytes": 1222261,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:32:13.575007+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-2-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-2-overview.png",
+      "sha256": "47ee39c1d6bbc10072be4b89a0dc48bf7f23af3addb8ca74cfdb733ac6efcc6d",
+      "bytes": 1135125,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:34:32.079850+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-3-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-3-overview.png",
+      "sha256": "6f897c0e09b2228ca93e8271144fa804a3247537ebd052dc2d59c40794e88778",
+      "bytes": 1124366,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:32:40.703904+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-4-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-4-overview.png",
+      "sha256": "56fad596628fa96bebf0d6f61a8c5b3ce21f62696efd9c0d3cb390f1b08b534f",
+      "bytes": 1134058,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:33:01.161151+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/case-5-overview.png",
+      "source": "Evidence/2026-10-09-mining-track/images/case-5-overview.png",
+      "sha256": "6cbea4f2fbfd8ee6eabe0a19b895a59cb99b55038bdf7160db130583413c9b1f",
+      "bytes": 1186862,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:33:20.261011+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/fastening-detail.png",
+      "source": "Evidence/2026-10-09-mining-track/images/fastening-detail.png",
+      "sha256": "e45edb4d5387828c8c7d74ad7f44ee7077f6ca2635e0be8eb5a67814e843a737",
+      "bytes": 1421716,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:31:44.537727+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/joint-detail.png",
+      "source": "Evidence/2026-10-09-mining-track/images/joint-detail.png",
+      "sha256": "51f846b1225055d546433aeffbdb02fa6fae6fb14d8d3c9a46d2508dfaad3a57",
+      "bytes": 1586491,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:31:15.701463+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/images/rail-profile.png",
+      "source": "Evidence/2026-10-09-mining-track/images/rail-profile.png",
+      "sha256": "322f0bf8ed28d285306170a66e215f4758023b20fd49a8f2280ec5ae00dd4b4b",
+      "bytes": 1423690,
+      "dimensions": [
+        1400,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:32:00.962214+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/references/HSE-fastening.png",
+      "source": "Evidence/2026-10-09-mining-track/references/HSE-fastening.png",
+      "sha256": "735ffee9d35eb18601029af8945e051bf8b432204a3e9aacfdd5de75fefb0900",
+      "bytes": 163891,
+      "dimensions": [
+        990,
+        1400
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:01:19.156671+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/references/HSE-joint.png",
+      "source": "Evidence/2026-10-09-mining-track/references/HSE-joint.png",
+      "sha256": "fdc72bf65edf9373d35746e9e7682ff6ec94535a150899c54ed32b277d6be943",
+      "bytes": 267860,
+      "dimensions": [
+        990,
+        1400
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:01:19.495547+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/references/Patry-section.png",
+      "source": "Evidence/2026-10-09-mining-track/references/Patry-section.png",
+      "sha256": "7fa7a7b0e59c21dd822bbfb952ce3f8041dcbe8c874a8105aa05cca43de46365",
+      "bytes": 344223,
+      "dimensions": [
+        1700,
+        1203
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T15:57:40.561012+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/references/S18-section.png",
+      "source": "Evidence/2026-10-09-mining-track/references/S18-section.png",
+      "sha256": "8d7119e1f124a64daba4134721fb32330a98fbf9437efc5ff9806e1a8c716752",
+      "bytes": 203462,
+      "dimensions": [
+        1203,
+        1700
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T15:57:40.000038+00:00"
+    },
+    {
+      "category": "vias",
+      "file": "vias/casos/unified-regression/precision16.png",
+      "source": "Evidence/2026-10-09-mining-track/unified-regression/precision16.png",
+      "sha256": "b3a94a272241a41471dcfb963c1cd54897eb643a8e0f59f925b316f2108cc108",
+      "bytes": 87,
+      "dimensions": [
+        3,
+        1
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-09T16:30:45.195414+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/broken-railing.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/broken-railing.png",
+      "sha256": "bd17d6cc02a404e74bfa031700af84b935b20397608c6ca662e237e7179e2393",
+      "bytes": 55052,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.071440+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/broken-railway.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/broken-railway.png",
+      "sha256": "cba1a4e2976dd19775f72dccd649fb9f28b13f4757090266c79a595f2ea06eb2",
+      "bytes": 57200,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.916738+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/catwalk.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/catwalk.png",
+      "sha256": "2dd56d50e032e6c59394698eaf86726ee790ecde1d301fd5d26fe949e6e547be",
+      "bytes": 64584,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.296735+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/pier-manual-damage.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/pier-manual-damage.png",
+      "sha256": "3e449ba318b1973dcd21ff56e618163680fe555f90ca5f2953fd1274b725b8f9",
+      "bytes": 59234,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.220862+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/pipe-couplings.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/pipe-couplings.png",
+      "sha256": "84f9833dc62a1fd26b874ae02a93f002838c28d6e0d7ade9019c9213ecb343ea",
+      "bytes": 68735,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.607857+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/pipe-high-curvature-rmf.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/pipe-high-curvature-rmf.png",
+      "sha256": "de297fc1a1bbf6d35a9505b620566713a95db8bcdaf902824642e5b2a3f31e12",
+      "bytes": 51054,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.765350+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/pipe-uv.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/pipe-uv.png",
+      "sha256": "932137f565d81aa093b324a41d10aaea6d06692ca522d2ce91cf24c0370f910d",
+      "bytes": 54772,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.686147+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/railing.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/railing.png",
+      "sha256": "7d50858b4f927689895050631d8bff9ed1c8eb87656c756b768d709de58a5148",
+      "bytes": 55083,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.995234+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/railway.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/railway.png",
+      "sha256": "d843f0b37240095f22ae74599da03ab65046fd0f0497e9b4823eff97b8182f1d",
+      "bytes": 57420,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:04.841326+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/rope-manual-damage.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/rope-manual-damage.png",
+      "sha256": "4225d08efbac13fd5fb3410cb744fca24814b95f9ea04e2f084ca38143c3990c",
+      "bytes": 95420,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.872751+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/rope-plank-bridge.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/rope-plank-bridge.png",
+      "sha256": "c0764518e0bb7663746863a8e91ffbb200e193d7a136f2bbe4f18128bcbf93f5",
+      "bytes": 94798,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.782028+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/suspension-bridge.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/suspension-bridge.png",
+      "sha256": "210a5a60186953198d02e8b76797fe7304eb7a0f4f03841cd08dddcf0ca9762d",
+      "bytes": 90575,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.611326+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/suspension-hanger-debug.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/suspension-hanger-debug.png",
+      "sha256": "99e8f0cea9da596b5305ea5af1c7bb6e21a0599fa062d83b993ad0386d3dd550",
+      "bytes": 57406,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.693511+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/truss-howe.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/truss-howe.png",
+      "sha256": "5071fe17a003c1c36b3304aedb1a435955cb0c6674f6591ea0c490629b3992ed",
+      "bytes": 74704,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.528466+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/truss-pratt.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/truss-pratt.png",
+      "sha256": "fbfd574046d2044687e9dedef74faec7a6d51d0f8b100a026f63dc312bf039f8",
+      "bytes": 74761,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.450705+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/truss-warren.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/truss-warren.png",
+      "sha256": "b0e906a39ecdc98c390a523280fce9a164fa1c55b847454e80255a6a07d12bc9",
+      "bytes": 75601,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.372907+00:00"
+    },
+    {
+      "category": "estructuras",
+      "file": "estructuras/final/wooden-pier.png",
+      "source": "Evidence/assembly-quality-final-2026-09-27/wooden-pier.png",
+      "sha256": "e78d04539cdd864c966c317b30fc9293077443085956f5618396b9eb94c9c766",
+      "bytes": 58951,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T15:01:05.146281+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/all-broken-empty-web.png",
+      "source": "Evidence/web-field-final-j/all-broken-empty-web.png",
+      "sha256": "fbfada82dc7ba1e44bd1fb822ec000c1c09d2446f58bd85495e15bb0af926954",
+      "bytes": 49270,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:36.994701+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/anchor-web-card.png",
+      "source": "Evidence/web-field-final-j/anchor-web-card.png",
+      "sha256": "5bceae1f16a8aefa523231b87c04b834625bc2599f705848371f2083a4c62383",
+      "bytes": 313514,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:25.988408+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/area-web-card.png",
+      "source": "Evidence/web-field-final-j/area-web-card.png",
+      "sha256": "649832bb6c883784b5259e2895de8bea2c32c79aadd73d9209443e02ea7104bd",
+      "bytes": 272802,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.188441+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/broken-edge-card.png",
+      "source": "Evidence/web-field-final-j/broken-edge-card.png",
+      "sha256": "a326406209ce4222b6f87ab94b1eb86246a0025479bf3f5d1e785141a8f1eaad",
+      "bytes": 351080,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:33.174073+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/broken-edge-hilos-3d.png",
+      "source": "Evidence/web-field-final-j/broken-edge-hilos-3d.png",
+      "sha256": "09a867962e5dfa94ebf685a609175c24a6ca5bf8783ce1cd6d8e64f7b3216983",
+      "bytes": 207893,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:33.623974+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/broken-old-card.png",
+      "source": "Evidence/web-field-final-j/broken-old-card.png",
+      "sha256": "4d041e8a1e93588c23238c5272e124b26a5fdcb30d3673fecf2fb42220286547",
+      "bytes": 312823,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:31.906904+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corner-card.png",
+      "source": "Evidence/web-field-final-j/corner-card.png",
+      "sha256": "3c4b5f653e8c53a5e8f22d1aade28fa745a03562f01bc66b217b7e2bc7e803e2",
+      "bytes": 465037,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:31.559327+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-light-0.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-light-0.png",
+      "sha256": "ca0fa139e4be86874adac2b05c1e80c1208a11e227b24bb1529d589564b11746",
+      "bytes": 525997,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.694621+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-light-1.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-light-1.png",
+      "sha256": "27c5e242bf6cbe36719d7e10785ad4216fcf0aaa2b6a3f9e0922e0d5ac76a097",
+      "bytes": 566865,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.804157+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-light-2.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-light-2.png",
+      "sha256": "20db2603eb5a1e90f31f58fabec9e3ec4570050467e46289909941e6b00c3014",
+      "bytes": 594268,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.916058+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-light-3.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-light-3.png",
+      "sha256": "7c089d6f5a71b3cc59dd97c8b49ec2cbd73fdcec231b1451a5111e9e387e888a",
+      "bytes": 585141,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.026267+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-light-4.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-light-4.png",
+      "sha256": "7c4528f2e4895231c480e11ef131023d24dfc33d210b9eabfb3977a2cf719193",
+      "bytes": 543523,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.135277+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-unlit.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-unlit.png",
+      "sha256": "51212e3f03ba6b2f638a6fe3eb411ec347c420551b3b232fe99a3cf4a6eae1c3",
+      "bytes": 493719,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.585887+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/corridor-ghost-wet.png",
+      "source": "Evidence/web-field-final-j/corridor-ghost-wet.png",
+      "sha256": "acd48bc9c3dbeb5ae6325969474ec95e3cffb0c7df6b3d8549898f87b0b7a627",
+      "bytes": 529550,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.243405+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/dense-nest-card.png",
+      "source": "Evidence/web-field-final-j/dense-nest-card.png",
+      "sha256": "ecb07e5d5f9908bbe04a4baaff37286a53f62ff78268dd95dfcaa799c9264c49",
+      "bytes": 382503,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:32.402344+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-100-shared-cards.png",
+      "source": "Evidence/web-field-final-j/ghost-100-shared-cards.png",
+      "sha256": "68cf4e3e3ff278af4e4d9d4bc6992bbfdd35051fb835b8420c1702702b819321",
+      "bytes": 996061,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.692671+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-distance-2.png",
+      "source": "Evidence/web-field-final-j/ghost-distance-2.png",
+      "sha256": "6f36a48ab1d18d875573daaf5cd5b1951d2d0e572b6f9ed31ec40c37add19f00",
+      "bytes": 360997,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.327591+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-distance-6.png",
+      "source": "Evidence/web-field-final-j/ghost-distance-6.png",
+      "sha256": "dcaedc08b67aff2e3c05a2356e4f564078e8e0dd922a951f4f1bc088f2445ce8",
+      "bytes": 178432,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.408107+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-distance-20.png",
+      "source": "Evidence/web-field-final-j/ghost-distance-20.png",
+      "sha256": "b5e62785aa51a66d9964b999c4ae560074583dd38fe37c59bde73130b9a54915",
+      "bytes": 70522,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.487745+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-distance-40.png",
+      "source": "Evidence/web-field-final-j/ghost-distance-40.png",
+      "sha256": "1b4f0290826136c2f11c3d27f9fac32f28ec39cd73076aa50cf7f4c1e51a7914",
+      "bytes": 53854,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:35.568334+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-light-left.png",
+      "source": "Evidence/web-field-final-j/ghost-light-left.png",
+      "sha256": "cc62b391d5594a03b394ccac45da00de5de0b75ba0aff2999b7802624d047cd4",
+      "bytes": 195095,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.315989+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-light-right.png",
+      "source": "Evidence/web-field-final-j/ghost-light-right.png",
+      "sha256": "1f5c9f831dae0e700cc1f1b4f444ac83179ef740f388b404640ed732c740ed3e",
+      "bytes": 215221,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.398470+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-unlit.png",
+      "source": "Evidence/web-field-final-j/ghost-unlit.png",
+      "sha256": "3bac79dbea6c7e91a9b910d5f9c7874bbeb9a78fd01e8582ed751bb47117aa69",
+      "bytes": 146733,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.234857+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/ghost-wet-droplets.png",
+      "source": "Evidence/web-field-final-j/ghost-wet-droplets.png",
+      "sha256": "dc81165dcba3ea7bb131926ed47a6a12dd445792580a2fe10e994538dd0c8cd3",
+      "bytes": 196133,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:34.479560+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/medium-hybrid-after-physics.png",
+      "source": "Evidence/web-field-final-j/medium-hybrid-after-physics.png",
+      "sha256": "262f3951fa48831128911de7335d19909b0cfc8b72ef3dd4cc284aa8a7dec457",
+      "bytes": 286538,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:36.916397+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/medium-wet-hybrid.png",
+      "source": "Evidence/web-field-final-j/medium-wet-hybrid.png",
+      "sha256": "0bc6ec97e0651bf2d0e04750376bac1d1288a2c1a1026c45b155e5671e5c0f8d",
+      "bytes": 277905,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:36.680634+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/messy-cave-card.png",
+      "source": "Evidence/web-field-final-j/messy-cave-card.png",
+      "sha256": "4a6585ec4fbad72fb5f4ab135da3a459a96c74e998c1271b73f6041a17a35d04",
+      "bytes": 390998,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:30.423556+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-average-mip1.png",
+      "source": "Evidence/web-field-final-j/plane-orb-average-mip1.png",
+      "sha256": "f705537a17f6b02303ecacfb414167c1a3508e8674501a7d757592b59d374f5b",
+      "bytes": 9773,
+      "dimensions": [
+        128,
+        128
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.623526+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-average-mips-card.png",
+      "source": "Evidence/web-field-final-j/plane-orb-average-mips-card.png",
+      "sha256": "649832bb6c883784b5259e2895de8bea2c32c79aadd73d9209443e02ea7104bd",
+      "bytes": 272802,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.276972+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-card.png",
+      "source": "Evidence/web-field-final-j/plane-orb-card.png",
+      "sha256": "9d5c131670a9a5ac81cf70157e67bbdf895cdc1908859155644033a46749ecd1",
+      "bytes": 351004,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:23.794534+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coarse-physical-graph.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coarse-physical-graph.png",
+      "sha256": "baf38a1e1365d22f893532145c65d719fed322415e6c01d35aeef4d3dec76374",
+      "bytes": 53004,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:29.948116+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coverage-1x.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coverage-1x.png",
+      "sha256": "0f5f26431588de82a4000809924b3ee88ed1b6128cfce6c89d9804bfe98a1b9b",
+      "bytes": 8653,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.938564+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coverage-4x.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coverage-4x.png",
+      "sha256": "698c85dc7dfba9e31bf73f18c33ad9da6a2a3c93219fbc634945927246259541",
+      "bytes": 16656,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.943005+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coverage-8x.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coverage-8x.png",
+      "sha256": "660abf194fbb53cb3cb67ad18bdd7f3435dce00d9e44680c867ceb9ee0febb2a",
+      "bytes": 21192,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:29.372163+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coverage-texture.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coverage-texture.png",
+      "sha256": "698c85dc7dfba9e31bf73f18c33ad9da6a2a3c93219fbc634945927246259541",
+      "bytes": 16656,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.610070+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-coverage.png",
+      "source": "Evidence/web-field-final-j/plane-orb-coverage.png",
+      "sha256": "67775a6da208ad7dd9ef257fdff56d8a272e42425821f3fd8f41e7eccb08b519",
+      "bytes": 187617,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.355447+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-distance-render.png",
+      "source": "Evidence/web-field-final-j/plane-orb-distance-render.png",
+      "sha256": "db12caa182feae00eb1952d1e6e13d58ce7c21602eea037b324f3b53ba08da63",
+      "bytes": 256828,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.605939+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-distance-texture.png",
+      "source": "Evidence/web-field-final-j/plane-orb-distance-texture.png",
+      "sha256": "1b825ca1f173c502f1ffa0335ed5c0c071e8f1a197e75d3f420372dc03883c2a",
+      "bytes": 48925,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.615226+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-distance.png",
+      "source": "Evidence/web-field-final-j/plane-orb-distance.png",
+      "sha256": "9482f9d8071572d3f74bdae1b04a48ff6322c0f3282ef91c3f01f911460ee188",
+      "bytes": 165451,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.432616+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-geometry-debug.png",
+      "source": "Evidence/web-field-final-j/plane-orb-geometry-debug.png",
+      "sha256": "19097c7247ab82a54e17e71cb4e95d249ce207cf2e339e4d20eff0ab53281de7",
+      "bytes": 170712,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:29.799805+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-normal-texture.png",
+      "source": "Evidence/web-field-final-j/plane-orb-normal-texture.png",
+      "sha256": "c939cbffe8b7127f5e9ef332aeb8c267d8fb530e204d22f4c4b2df62b2d3667a",
+      "bytes": 42274,
+      "dimensions": [
+        256,
+        256
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.620417+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-normal.png",
+      "source": "Evidence/web-field-final-j/plane-orb-normal.png",
+      "sha256": "9767d79aa9edbfddc0fb1fe7eb095ead88575617e91db1f8443f00c35b4df4de",
+      "bytes": 284225,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.520389+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-ribbons-debug.png",
+      "source": "Evidence/web-field-final-j/plane-orb-ribbons-debug.png",
+      "sha256": "fcc5e845886eb244bee410b74766d929685d04bcdc7a71b23f2dde406f114477",
+      "bytes": 61415,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:29.872555+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/plane-orb-source-mip1.png",
+      "source": "Evidence/web-field-final-j/plane-orb-source-mip1.png",
+      "sha256": "fd0df2b4f8300a1e3241c2eaa634b35dcca67133e83956c999d334859c36fe1d",
+      "bytes": 7478,
+      "dimensions": [
+        128,
+        128
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:28.622490+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/trap-strands-card.png",
+      "source": "Evidence/web-field-final-j/trap-strands-card.png",
+      "sha256": "f3f25bc607a1cb3b8c44aac6b916c12adf109a52edf86b2c0ec8912d5d1a9855",
+      "bytes": 233806,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:32.720248+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/web-jolt-network-after-120-steps.png",
+      "source": "Evidence/web-field-final-j/web-jolt-network-after-120-steps.png",
+      "sha256": "7b5f6e3b1173b27fcf83766c153227dae10379b8fd7a16ddc839c9a7cfa39c11",
+      "bytes": 53783,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:36.828836+00:00"
+    },
+    {
+      "category": "telaranas",
+      "file": "telaranas/campos/web-jolt-network-initial.png",
+      "source": "Evidence/web-field-final-j/web-jolt-network-initial.png",
+      "sha256": "ddde814f637dcbe97c2211c81f6c8c1f9a8227e362a2f4d8c54b7439b26a1c77",
+      "bytes": 53724,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-09-27T09:26:36.755266+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-after.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-after.png",
+      "sha256": "64dec36509dbc4bdc4ccf8ab15d17ca01f3bb38ae8a8bd13c026adb77c9c9378",
+      "bytes": 56778,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.430482+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-before.png",
+      "sha256": "4b5f3f5226adc13f87e65ac4dd75c24915e3bf1021e8f526787ed650621c9ff2",
+      "bytes": 56705,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.356985+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-0-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-0-before.png",
+      "sha256": "6ece77492e6dd9bed744073ac89c183d26bfdae95860517429396eb898e9978a",
+      "bytes": 55378,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.505838+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-0.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-0.png",
+      "sha256": "a7b5c384dd50e7157dfbc182328b91dc0a1ac25bfe25d389c2f7dd7f1e6c6393",
+      "bytes": 55719,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.581121+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-1-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-1-before.png",
+      "sha256": "3550a6404ff378998745f97568e6d04e3b743adddaa662da6ce7f0537020a520",
+      "bytes": 55843,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.656594+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-1.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-1.png",
+      "sha256": "d6b420fb416cc838ae43d9d6cc3b558f51bcb1314f2d61455d4c458c630e6138",
+      "bytes": 56024,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.732212+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-2-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-2-before.png",
+      "sha256": "03f793e102f10a6b88d9fe2a10dbcece1934c3938de00941adc60a6fcf93c9c4",
+      "bytes": 56112,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.807564+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/16-contact-2.png",
+      "source": "Evidence/2026-10-03-chain-edge/16-contact-2.png",
+      "sha256": "6e5bc6cea03724b7fa57200613efbdcf8ad2605d6c95976942c058dbb3f287f1",
+      "bytes": 56520,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.883693+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-after.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-after.png",
+      "sha256": "b96adec318bd99182ad4fbd748b9294f7ae56e615c1162317dda3bebd1cc3975",
+      "bytes": 60100,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.033354+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-before.png",
+      "sha256": "d38dacb82c98d6ef73c82f3c7dfeb2e9d1bc746c44d703786607d9545d6dbb1d",
+      "bytes": 60145,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:35.958936+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-0-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-0-before.png",
+      "sha256": "09cd941c20f723bdfcb4291d7e69f3461c385288e56a9f8b299df14da61d59a2",
+      "bytes": 58261,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.109030+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-0.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-0.png",
+      "sha256": "35504a4e2caf9dbdfd755476007cea3e39412bf71e12cf561c33e97640cb0cb6",
+      "bytes": 59172,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.185177+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-1-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-1-before.png",
+      "sha256": "49693b6a3062837092106701621f01ac20177e31894f40a60bb23a5ff31ab145",
+      "bytes": 58758,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.260509+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-1.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-1.png",
+      "sha256": "156a8bc781274bf9c79eac6f2a23292dc0216b8a07fb7d6b151d477bab57e8b9",
+      "bytes": 59299,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.337437+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-2-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-2-before.png",
+      "sha256": "ce52082812d71e4c4098d78ed28100b51a0b3a1c0b7f018a19cc17ab3aafb4e0",
+      "bytes": 59066,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.413221+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/32-contact-2.png",
+      "source": "Evidence/2026-10-03-chain-edge/32-contact-2.png",
+      "sha256": "bab8a1e5101dd9fa3c68cb63af8643bf0b88d72f217662f34ec83b5dc4139ac3",
+      "bytes": 59755,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.489781+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-after.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-after.png",
+      "sha256": "e7484f096d6f562f61b6cc7e385d994617b56b06803279ce1c1c47cd8317abe5",
+      "bytes": 65202,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.641242+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-before.png",
+      "sha256": "57c1432cef5289552b0d7e958cb3fd90ca17adcbcb770f77c8338690f9326f72",
+      "bytes": 65299,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.564914+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-0-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-0-before.png",
+      "sha256": "0bdf2101da01885e336e181316508f1bf798dcd05de8b53d1e4a8be7ec7340d1",
+      "bytes": 62468,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.718460+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-0.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-0.png",
+      "sha256": "f667bf699b6d4c42e3ba44bb3db4ef2e28ca47252ceefa81ba13f7a2d32a2563",
+      "bytes": 64287,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.798888+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-1-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-1-before.png",
+      "sha256": "0472720d4bdd710bbf31702ff84eb1466c35c0f91f22d2a92d824d5a77ae5764",
+      "bytes": 62889,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.877824+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-1.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-1.png",
+      "sha256": "dd3f19726d08022c1fc8e5e4b94ffaa1d9b9a4902a271069132073ca0f1ed12f",
+      "bytes": 64346,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:36.954870+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-2-before.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-2-before.png",
+      "sha256": "e98aa6f1b6f97bec3a886021e5985402f911f600126a50395ec595968684293d",
+      "bytes": 63370,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:37.033534+00:00"
+    },
+    {
+      "category": "cadenas",
+      "file": "cadenas/contactos/64-contact-2.png",
+      "source": "Evidence/2026-10-03-chain-edge/64-contact-2.png",
+      "sha256": "78ed9979aebcf15e30885d4b171a9e13ac205e79e83866a527dbc284ec4915ba",
+      "bytes": 64592,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-10-03T17:33:37.112518+00:00"
+    }
+  ]
+}

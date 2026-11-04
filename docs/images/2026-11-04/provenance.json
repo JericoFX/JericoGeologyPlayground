@@ -1,0 +1,32 @@
+{
+  "captured": "2026-11-04",
+  "application": "Jerico Geology Playground",
+  "binary_sha256": "4CC66ACDCB0A7F8218EE9280E862DEA622765975F5240425BF9EF34E28B47489",
+  "status": "Diagnostic evidence: weak visible modifier response remains unresolved",
+  "images": [
+    {
+      "file": "rock-source.jpg",
+      "source": "Evidence\\rocks-authoring-2026-11-04\\modifiers-ui-red-1\\captures\\common-source-lit.jpg",
+      "sha256": "E8FD65002462849592DF48B7506F068383163502D2FD5893F480117CCCE168EE",
+      "bytes": 123730,
+      "format": "JPEG",
+      "dimensions": [
+        1442,
+        932
+      ],
+      "edited": false
+    },
+    {
+      "file": "rock-voronoi-f2.jpg",
+      "source": "Evidence\\rocks-authoring-2026-11-04\\modifiers-ui-red-1\\captures\\voronoi-f2-amplitude-settled-lit.jpg",
+      "sha256": "2BB8B9542DA42EB3B836F6941E999B13641D250F2B66E670C68CA88B3EDBFC0C",
+      "bytes": 143149,
+      "format": "JPEG",
+      "dimensions": [
+        1442,
+        932
+      ],
+      "edited": false
+    }
+  ]
+}

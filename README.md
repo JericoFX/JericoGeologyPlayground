@@ -1,5 +1,45 @@
 # Jerico Geology Playground
 
+## Galería visual de los trabajos
+
+[**Abrir todas las familias y sus imágenes**](docs/images/README.md): damage, huesos e IK/FK, boca y dientes, splines, rocas, puertas, props, muelles, caños, escaleras, vías, estructuras, telarañas y cadenas.
+
+Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. La galería diferencia tandas actuales e históricas y señala lo pendiente. **Ocean Lab queda fuera del goal activo.**
+
+### Huesos e IK/FK
+
+![Araña con huesos, cadena seleccionada y objetivo IK](docs/images/rigs/anatomia/stage-5-ui.png)
+
+[Ver rigs y deformaciones](docs/images/rigs/README.md). El reconocimiento anatómico general sigue en desarrollo.
+
+### Boca y dientes
+
+![Boca del modelo axial durante la prueba de cierre](docs/images/boca/contactos/stage-4-viewport.png)
+
+[Ver la secuencia completa](docs/images/boca/README.md).
+
+### Damage: grietas, cavidades y roturas
+
+![Grieta geométrica en un panel](docs/images/damage/grietas/panel-crack-after.png)
+
+[Ver las pruebas de daño](docs/images/damage/README.md). Esta imagen es del panel histórico; el cubo nuevo se verifica específicamente con edge damage, cavidades y grietas.
+
+### Splines
+
+![Caño generado siguiendo una spline](docs/images/splines/construccion/pipe-s-curve.png)
+
+[Ver perfiles y pruebas de splines](docs/images/splines/README.md). Las capturas históricas no sustituyen la aceptación visual pendiente de la adaptación nueva del daño.
+
+### Rocas y modificadores
+
+![Roca nativa sin capas añadidas](docs/images/2026-11-04/rock-source.jpg)
+
+![La misma roca con Voronoi F2 y amplitud 0,502 metros](docs/images/2026-11-04/rock-voronoi-f2.jpg)
+
+[Ver capas y edge damage en rocas](docs/images/rocas/README.md). El cambio visible de Voronoi sigue siendo insuficiente: estas imágenes documentan el problema, no una corrección terminada.
+
+Las instrucciones geológicas históricas que siguen no acreditan aceptación visual del estado actual.
+
 Laboratorio independiente en C++20, Diligent/Vulkan e ImGui para experimentar con las operaciones identificadas en la review de addons de Blender. El [Goal local](GOAL.md) enlaza la [copia verificable de 280 documentos de referencia del Engine](docs/engine-reference-2026-09-24/README.md) y su manifiesto SHA-256; el Engine se mantiene en lectura y Blender no se ejecuta.
 
 ## Abrir
