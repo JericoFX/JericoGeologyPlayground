@@ -1,5 +1,6 @@
 #include "DamageGeometry.hpp"
 #include "SolidGeometry.hpp"
+#include "SplineDamageVolumeTests.hpp"
 #include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 
 #include <algorithm>
@@ -81,6 +82,7 @@ void checkCut(const TriangleMesh &source,const DamageArea &area,Jerico::Guid int
 }
 int run()
 {
+    SplineDamageVolumeTests::run();
     auto rockRecipe=preset(0);
     auto rock=evaluate(rockRecipe,12).mesh;
     require(PA::validateClosedMesh(rock).hasValue(),"rock fixture must be closed");

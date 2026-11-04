@@ -2,9 +2,22 @@
 
 #include "DamageField.hpp"
 #include "Model.hpp"
+#include <span>
 
 namespace Playground
 {
+// Metric sections shared by spline cuts and volumetric decal consumers.
+// Axes are half-extents in world space; adjacent sections form one continuous volume.
+struct DamageSweepSection
+{
+    Vec3d center, axisU, axisV;
+};
+TriangleMesh buildDamageSweepVolume(std::span<const DamageSweepSection> sections,
+    Jerico::Guid region, std::size_t maximumTriangles=240000,
+    const Jerico::CancellationToken *cancel=nullptr);
+TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
+    std::size_t maximumTriangles=240000,
+    const Jerico::CancellationToken *cancel=nullptr);
 // Geometric tier of the shared projector. The source mesh is never modified.
 TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
                              Jerico::Guid freshInteriorRegion,

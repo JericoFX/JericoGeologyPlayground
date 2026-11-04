@@ -395,6 +395,109 @@ TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,
     checkCancel();
     return result;
 }
+TriangleMesh buildDamageSweepVolume(std::span<const DamageSweepSection> sections,
+    Jerico::Guid region,std::size_t maximumTriangles,const Jerico::CancellationToken *cancel)
+{
+    constexpr std::size_t sides=16,maximumSections=512;
+    auto checkpoint=[&]{if(cancel&&cancel->isCancellationRequested())throw std::runtime_error("Cancelled");};
+    checkpoint();
+    if(sections.size()<2||sections.size()>maximumSections||maximumTriangles>240000||
+       (sections.size()-1)*(4*sides-4)>maximumTriangles||region==Jerico::Guid{})
+        throw std::runtime_error("Invalid spatial damage section count, identity or budget");
+    const auto finite=[](Vec3d p){return std::isfinite(p.x)&&std::isfinite(p.y)&&std::isfinite(p.z);};
+    std::vector<std::vector<manifold::vec3>> rings;
+    rings.reserve(sections.size());
+    for(const auto &section:sections)
+    {
+        checkpoint();
+        const auto u=section.axisU,v=section.axisV;
+        const auto lu=std::hypot(u.x,u.y,u.z),lv=std::hypot(v.x,v.y,v.z);
+        if(!finite(section.center)||!finite(u)||!finite(v)||!std::isfinite(lu)||!std::isfinite(lv)||lu<=1e-9||lv<=1e-9)
+            throw std::runtime_error("Spatial damage requires finite nonzero section axes");
+        const auto a=multiply(u,1/lu),b=multiply(v,1/lv);
+        if(std::hypot(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x)<1e-6)
+            throw std::runtime_error("Spatial damage section axes are parallel");
+        auto &ring=rings.emplace_back();ring.reserve(sides);
+        for(std::size_t i=0;i<sides;++i)
+        {
+            const auto angle=2*std::numbers::pi*double(i)/sides;
+            const auto point=add(section.center,add(multiply(u,std::cos(angle)),multiply(v,std::sin(angle))));
+            if(!finite(point))throw std::runtime_error("Spatial damage section overflow");
+            ring.emplace_back(point.x,point.y,point.z);
+        }
+    }
+    std::vector<manifold::Manifold> spans;spans.reserve(sections.size()-1);
+    for(std::size_t i=1;i<rings.size();++i)
+    {
+        checkpoint();
+        const auto p=sections[i].center,q=sections[i-1].center;
+        if(std::hypot(p.x-q.x,p.y-q.y,p.z-q.z)<=1e-9)
+            throw std::runtime_error("Spatial damage has coincident consecutive sections");
+        auto points=rings[i-1];points.insert(points.end(),rings[i].begin(),rings[i].end());
+        auto span=manifold::Manifold::Hull(points);
+        if(span.Status()!=manifold::Manifold::Error::NoError||span.IsEmpty()||span.Volume()<=0)
+            throw std::runtime_error("Spatial damage span is degenerate");
+        spans.push_back(std::move(span));
+    }
+    checkpoint();
+    const auto combined=manifold::Manifold::BatchBoolean(spans,manifold::OpType::Add);
+    if(combined.Status()!=manifold::Manifold::Error::NoError||combined.IsEmpty())
+        throw std::runtime_error("Spatial damage volume union failed");
+    const auto output=combined.GetMeshGL64();
+    if(output.NumTri()>maximumTriangles||output.NumVert()>maximumTriangles)
+        throw std::runtime_error("Spatial damage volume exceeds mesh budget");
+    std::map<std::uint32_t,Jerico::Guid> identities;
+    for(const auto id:output.runOriginalID)identities[id]=region;
+    auto result=fromNative(output,identities);
+    if(!PA::validateClosedMesh(result).hasValue())throw std::runtime_error("Spatial damage volume is not closed");
+    checkpoint();return result;
+}
+TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
+    std::size_t maximumTriangles,const Jerico::CancellationToken *cancel)
+{
+    auto checkpoint=[&]{if(cancel&&cancel->isCancellationRequested())throw std::runtime_error("Cancelled");};
+    checkpoint();
+    if(maximumTriangles>240000||host.indices.size()/3>maximumTriangles||volume.indices.size()/3>maximumTriangles||
+       host.positions.size()>maximumTriangles||volume.positions.size()>maximumTriangles)
+        throw std::runtime_error("Spatial damage mesh budget exceeded");
+    if(!PA::validateClosedMesh(host).hasValue()||!PA::validateClosedMesh(volume).hasValue())
+        throw std::runtime_error("Spatial damage requires closed host and volume");
+    if(separateBounds(host,volume))return host;
+    std::map<std::uint32_t,Jerico::Guid> identities;
+    const manifold::Manifold nativeHost(nativeMesh(host,identities,true));
+    const manifold::Manifold nativeVolume(nativeMesh(volume,identities,true));
+    if(nativeHost.Status()!=manifold::Manifold::Error::NoError||nativeVolume.Status()!=manifold::Manifold::Error::NoError)
+        throw std::runtime_error("Spatial damage input is not manifold");
+    checkpoint();
+    const auto intersection=nativeHost^nativeVolume;
+    if(intersection.Status()!=manifold::Manifold::Error::NoError)throw std::runtime_error("Spatial damage intersection failed");
+    if(intersection.IsEmpty()||intersection.Volume()==0)return host;
+    const auto cut=nativeHost-nativeVolume;
+    if(cut.Status()!=manifold::Manifold::Error::NoError||cut.IsEmpty())
+        throw std::runtime_error("Spatial damage subtraction failed or removed the entire host");
+    const auto output=cut.GetMeshGL64();
+    if(output.NumTri()>maximumTriangles||output.NumVert()>maximumTriangles)
+        throw std::runtime_error("Spatial damage output exceeds mesh budget");
+    auto result=fromNative(output,identities);
+    // Boolean intersections may retain topological bridge triangles whose two
+    // endpoints have exactly the same position. They enclose no area or volume.
+    // Remove only those faces; the unchanged closed-mesh gate still validates
+    // every remaining edge after exact geometric vertex canonicalization.
+    std::size_t kept=0;
+    for(std::size_t face=0;face<result.triangleRegions.size();++face)
+    {
+        const auto a=result.positions[result.indices[3*face]],
+                   b=result.positions[result.indices[3*face+1]],
+                   c=result.positions[result.indices[3*face+2]];
+        if(a==b||b==c||c==a)continue;
+        for(unsigned corner=0;corner<3;++corner)result.indices[3*kept+corner]=result.indices[3*face+corner];
+        result.triangleRegions[kept++]=result.triangleRegions[face];
+    }
+    result.indices.resize(3*kept);result.triangleRegions.resize(kept);
+    const auto valid=PA::validateClosedMesh(result);
+    if(!valid.hasValue())throw std::runtime_error("Spatial damage output is not closed: "+valid.error().message);
+    checkpoint();return result;
+}
 TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &cutter,
                            Jerico::Guid freshInteriorRegion,std::size_t maximumTriangles,
                            const Jerico::CancellationToken *cancel)
