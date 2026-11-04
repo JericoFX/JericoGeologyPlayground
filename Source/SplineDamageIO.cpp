@@ -16,10 +16,12 @@ void validatePaths(const std::vector<PathDamageRule>& paths){
 std::string serializeSplineDamage(const std::vector<PathDamageRule>& paths){
  validatePaths(paths);DamageIO::Json entries=DamageIO::Json::array();
  const bool volumeUnion=std::any_of(paths.begin(),paths.end(),[](const auto&rule){return rule.operation==DamageVolumeOperation::Union;});
+ const bool surfaceFit=std::any_of(paths.begin(),paths.end(),[](const auto&rule){return rule.followSurface||rule.surfaceDistanceMeters!=.05;});
  bool spatial=false;
  for(const auto& rule:paths){
   auto entry=DamageIO::writePathCutter(rule.cutter);entry["id"]=rule.id;
-  if(volumeUnion)entry["operation"]=rule.operation==DamageVolumeOperation::Union?"VolumeUnion":"VolumeDifference";
+  if(volumeUnion||surfaceFit)entry["operation"]=rule.operation==DamageVolumeOperation::Union?"VolumeUnion":"VolumeDifference";
+  if(surfaceFit){entry["followSurface"]=rule.followSurface;entry["surfaceDistanceMeters"]=rule.surfaceDistanceMeters;}
   if(rule.spatialPath){
    spatial=true;const auto&s=*rule.spatialPath;DamageIO::Json points=DamageIO::Json::array();
    for(const auto&p:s.points)points.push_back({{"guid",Jerico::formatGuid(p.pointGuid)},
@@ -30,25 +32,27 @@ std::string serializeSplineDamage(const std::vector<PathDamageRule>& paths){
   }
   entries.push_back(std::move(entry));
  }
- const auto text=DamageIO::Json{{"format","SplineConstructionDamage"},{"version",volumeUnion?3:spatial?2:1},{"paths",entries}}.dump(2);
+ const auto text=DamageIO::Json{{"format","SplineConstructionDamage"},{"version",surfaceFit?4:volumeUnion?3:spatial?2:1},{"paths",entries}}.dump(2);
  if(text.size()>DamageIO::maximumFileBytes)throw std::runtime_error("Damage recipe file too large");
  return text;
 }
 std::vector<PathDamageRule> deserializeSplineDamage(const std::string& text){
  if(text.size()>DamageIO::maximumFileBytes)throw std::runtime_error("Damage recipe file too large");
  const auto root=DamageIO::Json::parse(text);
- if(!root.is_object()||root.at("format")!="SplineConstructionDamage"||!root.at("version").is_number_integer()||(root.at("version")!=1&&root.at("version")!=2&&root.at("version")!=3))
+ if(!root.is_object()||root.at("format")!="SplineConstructionDamage"||!root.at("version").is_number_integer()||root.at("version")<1||root.at("version")>4)
   throw std::runtime_error("Unsupported spline damage recipe");
  const auto& entries=root.at("paths");
  if(!entries.is_array()||entries.size()>64)throw std::runtime_error("Invalid spline damage path collection");
  std::vector<PathDamageRule> paths;
  for(const auto& entry:entries){
   PathDamageRule rule{entry.at("id").get<std::string>(),DamageIO::readPathCutter(entry)};
-  if(root.at("version")==3){
+  if(root.at("version")>=3){
    const auto operation=entry.at("operation").get<std::string>();
    if(operation=="VolumeUnion")rule.operation=DamageVolumeOperation::Union;
    else if(operation!="VolumeDifference")throw std::runtime_error("Unsupported spatial decal operation");
   }else if(entry.contains("operation"))throw std::runtime_error("Explicit spatial operations require damage schema 3");
+  if(root.at("version")==4){rule.followSurface=entry.at("followSurface").get<bool>();rule.surfaceDistanceMeters=entry.at("surfaceDistanceMeters").get<double>();}
+  else if(entry.contains("followSurface")||entry.contains("surfaceDistanceMeters"))throw std::runtime_error("Surface fitting requires damage schema 4");
   if(entry.contains("spatialSpline")){
    if(root.at("version")==1)throw std::runtime_error("Spatial splines require damage schema 2 or 3");
    const auto&v=entry.at("spatialSpline");

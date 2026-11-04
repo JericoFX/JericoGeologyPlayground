@@ -394,7 +394,13 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
         {
             int operation=int(rule.operation);
             if(ImGui::Combo("Surface operation",&operation,"Cut / groove\0Raised decal\0"))
-            {rule.operation=DamageVolumeOperation(operation);dirty=true;}
+            {rule.operation=DamageVolumeOperation(operation);if(rule.operation==DamageVolumeOperation::Union)rule.followSurface=true;dirty=true;}
+            dirty|=ImGui::Checkbox("Follow surface",&rule.followSurface);
+            if(rule.followSurface)
+            {
+                dirty|=ImGui::InputDouble("Fit distance (m)",&rule.surfaceDistanceMeters,.005,.02,"%.4f");
+                ImGui::TextWrapped("Projects the guide onto the receiver. Width and depth stay as authored; turn off for a free 3D path.");
+            }
             auto &path=*rule.spatialPath;int interpolation=int(path.interpolation);
             if(ImGui::Combo("Damage curve",&interpolation,"Polyline\0Catmull-Rom\0Bezier\0"))
             {path.interpolation=PA::SplineInterpolation(interpolation);dirty=true;}
@@ -538,6 +544,9 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     if (built.bakeIslandCount)
         ImGui::Text("Unique bake UV islands %u | Damage/decal areas %zu",
                     built.bakeIslandCount,settings.damagePaths.size());
+    if(std::any_of(settings.damagePaths.begin(),settings.damagePaths.end(),[](const auto&r){return r.followSurface&&r.cutter.enabled&&r.cutter.amount>0;}))
+        ImGui::Text("Surface fit: max shift %.3f mm | sampled gap %.3f mm",
+                    built.maximumDamageProjectionMeters*1000,built.maximumDamageSurfaceErrorMeters*1000);
     if (built.bodyVertexCount && built.vertexUV.size()>=built.bodyVertexCount)
     {
         float minimumU=built.vertexUV[0][0],maximumU=minimumU;

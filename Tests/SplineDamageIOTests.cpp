@@ -3,6 +3,7 @@
 #include "SplineDamageIO.hpp"
 #include "SolidGeometry.hpp"
 #include "SplineDamageVolumeTests.hpp"
+#include "SplineSurfaceFitTests.hpp"
 #include <nlohmann/json.hpp>
 #include <algorithm>
 #include <fstream>
@@ -31,6 +32,7 @@ PA::ProceduralSpline line(){
 }
 int main(int argc,char**argv){
  try{
+  SplineSurfaceFitTests::run();
   const auto folder=argc>1?std::filesystem::path(argv[1]):std::filesystem::temp_directory_path()/"JericoSplineDamageIO";
   std::filesystem::create_directories(folder);
   const auto spline=line();ConstructionSettings original;original.radiusMeters=.08;original.breakSeed=991;original.metresPerTileU=.75;
@@ -115,7 +117,7 @@ int main(int argc,char**argv){
   require(serializeSplineDamage(open.damagePaths)==openBefore&&!open.capStart,"failed host build preserves state");
   reject([&]{deserializeSplineDamage("{}");},"wrong file shape rejected");
   for(const auto value:std::vector<Json>{-1,1.5,1e80}){auto bad=Json::parse(text);bad["paths"][0]["contourSeed"]=value;reject([&]{deserializeSplineDamage(bad.dump());},"lossy seed rejected");}
-  auto bad=Json::parse(text);bad["version"]=4;reject([&]{deserializeSplineDamage(bad.dump());},"unknown schema rejected");
+  auto bad=Json::parse(text);bad["version"]=5;reject([&]{deserializeSplineDamage(bad.dump());},"unknown schema rejected");
   bad=Json::parse(text);bad["paths"][1]["id"]=bad["paths"][0]["id"];reject([&]{deserializeSplineDamage(bad.dump());},"duplicate IDs rejected");
   auto nan=original.damagePaths;nan[0].cutter.depth=std::numeric_limits<double>::infinity();reject([&]{saveSplineDamage(nan,file);},"invalid save rejected");
   require(serializeSplineDamage(loadSplineDamage(file))==text,"failed save preserves previous file");

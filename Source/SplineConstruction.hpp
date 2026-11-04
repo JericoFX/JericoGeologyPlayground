@@ -49,6 +49,14 @@ struct PathDamageRule
     // Optional canonical spline in projector-local coordinates. Absent = legacy planar path.
     std::optional<PA::ProceduralSpline> spatialPath;
     DamageVolumeOperation operation{DamageVolumeOperation::Difference};
+    bool followSurface{};
+    double surfaceDistanceMeters{.05};
+};
+struct DamagePathSamples
+{
+    std::vector<DamageSweepSection> sections;
+    // Chord error is measured at quarter/midpoint probes, not a whole-surface bound.
+    double maximumProjectionMeters{}, maximumSurfaceChordErrorMeters{};
 };
 struct ConstructionSettings
 {
@@ -80,11 +88,14 @@ struct ConstructionResult
     unsigned bakeIslandCount{};
     std::size_t profileSegments{}, bodyVertexCount{}, bodyTriangleCount{};
     double generationCpuMilliseconds{};
+    double maximumDamageProjectionMeters{}, maximumDamageSurfaceErrorMeters{};
 };
 
 PathResult samplePath(const PA::ProceduralSpline &spline, const PathQuality &quality);
 void validateSplineDamage(const PathDamageRule &rule);
-TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region);
+DamagePathSamples sampleSplineDamage(const PathDamageRule &rule,const TriangleMesh *receiver=nullptr);
+TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region,
+                                    const TriangleMesh *receiver=nullptr);
 PathFrame frameAtDistance(const PathResult &path, double distanceMeters);
 std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const RepeatSettings &settings);
 ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,

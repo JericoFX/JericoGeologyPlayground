@@ -332,6 +332,112 @@ std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const Repea
     }
     return placements;
 }
+namespace
+{
+DamagePathSamples fitDamageToSurface(const PathDamageRule &rule,const PathResult &guide,
+                                     const TriangleMesh &receiver,const PathQuality &quality)
+{
+    namespace D=PA::Detail;
+    if(receiver.positions.empty()||receiver.indices.empty()||receiver.indices.size()%3||
+       receiver.positions.size()>240000||receiver.indices.size()/3>240000)
+        throw std::runtime_error("Surface fitting needs a bounded triangle mesh");
+    auto finite=[](Vec3d p){return std::isfinite(p.x)&&std::isfinite(p.y)&&std::isfinite(p.z);};
+    std::vector<D::Triangle> triangles;std::vector<Vec3d> faceNormals;
+    triangles.reserve(receiver.indices.size()/3);faceNormals.reserve(receiver.indices.size()/3);
+    for(std::size_t i=0;i<receiver.indices.size();i+=3)
+    {
+        for(unsigned c=0;c<3;++c)if(receiver.indices[i+c]>=receiver.positions.size())
+            throw std::runtime_error("Surface fitting receiver has an invalid triangle index");
+        const auto a=receiver.positions[receiver.indices[i]],b=receiver.positions[receiver.indices[i+1]],c=receiver.positions[receiver.indices[i+2]];
+        if(!finite(a)||!finite(b)||!finite(c))throw std::runtime_error("Surface fitting receiver contains a non-finite position");
+        const auto e=sub(b,a),f=sub(c,a);
+        const auto scale=std::max(std::hypot(e.x,e.y,e.z),std::hypot(f.x,f.y,f.z));
+        if(!std::isfinite(scale)||scale<=0)throw std::runtime_error("Surface fitting receiver has a collapsed triangle");
+        const auto n=cross(mul(e,1/scale),mul(f,1/scale));
+        if(length(n)<=1e-12)throw std::runtime_error("Surface fitting receiver has a degenerate triangle");
+        faceNormals.push_back(unit(n));
+        auto bounds=D::emptyBounds();D::include(bounds,a);D::include(bounds,b);D::include(bounds,c);
+        triangles.push_back({a,b,c,add(a,add(mul(e,1./3),mul(f,1./3))),bounds,std::uint32_t(i/3),std::uint32_t(i/3)});
+    }
+    const D::TriangleBvh bvh(std::move(triangles));
+    struct Fit {PathFrame guide;Vec3d point,normal;};
+    auto project=[&](const PathFrame &frame,Vec3d query,const Vec3d *reference)
+    {
+        const auto closest=bvh.closest(query,0);auto face=closest.owner;
+        if(face>=faceNormals.size()||!std::isfinite(closest.distance))
+            throw std::runtime_error("No receiver surface near the damage path");
+        if(reference&&dot(faceNormals[face],*reference)<-.25)
+        {
+            const auto facing=Projection::closestFront(bvh,query,*reference,rule.surfaceDistanceMeters*2);
+            if(!std::isfinite(facing.distance))throw std::runtime_error("Surface fit crosses the opposite side; add guide points");
+            face=facing.triangle;
+        }
+        const auto &triangle=bvh.triangles()[face];
+        const auto point=D::closestPointOnTriangle(query,triangle.first,triangle.second,triangle.third);
+        if(!finite(point)||length(sub(point,frame.position))>rule.surfaceDistanceMeters)
+            throw std::runtime_error("Surface fit exceeds its distance limit; move the guide or increase the limit");
+        return Fit{frame,point,faceNormals[face]};
+    };
+    std::vector<Fit> anchors;anchors.reserve(guide.frames.size());
+    for(const auto &frame:guide.frames)
+        anchors.push_back(project(frame,frame.position,anchors.empty()?nullptr:&anchors.back().normal));
+    if(rule.spatialPath->closed)
+    {anchors.back().point=anchors.front().point;anchors.back().normal=anchors.front().normal;}
+    const double surfaceError=std::clamp(quality.maximumDeviationMeters*.5,1e-5,.001);
+    DamagePathSamples result;std::vector<Fit> fitted{anchors.front()};
+    std::function<void(const Fit&,const Fit&,unsigned)> refine;
+    refine=[&](const Fit &a,const Fit &b,unsigned depth)
+    {
+        const auto chord=sub(b.point,a.point);const auto chordLength=length(chord);
+        if(chordLength<=1e-9)throw std::runtime_error("Surface fit collapses neighboring points; edit the guide");
+        double measured=0;Fit middle{};
+        for(const double t:{.25,.5,.75})
+        {
+            const auto reference=add(mul(a.normal,1-t),mul(b.normal,t));
+            if(length(reference)<1e-6)throw std::runtime_error("Surface fit reverses between opposite sides; add guide points");
+            const auto normal=unit(reference),query=add(a.point,mul(chord,t));
+            const auto frame=frameAtDistance(guide,std::lerp(a.guide.distanceMeters,b.guide.distanceMeters,t));
+            const auto candidate=project(frame,query,&normal);
+            measured=std::max(measured,length(sub(candidate.point,query)));
+            if(t==.5)middle=candidate;
+        }
+        if(measured<=surfaceError&&chordLength<=quality.maximumStepMeters)
+        {
+            if(fitted.size()>=quality.maximumSamples)throw std::runtime_error("Surface fit exceeds its sample budget");
+            fitted.push_back(b);result.maximumSurfaceChordErrorMeters=std::max(result.maximumSurfaceChordErrorMeters,measured);return;
+        }
+        if(depth>=18)throw std::runtime_error("Surface fit cannot follow this gap or corner within its error limit");
+        refine(a,middle,depth+1);refine(middle,b,depth+1);
+    };
+    for(std::size_t i=1;i<anchors.size();++i)refine(anchors[i-1],anchors[i],0);
+    std::vector<double> distance(fitted.size());
+    for(std::size_t i=1;i<fitted.size();++i)distance[i]=distance[i-1]+length(sub(fitted[i].point,fitted[i-1].point));
+    const auto &c=rule.cutter;const auto &p=c.projector;
+    const double metricScale=std::min({p.scale.x,p.scale.y,p.scale.z});
+    auto extentScale=[&](Vec3d axis){return 1/std::hypot(dot(axis,p.tangent)/p.scale.x,
+        dot(axis,p.bitangent)/p.scale.y,dot(axis,p.normal)/p.scale.z);};
+    result.sections.reserve(fitted.size());
+    for(std::size_t i=0;i<fitted.size();++i)
+    {
+        const auto &sample=fitted[i];
+        result.maximumProjectionMeters=std::max(result.maximumProjectionMeters,length(sub(sample.point,sample.guide.position)));
+        if(rule.spatialPath->closed&&i+1==fitted.size()){result.sections.push_back(result.sections.front());continue;}
+        const auto previous=i?i-1:(rule.spatialPath->closed?fitted.size()-2:0);
+        const auto next=std::min(i+1,fitted.size()-1);
+        const auto along=sub(fitted[next].point,fitted[previous].point);
+        auto tangent=sub(along,mul(sample.normal,dot(along,sample.normal)));
+        if(length(tangent)<1e-10)tangent=sub(sample.guide.tangent,mul(sample.normal,dot(sample.guide.tangent,sample.normal)));
+        if(length(tangent)<1e-10)throw std::runtime_error("Surface fit has no tangent along the receiver");
+        tangent=unit(tangent);
+        const auto u=rotateAbout(unit(cross(sample.normal,tangent)),tangent,sample.guide.rollRadians);
+        const auto v=rotateAbout(sample.normal,tangent,sample.guide.rollRadians);
+        const auto variation=damageVariationAtStation(distance[i],std::max(.005,c.radius*metricScale*4),c.seed,rule.id,distance.back(),rule.spatialPath->closed);
+        const auto scale=sample.guide.widthMeters*(1+.3*c.irregularity*variation);
+        result.sections.push_back({sample.point,mul(u,c.radius*scale*extentScale(u)),mul(v,c.depth*c.amount*scale*extentScale(v))});
+    }
+    return result;
+}
+}
 void validateSplineDamage(const PathDamageRule &rule)
 {
     sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
@@ -339,13 +445,16 @@ void validateSplineDamage(const PathDamageRule &rule)
         throw std::runtime_error("Invalid spline surface operation");
     if(rule.operation==DamageVolumeOperation::Union&&!rule.spatialPath)
         throw std::runtime_error("Raised decals require a spatial spline");
+    if(!std::isfinite(rule.surfaceDistanceMeters)||rule.surfaceDistanceMeters<1e-6||rule.surfaceDistanceMeters>1000)
+        throw std::runtime_error("Surface fitting distance must be between 0.000001 and 1000 meters");
+    if(rule.followSurface&&!rule.spatialPath)throw std::runtime_error("Surface fitting requires a spatial spline");
     if(!rule.spatialPath)return;
     if(rule.spatialPath->points.size()>64||rule.spatialPath->name.size()>128||rule.cutter.separationMeters!=0)
         throw std::runtime_error("Spatial damage permits 64 controls and does not support chunk separation");
     const auto valid=PA::validateProceduralSpline(*rule.spatialPath);
     if(!valid.hasValue())throw std::runtime_error(valid.error().message);
 }
-TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region)
+DamagePathSamples sampleSplineDamage(const PathDamageRule &rule,const TriangleMesh *receiver)
 {
     validateSplineDamage(rule);
     if(!rule.spatialPath||!rule.cutter.enabled||rule.cutter.amount<=0)
@@ -356,7 +465,6 @@ TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid reg
     quality.maximumDeviationMeters=std::clamp(std::min(c.radius,c.depth)*.1,1e-5,.01);
     quality.maximumStepMeters=std::clamp(c.radius*2,.005,.25);
     quality.maximumTangentAngleRadians=.12;
-    const auto path=samplePath(*rule.spatialPath,quality);
     const auto &p=c.projector;
     auto vectorToWorld=[&](Vec3d point)
     {
@@ -364,6 +472,18 @@ TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid reg
         return add(mul(p.tangent,(cosine*point.x+sine*point.y)*p.scale.x),
             add(mul(p.bitangent,(-sine*point.x+cosine*point.y)*p.scale.y),mul(p.normal,point.z*p.scale.z)));
     };
+    if(rule.followSurface)
+    {
+        if(!receiver)throw std::runtime_error("Surface fitting requires its receiver mesh");
+        auto world=*rule.spatialPath;
+        for(auto &point:world.points)
+        {point.position=add(p.center,vectorToWorld(point.position));point.incomingHandle=vectorToWorld(point.incomingHandle);point.outgoingHandle=vectorToWorld(point.outgoingHandle);}
+        const auto smallest=std::min(c.radius,c.depth*c.amount)*std::min({p.scale.x,p.scale.y,p.scale.z});
+        quality.maximumDeviationMeters=std::clamp(smallest*.1,1e-5,.01);
+        quality.maximumStepMeters=std::clamp(smallest*2,.005,.25);
+        return fitDamageToSurface(rule,samplePath(world,quality),*receiver,quality);
+    }
+    const auto path=samplePath(*rule.spatialPath,quality);
     std::vector<DamageSweepSection> sections;sections.reserve(path.frames.size());
     for(const auto &frame:path.frames)
     {
@@ -374,7 +494,11 @@ TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid reg
             vectorToWorld(mul(frame.normal,c.radius*scale)),
             vectorToWorld(mul(frame.binormal,c.depth*c.amount*scale))});
     }
-    return buildDamageSweepVolume(sections,region);
+    return {std::move(sections)};
+}
+TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region,const TriangleMesh *receiver)
+{
+    return buildDamageSweepVolume(sampleSplineDamage(rule,receiver).sections,region);
 }
 ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                                      const ConstructionSettings &settings)
@@ -797,9 +921,15 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                       result.mesh.mesh.triangleRegions.end(),fresh)!=
                       result.mesh.mesh.triangleRegions.end())
             throw std::runtime_error("Spline fresh interior region ID collision");
-        const auto cut=rule.spatialPath ?
-            applyDamageVolume(result.mesh.mesh,buildSplineDamageVolume(rule,fresh),rule.operation):
-            cutDamagePath(result.mesh.mesh,rule.cutter,fresh,240000);
+        TriangleMesh cut;
+        if(rule.spatialPath)
+        {
+            const auto samples=sampleSplineDamage(rule,&result.mesh.mesh);
+            result.maximumDamageProjectionMeters=std::max(result.maximumDamageProjectionMeters,samples.maximumProjectionMeters);
+            result.maximumDamageSurfaceErrorMeters=std::max(result.maximumDamageSurfaceErrorMeters,samples.maximumSurfaceChordErrorMeters);
+            cut=applyDamageVolume(result.mesh.mesh,buildDamageSweepVolume(samples.sections,fresh),rule.operation);
+        }
+        else cut=cutDamagePath(result.mesh.mesh,rule.cutter,fresh,240000);
         if (meshHash(cut)==meshHash(result.mesh.mesh)) continue;
         if (cut.positions.size()>settings.maximumVertices ||
             std::find(cut.triangleRegions.begin(),cut.triangleRegions.end(),fresh)==

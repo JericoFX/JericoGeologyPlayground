@@ -61,10 +61,11 @@ void captureSpatialSplineDamage(Renderer &renderer,const std::filesystem::path &
         }
         return sum;
     };
-    for(unsigned fixture=0;fixture<4;++fixture)
+    for(unsigned fixture=0;fixture<8;++fixture)
     {
-        const bool curved=fixture%2!=0,raised=fixture>=2;
-        const std::string name=std::string(curved?"curved-pipe":"cube")+(raised?"-decal":"");
+        const auto base=fixture%4;
+        const bool curved=base%2!=0,raised=base>=2,follow=fixture>=4;
+        const std::string name=std::string(curved?"curved-pipe":"cube")+(raised?"-decal":"")+(follow?"-surface":"");
         const auto host=curved?path({{-1.5,0,-.6},{-.6,.55,.2},{.4,-.5,-.15},{1.5,0,.65}},PA::SplineInterpolation::CatmullRom):
                                 path({{0,0,-1},{0,0,1}},PA::SplineInterpolation::Polyline);
         auto settings=splinePreset(1);
@@ -76,6 +77,7 @@ void captureSpatialSplineDamage(Renderer &renderer,const std::filesystem::path &
         rule.cutter.path={{-.5,0,0},{.5,0,0}};rule.cutter.seed=719;
         rule.cutter.radius=curved?.016:.12;rule.cutter.depth=curved?.014:.07;rule.cutter.irregularity=.25;
         rule.operation=raised?DamageVolumeOperation::Union:DamageVolumeOperation::Difference;
+        rule.followSurface=follow;rule.surfaceDistanceMeters=curved?.05:.3;
         std::vector<Vec3d> points;
         if(!curved)points={{-.7,1,.3},{.7,1,.3},{1,.7,.3},{1,0,.8},{1,-.7,-.3}};
         else for(unsigned i=0;i<9;++i)
@@ -119,7 +121,10 @@ void captureSpatialSplineDamage(Renderer &renderer,const std::filesystem::path &
                 images.push_back({{"file",image},{"yaw",camera.yaw},{"pitch",camera.pitch},{"distance",camera.distance},{"target",camera.target}});
             }
         }
-        proof["cases"].push_back({{"name",name},{"operation",raised?"VolumeUnion":"VolumeDifference"},{"beforeHash",meshHash(before.mesh.mesh)},{"afterHash",meshHash(after.mesh.mesh)},
+        proof["cases"].push_back({{"name",name},{"operation",raised?"VolumeUnion":"VolumeDifference"},
+            {"followSurface",follow},{"maximumProjectionMeters",after.maximumDamageProjectionMeters},
+            {"maximumSampledSurfaceErrorMeters",after.maximumDamageSurfaceErrorMeters},
+            {"beforeHash",meshHash(before.mesh.mesh)},{"afterHash",meshHash(after.mesh.mesh)},
             {"beforeVolume",volume(before.mesh.mesh)},{"afterVolume",volume(after.mesh.mesh)},
             {"beforeTriangles",before.mesh.mesh.indices.size()/3},{"afterTriangles",after.mesh.mesh.indices.size()/3},
             {"replayExact",true},{"offExact",true},{"recipe",recipe.filename().string()},{"images",images}});
