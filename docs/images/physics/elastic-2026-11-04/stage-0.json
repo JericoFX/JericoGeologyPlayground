@@ -1,0 +1,196 @@
+{
+  "actual_impactor_inertia_kg_m2": [
+    0.03599999890136722,
+    0.03599999890136722,
+    0.03599999890136722
+  ],
+  "actual_impactor_mass_kg": 1.0,
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "contact": false,
+  "contact_normal": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "contact_position_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "contact_samples": 0,
+  "damping_per_s": 2.0,
+  "dynamic_receiver_mass_kg": 6.0,
+  "edge_stiffness_N_per_m": 2000.0,
+  "healthy": true,
+  "impactor_mass_kg": 1.0,
+  "impactor_radius_m": 0.3,
+  "impactor_rotational_KE_J": 0.0,
+  "impactor_speed_m_per_s": 2.0,
+  "initial_linear_KE_J": 2.0,
+  "maximum_displacement_m": 0.0,
+  "maximum_fixed_world_position_error_m": 0.0,
+  "maximum_volume_error": 0.0,
+  "mechanical_energy_J": 2.000000000007205,
+  "minimum_tet_volume_ratio": 1.0,
+  "model": "Jolt volumetric elastic constraints",
+  "net_contact_impulse_N_s": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "nodes": 27,
+  "nodes_per_axis": 3,
+  "peak_displacement_m": 0.0,
+  "peak_mechanical_energy_J": 2.000000000007205,
+  "plasticity": false,
+  "positions": [
+    [
+      -0.5,
+      -0.5,
+      -0.5
+    ],
+    [
+      0.0,
+      -0.5,
+      -0.5
+    ],
+    [
+      0.5,
+      -0.5,
+      -0.5
+    ],
+    [
+      -0.5,
+      0.0,
+      -0.5
+    ],
+    [
+      0.0,
+      0.0,
+      -0.5
+    ],
+    [
+      0.5,
+      0.0,
+      -0.5
+    ],
+    [
+      -0.5,
+      0.5,
+      -0.5
+    ],
+    [
+      0.0,
+      0.5,
+      -0.5
+    ],
+    [
+      0.5,
+      0.5,
+      -0.5
+    ],
+    [
+      -0.5,
+      -0.5,
+      0.0
+    ],
+    [
+      0.0,
+      -0.5,
+      0.0
+    ],
+    [
+      0.5,
+      -0.5,
+      0.0
+    ],
+    [
+      -0.5,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.5,
+      0.0,
+      0.0
+    ],
+    [
+      -0.5,
+      0.5,
+      0.0
+    ],
+    [
+      0.0,
+      0.5,
+      0.0
+    ],
+    [
+      0.5,
+      0.5,
+      0.0
+    ],
+    [
+      -0.5,
+      -0.5,
+      0.5
+    ],
+    [
+      0.0,
+      -0.5,
+      0.5
+    ],
+    [
+      0.5,
+      -0.5,
+      0.5
+    ],
+    [
+      -0.5,
+      0.0,
+      0.5
+    ],
+    [
+      0.0,
+      0.0,
+      0.5
+    ],
+    [
+      0.5,
+      0.0,
+      0.5
+    ],
+    [
+      -0.5,
+      0.5,
+      0.5
+    ],
+    [
+      0.0,
+      0.5,
+      0.5
+    ],
+    [
+      0.5,
+      0.5,
+      0.5
+    ]
+  ],
+  "pre_step_relative_velocity_m_per_s": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "receiver_mass_kg": 8.0,
+  "remaining_linear_KE_J": 2.0,
+  "side_m": 1.0,
+  "steps": 0,
+  "tetrahedra": 48,
+  "time_s": 0.0,
+  "transferred_linear_KE_J": 0.0,
+  "volume_m3": 1.0000000000000007
+}

@@ -1,0 +1,98 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "afterHash": 12455253214835426900,
+      "afterTriangles": 3100,
+      "afterVertices": 1552,
+      "afterVolume": 7.973806320875337,
+      "beforeHash": 10403486003519162627,
+      "beforeTriangles": 12,
+      "beforeVertices": 8,
+      "beforeVolume": 8.0,
+      "cpuMilliseconds": 163.0841,
+      "detailDistance": 0.8999999761581421,
+      "detailPitch": 0.7853981852531433,
+      "detailTarget": [
+        -0.40822771191596985,
+        -0.9345676898956299,
+        0.9373036623001099
+      ],
+      "detailYaw": -3.1415927410125732,
+      "erosionHash": 12249066433485513751,
+      "freshRegionIds": [
+        "97D96C00AE973659D142BDEC08DD9C1D",
+        "CA06AE27B85958F630088E73A33506A2",
+        "6B49040C09CA4177D160D5B4696B5CD3",
+        "557072BA4A4C6D6C3B47F1EAF7250CA8",
+        "61822A880D508AC678FA3F7796D2DA22",
+        "9D8EC8E08873F8E82EB32F0E402A882C",
+        "95A030B19AA4164E60BE3FE459BF60DA",
+        "9F7188E9B5DD2D4ECC0E0E7DA01DFD3A"
+      ],
+      "name": "cube8",
+      "offHash": 10403486003519162627
+    },
+    {
+      "afterHash": 2486742270283443157,
+      "afterTriangles": 6074,
+      "afterVertices": 3039,
+      "afterVolume": 7.973806320875329,
+      "beforeHash": 1163265321279072013,
+      "beforeTriangles": 3072,
+      "beforeVertices": 1538,
+      "beforeVolume": 8.0,
+      "cpuMilliseconds": 506.7429,
+      "detailDistance": 0.8999999761581421,
+      "detailPitch": 0.7853981852531433,
+      "detailTarget": [
+        -0.40822771191596985,
+        -0.9345676898956299,
+        0.9373036623001099
+      ],
+      "detailYaw": -3.1415927410125732,
+      "erosionHash": 14854538182646371473,
+      "freshRegionIds": [
+        "97D96C00AE973659D142BDEC08DD9C1D",
+        "CA06AE27B85958F630088E73A33506A2",
+        "6B49040C09CA4177D160D5B4696B5CD3",
+        "557072BA4A4C6D6C3B47F1EAF7250CA8",
+        "61822A880D508AC678FA3F7796D2DA22",
+        "9D8EC8E08873F8E82EB32F0E402A882C",
+        "95A030B19AA4164E60BE3FE459BF60DA",
+        "9F7188E9B5DD2D4ECC0E0E7DA01DFD3A"
+      ],
+      "name": "cube1538",
+      "offHash": 1163265321279072013
+    }
+  ],
+  "fullCameras": [
+    {
+      "distance": 4.900000095367432,
+      "pitch": -0.2800000011920929,
+      "target": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 0.550000011920929
+    },
+    {
+      "distance": 4.900000095367432,
+      "pitch": 0.2800000011920929,
+      "target": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "yaw": 3.6915926933288574
+    }
+  ],
+  "interactive": false,
+  "invalidFieldRejected": true,
+  "renderer": "original Playground Renderer / Diligent Vulkan",
+  "resolution": [
+    1280,
+    960
+  ]
+}

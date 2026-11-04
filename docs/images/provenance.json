@@ -6528,6 +6528,706 @@
       "format": "PNG",
       "source_modified_utc": "2026-11-04T15:05:26.218007+00:00",
       "binary_sha256": "1682DFF3435EC9F2B4465F07D6F3718651E8A89D104823122EEEF0CF12B1B703"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-before-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-before-back.png",
+      "sha256": "0116b376fe1c79d2164de211cf25afa90183366561a1f98372b5c2f670afe374",
+      "bytes": 153462,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:47.824035+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-before-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-before-detail.png",
+      "sha256": "4741165502b8b4257f3cecbafaed98074fc83ef8a8827f23970e1a3e97654675",
+      "bytes": 108047,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:47.978935+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-before-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-before-front.png",
+      "sha256": "2491113ab966a223b0a18687d46b0e73047a4bff747fd91dd21c111c15c4260a",
+      "bytes": 242883,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:47.661443+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-back-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-back-wire.png",
+      "sha256": "cc52cce61a0f7a8f439051b59632f6084840ac3e6a6d8527ba58ed3a02353dbf",
+      "bytes": 215290,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:49.311584+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-back.png",
+      "sha256": "c8b60c68d9720f5256ad38b434d91e22c55246ad4e9ad0a04cf1e91e6473c307",
+      "bytes": 185478,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:49.138006+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-detail-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-detail-wire.png",
+      "sha256": "ee0926f568050ec4e1d30799c570fa1fa7e0edb36f2629668d835a04133fcadc",
+      "bytes": 340924,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:49.663184+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-detail.png",
+      "sha256": "3e1c65378485ba09b70a0eba76910614993593a30a073acce73a4c52eeaa4c98",
+      "bytes": 200520,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:49.523046+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-front-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-front-wire.png",
+      "sha256": "e6b07c67f0a5ccd77a47bf5854c59ffffae2de02af51434dce1adf5a9a39a3a0",
+      "bytes": 191258,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:48.963143+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-chips-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-chips-front.png",
+      "sha256": "d5cd0fc66060c8e53e51c58ccf45955d9414855c473465d71e7ff4ef7593a4a6",
+      "bytes": 243569,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:48.788582+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-erosion-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-erosion-back.png",
+      "sha256": "27a4c7420f944cb3e72160b2ae806e792ba7d676fd46aedf31a245a980103240",
+      "bytes": 149762,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:48.368948+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-erosion-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-erosion-detail.png",
+      "sha256": "4b091d7b9aebed99379d983166d919b98066b5dc0284cddbb20287c61d444040",
+      "bytes": 107863,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:48.611054+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-erosion-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-erosion-front.png",
+      "sha256": "d21a2def60fdf771a6951473cef175f4075556a49759f9d924c50445af3ebbd2",
+      "bytes": 236143,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:48.200882+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-off-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-off-back.png",
+      "sha256": "0116b376fe1c79d2164de211cf25afa90183366561a1f98372b5c2f670afe374",
+      "bytes": 153462,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:50.005821+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-off-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-off-detail.png",
+      "sha256": "4741165502b8b4257f3cecbafaed98074fc83ef8a8827f23970e1a3e97654675",
+      "bytes": 108047,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:50.164903+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube8-off-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube8-off-front.png",
+      "sha256": "2491113ab966a223b0a18687d46b0e73047a4bff747fd91dd21c111c15c4260a",
+      "bytes": 242883,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:49.842734+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-before-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-before-back.png",
+      "sha256": "9f43a56e56712b6c3ffc0338ecdd03d8b3e5a831c59492053bfca048f81953d1",
+      "bytes": 90040,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:51.561613+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-before-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-before-detail.png",
+      "sha256": "76c21742666b415dcf4d628f8b4bd5cc4935195f1250a001dc8b4049dc4abd9e",
+      "bytes": 71377,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:51.707405+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-before-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-before-front.png",
+      "sha256": "d01ceca9063e86f4ff48e000a1d5fb73d63b868a62f80759ac876ca6bf278c1e",
+      "bytes": 101239,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:51.408035+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-back-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-back-wire.png",
+      "sha256": "5e039fc80452cbd09f1fda8dbdf2f2c0eaa243ec28db9d1f0ba0f9adf4dda4cd",
+      "bytes": 266655,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.082468+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-back.png",
+      "sha256": "426907b9a9dc9633734a4df9139d63dd5f99d7c9c8651ffd6065ce48622d77a0",
+      "bytes": 103701,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:52.854545+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-detail-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-detail-wire.png",
+      "sha256": "08166f19c2d09ead11ba669fb80ca4632ed6b458196760594f2338edca2f6bf0",
+      "bytes": 299653,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.445300+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-detail.png",
+      "sha256": "4dd74d6034af4463b175d841e22b555d32e342fa2af6b43cdf792b0109b1dae6",
+      "bytes": 124314,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.266989+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-front-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-front-wire.png",
+      "sha256": "fa2f25a3dfd52608ef9c2d8e25cec5098172853da75fcf4a7571f3bd4dd784cc",
+      "bytes": 256088,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:52.641087+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-chips-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-chips-front.png",
+      "sha256": "fc48d9dfca5f847e14fb28a31192cf0b27bc6ef670bcd7c5e77574b5118e4682",
+      "bytes": 108002,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:52.463579+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-erosion-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-erosion-back.png",
+      "sha256": "c401e473db944333c1c3d53c853551b26ef1e98cce6ffd8497318e54fdb01406",
+      "bytes": 99298,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:52.068857+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-erosion-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-erosion-detail.png",
+      "sha256": "2974004a4c0be983452fb788b287e4017b3ca658f41265960d9a08a0f64c7758",
+      "bytes": 113643,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:52.244470+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-erosion-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-erosion-front.png",
+      "sha256": "a3733dc42548065cdfa6e97ea0532e633401d88cfe429fc10a08c4a69b17102b",
+      "bytes": 131364,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:51.898294+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-off-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-off-back.png",
+      "sha256": "9f43a56e56712b6c3ffc0338ecdd03d8b3e5a831c59492053bfca048f81953d1",
+      "bytes": 90040,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.805034+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-off-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-off-detail.png",
+      "sha256": "76c21742666b415dcf4d628f8b4bd5cc4935195f1250a001dc8b4049dc4abd9e",
+      "bytes": 71377,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.985576+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-2026-11-04/cube1538-off-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-2/cube1538-off-front.png",
+      "sha256": "d01ceca9063e86f4ff48e000a1d5fb73d63b868a62f80759ac876ca6bf278c1e",
+      "bytes": 101239,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:08:53.631471+00:00",
+      "binary_sha256": "F9E3ECF8369604ACB35A4B66F0DDDA3695220C5393A0A41F04D3051C54E1269F"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-0-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-0-ui.png",
+      "sha256": "07c11fe8516209e90596503c583ffc62201c496f604df0d13ca4208efe97e548",
+      "bytes": 176676,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.320720+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-0-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-0-viewport.png",
+      "sha256": "a038ef3d395c05703925206b473081f8e4a321cc69a71a16a27464d12adf729e",
+      "bytes": 41789,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.236497+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-1-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-1-ui.png",
+      "sha256": "3c491faf43499b089bb9435fb77c7141857281748f4debd464ebe41349c32dc5",
+      "bytes": 176289,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.479831+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-1-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-1-viewport.png",
+      "sha256": "73de5d2fa272a0d1835dca202eca7e8955faa7d1169586a3f6e5e2ef33326e07",
+      "bytes": 41197,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.397487+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-2-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-2-ui.png",
+      "sha256": "60c5098b7c8aa047caa2fbc1d5eaf8de0c19697f2903dbff2306a70e191b2783",
+      "bytes": 180998,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.671508+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-2-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-2-viewport.png",
+      "sha256": "99c2dfbbeeacc99e01699817333a79c0c5c3656e4210b3c52bfaec658dc47366",
+      "bytes": 43980,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.589584+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-3-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-3-ui.png",
+      "sha256": "cc05a1712d1997b3877de7264746488a027d73734cd855d10c21b56a8a040ffc",
+      "bytes": 282823,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.820244+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-3-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-3-viewport.png",
+      "sha256": "a0114e3f629e354a806768c56a07ac7c236661e33e7f9f5e5a94f7c0432891cc",
+      "bytes": 41931,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:45.732202+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-4-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-4-ui.png",
+      "sha256": "d4994542d70160c1a921ea73bc7d588db15b1ec53eafb20ad2a42cd9fc2173d3",
+      "bytes": 278240,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.095043+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-4-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-4-viewport.png",
+      "sha256": "7ff04cc9a4380240868e9bbb31e4b6045d001cbf270e90582ed3108fa2e3363d",
+      "bytes": 41412,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.008633+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-5-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-5-ui.png",
+      "sha256": "15484194d100bd4d21c436ab7ef756bcc587b57153c40db95571e250fa1855ea",
+      "bytes": 283285,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.557055+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-5-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-5-viewport.png",
+      "sha256": "17a5c10205caab6e1fa1bcf20ba8024ab8c677f8cfec64edd98da3383818d571",
+      "bytes": 39736,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.470584+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-6-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-6-ui.png",
+      "sha256": "fcb8e60cbb290e7e0a446e1c79d2df91d421187ba20247d111d22275c43ea671",
+      "bytes": 278022,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.833674+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-6-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-6-viewport.png",
+      "sha256": "bab15f7249853a5f0060cef85ab22e5c27d7798c5eaee990b6ed7ce8b9f9a9d0",
+      "bytes": 41970,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:46.747179+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-7-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-7-ui.png",
+      "sha256": "0fb89dd17e15d392f4dbb59c67eec0c8832aaa55833cace7e3224afd572dbf1b",
+      "bytes": 278601,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.109478+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-7-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-7-viewport.png",
+      "sha256": "57d97ddc423b1cf5a193d87c84e3b6496c1aff78a9a8cebe341d2bcc6e3fbef7",
+      "bytes": 40361,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.023614+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-8-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-8-ui.png",
+      "sha256": "87d03df9bf057a736fc606dbb97d197641664f17a83cf1495effb869aebadf5b",
+      "bytes": 279121,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.395682+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-8-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-8-viewport.png",
+      "sha256": "6ea7a94f78c532a648bc8fdfdbc38240260fbc69d04909415cc0c3c5501ed5e5",
+      "bytes": 24189,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.307553+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-9-ui.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-9-ui.png",
+      "sha256": "fef99775d6b9220d512ee95b97594935c3252d92fb465f418166700128b57b4c",
+      "bytes": 278737,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.667355+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "physics",
+      "file": "physics/elastic-2026-11-04/stage-9-viewport.png",
+      "source": "Evidence/physics-lab-2026-11-04/native-1/captures/stage-9-viewport.png",
+      "sha256": "2416ec7189625921b693b2462eeb84ff883743f4d081e04089d58744201ed4bd",
+      "bytes": 42382,
+      "dimensions": [
+        789,
+        727
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T19:38:47.579369+00:00",
+      "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
     }
   ]
 }

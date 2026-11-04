@@ -1,8 +1,8 @@
-# Damage: cavidades, grietas y roturas — 1/3
+# Damage: cavidades, grietas y roturas — 1/5
 
 Capturas históricas del daño compartido sobre paneles, rocas y estructuras. El recorrido actual del cubo está en la [página 3](page-3.md); su calidad visual sigue parcial. Voronoi se estudia sobre rocas.
 
-[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md)
 
 [Todas las familias](../README.md)
 

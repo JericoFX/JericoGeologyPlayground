@@ -18,21 +18,23 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 [Ver la secuencia completa](docs/images/boca/README.md).
 
-### Damage: estado actual del cubo
+### Damage: desconchado geométrico
 
-**Cubo de partida y edge damage actual:**
+**Antes y después, con la misma cámara:**
 
-![Cubo antes del daño](docs/images/damage/cube-2026-11-04/02-cube-intact-lit-0.jpg)
+![Cubo antes del corte](docs/images/damage/edge-chips-2026-11-04/cube1538-before-front.png)
 
-![Edge damage actual: desplazamiento de aristas, aún insuficiente](docs/images/damage/cube-2026-11-04/03-cube-edge-0.jpg)
+![Cubo con desconchados geométricos](docs/images/damage/edge-chips-2026-11-04/cube1538-chips-front.png)
 
-**Cavidad y crack geométricos:**
+[Ver las 30 capturas nuevas, incluidos el cubo de 8 vértices y los detalles](docs/images/damage/page-4.md). EdgeChips retira material y genera caras de corte; los dos cubos conservan cierre, replay y restitución al desactivar. **Calidad visual parcial:** sombreado del cubo simple y perfil radial del corte aún por corregir. La prueba nativa no sustituye el recorrido interactivo pendiente del modo nuevo.
+
+**Cavidad y crack existentes:**
 
 ![Cavidad sobre la cara del cubo](docs/images/damage/cube-2026-11-04/07-cube-cavity-lit-0.jpg)
 
-![Crack actual sobre el cubo](docs/images/damage/cube-2026-11-04/14-cube-crack-lit-0.jpg)
+![Crack sobre el cubo, todavía con aspecto de ranura](docs/images/damage/cube-2026-11-04/14-cube-crack-lit-0.jpg)
 
-[Ver las 23 capturas del recorrido UI](docs/images/damage/page-3.md). La pérdida de material de la cavidad y la grieta es visible. El desgaste de borde todavía mueve aristas y el crack parece una ranura mecanizada: **no se dan por terminados**. El siguiente cambio debe generar desconchados localizados con caras de corte.
+[Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). Grietas y decals 3D siguiendo spline continúan pendientes.
 
 ### Splines
 
@@ -41,6 +43,14 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 ![Corte adaptado a la superficie de un tubo hueco](docs/images/splines/surface-fit-2026-11-04/fitted-hollow-after-detail.png)
 
 [Ver las 44 capturas nuevas de ajuste sobre superficies](docs/images/splines/page-2.md), además de [las pruebas anteriores](docs/images/splines/README.md). Los cortes siguen siendo mecánicos; la calidad visual y los decals 3D siguiendo spline continúan pendientes.
+
+### Physics Lab: primer experimento elástico
+
+![Lattice de 3 nodos por eje y esfera antes del impacto](docs/images/physics/elastic-2026-11-04/stage-0-ui.png)
+
+![Lattice de 6 nodos por eje durante el impacto](docs/images/physics/elastic-2026-11-04/stage-4-ui.png)
+
+[Ver las 20 capturas y sus mediciones](docs/images/physics/README.md). Modelo elástico genérico con Jolt, masas reales y medidas de contacto, deformación, volumen y energía. Las familias caja hueca, metal macizo, chapa y gel necesitan modelos distintos y siguen pendientes; estas capturas no demuestran plasticidad, fatiga ni materiales calibrados.
 
 ### Rocas y modificadores
 
