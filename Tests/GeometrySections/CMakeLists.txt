@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.25)
+project(JEGeometrySectionsStandalone LANGUAGES CXX)
+get_filename_component(PLAYGROUND_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
+add_executable(GeometrySectionsTests
+    "${PLAYGROUND_ROOT}/Tests/GeometrySectionsTests.cpp"
+    "${PLAYGROUND_ROOT}/Source/GeometrySections.cpp")
+target_include_directories(GeometrySectionsTests PRIVATE "${PLAYGROUND_ROOT}/Source")
+target_compile_features(GeometrySectionsTests PRIVATE cxx_std_20)
+option(JE_GEOMETRY_ASAN "Instrument the standalone section consumer with AddressSanitizer" OFF)
+if(MSVC)
+    target_compile_options(GeometrySectionsTests PRIVATE /W4 /utf-8 /EHsc)
+    if(JE_GEOMETRY_ASAN)
+        target_compile_options(GeometrySectionsTests PRIVATE /fsanitize=address /Zi)
+        target_link_options(GeometrySectionsTests PRIVATE /INCREMENTAL:NO /DEBUG)
+    endif()
+endif()
+enable_testing()
+add_test(NAME Playground.GeometrySections COMMAND GeometrySectionsTests)
