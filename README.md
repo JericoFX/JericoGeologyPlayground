@@ -22,11 +22,11 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 **Antes y después, con la misma cámara:**
 
-![Cubo antes del corte](docs/images/damage/edge-chips-2026-11-04/cube1538-before-front.png)
+![Cubo antes del corte](docs/images/damage/edge-chips-normals-2026-11-04/cube8-before-front.png)
 
-![Cubo con desconchados geométricos](docs/images/damage/edge-chips-2026-11-04/cube1538-chips-front.png)
+![Cubo con desconchados geométricos](docs/images/damage/edge-chips-normals-2026-11-04/cube8-chips-front.png)
 
-[Ver las 30 capturas nuevas, incluidos el cubo de 8 vértices y los detalles](docs/images/damage/page-4.md). EdgeChips retira material y genera caras de corte; los dos cubos conservan cierre, replay y restitución al desactivar. **Calidad visual parcial:** sombreado del cubo simple y perfil radial del corte aún por corregir. La prueba nativa no sustituye el recorrido interactivo pendiente del modo nuevo.
+[Ver las 30 capturas con normales corregidas](docs/images/damage/page-6.md). EdgeChips retira material y genera caras de corte. La corrección elimina el sombreado diagonal falso del cubo simple, conservando exactamente la geometría y la restitución al desactivar. **Calidad visual parcial:** falta pulir el perfil radial de algunos cortes y recorrer la autoría interactiva del modo nuevo.
 
 **Cavidad y crack existentes:**
 

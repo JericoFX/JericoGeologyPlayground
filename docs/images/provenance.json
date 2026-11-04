@@ -7228,6 +7228,426 @@
       "format": "PNG",
       "source_modified_utc": "2026-11-04T19:38:47.579369+00:00",
       "binary_sha256": "BB011875A08E5F8ADD22BE2901AB64B379027129B85CE982C4CDDC4182A3FA4E"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-before-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-before-back.png",
+      "sha256": "9f43a56e56712b6c3ffc0338ecdd03d8b3e5a831c59492053bfca048f81953d1",
+      "bytes": 90040,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.684608+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-before-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-before-detail.png",
+      "sha256": "76c21742666b415dcf4d628f8b4bd5cc4935195f1250a001dc8b4049dc4abd9e",
+      "bytes": 71377,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.758589+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-before-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-before-front.png",
+      "sha256": "d01ceca9063e86f4ff48e000a1d5fb73d63b868a62f80759ac876ca6bf278c1e",
+      "bytes": 101239,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.611451+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-back-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-back-wire.png",
+      "sha256": "cabc3aafa03c915cdd5c1ed703c4a18f1d9112c4e3070ef24f82da820a690b30",
+      "bytes": 220182,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.298319+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-back.png",
+      "sha256": "9bdaebcb83fa0dae6e754f82092767699c93c8ce21ea9761ff6ca13647e0e4e7",
+      "bytes": 63874,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.223301+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-detail-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-detail-wire.png",
+      "sha256": "972c8c1121366a54853c2ae36109171dc9d62f23457c1ea19bbeca2cc60830ea",
+      "bytes": 253797,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.434795+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-detail.png",
+      "sha256": "8437fea4835b2b9d9bc3ba1ad48ad01b1d3ba5f23c124c67a580dbe559bfe458",
+      "bytes": 88877,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.374078+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-front-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-front-wire.png",
+      "sha256": "25e5fb669e25963e89dc093e52ac0c9be3fab046f538db5935ecadd5281a4ab8",
+      "bytes": 208322,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.147745+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-chips-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-chips-front.png",
+      "sha256": "f8d2a76a8348b1cf226fae6bc5aa66bcc6cab0f3a8ad74187628e56773ebaed3",
+      "bytes": 59695,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.072557+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-erosion-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-erosion-back.png",
+      "sha256": "c401e473db944333c1c3d53c853551b26ef1e98cce6ffd8497318e54fdb01406",
+      "bytes": 99298,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.913369+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-erosion-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-erosion-detail.png",
+      "sha256": "2974004a4c0be983452fb788b287e4017b3ca658f41265960d9a08a0f64c7758",
+      "bytes": 113643,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.986230+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-erosion-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-erosion-front.png",
+      "sha256": "a3733dc42548065cdfa6e97ea0532e633401d88cfe429fc10a08c4a69b17102b",
+      "bytes": 131364,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.839595+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-off-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-off-back.png",
+      "sha256": "9f43a56e56712b6c3ffc0338ecdd03d8b3e5a831c59492053bfca048f81953d1",
+      "bytes": 90040,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.587890+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-off-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-off-detail.png",
+      "sha256": "76c21742666b415dcf4d628f8b4bd5cc4935195f1250a001dc8b4049dc4abd9e",
+      "bytes": 71377,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.664213+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube1538-off-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube1538-off-front.png",
+      "sha256": "d01ceca9063e86f4ff48e000a1d5fb73d63b868a62f80759ac876ca6bf278c1e",
+      "bytes": 101239,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:03.514877+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-before-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-before-back.png",
+      "sha256": "0116b376fe1c79d2164de211cf25afa90183366561a1f98372b5c2f670afe374",
+      "bytes": 153462,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.088882+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-before-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-before-detail.png",
+      "sha256": "4741165502b8b4257f3cecbafaed98074fc83ef8a8827f23970e1a3e97654675",
+      "bytes": 108047,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.157248+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-before-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-before-front.png",
+      "sha256": "2491113ab966a223b0a18687d46b0e73047a4bff747fd91dd21c111c15c4260a",
+      "bytes": 242883,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.014598+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-back-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-back-wire.png",
+      "sha256": "de46d21c498f9898431f3cacc722a7a1bcd178df355f36841b26b96d1e718669",
+      "bytes": 153932,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.671612+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-back.png",
+      "sha256": "5952780b2ee04f530aeb268dbe2b8596728d0bd2bb7eff32ad6480567b6badfb",
+      "bytes": 63895,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.606363+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-detail-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-detail-wire.png",
+      "sha256": "91caadea98af4ceb6dffe88bddaecf65a8db7a01dcba34cee38bf3be1a7afeff",
+      "bytes": 289469,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.813185+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-detail.png",
+      "sha256": "684804265930d0efef712ad3206dff8bb456d7584d81365226e891383200281f",
+      "bytes": 88805,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.747527+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-front-wire.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-front-wire.png",
+      "sha256": "209e44da7643c07a17d942c68f13b3ab33079800f9c0d399e08f0ff3254e4124",
+      "bytes": 136490,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.531456+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-chips-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-chips-front.png",
+      "sha256": "9c97745877340c064927fced3cc4300738cc675efae50ecad99c561b0a61728b",
+      "bytes": 59665,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.465080+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-erosion-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-erosion-back.png",
+      "sha256": "27a4c7420f944cb3e72160b2ae806e792ba7d676fd46aedf31a245a980103240",
+      "bytes": 149762,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.315023+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-erosion-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-erosion-detail.png",
+      "sha256": "4b091d7b9aebed99379d983166d919b98066b5dc0284cddbb20287c61d444040",
+      "bytes": 107863,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.383229+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-erosion-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-erosion-front.png",
+      "sha256": "d21a2def60fdf771a6951473cef175f4075556a49759f9d924c50445af3ebbd2",
+      "bytes": 236143,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.239494+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-off-back.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-off-back.png",
+      "sha256": "0116b376fe1c79d2164de211cf25afa90183366561a1f98372b5c2f670afe374",
+      "bytes": 153462,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.969561+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-off-detail.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-off-detail.png",
+      "sha256": "4741165502b8b4257f3cecbafaed98074fc83ef8a8827f23970e1a3e97654675",
+      "bytes": 108047,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:02.037100+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "damage",
+      "file": "damage/edge-chips-normals-2026-11-04/cube8-off-front.png",
+      "source": "Evidence/mesh-modifiers-2026-11-04/chipping-native-3/captures/cube8-off-front.png",
+      "sha256": "2491113ab966a223b0a18687d46b0e73047a4bff747fd91dd21c111c15c4260a",
+      "bytes": 242883,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:33:01.895167+00:00",
+      "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
     }
   ]
 }

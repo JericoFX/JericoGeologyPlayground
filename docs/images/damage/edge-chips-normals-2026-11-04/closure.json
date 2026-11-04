@@ -1,0 +1,37 @@
+{
+  "Inputs": 343,
+  "InputDrift": [],
+  "RemainingOwned": [],
+  "FreeGiB": 23.536754608154297,
+  "UsedPercent": 26.245878986236594,
+  "Results": [
+    {
+      "Stage": "build",
+      "ExitCode": 0,
+      "Seconds": 7.2111728,
+      "PID": 1248,
+      "Arguments": [
+        "--build",
+        "build-chain/focused",
+        "--config",
+        "Release",
+        "--target",
+        "JericoGeologyPlaygroundRecovered",
+        "--",
+        "/m:1",
+        "/nr:false",
+        "/p:CL_MPCount=1"
+      ]
+    },
+    {
+      "Stage": "native",
+      "ExitCode": 0,
+      "Seconds": 4.6655679,
+      "PID": 20284,
+      "Arguments": [
+        "--edge-chips-test",
+        "F:\\JericoGeologyPlayground\\Evidence\\mesh-modifiers-2026-11-04\\chipping-native-3/captures"
+      ]
+    }
+  ]
+}

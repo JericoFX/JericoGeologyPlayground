@@ -1,8 +1,8 @@
-# Damage — 3/5
+# Damage — 3/7
 
 Tanda anterior al nuevo EdgeChips; se conserva para comparación. Capturas del candidato nativo del 4 de noviembre. Cavidades y grietas retiran material; la autoría del cubo se recorrió con movimiento, desactivación, guardado/carga y Undo/Redo en los casos documentados. **La calidad sigue parcial:** el edge damage actual desplaza aristas y el crack predeterminado parece una ranura mecanizada. Falta el desconchado geométrico localizado; estas fotos conservan ese problema visible.
 
-[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md) · [Página 7](page-7.md)
 
 [Todas las familias](../README.md)
 
