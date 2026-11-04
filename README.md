@@ -18,17 +18,29 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 [Ver la secuencia completa](docs/images/boca/README.md).
 
-### Damage: grietas, cavidades y roturas
+### Damage: estado actual del cubo
 
-![Grieta geométrica en un panel](docs/images/damage/grietas/panel-crack-after.png)
+**Cubo de partida y edge damage actual:**
 
-[Ver las pruebas de daño](docs/images/damage/README.md). Esta imagen es del panel histórico; el cubo nuevo se verifica específicamente con edge damage, cavidades y grietas.
+![Cubo antes del daño](docs/images/damage/cube-2026-11-04/02-cube-intact-lit-0.jpg)
+
+![Edge damage actual: desplazamiento de aristas, aún insuficiente](docs/images/damage/cube-2026-11-04/03-cube-edge-0.jpg)
+
+**Cavidad y crack geométricos:**
+
+![Cavidad sobre la cara del cubo](docs/images/damage/cube-2026-11-04/07-cube-cavity-lit-0.jpg)
+
+![Crack actual sobre el cubo](docs/images/damage/cube-2026-11-04/14-cube-crack-lit-0.jpg)
+
+[Ver las 23 capturas del recorrido UI](docs/images/damage/page-3.md). La pérdida de material de la cavidad y la grieta es visible. El desgaste de borde todavía mueve aristas y el crack parece una ranura mecanizada: **no se dan por terminados**. El siguiente cambio debe generar desconchados localizados con caras de corte.
 
 ### Splines
 
 ![Caño generado siguiendo una spline](docs/images/splines/construccion/pipe-s-curve.png)
 
-[Ver perfiles y pruebas de splines](docs/images/splines/README.md). Las capturas históricas no sustituyen la aceptación visual pendiente de la adaptación nueva del daño.
+![Corte adaptado a la superficie de un tubo hueco](docs/images/splines/surface-fit-2026-11-04/fitted-hollow-after-detail.png)
+
+[Ver las 44 capturas nuevas de ajuste sobre superficies](docs/images/splines/page-2.md), además de [las pruebas anteriores](docs/images/splines/README.md). Los cortes siguen siendo mecánicos; la calidad visual y los decals 3D siguiendo spline continúan pendientes.
 
 ### Rocas y modificadores
 

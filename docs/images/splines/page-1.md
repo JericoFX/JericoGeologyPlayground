@@ -1,8 +1,8 @@
-# Splines y perfiles — 1/1
+# Splines y perfiles — 1/3
 
-Capturas históricas del generador. La adaptación nueva del daño pasa sus pruebas CPU; estas imágenes no sustituyen su verificación visual pendiente.
+Capturas históricas del generador. La [página 2](page-2.md) inicia las capturas nuevas de ajuste de daño; su calidad visual sigue parcial.
 
-[Página 1](page-1.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md)
 
 [Todas las familias](../README.md)
 

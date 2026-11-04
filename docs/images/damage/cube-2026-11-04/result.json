@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "pid": 19772,
+  "processExited": true,
+  "inputDrift": [
+    {
+      "Path": "F:\\JericoGeologyPlayground\\Tests\\RocksIntegrationTests.cpp",
+      "Hash": "1037D31C72A23B7B7B381C145A51E8C4F360130167B0245EF0FE369F31DC8ABA"
+    }
+  ],
+  "binaryHash": "1682DFF3435EC9F2B4465F07D6F3718651E8A89D104823122EEEF0CF12B1B703"
+}
