@@ -1,7 +1,7 @@
 # Splines
 
-Capturas nativas actuales antes/después en siete perfiles y condiciones, más las pruebas existentes del generador. El ajuste crea cortes visibles y conserva el sólido en las pruebas ejercitadas. **Beauty parcial:** las ranuras siguen siendo mecánicas y la vista de detalle de torsión queda de canto. Decals 3D siguiendo spline siguen pendientes.
+Primer recorrido espacial real de damage: una spline 3D genera un volumen continuo que retira material del cubo y del tubo curvo. Guardado/carga, IDs, UVs y desactivación comprobados; tres suites PASS y 24 capturas nativas con fuentes/binario sin deriva. La ventana también permitió convertir, añadir un punto, editar Z y guardar/recargar. **Calidad visual parcial:** aspecto de ranura y ajuste continuo a superficies curvadas por mejorar. Decals 3D, ASan actualizado y la aceptación completa de UI siguen pendientes.
 
-60 imágenes: [Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md)
+84 imágenes: [Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md)
 
 [Volver a todas las familias](../README.md)

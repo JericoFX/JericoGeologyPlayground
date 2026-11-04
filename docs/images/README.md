@@ -8,7 +8,7 @@ Ocean Lab está excluido. Las fechas, fuentes y hashes están en [provenance.jso
 |---|---:|---|
 | Huesos, rigs e IK/FK | 56 | [Abrir](rigs/README.md) |
 | Boca y dientes | 32 | [Abrir](boca/README.md) |
-| Splines y perfiles | 60 | [Abrir](splines/README.md) |
+| Splines y perfiles | 84 | [Abrir](splines/README.md) |
 | Damage: cavidades, grietas y roturas | 120 | [Abrir](damage/README.md) |
 | Rocas: capas y edge damage | 22 | [Abrir](rocas/README.md) |
 | Puertas articuladas | 32 | [Abrir](puertas/README.md) |
@@ -22,6 +22,6 @@ Ocean Lab está excluido. Las fechas, fuentes y hashes están en [provenance.jso
 | Cadenas físicas y contactos | 24 | [Abrir](cadenas/README.md) |
 | Physics Lab: lattice e impacto elástico | 20 | [Abrir](physics/README.md) |
 
-**Total: 577 imágenes en 15 familias.** Se conservan los bytes originales; no se recomprimen ni se recortan al publicar.
+**Total: 601 imágenes en 15 familias.** Se conservan los bytes originales; no se recomprimen ni se recortan al publicar.
 
 En las capturas de animación, los archivos `ui` incluyen la superposición de huesos y controles; `viewport` muestra la malla renderizada.

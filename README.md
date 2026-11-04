@@ -34,15 +34,17 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 ![Crack sobre el cubo, todavía con aspecto de ranura](docs/images/damage/cube-2026-11-04/14-cube-crack-lit-0.jpg)
 
-[Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). Grietas y decals 3D siguiendo spline continúan pendientes.
+[Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). La ruta de grietas 3D ya tiene pruebas nativas; su aspecto y los decals 3D siguen pendientes.
 
-### Splines
+### Splines y daño 3D
 
-![Caño generado siguiendo una spline](docs/images/splines/construccion/pipe-s-curve.png)
+![Corte espacial sobre otra cara del cubo](docs/images/splines/spatial-damage-2026-11-04/cube-after-1.png)
 
-![Corte adaptado a la superficie de un tubo hueco](docs/images/splines/surface-fit-2026-11-04/fitted-hollow-after-detail.png)
+![Detalle del daño sobre el tubo curvo](docs/images/splines/spatial-damage-2026-11-04/curved-pipe-after-2.png)
 
-[Ver las 44 capturas nuevas de ajuste sobre superficies](docs/images/splines/page-2.md), además de [las pruebas anteriores](docs/images/splines/README.md). Los cortes siguen siendo mecánicos; la calidad visual y los decals 3D siguiendo spline continúan pendientes.
+[Ver las 24 capturas nuevas: antes, después, desactivado y recargado](docs/images/splines/page-4.md). La spline ya controla un corte tridimensional con puntos XYZ editables y persistencia. El perfil todavía parece una ranura y el ajuste a superficies curvas necesita mejorar. **Decals 3D y cierre visual pendientes.** [Pruebas anteriores del generador](docs/images/splines/README.md).
+
+El núcleo geométrico está publicado en `4a6be34`. La integración del editor mostrada en estas pruebas está validada localmente y aún pendiente de su commit.
 
 ### Physics Lab: primer experimento elástico
 

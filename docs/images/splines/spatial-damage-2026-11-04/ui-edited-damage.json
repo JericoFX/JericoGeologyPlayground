@@ -1,0 +1,125 @@
+{
+  "format": "SplineConstructionDamage",
+  "paths": [
+    {
+      "amount": 1.0,
+      "contourSeed": 2,
+      "depth": 0.03745808505405991,
+      "enabled": true,
+      "id": "spline-damage-1",
+      "irregularity": 0.3,
+      "path": [
+        [
+          -0.241829409367353,
+          0.0,
+          0.0
+        ],
+        [
+          0.241829409367353,
+          0.0,
+          0.0
+        ]
+      ],
+      "projector": {
+        "bitangent": [
+          0.43301320552115974,
+          -0.03238408760173178,
+          -0.9008056586825448
+        ],
+        "center": [
+          -0.014756630642426022,
+          0.18197454046033806,
+          0.30194089773715493
+        ],
+        "normal": [
+          0.6323770405854787,
+          0.7230648541833551,
+          0.27798650180387435
+        ],
+        "rotationRadians": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "tangent": [
+          0.6423385730163197,
+          -0.6900206428180298,
+          0.33357558378926855
+        ]
+      },
+      "radius": 0.01209147046836765,
+      "separationMeters": 0.0,
+      "spatialSpline": {
+        "closed": false,
+        "guid": "3CD07BD3C2E81AE284C733FD40890BDE",
+        "interpolation": 0,
+        "name": "spline-damage-1",
+        "points": [
+          {
+            "guid": "E49B0E35BEC7A973D8B251C78E258477",
+            "incoming": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.241829409367353,
+              0.0,
+              0.0
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "70D9B9C93B902FE76D1AC512B373B9E3",
+            "incoming": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.0,
+              0.0,
+              -0.01
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "87AAB91A9DF9CB107BC1FCAC6D57A614",
+            "incoming": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.241829409367353,
+              0.0,
+              0.0
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          }
+        ],
+        "schemaVersion": 1
+      }
+    }
+  ],
+  "version": 2
+}

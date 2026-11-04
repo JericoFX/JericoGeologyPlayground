@@ -7648,6 +7648,342 @@
       "format": "PNG",
       "source_modified_utc": "2026-11-04T20:33:01.895167+00:00",
       "binary_sha256": "3B7530A0EB2EE4D77FC9C487B3AF98AFF9280F71EA9EA6840E3F8C0E31507148"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-after-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-after-0.png",
+      "sha256": "628aee0965e7e8d4dbe3eead9da4b2b9d1c1067fe78a42669de1a08e62476f95",
+      "bytes": 51575,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.812020+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-after-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-after-1.png",
+      "sha256": "df2f010a74aed03cf31ae06a6233a561d032bcb1f2f4dd64e84898dd22f0d5a3",
+      "bytes": 54046,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.886455+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-after-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-after-2.png",
+      "sha256": "7ca112558c673d6ae75f649387a5f2abff51df6529f70c9a2c317f71f830b4d3",
+      "bytes": 57630,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.955872+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-before-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-before-0.png",
+      "sha256": "4f649cfe5fc85f7849eb1163f06aef629d6119f24ab2be6bc118ee29be5c0eea",
+      "bytes": 51417,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.583902+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-before-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-before-1.png",
+      "sha256": "d0951264c9fe74563b665a518bf92ba5cedd859e11e0a501ed59a1294a4d331d",
+      "bytes": 51833,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.659478+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-before-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-before-2.png",
+      "sha256": "625ccb13fb14f9a2dd0f6f09c09b340a9e27d854c245ae358ba8d748092c3bb1",
+      "bytes": 50007,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:52.736533+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-off-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-off-0.png",
+      "sha256": "4f649cfe5fc85f7849eb1163f06aef629d6119f24ab2be6bc118ee29be5c0eea",
+      "bytes": 51417,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.031500+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-off-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-off-1.png",
+      "sha256": "d0951264c9fe74563b665a518bf92ba5cedd859e11e0a501ed59a1294a4d331d",
+      "bytes": 51833,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.106319+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-off-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-off-2.png",
+      "sha256": "625ccb13fb14f9a2dd0f6f09c09b340a9e27d854c245ae358ba8d748092c3bb1",
+      "bytes": 50007,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.182539+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-replay-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-replay-0.png",
+      "sha256": "628aee0965e7e8d4dbe3eead9da4b2b9d1c1067fe78a42669de1a08e62476f95",
+      "bytes": 51575,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.257750+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-replay-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-replay-1.png",
+      "sha256": "df2f010a74aed03cf31ae06a6233a561d032bcb1f2f4dd64e84898dd22f0d5a3",
+      "bytes": 54046,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.331101+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/cube-replay-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/cube-replay-2.png",
+      "sha256": "7ca112558c673d6ae75f649387a5f2abff51df6529f70c9a2c317f71f830b4d3",
+      "bytes": 57630,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:53.400806+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-after-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-after-0.png",
+      "sha256": "879613e3700512a79157f7f0dde61b9649a53eb117407e792ed5487cd6eeff8f",
+      "bytes": 91913,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.310421+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-after-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-after-1.png",
+      "sha256": "7d160f6efa2031fa224e1e457ae647600a39cecf664df7d5e50d48918ee2c6d6",
+      "bytes": 76378,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.385469+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-after-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-after-2.png",
+      "sha256": "79b0cd90e89241a681f8a9271fe008e1bc0ab924fcadf8b7534907b39839b4d1",
+      "bytes": 218228,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.457510+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-before-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-before-0.png",
+      "sha256": "5f0a3440e446695e999d0226a04ecd847ab15059a6cfb7d08c2e1e08f62234b7",
+      "bytes": 91756,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.087342+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-before-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-before-1.png",
+      "sha256": "049f31e63a6dd0d7703916e59827472aaa4ec7a329de2443fa1350383cb6a211",
+      "bytes": 78121,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.161855+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-before-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-before-2.png",
+      "sha256": "3aaa8063745f7dea5739b7e9d31f9ac11b901cf70225494c53231f6caf29463f",
+      "bytes": 222846,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.234168+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-off-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-off-0.png",
+      "sha256": "5f0a3440e446695e999d0226a04ecd847ab15059a6cfb7d08c2e1e08f62234b7",
+      "bytes": 91756,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.535035+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-off-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-off-1.png",
+      "sha256": "049f31e63a6dd0d7703916e59827472aaa4ec7a329de2443fa1350383cb6a211",
+      "bytes": 78121,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.610601+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-off-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-off-2.png",
+      "sha256": "3aaa8063745f7dea5739b7e9d31f9ac11b901cf70225494c53231f6caf29463f",
+      "bytes": 222846,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.683543+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-replay-0.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-replay-0.png",
+      "sha256": "879613e3700512a79157f7f0dde61b9649a53eb117407e792ed5487cd6eeff8f",
+      "bytes": 91913,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.759400+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-replay-1.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-replay-1.png",
+      "sha256": "7d160f6efa2031fa224e1e457ae647600a39cecf664df7d5e50d48918ee2c6d6",
+      "bytes": 76378,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.835369+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
+    },
+    {
+      "category": "splines",
+      "file": "splines/spatial-damage-2026-11-04/curved-pipe-replay-2.png",
+      "source": "Evidence/spline-authoring-2026-11-04/spatial-native-1/captures/curved-pipe-replay-2.png",
+      "sha256": "79b0cd90e89241a681f8a9271fe008e1bc0ab924fcadf8b7534907b39839b4d1",
+      "bytes": 218228,
+      "dimensions": [
+        1280,
+        960
+      ],
+      "format": "PNG",
+      "source_modified_utc": "2026-11-04T20:47:54.907806+00:00",
+      "binary_sha256": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83"
     }
   ]
 }

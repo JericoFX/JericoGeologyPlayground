@@ -1,5 +1,15 @@
 # Goal de laboratorio — JericoGeologyPlayground
 
+## Goal activo: animación, splines y sistemas del Playground (2026-11-03)
+
+**ACTIVE — directiva vigente del propietario.** Mejorar y completar `JE::AnimationTools`, Spline Construction y los demás sistemas existentes del Playground, conservando sus requisitos de aceptación. **Ocean Lab queda fuera del goal activo**, incluida costa e iluminación de agua. Su código y evidencia se preservan; no se continúa su implementación ni se declara aceptado.
+
+Actualización vigente del 2026-11-04: entrega urgente sin reducir los gates. La última directiva general recibida establece sólo principal; los agentes anteriores entregaron sus cambios y permanecen inactivos. Se conserva su trabajo y el alcance completo. Physics Lab debe distinguir material y estructura: caja hueca, metal macizo, chapa delgada y gel no se consideran implementados mediante presets del mismo lattice elástico.
+
+Avance posterior de spline damage: volumen espacial continuo por unión de secciones consecutivas, límites de trabajo y conservación de IDs en `DamageGeometry`; no aplana los puntos 3D. RED/GREEN del cubo real de ocho vértices en `spatial-volume-{red,green}-1`. El consumidor canónico `PA::ProceduralSpline` produjo otro RED por ignorar su trayectoria y después por caras degeneradas exportadas por la operación booleana. Se eliminan únicamente caras con dos esquinas exactamente coincidentes; no se alteran posiciones ni el validador de cierre. `spatial-consumer-green-2` pasa. Persistencia v2 conserva curva/IDs/handles/roll y admite v1 sin cambiarla; desactivar/cantidad cero restaura el host exacto.
+
+`Evidence/spline-authoring-2026-11-04/spatial-native-1`: build0, tres suites PASS, ejecución0, 24 PNG originales y 344 inputs sin deriva, app `410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83`. Volumen del cubo 8→7,944253m³ y tubo 0,0215697→0,0207333m³; replay/off exactos. `spatial-ui-1` comprueba crear, convertir a 3D, dividir tramo, editar Z, desactivar/reactivar y guardar/cargar en la ventana 1442×932; original 1296 triángulos, editado 2082, recarga 2082. Proceso cerrado, sin deriva; no se atribuye código de salida a ese lanzamiento mediante CUA. La ruta espacial funciona, pero conserva aspecto de ranura y el ajuste continuo a una superficie curvada requiere trabajo. Decal3D, ASan actualizado, DPI/tamaño mínimo, Undo/Redo y calidad visual siguen pendientes. Las vistas de EdgeChips corregidas se publicaron como `8b6f6ec` (577 imágenes acumuladas).
+
 ## Misión vigente: JE::AnimationTools (2026-10-14)
 
 **ACTIVE / implementación en curso.** El owner cerró la investigación inversa de Cascadeur y pidió integrar Animation Tools en este playground real. No retomar DLL/Ghidra/paridad ni modificar JericoEngine. La integración futura será un Gem O3DE; el núcleo portable no depende del renderer, UI, Torch ni ONNX.

@@ -1,0 +1,56 @@
+{
+  "Inputs": 344,
+  "InputDrift": [],
+  "RemainingOwned": [],
+  "FreeGiB": 23.35540008544922,
+  "UsedPercent": 26.81416648536995,
+  "Results": [
+    {
+      "Stage": "build",
+      "ExitCode": 0,
+      "Seconds": 26.9517324,
+      "PID": 23264,
+      "Arguments": [
+        "--build",
+        "build-chain/focused",
+        "--config",
+        "Release",
+        "--target",
+        "JericoGeologyPlaygroundRecovered",
+        "RecoveredPlaygroundDamageGeometryTests",
+        "RecoveredPlaygroundSplineConstructionTests",
+        "--",
+        "/m:1",
+        "/nr:false",
+        "/p:CL_MPCount=1"
+      ]
+    },
+    {
+      "Stage": "tests",
+      "ExitCode": 0,
+      "Seconds": 1.8233037,
+      "PID": 19180,
+      "Arguments": [
+        "--test-dir",
+        "build-chain/focused",
+        "-C",
+        "Release",
+        "--output-on-failure",
+        "-j",
+        "1",
+        "-R",
+        "\"^Recovered.Playground(SplineDamageIO|SplineConstruction|DamageGeometry)Tests$\""
+      ]
+    },
+    {
+      "Stage": "native",
+      "ExitCode": 0,
+      "Seconds": 3.3744492,
+      "PID": 4756,
+      "Arguments": [
+        "--spline-spatial-damage-test",
+        "F:\\JericoGeologyPlayground\\Evidence\\spline-authoring-2026-11-04\\spatial-native-1/captures"
+      ]
+    }
+  ]
+}

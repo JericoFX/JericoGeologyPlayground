@@ -1,0 +1,25 @@
+{
+  "ProcessEnded": true,
+  "ExitCode": null,
+  "ExitCodeNote": "Launched through CUA; no original exit handle. Closure observed in inventory and process identity.",
+  "BinaryBefore": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83",
+  "BinaryAfter": "410D5CBC9198A169E020478D86DC48E73AF7D5F8AF716BB8F68054784D52CC83",
+  "InputDrift": [],
+  "Window": [
+    1442,
+    932
+  ],
+  "Checks": [
+    "Create crack: 1296 to 2218 triangles",
+    "Convert to 3D: 1962 triangles",
+    "Split segment: three points, 1956 triangles",
+    "Middle point Z -0.0100: 2082 triangles",
+    "Disable: original 1296 triangles",
+    "Reenable: 2082 triangles",
+    "Save and load via native dialog: 2082 triangles and middle Z restored"
+  ],
+  "RecipeVersion": 2,
+  "SpatialPoints": 3,
+  "MiddleZ": -0.01,
+  "Remaining": "DPI/minimum layout, complete keyboard flow, Undo/Redo and visual polish pending"
+}
