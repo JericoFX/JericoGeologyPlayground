@@ -2472,6 +2472,7 @@ struct Build
 } // namespace
 int run(int argc, char **argv)
 {
+    bool spatialSplineEvidence=false;
     bool splineEvidence=false,assemblyEvidence=false,
          assemblyFragmentEvidence=false,webEvidence=false;
     bool smoke = false, materialGallerySmoke = false, featureSmoke = false,
@@ -2506,6 +2507,12 @@ int run(int argc, char **argv)
     unsigned adaptiveSeed = 123;
     int automaticUvFamily = -1;
     int automaticUvRockLodFamily = -1;
+    for (int i=1;i<argc;++i)
+        if(std::string(argv[i])=="--spline-spatial-damage-test")
+        {
+            if(i+1>=argc)throw std::runtime_error("Spatial spline evidence needs an output directory");
+            spatialSplineEvidence=true;splineEvidence=true;evidence=argv[++i];
+        }
     for (int i=1;i<argc;++i)
         if (std::string(argv[i])=="--spline-construction-test")
         {
@@ -2697,7 +2704,8 @@ int run(int argc, char **argv)
     style.ItemSpacing = {8, 7};
     if (splineEvidence)
     {
-        captureSplineConstruction(renderer,evidence);
+        if(spatialSplineEvidence)captureSpatialSplineDamage(renderer,evidence);
+        else captureSplineConstruction(renderer,evidence);
         SetWindowLongPtrW(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(previousProc));
         return 0;
     }

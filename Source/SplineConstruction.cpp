@@ -4,6 +4,7 @@
 #include "DamageGeometry.hpp"
 #include "DamageUvTransfer.hpp"
 #include "SolidGeometry.hpp"
+#include "SurfaceRay.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -118,7 +119,7 @@ void rebuildDamageNormals(MeshResult &result)
     const auto &mesh=result.mesh;
     std::set<Jerico::Guid> fresh;
     for (const auto &region:result.regions)
-        if (region.role==SurfaceRole::DamageInterior) fresh.insert(region.id);
+        if (region.role==SurfaceRole::DamageInterior||region.role==SurfaceRole::DecalSurface) fresh.insert(region.id);
     std::vector<Vec3d> faces(mesh.indices.size()/3);
     std::vector<std::vector<std::size_t>> adjacent(mesh.positions.size());
     for (std::size_t face=0;face<faces.size();++face)
@@ -331,6 +332,50 @@ std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const Repea
     }
     return placements;
 }
+void validateSplineDamage(const PathDamageRule &rule)
+{
+    sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
+    if(rule.operation!=DamageVolumeOperation::Difference&&rule.operation!=DamageVolumeOperation::Union)
+        throw std::runtime_error("Invalid spline surface operation");
+    if(rule.operation==DamageVolumeOperation::Union&&!rule.spatialPath)
+        throw std::runtime_error("Raised decals require a spatial spline");
+    if(!rule.spatialPath)return;
+    if(rule.spatialPath->points.size()>64||rule.spatialPath->name.size()>128||rule.cutter.separationMeters!=0)
+        throw std::runtime_error("Spatial damage permits 64 controls and does not support chunk separation");
+    const auto valid=PA::validateProceduralSpline(*rule.spatialPath);
+    if(!valid.hasValue())throw std::runtime_error(valid.error().message);
+}
+TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region)
+{
+    validateSplineDamage(rule);
+    if(!rule.spatialPath||!rule.cutter.enabled||rule.cutter.amount<=0)
+        throw std::runtime_error("A spatial damage volume requires an active nonzero spline operation");
+    const auto &c=rule.cutter;
+    PathQuality quality;
+    quality.maximumSamples=512;
+    quality.maximumDeviationMeters=std::clamp(std::min(c.radius,c.depth)*.1,1e-5,.01);
+    quality.maximumStepMeters=std::clamp(c.radius*2,.005,.25);
+    quality.maximumTangentAngleRadians=.12;
+    const auto path=samplePath(*rule.spatialPath,quality);
+    const auto &p=c.projector;
+    auto vectorToWorld=[&](Vec3d point)
+    {
+        const auto cosine=std::cos(p.rotationRadians),sine=std::sin(p.rotationRadians);
+        return add(mul(p.tangent,(cosine*point.x+sine*point.y)*p.scale.x),
+            add(mul(p.bitangent,(-sine*point.x+cosine*point.y)*p.scale.y),mul(p.normal,point.z*p.scale.z)));
+    };
+    std::vector<DamageSweepSection> sections;sections.reserve(path.frames.size());
+    for(const auto &frame:path.frames)
+    {
+        const auto variation=damageVariationAtStation(frame.distanceMeters,std::max(.005,c.radius*4),
+            c.seed,rule.id,path.lengthMeters,rule.spatialPath->closed);
+        const auto scale=frame.widthMeters*(1+.3*c.irregularity*variation);
+        sections.push_back({add(p.center,vectorToWorld(frame.position)),
+            vectorToWorld(mul(frame.normal,c.radius*scale)),
+            vectorToWorld(mul(frame.binormal,c.depth*c.amount*scale))});
+    }
+    return buildDamageSweepVolume(sections,region);
+}
 ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                                      const ConstructionSettings &settings)
 {
@@ -379,7 +424,7 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
         if (rule.id.empty() || rule.id.size()>64 ||
             !damageIds.insert(rule.id).second)
             throw std::runtime_error("Spline damage path ID is invalid or repeated");
-        sampleDamagePathField(rule.cutter.projector.center,rule.cutter);
+        validateSplineDamage(rule);
     }
     ConstructionResult result;
     auto quality=settings.pathQuality;
@@ -752,18 +797,20 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                       result.mesh.mesh.triangleRegions.end(),fresh)!=
                       result.mesh.mesh.triangleRegions.end())
             throw std::runtime_error("Spline fresh interior region ID collision");
-        const auto cut=cutDamagePath(result.mesh.mesh,rule.cutter,fresh,240000);
+        const auto cut=rule.spatialPath ?
+            applyDamageVolume(result.mesh.mesh,buildSplineDamageVolume(rule,fresh),rule.operation):
+            cutDamagePath(result.mesh.mesh,rule.cutter,fresh,240000);
         if (meshHash(cut)==meshHash(result.mesh.mesh)) continue;
         if (cut.positions.size()>settings.maximumVertices ||
             std::find(cut.triangleRegions.begin(),cut.triangleRegions.end(),fresh)==
                 cut.triangleRegions.end())
-            throw std::runtime_error("Spline crack exceeded budget or lost fresh interior");
+            throw std::runtime_error("Spline surface operation exceeded budget or lost its surface identity");
         auto transferred=transferDamageCornerUv(result.mesh.mesh,result.cornerUV,
                                                 cut,fresh,rule.cutter.projector);
         result.mesh.mesh=cut;
         result.cornerUV=std::move(transferred);
         result.mesh.regions.push_back({fresh,spline.splineGuid,
-            SurfaceRole::DamageInterior,-1,-1});
+            rule.operation==DamageVolumeOperation::Union?SurfaceRole::DecalSurface:SurfaceRole::DamageInterior,-1,-1});
         damaged=true;
     }
     if (damaged)
@@ -794,6 +841,103 @@ ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
         std::chrono::steady_clock::now()-started).count();
     result.mesh.milliseconds = result.generationCpuMilliseconds;
     return result;
+}
+PathDamageRule proposeSplineDamage(const ConstructionResult &source,
+                                   const ConstructionSettings &settings,
+                                   std::string id, std::uint64_t seed)
+{
+    const auto &mesh=source.mesh.mesh;
+    if (!source.mesh.closedSolid)
+        throw std::runtime_error("Cracks need a closed sweep: enable both end caps or close the path");
+    if (source.path.frames.size()<2 || mesh.positions.empty() || mesh.indices.empty())
+        throw std::runtime_error("Cracks need a valid generated surface");
+    if (mesh.indices.size()/3>240000 || mesh.positions.size()>240000)
+        throw std::runtime_error("Spline surface exceeds the shared damage mesh budget");
+    namespace D=PA::Detail;
+    std::vector<D::Triangle> triangles;
+    triangles.reserve(mesh.indices.size()/3);
+    auto bounds=D::emptyBounds();
+    for (const auto point:mesh.positions) D::include(bounds,point);
+    for (std::size_t i=0;i<mesh.indices.size();i+=3)
+    {
+        const auto a=mesh.positions[mesh.indices[i]],b=mesh.positions[mesh.indices[i+1]],
+                   c=mesh.positions[mesh.indices[i+2]];
+        auto triangleBounds=D::emptyBounds();
+        D::include(triangleBounds,a);D::include(triangleBounds,b);D::include(triangleBounds,c);
+        triangles.push_back({a,b,c,mul(add(add(a,b),c),1.0/3),triangleBounds,
+                             std::uint32_t(i/3),std::uint32_t(i/3)});
+    }
+    const D::TriangleBvh bvh(std::move(triangles));
+    const double reach=length(sub(bounds.maximum,bounds.minimum))*2;
+    const double epsilon=std::max(1e-8,reach*1e-9);
+    const auto frame=frameAtDistance(source.path,source.path.lengthMeters*.5);
+    const auto direction=rotateAbout(frame.normal,frame.tangent,
+        settings.profileRotationRadians+std::numbers::pi*settings.twistTurns);
+    const auto origin=add(frame.position,mul(direction,reach));
+    const auto hit=Projection::cast(bvh,mesh,origin,mul(direction,-1),reach*2);
+    if (!std::isfinite(hit.distance) || hit.backface)
+        throw std::runtime_error("No exterior surface at the middle of this spline; move the fracture or edit the path");
+    const auto a=mesh.positions[mesh.indices[hit.triangle*3]],
+               b=mesh.positions[mesh.indices[hit.triangle*3+1]],
+               c=mesh.positions[mesh.indices[hit.triangle*3+2]];
+    const auto center=add(a,add(mul(sub(b,a),hit.u),mul(sub(c,a),hit.v)));
+    const auto normal=unit(cross(sub(b,a),sub(c,a)));
+    const auto along=sub(frame.tangent,mul(normal,dot(frame.tangent,normal)));
+    if (length(along)<.5)
+        throw std::runtime_error("The selected surface is an end cap, not a longitudinal crack surface");
+    const auto tangent=unit(along),bitangent=unit(cross(normal,tangent));
+    const auto opposite=Projection::cast(bvh,mesh,sub(center,mul(normal,epsilon)),
+                                         mul(normal,-1),reach);
+    if (!std::isfinite(opposite.distance) || !opposite.backface || opposite.distance<=epsilon)
+        throw std::runtime_error("Cannot measure a closed wall behind the crack surface");
+    const double wall=opposite.distance+epsilon;
+    double radius=std::min(.06,wall*.2);
+    double halfLength=std::min({source.path.lengthMeters*.1,.3,wall*4});
+    // The shared cutter is planar. Fit its footprint to the actual surface and
+    // retain at least 45% of measured wall instead of guessing from the profile.
+    for (unsigned attempt=0;attempt<8 && halfLength>=radius;++attempt)
+    {
+        double minimumHeight=0,maximumHeight=0,clearance=wall;
+        bool supported=true;
+        for (const double x:{-halfLength-radius,-halfLength*.5,0.0,
+                              halfLength*.5,halfLength+radius})
+            for (const double y:{-radius,0.0,radius})
+            {
+                const auto station=add(center,add(mul(tangent,x),mul(bitangent,y)));
+                const auto contact=Projection::cast(bvh,mesh,add(station,mul(normal,reach)),
+                                                    mul(normal,-1),reach*2);
+                if (!std::isfinite(contact.distance) || contact.backface)
+                {supported=false;continue;}
+                const double height=reach-contact.distance;
+                const auto surface=add(station,mul(normal,height));
+                const auto exit=Projection::cast(bvh,mesh,sub(surface,mul(normal,epsilon)),
+                                                 mul(normal,-1),reach);
+                if (!std::isfinite(exit.distance) || !exit.backface || exit.distance<=epsilon)
+                {supported=false;continue;}
+                clearance=std::min(clearance,exit.distance+epsilon);
+                minimumHeight=std::min(minimumHeight,height);
+                maximumHeight=std::max(maximumHeight,height);
+            }
+        if (supported && radius>clearance*.202)
+        {radius=clearance*.2;halfLength=std::min(halfLength,clearance*4);continue;}
+        const double relief=maximumHeight-minimumHeight;
+        if (!supported || relief>clearance*.2)
+        {halfLength*=.5;continue;}
+        if (radius<=epsilon*4 || clearance<=epsilon*4) break;
+        PathDamageRule rule;
+        rule.id=std::move(id);
+        rule.cutter.projector.center=add(center,mul(normal,maximumHeight));
+        rule.cutter.projector.tangent=tangent;
+        rule.cutter.projector.bitangent=bitangent;
+        rule.cutter.projector.normal=normal;
+        rule.cutter.path={{-halfLength,0,0},{halfLength,0,0}};
+        rule.cutter.radius=radius;
+        rule.cutter.depth=relief+clearance*.35;
+        rule.cutter.irregularity=.3;
+        rule.cutter.seed=seed;
+        return rule;
+    }
+    throw std::runtime_error("Local curvature or wall clearance cannot support a crack; reduce the bend or adjust the profile");
 }
 ConstructionResult withFrameAxes(const ConstructionResult &construction)
 {

@@ -269,11 +269,18 @@ std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
     const auto segmentLength=std::hypot(dx,dy);
     if (!(segmentLength>1e-9))
         throw std::invalid_argument("Damage path segment too short");
+    double prefixMeters=0,totalMeters=0;bool foundSegment=false;
+    for(std::size_t i=1;i<cutter.path.size();++i){
+        const auto a=cutter.path[i-1],b=cutter.path[i];
+        if(a==first&&b==second){prefixMeters=totalMeters;foundSegment=true;}
+        totalMeters+=std::hypot(b.x-a.x,b.y-a.y);
+    }
+    if(!foundSegment){prefixMeters=0;totalMeters=segmentLength;}
     const auto tx=dx/segmentLength,ty=dy/segmentLength;
     const auto nx=-ty,ny=tx;
     // Translate both sides together; the width perturbation remains below 0.3 radius.
     const auto sheetAmplitude=cutter.irregularity*
-        std::min({cutter.depth*cutter.amount*.09,segmentLength*.075,
+        std::min({cutter.depth*cutter.amount*.09,totalMeters*.075,
                   cutter.radius*5});
     DamageNoiseSettings sheetNoise;
     sheetNoise.frequency=4.5;
@@ -294,19 +301,18 @@ std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
     const auto side=[&](unsigned i,bool positive)
     {
         const auto t=double(i)/sideSteps;
-        const auto taper=std::sin(std::numbers::pi*t);
-        const auto center=fractureProfileOffset(t,cutter.radius*.6*cutter.irregularity,
-            cutter.radius,cutter.seed,"path-center")*taper;
+        const auto station=prefixMeters+t*segmentLength;
+        const auto taper=std::sin(std::numbers::pi*station/totalMeters);
+        const auto center=std::clamp((2*damageVariationAtStation(station,.8,cutter.seed,"path-center")-1)*damagePathNoiseContrast,-1.,1.)*cutter.radius*damagePathCenterRadiusFraction*cutter.irregularity*taper;
         const auto scaledDepth=depthFraction*damagePathDepthIntervals;
         const auto lowDepth=std::floor(scaledDepth)/damagePathDepthIntervals;
         const auto highDepth=std::ceil(scaledDepth)/damagePathDepthIntervals;
-        const auto lowNoise=structuredDamageNoise01({t,lowDepth,0},sheetNoise);
+        const auto lowNoise=structuredDamageNoise01({station,lowDepth,0},sheetNoise);
         const auto highNoise=highDepth==lowDepth?lowNoise:
-            structuredDamageNoise01({t,highDepth,0},sheetNoise);
+            structuredDamageNoise01({station,highDepth,0},sheetNoise);
         const auto sheet=taper*sheetAmplitude*2.5*(
             std::lerp(lowNoise,highNoise,scaledDepth-std::floor(scaledDepth))-.5);
-        const auto width=fractureProfileOffset(t,cutter.radius*.5*cutter.irregularity,
-            cutter.radius,cutter.seed,positive?"path-positive":"path-negative")*taper;
+        const auto width=std::clamp((2*damageVariationAtStation(station,.35,cutter.seed,positive?"path-positive":"path-negative")-1)*damagePathNoiseContrast,-1.,1.)*cutter.radius*damagePathWidthRadiusFraction*cutter.irregularity*taper;
         const auto distance=center+sheet+(positive?1:-1)*(cutter.radius+width);
         outline.push_back({first.x+t*dx+nx*distance,
                            first.y+t*dy+ny*distance,0});
@@ -319,8 +325,20 @@ std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
         for (unsigned i=sideSteps-1;i>0;--i) side(i,true);
     return outline;
 }
-double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter)
+std::vector<Vec3d> canonicalDamagePath(const std::vector<Vec3d>&path)
 {
+    if(path.size()<2||path.size()>maximumDamagePathPoints)throw std::invalid_argument("Damage path point budget invalid");
+    std::vector<Vec3d> result;
+    for(const auto p:path){
+        if(!std::isfinite(p.x)||!std::isfinite(p.y)||p.z!=0)throw std::invalid_argument("Damage path plane invalid");
+        if(!result.empty()&&std::hypot(p.x-result.back().x,p.y-result.back().y)<=1e-9)throw std::invalid_argument("Degenerate damage path segment");
+        if(result.size()>1){const auto a=result[result.size()-2],b=result.back();const auto ux=b.x-a.x,uy=b.y-a.y,vx=p.x-b.x,vy=p.y-b.y;const auto scale=std::hypot(ux,uy)*std::hypot(vx,vy);if(ux*vx+uy*vy>0&&std::abs(ux*vy-uy*vx)<=1e-10*scale)result.pop_back();}
+        result.push_back(p);
+    }return result;
+}
+double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &request)
+{
+    auto cutter=request;cutter.path=canonicalDamagePath(request.path);
     const auto q=projectorCoordinates(cutter.projector,worldPosition);
     if (cutter.path.size()<2 || cutter.path.size()>maximumDamagePathPoints)
         throw std::invalid_argument("Damage path point budget invalid");
@@ -367,6 +385,28 @@ double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter)
     }
     return std::max(radial,std::max(q.z,-q.z-cutter.depth*cutter.amount));
 }
+double damageVariationAtStation(double station,double wavelength,std::uint64_t seed,std::string_view semanticId)
+{
+    if(!std::isfinite(station)||!std::isfinite(wavelength)||wavelength<=0)
+        throw std::invalid_argument("Metric damage station/wavelength invalid");
+    DamageNoiseSettings noise;noise.frequency=1/wavelength;noise.lacunarity=1.87;
+    noise.seed=std::uint32_t(damageRandom01(seed,semanticId,"metric-chain-noise")*4294967295.0);
+    return structuredDamageNoise01({station,0,0},noise);
+}
+
+double damageVariationAtStation(double station,double wavelength,std::uint64_t seed,
+    std::string_view semanticId,double chainLength,bool closed)
+{
+    if(!closed)return damageVariationAtStation(station,wavelength,seed,semanticId);
+    if(!std::isfinite(station)||!std::isfinite(wavelength)||wavelength<=0||!std::isfinite(chainLength)||chainLength<=1e-9)
+        throw std::invalid_argument("Periodic damage station/length/wavelength invalid");
+    const double wrapped=station-chainLength*std::floor(station/chainLength);
+    const double angle=2*std::numbers::pi*wrapped/chainLength,radius=chainLength/(2*std::numbers::pi);
+    DamageNoiseSettings noise;noise.frequency=1/wavelength;noise.lacunarity=1.87;
+    noise.seed=std::uint32_t(damageRandom01(seed,semanticId,"metric-chain-noise")*4294967295.0);
+    return structuredDamageNoise01({radius*std::cos(angle),radius*std::sin(angle),0},noise);
+}
+
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,
                              double localFeatureSizeMeters,std::uint64_t seed,
                              std::string_view semanticId)

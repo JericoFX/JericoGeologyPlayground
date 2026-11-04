@@ -6,6 +6,7 @@
 #include <array>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <stdexcept>
 
@@ -35,6 +36,36 @@ inline TriangleMesh cube()
                   3,7,6,3,6,2,0,4,7,0,7,3,1,2,6,1,6,5};
     mesh.triangleRegions.assign(12,Solid::region(9107,1));return mesh;
 }
+inline bool connected(const TriangleMesh &mesh)
+{
+    if(mesh.indices.empty())return false;
+    std::vector<std::vector<std::uint32_t>> adjacent(mesh.positions.size());
+    for(std::size_t i=0;i<mesh.indices.size();i+=3)
+        for(unsigned c=0;c<3;++c){auto a=mesh.indices[i+c],b=mesh.indices[i+(c+1)%3];adjacent[a].push_back(b);adjacent[b].push_back(a);}
+    std::vector<bool> seen(mesh.positions.size());std::vector<std::uint32_t> pending{mesh.indices.front()};seen[pending.front()]=true;
+    while(!pending.empty()){auto a=pending.back();pending.pop_back();for(auto b:adjacent[a])if(!seen[b]){seen[b]=true;pending.push_back(b);}}
+    const bool all=std::all_of(mesh.indices.begin(),mesh.indices.end(),[&](auto vertex){return seen[vertex];});
+    if(!all)
+    {
+        double minimum=std::numeric_limits<double>::infinity();Vec3d first{},second{};
+        for(auto a:mesh.indices)if(seen[a])for(auto b:mesh.indices)if(!seen[b])
+        {
+            const auto p=mesh.positions[a],q=mesh.positions[b];const auto distance=std::hypot(p.x-q.x,p.y-q.y,p.z-q.z);
+            if(distance<minimum){minimum=distance;first=p;second=q;}
+        }
+        std::cerr<<std::setprecision(17)<<"Disconnected sweep diagnostic: vertices="<<mesh.positions.size()<<" triangles="<<mesh.indices.size()/3
+            <<" first component="<<std::count(seen.begin(),seen.end(),true)<<" closest vertices="<<minimum
+            <<" a="<<first.x<<','<<first.y<<','<<first.z<<" b="<<second.x<<','<<second.y<<','<<second.z<<'\n';
+        std::vector<int> component(mesh.positions.size(),-1);int count=0;
+        for(auto start:mesh.indices)if(component[start]<0){pending={start};component[start]=count;
+            while(!pending.empty()){auto a=pending.back();pending.pop_back();for(auto b:adjacent[a])if(component[b]<0){component[b]=count;pending.push_back(b);}}++count;}
+        for(int id=0;id<count;++id){TriangleMesh part;part.positions=mesh.positions;
+            for(std::size_t face=0;face<mesh.indices.size();face+=3)if(component[mesh.indices[face]]==id)
+                part.indices.insert(part.indices.end(),mesh.indices.begin()+face,mesh.indices.begin()+face+3);
+            std::cerr<<"component "<<id<<" vertices="<<std::count(component.begin(),component.end(),id)<<" triangles="<<part.indices.size()/3<<" signed-volume="<<volume(part)<<'\n';}
+    }
+    return all;
+}
 inline void run()
 {
     const auto host=cube();const auto original=meshHash(host);const auto fresh=Solid::region(9107,2);
@@ -50,11 +81,23 @@ inline void run()
     }
     const auto cutter=buildDamageSweepVolume(sections,fresh);
     require(PA::validateClosedMesh(cutter).hasValue()&&volume(cutter)>0,"noncoplanar sweep must make a closed positive volume");
+    require(connected(cutter),"spatial sweep must be one continuous connected volume");
     require(std::all_of(cutter.triangleRegions.begin(),cutter.triangleRegions.end(),[&](auto id){return id==fresh;}),"all sweep faces retain operation identity");
     const auto cut=subtractDamageVolume(host,cutter);
     require(PA::validateClosedMesh(cut).hasValue(),"spatial cut must retain a closed host");
     require(volume(cut)<7.99&&volume(cut)>7.2,"spatial cut must remove localized real volume");
     require(meshHash(host)==original,"spatial cut must preserve its source");
+    const auto raised=applyDamageVolume(host,cutter,DamageVolumeOperation::Union);
+    require(PA::validateClosedMesh(raised).hasValue()&&volume(raised)>8.01&&volume(raised)<8.2,
+        "raised spatial decal must add bounded real volume to the closed cube");
+    require(meshHash(host)==original,"raised decal must preserve the source mesh");
+    require(connected(raised),"raised decal must be fused to its receiver, without floating components");
+    require(std::abs(volume(raised)-volume(cut)-volume(cutter))<1e-10,
+        "union and difference must account for the same complete authored volume");
+    require(std::find(raised.triangleRegions.begin(),raised.triangleRegions.end(),fresh)!=raised.triangleRegions.end(),
+        "raised decal must keep its own surface identity");
+    require(meshHash(applyDamageVolume(host,cutter,DamageVolumeOperation::Union))==meshHash(raised),
+        "raised decal topology and IDs must replay exactly");
     bool top=false,side=false;
     for(std::size_t t=0;t<cut.triangleRegions.size();++t)
     {
@@ -77,13 +120,17 @@ inline void run()
     require(meshHash(buildDamageSweepVolume(sections,fresh))==meshHash(cutter)&&meshHash(subtractDamageVolume(host,cutter))==meshHash(cut),"spatial geometry and IDs must replay exactly");
     auto moved=cutter;for(auto &p:moved.positions)p.x+=10;
     require(meshHash(subtractDamageVolume(host,moved))==original,"disjoint volume must leave host byte-identical");
+    require(meshHash(applyDamageVolume(host,moved,DamageVolumeOperation::Union))==original,"disjoint decal must not create a floating island");
+    auto inside=host;for(auto&p:inside.positions)p=mul(p,.1);inside.triangleRegions.assign(12,fresh);
+    require(meshHash(applyDamageVolume(host,inside,DamageVolumeOperation::Union))==original,"fully buried decal must preserve the exact host");
     auto reject=[](auto action){bool failed=false;try{action();}catch(const std::exception&){failed=true;}require(failed,"invalid spatial damage input must be rejected");};
     reject([&]{buildDamageSweepVolume({},fresh);});
+    reject([&]{applyDamageVolume(host,cutter,DamageVolumeOperation(9));});
     auto invalid=sections;invalid[1].axisV=invalid[1].axisU;reject([&]{buildDamageSweepVolume(invalid,fresh);});
     invalid=sections;invalid[1].center.x=std::numeric_limits<double>::infinity();reject([&]{buildDamageSweepVolume(invalid,fresh);});
     reject([&]{buildDamageSweepVolume(sections,fresh,8);});
     auto open=host;open.indices.resize(open.indices.size()-3);open.triangleRegions.pop_back();
     reject([&]{subtractDamageVolume(open,cutter);});
-    std::cout<<"PASS continuous spatial damage on two cube faces: volume "<<volume(cut)<<", cutter triangles "<<cutter.indices.size()/3<<'\n';
+    std::cout<<std::setprecision(17)<<"PASS connected spatial cut and decal on two cube faces: cut volume "<<volume(cut)<<", added volume "<<volume(raised)<<", cutter volume "<<volume(cutter)<<", cutter triangles "<<cutter.indices.size()/3<<'\n';
 }
 }

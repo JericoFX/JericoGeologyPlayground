@@ -2,10 +2,12 @@
 
 #include "Model.hpp"
 #include "DamageField.hpp"
+#include "DamageGeometry.hpp"
 #include <Jerico/ProceduralAuthoring/ProceduralSpline.hpp>
 
 #include <cstddef>
 #include <array>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -44,6 +46,9 @@ struct PathDamageRule
 {
     std::string id;
     DamagePathCutter cutter;
+    // Optional canonical spline in projector-local coordinates. Absent = legacy planar path.
+    std::optional<PA::ProceduralSpline> spatialPath;
+    DamageVolumeOperation operation{DamageVolumeOperation::Difference};
 };
 struct ConstructionSettings
 {
@@ -78,9 +83,14 @@ struct ConstructionResult
 };
 
 PathResult samplePath(const PA::ProceduralSpline &spline, const PathQuality &quality);
+void validateSplineDamage(const PathDamageRule &rule);
+TriangleMesh buildSplineDamageVolume(const PathDamageRule &rule,Jerico::Guid region);
 PathFrame frameAtDistance(const PathResult &path, double distanceMeters);
 std::vector<RepeatPlacement> repeatAlongPath(const PathResult &path, const RepeatSettings &settings);
 ConstructionResult buildConstruction(const PA::ProceduralSpline &spline,
                                      const ConstructionSettings &settings);
+PathDamageRule proposeSplineDamage(const ConstructionResult &source,
+                                   const ConstructionSettings &settings,
+                                   std::string id, std::uint64_t seed);
 ConstructionResult withFrameAxes(const ConstructionResult &construction);
 }

@@ -139,7 +139,8 @@ enum class SurfaceRole
     CutFace,
     FractureCut,
     BlockChisel,
-    DamageInterior
+    DamageInterior,
+    DecalSurface
 };
 struct RegionInfo
 {

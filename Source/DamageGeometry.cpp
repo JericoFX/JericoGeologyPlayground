@@ -440,7 +440,10 @@ TriangleMesh buildDamageSweepVolume(std::span<const DamageSweepSection> sections
         spans.push_back(std::move(span));
     }
     checkpoint();
-    const auto combined=manifold::Manifold::BatchBoolean(spans,manifold::OpType::Add);
+    // All spans belong to one authored operation. Drop per-span face ancestry
+    // before native simplification so shared caps can collapse across hull IDs.
+    // Simplify() uses the kernel's existing tolerance; no tolerance is increased.
+    const auto combined=manifold::Manifold::BatchBoolean(spans,manifold::OpType::Add).AsOriginal().Simplify();
     if(combined.Status()!=manifold::Manifold::Error::NoError||combined.IsEmpty())
         throw std::runtime_error("Spatial damage volume union failed");
     const auto output=combined.GetMeshGL64();
@@ -452,9 +455,11 @@ TriangleMesh buildDamageSweepVolume(std::span<const DamageSweepSection> sections
     if(!PA::validateClosedMesh(result).hasValue())throw std::runtime_error("Spatial damage volume is not closed");
     checkpoint();return result;
 }
-TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
-    std::size_t maximumTriangles,const Jerico::CancellationToken *cancel)
+TriangleMesh applyDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
+    DamageVolumeOperation operation,std::size_t maximumTriangles,const Jerico::CancellationToken *cancel)
 {
+    if(operation!=DamageVolumeOperation::Difference&&operation!=DamageVolumeOperation::Union)
+        throw std::runtime_error("Invalid spatial damage operation");
     auto checkpoint=[&]{if(cancel&&cancel->isCancellationRequested())throw std::runtime_error("Cancelled");};
     checkpoint();
     if(maximumTriangles>240000||host.indices.size()/3>maximumTriangles||volume.indices.size()/3>maximumTriangles||
@@ -472,9 +477,16 @@ TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &v
     const auto intersection=nativeHost^nativeVolume;
     if(intersection.Status()!=manifold::Manifold::Error::NoError)throw std::runtime_error("Spatial damage intersection failed");
     if(intersection.IsEmpty()||intersection.Volume()==0)return host;
-    const auto cut=nativeHost-nativeVolume;
+    if(operation==DamageVolumeOperation::Union)
+    {
+        const auto outside=nativeVolume-nativeHost;
+        if(outside.Status()!=manifold::Manifold::Error::NoError)
+            throw std::runtime_error("Spatial decal exterior check failed");
+        if(outside.IsEmpty()||outside.Volume()==0)return host;
+    }
+    const auto cut=operation==DamageVolumeOperation::Union?nativeHost+nativeVolume:nativeHost-nativeVolume;
     if(cut.Status()!=manifold::Manifold::Error::NoError||cut.IsEmpty())
-        throw std::runtime_error("Spatial damage subtraction failed or removed the entire host");
+        throw std::runtime_error("Spatial damage composition failed or removed the entire host");
     const auto output=cut.GetMeshGL64();
     if(output.NumTri()>maximumTriangles||output.NumVert()>maximumTriangles)
         throw std::runtime_error("Spatial damage output exceeds mesh budget");
@@ -498,10 +510,16 @@ TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &v
     if(!valid.hasValue())throw std::runtime_error("Spatial damage output is not closed: "+valid.error().message);
     checkpoint();return result;
 }
-TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &cutter,
+TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
+    std::size_t maximumTriangles,const Jerico::CancellationToken *cancel)
+{
+    return applyDamageVolume(host,volume,DamageVolumeOperation::Difference,maximumTriangles,cancel);
+}
+TriangleMesh cutDamagePath(const TriangleMesh &host,const DamagePathCutter &request,
                            Jerico::Guid freshInteriorRegion,std::size_t maximumTriangles,
                            const Jerico::CancellationToken *cancel)
 {
+    auto cutter=request;cutter.path=canonicalDamagePath(request.path);
     auto checkCancel=[&]
     {
         if (cancel && cancel->isCancellationRequested())

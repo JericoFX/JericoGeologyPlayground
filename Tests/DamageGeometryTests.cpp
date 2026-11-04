@@ -383,6 +383,7 @@ int run()
     area.projector.scale.x=0;
     reject([&]{cutDamageCavity(panel,area,interior,50000);},
            "zero projector scale must be rejected before boolean work");
+    return 0;
 }
 int main()
 {

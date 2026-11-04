@@ -6,6 +6,7 @@
 
 namespace Playground
 {
+enum class DamageVolumeOperation { Difference, Union };
 // Metric sections shared by spline cuts and volumetric decal consumers.
 // Axes are half-extents in world space; adjacent sections form one continuous volume.
 struct DamageSweepSection
@@ -17,6 +18,9 @@ TriangleMesh buildDamageSweepVolume(std::span<const DamageSweepSection> sections
     const Jerico::CancellationToken *cancel=nullptr);
 TriangleMesh subtractDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
     std::size_t maximumTriangles=240000,
+    const Jerico::CancellationToken *cancel=nullptr);
+TriangleMesh applyDamageVolume(const TriangleMesh &host,const TriangleMesh &volume,
+    DamageVolumeOperation operation,std::size_t maximumTriangles=240000,
     const Jerico::CancellationToken *cancel=nullptr);
 // Geometric tier of the shared projector. The source mesh is never modified.
 TriangleMesh cutDamageCavity(const TriangleMesh &host,const DamageArea &area,

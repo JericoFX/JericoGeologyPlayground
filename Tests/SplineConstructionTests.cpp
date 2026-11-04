@@ -92,12 +92,91 @@ PA::ProceduralSpline closedLoop()
     spline.points[3].position={0,0,-1};
     return spline;
 }
+void damagePlacementRegression()
+{
+    ConstructionSettings settings;
+    settings.profileScale=.15;
+    const auto source=buildConstruction(straightRun(),settings);
+    const auto rule=proposeSplineDamage(source,settings,"scaled-crack",777);
+    const auto center=rule.cutter.projector.center;
+    const auto radius=std::hypot(center.x,center.y);
+    const bool onSurface=std::abs(radius-.006)<1e-7;
+    std::cout << "damage placement radius=" << radius
+              << " expected=.006 onSurface=" << onSurface << '\n';
+    settings.capStart=false;
+    const auto open=buildConstruction(straightRun(),settings);
+    bool rejected=false;
+    try {proposeSplineDamage(open,settings,"open-crack",777);}
+    catch (const std::exception &) {rejected=true;}
+    std::cout << "open sweep proposal rejected=" << rejected << '\n';
+    require(onSurface && rejected,
+            "crack proposal must follow actual scaled surface and reject open sweeps");
+}
+double volume(const TriangleMesh &mesh)
+{
+    double result=0;
+    for (std::size_t i=0;i<mesh.indices.size();i+=3)
+        result+=dot(mesh.positions[mesh.indices[i]],
+            cross(mesh.positions[mesh.indices[i+1]],mesh.positions[mesh.indices[i+2]]))/6;
+    return std::abs(result);
+}
+void fittedDamageRegressions()
+{
+    for (int scenario=0;scenario<13;++scenario)
+    {
+        auto spline=straightRun();
+        ConstructionSettings settings;
+        if (scenario<6) settings.profile=ProfileKind(scenario);
+        if (scenario==6) settings.profileScale=.15;
+        if (scenario==7) settings.profileScale=3;
+        if (scenario==8) for (auto &point:spline.points) point.widthMeters=.25;
+        if (scenario==9) {settings.taperLengthMeters=10;settings.tipScale=.2;}
+        if (scenario==10) {settings.ribAmplitude=.25;settings.ribSpacingMeters=.2;}
+        if (scenario==11)
+        {
+            settings.profile=ProfileKind::Rectangle;
+            settings.profileRotationRadians=.8;settings.twistTurns=.35;
+        }
+        if (scenario==12) spline=verticalInflection();
+        const auto source=buildConstruction(spline,settings);
+        const auto rule=proposeSplineDamage(source,settings,"fitted-crack",777);
+        std::cout << "fitted crack case=" << scenario << " radius=" << rule.cutter.radius
+                  << " depth=" << rule.cutter.depth
+                  << " length=" << rule.cutter.path.back().x-rule.cutter.path.front().x << '\n';
+        settings.damagePaths.push_back(rule);
+        const auto cut=buildConstruction(spline,settings);
+        require(PA::validateClosedMesh(cut.mesh.mesh).hasValue(),
+                "fitted crack must preserve a closed solid");
+        require(volume(cut.mesh.mesh)<volume(source.mesh.mesh),
+                "fitted crack must remove actual material");
+        require(volume(cut.mesh.mesh)>volume(source.mesh.mesh)*.5,
+                "default fitted crack must preserve the host body");
+        require(std::any_of(cut.mesh.regions.begin(),cut.mesh.regions.end(),
+                [](const RegionInfo &region){return region.role==SurfaceRole::DamageInterior;}),
+                "fitted crack must expose fresh interior");
+        require(meshHash(cut.mesh.mesh)==meshHash(buildConstruction(spline,settings).mesh.mesh),
+                "fitted crack must replay exactly");
+        settings.damagePaths.front().cutter.enabled=false;
+        require(meshHash(buildConstruction(spline,settings).mesh.mesh)==meshHash(source.mesh.mesh),
+                "disabling a fitted crack must restore the exact source");
+        if (scenario==1)
+            require(rule.cutter.depth<.008,
+                    "default hollow-pipe crack must retain material behind its measured wall");
+    }
+    ConstructionSettings broken;broken.breakEnabled=true;
+    bool rejected=false;
+    try {proposeSplineDamage(buildConstruction(straightRun(),broken),broken,"gap",777);}
+    catch (const std::exception &) {rejected=true;}
+    require(rejected,"a missing midpoint span must not silently accept an empty crack");
+}
 }
 
 int main()
 {
     try
     {
+        damagePlacementRegression();
+        fittedDamageRegressions();
         const auto path = samplePath(verticalInflection(), {.maximumDeviationMeters = 0.002,
                                                              .maximumTangentAngleRadians = 0.12,
                                                              .maximumStepMeters = 0.12});

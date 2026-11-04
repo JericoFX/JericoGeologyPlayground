@@ -20,7 +20,7 @@ class SplineLabUI
     Construction::ConstructionSettings settings;
     Construction::ConstructionResult built;
     Camera camera;
-    std::string error;
+    std::string error,status;
     int selected{}, selectedDamage{-1}, preset{}, view{}, uploadedView{-1}, quality{1};
     bool dirty{true}, fitCamera{true}, moveDamageMode{}, movingDamage{};
     unsigned nextPointId{20}, nextDamageId{1};

@@ -1,4 +1,7 @@
 #include "SplineLabUI.hpp"
+#include "SplineDamageIO.hpp"
+#include <Windows.h>
+#include <commdlg.h>
 #include "SolidGeometry.hpp"
 #include "ViewportProjection.hpp"
 
@@ -6,11 +9,24 @@
 #include <algorithm>
 #include <cmath>
 #include <numbers>
+#include <stdexcept>
 
 namespace Playground
 {
 namespace
 {
+std::filesystem::path chooseSplineDamageFile(bool saveFile)
+{
+    wchar_t filename[MAX_PATH]=L"SplineDamage.json";
+    OPENFILENAMEW dialog{};
+    dialog.lStructSize=sizeof(dialog);dialog.hwndOwner=GetActiveWindow();
+    dialog.lpstrFilter=L"Spline damage (*.json)\0*.json\0\0";
+    dialog.lpstrFile=filename;dialog.nMaxFile=MAX_PATH;dialog.lpstrDefExt=L"json";
+    dialog.Flags=OFN_NOCHANGEDIR|OFN_PATHMUSTEXIST|(saveFile?OFN_OVERWRITEPROMPT:OFN_FILEMUSTEXIST);
+    const bool accepted=saveFile?GetSaveFileNameW(&dialog):GetOpenFileNameW(&dialog);
+    ImGui::GetIO().ClearInputMouse();
+    return accepted?std::filesystem::path(filename):std::filesystem::path{};
+}
 constexpr const char *presetNames[] = {
     "Pipe 25 mm", "Pipe 80 mm", "Hollow Pipe", "Cable", "Hose",
     "Round Duct", "Rectangular Duct", "Cable Tray", "Handrail", "I-Beam Run",
@@ -88,6 +104,8 @@ void SplineLabUI::choosePreset(int index)
     settings=splinePreset(index);
     selectedDamage=-1;
     movingDamage=false;
+    status.clear();
+    error.clear();
     dirty=true;
 }
 void SplineLabUI::activate(Renderer &renderer)
@@ -274,30 +292,51 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
     if (ImGui::InputInt("Fracture seed",&breakSeed))
     {settings.breakSeed=std::uint32_t(std::max(0,breakSeed));dirty=true;}
     ImGui::Separator();ImGui::TextUnformatted("Shared path damage");
-    if (ImGui::Button("Add crack / gouge") && !built.path.frames.empty() &&
-        settings.damagePaths.size()<64)
+    ImGui::TextWrapped("Save/load damage operations on the current spline and profile.");
+    if (ImGui::Button("Save damage"))
     {
-        Construction::PathDamageRule rule;
-        rule.id="spline-damage-"+std::to_string(nextDamageId++);
-        const auto frame=Construction::frameAtDistance(built.path,built.path.lengthMeters*.5);
-        const double surface=(settings.profile==Construction::ProfileKind::Circle ||
-            settings.profile==Construction::ProfileKind::Ring) ?
-            settings.radiusMeters : settings.widthMeters*.5;
-        rule.cutter.projector.center={frame.position.x+frame.normal.x*surface,
-            frame.position.y+frame.normal.y*surface,
-            frame.position.z+frame.normal.z*surface};
-        rule.cutter.projector.tangent=frame.tangent;
-        rule.cutter.projector.bitangent=frame.binormal;
-        rule.cutter.projector.normal=frame.normal;
-        const double halfLength=std::clamp(built.path.lengthMeters*.1,.05,.3);
-        rule.cutter.path={{-halfLength,0,0},{halfLength,0,0}};
-        rule.cutter.radius=std::clamp(surface*.5,.01,.06);
-        rule.cutter.depth=std::max(surface*1.25,.04);
-        rule.cutter.irregularity=.3;
-        rule.cutter.seed=nextDamageId;
-        settings.damagePaths.push_back(std::move(rule));
-        selectedDamage=int(settings.damagePaths.size())-1;
-        dirty=true;
+        const auto file=chooseSplineDamageFile(true);
+        if (!file.empty()) try
+        {
+            Construction::buildConstruction(spline,settings);
+            Construction::saveSplineDamage(settings.damagePaths,file);
+            error.clear();status="Damage operations saved.";
+        }
+        catch(const std::exception &e){status=std::string("Could not save damage: ")+e.what();}
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load damage"))
+    {
+        const auto file=chooseSplineDamageFile(false);
+        if (!file.empty()) try
+        {
+            auto next=Construction::loadSplineDamage(spline,settings,file);
+            built=std::move(next);selectedDamage=settings.damagePaths.empty()?-1:0;
+            movingDamage=moveDamageMode=false;damageGrabOffset={};
+            dirty=false;uploadedView=-1;error.clear();status="Damage operations loaded.";
+        }
+        catch(const std::exception &e){status=std::string("Could not load damage: ")+e.what();}
+    }
+    if (!status.empty()) ImGui::TextWrapped("%s",status.c_str());
+    if (ImGui::Button("Add crack / gouge"))
+    {
+        try
+        {
+            if (settings.damagePaths.size()>=64)
+                throw std::runtime_error("The 64 damage area limit has been reached");
+            const auto current=Construction::buildConstruction(spline,settings);
+            auto next=settings;
+            next.damagePaths.push_back(Construction::proposeSplineDamage(current,settings,
+                Construction::nextSplineDamageId(settings.damagePaths),nextDamageId+1));
+            auto candidate=Construction::buildConstruction(spline,next);
+            if (meshHash(candidate.mesh.mesh)==meshHash(current.mesh.mesh))
+                throw std::runtime_error("The proposed crack does not remove material from this surface");
+            settings=std::move(next);built=std::move(candidate);++nextDamageId;
+            selectedDamage=int(settings.damagePaths.size())-1;
+            movingDamage=false;dirty=false;uploadedView=-1;error.clear();
+            status="Crack fitted to the surface and local wall thickness.";
+        }
+        catch(const std::exception &e){status=std::string("Crack not added: ")+e.what();}
     }
     ImGui::SameLine();ImGui::Text("Areas %zu / 64",settings.damagePaths.size());
     for (std::size_t i=0;i<settings.damagePaths.size();++i)
@@ -317,20 +356,82 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
                                nullptr,nullptr,"%.4f"))
         {cutter.projector.center={center[0],center[1],center[2]};dirty=true;}
         dirty|=ImGui::InputDouble("Crack radius (m)",&cutter.radius,.005,.02,"%.4f");
-        dirty|=ImGui::InputDouble("Crack depth (m)",&cutter.depth,.01,.05,"%.4f");
+        dirty|=ImGui::InputDouble(rule.spatialPath?"Depth radius (m)":"Crack depth (m)",&cutter.depth,.01,.05,"%.4f");
         dirty|=ImGui::InputDouble("Damage amount",&cutter.amount,.05,.2,"%.3f");
         dirty|=ImGui::InputDouble("Edge irregularity",&cutter.irregularity,.05,.2,"%.3f");
-        dirty|=ImGui::InputDouble("Separate chunks (m)",&cutter.separationMeters,.01,.05,"%.3f");
-        if (cutter.path.size()==2)
+        if(!rule.spatialPath)
+            dirty|=ImGui::InputDouble("Separate chunks (m)",&cutter.separationMeters,.01,.05,"%.3f");
+        if (!rule.spatialPath && cutter.path.size()==2)
         {
             double ends[]={cutter.path[0].x,cutter.path[1].x};
             if (ImGui::InputScalarN("Crack ends (m)",ImGuiDataType_Double,ends,2,
                                    nullptr,nullptr,"%.4f"))
             {cutter.path[0].x=ends[0];cutter.path[1].x=ends[1];dirty=true;}
         }
-        int seed=int(cutter.seed);
-        if (ImGui::InputInt("Damage seed",&seed))
-        {cutter.seed=std::uint64_t(std::max(0,seed));dirty=true;}
+        if(!rule.spatialPath && ImGui::Button("Convert to 3D spline"))
+        {
+            try
+            {
+                auto next=settings;auto &candidate=next.damagePaths[std::size_t(selectedDamage)];
+                if(candidate.cutter.separationMeters!=0)
+                    throw std::runtime_error("Set chunk separation to zero before converting");
+                PA::ProceduralSpline path;path.name=rule.id;
+                path.splineGuid=Solid::region(2410,Jerico::stableGuidHash(spline.splineGuid)^cutter.seed);
+                for(const auto position:cutter.path)
+                {
+                    PA::SplineControlPoint point;point.position=position;
+                    point.pointGuid=Solid::region(2411,path.points.size()+1);path.points.push_back(point);
+                }
+                candidate.spatialPath=std::move(path);
+                auto preview=Construction::buildConstruction(spline,next);
+                // Keep the selected vector entry alive while this editor holds references to it.
+                rule.spatialPath=std::move(candidate.spatialPath);built=std::move(preview);
+                dirty=false;uploadedView=-1;error.clear();status="3D path ready. Edit its local XYZ points below.";
+            }
+            catch(const std::exception &e){status=std::string("3D conversion failed: ")+e.what();}
+        }
+        if(rule.spatialPath)
+        {
+            int operation=int(rule.operation);
+            if(ImGui::Combo("Surface operation",&operation,"Cut / groove\0Raised decal\0"))
+            {rule.operation=DamageVolumeOperation(operation);dirty=true;}
+            auto &path=*rule.spatialPath;int interpolation=int(path.interpolation);
+            if(ImGui::Combo("Damage curve",&interpolation,"Polyline\0Catmull-Rom\0Bezier\0"))
+            {path.interpolation=PA::SplineInterpolation(interpolation);dirty=true;}
+            ImGui::TextWrapped("Point XYZ is relative to the damage area. Width and depth set the swept cross-section.");
+            for(std::size_t i=0;i<path.points.size();++i)
+            {
+                ImGui::PushID(int(i));auto &point=path.points[i];
+                double xyz[]{point.position.x,point.position.y,point.position.z};
+                ImGui::Text("Point %zu",i+1);
+                if(ImGui::InputScalarN("XYZ (m)",ImGuiDataType_Double,xyz,3,nullptr,nullptr,"%.4f"))
+                {point.position={xyz[0],xyz[1],xyz[2]};dirty=true;}
+                dirty|=ImGui::InputDouble("Width scale",&point.widthMeters,.05,.2,"%.3f");
+                dirty|=ImGui::InputDouble("Roll (rad)",&point.rollRadians,.05,.2,"%.3f");
+                if(path.interpolation==PA::SplineInterpolation::CubicBezier)
+                {
+                    for(unsigned h=0;h<2;++h)
+                    {
+                        auto &handle=h?point.outgoingHandle:point.incomingHandle;
+                        double values[]{handle.x,handle.y,handle.z};
+                        if(ImGui::InputScalarN(h?"Outgoing (m)":"Incoming (m)",ImGuiDataType_Double,values,3,nullptr,nullptr,"%.4f"))
+                        {handle={values[0],values[1],values[2]};dirty=true;}
+                    }
+                }
+                const bool remove=path.points.size()>2&&ImGui::Button("Remove point");
+                ImGui::PopID();
+                if(remove){path.points.erase(path.points.begin()+i);dirty=true;break;}
+            }
+            if(path.points.size()<64&&ImGui::Button("Split last segment"))
+            {
+                PA::SplineControlPoint point;const auto &a=path.points[path.points.size()-2],&b=path.points.back();
+                point.position={(a.position.x+b.position.x)*.5,(a.position.y+b.position.y)*.5,(a.position.z+b.position.z)*.5};
+                point.widthMeters=(a.widthMeters+b.widthMeters)*.5;point.rollRadians=(a.rollRadians+b.rollRadians)*.5;
+                do{point.pointGuid=Solid::region(2411,++nextPointId);}while(std::any_of(path.points.begin(),path.points.end(),[&](const auto&p){return p.pointGuid==point.pointGuid;}));
+                path.points.insert(path.points.end()-1,point);dirty=true;
+            }
+        }
+        dirty|=ImGui::InputScalar("Damage seed",ImGuiDataType_U64,&cutter.seed);
         ImGui::Checkbox("Move selected area",&moveDamageMode);
         ImGui::SameLine();ImGui::TextUnformatted("or Shift+drag");
         if (ImGui::Button("Remove selected damage"))
@@ -435,7 +536,7 @@ void SplineLabUI::frame(Renderer &renderer, unsigned width, unsigned height)
                 (built.mesh.mesh.positions.size()*sizeof(Vec3d)+built.mesh.mesh.indices.size()*sizeof(std::uint32_t))/1048576.0,
                 renderer.bufferBytes()/1048576.0,renderer.adapter().c_str());
     if (built.bakeIslandCount)
-        ImGui::Text("Unique bake UV islands %u | Fresh damage areas %zu",
+        ImGui::Text("Unique bake UV islands %u | Damage/decal areas %zu",
                     built.bakeIslandCount,settings.damagePaths.size());
     if (built.bodyVertexCount && built.vertexUV.size()>=built.bodyVertexCount)
     {

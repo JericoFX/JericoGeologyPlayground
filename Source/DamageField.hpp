@@ -116,8 +116,19 @@ inline constexpr unsigned damagePathDepthIntervals=8;
 std::vector<Vec3d> damagePathSegmentOutline(const DamagePathCutter &cutter,
                                              Vec3d first,Vec3d second,
                                              double depthFraction=1);
+std::vector<Vec3d> canonicalDamagePath(const std::vector<Vec3d> &path);
 double sampleDamagePathField(Vec3d worldPosition,const DamagePathCutter &cutter);
+inline constexpr double damagePathNoiseContrast=3.0;
+inline constexpr double damagePathCenterRadiusFraction=.3;
+inline constexpr double damagePathWidthRadiusFraction=.3;
+double damageVariationAtStation(double stationMeters,double wavelengthMeters,
+    std::uint64_t seed,std::string_view semanticId);
+
+double damageVariationAtStation(double stationMeters,double wavelengthMeters,
+    std::uint64_t seed,std::string_view semanticId,double chainLengthMeters,bool closed);
+
 double fractureProfileOffset(double contourFraction,double amplitudeMeters,
                              double localFeatureSizeMeters,std::uint64_t seed,
                              std::string_view semanticId);
+
 } // namespace Playground

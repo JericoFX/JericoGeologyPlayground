@@ -166,3 +166,8 @@ add_custom_command(TARGET JericoGeologyPlayground POST_BUILD
         "${JERICO_DEPS}/Tools/GeologyPreview/Release/GraphicsEngineVk_64r.dll"
         "${JERICO_DEPS}/Tools/GeologyPreview/Release/spv_dxcompiler.dll"
         "$<TARGET_FILE_DIR:JericoGeologyPlayground>")
+
+target_sources(PlaygroundModel PRIVATE Source/SplineDamageIO.cpp)
+add_executable(PlaygroundSplineDamageIOTests Tests/SplineDamageIOTests.cpp)
+target_link_libraries(PlaygroundSplineDamageIOTests PRIVATE PlaygroundModel)
+add_test(NAME Playground.SplineDamageIO COMMAND PlaygroundSplineDamageIOTests "${CMAKE_CURRENT_BINARY_DIR}/spline-damage-io-evidence")
