@@ -101,6 +101,19 @@ inline void run()
     bezier.cutter.projector.center={3,2,1};auto translatedCube=cube;for(auto&p:translatedCube.positions)p={p.x+3,p.y+2,p.z+1};
     for(const auto &section:sampleSplineDamage(bezier,&translatedCube).sections)
         require(std::abs(section.center.y-3)<1e-9,"Bezier handles must transform as vectors when following a translated surface");
+    auto loop=rule;loop.spatialPath=path({});loop.spatialPath->closed=true;loop.spatialPath->interpolation=PA::SplineInterpolation::CatmullRom;
+    for(unsigned i=0;i<8;++i){PA::SplineControlPoint point;point.pointGuid=Solid::region(9303,i+1);
+        const auto angle=2*std::numbers::pi*i/8;point.position={.2*std::cos(angle),.2*std::sin(angle),1.5};loop.spatialPath->points.push_back(point);}
+    const auto ring=sampleSplineDamage(loop,&source.mesh.mesh);
+    require(ring.sections.front().center==ring.sections.back().center&&ring.sections.front().axisU==ring.sections.back().axisU&&ring.sections.front().axisV==ring.sections.back().axisV,
+        "a fitted closed route must seal its center and section frame exactly");
+    for(const auto &section:ring.sections)require(gap(section.center,profile)<1e-9,"every fitted loop section must contact the receiver");
+    const auto ringVolume=buildSplineDamageVolume(loop,Solid::region(9303,20),&source.mesh.mesh);
+    require(SplineDamageVolumeTests::connected(ringVolume),"a surface-fitted loop must remain one connected volume");
+    std::set<std::uint32_t> ringVertices;std::set<std::pair<std::uint32_t,std::uint32_t>> ringEdges;
+    for(std::size_t i=0;i<ringVolume.indices.size();i+=3)for(unsigned c=0;c<3;++c){auto a=ringVolume.indices[i+c],b=ringVolume.indices[i+(c+1)%3];ringVertices.insert(a);ringEdges.insert(std::minmax(a,b));}
+    require(std::int64_t(ringVertices.size())-std::int64_t(ringEdges.size())+std::int64_t(ringVolume.indices.size()/3)==0,
+        "a fitted closed route must retain one hole without a seam cap or extra handle");
     std::cout<<"PASS fitted decal geometry, nonuniform scale, cube corner, persistence, off and distance limits\n";
 }
 }

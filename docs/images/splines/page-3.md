@@ -1,8 +1,8 @@
-# Splines — 3/6
+# Splines — 3/10
 
 Capturas nativas actuales antes/después en siete perfiles y condiciones, más las pruebas existentes del generador. El ajuste crea cortes visibles y conserva el sólido en las pruebas ejercitadas. **Beauty parcial:** las ranuras siguen siendo mecánicas y la vista de detalle de torsión queda de canto. Decals 3D siguiendo spline siguen pendientes.
 
-[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md) · [Página 7](page-7.md) · [Página 8](page-8.md) · [Página 9](page-9.md) · [Página 10](page-10.md)
 
 [Todas las familias](../README.md)
 

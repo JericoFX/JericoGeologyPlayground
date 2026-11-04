@@ -72,4 +72,14 @@ Cuatro suites Release y cuatro con AddressSanitizer pasan. Se comprobó carga re
 
 `Evidence/spline-authoring-2026-11-04/spatial-decal-native-final2` contiene 48 vistas del cubo y tubo curvo: antes/después/off/replay. Build, cuatro suites y ejecución nativa terminaron en cero, con 344 inputs sin deriva. Binario `239B678B9B07835C4975FA76A040E1656D0AF42E0B0685A0165E65BEA0307FD4`. La autoría se recorrió en la ventana mediante carga v2, cambio de modo, save/load v3 y desactivación. El corte y el relieve se distinguen geométricamente; los originales conservan las facetas y los tramos que todavía necesitan mejor ajuste a la superficie.
 
-**Pendiente:** calidad visual natural, adaptación automática continua al receptor, otros modos del contrato Decal3D, UI a diferentes escalas/tamaños, Undo/Redo y aceptación global. Esta entrega implementa corte y unión volumétrica; no representa los modos de máscara, MeshInsert ni toda la destrucción física.
+**Pendiente de aquella entrega:** calidad visual natural, adaptación al receptor, otros modos del contrato Decal3D, UI a diferentes escalas/tamaños, Undo/Redo y aceptación global. El seguimiento acotado se incorpora en la actualización siguiente. No representa los modos de máscara, MeshInsert ni toda la destrucción física.
+
+## Seguimiento acotado de superficie — 2026-11-04
+
+Código en `a87fb1db72aaadcb16f1448782321941f9ba370a`. **Follow surface** conserva la spline original y ajusta las secciones contra la geometría actual. Reutiliza TriangleBvh/SurfaceRay; refina puntos intermedios, orienta el perfil por la superficie y limita la distancia de proyección. Un salto imposible conserva la última vista válida y muestra el motivo. **Fit distance (m)** controla ese límite; anchura y profundidad permanecen autoradas, sin prometer conservación automática del espesor de pared.
+
+La UI activa el seguimiento al elegir un relieve nuevo; recetas antiguas conservan su recorrido libre. Formato v4 con lectura v1–v3. Se prueban persistencia, desactivación, escalado no uniforme, orientación, handles Bézier, esquina de cubo y recorrido cerrado, sin cambiar los puntos de control almacenados. En el fixture cilíndrico el error muestreado baja de 1,648mm a 0,175mm. Las mediciones usan cuartos/punto medio de cada tramo; no certifican un máximo global entre todos los puntos posibles.
+
+`surface-follow-native-1` conserva 96 PNG originales y salida cero de build, ocho suites y app, con 345 inputs sin deriva. Las comparaciones usan las mismas cámaras para recorrido libre y ajustado. La UI comprobó rechazo/recuperación y save/load v4; AddressSanitizer pasa las cuatro suites centrales. Los registros del build distinguen salida nativa cero de la limpieza posterior de un auxiliar del compilador.
+
+**Pendiente:** aspecto natural, suavidad visual, otros modos de Decal3D, UX completa/Undo/Redo y aceptación global. El seguimiento está acotado por distancia, error muestreado y 512 secciones; no inventa una conexión cuando la guía no puede seguir al receptor dentro de esos límites.

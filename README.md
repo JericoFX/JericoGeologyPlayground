@@ -36,15 +36,19 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 [Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). La ruta de cortes y relieves 3D ya tiene pruebas nativas; quedan pendientes el acabado y los demás modos de Decal3D.
 
-### Splines, cortes y decals 3D
+### Splines: daño que sigue la superficie
 
-![Relieve geométrico siguiendo una spline sobre el cubo](docs/images/splines/spatial-decals-2026-11-04/cube-decal-after-1.png)
+**Recorrido libre, con un hueco visible bajo el relieve:**
 
-![Decal elevado sobre el tubo curvo: ajuste visual todavía parcial](docs/images/splines/spatial-decals-2026-11-04/curved-pipe-decal-after-2.png)
+![Relieve sin seguimiento de superficie](docs/images/splines/surface-follow-2026-11-04/curved-pipe-decal-after-2.png)
 
-[Ver las 48 capturas nuevas: corte y relieve, antes/después/off/replay](docs/images/splines/page-5.md). La misma spline permite retirar o añadir volumen, con edición XYZ, guardado/carga y procedencia de las superficies. Cuatro suites Release y cuatro con AddressSanitizer pasan. **Calidad visual parcial:** facetas y adaptación continua al receptor por mejorar; otros modos de Decal3D y Undo/Redo siguen pendientes.
+**Misma cámara, con Follow surface:**
 
-[Código de la integración publicado en 5281f1d](https://github.com/JericoFX/JericoGeologyPlayground/commit/5281f1da22ed543b9e739121bf404edf5d73124d). [Todas las pruebas de splines](docs/images/splines/README.md).
+![Relieve siguiendo la superficie del tubo](docs/images/splines/surface-follow-2026-11-04/curved-pipe-decal-surface-after-2.png)
+
+[Ver las 96 comparaciones nuevas](docs/images/splines/page-7.md). La spline original se conserva; el ajuste limita el desplazamiento y refina los tramos sobre el receptor. Se verificaron cortes, relieves, guardado/carga v4, desactivación y rechazo de límites insuficientes. Ocho suites Release y cuatro AddressSanitizer pasan. El error informado es muestreado, no una garantía global sobre toda la superficie.
+
+[Código publicado en a87fb1d](https://github.com/JericoFX/JericoGeologyPlayground/commit/a87fb1db72aaadcb16f1448782321941f9ba370a). **Pendientes:** acabado natural, facetas, otros modos de Decal3D y UX/Undo/Redo. [Todas las pruebas de splines](docs/images/splines/README.md).
 
 ### Physics Lab: primer experimento elástico
 

@@ -1,0 +1,62 @@
+{
+  "Inputs": 345,
+  "InputDrift": [],
+  "RemainingOwned": [],
+  "FreeGiB": 22.91848373413086,
+  "UsedPercent": 28.183275437921218,
+  "Results": [
+    {
+      "Stage": "build",
+      "ExitCode": 0,
+      "Seconds": 155.458405,
+      "PID": 20452,
+      "Arguments": [
+        "--build",
+        "build-chain/focused",
+        "--config",
+        "Release",
+        "--target",
+        "JericoGeologyPlaygroundRecovered",
+        "RecoveredPlaygroundDamageGeometryTests",
+        "RecoveredPlaygroundSplineConstructionTests",
+        "RecoveredPlaygroundSplineDamageIOTests",
+        "RecoveredPlaygroundDamageFieldTests",
+        "RecoveredPlaygroundProceduralAssembliesTests",
+        "RecoveredPlaygroundWebLodTests",
+        "PipeSocketTests",
+        "DockSystemTests",
+        "--",
+        "/m:1",
+        "/nr:false",
+        "/p:CL_MPCount=1"
+      ]
+    },
+    {
+      "Stage": "tests",
+      "ExitCode": 0,
+      "Seconds": 12.214664,
+      "PID": 23732,
+      "Arguments": [
+        "--test-dir",
+        "build-chain/focused",
+        "-C",
+        "Release",
+        "--output-on-failure",
+        "-j",
+        "1",
+        "-R",
+        "\"^(Recovered.Playground(SplineDamageIO|SplineConstruction|DamageGeometry|DamageField|ProceduralAssemblies|WebLod)Tests|Playground.(PipeSockets|DockSystem))$\""
+      ]
+    },
+    {
+      "Stage": "native",
+      "ExitCode": 0,
+      "Seconds": 11.7683049,
+      "PID": 14644,
+      "Arguments": [
+        "--spline-spatial-damage-test",
+        "F:\\JericoGeologyPlayground\\Evidence\\spline-authoring-2026-11-04\\surface-follow-native-1/captures"
+      ]
+    }
+  ]
+}

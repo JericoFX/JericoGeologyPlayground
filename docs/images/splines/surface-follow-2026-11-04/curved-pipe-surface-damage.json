@@ -1,0 +1,248 @@
+{
+  "format": "SplineConstructionDamage",
+  "paths": [
+    {
+      "amount": 1.0,
+      "contourSeed": 719,
+      "depth": 0.014,
+      "enabled": true,
+      "followSurface": true,
+      "id": "continuous-spatial-crack",
+      "irregularity": 0.25,
+      "operation": "VolumeDifference",
+      "path": [
+        [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "projector": {
+        "bitangent": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "rotationRadians": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "tangent": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "radius": 0.016,
+      "separationMeters": 0.0,
+      "spatialSpline": {
+        "closed": false,
+        "guid": "677344921CBECFCCD719AF488F62E600",
+        "interpolation": 0,
+        "name": "Spline Construction evidence",
+        "points": [
+          {
+            "guid": "C46399AD3D8CAE2F340A0463B030C463",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.997303857101884,
+              0.47280898197002974,
+              -0.06244467691353539
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "A568D2A4329D640E150F3D5AA5417A42",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.7470898994645209,
+              0.5872545864663146,
+              0.13120037300987394
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "0A82EF76FBF0F16971FF9275C60F58A5",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.4310921557540845,
+              0.49175492134875426,
+              0.19736550120525065
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "EB88286DF101A7485304CB6CBB200E84",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.21934669554207845,
+              0.24818790939996743,
+              0.10909150157107395
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "48787D8911CF85ABAFF52087DBEDECE7",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.04092082248301768,
+              -0.0037651706766860388,
+              -0.00032943855717310023
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "297DB68006E03B8A90FA597ED0FEA2C6",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.1435579418015251,
+              -0.2485815028827248,
+              -0.10278356715329717
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "8E97D352D033C8E5EDEAAE99F1CC8129",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.3720271551553049,
+              -0.44053586682944523,
+              -0.15005274549417988
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "6F9D0C49C5447EC4CEEFE790E6DD3708",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.6431980235837103,
+              -0.4435451721901839,
+              -0.042877030121521414
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "CC8D6164E6125D272BE03CAC07AB156B",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.890285535777837,
+              -0.3398982987567505,
+              0.1307082024223621
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          }
+        ],
+        "schemaVersion": 1
+      },
+      "surfaceDistanceMeters": 0.05
+    }
+  ],
+  "version": 4
+}

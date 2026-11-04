@@ -1,8 +1,8 @@
-# Splines y perfiles — 1/6
+# Splines y perfiles — 1/10
 
 Capturas históricas del generador. La [página 2](page-2.md) inicia las capturas nuevas de ajuste de daño; su calidad visual sigue parcial.
 
-[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md) · [Página 7](page-7.md) · [Página 8](page-8.md) · [Página 9](page-9.md) · [Página 10](page-10.md)
 
 [Todas las familias](../README.md)
 

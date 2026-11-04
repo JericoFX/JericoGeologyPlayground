@@ -1,0 +1,27 @@
+{
+  "ProcessEnded": true,
+  "ExitCode": null,
+  "ExitNote": "CUA launch; original exit status not measured",
+  "InputDrift": [],
+  "BinaryBefore": "E0029468B2D4EB45F72AC708E27058390421426DC5B3E977DCEDC9295ECAF697",
+  "BinaryAfter": "E0029468B2D4EB45F72AC708E27058390421426DC5B3E977DCEDC9295ECAF697",
+  "RecipeVersion": 4,
+  "FollowSurface": true,
+  "Distance": 0.05,
+  "Triangles": {
+    "ReloadedV4": 2090,
+    "RejectedLimitRetains": 2090,
+    "LoadedV3FreePath": 1976,
+    "Fitted": 2090,
+    "FreePathRestored": 1976,
+    "Original": 1296
+  },
+  "ObservedMaximumShiftMm": 9.709,
+  "ObservedSampledGapMm": 0.045,
+  "RejectedLimitMeters": 0.0001,
+  "Window": [
+    1442,
+    932
+  ],
+  "Remaining": "DPI/minimum layout, full keyboard and Undo/Redo pending"
+}

@@ -1,0 +1,168 @@
+{
+  "format": "SplineConstructionDamage",
+  "paths": [
+    {
+      "amount": 1.0,
+      "contourSeed": 719,
+      "depth": 0.07,
+      "enabled": true,
+      "followSurface": false,
+      "id": "continuous-spatial-crack",
+      "irregularity": 0.25,
+      "operation": "VolumeDifference",
+      "path": [
+        [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          0.0,
+          0.0
+        ]
+      ],
+      "projector": {
+        "bitangent": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "rotationRadians": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "tangent": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "radius": 0.12,
+      "separationMeters": 0.0,
+      "spatialSpline": {
+        "closed": false,
+        "guid": "677344921CBECFCCD719AF488F62E600",
+        "interpolation": 0,
+        "name": "Spline Construction evidence",
+        "points": [
+          {
+            "guid": "C46399AD3D8CAE2F340A0463B030C463",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              -0.7,
+              1.0,
+              0.3
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "A568D2A4329D640E150F3D5AA5417A42",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              0.7,
+              1.0,
+              0.3
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "0A82EF76FBF0F16971FF9275C60F58A5",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              1.0,
+              0.7,
+              0.3
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "EB88286DF101A7485304CB6CBB200E84",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              1.0,
+              0.0,
+              0.8
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          },
+          {
+            "guid": "48787D8911CF85ABAFF52087DBEDECE7",
+            "incoming": [
+              -0.25,
+              0.0,
+              0.0
+            ],
+            "outgoing": [
+              0.25,
+              0.0,
+              0.0
+            ],
+            "position": [
+              1.0,
+              -0.7,
+              -0.3
+            ],
+            "roll": 0.0,
+            "width": 1.0
+          }
+        ],
+        "schemaVersion": 1
+      },
+      "surfaceDistanceMeters": 0.3
+    }
+  ],
+  "version": 4
+}

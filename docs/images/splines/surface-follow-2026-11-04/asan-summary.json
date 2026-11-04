@@ -1,0 +1,99 @@
+{
+  "suites": 4,
+  "exit_code": 0,
+  "runtime_observed": true,
+  "frozen_inputs": 1607,
+  "instrumentation": {
+    "Executables": [
+      {
+        "Target": "DamageField",
+        "Hash": "2BEE47AB991A7951BDAD53CF13979F785AF9DE17BE5977A6D384A5BA8754A847"
+      },
+      {
+        "Target": "DamageGeometry",
+        "Hash": "7556697A575EC2B7F7CDE4CFE4F3043CA6F3BE5BCA8CCC84FE83C784CAF850A4"
+      },
+      {
+        "Target": "SplineConstruction",
+        "Hash": "7FED674142C50E352EEA5D19A72D862461C5A6F968EB6D0F39391412B2670FF3"
+      },
+      {
+        "Target": "SplineDamageIO",
+        "Hash": "307F9DB44610884DF197635230C7ED77A674B06A002E09123C76B8F7684E03B6"
+      }
+    ],
+    "Objects": [
+      {
+        "Object": "build-chain/rocks-asan/ExperimentRecipe.dir/Release/SplineConstruction.obj",
+        "Hash": "83542E8F4A5D4BA536D8DBED03F8A707C9EB3E5A085B010AC7D4D46A37AF349A",
+        "AsanSymbols": 429
+      },
+      {
+        "Object": "build-chain/rocks-asan/ExperimentRecipe.dir/Release/SplineDamageIO.obj",
+        "Hash": "4874A73E6FA10E3B3752758F08BD8289ACD7D54400A7D2030C3885E70D7446A7",
+        "AsanSymbols": 1197
+      }
+    ],
+    "Runtime": {
+      "PID": 9684,
+      "Module": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\clang_rt.asan_dynamic-x86_64.dll",
+      "SHA256": "3AA742521E8CBD23252F0545AA51D5A15624A3E4430FBE2F81567AFAEB3FC59B"
+    },
+    "Options": "halt_on_error=1",
+    "Suppressions": false
+  },
+  "build_cleanup": {
+    "NativeBuildExitCode": 0,
+    "StoppedOwnedHelpers": [
+      {
+        "PID": 7720,
+        "Executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\VCTIP.EXE",
+        "Created": "2026-11-04T19:17:15.930568-03:00",
+        "Parent": 20836,
+        "Owner": "Jerico",
+        "OwnerSource": "Inherited launching identity",
+        "Purpose": "Surface follow ASan build"
+      }
+    ],
+    "RemainingOwned": []
+  },
+  "closed_route_followup": {
+    "exit_code": 0,
+    "input_changes": [
+      {
+        "Path": "F:\\JericoGeologyPlayground\\Tests\\SplineSurfaceFitTests.hpp",
+        "Hash": "7ACD6F19915F57A70FEB1D85F59004B79CEE2B71F8A1EF085D93707EBB9F7817",
+        "SideIndicator": "=>"
+      },
+      {
+        "Path": "F:\\JericoGeologyPlayground\\Tests\\SplineSurfaceFitTests.hpp",
+        "Hash": "C8CCB6C92E608D1A0FD48DF74B8DC203BE0F7C8AC5C5BA8C540CB24482317173",
+        "SideIndicator": "<="
+      }
+    ],
+    "instrumentation": {
+      "BinaryHash": "E88B7441BF658789B6BC45760213637C918A3C7228DEA7249CD0DBB240C4AFCB",
+      "RuntimeImports": 1,
+      "Runtime": {
+        "PID": 14944,
+        "Module": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\clang_rt.asan_dynamic-x86_64.dll",
+        "SHA256": "3AA742521E8CBD23252F0545AA51D5A15624A3E4430FBE2F81567AFAEB3FC59B"
+      }
+    },
+    "build_cleanup": {
+      "NativeBuildExitCode": 0,
+      "StoppedOwnedHelpers": [
+        {
+          "PID": 20352,
+          "Executable": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\VCTIP.EXE",
+          "Created": "2026-11-04T19:33:58.783417-03:00",
+          "Parent": 12872,
+          "Owner": "Jerico",
+          "OwnerSource": "Inherited launching identity",
+          "Purpose": "Surface follow ASan build"
+        }
+      ],
+      "RemainingOwned": []
+    }
+  }
+}

@@ -1,8 +1,8 @@
-# Splines — 4/6
+# Splines — 4/10
 
 Primer recorrido espacial real de damage: una spline 3D genera un volumen continuo que retira material del cubo y del tubo curvo. Guardado/carga, IDs, UVs y desactivación comprobados; tres suites PASS y 24 capturas nativas con fuentes/binario sin deriva. La ventana también permitió convertir, añadir un punto, editar Z y guardar/recargar. **Calidad visual parcial:** aspecto de ranura y ajuste continuo a superficies curvadas por mejorar. Decals 3D, ASan actualizado y la aceptación completa de UI siguen pendientes.
 
-[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md)
+[Página 1](page-1.md) · [Página 2](page-2.md) · [Página 3](page-3.md) · [Página 4](page-4.md) · [Página 5](page-5.md) · [Página 6](page-6.md) · [Página 7](page-7.md) · [Página 8](page-8.md) · [Página 9](page-9.md) · [Página 10](page-10.md)
 
 [Todas las familias](../README.md)
 
