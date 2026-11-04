@@ -1,0 +1,598 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3090",
+  "cases": [
+    {
+      "afterHash": 8882477465729658566,
+      "afterTriangles": 596,
+      "afterVolume": 7.943736342572406,
+      "beforeHash": 6030376999186860979,
+      "beforeTriangles": 68,
+      "beforeVolume": 7.999999999999999,
+      "images": [
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-before-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-before-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-before-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-after-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-after-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-after-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-off-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-off-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-off-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-replay-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-replay-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-replay-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        }
+      ],
+      "name": "cube",
+      "offExact": true,
+      "operation": "VolumeDifference",
+      "recipe": "cube-damage.json",
+      "replayExact": true
+    },
+    {
+      "afterHash": 12437339965017771705,
+      "afterTriangles": 3870,
+      "afterVolume": 0.020730540105046727,
+      "beforeHash": 2074044908779740602,
+      "beforeTriangles": 1296,
+      "beforeVolume": 0.021569666404414326,
+      "images": [
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-before-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-before-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-before-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-after-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-after-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-after-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-off-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-off-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-off-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-replay-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-replay-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-replay-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        }
+      ],
+      "name": "curved-pipe",
+      "offExact": true,
+      "operation": "VolumeDifference",
+      "recipe": "curved-pipe-damage.json",
+      "replayExact": true
+    },
+    {
+      "afterHash": 15875605408909146913,
+      "afterTriangles": 556,
+      "afterVolume": 8.04961663233516,
+      "beforeHash": 6030376999186860979,
+      "beforeTriangles": 68,
+      "beforeVolume": 7.999999999999999,
+      "images": [
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-before-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-before-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-decal-before-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-after-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-after-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-decal-after-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-off-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-off-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-decal-off-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-replay-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.900000095367432,
+          "file": "cube-decal-replay-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 1.5,
+          "file": "cube-decal-replay-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            1.0,
+            0.699999988079071,
+            0.30000001192092896
+          ],
+          "yaw": 1.2000000476837158
+        }
+      ],
+      "name": "cube-decal",
+      "offExact": true,
+      "operation": "VolumeUnion",
+      "recipe": "cube-decal-damage.json",
+      "replayExact": true
+    },
+    {
+      "afterHash": 10121019023509677779,
+      "afterTriangles": 4602,
+      "afterVolume": 0.022617698498921323,
+      "beforeHash": 2074044908779740602,
+      "beforeTriangles": 1296,
+      "beforeVolume": 0.021569666404414326,
+      "images": [
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-before-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-before-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-decal-before-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-after-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-after-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-decal-after-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-off-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-off-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-decal-off-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-replay-0.png",
+          "pitch": -0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 0.550000011920929
+        },
+        {
+          "distance": 4.400000095367432,
+          "file": "curved-pipe-decal-replay-1.png",
+          "pitch": 0.2800000011920929,
+          "target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw": 3.690000057220459
+        },
+        {
+          "distance": 0.800000011920929,
+          "file": "curved-pipe-decal-replay-2.png",
+          "pitch": -0.6000000238418579,
+          "target": [
+            -0.04092082381248474,
+            -0.003765170695260167,
+            -0.000329438567860052
+          ],
+          "yaw": 0.550000011920929
+        }
+      ],
+      "name": "curved-pipe-decal",
+      "offExact": true,
+      "operation": "VolumeUnion",
+      "recipe": "curved-pipe-decal-damage.json",
+      "replayExact": true
+    }
+  ],
+  "interactive": false,
+  "resolution": [
+    1280,
+    960
+  ]
+}

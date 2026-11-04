@@ -1,0 +1,25 @@
+{
+  "ProcessEnded": true,
+  "ExitCode": null,
+  "ExitNote": "CUA launch; original exit status not measured",
+  "InputDrift": [],
+  "BinaryBefore": "D8186175CBBE0D2F90D72BEAB5AEF2A11EDD305AF9BF251F8AC43BA78F04427A",
+  "BinaryAfter": "D8186175CBBE0D2F90D72BEAB5AEF2A11EDD305AF9BF251F8AC43BA78F04427A",
+  "RecipeVersion": 3,
+  "Operation": "VolumeUnion",
+  "SpatialPoints": 3,
+  "ObservedTriangles": {
+    "ReloadedV3": 1976,
+    "Raised": 1976,
+    "LoadedV2Cut": 2016,
+    "Original": 1296,
+    "PresetReset": 1296,
+    "Off": 1296
+  },
+  "PresetClearsStatus": true,
+  "Window": [
+    1442,
+    932
+  ],
+  "Remaining": "DPI/minimum layout, complete keyboard and Undo/Redo pending"
+}

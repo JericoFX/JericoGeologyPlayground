@@ -34,17 +34,17 @@ Capturas reales y archivos originales, accesibles desde GitHub en el teléfono. 
 
 ![Crack sobre el cubo, todavía con aspecto de ranura](docs/images/damage/cube-2026-11-04/14-cube-crack-lit-0.jpg)
 
-[Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). La ruta de grietas 3D ya tiene pruebas nativas; su aspecto y los decals 3D siguen pendientes.
+[Autoría y comparación con el desgaste anterior](docs/images/damage/page-3.md). La ruta de cortes y relieves 3D ya tiene pruebas nativas; quedan pendientes el acabado y los demás modos de Decal3D.
 
-### Splines y daño 3D
+### Splines, cortes y decals 3D
 
-![Corte espacial sobre otra cara del cubo](docs/images/splines/spatial-damage-2026-11-04/cube-after-1.png)
+![Relieve geométrico siguiendo una spline sobre el cubo](docs/images/splines/spatial-decals-2026-11-04/cube-decal-after-1.png)
 
-![Detalle del daño sobre el tubo curvo](docs/images/splines/spatial-damage-2026-11-04/curved-pipe-after-2.png)
+![Decal elevado sobre el tubo curvo: ajuste visual todavía parcial](docs/images/splines/spatial-decals-2026-11-04/curved-pipe-decal-after-2.png)
 
-[Ver las 24 capturas nuevas: antes, después, desactivado y recargado](docs/images/splines/page-4.md). La spline ya controla un corte tridimensional con puntos XYZ editables y persistencia. El perfil todavía parece una ranura y el ajuste a superficies curvas necesita mejorar. **Decals 3D y cierre visual pendientes.** [Pruebas anteriores del generador](docs/images/splines/README.md).
+[Ver las 48 capturas nuevas: corte y relieve, antes/después/off/replay](docs/images/splines/page-5.md). La misma spline permite retirar o añadir volumen, con edición XYZ, guardado/carga y procedencia de las superficies. Cuatro suites Release y cuatro con AddressSanitizer pasan. **Calidad visual parcial:** facetas y adaptación continua al receptor por mejorar; otros modos de Decal3D y Undo/Redo siguen pendientes.
 
-El núcleo geométrico está publicado en `4a6be34`. La integración del editor mostrada en estas pruebas está validada localmente y aún pendiente de su commit.
+[Código de la integración publicado en 5281f1d](https://github.com/JericoFX/JericoGeologyPlayground/commit/5281f1da22ed543b9e739121bf404edf5d73124d). [Todas las pruebas de splines](docs/images/splines/README.md).
 
 ### Physics Lab: primer experimento elástico
 

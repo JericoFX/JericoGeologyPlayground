@@ -1,0 +1,66 @@
+{
+  "suites": 4,
+  "exit_code": 0,
+  "frozen_inputs": 1606,
+  "input_drift": [],
+  "runtime_observed": true,
+  "surviving_owned_processes": [],
+  "instrumentation": {
+    "Executables": [
+      {
+        "Target": "DamageField",
+        "SHA256": "FF7A53A78DEA572B2368D91A92BAB47A3BA55199A5BBB0BBFE53F338A480F72D",
+        "RuntimeImports": 1
+      },
+      {
+        "Target": "DamageGeometry",
+        "SHA256": "AC61D2AFF55D7D91B15399D735380B1915490ECA39311A00503C59CC3028B6AF",
+        "RuntimeImports": 1
+      },
+      {
+        "Target": "SplineConstruction",
+        "SHA256": "870C7751B3EA8F3ECCB2FB45616043B5FA345DFC919C9F482E09F61129F53E23",
+        "RuntimeImports": 1
+      },
+      {
+        "Target": "SplineDamageIO",
+        "SHA256": "78A19AAF8145D81A1864329D534217D7EDE607A30A616D2ABD773D607CE85FAF",
+        "RuntimeImports": 1
+      }
+    ],
+    "Objects": [
+      {
+        "Object": "build-chain/rocks-asan/ExperimentRecipe.dir/Release/DamageGeometry.obj",
+        "SHA256": "3FFFF5EF4025EB3681E477A7B3002C5E29E87C62EA43F64C34EF64CB5C7C0B04",
+        "AsanSymbols": 428
+      },
+      {
+        "Object": "build-chain/rocks-asan/ExperimentRecipe.dir/Release/SplineConstruction.obj",
+        "SHA256": "9412A26376012DAE7D33D00B0A4CC71C213DB15432745A4B676EE46193C6B6A3",
+        "AsanSymbols": 363
+      },
+      {
+        "Object": "build-chain/rocks-asan/ExperimentRecipe.dir/Release/SplineDamageIO.obj",
+        "SHA256": "BFCCC5DD42764F27969F70A973A54DF4CF26E32A1E14CA76B785DE90F2454394",
+        "AsanSymbols": 1181
+      },
+      {
+        "Object": "build-chain/rocks-asan/ExperimentDamage.dir/Release/DamageField.obj",
+        "SHA256": "F1BC00551918EFDC968D929D8B7B3F85355CDE33D3BC0B84D73BC04641B81FB5",
+        "AsanSymbols": 188
+      },
+      {
+        "Object": "build-chain/rocks-asan/native-manifold/src/manifold.dir/Release/manifold.obj",
+        "SHA256": "ABD9BE68A5D29CA7E52FA48FBD0C8CAFFB3E5CB6783A10BBE23DCA8D0D041E88",
+        "AsanSymbols": 291
+      }
+    ],
+    "Runtime": {
+      "PID": 8964,
+      "Module": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\clang_rt.asan_dynamic-x86_64.dll",
+      "SHA256": "3AA742521E8CBD23252F0545AA51D5A15624A3E4430FBE2F81567AFAEB3FC59B"
+    },
+    "Options": "halt_on_error=1",
+    "Suppressions": false
+  }
+}
