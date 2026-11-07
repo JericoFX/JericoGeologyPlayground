@@ -392,6 +392,31 @@ void PipeLabUI::frame(Renderer&renderer,unsigned width,unsigned height)
                 status=std::string("Routed pipe added: ")+name(fit.state)+", "+std::to_string(fit.path.size())+" points, "
                     +std::to_string(fit.lengthMeters)+" m, "+std::to_string(triangles)+" triangles";
             });
+            ImGui::BeginDisabled(pipes.empty());
+            if(ImGui::Button("Break last generated pipe"))action([&]{
+                if(pipes.empty())throw std::runtime_error("Generate or route a pipe first");
+                const auto fragments=breakPipe(pipes.back().mesh.mesh.mesh,0.5,0.02);
+                if(fragments.size()<2)throw std::runtime_error("The break produced fewer than two fragments");
+                std::string sizes;
+                for(const auto& fragment:fragments)
+                {
+                    Pipes::ImportedMesh mesh;
+                    mesh.mesh.mesh=fragment;
+                    // The renderer keeps a per-vertex diagnostic field; a fragment without one
+                    // is rejected with "field count must match".
+                    mesh.mesh.field.assign(fragment.positions.size(),0.0f);
+                    // The renderer also wants one UV per mesh corner; fragments are untextured.
+                    mesh.cornerUV.assign(fragment.indices.size(),{0.0f,0.0f});
+                    pipes.push_back({std::move(mesh),Pipes::Module{}});
+                    instances.push_back({{}, {},int(pipes.size())-1});
+                    if(!sizes.empty())sizes+=", ";
+                    sizes+=std::to_string(fragment.indices.size()/3);
+                }
+                dirty=true;fitAfterRebuild=true;scene=true;
+                status="Broken into "+std::to_string(fragments.size())+" fragments: "+sizes+" triangles";
+            });
+            ImGui::EndDisabled();
+            ImGui::TextWrapped("Break cuts the last generated pipe in half with the shared damage backend and adds the closed fragments to the scene; the source pipe stays.");
             ImGui::TextWrapped("Fit route draws the pipe between the selected sockets with the fewest elbows; it refuses when the axes cannot be joined.");
             ImGui::TextWrapped("Hollow ring profile. U follows the circumference; V = distance / repeat meters. UV checker uses the same density at every length.");
             ImGui::EndTabItem();
