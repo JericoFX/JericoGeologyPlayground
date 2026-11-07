@@ -108,6 +108,20 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
         }
         if(loop.size()<settings.minimumLoopVertices)continue;
         ++report.boundaryLoops;
+        if(report.loops.size()<8) {
+            LoopInfo info;info.vertices=loop.size();info.closed=closed;
+            Vec3 centreLoop{};
+            for(const auto vertex:loop)centreLoop=add(centreLoop,welded.points[vertex]);
+            centreLoop=mul(centreLoop,1.0/double(loop.size()));
+            info.centre=centreLoop;
+            double maximum=0,average=0;
+            for(const auto vertex:loop) {
+                const double distance=length(sub(welded.points[vertex],centreLoop));
+                maximum=std::max(maximum,distance);average+=distance;
+            }
+            info.maximumRadial=maximum;info.averageRadial=average/double(loop.size());
+            report.loops.push_back(info);
+        }
         // Plane fit through the loop, then a 2D least-squares circle.
         Vec3 centre{};
         for(const auto vertex:loop)centre=add(centre,welded.points[vertex]);
@@ -296,12 +310,15 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
     // which matters because these scanned GLBs are not reliably vertex-shared. A disk of
     // area A has radius sqrt(A/pi); the cluster's own vertices must reach that radius.
     {
-        struct Cluster {Vec3 normal{};double offset{};double area{};Vec3 centroidSum{};double weight{};};
+        struct Cluster {Vec3 normal{};double offset{};double area{};Vec3 centroidSum{};double weight{};std::uint64_t key{};};
         std::unordered_map<std::uint64_t,std::size_t> index;
         std::vector<Cluster> clusters;
-        auto keyOf=[](Vec3 normal,double offset) {
-            const auto quantize=[&](double value){return std::uint64_t(std::uint32_t(std::int32_t(std::lround(value*50.0))));};
-            const auto offsetKey=std::uint64_t(std::uint32_t(std::int32_t(std::lround(offset/0.005))));
+        // Coarse bins on purpose: a scanned cap fragments into hundreds of patches when the
+        // normal is quantised at ~1 degree, which is why no cap was ever whole.
+        const double offsetStep=0.02*diagonal;
+        auto keyOf=[offsetStep](Vec3 normal,double offset) {
+            const auto quantize=[&](double value){return std::uint64_t(std::uint32_t(std::int32_t(std::lround(value*10.0))));};
+            const auto offsetKey=std::uint64_t(std::uint32_t(std::int32_t(std::lround(offset/offsetStep))));
             std::uint64_t key=quantize(normal.x);
             key=key*1000003ull^quantize(normal.y);
             key=key*1000003ull^quantize(normal.z);
@@ -318,14 +335,14 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
             const auto key=keyOf(normal,dot(normal,centre));
             auto found=index.find(key);
             if(found==index.end()) {
-                Cluster cluster;cluster.normal=normal;cluster.offset=dot(normal,centre);
+                Cluster cluster;cluster.normal=normal;cluster.offset=dot(normal,centre);cluster.key=key;
                 clusters.push_back(cluster);
                 found=index.emplace(key,clusters.size()-1).first;
             }
             auto& cluster=clusters[found->second];
             cluster.area+=area;cluster.weight+=area;
             cluster.centroidSum=add(cluster.centroidSum,mul(centre,area));
-            cluster.normal=normalized(add(mul(cluster.normal,1.0),mul(normal,0.01)));
+            cluster.normal=normalized(add(mul(cluster.normal,cluster.area),mul(normal,area)));
         }
         for(const auto& cluster:clusters) {
             if(cluster.area<0.005||cluster.weight<=0)continue;
@@ -343,13 +360,26 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
                 if(doubleArea<=kEpsilon)continue;
                 const Vec3 normal=mul(normalRaw,1.0/doubleArea);
                 const Vec3 centre=mul(add(add(a,b),c),1.0/3.0);
-                if(keyOf(normal,dot(normal,centre))!=keyOf(cluster.normal,cluster.offset))continue;
-                const auto delta=sub(centre,centroidCluster);
-                const double radial=std::hypot(dot(delta,u),dot(delta,v));
-                maximum=std::max(maximum,radial);sum+=radial;++counted;
+                // Compare against the cluster's own key: the accumulated normal drifts, so
+                // re-deriving a key from it matched nothing and every cap was discarded.
+                if(keyOf(normal,dot(normal,centre))!=cluster.key)continue;
+                // Measure the triangle's corners, not its centroid: a fan's centroids only
+                // reach 2/3 of the radius, so a perfect disk looked like a small hub.
+                for(const auto corner:{a,b,c}) {
+                    const auto delta=sub(corner,centroidCluster);
+                    const double radial=std::hypot(dot(delta,u),dot(delta,v));
+                    maximum=std::max(maximum,radial);sum+=radial;++counted;
+                }
             }
             if(counted<16)continue;
             const double average=sum/double(counted);
+            if(report.clusters.size()<8) {
+                ClusterInfo info;
+                info.area=cluster.area;info.radius=radius;info.maximumRadial=maximum;
+                info.averageRadial=average;info.triangles=counted;
+                info.position=centroidCluster;info.normal=cluster.normal;
+                report.clusters.push_back(info);
+            }
             // A disk fills its circle: its triangles reach the radius and average near 2/3 R.
             if(maximum<radius*0.85||maximum>radius*1.15)continue;
             if(average<radius*0.45||average>radius*0.85)continue;

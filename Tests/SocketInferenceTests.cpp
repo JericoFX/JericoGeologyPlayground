@@ -29,6 +29,15 @@ Json run(const std::filesystem::path& asset,const std::filesystem::path& sidecar
     out["boundary_loops"]=report.boundaryLoops;
     out["rejected_loops"]=report.rejectedLoops;
     out["planar_regions"]=report.planarRegions;
+    out["loops"]=Json::array();
+    for(const auto& loop:report.loops)out["loops"].push_back({{"vertices",loop.vertices},{"closed",loop.closed},
+        {"max_radial",loop.maximumRadial},{"avg_radial",loop.averageRadial},
+        {"centre",{loop.centre.x,loop.centre.y,loop.centre.z}}});
+    out["clusters"]=Json::array();
+    for(const auto& cluster:report.clusters)out["clusters"].push_back({{"area",cluster.area},{"radius",cluster.radius},
+        {"max_radial",cluster.maximumRadial},{"avg_radial",cluster.averageRadial},{"triangles",cluster.triangles},
+        {"position",{cluster.position.x,cluster.position.y,cluster.position.z}},
+        {"normal",{cluster.normal.x,cluster.normal.y,cluster.normal.z}}});
     out["best_fill"]=report.bestFill;
     out["best_radial"]=report.bestRadial;
     out["sockets"]=Json::array();
@@ -43,6 +52,42 @@ Json run(const std::filesystem::path& asset,const std::filesystem::path& sidecar
             {"position",socket["position"]},{"forward",socket["forward"]},{"diameter",socket["diameter"]}});
     }
     return out;
+}
+// Synthetic controls: a clean open tube and the same tube with capped ends. The
+// algorithms must be exact here; the scanned pipes are a separate, harder case.
+struct Mesh {std::vector<S::Vec3> positions;std::vector<std::uint32_t> indices;};
+
+Mesh tube(double radius,double length,int segments,bool capped) {
+    Mesh mesh;
+    for(int index=0;index<segments;++index) {
+        const double angle=2.0*3.14159265358979323846*double(index)/double(segments);
+        const double x=radius*std::cos(angle),y=radius*std::sin(angle);
+        mesh.positions.push_back({x,y,0});
+        mesh.positions.push_back({x,y,length});
+    }
+    for(int index=0;index<segments;++index) {
+        const auto next=(index+1)%segments;
+        const std::uint32_t a=std::uint32_t(index*2),b=std::uint32_t(index*2+1);
+        const std::uint32_t c=std::uint32_t(next*2),d=std::uint32_t(next*2+1);
+        mesh.indices.insert(mesh.indices.end(),{a,c,b,b,c,d});
+    }
+    if(capped) {
+        for(const double z:{0.0,length}) {
+            const auto centre=std::uint32_t(mesh.positions.size());
+            mesh.positions.push_back({0,0,z});
+            const std::uint32_t ringStart=std::uint32_t(mesh.positions.size());
+            for(int index=0;index<segments;++index) {
+                const double angle=2.0*3.14159265358979323846*double(index)/double(segments);
+                mesh.positions.push_back({radius*std::cos(angle),radius*std::sin(angle),z});
+            }
+            for(int index=0;index<segments;++index) {
+                const auto next=(index+1)%segments;
+                if(z==0.0)mesh.indices.insert(mesh.indices.end(),{centre,ringStart+std::uint32_t(index),ringStart+std::uint32_t(next)});
+                else mesh.indices.insert(mesh.indices.end(),{centre,ringStart+std::uint32_t(next),ringStart+std::uint32_t(index)});
+            }
+        }
+    }
+    return mesh;
 }
 } // namespace
 
@@ -59,7 +104,28 @@ int main(int argc,char** argv) {
             {"bend","models/industrial+pipe+bend+3d+model.glb",nullptr},
             {"coupling","models/rusty+pipe+coupling+3d+model.glb",nullptr},
             {"valve","models/industrial+valve+3d+model.glb",nullptr}};
-        Json result={{"assets",Json::array()}};
+        Json result={{"assets",Json::array()},{"synthetic",Json::array()}};
+        // Synthetic gates: exact ground truth.
+        const auto open=tube(0.17,0.5,64,false);
+        const auto openReport=S::infer(open.positions,open.indices);
+        const auto capped=tube(0.17,0.5,64,true);
+        const auto cappedReport=S::infer(capped.positions,capped.indices);
+        auto describe=[](const S::Report& report) {
+            Json item={{"sockets",Json::array()}};
+            for(const auto& socket:report.sockets)item["sockets"].push_back({{"diameter",socket.diameter},
+                {"position",{socket.position.x,socket.position.y,socket.position.z}},
+                {"forward",{socket.forward.x,socket.forward.y,socket.forward.z}}});
+            return item;
+        };
+        result["synthetic"].push_back({{"id","open-tube"},{"report",describe(openReport)}});
+        result["synthetic"].push_back({{"id","capped-tube"},{"report",describe(cappedReport)}});
+        std::cout<<"synthetic open-tube sockets="<<openReport.sockets.size()
+                 <<" capped-tube sockets="<<cappedReport.sockets.size()<<"\n";
+        require(openReport.sockets.size()==2,"Open tube did not yield two sockets");
+        for(const auto& socket:openReport.sockets)require(std::abs(socket.diameter-0.34)<0.002,"Open tube socket diameter is wrong");
+        require(cappedReport.sockets.size()>=2,"Capped tube did not yield two sockets");
+        for(const auto& socket:cappedReport.sockets)
+            require(std::abs(socket.diameter-0.34)<0.02,"Capped tube socket diameter is wrong");
         std::size_t compared=0,matched=0;
         for(const auto& asset:assets) {
             const std::filesystem::path glb=root/asset.glb;

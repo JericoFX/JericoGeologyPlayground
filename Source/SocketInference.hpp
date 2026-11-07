@@ -24,9 +24,24 @@ struct Settings {
     double maximumRadialErrorRelative{0.08};
     double maximumPlaneErrorRelative{0.05};
 };
+struct ClusterInfo {
+    Vec3 position{},normal{};
+    double area{},radius{},maximumRadial{},averageRadial{};
+    std::size_t triangles{};
+};
+
+struct LoopInfo {
+    Vec3 centre{};
+    double maximumRadial{},averageRadial{};
+    std::size_t vertices{};
+    bool closed{};
+};
+
 struct Report {
     std::size_t boundaryLoops{},rejectedLoops{},planarRegions{};
+    std::vector<LoopInfo> loops; // Largest border loops, for diagnosis.
     double bestFill{},bestRadial{}; // Diagnostics for the planar-cap stage.
+    std::vector<ClusterInfo> clusters; // Largest planar clusters, for diagnosis.
     std::vector<SocketCandidate> sockets;
 };
 Report infer(std::span<const Vec3>,std::span<const std::uint32_t>,const Settings& = {});
