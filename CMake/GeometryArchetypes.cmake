@@ -97,3 +97,9 @@ foreach(consumer PipeConnectorTests JericoGeologyPlaygroundRecovered JericoGeolo
         target_link_libraries(${consumer} PRIVATE PipeConnectorGeometry)
     endif()
 endforeach()
+# The Pipe Lab proposes sockets from the mesh, so the application needs the inference core.
+foreach(consumer JericoGeologyPlaygroundRecovered JericoGeologyPlayground)
+    if(TARGET ${consumer})
+        target_link_libraries(${consumer} PRIVATE JESocketInference)
+    endif()
+endforeach()

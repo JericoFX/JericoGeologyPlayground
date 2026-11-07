@@ -1,6 +1,7 @@
 #include "PipeLabUI.hpp"
 #include <fstream>
 #include "PipeConnector.hpp"
+#include "SocketInference.hpp"
 #include "ViewportProjection.hpp"
 #include <imgui.h>
 #include <nlohmann/json.hpp>
@@ -82,6 +83,41 @@ PipeLabUI::Asset& PipeLabUI::loadAsset(const std::filesystem::path&path)
 {
     if(auto it=assets.find(path);it!=assets.end())return it->second;
     Asset asset;asset.mesh=Pipes::loadGlb(path);asset.module=Pipes::loadModule(path);
+    if(asset.module.sockets.empty())
+    {
+        // No sidecar: propose sockets from the mesh itself so the module can be connected and
+        // routed. Proposals are named as such and are never written back to a sidecar.
+        std::vector<JE::SocketInference::Vec3> points;
+        points.reserve(asset.mesh.mesh.mesh.positions.size());
+        for(const auto&p:asset.mesh.mesh.mesh.positions)points.push_back({p.x,p.y,p.z});
+        const auto inferred=JE::SocketInference::infer(points,asset.mesh.mesh.mesh.indices);
+        // The valve's own body reads as a metre-wide ring, so ranking by diameter proposes
+        // the envelope instead of the bores. Keep bores (a small fraction of the diagonal)
+        // and rank by how circular each rim is.
+        double lowX=1e30,lowY=1e30,lowZ=1e30,highX=-1e30,highY=-1e30,highZ=-1e30;
+        for(const auto&p:points){lowX=std::min(lowX,p.x);lowY=std::min(lowY,p.y);lowZ=std::min(lowZ,p.z);
+            highX=std::max(highX,p.x);highY=std::max(highY,p.y);highZ=std::max(highZ,p.z);}
+        const double diagonal=std::sqrt((highX-lowX)*(highX-lowX)+(highY-lowY)*(highY-lowY)+(highZ-lowZ)*(highZ-lowZ));
+        std::vector<const JE::SocketInference::SocketCandidate*> ranked;
+        for(const auto& socket:inferred.sockets)
+            if(socket.diameter>=0.02&&socket.diameter<=0.45*diagonal)ranked.push_back(&socket);
+        std::sort(ranked.begin(),ranked.end(),[](const auto*a,const auto*b) {
+            return a->radialErrorMeters<b->radialErrorMeters;
+        });
+        if(ranked.size()>4)ranked.resize(4);
+        for(std::size_t index=0;index<ranked.size();++index)
+        {
+            Pipes::Socket socket;
+            socket.name="Proposed "+std::to_string(index+1);
+            socket.position={ranked[index]->position.x,ranked[index]->position.y,ranked[index]->position.z};
+            socket.diameter=ranked[index]->diameter;
+            socket.role=Pipes::Role::Connection;
+            socket.capabilities={"Pipe","Proposed"};
+            socket.rotation=Pipes::faceDirection({ranked[index]->forward.x,ranked[index]->forward.y,ranked[index]->forward.z});
+            asset.module.sockets.push_back(std::move(socket));
+        }
+        if(!asset.module.sockets.empty())asset.module.moduleType="Proposed sockets";
+    }
     return assets.emplace(path,std::move(asset)).first->second;
 }
 void PipeLabUI::reload()
