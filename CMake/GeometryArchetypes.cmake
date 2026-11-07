@@ -59,3 +59,12 @@ if(NOT TARGET SocketInferenceTests)
     add_test(NAME Playground.SocketInferenceProbe COMMAND SocketInferenceTests "${CMAKE_CURRENT_BINARY_DIR}/socket-evidence")
     set_tests_properties(Playground.SocketInferenceProbe PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
 endif()
+
+# The application rig builder calls the classifier, so the application executable must
+# see the archetype core as well (it links the import library by target).
+if(TARGET PlaygroundAnimationImport)
+    target_link_libraries(PlaygroundAnimationImport PUBLIC JEGeometryArchetypes)
+endif()
+if(TARGET JericoGeologyPlaygroundRecovered)
+    target_link_libraries(JericoGeologyPlaygroundRecovered PRIVATE JEGeometryArchetypes)
+endif()
