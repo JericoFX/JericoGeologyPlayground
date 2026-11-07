@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
+#include <functional>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -383,6 +385,7 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
         for(const auto& support:supports)if(support.y<=groundBand)++grounded;
         evidence.supportCount=supports.size();
         evidence.groundedSupportCount=grounded;
+        for(const auto& support:supports)if(support.y<=groundBand)evidence.supportPoints.push_back(support);
         // Spread of the ground contacts around their own best line: limbs surround a
         // body, while an axial body keeps all of its low points on one corridor.
         if(supports.size()>=2) {
@@ -692,4 +695,123 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
     if(report.ranked.size()>1)report.ambiguous=(report.ranked[0].score-report.ranked[1].score)<0.05;
     return report;
 }
+
+Skeleton skeleton(std::span<const Vec3> positions,std::span<const std::uint32_t> indices,
+                  const Report& report,std::size_t jointsPerChain,const Settings& settings) {
+    if(indices.empty()||indices.size()%3)throw std::invalid_argument("Skeleton needs a triangle list");
+    if(positions.empty())throw std::invalid_argument("Skeleton needs vertices");
+    if(jointsPerChain==0||jointsPerChain>64)throw std::invalid_argument("Skeleton joint count out of range");
+
+    Vec3 minimum{positions[0]},maximum{positions[0]};
+    for(const auto p:positions) {
+        minimum={std::min({minimum.x,p.x}),std::min({minimum.y,p.y}),std::min({minimum.z,p.z})};
+        maximum={std::max({maximum.x,p.x}),std::max({maximum.y,p.y}),std::max({maximum.z,p.z})};
+    }
+    const double diagonal=length(maximum-minimum);
+    if(!(diagonal>0))throw std::invalid_argument("Skeleton needs a non-degenerate mesh");
+    // The shared analysis graph: welded vertices plus explicit proximity links, so a
+    // character exported as several shells is still one surface.
+    std::vector<JE::GeometryAnalysis::Vec3> analysisPoints(positions.size());
+    for(std::size_t index=0;index<positions.size();++index)
+        analysisPoints[index]={positions[index].x,positions[index].y,positions[index].z};
+    JE::GeometryAnalysis::Settings analysisSettings;
+    analysisSettings.maximumVertices=settings.maximumVertices;
+    analysisSettings.maximumTriangles=settings.maximumTriangles;
+    analysisSettings.weldRelative=1e-5;
+    analysisSettings.connectionRelative=0.02;
+    const auto analysis=JE::GeometryAnalysis::analyze({analysisPoints,indices},analysisSettings);
+    const auto& welded=analysis.graph;
+    std::vector<std::vector<std::pair<std::uint32_t,double>>> adjacency(welded.points.size());
+    for(std::uint32_t vertex=0;vertex<welded.points.size();++vertex)
+        for(const auto& [other,weight]:welded.adjacent[vertex])
+            adjacency[vertex].emplace_back(other,weight);
+
+    const Vec3 centre=report.evidence.centroid;
+    auto nearestVertex=[&](Vec3 point) {
+        std::uint32_t best=0;double bestDistance=1e300;
+        for(std::uint32_t index=0;index<welded.points.size();++index) {
+            const auto& candidate=welded.points[index];
+            const double distance=length(Vec3{candidate.x,candidate.y,candidate.z}-point);
+            if(distance<bestDistance){bestDistance=distance;best=index;}
+        }
+        return best;
+    };
+
+    const auto rootIndex=nearestVertex(centre);
+    std::vector<double> distance(welded.points.size(),1e300);
+    std::vector<std::uint32_t> parent(welded.points.size(),UINT32_MAX);
+    using Entry=std::pair<double,std::uint32_t>;
+    std::priority_queue<Entry,std::vector<Entry>,std::greater<Entry>> queue;
+    distance[rootIndex]=0;queue.emplace(0.0,rootIndex);
+    while(!queue.empty()) {
+        const auto [cost,vertex]=queue.top();queue.pop();
+        if(cost>distance[vertex])continue;
+        for(const auto& [next,weight]:adjacency[vertex]) {
+            const double candidate=cost+weight;
+            if(candidate<distance[next]) {distance[next]=candidate;parent[next]=vertex;queue.emplace(candidate,next);}
+        }
+    }
+
+    auto pointOf=[&](std::uint32_t vertex) {
+        const auto& q=welded.points[vertex];
+        return Vec3{q.x,q.y,q.z};
+    };
+    Skeleton result;
+    result.root=pointOf(rootIndex);
+    auto chain=[&](std::uint32_t contact,std::size_t contactIndex) {
+        std::vector<std::uint32_t> vertices;
+        for(auto vertex=contact;vertex!=UINT32_MAX;vertex=parent[vertex]) {
+            vertices.push_back(vertex);
+            if(vertex==rootIndex)break;
+        }
+        // Unreachable surface: no chain is reported rather than a fabricated straight line.
+        if(vertices.size()<2||vertices.back()!=rootIndex)return;
+        std::reverse(vertices.begin(),vertices.end());
+        std::vector<Vec3> path;
+        path.reserve(vertices.size());
+        for(const auto vertex:vertices)path.push_back(pointOf(vertex));
+        std::vector<double> cumulative(path.size(),0);
+        for(std::size_t index=1;index<path.size();++index)cumulative[index]=cumulative[index-1]+length(path[index]-path[index-1]);
+        const double total=cumulative.back();
+        if(!(total>1e-9))return;
+        Chain boneChain;boneChain.contact=contactIndex;
+        Vec3 previous=path.front();
+        for(std::size_t joint=1;joint<=jointsPerChain;++joint) {
+            const double target=total*double(joint)/double(jointsPerChain);
+            std::size_t index=1;
+            while(index+1<path.size()&&cumulative[index]<target)++index;
+            const double span=cumulative[index]-cumulative[index-1];
+            const double fraction=span>1e-12?std::clamp((target-cumulative[index-1])/span,0.0,1.0):1.0;
+            const Vec3 point=path[index-1]+(path[index]-path[index-1])*fraction;
+            Bone bone;
+            bone.parent=boneChain.bones.empty()?std::size_t(-1):result.bones.size()-1;
+            bone.head=previous;bone.tail=point;bone.length=length(point-previous);
+            if(bone.length<=1e-9)continue;
+            result.bones.push_back(bone);
+            boneChain.bones.push_back(result.bones.size()-1);
+            boneChain.length+=bone.length;
+            result.totalLength+=bone.length;
+            previous=point;
+        }
+        if(!boneChain.bones.empty())result.chains.push_back(boneChain);
+    };
+
+    if(report.ranked.empty())return result;
+    const auto accepted=report.ranked.front().type;
+    if(accepted==Class::Biped||accepted==Class::Quadruped||accepted==Class::Arthropod) {
+        std::size_t contactIndex=0;
+        for(const auto& contact:report.evidence.supportPoints) {
+            if(distance[nearestVertex(contact)]>=1e299) {++contactIndex;continue;}
+            chain(nearestVertex(contact),contactIndex++);
+        }
+    } else if(accepted==Class::Axial) {
+        // The axial body itself: the geodesic diameter from the farthest vertex.
+        std::uint32_t first=0;double best=-1;
+        for(std::uint32_t index=0;index<distance.size();++index)
+            if(distance[index]<1e299&&distance[index]>best){best=distance[index];first=index;}
+        chain(first,noContact);
+    }
+    return result;
+}
+
 }

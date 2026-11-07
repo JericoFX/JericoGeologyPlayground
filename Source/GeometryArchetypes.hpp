@@ -72,6 +72,7 @@ struct Evidence {
     std::size_t vertexCount{},triangleCount{},degenerateTriangles{},componentCount{},supportCount{},groundedSupportCount{};
     double groundedAreaFraction{},verticalPanelFraction{},horizontalPanelFraction{},verticalCoverage{},supportSpread{1};
     Vec3 thinAxis{}; // Object-space normal of the panel plane (smallest principal extent).
+    std::vector<Vec3> supportPoints; // Grounded contacts, in object space.
     std::size_t regionCount{};
     double largestRegionFraction{}; // Area of the largest merged planar region.
     std::vector<Panel> panels;
@@ -90,4 +91,27 @@ struct Report {
 };
 
 Report classify(std::span<const Vec3>,std::span<const std::uint32_t>,const Settings& = {});
+
+// Skeleton hypothesis: one bone chain per grounded contact, following the surface
+// geodesic from the body to the contact. Geometry only; no skinning, no name lookup.
+struct Bone {
+    std::size_t parent{};
+    Vec3 head{},tail{};
+    double length{};
+};
+struct Chain {
+    std::vector<std::size_t> bones;
+    double length{};
+    std::size_t contact{}; // Index into Evidence::supportPoints, or noContact.
+};
+inline constexpr std::size_t noContact=static_cast<std::size_t>(-1);
+struct Skeleton {
+    Vec3 root{};
+    std::vector<Bone> bones;
+    std::vector<Chain> chains;
+    double totalLength{};
+};
+// jointsPerChain counts bones per limb; an axial body uses the geodesic diameter.
+Skeleton skeleton(std::span<const Vec3>,std::span<const std::uint32_t>,const Report&,
+                  std::size_t jointsPerChain = 4,const Settings& = {});
 }

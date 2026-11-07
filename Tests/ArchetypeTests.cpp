@@ -188,6 +188,55 @@ int main(int argc,char** argv) {
         result["drawer_reconstruction"]={{"hollow",{{"class",A::name(hollowReport.ranked.front().type)},{"cavity",hollowBox.cavity},
             {"width",hollowBox.width},{"height",hollowBox.height},{"depth",hollowBox.depth},{"travel",hollowBox.travel}}},
             {"solid",{{"cavity",solidBox.cavity},{"depth",solidBox.depth},{"travel",solidBox.travel}}}};
+        // Skeleton: one chain per grounded contact, following the surface.
+        auto skeletonOf=[&](const Playground::TriangleMesh& mesh) {
+            std::vector<A::Vec3> p;for(const auto& v:mesh.positions)p.push_back({v.x,v.y,v.z});
+            const auto report=A::classify(p,mesh.indices);
+            return std::make_pair(report,A::skeleton(p,mesh.indices,report,4));
+        };
+        const auto philipsMesh=Playground::AnimationImport::loadAsset(std::filesystem::path(PLAYGROUND_ROOT)/"models/Philips.fbx").renderMesh.mesh.mesh;
+        const auto [philipsReport,philipsSkeleton]=skeletonOf(philipsMesh);
+        const auto spiderMesh=Playground::AnimationImport::loadAsset(std::filesystem::path(PLAYGROUND_ROOT)/"models/giant+spider+3d+model.glb").renderMesh.mesh.mesh;
+        const auto [spiderReport,spiderSkeleton]=skeletonOf(spiderMesh);
+        const auto larvaMesh=Playground::AnimationImport::loadAsset(std::filesystem::path(PLAYGROUND_ROOT)/"models/monster larva 3d model.glb").renderMesh.mesh.mesh;
+        const auto [larvaReport,larvaSkeleton]=skeletonOf(larvaMesh);
+        result["skeleton"]={{"humanoid",{{"class",A::name(philipsReport.ranked.front().type)},{"chains",philipsSkeleton.chains.size()},
+            {"bones",philipsSkeleton.bones.size()},{"length",philipsSkeleton.totalLength}}},
+            {"spider",{{"class",A::name(spiderReport.ranked.front().type)},{"chains",spiderSkeleton.chains.size()},
+            {"bones",spiderSkeleton.bones.size()},{"length",spiderSkeleton.totalLength}}},
+            {"larva",{{"class",A::name(larvaReport.ranked.front().type)},{"chains",larvaSkeleton.chains.size()},
+            {"bones",larvaSkeleton.bones.size()},{"length",larvaSkeleton.totalLength}}}};
+        std::cout<<"skeleton humanoid: chains="<<philipsSkeleton.chains.size()<<" bones="<<philipsSkeleton.bones.size()
+                 <<" length="<<philipsSkeleton.totalLength<<"\n";
+        std::cout<<"skeleton spider: chains="<<spiderSkeleton.chains.size()<<" bones="<<spiderSkeleton.bones.size()
+                 <<" length="<<spiderSkeleton.totalLength<<"\n";
+        // Each chain must start at the root and end on its own contact, not merely exist.
+        auto chainGeometry=[&](const A::Skeleton& skeleton,const A::Report& report) {
+            Json list=Json::array();
+            for(const auto& chain:skeleton.chains) {
+                const auto& first=skeleton.bones[chain.bones.front()];
+                const auto& last=skeleton.bones[chain.bones.back()];
+                const auto head=first.head, tail=last.tail;
+                const double headError=std::hypot(std::hypot(head.x-skeleton.root.x,head.y-skeleton.root.y),head.z-skeleton.root.z);
+                double contactError=0;
+                if(chain.contact!=A::noContact&&chain.contact<report.evidence.supportPoints.size()) {
+                    const auto& contact=report.evidence.supportPoints[chain.contact];
+                    contactError=std::hypot(std::hypot(tail.x-contact.x,tail.y-contact.y),tail.z-contact.z);
+                }
+                list.push_back({{"bones",chain.bones.size()},{"length",chain.length},
+                    {"head_error",headError},{"contact_error",contactError}});
+                require(headError<0.01,"Skeleton chain does not start at the root");
+                require(contactError<0.02,"Skeleton chain does not end on its contact");
+                require(chain.length>0.05,"Skeleton chain is degenerate");
+            }
+            return list;
+        };
+        result["skeleton"]["humanoid"]["chains_detail"]=chainGeometry(philipsSkeleton,philipsReport);
+        result["skeleton"]["spider"]["chains_detail"]=chainGeometry(spiderSkeleton,spiderReport);
+        require(philipsSkeleton.chains.size()==philipsReport.evidence.groundedSupportCount,"Humanoid skeleton does not have one chain per grounded contact");
+        require(spiderSkeleton.chains.size()==spiderReport.evidence.groundedSupportCount,"Spider skeleton does not have one chain per grounded contact");
+        require(philipsSkeleton.bones.size()>=4&&spiderSkeleton.bones.size()>=8,"Skeleton produced too few bones");
+        require(larvaSkeleton.chains.size()==1,"Axial body did not produce a single vertebral chain");
         std::ofstream(output/"archetype-report.json")<<result.dump(2);
         require(A::name(hollowReport.ranked.front().type)=="Drawer","Hollow carcass with a drawer front was not classified as Drawer");
         require(hollowBox.cavity,"Hollow carcass drawer reported no cavity");
