@@ -124,18 +124,22 @@ std::vector<A::Joint> borderRuns(const Playground::TriangleMesh& mesh,
     return joints;
 }
 
-std::size_t crossings(const D::TriangleBvh& frame,const Playground::TriangleMesh& mesh,
-                      const std::vector<std::pair<std::uint32_t,std::uint32_t>>& edges,
-                      const std::vector<Playground::Vec3d>& rotated,double tolerance) {
-    std::size_t hits=0;
-    for(const auto& [from,to]:edges) {
+// Per-edge flags, not a count: an edge that already crossed its frame at rest must
+// not be credited as "new" when the count happens to stay the same.
+std::vector<unsigned char> crossingFlags(const D::TriangleBvh& frame,const Playground::TriangleMesh& mesh,
+                                         const std::vector<std::pair<std::uint32_t,std::uint32_t>>& edges,
+                                         const std::vector<std::size_t>& use,
+                                         const std::vector<Playground::Vec3d>& rotated,double tolerance,double margin) {
+    std::vector<unsigned char> flags(use.size(),0);
+    for(std::size_t slot=0;slot<use.size();++slot) {
+        const auto [from,to]=edges[use[slot]];
         const auto origin=rotated[from];const auto delta=D::subtract(rotated[to],origin);
         const double length=Playground::Projection::length(delta);if(length<=2*tolerance)continue;
         const auto direction=D::multiply(delta,1/length);
         const auto hit=Playground::Projection::cast(frame,mesh,origin,direction,length-tolerance);
-        if(std::isfinite(hit.distance)&&hit.distance>tolerance)++hits;
+        if(std::isfinite(hit.distance)&&hit.distance>margin&&hit.distance<length-margin)flags[slot]=1;
     }
-    return hits;
+    return flags;
 }
 } // namespace
 
@@ -181,7 +185,19 @@ int main(int argc,char** argv) {
             }
             if(diagnose) {
                 std::cout<<door.id<<": "<<asset.renderMesh.parts.size()<<" parts\n";
-                for(const auto& part:asset.renderMesh.parts)std::cout<<"   "<<part.localId<<" / "<<part.nodeId<<" tris="<<part.indexCount/3<<"\n";
+                for(const auto& part:asset.renderMesh.parts) {
+                    Playground::Vec3d low{1e30,1e30,1e30},high{-1e30,-1e30,-1e30};
+                    for(std::size_t triangle=0;triangle<part.indexCount/3;++triangle) {
+                        const auto base=part.firstIndex+triangle*3;
+                        for(int corner=0;corner<3;++corner) {
+                            const auto q=mesh.positions.at(mesh.indices.at(base+std::size_t(corner)));
+                            low={std::min(low.x,q.x),std::min(low.y,q.y),std::min(low.z,q.z)};
+                            high={std::max(high.x,q.x),std::max(high.y,q.y),std::max(high.z,q.z)};
+                        }
+                    }
+                    std::cout<<"   "<<part.localId<<" tris="<<part.indexCount/3
+                             <<" bbox=("<<low.x<<","<<low.y<<","<<low.z<<")-("<<high.x<<","<<high.y<<","<<high.z<<")\n";
+                }
             }
             if(leaves.empty()||frames.empty())throw std::runtime_error(std::string("Door asset lacks leaf/frame parts: ")+door.id);
 
@@ -216,14 +232,18 @@ int main(int argc,char** argv) {
             const double tolerance=1e-5*classification.evidence.diagonal;
             // The repaired leaf is seated inside the frame rabbet at rest, so the
             // criterion is "no NEW crossings", the same rule used for tooth contacts.
-            const auto resting=crossings(frameBvh,mesh,edges,mesh.positions,tolerance);
+            const double margin=0.002; // 2 mm of material on both sides.
+            std::vector<std::size_t> allEdges(edges.size());
+            for(std::size_t index=0;index<edges.size();++index)allEdges[index]=index;
+            const auto restingFlags=crossingFlags(frameBvh,mesh,edges,allEdges,mesh.positions,tolerance,margin);
+            const auto resting=std::size_t(std::count(restingFlags.begin(),restingFlags.end(),1));
             item["resting_crossings"]=resting;
             // A real hinge pin sits at the frame, outside the reveal, so the axis can be
             // offset along the leaf normal. Search that clearance before rejecting an axis.
             const auto normal=A::Vec3{classification.evidence.thinAxis.x,classification.evidence.thinAxis.y,classification.evidence.thinAxis.z};
-            auto coarse=edges;
+            auto coarse=allEdges;
             if(coarse.size()>4000)coarse.resize(4000);
-            const auto sweep=[&](const A::Joint& joint,int sign,double offset,const std::vector<std::pair<std::uint32_t,std::uint32_t>>& use) {
+            const auto sweep=[&](const A::Joint& joint,int sign,double offset,const std::vector<std::size_t>& use) {
                 const Playground::Vec3d axis{joint.axis.x,joint.axis.y,joint.axis.z};
                 const Playground::Vec3d point{joint.point.x+normal.x*offset,joint.point.y+normal.y*offset,joint.point.z+normal.z*offset};
                 std::size_t added=0,peak=0;
@@ -231,9 +251,12 @@ int main(int argc,char** argv) {
                     const double angle=sign*double(step)*15.0*3.14159265358979323846/180.0;
                     std::vector<Playground::Vec3d> rotated;rotated.reserve(mesh.positions.size());
                     for(const auto& q:mesh.positions)rotated.push_back(rotate(q,point,axis,angle));
-                    const auto hits=crossings(frameBvh,mesh,use,rotated,tolerance);
-                    peak=std::max(peak,hits);
-                    added+=hits>resting?hits-resting:0;
+                    const auto flags=crossingFlags(frameBvh,mesh,edges,use,rotated,tolerance,margin);
+                    std::size_t fresh=0;
+                    for(std::size_t slot=0;slot<flags.size();++slot)
+                        if(flags[slot]&&restingFlags[use[slot]]==0)++fresh;
+                    peak=std::max(peak,fresh);
+                    added+=fresh;
                 }
                 return std::pair<std::size_t,std::size_t>{added,peak};
             };
@@ -242,16 +265,31 @@ int main(int argc,char** argv) {
             bool anyClean=false;
             double bestPlateauOffset=0,bestPlateauWidth=0;
             const bool measurable=resting==0;
-            constexpr int kSteps=7;      // 0..30 mm in 5 mm steps.
+            // The pin must live inside the door's own slab, so the clearance is bounded by
+            // half the leaf thickness measured along its normal. A pin outside the door is
+            // not a hinge, it is a rig that dodges the frame.
+            double thickness=0;
+            {
+                double low=1e30,high=-1e30;
+                for(const auto& q:mesh.positions) {
+                    const double projection=double(q.x)*normal.x+double(q.y)*normal.y+double(q.z)*normal.z;
+                    low=std::min(low,projection);high=std::max(high,projection);
+                }
+                thickness=high-low;
+            }
+            // Declared bound: a pin more than 30 mm outside the leaf border is not a hinge,
+            // it is a rig that dodges the frame. Without this bound "clean" intervals appear
+            // at 85-190 mm, which is physically meaningless.
+            constexpr int kSteps=7;
             constexpr double kStep=0.005;
-            constexpr double kMinimumPlateau=0.010; // A single lucky offset is not a clearance.
+            constexpr double kMinimumPlateau=0.020; // A single lucky offset is not a clearance.
             for(std::size_t candidate=0;candidate<std::min<std::size_t>(2,joints.size());++candidate) {
                 const auto& joint=joints[candidate];
                 for(const int sign:{1,-1}) {
                     Json entry={{"candidate",candidate},{"sign",sign},{"scan",Json::array()}};
                     double bestOffset=0,bestWidth=0;
                     for(const int side:{1,-1}) {
-                        std::array<std::size_t,kSteps> added{};
+                        std::vector<std::size_t> added(std::size_t(kSteps),0);
                         for(int step=0;step<kSteps;++step) {
                             const double offset=double(step)*kStep*side;
                             added[std::size_t(step)]=sweep(joint,sign,offset,coarse).first;
@@ -270,7 +308,7 @@ int main(int argc,char** argv) {
                     }
                     bool clean=false;
                     if(bestWidth>=kMinimumPlateau-1e-12&&bestWidth>0) {
-                        const auto [fullAdded,fullPeak]=sweep(joint,sign,bestOffset,edges);
+                        const auto [fullAdded,fullPeak]=sweep(joint,sign,bestOffset,allEdges);
                         entry["verified_added"]=fullAdded;entry["verified_peak"]=fullPeak;
                         clean=fullAdded==0;
                     }
@@ -284,14 +322,15 @@ int main(int argc,char** argv) {
             item["sweeps"]=sweeps;
             item["has_clean_sweep"]=anyClean;
             item["measurable"]=measurable;
+            item["leaf_thickness_m"]=thickness;
             item["plateau_width_m"]=bestPlateauWidth;
             item["clearance_m"]=bestPlateauOffset;
             ++gated;if(anyClean)++passed;
             if(anyClean!=door.expectClean)
                 throw std::runtime_error(std::string("Hinge sweep state changed for ")+door.id
                     +": expected "+(door.expectClean?"a clean interval":"no clean interval"));
-            std::cout<<door.id<<": class="<<item["class"].get<std::string>()<<" candidates="<<joints.size()
-                     <<" perimeter="<<edges.size()<<" resting="<<resting<<" clean="<<(anyClean?"yes":"no")
+            std::cout<<door.id<<": class="<<item["class"].get<std::string>()<<" thickness="<<thickness
+                     <<"m perimeter="<<edges.size()<<" resting="<<resting<<" clean="<<(anyClean?"yes":"no")
                      <<" plateau="<<bestPlateauWidth<<"m at "<<bestPlateauOffset<<"m\n";
             for(const auto& sweep:sweeps)std::cout<<"   cand "<<sweep["candidate"]<<" dir "<<sweep["sign"]
                 <<" clean="<<sweep["clean"].get<bool>()<<" width="<<sweep["plateau_width"].get<double>()
