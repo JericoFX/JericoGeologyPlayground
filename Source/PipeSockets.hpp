@@ -94,6 +94,12 @@ struct RoutedResult {
     Module module;
 };
 RoutedResult routed(const std::vector<Vec3d>& path,const StraightSettings& settings);
+// Breaks a closed pipe across its longest axis and returns the fragments. The shared damage
+// backend needs welded vertices and a per-triangle region on every input, so both are done here
+// instead of in each caller.
+std::vector<TriangleMesh> breakPipe(const TriangleMesh& pipe,double fraction = 0.5,
+                                    double knifeThicknessMeters = 0.02,
+                                    std::size_t maximumFragments = 8);
 Module straightModule(const StraightSettings&);
 void append(ImportedMesh& destination,const ImportedMesh& source,const Pose&);
 }

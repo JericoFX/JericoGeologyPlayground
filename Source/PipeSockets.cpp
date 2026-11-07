@@ -1,4 +1,5 @@
 #include "PipeSockets.hpp"
+#include "GeometryAnalysis.hpp"
 #include "SolidGeometry.hpp"
 #include <nlohmann/json.hpp>
 #include <Windows.h>
@@ -224,6 +225,95 @@ RoutedResult routed(const std::vector<Vec3d>& path,const StraightSettings& s)
     routedResult.module.sockets={startSocket,endSocket};
     (void)at;
     return routedResult;
+}
+std::vector<TriangleMesh> breakPipe(const TriangleMesh& pipe,double fraction,
+                                                double knifeThicknessMeters,std::size_t maximumFragments)
+{
+    require(!pipe.positions.empty()&&!pipe.indices.empty(),"Breaking a pipe needs geometry");
+    require(fraction>0.0&&fraction<1.0,"The break fraction must be inside the pipe");
+    require(std::isfinite(knifeThicknessMeters)&&knifeThicknessMeters>0,"The knife needs a thickness");
+    // Weld first: the sweep leaves duplicate vertices at caps and seams.
+    TriangleMesh welded;
+    std::map<std::tuple<long long,long long,long long>,std::uint32_t> lookup;
+    std::vector<std::uint32_t> remap(pipe.positions.size());
+    for(std::size_t index=0;index<pipe.positions.size();++index) {
+        const auto&p=pipe.positions[index];
+        const auto key=std::make_tuple(std::llround(p.x*100000.0),std::llround(p.y*100000.0),std::llround(p.z*100000.0));
+        auto found=lookup.find(key);
+        if(found==lookup.end()) {
+            found=lookup.emplace(key,std::uint32_t(welded.positions.size())).first;
+            welded.positions.push_back(p);
+        }
+        remap[index]=found->second;
+    }
+    for(const auto index:pipe.indices)welded.indices.push_back(remap[index]);
+    // The damage backend builds its Manifold input from a per-triangle region map; an empty
+    // one makes Manifold reject the mesh as not manifold.
+    Jerico::Guid pipeRegion=Solid::region(4501,3);
+    welded.triangleRegions.assign(welded.indices.size()/3,pipeRegion);
+
+    Vec3d low=welded.positions.front(),high=low;
+    for(const auto&p:welded.positions){low={std::min(low.x,p.x),std::min(low.y,p.y),std::min(low.z,p.z)};
+        high={std::max(high.x,p.x),std::max(high.y,p.y),std::max(high.z,p.z)};}
+    const Vec3d extent{high.x-low.x,high.y-low.y,high.z-low.z};
+    const int axis=extent.x>=extent.y?(extent.x>=extent.z?0:2):(extent.y>=extent.z?1:2);
+    const double station=(axis==0?low.x:axis==1?low.y:low.z)+(axis==0?extent.x:axis==1?extent.y:extent.z)*fraction;
+    Vec3d axisU{0,0,0},axisV{0,0,0};
+    double halfU=0,halfV=0;
+    if(axis==0){axisU={0,(extent.y*0.75)+0.05,0};axisV={0,0,(extent.z*0.75)+0.05};halfU=extent.y;halfV=extent.z;}
+    else if(axis==1){axisU={(extent.x*0.75)+0.05,0,0};axisV={0,0,(extent.z*0.75)+0.05};halfU=extent.x;halfV=extent.z;}
+    else {axisU={(extent.x*0.75)+0.05,0,0};axisV={0,(extent.y*0.75)+0.05,0};halfU=extent.x;halfV=extent.y;}
+    (void)halfU;(void)halfV;
+    const double halfThickness=knifeThicknessMeters*0.5;
+    Vec3d centre{low.x+extent.x*0.5,low.y+extent.y*0.5,low.z+extent.z*0.5};
+    if(axis==0)centre.x=station;else if(axis==1)centre.y=station;else centre.z=station;
+    std::vector<DamageSweepSection> sections(2);
+    for(int side=0;side<2;++side) {
+        Vec3d offset{centre.x,centre.y,centre.z};
+        const double shift=(side==0?-halfThickness:halfThickness);
+        if(axis==0)offset.x+=shift;else if(axis==1)offset.y+=shift;else offset.z+=shift;
+        sections[std::size_t(side)]={offset,axisU,axisV};
+    }
+    const auto knife=buildDamageSweepVolume(sections,pipeRegion);
+    const auto cut=subtractDamageVolume(welded,knife,240000);
+
+    // Split the result into connected components; each is a fragment.
+    std::vector<JE::GeometryAnalysis::Vec3> points;
+    for(const auto&p:cut.positions)points.push_back({p.x,p.y,p.z});
+    JE::GeometryAnalysis::Settings settings;
+    settings.maximumVertices=1000000;
+    settings.maximumTriangles=1000000;
+    const auto analysis=JE::GeometryAnalysis::analyze({points,cut.indices},settings);
+    std::vector<std::size_t> componentOf(points.size(),SIZE_MAX);
+    for(std::size_t index=0;index<analysis.components.size();++index)
+        for(const auto vertex:analysis.components[index].vertices)componentOf[vertex]=index;
+    // Vertices stay shared inside a fragment: duplicating them per triangle would leave every
+    // edge used once and the fragment would not be a closed solid.
+    std::vector<std::map<std::uint32_t,std::uint32_t>> vertexMap(analysis.components.size());
+    std::vector<TriangleMesh> fragments(analysis.components.size());
+    for(std::size_t triangle=0;triangle+2<cut.indices.size();triangle+=3) {
+        const auto a=cut.indices[triangle],b=cut.indices[triangle+1],c=cut.indices[triangle+2];
+        const auto component=componentOf[a];
+        if(component==SIZE_MAX||componentOf[b]!=component||componentOf[c]!=component)continue;
+        auto& fragment=fragments[component];
+        auto& mapping=vertexMap[component];
+        auto remapVertex=[&](std::uint32_t vertex) {
+            auto found=mapping.find(vertex);
+            if(found!=mapping.end())return found->second;
+            const auto next=std::uint32_t(fragment.positions.size());
+            mapping.emplace(vertex,next);
+            fragment.positions.push_back(cut.positions[vertex]);
+            return next;
+        };
+        fragment.indices.push_back(remapVertex(a));
+        fragment.indices.push_back(remapVertex(b));
+        fragment.indices.push_back(remapVertex(c));
+    }
+    std::vector<TriangleMesh> result;
+    for(auto& fragment:fragments)if(fragment.indices.size()>=3*20)result.push_back(std::move(fragment));
+    std::sort(result.begin(),result.end(),[](const auto&a,const auto&b){return a.indices.size()>b.indices.size();});
+    if(result.size()>maximumFragments)result.resize(maximumFragments);
+    return result;
 }
 void append(ImportedMesh& out,const ImportedMesh& input,const Pose&pose)
 {

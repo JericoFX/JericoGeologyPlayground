@@ -418,6 +418,34 @@ int main(int argc,char** argv) {
             result["ui_path_attempts"]=attempts;
             require(routed,"No real-socket pair could be routed for the UI path");
         }
+        // The reusable break: the library welds, assigns regions and cuts, so callers do not
+        // repeat the three things the damage backend needs.
+        {
+            const auto straightFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,0,-1,0,0));
+            P::StraightSettings settings;
+            settings.diameter=0.2;settings.wallThickness=0.02;settings.repeatMeters=1;
+            const auto built=P::routed(straightFit.path,settings);
+            const auto fragments=P::breakPipe(built.mesh.mesh.mesh,0.5,0.02);
+            Json list=Json::array();
+            std::size_t closed=0;
+            for(const auto& fragment:fragments) {
+                std::map<std::pair<std::uint32_t,std::uint32_t>,int> use;
+                for(std::size_t triangle=0;triangle+2<fragment.indices.size();triangle+=3) {
+                    const auto a=fragment.indices[triangle],b=fragment.indices[triangle+1],c=fragment.indices[triangle+2];
+                    ++use[{std::min(a,b),std::max(a,b)}];
+                    ++use[{std::min(b,c),std::max(b,c)}];
+                    ++use[{std::min(c,a),std::max(c,a)}];
+                }
+                bool isClosed=true;
+                for(const auto& [edge,count]:use)if(count!=2){isClosed=false;break;}
+                if(isClosed)++closed;
+                list.push_back({{"triangles",fragment.indices.size()/3},{"closed",isClosed}});
+            }
+            result["break_pipe"]={{"fragments",fragments.size()},{"closed",closed},{"detail",list}};
+            std::cout<<"break_pipe: fragments="<<fragments.size()<<" closed="<<closed<<"\n";
+            require(fragments.size()==2,"breakPipe did not return two fragments");
+            require(closed==2,"A breakPipe fragment is not closed");
+        }
         std::ofstream(output/"pipe-connector-report.json")<<result.dump(2);
         std::cout<<"pipe connector: "<<accepted<<"/"<<result["cases"].size()<<" socket pairs routed\n";
         return 0;
