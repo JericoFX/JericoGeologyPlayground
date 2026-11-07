@@ -69,7 +69,7 @@ struct DrawerBox {
 struct Evidence {
     Vec3 minimum{},maximum{},extent{},centroid{};
     double diagonal{},area{},boxiness{},planarAreaFraction{},thinness{1},elongation{1},symmetryError{1};
-    std::size_t vertexCount{},triangleCount{},degenerateTriangles{},componentCount{},supportCount{};
+    std::size_t vertexCount{},triangleCount{},degenerateTriangles{},componentCount{},supportCount{},groundedSupportCount{};
     double groundedAreaFraction{},verticalPanelFraction{},horizontalPanelFraction{},verticalCoverage{},supportSpread{1};
     Vec3 thinAxis{}; // Object-space normal of the panel plane (smallest principal extent).
     std::size_t regionCount{};

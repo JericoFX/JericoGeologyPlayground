@@ -33,6 +33,7 @@ std::vector<Entry> corpus() {
         {"larva",            "models/monster larva 3d model.glb",         A::Class::Axial,      true, "single column"},
         {"creature-alien",   "models/alien creature 3d model.glb",        A::Class::Unknown,    false,"organic, class unverified"},
         {"table",            "models/weathered+wooden+table+3d+model.glb",A::Class::RigidFrame, true, "four supports but furniture"},
+        {"humanoid-philips", "models/Philips.fbx",                        A::Class::Biped,      true, "humanoid with arms at mid height"},
         {"staircase",        "models/wooden+staircase+3d+model.glb",      A::Class::Unknown,    false,"structure"},
         {"dock",             "models/wooden+dock+3d+model.glb",           A::Class::Unknown,    false,"structure"},
         {"valve",            "models/VALVE01_Gate_PBR_1K.glb",            A::Class::Unknown,    false,"mechanism must not be a creature"},
@@ -47,7 +48,7 @@ Json evidenceJson(const A::Evidence& e) {
         {"degenerate",e.degenerateTriangles},{"components",e.componentCount},{"boxiness",e.boxiness},
         {"planar_area_fraction",e.planarAreaFraction},{"thinness",e.thinness},{"elongation",e.elongation},
         {"symmetry_error",e.symmetryError},{"supports",e.supportCount},{"grounded_area_fraction",e.groundedAreaFraction},
-        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},{"thin_axis",{e.thinAxis.x,e.thinAxis.y,e.thinAxis.z}},{"regions",e.regionCount},{"largest_region",e.largestRegionFraction},
+        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},{"grounded_supports",e.groundedSupportCount},{"thin_axis",{e.thinAxis.x,e.thinAxis.y,e.thinAxis.z}},{"regions",e.regionCount},{"largest_region",e.largestRegionFraction},
         {"face_step_debug",{{"mode",e.faceStepDepth},{"coverage",e.faceStepCoverage},{"offset_fraction",e.faceStepOffsetFraction}}},
         {"face_steps",[&]{Json list=Json::array();for(const auto& s:e.faceSteps)list.push_back({{"area",s.areaFraction},{"fill",s.fillRatio},{"height",s.heightFraction},{"depth",s.depthMeters},{"rect",s.rectangular}});return list;}()},
         {"joints",[&]{Json list=Json::array();for(const auto& j:e.joints)list.push_back({{"axis",{j.axis.x,j.axis.y,j.axis.z}},{"point",{j.point.x,j.point.y,j.point.z}},{"length",j.lengthMeters}});return list;}()},
@@ -142,7 +143,7 @@ int main(int argc,char** argv) {
             }
             result["corpus"].push_back(item);
             std::cout<<entry.id<<": "<<item["accepted"].get<std::string>()<<" (expected "<<A::name(entry.expected)<<")"
-                <<" supports="<<item["evidence"]["supports"]<<" planar="<<item["evidence"]["planar_area_fraction"]
+                <<" supports="<<item["evidence"]["supports"]<<" grounded="<<item["evidence"]["grounded_supports"]<<" planar="<<item["evidence"]["planar_area_fraction"]
                 <<" thin="<<item["evidence"]["thinness"]<<" boxy="<<item["evidence"]["boxiness"]<<"\n";
         }
         result["gate"]={{"tracked",gated},{"passed",passed},{"mismatches",mismatches}};

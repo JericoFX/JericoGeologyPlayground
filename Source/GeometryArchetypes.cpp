@@ -376,7 +376,13 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
             for(const auto& support:supports)if(length(positions[index]-support)<=separation){merged=true;break;}
             if(!merged)supports.push_back(positions[index]);
         }
+        // Only the lowest contacts hold a body: a humanoid's hands are local minima too, and
+        // counting them turned a biped into a six-legged arthropod.
+        const double groundBand=minimum.y+0.25*extent.y;
+        std::size_t grounded=0;
+        for(const auto& support:supports)if(support.y<=groundBand)++grounded;
         evidence.supportCount=supports.size();
+        evidence.groundedSupportCount=grounded;
         // Spread of the ground contacts around their own best line: limbs surround a
         // body, while an axial body keeps all of its low points on one corridor.
         if(supports.size()>=2) {
@@ -665,7 +671,7 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
             add(Class::Drawer,0.42+0.25*evidence.verticalPanelFraction,"thin face in a rigid shell: coverage "+format(evidence.verticalCoverage));
     }
     if(organic) {
-        const double supports=double(evidence.supportCount);
+        const double supports=double(evidence.groundedSupportCount);
         // Ground contacts are counted, not guessed: an eight-leg scan splits a foot
         // into several minima, so each family accepts a band and states it.
         const auto creature=[&](Class type,double low,double high,double ideal,double base) {

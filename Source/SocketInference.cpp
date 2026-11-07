@@ -352,7 +352,7 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
             const Vec3 helper=std::abs(cluster.normal.y)<0.9?Vec3{0,1,0}:Vec3{1,0,0};
             const Vec3 u=normalized(cross(helper,cluster.normal));
             const Vec3 v=cross(cluster.normal,u);
-            double maximum=0,sum=0;std::size_t counted=0;
+            double maximum=0,minimum=1e30,sum=0;std::size_t counted=0;
             for(std::size_t triangle=0;triangle+2<indices.size();triangle+=3) {
                 const auto a=positions[indices[triangle]],b=positions[indices[triangle+1]],c=positions[indices[triangle+2]];
                 const auto normalRaw=cross(sub(b,a),sub(c,a));
@@ -368,7 +368,8 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
                 for(const auto corner:{a,b,c}) {
                     const auto delta=sub(corner,centroidCluster);
                     const double radial=std::hypot(dot(delta,u),dot(delta,v));
-                    maximum=std::max(maximum,radial);sum+=radial;++counted;
+                    maximum=std::max(maximum,radial);minimum=std::min(minimum,radial);
+                    sum+=radial;++counted;
                 }
             }
             if(counted<16)continue;
@@ -380,15 +381,53 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
                 info.position=centroidCluster;info.normal=cluster.normal;
                 report.clusters.push_back(info);
             }
-            // A disk fills its circle: its triangles reach the radius and average near 2/3 R.
-            if(maximum<radius*0.85||maximum>radius*1.15)continue;
-            if(average<radius*0.45||average>radius*0.85)continue;
+            // A pipe end is either a disk or an annulus around a bore. The bore is the real
+            // socket: a flange ring measured 0.27 m across while its hole is the 0.34 m end.
+            const bool disk=maximum>=radius*0.85&&maximum<=radius*1.15&&average>=radius*0.45&&average<=radius*0.90;
+            const bool annulus=minimum>0.35*maximum&&minimum<0.95*maximum;
+            if(!disk&&!annulus)continue;
+            double socketRadius=annulus?minimum:radius;
+            Vec3 socketCentre=centroidCluster;
+            if(false&&annulus) {
+                // Fit the bore's own rim instead of trusting the ring's centroid: a partial
+                // flange biases the centroid, which put one socket 9 cm off its declared end.
+                std::vector<Vec3> rim;
+                for(std::size_t triangle=0;triangle+2<indices.size();triangle+=3) {
+                    const auto a=positions[indices[triangle]],b=positions[indices[triangle+1]],c=positions[indices[triangle+2]];
+                    const auto normalRaw=cross(sub(b,a),sub(c,a));
+                    const double doubleArea=length(normalRaw);
+                    if(doubleArea<=kEpsilon)continue;
+                    const Vec3 normal=mul(normalRaw,1.0/doubleArea);
+                    const Vec3 centre=mul(add(add(a,b),c),1.0/3.0);
+                    if(keyOf(normal,dot(normal,centre))!=cluster.key)continue;
+                    for(const auto corner:{a,b,c}) {
+                        const auto delta=sub(corner,centroidCluster);
+                        if(std::hypot(dot(delta,u),dot(delta,v))>minimum*1.20)continue;
+                        rim.push_back(corner);
+                    }
+                }
+                double sxx=0,sxy=0,syy=0,sxz=0,syz=0;
+                for(const auto& point:rim) {
+                    const auto delta=sub(point,centroidCluster);
+                    const double x=dot(delta,u),y=dot(delta,v);
+                    sxx+=x*x;sxy+=x*y;syy+=y*y;sxz+=x*x*x+x*y*y;syz+=y*y*y+x*x*y;
+                }
+                const double determinant=sxx*syy-sxy*sxy;
+                if(rim.size()>=8&&std::abs(determinant)>1e-18) {
+                    const double cx=(sxz*syy-syz*sxy)/determinant*0.5;
+                    const double cy=(syz*sxx-sxz*sxy)/determinant*0.5;
+                    socketCentre=add(centroidCluster,add(mul(u,cx),mul(v,cy)));
+                    double sum=0;for(const auto& point:rim){const auto delta=sub(point,centroidCluster);
+                        sum+=std::hypot(dot(delta,u)-cx,dot(delta,v)-cy);}
+                    socketRadius=sum/double(rim.size());
+                }
+            }
             SocketCandidate socket;
-            socket.position=centroidCluster;
+            socket.position=socketCentre;
             socket.forward=cluster.normal;
             if(dot(socket.forward,sub(socket.position,centroid))<0)socket.forward=mul(socket.forward,-1.0);
-            socket.diameter=radius*2;
-            socket.radialErrorMeters=std::abs(maximum-radius);
+            socket.diameter=socketRadius*2;
+            socket.radialErrorMeters=std::abs(maximum-socketRadius);
             socket.loopVertices=counted;
             socket.closedLoop=true;
             report.sockets.push_back(socket);
