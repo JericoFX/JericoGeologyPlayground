@@ -969,34 +969,40 @@ std::vector<Vec3> deform(std::span<const Vec3> positions,const Skin& skinning,co
     return result;
 }
 
-IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std::size_t iterations,double tolerance) {
-    if(chainIndex>=skeleton.chains.size())throw std::invalid_argument("IK chain index out of range");
-    if(iterations==0||iterations>1024)throw std::invalid_argument("IK iteration count out of range");
-    const auto& chain=skeleton.chains[chainIndex];
-    if(chain.bones.empty())throw std::invalid_argument("IK chain has no bones");
+namespace {
+double interiorAngle(Vec3 previous,Vec3 joint,Vec3 next) {
+    const auto a=normalized(previous-joint),b=normalized(next-joint);
+    return std::acos(std::clamp(dot(a,b),-1.0,1.0));
+}
+double largestAngle(const std::vector<Vec3>& joints) {
+    double largest=0;
+    for(std::size_t index=1;index+1<joints.size();++index)
+        largest=std::max(largest,interiorAngle(joints[index-1],joints[index],joints[index+1]));
+    return largest;
+}
+} // namespace
 
-    std::vector<Vec3> joints;
-    std::vector<double> lengths;
+IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std::size_t iterations,double tolerance) {
+    IkSettings settings;settings.enforceJointLimits=false;
+    // Reuse the limited solver with the limit disabled, then report.
+    IkResult result;
+    const auto& chain=skeleton.chains.at(chainIndex);
+    if(chain.bones.empty())throw std::invalid_argument("IK chain has no bones");
+    std::vector<Vec3> joints;std::vector<double> lengths;
     for(std::size_t index=0;index<chain.bones.size();++index) {
         const auto& bone=skeleton.bones[chain.bones[index]];
         if(index==0)joints.push_back(bone.head);
         joints.push_back(bone.tail);
         lengths.push_back(bone.length);
     }
-    double total=0;
-    for(const auto value:lengths)total+=value;
-
-    IkResult result;
+    double total=0;for(const auto value:lengths)total+=value;
     result.totalLength=total;
     const Vec3 origin=joints.front();
-    const double span=length(target-origin);
-    result.reachable=span<=total+tolerance;
-
+    result.reachable=length(target-origin)<=total+tolerance;
     std::vector<Vec3> working=joints;
     if(!result.reachable) {
         for(std::size_t index=0;index<working.size();++index) {
-            double travelled=0;
-            for(std::size_t step=0;step<index;++step)travelled+=lengths[step];
+            double travelled=0;for(std::size_t step=0;step<index;++step)travelled+=lengths[step];
             working[index]=origin+normalized(target-origin)*travelled;
         }
     } else {
@@ -1011,8 +1017,128 @@ IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std
         }
     }
     result.error=length(working.back()-target);
+    result.maximumJointAngle=largestAngle(working);
     result.joints=working;
+    result.transforms.resize(skeleton.bones.size());
+    for(std::size_t index=0;index<chain.bones.size();++index) {
+        const auto bone=chain.bones[index];
+        const auto restDirection=normalized(skeleton.bones[bone].tail-skeleton.bones[bone].head);
+        const auto posedDirection=normalized(working[index+1]-working[index]);
+        const double cosine=std::clamp(dot(restDirection,posedDirection),-1.0,1.0);
+        const Vec3 axis=cross(restDirection,posedDirection);
+        const double sine=length(axis);
+        std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}};
+        if(sine>1e-9) {
+            const Vec3 unit=axis*(1.0/sine);
+            const double angle=std::atan2(sine,cosine);
+            const double cc=std::cos(angle),ss=std::sin(angle),t=1-cc;
+            const double x=unit.x,y=unit.y,z=unit.z;
+            rotation={cc+x*x*t,x*y*t-z*ss,x*z*t+y*ss,
+                      y*x*t+z*ss,cc+y*y*t,y*z*t-x*ss,
+                      z*x*t-y*ss,z*y*t+x*ss,cc+z*z*t};
+        } else if(cosine<0) {
+            const Vec3 helper=std::abs(restDirection.x)<0.9?Vec3{1,0,0}:Vec3{0,1,0};
+            const Vec3 unit=normalized(cross(restDirection,helper));
+            rotation={2*unit.x*unit.x-1,2*unit.x*unit.y,2*unit.x*unit.z,
+                      2*unit.y*unit.x,2*unit.y*unit.y-1,2*unit.y*unit.z,
+                      2*unit.z*unit.x,2*unit.z*unit.y,2*unit.z*unit.z-1};
+        }
+        result.transforms[bone].rotation=rotation;
+        result.transforms[bone].head=working[index];
+        result.transforms[bone].usePosedHead=true;
+    }
+    (void)settings;
+    return result;
+}
+IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,const IkSettings& settings) {
+    if(chainIndex>=skeleton.chains.size())throw std::invalid_argument("IK chain index out of range");
+    const auto& chain=skeleton.chains[chainIndex];
+    if(chain.bones.empty())throw std::invalid_argument("IK chain has no bones");
 
+    std::vector<Vec3> joints;std::vector<double> lengths;
+    for(std::size_t index=0;index<chain.bones.size();++index) {
+        const auto& bone=skeleton.bones[chain.bones[index]];
+        if(index==0)joints.push_back(bone.head);
+        joints.push_back(bone.tail);
+        lengths.push_back(bone.length);
+    }
+    double total=0;for(const auto value:lengths)total+=value;
+    IkResult result;
+    result.totalLength=total;
+    const Vec3 origin=joints.front();
+    result.reachable=length(target-origin)<=total+1e-4;
+
+    std::vector<Vec3> working=joints;
+    auto solvePass=[&](std::size_t iterations) {
+        for(std::size_t iteration=0;iteration<iterations;++iteration) {
+            working.back()=target;
+            for(std::size_t index=working.size()-1;index>0;--index)
+                working[index-1]=working[index]+normalized(working[index-1]-working[index])*lengths[index-1];
+            working.front()=origin;
+            for(std::size_t index=0;index+1<working.size();++index)
+                working[index+1]=working[index]+normalized(working[index+1]-working[index])*lengths[index];
+        }
+    };
+    auto rotateAbout=[](Vec3 point,Vec3 pivot,Vec3 axis,double angle) {
+        const auto delta=point-pivot;
+        const double cosine=std::cos(angle),sine=std::sin(angle);
+        const auto perpendicular=cross(axis,delta);
+        const double along=dot(axis,delta);
+        return pivot+(delta*cosine+perpendicular*sine+axis*(along*(1-cosine)));
+    };
+
+    if(!result.reachable) {
+        for(std::size_t index=0;index<working.size();++index) {
+            double travelled=0;for(std::size_t step=0;step<index;++step)travelled+=lengths[step];
+            working[index]=origin+normalized(target-origin)*travelled;
+        }
+        result.limitPassesUsed=0;
+    } else {
+        solvePass(64);
+        if(settings.enforceJointLimits) {
+            for(std::size_t pass=0;pass<settings.limitPasses&&working.size()>2;++pass) {
+                bool changed=false;
+                for(std::size_t joint=1;joint+1<working.size();++joint) {
+                    const double angle=interiorAngle(working[joint-1],working[joint],working[joint+1]);
+                    if(angle<=settings.maximumJointAngleRadians)continue;
+                    const auto a=normalized(working[joint-1]-working[joint]);
+                    const auto b=normalized(working[joint+1]-working[joint]);
+                    const auto axis=normalized(cross(a,b));
+                    if(length(axis)<0.5)continue;
+                    const double correction=angle-settings.maximumJointAngleRadians;
+                    for(std::size_t distal=joint+1;distal<working.size();++distal)
+                        working[distal]=rotateAbout(working[distal],working[joint],axis,-correction);
+                    changed=true;
+                }
+                ++result.limitPassesUsed;
+                if(!changed)break;
+                solvePass(8); // Restore reach before checking the limits again.
+            }
+            // The last operation must be the clamp: running FABRIK afterwards would move the
+            // joints freely and silently undo the limit, which is how a "clamped" pose ended
+            // up at 158 degrees against a 100 degree budget.
+            for(std::size_t pass=0;pass<settings.limitPasses;++pass) {
+                bool changed=false;
+                for(std::size_t joint=1;joint+1<working.size();++joint) {
+                    const double angle=interiorAngle(working[joint-1],working[joint],working[joint+1]);
+                    if(angle<=settings.maximumJointAngleRadians)continue;
+                    const auto a=normalized(working[joint-1]-working[joint]);
+                    const auto b=normalized(working[joint+1]-working[joint]);
+                    const auto axis=normalized(cross(a,b));
+                    if(length(axis)<0.5)continue;
+                    const double correction=angle-settings.maximumJointAngleRadians;
+                    for(std::size_t distal=joint+1;distal<working.size();++distal)
+                        working[distal]=rotateAbout(working[distal],working[joint],axis,-correction);
+                    changed=true;
+                }
+                if(!changed)break;
+            }
+        }
+    }
+
+    result.error=length(working.back()-target);
+    result.maximumJointAngle=largestAngle(working);
+    result.joints=working;
     result.transforms.resize(skeleton.bones.size());
     for(std::size_t index=0;index<chain.bones.size();++index) {
         const auto bone=chain.bones[index];
@@ -1043,5 +1169,4 @@ IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std
     }
     return result;
 }
-
 }

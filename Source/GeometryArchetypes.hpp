@@ -130,15 +130,25 @@ struct BoneTransform {
     bool usePosedHead{};
 };
 
+struct IkSettings {
+    // Anatomical budget: a knee or elbow should not fold past the given interior angle.
+    // 150 degrees is a declared default, not a measured human value.
+    double maximumJointAngleRadians{2.6179938779914944}; // 150 degrees.
+    bool enforceJointLimits{true};
+    std::size_t limitPasses{6};
+};
 struct IkResult {
     bool reachable{};
-    double error{};           // Distance from the solved tip to the target.
+    double error{};            // Distance from the solved tip to the target.
     double totalLength{};
-    std::vector<Vec3> joints; // chain.bones.size() + 1 joint positions.
+    double maximumJointAngle{}; // Largest interior angle reached by any joint.
+    std::size_t limitPassesUsed{};
+    std::vector<Vec3> joints;  // chain.bones.size() + 1 joint positions.
     std::vector<BoneTransform> transforms;
 };
-// Forward and backward reaching IK over one chain. No joint limits are applied.
-IkResult solveIk(const Skeleton&,std::size_t chain,Vec3 target,std::size_t iterations = 16,double tolerance = 1e-4);
+// Forward and backward reaching IK over one chain, with an interior-angle limit.
+IkResult solveIk(const Skeleton&,std::size_t chain,Vec3 target,const IkSettings& = {});
+IkResult solveIk(const Skeleton&,std::size_t chain,Vec3 target,std::size_t iterations,double tolerance);
 Skin skin(std::span<const Vec3>,const Skeleton&,std::size_t maximumInfluences = 4);
 struct DeformSettings {
     // Linear blend skinning is the default and the measured one: at 90 degrees it pinches the

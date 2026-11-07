@@ -390,6 +390,35 @@ int main(int argc,char** argv) {
         };
         result["ik"]=Json::object();
         ikTest(philipsMesh,"humanoid");
+        // Joint limits: aim behind the knee so the unconstrained solver hyperextends.
+        {
+            std::vector<A::Vec3> p;for(const auto& v:philipsMesh.positions)p.push_back({v.x,v.y,v.z});
+            const auto report=A::classify(p,philipsMesh.indices);
+            const auto skeleton=A::skeleton(p,philipsMesh.indices,report,4);
+            const auto& chain=skeleton.chains.front();
+            const auto root=skeleton.bones[chain.bones.front()].head;
+            const auto tip=skeleton.bones[chain.bones.back()].tail;
+            // Fold the target back towards the root and beyond it, which forces a deep bend.
+            const A::Vec3 folded{root.x+(root.x-tip.x)*0.35,root.y+(root.y-tip.y)*0.35+0.05,root.z+(root.z-tip.z)*0.35};
+            const auto free=A::solveIk(skeleton,0,folded,256,1e-6);
+            A::IkSettings limited;
+            // A strict limit on purpose: the default 150 degrees is never reached by a
+            // four-bone chain, so it proves nothing. 100 degrees forces the clamp to act.
+            limited.maximumJointAngleRadians=100.0*3.14159265358979323846/180.0;
+            const auto clamped=A::solveIk(skeleton,0,folded,limited);
+            result["joint_limits"]={{"free_max_angle_degrees",free.maximumJointAngle*180.0/3.14159265358979323846},
+                {"clamped_max_angle_degrees",clamped.maximumJointAngle*180.0/3.14159265358979323846},
+                {"limit_degrees",limited.maximumJointAngleRadians*180.0/3.14159265358979323846},
+                {"free_error",free.error},{"clamped_error",clamped.error},{"passes",clamped.limitPassesUsed}};
+            std::cout<<"joint limits: free="<<free.maximumJointAngle*180.0/3.14159265358979323846
+                     <<"deg clamped="<<clamped.maximumJointAngle*180.0/3.14159265358979323846
+                     <<"deg free_err="<<free.error<<" clamped_err="<<clamped.error<<"\n";
+            require(free.maximumJointAngle>limited.maximumJointAngleRadians,"The free solve did not violate the test limit, so the clamp is untested");
+            require(clamped.maximumJointAngle<=limited.maximumJointAngleRadians+1e-6,"Clamped solve still exceeds the joint limit");
+            // The folded target needs a 149 degree bend, so under a 100 degree budget it is
+            // simply not reachable. The solver reports the miss instead of breaking the joint.
+            require(clamped.error<0.30,"Clamped solve diverged instead of stopping at the limit");
+        }
         result["joint_blend"]=Json::object();
         jointTest(philipsMesh,"humanoid-90",90.0);
         jointTest(spiderMesh,"spider-90",90.0);
