@@ -418,6 +418,29 @@ int main(int argc,char** argv) {
             // The folded target needs a 149 degree bend, so under a 100 degree budget it is
             // simply not reachable. The solver reports the miss instead of breaking the joint.
             require(clamped.error<0.30,"Clamped solve diverged instead of stopping at the limit");
+
+            // Pole vector: the bend must land on the requested side, not just inside the budget.
+            A::IkSettings poled=limited;
+            poled.usePole=true;
+            poled.pole={0,0,1};
+            poled.maximumJointAngleRadians=150.0*3.14159265358979323846/180.0;
+            const auto freePole=A::solveIk(skeleton,0,folded,poled);
+            A::IkSettings noPole=poled;
+            noPole.usePole=false;
+            const auto noPoleSolve=A::solveIk(skeleton,0,folded,noPole);
+            A::IkSettings opposite=poled;
+            opposite.pole={0,0,-1};
+            const auto oppositeSolve=A::solveIk(skeleton,0,folded,opposite);
+            result["pole"]={{"pole_degrees",freePole.worstPoleDeviation*180.0/3.14159265358979323846},
+                {"no_pole_degrees",noPoleSolve.worstPoleDeviation*180.0/3.14159265358979323846},
+                {"opposite_degrees",oppositeSolve.worstPoleDeviation*180.0/3.14159265358979323846},
+                {"pole_error",freePole.error},{"opposite_error",oppositeSolve.error}};
+            std::cout<<"pole: with="<<freePole.worstPoleDeviation*180.0/3.14159265358979323846
+                     <<"deg without="<<noPoleSolve.worstPoleDeviation*180.0/3.14159265358979323846
+                     <<"deg opposite="<<oppositeSolve.worstPoleDeviation*180.0/3.14159265358979323846<<"deg\n";
+            require(noPoleSolve.worstPoleDeviation>freePole.worstPoleDeviation,"The pole made no measurable difference, so the test proves nothing");
+            require(freePole.worstPoleDeviation<poled.poleToleranceRadians,"Solving with a pole did not land the bend on it");
+            require(oppositeSolve.worstPoleDeviation<poled.poleToleranceRadians,"The opposite pole did not land the bend on its side");
         }
         result["joint_blend"]=Json::object();
         jointTest(philipsMesh,"humanoid-90",90.0);

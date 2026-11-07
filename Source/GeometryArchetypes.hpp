@@ -136,12 +136,19 @@ struct IkSettings {
     double maximumJointAngleRadians{2.6179938779914944}; // 150 degrees.
     bool enforceJointLimits{true};
     std::size_t limitPasses{6};
+    // Preferred bend direction. Without it an elbow is free to fold either way inside the
+    // angle budget, which is how a knee ends up bending backwards.
+    bool usePole{};
+    Vec3 pole{};
+    // Largest angle between the achieved bend and the pole. 30 degrees is a declared default.
+    double poleToleranceRadians{0.5235987755982988};
 };
 struct IkResult {
     bool reachable{};
     double error{};            // Distance from the solved tip to the target.
     double totalLength{};
     double maximumJointAngle{}; // Largest interior angle reached by any joint.
+    double worstPoleDeviation{}; // Largest angle between a bend and the pole, when a pole is set.
     std::size_t limitPassesUsed{};
     std::vector<Vec3> joints;  // chain.bones.size() + 1 joint positions.
     std::vector<BoneTransform> transforms;

@@ -980,6 +980,28 @@ double largestAngle(const std::vector<Vec3>& joints) {
         largest=std::max(largest,interiorAngle(joints[index-1],joints[index],joints[index+1]));
     return largest;
 }
+
+// Bend direction of the distal segment relative to the incoming one, projected off that
+// incoming axis. Zero length means the joint is straight and has no preferred side.
+Vec3 bendDirection(Vec3 previous,Vec3 joint,Vec3 next) {
+    const auto incoming=normalized(previous-joint);
+    const auto outgoing=normalized(next-joint);
+    return outgoing-incoming*dot(incoming,outgoing);
+}
+// Largest angle between an achieved bend and the wanted pole direction.
+double poleDeviation(const std::vector<Vec3>& joints,Vec3 pole) {
+    double worst=0;
+    for(std::size_t index=1;index+1<joints.size();++index) {
+        const auto incoming=normalized(joints[index-1]-joints[index]);
+        const auto bend=bendDirection(joints[index-1],joints[index],joints[index+1]);
+        if(length(bend)<1e-6)continue;
+        const auto desired=pole-incoming*dot(incoming,pole);
+        if(length(desired)<1e-6)continue;
+        const double cosine=std::clamp(dot(normalized(bend),normalized(desired)),-1.0,1.0);
+        worst=std::max(worst,std::acos(cosine));
+    }
+    return worst;
+}
 } // namespace
 
 IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std::size_t iterations,double tolerance) {
@@ -1018,6 +1040,9 @@ IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std
     }
     result.error=length(working.back()-target);
     result.maximumJointAngle=largestAngle(working);
+    // Measured whenever a pole is supplied, even if the alignment is disabled: that is what
+    // makes "without a pole" a real measurement instead of a hard-coded zero.
+    result.worstPoleDeviation=length(settings.pole)>1e-9?poleDeviation(working,settings.pole):0.0;
     result.joints=working;
     result.transforms.resize(skeleton.bones.size());
     for(std::size_t index=0;index<chain.bones.size();++index) {
@@ -1114,6 +1139,30 @@ IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,con
                 if(!changed)break;
                 solvePass(8); // Restore reach before checking the limits again.
             }
+            // Preferred bend direction: rotate each distal chain about its incoming axis so
+            // the bend lands on the pole's side. This is what stops a knee folding backwards
+            // inside an angle budget that allows it.
+            if(settings.usePole) {
+                for(std::size_t pass=0;pass<settings.limitPasses;++pass) {
+                    bool changed=false;
+                    for(std::size_t joint=1;joint+1<working.size();++joint) {
+                        const auto incoming=normalized(working[joint-1]-working[joint]);
+                        const auto bend=bendDirection(working[joint-1],working[joint],working[joint+1]);
+                        if(length(bend)<1e-6)continue;
+                        const auto desired=settings.pole-incoming*dot(incoming,settings.pole);
+                        if(length(desired)<1e-6)continue;
+                        const auto from=normalized(bend),to=normalized(desired);
+                        const double cosine=std::clamp(dot(from,to),-1.0,1.0);
+                        const double sine=dot(cross(from,to),incoming);
+                        const double turn=std::atan2(sine,cosine);
+                        if(std::abs(turn)<1e-6)continue;
+                        for(std::size_t distal=joint+1;distal<working.size();++distal)
+                            working[distal]=rotateAbout(working[distal],working[joint],incoming,turn);
+                        changed=true;
+                    }
+                    if(!changed)break;
+                }
+            }
             // The last operation must be the clamp: running FABRIK afterwards would move the
             // joints freely and silently undo the limit, which is how a "clamped" pose ended
             // up at 158 degrees against a 100 degree budget.
@@ -1138,6 +1187,7 @@ IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,con
 
     result.error=length(working.back()-target);
     result.maximumJointAngle=largestAngle(working);
+    result.worstPoleDeviation=length(settings.pole)>1e-9?poleDeviation(working,settings.pole):0.0;
     result.joints=working;
     result.transforms.resize(skeleton.bones.size());
     for(std::size_t index=0;index<chain.bones.size();++index) {
