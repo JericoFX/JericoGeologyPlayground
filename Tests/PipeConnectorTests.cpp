@@ -379,6 +379,45 @@ int main(int argc,char** argv) {
             require(distanceTo(elbowFit.path.back(),routed.module.sockets.back().position)<1e-9,
                 "Routed socket is not on the route end");
         }
+        // Headless replica of the UI action with REAL modules: load the modules, take their
+        // declared sockets, place one in the scene and route to it.
+        {
+            const std::filesystem::path root=PLAYGROUND_ROOT;
+            const auto elbowModule=P::loadModule(root/"models/industrial+pipe+elbow+3d+model.glb");
+            P::StraightSettings straightSettings;
+            straightSettings.wallThickness=0.02;straightSettings.repeatMeters=1;
+            Json attempts=Json::array();
+            bool routed=false;
+            for(std::size_t a=0;a<elbowModule.sockets.size()&&!routed;++a) {
+                // The end pipe must share the socket diameter or snap refuses the pairing.
+                straightSettings.diameter=elbowModule.sockets[a].diameter;
+                const auto endPipe=P::routed({{0,0,0},{0.5,0,0}},straightSettings).module;
+                for(std::size_t b=0;b<endPipe.sockets.size()&&!routed;++b) {
+                    P::Pose poseA;poseA.position={0,0,0};
+                    // Same as the UI's Connect B to A: snap B onto A, then slide it apart
+                    // along the shared axis so there is a gap to route.
+                    auto poseB=P::snap(elbowModule.sockets[a],poseA,endPipe.sockets[b]);
+                    const auto fa=P::worldFrame(elbowModule.sockets[a],poseA);
+                    poseB.position.x+=fa.forward.x*1.5;
+                    poseB.position.y+=fa.forward.y*1.5;
+                    poseB.position.z+=fa.forward.z*1.5;
+                    const auto fb=P::worldFrame(endPipe.sockets[b],poseB);
+                    const auto fit=P::connect(fa,fb);
+                    attempts.push_back({{"a",a},{"b",b},{"state",P::name(fit.state)},{"reason",fit.reason}});
+                    if(fit.state==P::ConnectorState::Unconnectable)continue;
+                    const auto built=P::routed(fit.path,straightSettings);
+                    std::cout<<"ui-path socket "<<a<<"->"<<b<<": "<<P::name(fit.state)<<" "
+                             <<fit.lengthMeters<<" m, "<<built.mesh.mesh.mesh.indices.size()/3<<" triangles\n";
+                    require(built.mesh.mesh.mesh.indices.size()>0,"UI path produced no mesh");
+                    require(built.module.sockets.size()==2,"UI path produced no end sockets");
+                    result["ui_path"]={{"a",a},{"b",b},{"state",P::name(fit.state)},
+                        {"length",fit.lengthMeters},{"triangles",built.mesh.mesh.mesh.indices.size()/3}};
+                    routed=true;
+                }
+            }
+            result["ui_path_attempts"]=attempts;
+            require(routed,"No real-socket pair could be routed for the UI path");
+        }
         std::ofstream(output/"pipe-connector-report.json")<<result.dump(2);
         std::cout<<"pipe connector: "<<accepted<<"/"<<result["cases"].size()<<" socket pairs routed\n";
         return 0;
