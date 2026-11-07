@@ -154,12 +154,15 @@ int main(int argc,char** argv) {
             if(!argument.empty()&&argument[0]!='-')output=argument;
         }
         std::filesystem::create_directories(output);
-        struct Door {const char* id;const char* path;};
+        // Expected state recorded on 2026-11-07. vault and metal are known unresolved:
+        // vault admits no clean interval up to 30 mm and metal's leaf already crosses
+        // its frame at rest, so its "no new crossings" cannot demonstrate anything.
+        struct Door {const char* id;const char* path;bool expectClean;};
         const std::vector<Door> doors={
-            {"wooden","Assets/Doors/Repaired/wooden/wooden-door.glb"},
-            {"vault","Assets/Doors/Repaired/vault/vault-door.glb"},
-            {"prison","Assets/Doors/Repaired/prison/prison-door.glb"},
-            {"metal","Assets/Doors/Repaired/metal/metal-door.glb"}};
+            {"wooden","Assets/Doors/Repaired/wooden/wooden-door.glb",true},
+            {"vault","Assets/Doors/Repaired/vault/vault-door.glb",false},
+            {"prison","Assets/Doors/Repaired/prison/prison-door.glb",true},
+            {"metal","Assets/Doors/Repaired/metal/metal-door.glb",false}};
         Json report={{"doors",Json::array()}};
         std::size_t gated=0,passed=0;
         for(const auto& door:doors) {
@@ -215,35 +218,84 @@ int main(int argc,char** argv) {
             // criterion is "no NEW crossings", the same rule used for tooth contacts.
             const auto resting=crossings(frameBvh,mesh,edges,mesh.positions,tolerance);
             item["resting_crossings"]=resting;
+            // A real hinge pin sits at the frame, outside the reveal, so the axis can be
+            // offset along the leaf normal. Search that clearance before rejecting an axis.
+            const auto normal=A::Vec3{classification.evidence.thinAxis.x,classification.evidence.thinAxis.y,classification.evidence.thinAxis.z};
+            auto coarse=edges;
+            if(coarse.size()>4000)coarse.resize(4000);
+            const auto sweep=[&](const A::Joint& joint,int sign,double offset,const std::vector<std::pair<std::uint32_t,std::uint32_t>>& use) {
+                const Playground::Vec3d axis{joint.axis.x,joint.axis.y,joint.axis.z};
+                const Playground::Vec3d point{joint.point.x+normal.x*offset,joint.point.y+normal.y*offset,joint.point.z+normal.z*offset};
+                std::size_t added=0,peak=0;
+                for(int step=1;step<=6;++step) {
+                    const double angle=sign*double(step)*15.0*3.14159265358979323846/180.0;
+                    std::vector<Playground::Vec3d> rotated;rotated.reserve(mesh.positions.size());
+                    for(const auto& q:mesh.positions)rotated.push_back(rotate(q,point,axis,angle));
+                    const auto hits=crossings(frameBvh,mesh,use,rotated,tolerance);
+                    peak=std::max(peak,hits);
+                    added+=hits>resting?hits-resting:0;
+                }
+                return std::pair<std::size_t,std::size_t>{added,peak};
+            };
+
             Json sweeps=Json::array();
             bool anyClean=false;
+            double bestPlateauOffset=0,bestPlateauWidth=0;
+            const bool measurable=resting==0;
+            constexpr int kSteps=7;      // 0..30 mm in 5 mm steps.
+            constexpr double kStep=0.005;
+            constexpr double kMinimumPlateau=0.010; // A single lucky offset is not a clearance.
             for(std::size_t candidate=0;candidate<std::min<std::size_t>(2,joints.size());++candidate) {
                 const auto& joint=joints[candidate];
                 for(const int sign:{1,-1}) {
-                    Playground::Vec3d point{joint.point.x,joint.point.y,joint.point.z};
-                    Playground::Vec3d axis{joint.axis.x,joint.axis.y,joint.axis.z};
-                    std::size_t added=0;std::size_t peak=0;Json angles=Json::array();
-                    for(int step=1;step<=6;++step) {
-                        const double angle=sign*double(step)*15.0*3.14159265358979323846/180.0;
-                        std::vector<Playground::Vec3d> rotated;rotated.reserve(mesh.positions.size());
-                        for(const auto& p:mesh.positions)rotated.push_back(rotate(p,point,axis,angle));
-                        const auto hits=crossings(frameBvh,mesh,edges,rotated,tolerance);
-                        peak=std::max(peak,hits);
-                        added+=hits>resting?hits-resting:0;
-                        angles.push_back({{"degrees",sign*step*15},{"crossings",hits}});
+                    Json entry={{"candidate",candidate},{"sign",sign},{"scan",Json::array()}};
+                    double bestOffset=0,bestWidth=0;
+                    for(const int side:{1,-1}) {
+                        std::array<std::size_t,kSteps> added{};
+                        for(int step=0;step<kSteps;++step) {
+                            const double offset=double(step)*kStep*side;
+                            added[std::size_t(step)]=sweep(joint,sign,offset,coarse).first;
+                            entry["scan"].push_back({{"offset",offset},{"added",added[std::size_t(step)]}});
+                        }
+                        // Longest contiguous clean run: a real clearance is an interval.
+                        for(int begin=0;begin<kSteps;) {
+                            if(added[std::size_t(begin)]!=0) {++begin;continue;}
+                            int end=begin;while(end+1<kSteps&&added[std::size_t(end+1)]==0)++end;
+                            const double width=(end-begin)*kStep;
+                            if(width>bestWidth||(width==bestWidth&&std::abs(begin*kStep)<std::abs(bestOffset))) {
+                                bestWidth=width;bestOffset=(begin+end)*0.5*kStep*side;
+                            }
+                            begin=end+1;
+                        }
                     }
-                    const bool clean=added==0;
-                    sweeps.push_back({{"candidate",candidate},{"sign",sign},{"added",added},{"peak",peak},{"angles",angles},{"clean",clean}});
-                    if(clean)anyClean=true;
+                    bool clean=false;
+                    if(bestWidth>=kMinimumPlateau-1e-12&&bestWidth>0) {
+                        const auto [fullAdded,fullPeak]=sweep(joint,sign,bestOffset,edges);
+                        entry["verified_added"]=fullAdded;entry["verified_peak"]=fullPeak;
+                        clean=fullAdded==0;
+                    }
+                    entry["plateau_width"]=bestWidth;
+                    entry["clearance"]=bestOffset;
+                    entry["clean"]=clean&&measurable;
+                    sweeps.push_back(entry);
+                    if(clean&&measurable&&(bestWidth>bestPlateauWidth)) {anyClean=true;bestPlateauWidth=bestWidth;bestPlateauOffset=bestOffset;}
                 }
             }
             item["sweeps"]=sweeps;
             item["has_clean_sweep"]=anyClean;
+            item["measurable"]=measurable;
+            item["plateau_width_m"]=bestPlateauWidth;
+            item["clearance_m"]=bestPlateauOffset;
             ++gated;if(anyClean)++passed;
+            if(anyClean!=door.expectClean)
+                throw std::runtime_error(std::string("Hinge sweep state changed for ")+door.id
+                    +": expected "+(door.expectClean?"a clean interval":"no clean interval"));
             std::cout<<door.id<<": class="<<item["class"].get<std::string>()<<" candidates="<<joints.size()
-                     <<" perimeter="<<edges.size()<<" clean_sweep="<<(anyClean?"yes":"no")<<"\n";
-            std::cout<<"   resting crossings "<<resting<<"\n";
-            for(const auto& sweep:sweeps)std::cout<<"   cand "<<sweep["candidate"]<<" dir "<<sweep["sign"]<<" added "<<sweep["added"]<<" peak "<<sweep["peak"]<<"\n";
+                     <<" perimeter="<<edges.size()<<" resting="<<resting<<" clean="<<(anyClean?"yes":"no")
+                     <<" plateau="<<bestPlateauWidth<<"m at "<<bestPlateauOffset<<"m\n";
+            for(const auto& sweep:sweeps)std::cout<<"   cand "<<sweep["candidate"]<<" dir "<<sweep["sign"]
+                <<" clean="<<sweep["clean"].get<bool>()<<" width="<<sweep["plateau_width"].get<double>()
+                <<" at="<<sweep["clearance"].get<double>()<<"\n";
             report["doors"].push_back(item);
         }
         report["gate"]={{"doors",gated},{"with_clean_sweep",passed}};
@@ -252,7 +304,7 @@ int main(int argc,char** argv) {
         std::cout<<"hinge sweep: "<<passed<<"/"<<gated<<" doors have a collision-free opening\n";
         // Probe by default: the survey is recorded even when it fails. --strict turns
         // the current numbers into a gate, which is how the RED is reproduced.
-        if(strict&&passed!=gated)throw std::runtime_error("No collision-free hinge sweep for some door");
+        if(strict&&passed!=gated)throw std::runtime_error("No collision-free hinge sweep for every door");
         return 0;
     } catch(const std::exception& error) {
         std::cerr<<"HINGE FAILURE: "<<error.what()<<"\n";

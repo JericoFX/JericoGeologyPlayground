@@ -35,8 +35,8 @@ if(NOT TARGET HingeSweepTests)
         target_include_directories(HingeSweepTests PRIVATE "${JERICO_DEPS}/DiligentTools/ThirdParty/json/single_include")
     endif()
     target_compile_definitions(HingeSweepTests PRIVATE PLAYGROUND_ROOT="${PLAYGROUND_ROOT}")
-    # Probe: records the sweep survey. Pass --strict to turn the current numbers into
-    # a gate; it fails today, which is the RED this increment documents.
-    add_test(NAME Playground.HingeSweepProbe COMMAND HingeSweepTests "${CMAKE_CURRENT_BINARY_DIR}/hinge-sweep-evidence")
-    set_tests_properties(Playground.HingeSweepProbe PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
+    # Gates the recorded per-door state (wooden and prison open once the pin is offset;
+    # vault and metal stay unresolved). --strict requires every door to open.
+    add_test(NAME Playground.HingeSweep COMMAND HingeSweepTests "${CMAKE_CURRENT_BINARY_DIR}/hinge-sweep-evidence")
+    set_tests_properties(Playground.HingeSweep PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
 endif()
