@@ -1,4 +1,5 @@
 #include "PipeLabUI.hpp"
+#include <fstream>
 #include "PipeConnector.hpp"
 #include "ViewportProjection.hpp"
 #include <imgui.h>
@@ -164,13 +165,22 @@ void PipeLabUI::addStraight()
 void PipeLabUI::showAllModels()
 {
     // Build first so a broken asset does not destroy a previous test scene.
+    // One asset that is not a static GLB (animated valve, FBX, ...) used to abort the whole
+    // gallery, which is why the test scene never appeared. Skip the unusable ones instead.
+    std::vector<std::filesystem::path> usable;
+    std::string skipped;
+    for(const auto&file:files) {
+        try { loadAsset(file); usable.push_back(file); }
+        catch(const std::exception&e) { if(!skipped.empty())skipped+=", ";skipped+=file.filename().string(); }
+    }
+    if(usable.empty())throw std::runtime_error("No static GLB module could be loaded"+std::string(skipped.empty()?"":": "+skipped));
     std::vector<Instance> gallery;
     double spacing=1.5;
-    for(const auto&file:files){auto [low,high]=bounds(loadAsset(file).mesh.mesh);spacing=std::max(spacing,std::max(high.x-low.x,high.z-low.z)+.7);}
-    for(std::size_t i=0;i<files.size();++i)
+    for(const auto&file:usable){auto [low,high]=bounds(loadAsset(file).mesh.mesh);spacing=std::max(spacing,std::max(high.x-low.x,high.z-low.z)+.7);}
+    for(std::size_t i=0;i<usable.size();++i)
     {
-        auto [low,high]=bounds(loadAsset(files[i]).mesh.mesh);
-        Instance instance;instance.asset=files[i];
+        auto [low,high]=bounds(loadAsset(usable[i]).mesh.mesh);
+        Instance instance;instance.asset=usable[i];
         instance.pose.position={double(i%4)*spacing-(low.x+high.x)*.5,-low.y,double(i/4)*spacing-(low.z+high.z)*.5};
         gallery.push_back(instance);
     }
