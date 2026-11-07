@@ -22,4 +22,16 @@ struct ConnectorResult {
 };
 ConnectorResult connect(const Frame& from, const Frame& to, const ConnectorSettings& = {});
 const char* name(ConnectorState);
+
+// Inline valve placement: cut the routed centreline at a fraction of its length and leave
+// a body of the requested length between the two remaining runs. The valve frame carries
+// the axis and the body length; the caller sweeps the body with a larger radius.
+struct ValvePlacement {
+    bool placed{};
+    std::vector<Vec3d> before, after; // Trimmed centrelines.
+    Frame valve{};                    // position = centre, forward = run direction.
+    double lengthMeters{}, radiusMeters{};
+    std::string reason;
+};
+ValvePlacement insertValve(const ConnectorResult& route,double fraction,double lengthMeters,double radiusMeters);
 }

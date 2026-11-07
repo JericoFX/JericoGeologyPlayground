@@ -159,6 +159,44 @@ int main(int argc,char** argv) {
             }
             result["sweeps"]=sweeps;
         }
+        // Inline valve: the run is cut and the two remaining pieces must stop exactly on the
+        // valve faces, otherwise the "valve" floats inside the pipe.
+        {
+            const auto straightFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,0,-1,0,0));
+            const auto elbowFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,1,0,0,-1));
+            Json valves=Json::array();
+            for(const auto& [id,route,fraction] : std::vector<std::tuple<std::string,P::ConnectorResult,double>>{
+                    {"straight",straightFit,0.5},{"elbow",elbowFit,0.25}}) {
+                const auto placement=P::insertValve(route,fraction,0.2,0.14);
+                Json entry={{"id",id},{"placed",placement.placed},{"reason",placement.reason},
+                    {"before_points",placement.before.size()},{"after_points",placement.after.size()},
+                    {"length",placement.lengthMeters},{"radius",placement.radiusMeters}};
+                valves.push_back(entry);
+                std::cout<<"valve "<<id<<": placed="<<placement.placed<<" before="<<placement.before.size()
+                         <<" after="<<placement.after.size()<<"\n";
+                require(placement.placed,"Valve was not placed at the middle of the route");
+                const auto gapTo=[&](const Playground::Vec3d& a,const Playground::Vec3d& b) {
+                    return std::sqrt(std::pow(a.x-b.x,2)+std::pow(a.y-b.y,2)+std::pow(a.z-b.z,2));
+                };
+                const auto& valveStart=placement.valve.position;
+                const auto half=0.5*placement.lengthMeters;
+                const Playground::Vec3d faceA{valveStart.x-placement.valve.forward.x*half,
+                    valveStart.y-placement.valve.forward.y*half,valveStart.z-placement.valve.forward.z*half};
+                const Playground::Vec3d faceB{valveStart.x+placement.valve.forward.x*half,
+                    valveStart.y+placement.valve.forward.y*half,valveStart.z+placement.valve.forward.z*half};
+                require(gapTo(placement.before.back(),faceA)<1e-9,"First run does not stop on the valve face");
+                require(gapTo(placement.after.front(),faceB)<1e-9,"Second run does not start on the valve face");
+                require(gapTo(placement.before.front(),route.path.front())<1e-9,"First run lost its socket end");
+                require(gapTo(placement.after.back(),route.path.back())<1e-9,"Second run lost its socket end");
+            }
+            // The guard must actually refuse: a valve centred on the elbow would span it.
+            const auto spanning=P::insertValve(elbowFit,0.5,0.2,0.14);
+            result["valve_on_elbow"]={{"placed",spanning.placed},{"reason",spanning.reason}};
+            std::cout<<"valve on elbow: placed="<<spanning.placed<<" reason="<<spanning.reason<<"\n";
+            require(!spanning.placed&&spanning.reason.find("elbow")!=std::string::npos,
+                "A valve centred on an elbow was accepted");
+            result["valves"]=valves;
+        }
         std::ofstream(output/"pipe-connector-report.json")<<result.dump(2);
         std::cout<<"pipe connector: "<<accepted<<"/"<<result["cases"].size()<<" socket pairs routed\n";
         return 0;

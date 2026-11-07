@@ -8,6 +8,7 @@ namespace Playground::Pipes {
 namespace {
 constexpr double kEpsilon=1e-12;
 double length(Vec3d v){return std::sqrt(v.x*v.x+v.y*v.y+v.z*v.z);}
+
 Vec3d subtract(Vec3d a,Vec3d b){return {a.x-b.x,a.y-b.y,a.z-b.z};}
 Vec3d add(Vec3d a,Vec3d b){return {a.x+b.x,a.y+b.y,a.z+b.z};}
 Vec3d multiply(Vec3d a,double s){return {a.x*s,a.y*s,a.z*s};}
@@ -95,4 +96,79 @@ ConnectorResult connect(const Frame& from,const Frame& to,const ConnectorSetting
     }
     return result;
 }
+ValvePlacement insertValve(const ConnectorResult& route,double fraction,double lengthMeters,double radiusMeters) {
+    ValvePlacement placement;
+    placement.lengthMeters=lengthMeters;
+    placement.radiusMeters=radiusMeters;
+    if(route.path.size()<2) {placement.reason="The route has no leg";return placement;}
+    if(!(fraction>0.0&&fraction<1.0)) {placement.reason="The valve fraction is outside the route";return placement;}
+    if(lengthMeters<=0.0||radiusMeters<=0.0) {placement.reason="The valve has no size";return placement;}
+
+    const auto pointAt=[&](double distance,Vec3d* direction) {
+        double travelled=0;
+        for(std::size_t index=1;index<route.path.size();++index) {
+            const Vec3d segment=subtract(route.path[index],route.path[index-1]);
+            const double segmentLength=length(segment);
+            if(segmentLength<1e-12)continue;
+            if(travelled+segmentLength>=distance) {
+                const double inside=(distance-travelled)/segmentLength;
+                if(direction)*direction=multiply(segment,1.0/segmentLength);
+                return add(route.path[index-1],multiply(segment,inside));
+            }
+            travelled+=segmentLength;
+        }
+        if(direction)*direction=normalized(subtract(route.path.back(),route.path[route.path.size()-2]));
+        return route.path.back();
+    };
+
+    const double total=route.lengthMeters;
+    const double centreDistance=total*fraction;
+    const double halfLength=0.5*lengthMeters;
+    if(centreDistance-halfLength<1e-6||centreDistance+halfLength>total-1e-6) {
+        placement.reason="The valve does not fit at that fraction";
+        return placement;
+    }
+    // A valve sits on a straight leg: spanning an elbow would leave the body floating.
+    auto legOf=[&](double distance) {
+        double travelled=0;std::size_t leg=0;
+        for(std::size_t index=1;index<route.path.size();++index) {
+            const double segmentLength=length(subtract(route.path[index],route.path[index-1]));
+            if(segmentLength<1e-12)continue;
+            if(distance<=travelled+segmentLength+1e-9)return leg;
+            travelled+=segmentLength;++leg;
+        }
+        return leg;
+    };
+    if(legOf(centreDistance-halfLength)!=legOf(centreDistance+halfLength)) {
+        placement.reason="The valve would span an elbow";
+        return placement;
+    }
+    Vec3d direction{};
+    placement.valve.position=pointAt(centreDistance,&direction);
+    placement.valve.forward=direction;
+    placement.valve.up={0,1,0};
+
+    // Rebuild both runs leg by leg, stopping at the cut distances.
+    auto trim=[&](double from,double to) {
+        std::vector<Vec3d> trimmed;
+        Vec3d ignore{};
+        trimmed.push_back(pointAt(from,&ignore));
+        double travelled=0;
+        for(std::size_t index=1;index<route.path.size();++index) {
+            const Vec3d segment=subtract(route.path[index],route.path[index-1]);
+            const double segmentLength=length(segment);
+            if(segmentLength<1e-12)continue;
+            const double corner=travelled+segmentLength;
+            if(corner>from&&corner<to)trimmed.push_back(route.path[index]);
+            travelled=corner;
+        }
+        trimmed.push_back(pointAt(to,&ignore));
+        return trimmed;
+    };
+    placement.before=trim(0.0,centreDistance-halfLength);
+    placement.after=trim(centreDistance+halfLength,total);
+    placement.placed=true;
+    return placement;
+}
+
 }
