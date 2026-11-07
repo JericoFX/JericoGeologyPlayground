@@ -126,6 +126,14 @@ struct BoneTransform {
     std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}}; // Row major, applied about the bone head.
 };
 Skin skin(std::span<const Vec3>,const Skeleton&,std::size_t maximumInfluences = 4);
+struct DeformSettings {
+    // Linear blend skinning is the default and the measured one: at 90 degrees it pinches the
+    // joint band by 8.6 % (humanoid) and 1.8 % (spider). The dual quaternion path is kept as an
+    // experiment and is NOT adopted: as implemented it expands the band by 60 %, so do not
+    // enable it without re-deriving the blend and measuring again.
+    bool dualQuaternion{};
+};
 // Identity transforms must reproduce the input exactly; that is the rest-pose gate.
-std::vector<Vec3> deform(std::span<const Vec3>,const Skin&,const Skeleton&,std::span<const BoneTransform>);
+std::vector<Vec3> deform(std::span<const Vec3>,const Skin&,const Skeleton&,std::span<const BoneTransform>,
+                         const DeformSettings& = {});
 }

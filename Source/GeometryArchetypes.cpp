@@ -862,30 +862,109 @@ Skin skin(std::span<const Vec3> positions,const Skeleton& skeleton,std::size_t m
 }
 
 std::vector<Vec3> deform(std::span<const Vec3> positions,const Skin& skinning,const Skeleton& skeleton,
-                         std::span<const BoneTransform> transforms) {
+                         std::span<const BoneTransform> transforms,const DeformSettings& settings) {
     if(skinning.weights.size()!=positions.size())
         throw std::invalid_argument("Skinning weights do not cover the vertices");
     if(transforms.size()!=skeleton.bones.size())
         throw std::invalid_argument("Bone transforms do not cover the skeleton");
+
+    struct Quaternion {double x{},y{},z{},w{1};};
+    auto multiply=[](Quaternion a,Quaternion b) {
+        return Quaternion{
+            a.w*b.x+a.x*b.w+a.y*b.z-a.z*b.y,
+            a.w*b.y-a.x*b.z+a.y*b.w+a.z*b.x,
+            a.w*b.z+a.x*b.y-a.y*b.x+a.z*b.w,
+            a.w*b.w-a.x*b.x-a.y*b.y-a.z*b.z};
+    };
+    auto conjugate=[](Quaternion a){return Quaternion{-a.x,-a.y,-a.z,a.w};};
+    auto rotatePoint=[&](Quaternion q,Vec3 p) {
+        const Quaternion pure{p.x,p.y,p.z,0};
+        const auto rotated=multiply(multiply(q,pure),conjugate(q));
+        return Vec3{rotated.x,rotated.y,rotated.z};
+    };
+    auto matrixQuaternion=[](const std::array<double,9>& m) {
+        const double trace=m[0]+m[4]+m[8];
+        Quaternion q;
+        if(trace>0) {
+            const double scale=std::sqrt(trace+1.0)*2;
+            q.w=0.25*scale;q.x=(m[7]-m[5])/scale;q.y=(m[2]-m[6])/scale;q.z=(m[3]-m[1])/scale;
+        } else if(m[0]>m[4]&&m[0]>m[8]) {
+            const double scale=std::sqrt(1.0+m[0]-m[4]-m[8])*2;
+            q.w=(m[7]-m[5])/scale;q.x=0.25*scale;q.y=(m[1]+m[3])/scale;q.z=(m[2]+m[6])/scale;
+        } else if(m[4]>m[8]) {
+            const double scale=std::sqrt(1.0+m[4]-m[0]-m[8])*2;
+            q.w=(m[2]-m[6])/scale;q.x=(m[1]+m[3])/scale;q.y=0.25*scale;q.z=(m[5]+m[7])/scale;
+        } else {
+            const double scale=std::sqrt(1.0+m[8]-m[0]-m[4])*2;
+            q.w=(m[3]-m[1])/scale;q.x=(m[2]+m[6])/scale;q.y=(m[5]+m[7])/scale;q.z=0.25*scale;
+        }
+        return q;
+    };
+
+    // Per-bone rigid transform as a dual quaternion (rotation + translation about the head).
+    struct Dual {Quaternion real,dual;};
+    std::vector<Dual> duals(skeleton.bones.size());
+    for(std::size_t bone=0;bone<skeleton.bones.size();++bone) {
+        const auto& rotation=transforms[bone].rotation;
+        const auto& head=skeleton.bones[bone].head;
+        const Quaternion real=matrixQuaternion(rotation);
+        const Vec3 rotatedHead{
+            rotation[0]*head.x+rotation[1]*head.y+rotation[2]*head.z,
+            rotation[3]*head.x+rotation[4]*head.y+rotation[5]*head.z,
+            rotation[6]*head.x+rotation[7]*head.y+rotation[8]*head.z};
+        const Vec3 translation{head.x-rotatedHead.x,head.y-rotatedHead.y,head.z-rotatedHead.z};
+        const Quaternion pure{translation.x,translation.y,translation.z,0};
+        duals[bone].real=real;
+        duals[bone].dual=multiply(pure,real);
+        duals[bone].dual.x*=0.5;duals[bone].dual.y*=0.5;duals[bone].dual.z*=0.5;duals[bone].dual.w*=0.5;
+    }
+
     std::vector<Vec3> result(positions.size());
     for(std::size_t vertex=0;vertex<positions.size();++vertex) {
-        Vec3 accumulated{};
+        if(!settings.dualQuaternion) {
+            Vec3 accumulated{};
+            for(std::size_t slot=0;slot<4;++slot) {
+                const double weight=skinning.weights[vertex][slot];
+                if(weight<=0)continue;
+                const auto bone=skinning.bones[vertex][slot];
+                const auto& boneGeometry=skeleton.bones.at(bone);
+                const auto& rotation=transforms[bone].rotation;
+                const auto delta=positions[vertex]-boneGeometry.head;
+                const Vec3 rotated{
+                    rotation[0]*delta.x+rotation[1]*delta.y+rotation[2]*delta.z,
+                    rotation[3]*delta.x+rotation[4]*delta.y+rotation[5]*delta.z,
+                    rotation[6]*delta.x+rotation[7]*delta.y+rotation[8]*delta.z};
+                accumulated=accumulated+(boneGeometry.head+rotated)*weight;
+            }
+            result[vertex]=accumulated;
+            continue;
+        }
+        // Dual quaternion blend: rotations blend as a unit quaternion, so the limb keeps
+        // its thickness instead of shrinking toward the joint.
+        Quaternion realSum{},dualSum{};
+        bool first=true;
         for(std::size_t slot=0;slot<4;++slot) {
             const double weight=skinning.weights[vertex][slot];
             if(weight<=0)continue;
             const auto bone=skinning.bones[vertex][slot];
-            const auto& boneGeometry=skeleton.bones.at(bone);
-            const auto& rotation=transforms[bone].rotation;
-            const auto delta=positions[vertex]-boneGeometry.head;
-            const Vec3 rotated{
-                rotation[0]*delta.x+rotation[1]*delta.y+rotation[2]*delta.z,
-                rotation[3]*delta.x+rotation[4]*delta.y+rotation[5]*delta.z,
-                rotation[6]*delta.x+rotation[7]*delta.y+rotation[8]*delta.z};
-            accumulated=accumulated+(boneGeometry.head+rotated)*weight;
+            double sign=1;
+            if(first)first=false;
+            else if(realSum.x*duals[bone].real.x+realSum.y*duals[bone].real.y
+                +realSum.z*duals[bone].real.z+realSum.w*duals[bone].real.w<0)sign=-1;
+            realSum.x+=sign*weight*duals[bone].real.x;realSum.y+=sign*weight*duals[bone].real.y;
+            realSum.z+=sign*weight*duals[bone].real.z;realSum.w+=sign*weight*duals[bone].real.w;
+            dualSum.x+=sign*weight*duals[bone].dual.x;dualSum.y+=sign*weight*duals[bone].dual.y;
+            dualSum.z+=sign*weight*duals[bone].dual.z;dualSum.w+=sign*weight*duals[bone].dual.w;
         }
-        result[vertex]=accumulated;
+        const double magnitude=std::sqrt(realSum.x*realSum.x+realSum.y*realSum.y+realSum.z*realSum.z+realSum.w*realSum.w);
+        if(!(magnitude>1e-12)) {result[vertex]=positions[vertex];continue;}
+        const Quaternion real{realSum.x/magnitude,realSum.y/magnitude,realSum.z/magnitude,realSum.w/magnitude};
+        const Quaternion dual{dualSum.x/magnitude,dualSum.y/magnitude,dualSum.z/magnitude,dualSum.w/magnitude};
+        const auto translationProduct=multiply(dual,conjugate(real));
+        const Vec3 translation{2*translationProduct.x,2*translationProduct.y,2*translationProduct.z};
+        const auto rotatedPoint=rotatePoint(real,positions[vertex]);
+        result[vertex]=rotatedPoint+translation;
     }
     return result;
 }
-
 }
