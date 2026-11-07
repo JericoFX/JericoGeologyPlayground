@@ -51,14 +51,25 @@ struct Joint {
     bool prismatic{};
 };
 
+// A rectangular step in the dominant face: the drawer-front signature. A wardrobe
+// shell has none; a flush door leaf has a step that spans the full height.
+struct FaceStep {
+    double areaFraction{},fillRatio{},heightFraction{},depthMeters{};
+    bool rectangular{};
+};
+
 struct Evidence {
     Vec3 minimum{},maximum{},extent{},centroid{};
     double diagonal{},area{},boxiness{},planarAreaFraction{},thinness{1},elongation{1},symmetryError{1};
     std::size_t vertexCount{},triangleCount{},degenerateTriangles{},componentCount{},supportCount{};
     double groundedAreaFraction{},verticalPanelFraction{},horizontalPanelFraction{},verticalCoverage{},supportSpread{1};
     Vec3 thinAxis{}; // Object-space normal of the panel plane (smallest principal extent).
+    std::size_t regionCount{};
+    double largestRegionFraction{}; // Area of the largest merged planar region.
     std::vector<Panel> panels;
     std::vector<Joint> joints;
+    std::vector<FaceStep> faceSteps;
+    double faceStepDepth{},faceStepCoverage{},faceStepOffsetFraction{};
 };
 
 struct Hypothesis {Class type{Class::Unknown};double score{};std::string reason;};

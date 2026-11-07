@@ -202,37 +202,59 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
         }
     }
     std::sort(edges.begin(),edges.end());
-    UnionFind regions(triangles.size());
-    const double planarCosine=std::cos(settings.planarAngleRadians);
-    const double planarOffset=settings.planarOffsetRelative*diagonal;
+    std::vector<std::vector<std::size_t>> adjacency(triangles.size());
     for(std::size_t edge=1;edge<edges.size();++edge) {
         if(edges[edge].first!=edges[edge-1].first)continue;
         const auto first=edges[edge-1].second,second=edges[edge].second;
         if(first==second)continue;
-        const auto& x=triangles[first];const auto& y=triangles[second];
-        if(std::abs(dot(x.normal,y.normal))<planarCosine)continue;
-        if(std::abs(x.offset-y.offset)>planarOffset)continue;
-        regions.join(first,second);
+        adjacency[first].push_back(second);adjacency[second].push_back(first);
     }
-    std::unordered_map<std::size_t,std::size_t> regionIndex;std::vector<std::size_t> regionOf(triangles.size());
+    // Seeded region growing against a fitted plane. Pairwise merging chained across
+    // curvature and fragmented every scanned panel into islands of a few triangles.
+    const double planarCosine=std::cos(settings.planarAngleRadians);
+    const double planarOffset=settings.planarOffsetRelative*diagonal;
+    std::vector<std::size_t> regionOf(triangles.size(),std::numeric_limits<std::size_t>::max());
     std::vector<double> regionArea;std::vector<Vec3> regionNormal;std::vector<std::size_t> regionTriangles;
-    for(std::size_t index=0;index<triangles.size();++index) {
-        const auto root=regions.find(index);
-        auto found=regionIndex.find(root);
-        if(found==regionIndex.end()) {
-            found=regionIndex.emplace(root,regionArea.size()).first;
-            regionArea.push_back(0);regionNormal.push_back({});regionTriangles.push_back(0);
+    std::vector<std::size_t> order(triangles.size());
+    for(std::size_t index=0;index<order.size();++index)order[index]=index;
+    std::sort(order.begin(),order.end(),[&](auto x,auto y){return triangles[x].area>triangles[y].area;});
+    std::vector<std::size_t> stack;
+    for(const auto seed:order) {
+        if(regionOf[seed]!=std::numeric_limits<std::size_t>::max())continue;
+        const auto slot=regionArea.size();
+        regionArea.push_back(0);regionNormal.push_back({});regionTriangles.push_back(0);
+        Vec3 normalSum=triangles[seed].normal*triangles[seed].area;
+        Vec3 centreSum=triangles[seed].centre*triangles[seed].area;
+        double areaSum=triangles[seed].area;
+        regionOf[seed]=slot;regionArea[slot]+=triangles[seed].area;++regionTriangles[slot];
+        stack.assign(1,seed);
+        while(!stack.empty()) {
+            const auto current=stack.back();stack.pop_back();
+            const Vec3 plane=normalized(normalSum);
+            const Vec3 origin=centreSum*(1.0/std::max(1e-18,areaSum));
+            for(const auto neighbour:adjacency[current]) {
+                if(regionOf[neighbour]!=std::numeric_limits<std::size_t>::max())continue;
+                const auto& candidate=triangles[neighbour];
+                if(std::abs(dot(candidate.normal,plane))<planarCosine)continue;
+                if(std::abs(dot(plane,candidate.centre-origin))>planarOffset)continue;
+                regionOf[neighbour]=slot;regionArea[slot]+=candidate.area;++regionTriangles[slot];
+                normalSum=normalSum+candidate.normal*candidate.area;
+                centreSum=centreSum+candidate.centre*candidate.area;
+                areaSum+=candidate.area;
+                stack.push_back(neighbour);
+            }
         }
-        const auto slot=found->second;regionOf[index]=slot;
-        regionArea[slot]+=triangles[index].area;regionTriangles[slot]+=1;
-        regionNormal[slot]=regionNormal[slot]+triangles[index].normal*triangles[index].area;
+        regionNormal[slot]=normalized(normalSum);
     }
     const double panelFloor=settings.panelMinimumAreaRelative*totalArea;
     std::vector<std::size_t> rankedRegions;double planarArea=0;
+    evidence.regionCount=regionArea.size();
+    for(const auto area:regionArea)evidence.largestRegionFraction=std::max(evidence.largestRegionFraction,area);
     for(std::size_t region=0;region<regionArea.size();++region) {
         if(regionArea[region]<panelFloor)continue;
         rankedRegions.push_back(region);planarArea+=regionArea[region];
     }
+    evidence.largestRegionFraction=totalArea>0?evidence.largestRegionFraction/totalArea:0;
     std::sort(rankedRegions.begin(),rankedRegions.end(),[&](auto x,auto y){return regionArea[x]>regionArea[y];});
     if(rankedRegions.size()>8)rankedRegions.resize(8);
     evidence.planarAreaFraction=clamp01(planarArea/totalArea);
@@ -432,6 +454,122 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
         evidence.verticalCoverage=double(filled)/double(resolution*resolution);
     }
 
+    // Face-step detection on the dominant face plane: a rectangular island sitting at a
+    // different depth from the face around it. This is the drawer-front signature and it
+    // avoids exact planar regions, which scanned furniture never provides.
+    {
+        const auto thin=evidence.thinAxis;
+        const Vec3 helper=std::abs(thin.y)<0.9?Vec3{0,1,0}:Vec3{1,0,0};
+        const Vec3 u=normalized(cross(helper,thin));
+        const Vec3 v=cross(thin,u);
+        // Only one side of the slab is the face the user sees: a door's front, not its back.
+        // Mixing both sides put every cell at two depths and hid every step.
+        double frontArea=0,backArea=0;
+        for(const auto& triangle:triangles) {
+            const double alignment=dot(triangle.normal,thin);
+            if(alignment>0.9)frontArea+=triangle.area;
+            if(alignment<-0.9)backArea+=triangle.area;
+        }
+        const double side=frontArea>=backArea?1.0:-1.0;
+        constexpr int resolution=64;
+        std::vector<double> sum(std::size_t(resolution)*resolution,0);
+        std::vector<double> area(std::size_t(resolution)*resolution,0);
+        double uMin=1e30,uMax=-1e30,vMin=1e30,vMax=-1e30,faceArea=0;
+        for(const auto& triangle:triangles) {
+            if(dot(triangle.normal,thin)*side<=0.9)continue;
+            faceArea+=triangle.area;
+            for(const auto corner:triangle.corners) {
+                const double pu=dot(corner,u),pv=dot(corner,v);
+                uMin=std::min(uMin,pu);uMax=std::max(uMax,pu);
+                vMin=std::min(vMin,pv);vMax=std::max(vMax,pv);
+            }
+        }
+        if(faceArea>0&&uMax>uMin&&vMax>vMin) {
+            const double spanU=uMax-uMin,spanV=vMax-vMin;
+            // Rasterise each triangle instead of dropping it into one centroid cell: a box
+            // face is two triangles and would otherwise contribute two samples.
+            for(const auto& triangle:triangles) {
+                if(dot(triangle.normal,thin)*side<=0.9)continue;
+                double su[3]{},sv[3]{};
+                for(int corner=0;corner<3;++corner) {
+                    su[corner]=(dot(triangle.corners[corner],u)-uMin)/spanU*resolution;
+                    sv[corner]=(dot(triangle.corners[corner],v)-vMin)/spanV*resolution;
+                }
+                const double twice=(su[1]-su[0])*(sv[2]-sv[0])-(su[2]-su[0])*(sv[1]-sv[0]);
+                if(std::abs(twice)<1e-12)continue;
+                const int lowColumn=std::clamp(int(std::floor(std::min({su[0],su[1],su[2]}))),0,resolution-1);
+                const int highColumn=std::clamp(int(std::ceil(std::max({su[0],su[1],su[2]}))),0,resolution-1);
+                const int lowRow=std::clamp(int(std::floor(std::min({sv[0],sv[1],sv[2]}))),0,resolution-1);
+                const int highRow=std::clamp(int(std::ceil(std::max({sv[0],sv[1],sv[2]}))),0,resolution-1);
+                const double pd=dot(triangle.centre,thin)*side;
+                std::size_t covered=0;
+                std::vector<std::size_t> cells;
+                for(int row=lowRow;row<=highRow;++row)for(int column=lowColumn;column<=highColumn;++column) {
+                    const double x=column+0.5,y=row+0.5;
+                    const double w0=((su[1]-x)*(sv[2]-y)-(su[2]-x)*(sv[1]-y))/twice;
+                    const double w1=((su[2]-x)*(sv[0]-y)-(su[0]-x)*(sv[2]-y))/twice;
+                    const double w2=1-w0-w1;
+                    if(w0<-1e-9||w1<-1e-9||w2<-1e-9)continue;
+                    cells.push_back(std::size_t(row)*resolution+std::size_t(column));++covered;
+                }
+                if(!covered)continue;
+                const double share=triangle.area/double(covered);
+                for(const auto slot:cells) {sum[slot]+=pd*share;area[slot]+=share;}
+            }
+            std::vector<double> depth(std::size_t(resolution)*resolution,0);
+            std::vector<unsigned char> filled(std::size_t(resolution)*resolution,0);
+            std::vector<double> samples;
+            for(std::size_t slot=0;slot<depth.size();++slot)if(area[slot]>0) {
+                depth[slot]=sum[slot]/area[slot];filled[slot]=1;samples.push_back(depth[slot]);
+            }
+            if(samples.size()>10) {
+                std::sort(samples.begin(),samples.end());
+                const double mode=samples[samples.size()/2];
+                std::vector<unsigned char> offsetMask(depth.size(),0);
+                std::size_t offsetCells=0;
+                for(std::size_t slot=0;slot<depth.size();++slot)
+                    if(filled[slot]&&std::abs(depth[slot]-mode)>0.010) {offsetMask[slot]=1;++offsetCells;}
+                evidence.faceStepDepth=mode;
+                evidence.faceStepCoverage=double(samples.size())/double(resolution*resolution);
+                evidence.faceStepOffsetFraction=double(offsetCells)/double(std::max<std::size_t>(1,samples.size()));
+                std::vector<unsigned char> visited(depth.size(),0);
+                std::vector<std::size_t> stack;
+                for(std::size_t seed=0;seed<offsetMask.size();++seed) {
+                    if(!offsetMask[seed]||visited[seed])continue;
+                    stack.assign(1,seed);visited[seed]=1;
+                    std::size_t cells=0;int lowColumn=resolution,highColumn=-1,lowRow=resolution,highRow=-1;
+                    double stepDepth=0;
+                    while(!stack.empty()) {
+                        const auto current=stack.back();stack.pop_back();
+                        const int row=int(current)/resolution,column=int(current)%resolution;
+                        ++cells;stepDepth=std::max(stepDepth,std::abs(depth[current]-mode));
+                        lowColumn=std::min(lowColumn,column);highColumn=std::max(highColumn,column);
+                        lowRow=std::min(lowRow,row);highRow=std::max(highRow,row);
+                        const int neighbours[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+                        for(const auto& delta:neighbours) {
+                            const int nextRow=row+delta[0],nextColumn=column+delta[1];
+                            if(nextRow<0||nextRow>=resolution||nextColumn<0||nextColumn>=resolution)continue;
+                            const auto next=std::size_t(nextRow)*resolution+std::size_t(nextColumn);
+                            if(!offsetMask[next]||visited[next])continue;
+                            visited[next]=1;stack.push_back(next);
+                        }
+                    }
+                    if(cells<20)continue;
+                    const double boxArea=double((highColumn-lowColumn+1)*(highRow-lowRow+1));
+                    FaceStep step;
+                    step.fillRatio=boxArea>0?double(cells)/boxArea:0;
+                    step.areaFraction=double(cells)/double(resolution*resolution);
+                    step.heightFraction=double(highRow-lowRow+1)/double(resolution);
+                    step.depthMeters=stepDepth;
+                    step.rectangular=step.fillRatio>0.80;
+                    evidence.faceSteps.push_back(step);
+                }
+                std::sort(evidence.faceSteps.begin(),evidence.faceSteps.end(),[](const auto& x,const auto& y){return x.areaFraction>y.areaFraction;});
+                if(evidence.faceSteps.size()>4)evidence.faceSteps.resize(4);
+            }
+        }
+    }
+
     const auto format=[](double value){char text[64];std::snprintf(text,sizeof text,"%.3f",value);return std::string(text);};
     auto add=[&](Class type,double score,std::string reason){report.ranked.push_back({type,clamp01(score),std::move(reason)});};
 
@@ -440,7 +578,20 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
     const double axialConfidence=clamp01((1.5-evidence.supportSpread)/0.5)*clamp01((evidence.elongation-1.4)/0.6);
 
     if(furnitureLike) {
-        if(evidence.thinness<0.40&&evidence.verticalPanelFraction>0.50&&evidence.verticalCoverage>0.45)
+        // A rectangular island that does not span the face height is a drawer front;
+        // a leaf that spans it stays a hinged panel.
+        double drawerStep=0;
+        for(const auto& step:evidence.faceSteps)
+            if(step.rectangular&&step.areaFraction>0.04&&step.areaFraction<0.55&&step.heightFraction<0.60)
+                drawerStep=std::max(drawerStep,step.areaFraction);
+        if(drawerStep>0)
+            add(Class::Drawer,0.75+0.20*drawerStep+0.10*evidence.boxiness,
+                "face step covering "+format(drawerStep)+" of the face, rectangular and short of the full height");
+        // A leaf is either thin on its own or sits in a frame that produces a tall step.
+        // A plain deep box (a wardrobe shell) is neither, so it stays a rigid frame.
+        bool tallStep=false;
+        for(const auto& step:evidence.faceSteps)if(step.heightFraction>=0.60)tallStep=true;
+        if((evidence.thinness<0.30||tallStep)&&evidence.verticalPanelFraction>0.50&&evidence.verticalCoverage>0.45)
             add(Class::HingedPanel,0.50+0.25*evidence.verticalPanelFraction+0.15*evidence.verticalCoverage+0.10*(1-evidence.thinness),
                 "upright rigid leaf: vertical area "+format(evidence.verticalPanelFraction)+", face coverage "+format(evidence.verticalCoverage)+", thinness "+format(evidence.thinness));
         add(Class::RigidFrame,0.44+0.30*evidence.boxiness+0.15*evidence.verticalCoverage,

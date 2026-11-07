@@ -47,7 +47,9 @@ Json evidenceJson(const A::Evidence& e) {
         {"degenerate",e.degenerateTriangles},{"components",e.componentCount},{"boxiness",e.boxiness},
         {"planar_area_fraction",e.planarAreaFraction},{"thinness",e.thinness},{"elongation",e.elongation},
         {"symmetry_error",e.symmetryError},{"supports",e.supportCount},{"grounded_area_fraction",e.groundedAreaFraction},
-        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},{"thin_axis",{e.thinAxis.x,e.thinAxis.y,e.thinAxis.z}},
+        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},{"thin_axis",{e.thinAxis.x,e.thinAxis.y,e.thinAxis.z}},{"regions",e.regionCount},{"largest_region",e.largestRegionFraction},
+        {"face_step_debug",{{"mode",e.faceStepDepth},{"coverage",e.faceStepCoverage},{"offset_fraction",e.faceStepOffsetFraction}}},
+        {"face_steps",[&]{Json list=Json::array();for(const auto& s:e.faceSteps)list.push_back({{"area",s.areaFraction},{"fill",s.fillRatio},{"height",s.heightFraction},{"depth",s.depthMeters},{"rect",s.rectangular}});return list;}()},
         {"joints",[&]{Json list=Json::array();for(const auto& j:e.joints)list.push_back({{"axis",{j.axis.x,j.axis.y,j.axis.z}},{"point",{j.point.x,j.point.y,j.point.z}},{"length",j.lengthMeters}});return list;}()},
         {"panels",panels}};
 }
@@ -150,21 +152,30 @@ int main(int argc,char** argv) {
         const auto cubeReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:cube.positions)p.push_back({v.x,v.y,v.z});return p;}(),cube.indices);
         const auto cubePanel=box(1.0,1.2,0.06);
         const auto cubePanelReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:cubePanel.positions)p.push_back({v.x,v.y,v.z});return p;}(),cubePanel.indices);
+        // Legacy control: a full-height proud plate, not a drawer front.
         const auto drawerFrame=box(1.0,1.0,0.5);
         const auto drawerFace=box(0.8,0.8,0.02,0,0,0.26);
         const auto drawer=merge(drawerFrame,drawerFace);
         const auto drawerReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:drawer.positions)p.push_back({v.x,v.y,v.z});return p;}(),drawer.indices);
+        // Furniture controls: a carcass with a proud drawer front, and a plain wardrobe shell.
+        const auto carcass=box(1.0,0.9,0.5);
+        const auto drawerModule=merge(carcass,box(0.8,0.35,0.03,0,0,0.265));
+        const auto drawerModuleReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:drawerModule.positions)p.push_back({v.x,v.y,v.z});return p;}(),drawerModule.indices);
+        const auto wardrobeReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:carcass.positions)p.push_back({v.x,v.y,v.z});return p;}(),carcass.indices);
         const auto doorFrame=box(1.0,2.0,0.12);
         const auto doorLeaf=box(0.9,1.9,0.05,0.02,0,0.09);
         const auto door=merge(doorFrame,doorLeaf);
         const auto doorReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:door.positions)p.push_back({v.x,v.y,v.z});return p;}(),door.indices);
-        for(const auto& [id,report]:std::vector<std::pair<std::string,A::Report>>{{"cube",cubeReport},{"thin-panel",cubePanelReport},{"drawer",drawerReport},{"door",doorReport}}) {
+        for(const auto& [id,report]:std::vector<std::pair<std::string,A::Report>>{{"cube",cubeReport},{"thin-panel",cubePanelReport},
+                {"proud-plate",drawerReport},{"wardrobe",wardrobeReport},{"drawer-module",drawerModuleReport},{"door",doorReport}}) {
             result["synthetic"].push_back({{"id",id},{"accepted",A::name(report.ranked.front().type)},{"score",report.ranked.front().score},
                 {"evidence",evidenceJson(report.evidence)}});
             std::cout<<"synthetic "<<id<<": "<<A::name(report.ranked.front().type)<<" score="<<report.ranked.front().score<<"\n";
         }
 
         std::ofstream(output/"archetype-report.json")<<result.dump(2);
+        require(A::name(drawerModuleReport.ranked.front().type)=="Drawer","Furniture carcass with a proud drawer front was not classified as Drawer");
+        require(A::name(wardrobeReport.ranked.front().type)=="RigidFrame","Plain wardrobe shell was not classified as RigidFrame");
         std::cout<<"gated "<<passed<<"/"<<gated<<" archetype expectations\n";
         if(passed!=gated)throw std::runtime_error("Archetype expectations failed: "+mismatches.dump());
         return 0;
