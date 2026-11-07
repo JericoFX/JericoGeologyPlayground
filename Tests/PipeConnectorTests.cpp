@@ -1,4 +1,6 @@
 #include "PipeConnector.hpp"
+#include "SplineConstruction.hpp"
+#include "SocketInference.hpp"
 #include <nlohmann/json.hpp>
 #include <cmath>
 #include <filesystem>
@@ -65,6 +67,80 @@ int main(int argc,char** argv) {
         std::size_t accepted=0;
         for(const auto& item:result["cases"])if(item["state"]!="Unconnectable")++accepted;
         result["accepted"]=accepted;
+        // Sweep the routed centreline and read the sockets back out of the generated mesh:
+        // the loop is only closed if the pipe that was built still ends on the sockets.
+        {
+            const auto straightFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,0,-1,0,0));
+            const auto elbowFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,1,0,0,-1));
+            auto sweep=[&](const P::ConnectorResult& fit,double radius) {
+                Playground::PA::ProceduralSpline spline;
+                // A deterministic, non-zero identity: the same route always builds the same mesh.
+                spline.splineGuid.bytes={std::byte{0x1},std::byte{0x2},std::byte{0x3},std::byte{0x4},
+                    std::byte{0x5},std::byte{0x6},std::byte{0x7},std::byte{0x8},
+                    std::byte{0x9},std::byte{0xa},std::byte{0xb},std::byte{0xc},
+                    std::byte{0xd},std::byte{0xe},std::byte{0xf},std::byte{0x10}};
+                spline.name="connector";
+                spline.interpolation=Playground::PA::SplineInterpolation::Polyline;
+                for(const auto& point:fit.path) {
+                    Playground::PA::SplineControlPoint control;
+                    control.position=point;
+                    control.pointGuid.bytes[0]=std::byte(std::uint8_t(spline.points.size()+1));
+                    spline.points.push_back(control);
+                }
+                Playground::Construction::ConstructionSettings settings;
+                settings.profile=Playground::Construction::ProfileKind::Circle;
+                settings.radiusMeters=radius;
+                // A connector is an open segment: its rims are the sockets themselves.
+                settings.capStart=false;settings.capEnd=false;
+                settings.maximumVertices=200000;
+                return Playground::Construction::buildConstruction(spline,settings);
+            };
+            Json sweeps=Json::array();
+            for(const auto& [id,fit,radius] : std::vector<std::tuple<std::string,P::ConnectorResult,double>>{
+                    {"straight",straightFit,0.1},{"elbow",elbowFit,0.1}}) {
+                const auto built=sweep(fit,radius);
+                std::vector<JE::SocketInference::Vec3> points;
+                points.reserve(built.mesh.mesh.positions.size());
+                for(const auto& p:built.mesh.mesh.positions)points.push_back({p.x,p.y,p.z});
+                const auto inferred=JE::SocketInference::infer(points,built.mesh.mesh.indices);
+                Json entry={{"id",id},{"triangles",built.mesh.mesh.indices.size()/3},
+                    {"inferred_sockets",inferred.sockets.size()},{"boundary_loops",inferred.boundaryLoops}};
+                sweeps.push_back(entry);
+                std::cout<<"sweep "<<id<<": triangles="<<built.mesh.mesh.indices.size()/3
+                         <<" inferred_sockets="<<inferred.sockets.size()<<" loops="<<inferred.boundaryLoops<<"\n";
+
+                // Direct geometric closure: the swept mesh must reach each routed end and its
+                // rim there must have the profile radius, whatever the socket inference says.
+                auto rimRadius=[&](const Playground::Vec3d& end,const Playground::Vec3d& axis) {
+                    double radius=0;std::size_t reached=0;
+                    for(const auto& p:built.mesh.mesh.positions) {
+                        const double dx=p.x-end.x,dy=p.y-end.y,dz=p.z-end.z;
+                        // Select by distance ALONG the axis, not to the point: rim vertices
+                        // sit one radius away from the centre by construction.
+                        const double along=dx*axis.x+dy*axis.y+dz*axis.z;
+                        if(std::abs(along)>0.02)continue;
+                        ++reached;
+                        const double ax=dx-along*axis.x,ay=dy-along*axis.y,az=dz-along*axis.z;
+                        radius=std::max(radius,std::sqrt(ax*ax+ay*ay+az*az));
+                    }
+                    return std::pair<double,std::size_t>{radius,reached};
+                };
+                const auto toAxis=[&](Playground::Vec3d a,Playground::Vec3d b) {
+                    const double dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z;
+                    const double l=std::sqrt(dx*dx+dy*dy+dz*dz);
+                    return Playground::Vec3d{dx/l,dy/l,dz/l};
+                };
+                const auto startRim=rimRadius(fit.path.front(),toAxis(fit.path.front(),fit.path[1]));
+                const auto endRim=rimRadius(fit.path.back(),toAxis(fit.path[fit.path.size()-2],fit.path.back()));
+                entry["start_rim_radius"]=startRim.first;entry["end_rim_radius"]=endRim.first;
+                entry["start_vertices"]=startRim.second;entry["end_vertices"]=endRim.second;
+                std::cout<<"  rim radius start="<<startRim.first<<" end="<<endRim.first
+                         <<" (profile "<<radius<<", vertices "<<startRim.second<<"/"<<endRim.second<<")\n";
+                require(std::abs(startRim.first-radius)<0.02,"Swept mesh does not reach the start socket with the profile radius");
+                require(std::abs(endRim.first-radius)<0.02,"Swept mesh does not reach the end socket with the profile radius");
+            }
+            result["sweeps"]=sweeps;
+        }
         std::ofstream(output/"pipe-connector-report.json")<<result.dump(2);
         std::cout<<"pipe connector: "<<accepted<<"/"<<result["cases"].size()<<" socket pairs routed\n";
         return 0;

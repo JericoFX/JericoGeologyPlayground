@@ -72,7 +72,7 @@ endif()
 # Socket-to-socket routing: the pipe centreline between two declared sockets.
 if(NOT TARGET PipeConnectorTests)
     add_executable(PipeConnectorTests "${PLAYGROUND_ROOT}/Tests/PipeConnectorTests.cpp" "${PLAYGROUND_ROOT}/Source/PipeConnector.cpp")
-    target_link_libraries(PipeConnectorTests PRIVATE PlaygroundAnimationImport)
+    target_link_libraries(PipeConnectorTests PRIVATE PlaygroundAnimationImport JESocketInference)
     if(TARGET ExperimentRecipe)
         target_include_directories(PipeConnectorTests PRIVATE "${RECOVERY_DEPS}/json")
     else()
