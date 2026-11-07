@@ -354,6 +354,31 @@ int main(int argc,char** argv) {
                 std::cout<<"  break skipped: the swept pipe is not a closed manifold\n";
             }
         }
+        // The routed builder is what the UI will call: same ring profile as a straight pipe,
+        // swept along the routed polyline, with a socket at each end.
+        {
+            const auto elbowFit=P::connect(frame(0,0,0,1,0,0),frame(1,0,1,0,0,-1));
+            P::StraightSettings settings;
+            settings.diameter=0.2;settings.wallThickness=0.02;settings.repeatMeters=0.5;
+            const auto routed=P::routed(elbowFit.path,settings);
+            result["routed"]={{"triangles",routed.mesh.mesh.mesh.indices.size()/3},
+                {"sockets",routed.module.sockets.size()},{"module",routed.module.moduleType}};
+            for(const auto& socket:routed.module.sockets)
+                result["routed"]["socket_positions"]=result["routed"].contains("socket_positions")
+                    ? result["routed"]["socket_positions"] : Json::array();
+            std::cout<<"routed: triangles="<<routed.mesh.mesh.mesh.indices.size()/3
+                     <<" sockets="<<routed.module.sockets.size()<<" module="<<routed.module.moduleType<<"\n";
+            require(routed.mesh.mesh.mesh.indices.size()>0,"Routed builder produced no mesh");
+            require(routed.module.sockets.size()==2,"Routed builder did not expose two sockets");
+            require(std::abs(routed.module.sockets.front().diameter-0.2)<1e-9,"Routed socket diameter is wrong");
+            const auto distanceTo=[&](const Playground::Vec3d& a,const Playground::Vec3d& b) {
+                return std::sqrt(std::pow(a.x-b.x,2)+std::pow(a.y-b.y,2)+std::pow(a.z-b.z,2));
+            };
+            require(distanceTo(elbowFit.path.front(),routed.module.sockets.front().position)<1e-9,
+                "Routed socket is not on the route start");
+            require(distanceTo(elbowFit.path.back(),routed.module.sockets.back().position)<1e-9,
+                "Routed socket is not on the route end");
+        }
         std::ofstream(output/"pipe-connector-report.json")<<result.dump(2);
         std::cout<<"pipe connector: "<<accepted<<"/"<<result["cases"].size()<<" socket pairs routed\n";
         return 0;

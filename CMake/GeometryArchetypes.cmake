@@ -71,7 +71,7 @@ endif()
 
 # Socket-to-socket routing: the pipe centreline between two declared sockets.
 if(NOT TARGET PipeConnectorTests)
-    add_executable(PipeConnectorTests "${PLAYGROUND_ROOT}/Tests/PipeConnectorTests.cpp" "${PLAYGROUND_ROOT}/Source/PipeConnector.cpp")
+    add_executable(PipeConnectorTests "${PLAYGROUND_ROOT}/Tests/PipeConnectorTests.cpp")
     target_link_libraries(PipeConnectorTests PRIVATE PlaygroundAnimationImport JESocketInference)
     if(TARGET ExperimentRecipe)
         target_include_directories(PipeConnectorTests PRIVATE "${RECOVERY_DEPS}/json")
@@ -81,3 +81,18 @@ if(NOT TARGET PipeConnectorTests)
     add_test(NAME Playground.PipeConnector COMMAND PipeConnectorTests "${CMAKE_CURRENT_BINARY_DIR}/connector-evidence")
     set_tests_properties(Playground.PipeConnector PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
 endif()
+
+# Socket-to-socket routing is used by the tests and by the application's Pipe Lab.
+if(NOT TARGET PipeConnectorGeometry)
+    add_library(PipeConnectorGeometry "${PLAYGROUND_ROOT}/Source/PipeConnector.cpp")
+    target_include_directories(PipeConnectorGeometry PUBLIC "${PLAYGROUND_ROOT}/Source"
+        "${ENGINE_INPUTS}/Tools/ProceduralAuthoring/Include"
+        "${ENGINE_INPUTS}/Engine/Core/Include"
+        "${ENGINE_INPUTS}/Engine/Jobs/Include")
+    target_compile_features(PipeConnectorGeometry PUBLIC cxx_std_20)
+endif()
+foreach(consumer PipeConnectorTests JericoGeologyPlaygroundRecovered JericoGeologyPlayground)
+    if(TARGET ${consumer})
+        target_link_libraries(${consumer} PRIVATE PipeConnectorGeometry)
+    endif()
+endforeach()
