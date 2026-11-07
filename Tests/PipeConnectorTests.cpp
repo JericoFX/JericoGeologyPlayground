@@ -106,11 +106,17 @@ int main(int argc,char** argv) {
                 Json entry={{"id",id},{"triangles",built.mesh.mesh.indices.size()/3},
                     {"inferred_sockets",inferred.sockets.size()},{"boundary_loops",inferred.boundaryLoops}};
                 sweeps.push_back(entry);
-                // The elbow closes the loop: both generated rims are read back. The straight
-                // run still yields one rim (its border walk mixes a seam edge into the second
-                // rim), so it is recorded and gated at one until that is fixed.
-                if(id=="elbow") require(inferred.sockets.size()==2,"Elbow sweep did not leave two readable sockets");
-                else require(inferred.sockets.size()>=1,"Straight sweep left no readable socket");
+                // Both routes must read back exactly two sockets: that is the loop closing.
+                require(inferred.sockets.size()==2,"Sweep did not leave two readable sockets");
+                for(const auto& socket:inferred.sockets) {
+                    require(std::abs(socket.diameter-2*radius)<0.005,"Read back socket diameter is not the profile diameter");
+                    const auto distanceTo=[&](const Playground::Vec3d& end) {
+                        return std::sqrt(std::pow(socket.position.x-end.x,2)+std::pow(socket.position.y-end.y,2)
+                            +std::pow(socket.position.z-end.z,2));
+                    };
+                    require(std::min(distanceTo(fit.path.front()),distanceTo(fit.path.back()))<0.01,
+                        "Read back socket is not on a routed end");
+                }
                 std::cout<<"sweep "<<id<<": triangles="<<built.mesh.mesh.indices.size()/3
                          <<" inferred="<<inferred.sockets.size()<<" border_edges="<<inferred.boundaryEdges
                          <<" welded="<<inferred.vertices<<" loops="<<inferred.boundaryLoops<<" sizes=";

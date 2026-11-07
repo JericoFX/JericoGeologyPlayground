@@ -122,22 +122,26 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
     }
     for(const auto& walk:walks) {
         if(report.loopSizes.size()<8)report.loopSizes.push_back(walk.size());
-        // Cut the walk where it turns sharply; each piece is a candidate circle.
+        // Cut the walk into PLANAR runs, not by turning angle. A rim lies in a plane; a seam
+        // edge does not, and the straight tube's seam is smooth enough that an angle test never
+        // fired, leaving the two rims glued together in one walk.
         std::vector<std::vector<std::uint32_t>> pieces;
+        const double planeTolerance=0.01*diagonal;
         std::size_t begin=0;
-        for(std::size_t index=0;index<walk.size();++index) {
-            const auto previous=welded.points[walk[(index+walk.size()-1)%walk.size()]];
-            const auto current=welded.points[walk[index]];
-            const auto next=welded.points[walk[(index+1)%walk.size()]];
-            const auto incoming=normalized({current.x-previous.x,current.y-previous.y,current.z-previous.z});
-            const auto outgoing=normalized({next.x-current.x,next.y-current.y,next.z-current.z});
-            const double turn=std::acos(std::clamp(incoming.x*outgoing.x+incoming.y*outgoing.y+incoming.z*outgoing.z,-1.0,1.0));
-            if(turn>0.7853981633974483&&index>begin+3) { // 45 degrees
-                pieces.emplace_back(walk.begin()+std::ptrdiff_t(begin),walk.begin()+std::ptrdiff_t(index));
-                begin=index;
+        while(begin+8<=walk.size()) {
+            const auto a=welded.points[walk[begin]],b=welded.points[walk[begin+2]],d=welded.points[walk[begin+4]];
+            const auto normal=normalized(cross(sub(b,a),sub(d,a)));
+            if(length(normal)<0.5) {++begin;continue;}
+            const double offset=dot(normal,a);
+            std::size_t end=begin;
+            while(end<walk.size()) {
+                if(std::abs(dot(normal,welded.points[walk[end]])-offset)>planeTolerance)break;
+                ++end;
             }
+            if(end-begin>=settings.minimumLoopVertices)
+                pieces.emplace_back(walk.begin()+std::ptrdiff_t(begin),walk.begin()+std::ptrdiff_t(end));
+            begin=(end>begin?end:begin+1);
         }
-        if(begin+3<walk.size())pieces.emplace_back(walk.begin()+std::ptrdiff_t(begin),walk.end());
         for(const auto& piece:pieces) {
             std::vector<std::uint32_t> loop=piece;
             if(loop.size()<settings.minimumLoopVertices)continue;
