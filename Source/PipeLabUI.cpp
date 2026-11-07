@@ -305,6 +305,27 @@ void PipeLabUI::frame(Renderer&renderer,unsigned width,unsigned height)
                 pipeSettings.start=fa.position;pipeSettings.end=fb.position;pipeSettings.diameter=sa.diameter;
             });
             if(ImGui::Button("Generate straight pipe"))action([&]{addStraight();});
+            ImGui::BeginDisabled(selected<0||selected>=int(files.size())||loadAsset(files.at(std::size_t(selected))).module.sockets.size()<2);
+            if(ImGui::Button("Route this module's own sockets"))action([&]{
+                const auto&module=loadAsset(files.at(std::size_t(selected))).module;
+                if(module.sockets.size()<2)throw std::runtime_error("This module needs two sockets");
+                Pipes::Pose pose;pose.position={0,0,0};
+                const auto fa=worldFrame(module.sockets[0],pose);
+                const auto fb=worldFrame(module.sockets[1],pose);
+                const auto fit=connect(fa,fb);
+                if(fit.state==ConnectorState::Unconnectable)throw std::runtime_error("Route unavailable: "+fit.reason);
+                auto settings=pipeSettings;
+                settings.diameter=module.sockets[0].diameter;
+                settings.start=fit.path.front();settings.end=fit.path.back();
+                auto built=routed(fit.path,settings);
+                const auto triangles=built.mesh.mesh.mesh.indices.size()/3;
+                pipes.push_back({{std::move(built.mesh.mesh),std::move(built.mesh.cornerUV)},std::move(built.module)});
+                instances.push_back({{}, {},int(pipes.size())-1});
+                sceneSelection=int(instances.size())-1;scene=true;dirty=true;fitAfterRebuild=true;
+                status=std::string("Own-socket route: ")+name(fit.state)+", "+std::to_string(fit.lengthMeters)+" m, "
+                    +std::to_string(triangles)+" triangles";
+            });
+            ImGui::EndDisabled();
             if(ImGui::Button("Fit route between A / B"))action([&]{
                 if(!checkSelected())throw std::runtime_error("Select A / B sockets in Connect");
                 const auto&a=instances.at(firstInstance),&b=instances.at(secondInstance);
