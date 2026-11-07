@@ -107,7 +107,10 @@ int main(int argc,char** argv) {
                     {"inferred_sockets",inferred.sockets.size()},{"boundary_loops",inferred.boundaryLoops}};
                 sweeps.push_back(entry);
                 std::cout<<"sweep "<<id<<": triangles="<<built.mesh.mesh.indices.size()/3
-                         <<" inferred_sockets="<<inferred.sockets.size()<<" loops="<<inferred.boundaryLoops<<"\n";
+                         <<" inferred="<<inferred.sockets.size()<<" border_edges="<<inferred.boundaryEdges
+                         <<" welded="<<inferred.vertices<<" loops="<<inferred.boundaryLoops<<" sizes=";
+                for(const auto size:inferred.loopSizes)std::cout<<size<<",";
+                std::cout<<"\n";
 
                 // Direct geometric closure: the swept mesh must reach each routed end and its
                 // rim there must have the profile radius, whatever the socket inference says.

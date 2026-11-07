@@ -69,6 +69,7 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
     const double diagonal=length(sub(maximum,minimum));
     const Vec3 centroid=mul(sum,1.0/double(positions.size()));
     const auto welded=weld(positions,diagonal);
+    report.vertices=welded.points.size();
 
     // Edge use counts: an edge used once is a border.
     std::unordered_map<std::uint64_t,int> useCount;
@@ -92,85 +93,102 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
         }
     std::vector<std::pair<std::uint32_t,std::uint32_t>> borders;
     for(const auto& [key,count]:useCount)if(count==1)borders.emplace_back(std::uint32_t(key&0xffffffffu),std::uint32_t(key>>32));
+    report.boundaryEdges=borders.size();
 
     // Group border edges into loops through shared vertices.
     std::unordered_map<std::uint32_t,std::vector<std::uint32_t>> adjacency;
     for(const auto& [a,b]:borders){adjacency[a].push_back(b);adjacency[b].push_back(a);}
+    // Border walks, in order. A single border can run around two rims and up both sides of a
+    // UV seam, so it is split at sharp corners before any circle is fitted: a tube that is
+    // open at both ends produced one 59-vertex loop and therefore no socket at all.
     std::vector<unsigned char> visited(welded.points.size(),0);
+    std::vector<std::vector<std::uint32_t>> walks;
     for(const auto& [start,neighbours]:adjacency) {
-        if(visited[start])continue;
-        std::vector<std::uint32_t> loop;std::vector<std::uint32_t> stack{start};
-        visited[start]=1;bool closed=true;
-        while(!stack.empty()) {
-            const auto current=stack.back();stack.pop_back();loop.push_back(current);
-            if(adjacency[current].size()!=2)closed=false;
-            for(const auto next:adjacency[current])if(!visited[next]){visited[next]=1;stack.push_back(next);}
-        }
-        if(loop.size()<settings.minimumLoopVertices)continue;
-        ++report.boundaryLoops;
-        if(report.loops.size()<8) {
-            LoopInfo info;info.vertices=loop.size();info.closed=closed;
-            Vec3 centreLoop{};
-            for(const auto vertex:loop)centreLoop=add(centreLoop,welded.points[vertex]);
-            centreLoop=mul(centreLoop,1.0/double(loop.size()));
-            info.centre=centreLoop;
-            double maximum=0,average=0;
-            for(const auto vertex:loop) {
-                const double distance=length(sub(welded.points[vertex],centreLoop));
-                maximum=std::max(maximum,distance);average+=distance;
+        if(visited[start]||neighbours.empty())continue;
+        std::vector<std::uint32_t> walk{start};
+        visited[start]=1;
+        std::uint32_t previous=start,current=start;
+        while(true) {
+            std::uint32_t next=UINT32_MAX;
+            for(const auto candidate:adjacency[current]) {
+                if(candidate==previous)continue;
+                if(visited[candidate]&&candidate!=start)continue;
+                next=candidate;break;
             }
-            info.maximumRadial=maximum;info.averageRadial=average/double(loop.size());
-            report.loops.push_back(info);
+            if(next==UINT32_MAX||next==start)break;
+            walk.push_back(next);visited[next]=1;previous=current;current=next;
         }
-        // Plane fit through the loop, then a 2D least-squares circle.
-        Vec3 centre{};
-        for(const auto vertex:loop)centre=add(centre,welded.points[vertex]);
-        centre=mul(centre,1.0/double(loop.size()));
-        Vec3 normalSum{};
-        for(std::size_t index=0;index<loop.size();++index) {
-            const auto a=welded.points[loop[index]],b=welded.points[loop[(index+1)%loop.size()]];
-            normalSum=add(normalSum,cross(sub(a,centre),sub(b,centre)));
+        if(walk.size()>=settings.minimumLoopVertices)walks.push_back(std::move(walk));
+    }
+    for(const auto& walk:walks) {
+        if(report.loopSizes.size()<8)report.loopSizes.push_back(walk.size());
+        // Cut the walk where it turns sharply; each piece is a candidate circle.
+        std::vector<std::vector<std::uint32_t>> pieces;
+        std::size_t begin=0;
+        for(std::size_t index=0;index<walk.size();++index) {
+            const auto previous=welded.points[walk[(index+walk.size()-1)%walk.size()]];
+            const auto current=welded.points[walk[index]];
+            const auto next=welded.points[walk[(index+1)%walk.size()]];
+            const auto incoming=normalized({current.x-previous.x,current.y-previous.y,current.z-previous.z});
+            const auto outgoing=normalized({next.x-current.x,next.y-current.y,next.z-current.z});
+            const double turn=std::acos(std::clamp(incoming.x*outgoing.x+incoming.y*outgoing.y+incoming.z*outgoing.z,-1.0,1.0));
+            if(turn>0.7853981633974483&&index>begin+3) { // 45 degrees
+                pieces.emplace_back(walk.begin()+std::ptrdiff_t(begin),walk.begin()+std::ptrdiff_t(index));
+                begin=index;
+            }
         }
-        const Vec3 normal=normalized(normalSum);
-        if(length(normal)<0.5){++report.rejectedLoops;continue;}
-        const Vec3 helper=std::abs(normal.y)<0.9?Vec3{0,1,0}:Vec3{1,0,0};
-        const Vec3 u=normalized(cross(helper,normal));
-        const Vec3 v=cross(normal,u);
-        double sxx=0,sxy=0,syy=0,sxz=0,syz=0,szz=0;
-        Vec3 planeDeviationOrigin=centre;
-        double maximumPlaneDeviation=0;
-        for(const auto vertex:loop) {
-            const auto delta=sub(welded.points[vertex],centre);
-            const double x=dot(delta,u),y=dot(delta,v),z=dot(delta,normal);
-            maximumPlaneDeviation=std::max(maximumPlaneDeviation,std::abs(z));
-            sxx+=x*x;sxy+=x*y;syy+=y*y;sxz+=x*x*x+x*y*y;syz+=y*y*y+x*x*y;szz+=x*x+y*y;
+        if(begin+3<walk.size())pieces.emplace_back(walk.begin()+std::ptrdiff_t(begin),walk.end());
+        for(const auto& piece:pieces) {
+            std::vector<std::uint32_t> loop=piece;
+            if(loop.size()<settings.minimumLoopVertices)continue;
+            ++report.boundaryLoops;
+            Vec3 centre{};
+            for(const auto vertex:loop)centre=add(centre,welded.points[vertex]);
+            centre=mul(centre,1.0/double(loop.size()));
+            Vec3 normalSum{};
+            for(std::size_t index=0;index<loop.size();++index) {
+                const auto a=welded.points[loop[index]],b=welded.points[loop[(index+1)%loop.size()]];
+                normalSum=add(normalSum,cross(sub(a,centre),sub(b,centre)));
+            }
+            const Vec3 normal=normalized(normalSum);
+            if(length(normal)<0.5){++report.rejectedLoops;continue;}
+            const Vec3 helper=std::abs(normal.y)<0.9?Vec3{0,1,0}:Vec3{1,0,0};
+            const Vec3 u=normalized(cross(helper,normal));
+            const Vec3 v=cross(normal,u);
+            double sxx=0,sxy=0,syy=0,sxz=0,syz=0;
+            double maximumPlaneDeviation=0;
+            for(const auto vertex:loop) {
+                const auto delta=sub(welded.points[vertex],centre);
+                const double x=dot(delta,u),y=dot(delta,v),z=dot(delta,normal);
+                maximumPlaneDeviation=std::max(maximumPlaneDeviation,std::abs(z));
+                sxx+=x*x;sxy+=x*y;syy+=y*y;sxz+=x*x*x+x*y*y;syz+=y*y*y+x*x*y;
+            }
+            const double determinant=sxx*syy-sxy*sxy;
+            if(std::abs(determinant)<1e-18){++report.rejectedLoops;continue;}
+            const double cx=(sxz*syy-syz*sxy)/determinant*0.5;
+            const double cy=(syz*sxx-sxz*sxy)/determinant*0.5;
+            double radialSum=0,radialMax=0;
+            for(const auto vertex:loop) {
+                const auto delta=sub(welded.points[vertex],centre);
+                const double x=dot(delta,u),y=dot(delta,v);
+                const double radial=std::hypot(x-cx,y-cy);
+                radialSum+=radial;radialMax=std::max(radialMax,radial);
+            }
+            const double radius=radialSum/double(loop.size());
+            if(radius<=kEpsilon){++report.rejectedLoops;continue;}
+            SocketCandidate socket;
+            socket.position=add(centre,add(mul(u,cx),mul(v,cy)));
+            socket.forward=normal;
+            if(dot(socket.forward,sub(socket.position,centroid))<0)socket.forward=mul(socket.forward,-1.0);
+            socket.diameter=radius*2;
+            socket.radialErrorMeters=radialMax-radius;
+            socket.planeErrorMeters=maximumPlaneDeviation;
+            socket.loopVertices=loop.size();
+            socket.closedLoop=true;
+            if(socket.radialErrorMeters>settings.maximumRadialErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
+            if(socket.planeErrorMeters>settings.maximumPlaneErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
+            report.sockets.push_back(socket);
         }
-        const double determinant=sxx*syy-sxy*sxy;
-        if(std::abs(determinant)<1e-18){++report.rejectedLoops;continue;}
-        const double cx=(sxz*syy-syz*sxy)/determinant*0.5;
-        const double cy=(syz*sxx-sxz*sxy)/determinant*0.5;
-        double radialSum=0,radialMax=0;
-        for(const auto vertex:loop) {
-            const auto delta=sub(welded.points[vertex],centre);
-            const double x=dot(delta,u),y=dot(delta,v);
-            const double radial=std::hypot(x-cx,y-cy);
-            radialSum+=radial;radialMax=std::max(radialMax,radial);
-        }
-        const double radius=radialSum/double(loop.size());
-        if(radius<=kEpsilon){++report.rejectedLoops;continue;}
-        SocketCandidate socket;
-        socket.position=add(centre,add(mul(u,cx),mul(v,cy)));
-        socket.forward=normal;
-        // Point the socket away from the body.
-        if(dot(socket.forward,sub(socket.position,centroid))<0)socket.forward=mul(socket.forward,-1.0);
-        socket.diameter=radius*2;
-        socket.radialErrorMeters=radialMax-radius;
-        socket.planeErrorMeters=maximumPlaneDeviation;
-        socket.loopVertices=loop.size();
-        socket.closedLoop=closed;
-        if(socket.radialErrorMeters>settings.maximumRadialErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
-        if(socket.planeErrorMeters>settings.maximumPlaneErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
-        report.sockets.push_back(socket);
     }
 
     // Stage 2: capped pipes. The end of a pipe is a planar disk whose border is a circle,

@@ -39,6 +39,8 @@ struct LoopInfo {
 
 struct Report {
     std::size_t boundaryLoops{},rejectedLoops{},planarRegions{};
+    std::size_t boundaryEdges{},vertices{};
+    std::vector<std::size_t> loopSizes; // Border component sizes, for diagnosis.
     std::vector<LoopInfo> loops; // Largest border loops, for diagnosis.
     double bestFill{},bestRadial{}; // Diagnostics for the planar-cap stage.
     std::vector<ClusterInfo> clusters; // Largest planar clusters, for diagnosis.
