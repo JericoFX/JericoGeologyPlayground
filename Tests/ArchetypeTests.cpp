@@ -342,6 +342,54 @@ int main(int argc,char** argv) {
             result["joint_blend"][label]["triangles"]=band.size();
             result["joint_blend"][label]["dual_quaternion_adopted"]=false;
         };
+        // IK: reach a target with one chain, then prove the mesh follows.
+        auto ikTest=[&](const Playground::TriangleMesh& mesh,const std::string& label) {
+            std::vector<A::Vec3> p;for(const auto& v:mesh.positions)p.push_back({v.x,v.y,v.z});
+            const auto report=A::classify(p,mesh.indices);
+            const auto skeleton=A::skeleton(p,mesh.indices,report,4);
+            const auto skinning=A::skin(p,skeleton,4);
+            const auto& chain=skeleton.chains.front();
+            const auto tip=skeleton.bones[chain.bones.back()].tail;
+            const auto root=skeleton.bones[chain.bones.front()].head;
+            const auto direction=A::Vec3{(tip.x-root.x),(tip.y-root.y),(tip.z-root.z)};
+            const double span=std::hypot(std::hypot(direction.x,direction.y),direction.z);
+            // Same radius, rotated 25 degrees: inside the reach, unlike pushing the tip outward.
+            const double turn=25.0*3.14159265358979323846/180.0;
+            const A::Vec3 reachableTarget{
+                root.x+direction.x*std::cos(turn)-direction.y*std::sin(turn),
+                root.y+direction.x*std::sin(turn)+direction.y*std::cos(turn),
+                root.z+direction.z};
+            const auto reached=A::solveIk(skeleton,0,reachableTarget,200,1e-6);
+            const A::Vec3 farTarget{root.x+direction.x*(20.0),root.y+direction.y*(20.0),root.z+direction.z*(20.0)};
+            const auto stretched=A::solveIk(skeleton,0,farTarget,32,1e-6);
+            // The mesh must follow: vertices bound to the last bone should land near the target.
+            const auto posed=A::deform(p,skinning,skeleton,reached.transforms);
+            double worstTip=0;std::size_t tipVertices=0;
+            for(std::size_t vertex=0;vertex<p.size();++vertex) {
+                bool boundToTip=false;
+                for(std::size_t slot=0;slot<4;++slot)
+                    if(skinning.weights[vertex][slot]>0.5&&skinning.bones[vertex][slot]==chain.bones.back())boundToTip=true;
+                if(!boundToTip)continue;
+                ++tipVertices;
+                const double distance=std::hypot(std::hypot(posed[vertex].x-reachableTarget.x,posed[vertex].y-reachableTarget.y),
+                    posed[vertex].z-reachableTarget.z);
+                worstTip=std::max(worstTip,distance);
+            }
+            result["ik"][label]={{"reachable_error",reached.error},{"reachable",reached.reachable},
+                {"stretched_error",stretched.error},{"stretched_reachable",stretched.reachable},
+                {"total_length",reached.totalLength},{"tip_vertices",tipVertices},{"worst_tip_distance",worstTip}};
+            std::cout<<"ik "<<label<<": reachable="<<reached.reachable<<" error="<<reached.error
+                     <<" length="<<reached.totalLength<<" stretched_error="<<stretched.error
+                     <<" tip_vertices="<<tipVertices<<" worst_tip="<<worstTip<<"\n";
+            require(reached.reachable&&reached.error<1e-3,"IK did not reach a reachable target");
+            require(!stretched.reachable,"IK called an out-of-range target reachable");
+            const double spanToTarget=std::hypot(std::hypot(farTarget.x-root.x,farTarget.y-root.y),farTarget.z-root.z);
+            require(std::abs(stretched.error-(spanToTarget-reached.totalLength))<1e-3,"Out-of-range IK did not stop at maximum reach");
+            require(tipVertices>0,"No vertices are bound to the chain tip");
+            require(worstTip<0.15,"Skinning did not follow the solved pose");
+        };
+        result["ik"]=Json::object();
+        ikTest(philipsMesh,"humanoid");
         result["joint_blend"]=Json::object();
         jointTest(philipsMesh,"humanoid-90",90.0);
         jointTest(spiderMesh,"spider-90",90.0);

@@ -123,8 +123,22 @@ struct Skin {
     std::vector<std::array<double,4>> weights;    // Each row sums to 1.
 };
 struct BoneTransform {
-    std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}}; // Row major, applied about the bone head.
+    std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}}; // Row major.
+    // A solved chain moves each joint, so the transform needs the posed head too:
+    // p' = origin + R * (p - bone.headRest). The rest pose leaves this unused.
+    Vec3 head{};
+    bool usePosedHead{};
 };
+
+struct IkResult {
+    bool reachable{};
+    double error{};           // Distance from the solved tip to the target.
+    double totalLength{};
+    std::vector<Vec3> joints; // chain.bones.size() + 1 joint positions.
+    std::vector<BoneTransform> transforms;
+};
+// Forward and backward reaching IK over one chain. No joint limits are applied.
+IkResult solveIk(const Skeleton&,std::size_t chain,Vec3 target,std::size_t iterations = 16,double tolerance = 1e-4);
 Skin skin(std::span<const Vec3>,const Skeleton&,std::size_t maximumInfluences = 4);
 struct DeformSettings {
     // Linear blend skinning is the default and the measured one: at 90 degrees it pinches the

@@ -934,7 +934,8 @@ std::vector<Vec3> deform(std::span<const Vec3> positions,const Skin& skinning,co
                     rotation[0]*delta.x+rotation[1]*delta.y+rotation[2]*delta.z,
                     rotation[3]*delta.x+rotation[4]*delta.y+rotation[5]*delta.z,
                     rotation[6]*delta.x+rotation[7]*delta.y+rotation[8]*delta.z};
-                accumulated=accumulated+(boneGeometry.head+rotated)*weight;
+                const auto origin=transforms[bone].usePosedHead?transforms[bone].head:boneGeometry.head;
+                accumulated=accumulated+(origin+rotated)*weight;
             }
             result[vertex]=accumulated;
             continue;
@@ -967,4 +968,80 @@ std::vector<Vec3> deform(std::span<const Vec3> positions,const Skin& skinning,co
     }
     return result;
 }
+
+IkResult solveIk(const Skeleton& skeleton,std::size_t chainIndex,Vec3 target,std::size_t iterations,double tolerance) {
+    if(chainIndex>=skeleton.chains.size())throw std::invalid_argument("IK chain index out of range");
+    if(iterations==0||iterations>1024)throw std::invalid_argument("IK iteration count out of range");
+    const auto& chain=skeleton.chains[chainIndex];
+    if(chain.bones.empty())throw std::invalid_argument("IK chain has no bones");
+
+    std::vector<Vec3> joints;
+    std::vector<double> lengths;
+    for(std::size_t index=0;index<chain.bones.size();++index) {
+        const auto& bone=skeleton.bones[chain.bones[index]];
+        if(index==0)joints.push_back(bone.head);
+        joints.push_back(bone.tail);
+        lengths.push_back(bone.length);
+    }
+    double total=0;
+    for(const auto value:lengths)total+=value;
+
+    IkResult result;
+    result.totalLength=total;
+    const Vec3 origin=joints.front();
+    const double span=length(target-origin);
+    result.reachable=span<=total+tolerance;
+
+    std::vector<Vec3> working=joints;
+    if(!result.reachable) {
+        for(std::size_t index=0;index<working.size();++index) {
+            double travelled=0;
+            for(std::size_t step=0;step<index;++step)travelled+=lengths[step];
+            working[index]=origin+normalized(target-origin)*travelled;
+        }
+    } else {
+        for(std::size_t iteration=0;iteration<iterations;++iteration) {
+            working.back()=target;
+            for(std::size_t index=working.size()-1;index>0;--index)
+                working[index-1]=working[index]+normalized(working[index-1]-working[index])*lengths[index-1];
+            working.front()=origin;
+            for(std::size_t index=0;index+1<working.size();++index)
+                working[index+1]=working[index]+normalized(working[index+1]-working[index])*lengths[index];
+            if(length(working.back()-target)<=tolerance)break;
+        }
+    }
+    result.error=length(working.back()-target);
+    result.joints=working;
+
+    result.transforms.resize(skeleton.bones.size());
+    for(std::size_t index=0;index<chain.bones.size();++index) {
+        const auto bone=chain.bones[index];
+        const auto restDirection=normalized(skeleton.bones[bone].tail-skeleton.bones[bone].head);
+        const auto posedDirection=normalized(working[index+1]-working[index]);
+        const double cosine=std::clamp(dot(restDirection,posedDirection),-1.0,1.0);
+        const Vec3 axis=cross(restDirection,posedDirection);
+        const double sine=length(axis);
+        std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}};
+        if(sine>1e-9) {
+            const Vec3 unit=axis*(1.0/sine);
+            const double angle=std::atan2(sine,cosine);
+            const double cc=std::cos(angle),ss=std::sin(angle),t=1-cc;
+            const double x=unit.x,y=unit.y,z=unit.z;
+            rotation={cc+x*x*t,x*y*t-z*ss,x*z*t+y*ss,
+                      y*x*t+z*ss,cc+y*y*t,y*z*t-x*ss,
+                      z*x*t-y*ss,z*y*t+x*ss,cc+z*z*t};
+        } else if(cosine<0) {
+            const Vec3 helper=std::abs(restDirection.x)<0.9?Vec3{1,0,0}:Vec3{0,1,0};
+            const Vec3 unit=normalized(cross(restDirection,helper));
+            rotation={2*unit.x*unit.x-1,2*unit.x*unit.y,2*unit.x*unit.z,
+                      2*unit.y*unit.x,2*unit.y*unit.y-1,2*unit.y*unit.z,
+                      2*unit.z*unit.x,2*unit.z*unit.y,2*unit.z*unit.z-1};
+        }
+        result.transforms[bone].rotation=rotation;
+        result.transforms[bone].head=working[index];
+        result.transforms[bone].usePosedHead=true;
+    }
+    return result;
+}
+
 }
