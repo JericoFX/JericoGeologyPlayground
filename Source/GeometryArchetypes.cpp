@@ -462,29 +462,24 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
         const Vec3 helper=std::abs(thin.y)<0.9?Vec3{0,1,0}:Vec3{1,0,0};
         const Vec3 u=normalized(cross(helper,thin));
         const Vec3 v=cross(thin,u);
-        // Only one side of the slab is the face the user sees: a door's front, not its back.
-        // Mixing both sides put every cell at two depths and hid every step.
-        double frontArea=0,backArea=0;
-        for(const auto& triangle:triangles) {
-            const double alignment=dot(triangle.normal,thin);
-            if(alignment>0.9)frontArea+=triangle.area;
-            if(alignment<-0.9)backArea+=triangle.area;
-        }
-        const double side=frontArea>=backArea?1.0:-1.0;
         constexpr int resolution=64;
-        std::vector<double> sum(std::size_t(resolution)*resolution,0);
-        std::vector<double> area(std::size_t(resolution)*resolution,0);
-        double uMin=1e30,uMax=-1e30,vMin=1e30,vMax=-1e30,faceArea=0;
-        for(const auto& triangle:triangles) {
-            if(dot(triangle.normal,thin)*side<=0.9)continue;
-            faceArea+=triangle.area;
-            for(const auto corner:triangle.corners) {
-                const double pu=dot(corner,u),pv=dot(corner,v);
-                uMin=std::min(uMin,pu);uMax=std::max(uMax,pu);
-                vMin=std::min(vMin,pv);vMax=std::max(vMax,pv);
+        // Both slab faces are analysed. Choosing "the side with more area" picked the back
+        // of a hollow carcass (its back panel is larger than the front frames) and reported
+        // no drawer at all; the drawer signature decides the side instead.
+        for(const double side:{1.0,-1.0}) {
+            std::vector<double> sum(std::size_t(resolution)*resolution,0);
+            std::vector<double> area(std::size_t(resolution)*resolution,0);
+            double uMin=1e30,uMax=-1e30,vMin=1e30,vMax=-1e30,faceArea=0;
+            for(const auto& triangle:triangles) {
+                if(dot(triangle.normal,thin)*side<=0.9)continue;
+                faceArea+=triangle.area;
+                for(const auto corner:triangle.corners) {
+                    const double pu=dot(corner,u),pv=dot(corner,v);
+                    uMin=std::min(uMin,pu);uMax=std::max(uMax,pu);
+                    vMin=std::min(vMin,pv);vMax=std::max(vMax,pv);
+                }
             }
-        }
-        if(faceArea>0&&uMax>uMin&&vMax>vMin) {
+            if(!(faceArea>0)||!(uMax>uMin)||!(vMax>vMin))continue;
             const double spanU=uMax-uMin,spanV=vMax-vMin;
             // Rasterise each triangle instead of dropping it into one centroid cell: a box
             // face is two triangles and would otherwise contribute two samples.
@@ -513,61 +508,128 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
                     cells.push_back(std::size_t(row)*resolution+std::size_t(column));++covered;
                 }
                 if(!covered)continue;
-                const double share=triangle.area/double(covered);
-                for(const auto slot:cells) {sum[slot]+=pd*share;area[slot]+=share;}
+                // Nearest surface wins per cell. Averaging put the drawer front and the
+                // carcass front at the same depth and hid the step entirely.
+                for(const auto slot:cells) {
+                    sum[slot]=std::max(sum[slot],pd);
+                    area[slot]=std::max(area[slot],triangle.area/double(covered));
+                }
             }
             std::vector<double> depth(std::size_t(resolution)*resolution,0);
             std::vector<unsigned char> filled(std::size_t(resolution)*resolution,0);
+            // What sits behind each front cell, and which way that surface faces. A cavity
+            // floor points back at the viewer; an exterior back face points away.
+            std::vector<double> behind(std::size_t(resolution)*resolution,-1e30);
+            std::vector<double> behindSign(std::size_t(resolution)*resolution,0);
+            std::vector<double> cavityFloor(std::size_t(resolution)*resolution,-1e30);
+            std::vector<double> backPanel(std::size_t(resolution)*resolution,-1e30);
             std::vector<double> samples;
             for(std::size_t slot=0;slot<depth.size();++slot)if(area[slot]>0) {
-                depth[slot]=sum[slot]/area[slot];filled[slot]=1;samples.push_back(depth[slot]);
+                depth[slot]=sum[slot];filled[slot]=1;samples.push_back(depth[slot]);
             }
-            if(samples.size()>10) {
-                std::sort(samples.begin(),samples.end());
-                const double mode=samples[samples.size()/2];
-                std::vector<unsigned char> offsetMask(depth.size(),0);
-                std::size_t offsetCells=0;
-                for(std::size_t slot=0;slot<depth.size();++slot)
-                    if(filled[slot]&&std::abs(depth[slot]-mode)>0.010) {offsetMask[slot]=1;++offsetCells;}
-                evidence.faceStepDepth=mode;
+            if(samples.size()<=10)continue;
+            for(const auto& triangle:triangles) {
+                // Only faces parallel to the slab face can be a cavity floor or a back panel.
+                // A side or top wall runs the whole depth and would otherwise report a
+                // cavity floor halfway inside the carcass, which is what produced 0.253 m.
+                if(std::abs(dot(triangle.normal,thin))<0.5)continue;
+                const double pd=dot(triangle.centre,thin)*side;
+                const double pu=dot(triangle.centre,u),pv=dot(triangle.centre,v);
+                const int column=std::clamp(int((pu-uMin)/spanU*resolution),0,resolution-1);
+                const int row=std::clamp(int((pv-vMin)/spanV*resolution),0,resolution-1);
+                const auto slot=std::size_t(row)*resolution+std::size_t(column);
+                if(!filled[slot])continue;
+                // Skip the drawer front's own thickness; look for the surface behind it.
+                if(pd>depth[slot]-0.05)continue;
+                // The farthest parallel face is the cavity floor or the exterior back.
+                if(pd>behind[slot]){behind[slot]=pd;behindSign[slot]=dot(triangle.normal,thin)*side;}
+                // Split by facing: a surface that faces the viewer is a cavity floor, one
+                // that faces away is the exterior back.
+                const double facing=dot(triangle.normal,thin)*side;
+                if(facing>0.5)cavityFloor[slot]=std::max(cavityFloor[slot],pd);
+                else backPanel[slot]=std::max(backPanel[slot],pd);
+            }
+            // Depth clusters, not "offset from the median": the drawer front can be the
+            // dominant depth, and then the frame around it is the island, not the front.
+            double minimumDepth=1e30;
+            for(std::size_t slot=0;slot<depth.size();++slot)if(filled[slot])minimumDepth=std::min(minimumDepth,depth[slot]);
+            std::vector<int> cluster(depth.size(),-1);
+            for(std::size_t slot=0;slot<depth.size();++slot)
+                if(filled[slot])cluster[slot]=int(std::lround((depth[slot]-minimumDepth)/0.010));
+            if(faceArea>0) {
+                evidence.faceStepDepth=minimumDepth;
                 evidence.faceStepCoverage=double(samples.size())/double(resolution*resolution);
-                evidence.faceStepOffsetFraction=double(offsetCells)/double(std::max<std::size_t>(1,samples.size()));
-                std::vector<unsigned char> visited(depth.size(),0);
-                std::vector<std::size_t> stack;
-                for(std::size_t seed=0;seed<offsetMask.size();++seed) {
-                    if(!offsetMask[seed]||visited[seed])continue;
-                    stack.assign(1,seed);visited[seed]=1;
-                    std::size_t cells=0;int lowColumn=resolution,highColumn=-1,lowRow=resolution,highRow=-1;
-                    double stepDepth=0;
-                    while(!stack.empty()) {
-                        const auto current=stack.back();stack.pop_back();
-                        const int row=int(current)/resolution,column=int(current)%resolution;
-                        ++cells;stepDepth=std::max(stepDepth,std::abs(depth[current]-mode));
-                        lowColumn=std::min(lowColumn,column);highColumn=std::max(highColumn,column);
-                        lowRow=std::min(lowRow,row);highRow=std::max(highRow,row);
-                        const int neighbours[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
-                        for(const auto& delta:neighbours) {
-                            const int nextRow=row+delta[0],nextColumn=column+delta[1];
-                            if(nextRow<0||nextRow>=resolution||nextColumn<0||nextColumn>=resolution)continue;
-                            const auto next=std::size_t(nextRow)*resolution+std::size_t(nextColumn);
-                            if(!offsetMask[next]||visited[next])continue;
-                            visited[next]=1;stack.push_back(next);
+                evidence.faceStepOffsetFraction=0;
+            }
+            std::vector<unsigned char> visited(depth.size(),0);
+            std::vector<std::size_t> stack;
+            for(std::size_t seed=0;seed<cluster.size();++seed) {
+                if(cluster[seed]<0||visited[seed])continue;
+                stack.assign(1,seed);visited[seed]=1;
+                std::size_t cells=0;int lowColumn=resolution,highColumn=-1,lowRow=resolution,highRow=-1;
+                std::vector<std::size_t> members;
+                double stepDepth=0;
+                while(!stack.empty()) {
+                    const auto current=stack.back();stack.pop_back();
+                    const int row=int(current)/resolution,column=int(current)%resolution;
+                    ++cells;members.push_back(current);
+                    stepDepth=std::max(stepDepth,std::abs(depth[current]-minimumDepth));
+                    lowColumn=std::min(lowColumn,column);highColumn=std::max(highColumn,column);
+                    lowRow=std::min(lowRow,row);highRow=std::max(highRow,row);
+                    const int neighbours[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+                    for(const auto& delta:neighbours) {
+                        const int nextRow=row+delta[0],nextColumn=column+delta[1];
+                        if(nextRow<0||nextRow>=resolution||nextColumn<0||nextColumn>=resolution)continue;
+                        const auto next=std::size_t(nextRow)*resolution+std::size_t(nextColumn);
+                        if(cluster[next]!=cluster[seed]||visited[next])continue;
+                        visited[next]=1;stack.push_back(next);
+                    }
+                }
+                if(cells<20)continue;
+                const double boxArea=double((highColumn-lowColumn+1)*(highRow-lowRow+1));
+                FaceStep step;
+                step.fillRatio=boxArea>0?double(cells)/boxArea:0;
+                step.areaFraction=double(cells)/double(resolution*resolution);
+                step.heightFraction=double(highRow-lowRow+1)/double(resolution);
+                step.depthMeters=stepDepth;
+                step.rectangular=step.fillRatio>0.80;
+                evidence.faceSteps.push_back(step);
+
+                // Only the island that looks like a drawer front carries the reconstruction.
+                // Taking any cavity island measured the whole carcass face in one case and
+                // a cavity inside a solid block in the other.
+                const bool drawerLike=step.rectangular&&step.areaFraction>0.04&&step.areaFraction<0.55&&step.heightFraction<0.60;
+                if(drawerLike) {
+                    std::vector<double> islandDepth,islandFloor;
+                    for(const auto slot:members) {
+                        if(behind[slot]<=-1e29)continue;
+                        islandDepth.push_back(depth[slot]);
+                        if(cavityFloor[slot]>-1e29)islandFloor.push_back(cavityFloor[slot]);
+                    }
+                    if(!islandDepth.empty()) {
+                        std::sort(islandDepth.begin(),islandDepth.end());
+                        const double frontDepth=islandDepth[islandDepth.size()/2];
+                        double floorDepth=-1e30;
+                        if(!islandFloor.empty()) {
+                            std::sort(islandFloor.begin(),islandFloor.end());
+                            floorDepth=islandFloor[islandFloor.size()/2];
+                        }
+                        const bool cavity=floorDepth>-1e29&&(frontDepth-floorDepth)>0.02;
+                        if(cavity&&(!evidence.drawer.cavity||step.areaFraction>evidence.drawer.faceFraction)) {
+                            evidence.drawer.cavity=true;
+                            evidence.drawer.faceFraction=step.areaFraction;
+                            evidence.drawer.depth=frontDepth-floorDepth;
+                            evidence.drawer.travel=std::max(0.0,evidence.drawer.depth-0.01);
+                            evidence.drawer.width=double(highColumn-lowColumn+1)/double(resolution)*spanU;
+                            evidence.drawer.height=double(highRow-lowRow+1)/double(resolution)*spanV;
+                            evidence.drawer.axis=thin*side;
                         }
                     }
-                    if(cells<20)continue;
-                    const double boxArea=double((highColumn-lowColumn+1)*(highRow-lowRow+1));
-                    FaceStep step;
-                    step.fillRatio=boxArea>0?double(cells)/boxArea:0;
-                    step.areaFraction=double(cells)/double(resolution*resolution);
-                    step.heightFraction=double(highRow-lowRow+1)/double(resolution);
-                    step.depthMeters=stepDepth;
-                    step.rectangular=step.fillRatio>0.80;
-                    evidence.faceSteps.push_back(step);
                 }
-                std::sort(evidence.faceSteps.begin(),evidence.faceSteps.end(),[](const auto& x,const auto& y){return x.areaFraction>y.areaFraction;});
-                if(evidence.faceSteps.size()>4)evidence.faceSteps.resize(4);
             }
         }
+        std::sort(evidence.faceSteps.begin(),evidence.faceSteps.end(),[](const auto& x,const auto& y){return x.areaFraction>y.areaFraction;});
+        if(evidence.faceSteps.size()>4)evidence.faceSteps.resize(4);
     }
 
     const auto format=[](double value){char text[64];std::snprintf(text,sizeof text,"%.3f",value);return std::string(text);};
@@ -589,8 +651,11 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
                 "face step covering "+format(drawerStep)+" of the face, rectangular and short of the full height");
         // A leaf is either thin on its own or sits in a frame that produces a tall step.
         // A plain deep box (a wardrobe shell) is neither, so it stays a rigid frame.
+        // A "tall step" must be a sub-region: the whole face counted as a step would make
+        // every closed box a door.
         bool tallStep=false;
-        for(const auto& step:evidence.faceSteps)if(step.heightFraction>=0.60)tallStep=true;
+        for(const auto& step:evidence.faceSteps)
+            if(step.heightFraction>=0.60&&step.areaFraction>0.04&&step.areaFraction<0.55)tallStep=true;
         if((evidence.thinness<0.30||tallStep)&&evidence.verticalPanelFraction>0.50&&evidence.verticalCoverage>0.45)
             add(Class::HingedPanel,0.50+0.25*evidence.verticalPanelFraction+0.15*evidence.verticalCoverage+0.10*(1-evidence.thinness),
                 "upright rigid leaf: vertical area "+format(evidence.verticalPanelFraction)+", face coverage "+format(evidence.verticalCoverage)+", thinness "+format(evidence.thinness));

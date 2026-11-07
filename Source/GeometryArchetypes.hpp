@@ -58,6 +58,14 @@ struct FaceStep {
     bool rectangular{};
 };
 
+// Reconstructed drawer: the front is measured, the cavity behind it is measured,
+// and the travel is derived from the cavity, not guessed from the asset name.
+struct DrawerBox {
+    bool cavity{};
+    Vec3 axis{};
+    double width{},height{},depth{},travel{},faceFraction{};
+};
+
 struct Evidence {
     Vec3 minimum{},maximum{},extent{},centroid{};
     double diagonal{},area{},boxiness{},planarAreaFraction{},thinness{1},elongation{1},symmetryError{1};
@@ -70,6 +78,7 @@ struct Evidence {
     std::vector<Joint> joints;
     std::vector<FaceStep> faceSteps;
     double faceStepDepth{},faceStepCoverage{},faceStepOffsetFraction{};
+    DrawerBox drawer;
 };
 
 struct Hypothesis {Class type{Class::Unknown};double score{};std::string reason;};

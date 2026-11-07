@@ -160,6 +160,15 @@ int main(int argc,char** argv) {
         // Furniture controls: a carcass with a proud drawer front, and a plain wardrobe shell.
         const auto carcass=box(1.0,0.9,0.5);
         const auto drawerModule=merge(carcass,box(0.8,0.35,0.03,0,0,0.265));
+        // Hollow carcass: five panels leave a real cavity behind the drawer front, so the
+        // travel and depth are measured rather than assumed.
+        auto hollow=box(1.0,0.9,0.05,0,0,-0.225);
+        hollow=merge(hollow,box(0.05,0.9,0.5,-0.475,0,0));
+        hollow=merge(hollow,box(0.05,0.9,0.5,0.475,0,0));
+        hollow=merge(hollow,box(1.0,0.05,0.5,0,-0.425,0));
+        hollow=merge(hollow,box(1.0,0.05,0.5,0,0.425,0));
+        const auto hollowDrawer=merge(hollow,box(0.8,0.35,0.03,0,0,0.26));
+        const auto hollowReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:hollowDrawer.positions)p.push_back({v.x,v.y,v.z});return p;}(),hollowDrawer.indices);
         const auto drawerModuleReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:drawerModule.positions)p.push_back({v.x,v.y,v.z});return p;}(),drawerModule.indices);
         const auto wardrobeReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:carcass.positions)p.push_back({v.x,v.y,v.z});return p;}(),carcass.indices);
         const auto doorFrame=box(1.0,2.0,0.12);
@@ -167,13 +176,24 @@ int main(int argc,char** argv) {
         const auto door=merge(doorFrame,doorLeaf);
         const auto doorReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:door.positions)p.push_back({v.x,v.y,v.z});return p;}(),door.indices);
         for(const auto& [id,report]:std::vector<std::pair<std::string,A::Report>>{{"cube",cubeReport},{"thin-panel",cubePanelReport},
-                {"proud-plate",drawerReport},{"wardrobe",wardrobeReport},{"drawer-module",drawerModuleReport},{"door",doorReport}}) {
+                {"proud-plate",drawerReport},{"wardrobe",wardrobeReport},{"drawer-module",drawerModuleReport},{"hollow-drawer",hollowReport},{"door",doorReport}}) {
             result["synthetic"].push_back({{"id",id},{"accepted",A::name(report.ranked.front().type)},{"score",report.ranked.front().score},
                 {"evidence",evidenceJson(report.evidence)}});
             std::cout<<"synthetic "<<id<<": "<<A::name(report.ranked.front().type)<<" score="<<report.ranked.front().score<<"\n";
         }
 
+        const auto& hollowBox=hollowReport.evidence.drawer;
+        const auto& solidBox=drawerModuleReport.evidence.drawer;
+        result["drawer_reconstruction"]={{"hollow",{{"class",A::name(hollowReport.ranked.front().type)},{"cavity",hollowBox.cavity},
+            {"width",hollowBox.width},{"height",hollowBox.height},{"depth",hollowBox.depth},{"travel",hollowBox.travel}}},
+            {"solid",{{"cavity",solidBox.cavity},{"depth",solidBox.depth},{"travel",solidBox.travel}}}};
         std::ofstream(output/"archetype-report.json")<<result.dump(2);
+        require(A::name(hollowReport.ranked.front().type)=="Drawer","Hollow carcass with a drawer front was not classified as Drawer");
+        require(hollowBox.cavity,"Hollow carcass drawer reported no cavity");
+        require(std::abs(hollowBox.depth-0.465)<0.03,"Measured drawer cavity depth is wrong");
+        require(std::abs(hollowBox.travel-(hollowBox.depth-0.01))<1e-9,"Drawer travel is not derived from the measured cavity");
+        require(std::abs(hollowBox.width-0.8)<0.05&&std::abs(hollowBox.height-0.35)<0.05,"Drawer front size was not measured");
+        require(!solidBox.cavity,"Solid block produced a drawer cavity that does not exist");
         require(A::name(drawerModuleReport.ranked.front().type)=="Drawer","Furniture carcass with a proud drawer front was not classified as Drawer");
         require(A::name(wardrobeReport.ranked.front().type)=="RigidFrame","Plain wardrobe shell was not classified as RigidFrame");
         std::cout<<"gated "<<passed<<"/"<<gated<<" archetype expectations\n";
