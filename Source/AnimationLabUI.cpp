@@ -649,13 +649,17 @@ void AnimationLabUI::frame(Renderer& renderer,unsigned width,unsigned height) {
         const bool validCount=spiderJointsPerLeg>=3&&spiderJointsPerLeg<=64;ImGui::BeginDisabled(!validCount);
         if(ImGui::Button("Create eight-leg rig"))action([&]{auto next=*imported;AnimationImport::createPresetRig(next,AnimationImport::RigPreset::Spider,std::size_t(spiderJointsPerLeg));adopt(std::move(next));});
         ImGui::EndDisabled();if(!validCount)ImGui::TextWrapped("Choose 3 to 64 joints per leg before generating the rig.");
+    }
+    // Available even when the asset already carries an imported rig: replacing a bad
+    // imported skeleton with an archetype one is the plain use case.
+    if(imported){
         fieldLabel("Archetype joints per limb (1..16)");ImGui::InputInt("##archetypeJoints",&archetypeJointsPerLimb);
         const bool validArchetype=archetypeJointsPerLimb>=1&&archetypeJointsPerLimb<=16;
         ImGui::BeginDisabled(!validArchetype);
         if(ImGui::Button("Create archetype rig"))action([&]{auto next=*imported;AnimationImport::createArchetypeRig(next,std::size_t(archetypeJointsPerLimb));adopt(std::move(next));});
         ImGui::EndDisabled();
         if(!validArchetype)ImGui::TextWrapped("Choose 1 to 16 bones per limb before generating the archetype rig.");
-        ImGui::TextWrapped("Archetype rig classifies the mesh (biped, quadruped, arachnid, axial) and fits geodesic limb chains; it is the only path that can rig a biped.");
+        ImGui::TextWrapped("Classifies the mesh (biped, quadruped, arachnid, axial) and fits geodesic limb chains; the only path that can rig a biped.");
     }
     if(editor){ImGui::BeginDisabled(editor->editing());if(ImGui::Button("Undo"))action([&]{editor->undo();if(interactiveScene)resetPhysics();else if(ikMode)setIkMode(true);dirty=true;});ImGui::SameLine();if(ImGui::Button("Redo"))action([&]{editor->redo();if(interactiveScene)resetPhysics();else if(ikMode)setIkMode(true);dirty=true;});ImGui::EndDisabled();}
     action([&]{sceneHierarchy();},false);
