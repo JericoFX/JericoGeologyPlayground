@@ -231,6 +231,56 @@ int main(int argc,char** argv) {
             }
             return list;
         };
+        // Skinning: rest pose must be exact, and rotating one limb must not move the rest.
+        auto skinCheck=[&](const Playground::TriangleMesh& mesh,const std::string& label) {
+            std::vector<A::Vec3> p;for(const auto& v:mesh.positions)p.push_back({v.x,v.y,v.z});
+            const auto report=A::classify(p,mesh.indices);
+            const auto skeleton=A::skeleton(p,mesh.indices,report,4);
+            const auto skinning=A::skin(p,skeleton,4);
+            double maximumWeightError=0;
+            for(const auto& row:skinning.weights) {
+                const double sum=row[0]+row[1]+row[2]+row[3];
+                maximumWeightError=std::max(maximumWeightError,std::abs(sum-1.0));
+            }
+            std::vector<A::BoneTransform> identity(skeleton.bones.size());
+            const auto rest=A::deform(p,skinning,skeleton,identity);
+            double maximumRestError=0;
+            for(std::size_t index=0;index<p.size();++index)
+                maximumRestError=std::max(maximumRestError,std::hypot(std::hypot(rest[index].x-p[index].x,
+                    rest[index].y-p[index].y),rest[index].z-p[index].z));
+            // Rotate the whole first chain about its first bone head by 30 degrees.
+            auto transforms=identity;
+            const double angle=30.0*3.14159265358979323846/180.0;
+            const double cosine=std::cos(angle),sine=std::sin(angle);
+            const auto& chain=skeleton.chains.front();
+            for(const auto bone:chain.bones)
+                transforms[bone].rotation={1,0,0,0,cosine,-sine,0,sine,cosine};
+            const auto posed=A::deform(p,skinning,skeleton,transforms);
+            double movedInChain=0,maximumOutside=0;
+            for(std::size_t index=0;index<p.size();++index) {
+                const double moved=std::hypot(std::hypot(posed[index].x-p[index].x,posed[index].y-p[index].y),
+                    posed[index].z-p[index].z);
+                bool influencedByChain=false;
+                for(std::size_t slot=0;slot<4;++slot)
+                    if(skinning.weights[index][slot]>0)
+                        for(const auto bone:chain.bones)
+                            if(skinning.bones[index][slot]==bone)influencedByChain=true;
+                if(influencedByChain)movedInChain=std::max(movedInChain,moved);
+                else maximumOutside=std::max(maximumOutside,moved);
+            }
+            result["skinning"][label]={{"bones",skeleton.bones.size()},{"vertices",p.size()},
+                {"maximum_weight_error",maximumWeightError},{"maximum_rest_error",maximumRestError},
+                {"moved_in_chain",movedInChain},{"maximum_outside_motion",maximumOutside}};
+            std::cout<<"skinning "<<label<<": weight_error="<<maximumWeightError<<" rest_error="<<maximumRestError
+                     <<" moved="<<movedInChain<<" outside="<<maximumOutside<<"\n";
+            require(maximumWeightError<1e-9,"Skinning weights do not sum to one");
+            require(maximumRestError<1e-9,"Rest pose does not reproduce the mesh exactly");
+            require(movedInChain>0.01,"Rotating a limb did not move any of its vertices");
+            require(maximumOutside<1e-9,"Rotating a limb moved vertices outside that chain");
+        };
+        result["skinning"]=Json::object();
+        skinCheck(philipsMesh,"humanoid");
+        skinCheck(spiderMesh,"spider");
         result["skeleton"]["humanoid"]["chains_detail"]=chainGeometry(philipsSkeleton,philipsReport);
         result["skeleton"]["spider"]["chains_detail"]=chainGeometry(spiderSkeleton,spiderReport);
         require(philipsSkeleton.chains.size()==philipsReport.evidence.groundedSupportCount,"Humanoid skeleton does not have one chain per grounded contact");

@@ -814,4 +814,78 @@ Skeleton skeleton(std::span<const Vec3> positions,std::span<const std::uint32_t>
     return result;
 }
 
+Skin skin(std::span<const Vec3> positions,const Skeleton& skeleton,std::size_t maximumInfluences) {
+    if(positions.empty())throw std::invalid_argument("Skinning needs vertices");
+    if(skeleton.bones.empty())throw std::invalid_argument("Skinning needs at least one bone");
+    if(maximumInfluences==0||maximumInfluences>4)throw std::invalid_argument("Skinning influence count must be 1..4");
+    Skin result;
+    result.bones.resize(positions.size());
+    result.weights.resize(positions.size());
+    auto segmentDistance=[](Vec3 p,Vec3 a,Vec3 b) {
+        const auto ab=b-a;const double lengthSquared=dot(ab,ab);
+        const double t=lengthSquared>1e-18?std::clamp(dot(p-a,ab)/lengthSquared,0.0,1.0):0.0;
+        return length(p-(a+ab*t));
+    };
+    for(std::size_t vertex=0;vertex<positions.size();++vertex) {
+        std::array<std::pair<double,std::uint32_t>,4> nearest;
+        for(auto& entry:nearest)entry={1e300,0};
+        for(std::size_t bone=0;bone<skeleton.bones.size();++bone) {
+            const double distance=segmentDistance(positions[vertex],skeleton.bones[bone].head,skeleton.bones[bone].tail);
+            for(std::size_t slot=0;slot<maximumInfluences;++slot)
+                if(distance<nearest[slot].first) {
+                    for(std::size_t shift=maximumInfluences-1;shift>slot;--shift)nearest[shift]=nearest[shift-1];
+                    nearest[slot]={distance,std::uint32_t(bone)};
+                    break;
+                }
+        }
+        double total=0;
+        std::array<double,4> weight{};
+        for(std::size_t slot=0;slot<maximumInfluences;++slot) {
+            const double distance=nearest[slot].first;
+            weight[slot]=distance>=1e299?0.0:1.0/(distance*distance+1e-8);
+            total+=weight[slot];
+        }
+        if(!(total>0)) {weight[0]=1.0;total=1.0;nearest[0]={0.0,0};}
+        for(std::size_t slot=0;slot<maximumInfluences;++slot) {
+            weight[slot]/=total;
+            result.bones[vertex][slot]=nearest[slot].second;
+        }
+        // Drop negligible influences and renormalise so every row still sums to one.
+        double sum=0;
+        for(std::size_t slot=0;slot<maximumInfluences;++slot) {
+            if(weight[slot]<0.05)weight[slot]=0.0;
+            sum+=weight[slot];
+        }
+        for(std::size_t slot=0;slot<maximumInfluences;++slot)result.weights[vertex][slot]=weight[slot]/sum;
+    }
+    return result;
+}
+
+std::vector<Vec3> deform(std::span<const Vec3> positions,const Skin& skinning,const Skeleton& skeleton,
+                         std::span<const BoneTransform> transforms) {
+    if(skinning.weights.size()!=positions.size())
+        throw std::invalid_argument("Skinning weights do not cover the vertices");
+    if(transforms.size()!=skeleton.bones.size())
+        throw std::invalid_argument("Bone transforms do not cover the skeleton");
+    std::vector<Vec3> result(positions.size());
+    for(std::size_t vertex=0;vertex<positions.size();++vertex) {
+        Vec3 accumulated{};
+        for(std::size_t slot=0;slot<4;++slot) {
+            const double weight=skinning.weights[vertex][slot];
+            if(weight<=0)continue;
+            const auto bone=skinning.bones[vertex][slot];
+            const auto& boneGeometry=skeleton.bones.at(bone);
+            const auto& rotation=transforms[bone].rotation;
+            const auto delta=positions[vertex]-boneGeometry.head;
+            const Vec3 rotated{
+                rotation[0]*delta.x+rotation[1]*delta.y+rotation[2]*delta.z,
+                rotation[3]*delta.x+rotation[4]*delta.y+rotation[5]*delta.z,
+                rotation[6]*delta.x+rotation[7]*delta.y+rotation[8]*delta.z};
+            accumulated=accumulated+(boneGeometry.head+rotated)*weight;
+        }
+        result[vertex]=accumulated;
+    }
+    return result;
+}
+
 }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #pragma once
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -114,4 +115,17 @@ struct Skeleton {
 // jointsPerChain counts bones per limb; an axial body uses the geodesic diameter.
 Skeleton skeleton(std::span<const Vec3>,std::span<const std::uint32_t>,const Report&,
                   std::size_t jointsPerChain = 4,const Settings& = {});
+
+// Linear blend skinning over the skeleton hypothesis. Weights are distances to
+// bone segments, so no anatomical naming and no rig import are involved.
+struct Skin {
+    std::vector<std::array<std::uint32_t,4>> bones;
+    std::vector<std::array<double,4>> weights;    // Each row sums to 1.
+};
+struct BoneTransform {
+    std::array<double,9> rotation{{1,0,0,0,1,0,0,0,1}}; // Row major, applied about the bone head.
+};
+Skin skin(std::span<const Vec3>,const Skeleton&,std::size_t maximumInfluences = 4);
+// Identity transforms must reproduce the input exactly; that is the rest-pose gate.
+std::vector<Vec3> deform(std::span<const Vec3>,const Skin&,const Skeleton&,std::span<const BoneTransform>);
 }
