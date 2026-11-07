@@ -1,0 +1,153 @@
+#include "GeometryArchetypes.hpp"
+#include "AnimationImport.hpp"
+#include "AnimationRigFit.hpp"
+#include <nlohmann/json.hpp>
+#include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+namespace A=JE::GeometryArchetypes;
+using Json=nlohmann::json;
+namespace {
+void require(bool condition,const std::string& message){if(!condition)throw std::runtime_error(message);}
+
+struct Entry {std::string id,path;A::Class expected;bool gate;std::string note;};
+
+std::vector<Entry> corpus() {
+    const std::filesystem::path root=PLAYGROUND_ROOT;
+    return {
+        {"door-wooden",      "models/wooden+door+3d+model.glb",           A::Class::HingedPanel,true, "complete wooden door"},
+        {"door-prison",      "models/rusty+prison+door+3d+model.glb",     A::Class::HingedPanel,true, "complete prison door"},
+        {"door-vault",       "models/rusted+vault+door+3d+model.glb",     A::Class::HingedPanel,true, "complete vault door"},
+        {"door-metal",       "models/rusty+metal+door+3d+model.glb",      A::Class::HingedPanel,true, "complete metal door"},
+        {"leaf-vault",       "Assets/Doors/Repaired/vault/leaf.glb",      A::Class::HingedPanel,true, "leaf alone"},
+        {"frame-vault",      "Assets/Doors/Repaired/vault/frame.glb",     A::Class::RigidFrame, true, "frame alone"},
+        {"spider-monster",   "models/monster spider 3d model.glb",        A::Class::Arthropod,  true, "eight legs"},
+        {"spider-realistic", "models/realistic spider 3d model.glb",      A::Class::Arthropod,  true, "eight legs"},
+        {"spider-giant",     "models/giant+spider+3d+model.glb",          A::Class::Arthropod,  true, "eight legs"},
+        {"spider-alien",     "models/alien spider 3d model.glb",          A::Class::Arthropod,  true, "eight legs"},
+        {"larva",            "models/monster larva 3d model.glb",         A::Class::Axial,      true, "single column"},
+        {"creature-alien",   "models/alien creature 3d model.glb",        A::Class::Unknown,    false,"organic, class unverified"},
+        {"table",            "models/weathered+wooden+table+3d+model.glb",A::Class::RigidFrame, true, "four supports but furniture"},
+        {"staircase",        "models/wooden+staircase+3d+model.glb",      A::Class::Unknown,    false,"structure"},
+        {"dock",             "models/wooden+dock+3d+model.glb",           A::Class::Unknown,    false,"structure"},
+        {"valve",            "models/VALVE01_Gate_PBR_1K.glb",            A::Class::Unknown,    false,"mechanism must not be a creature"},
+    };
+}
+
+Json evidenceJson(const A::Evidence& e) {
+    Json panels=Json::array();
+    for(const auto& p:e.panels)panels.push_back({{"area",p.area},{"normal",{p.normal.x,p.normal.y,p.normal.z}},
+        {"offset",p.offset},{"longest_edge",p.longestEdgeMeters}});
+    return {{"diagonal",e.diagonal},{"area",e.area},{"vertices",e.vertexCount},{"triangles",e.triangleCount},
+        {"degenerate",e.degenerateTriangles},{"components",e.componentCount},{"boxiness",e.boxiness},
+        {"planar_area_fraction",e.planarAreaFraction},{"thinness",e.thinness},{"elongation",e.elongation},
+        {"symmetry_error",e.symmetryError},{"supports",e.supportCount},{"grounded_area_fraction",e.groundedAreaFraction},
+        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},
+        {"panels",panels}};
+}
+
+Json classifyJson(const Playground::TriangleMesh& mesh,Json* legacy) {
+    std::vector<A::Vec3> points;points.reserve(mesh.positions.size());
+    for(const auto& p:mesh.positions)points.push_back({p.x,p.y,p.z});
+    const auto report=A::classify(points,mesh.indices);
+    Json ranked=Json::array();
+    for(const auto& hypothesis:report.ranked)ranked.push_back({{"class",A::name(hypothesis.type)},{"score",hypothesis.score},{"evidence",hypothesis.reason}});
+    if(legacy) {
+        // Recorded for the RED: the previous support-only inference applied to the same mesh.
+        try {
+            const auto fit=Playground::AnimationImport::fitWalkingRig(mesh,0,7);
+            (*legacy)["walking_rig_supports"]=fit.legs.size();
+        } catch(const std::invalid_argument& error) {(*legacy)["walking_rig_error"]=error.what();}
+        try {
+            const auto axial=Playground::AnimationImport::fitAxialRig(mesh,17);
+            (*legacy)["axial_rig_points"]=axial.size();
+        } catch(const std::invalid_argument& error) {(*legacy)["axial_rig_error"]=error.what();}
+    }
+    return {{"accepted",A::name(report.ranked.front().type)},{"ambiguous",report.ambiguous},
+        {"evidence",evidenceJson(report.evidence)},{"ranked",ranked}};
+}
+
+// Synthetic control: a closed box, an inset drawer face and a leaf separated from
+// its frame. These are exact geometry, so their expected class is not an opinion.
+Playground::TriangleMesh box(double sizeX,double sizeY,double sizeZ,double offsetX=0,double offsetY=0,double offsetZ=0) {
+    Playground::TriangleMesh mesh;
+    const double x=sizeX*0.5,y=sizeY*0.5,z=sizeZ*0.5;
+    const double corners[8][3]={{-x,-y,-z},{x,-y,-z},{x,y,-z},{-x,y,-z},{-x,-y,z},{x,-y,z},{x,y,z},{-x,y,z}};
+    for(const auto& c:corners)mesh.positions.push_back({c[0]+offsetX,c[1]+offsetY,c[2]+offsetZ});
+    const std::uint32_t faces[12][3]={{0,2,1},{0,3,2},{4,5,6},{4,6,7},{0,1,5},{0,5,4},{3,7,6},{3,6,2},{0,4,7},{0,7,3},{1,2,6},{1,6,5}};
+    for(const auto& f:faces)for(const auto c:f)mesh.indices.push_back(c);
+    return mesh;
+}
+Playground::TriangleMesh merge(Playground::TriangleMesh a,const Playground::TriangleMesh& b) {
+    const auto offset=std::uint32_t(a.positions.size());
+    for(const auto& p:b.positions)a.positions.push_back(p);
+    for(const auto index:b.indices)a.indices.push_back(index+offset);
+    return a;
+}
+} // namespace
+
+int main(int argc,char** argv) {
+    try {
+        const std::filesystem::path output=argc>1?std::filesystem::path(argv[1]):std::filesystem::temp_directory_path()/"archetypes";
+        std::filesystem::create_directories(output);
+        Json result={{"corpus",Json::array()},{"synthetic",Json::array()}};
+        std::size_t gated=0,passed=0;Json mismatches=Json::array();
+
+        for(const auto& entry:corpus()) {
+            const std::filesystem::path path=std::filesystem::path(PLAYGROUND_ROOT)/entry.path;
+            if(!std::filesystem::exists(path))throw std::runtime_error("Missing corpus asset: "+path.string());
+            const auto asset=Playground::AnimationImport::loadAsset(path);
+            Json legacy;
+            Json item={{"id",entry.id},{"path",entry.path},{"note",entry.note}};
+            item.merge_patch(classifyJson(asset.renderMesh.mesh.mesh,&legacy));
+            item["legacy"]=legacy;
+            item["expected"]=A::name(entry.expected);
+            item["gated"]=entry.gate;
+            if(entry.gate) {
+                ++gated;
+                const auto accepted=item["accepted"].get<std::string>();
+                const bool ok=accepted==A::name(entry.expected);
+                item["pass"]=ok;
+                if(ok)++passed;else mismatches.push_back({{"id",entry.id},{"expected",A::name(entry.expected)},{"accepted",accepted},
+                    {"top_score",item["ranked"][0]["score"]},{"runner_up",item["ranked"][1]["class"]},{"runner_up_score",item["ranked"][1]["score"]}});
+            }
+            result["corpus"].push_back(item);
+            std::cout<<entry.id<<": "<<item["accepted"].get<std::string>()<<" (expected "<<A::name(entry.expected)<<")"
+                <<" supports="<<item["evidence"]["supports"]<<" planar="<<item["evidence"]["planar_area_fraction"]
+                <<" thin="<<item["evidence"]["thinness"]<<" boxy="<<item["evidence"]["boxiness"]<<"\n";
+        }
+        result["gate"]={{"tracked",gated},{"passed",passed},{"mismatches",mismatches}};
+
+        // Synthetic controls.
+        const auto cube=box(1,1,1);
+        const auto cubeReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:cube.positions)p.push_back({v.x,v.y,v.z});return p;}(),cube.indices);
+        const auto cubePanel=box(1.0,1.2,0.06);
+        const auto cubePanelReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:cubePanel.positions)p.push_back({v.x,v.y,v.z});return p;}(),cubePanel.indices);
+        const auto drawerFrame=box(1.0,1.0,0.5);
+        const auto drawerFace=box(0.8,0.8,0.02,0,0,0.26);
+        const auto drawer=merge(drawerFrame,drawerFace);
+        const auto drawerReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:drawer.positions)p.push_back({v.x,v.y,v.z});return p;}(),drawer.indices);
+        const auto doorFrame=box(1.0,2.0,0.12);
+        const auto doorLeaf=box(0.9,1.9,0.05,0.02,0,0.09);
+        const auto door=merge(doorFrame,doorLeaf);
+        const auto doorReport=A::classify([&]{std::vector<A::Vec3> p;for(const auto& v:door.positions)p.push_back({v.x,v.y,v.z});return p;}(),door.indices);
+        for(const auto& [id,report]:std::vector<std::pair<std::string,A::Report>>{{"cube",cubeReport},{"thin-panel",cubePanelReport},{"drawer",drawerReport},{"door",doorReport}}) {
+            result["synthetic"].push_back({{"id",id},{"accepted",A::name(report.ranked.front().type)},{"score",report.ranked.front().score},
+                {"evidence",evidenceJson(report.evidence)}});
+            std::cout<<"synthetic "<<id<<": "<<A::name(report.ranked.front().type)<<" score="<<report.ranked.front().score<<"\n";
+        }
+
+        std::ofstream(output/"archetype-report.json")<<result.dump(2);
+        std::cout<<"gated "<<passed<<"/"<<gated<<" archetype expectations\n";
+        if(passed!=gated)throw std::runtime_error("Archetype expectations failed: "+mismatches.dump());
+        return 0;
+    } catch(const std::exception& error) {
+        std::cerr<<"ARCHETYPE FAILURE: "<<error.what()<<"\n";
+        return 1;
+    }
+}

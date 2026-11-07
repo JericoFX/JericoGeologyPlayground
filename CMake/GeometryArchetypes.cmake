@@ -1,0 +1,21 @@
+# Portable motion-archetype classification (bones hypothesis) and its corpus gate.
+# Included from Tests/Experiments and from the application build; the core itself
+# has no renderer, UI, asset-path or Jolt dependency.
+if(NOT TARGET JEGeometryArchetypes)
+    add_library(JEGeometryArchetypes "${PLAYGROUND_ROOT}/Source/GeometryArchetypes.cpp")
+    target_link_libraries(JEGeometryArchetypes PUBLIC JEGeometryAnalysis)
+    target_include_directories(JEGeometryArchetypes PUBLIC "${PLAYGROUND_ROOT}/Source")
+    target_compile_features(JEGeometryArchetypes PUBLIC cxx_std_20)
+endif()
+if(NOT TARGET ArchetypeTests)
+    add_executable(ArchetypeTests "${PLAYGROUND_ROOT}/Tests/ArchetypeTests.cpp")
+    target_link_libraries(ArchetypeTests PRIVATE JEGeometryArchetypes PlaygroundAnimationImport)
+    if(TARGET ExperimentRecipe)
+        target_include_directories(ArchetypeTests PRIVATE "${RECOVERY_DEPS}/json")
+    else()
+        target_include_directories(ArchetypeTests PRIVATE "${JERICO_DEPS}/DiligentTools/ThirdParty/json/single_include")
+    endif()
+    target_compile_definitions(ArchetypeTests PRIVATE PLAYGROUND_ROOT="${PLAYGROUND_ROOT}")
+    add_test(NAME Playground.Archetypes COMMAND ArchetypeTests "${CMAKE_CURRENT_BINARY_DIR}/archetype-evidence")
+    set_tests_properties(Playground.Archetypes PROPERTIES WORKING_DIRECTORY "${PLAYGROUND_ROOT}")
+endif()
