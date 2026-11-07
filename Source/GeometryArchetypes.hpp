@@ -42,12 +42,23 @@ struct Panel {
     std::size_t triangles{};
 };
 
+// A kinematic candidate extracted from the mesh: a straight border run (revolute)
+// or a face travel (prismatic). It is a geometric candidate with a measured length,
+// never a completed rig.
+struct Joint {
+    Vec3 point{},axis{};
+    double lengthMeters{},score{};
+    bool prismatic{};
+};
+
 struct Evidence {
     Vec3 minimum{},maximum{},extent{},centroid{};
     double diagonal{},area{},boxiness{},planarAreaFraction{},thinness{1},elongation{1},symmetryError{1};
     std::size_t vertexCount{},triangleCount{},degenerateTriangles{},componentCount{},supportCount{};
     double groundedAreaFraction{},verticalPanelFraction{},horizontalPanelFraction{},verticalCoverage{},supportSpread{1};
+    Vec3 thinAxis{}; // Object-space normal of the panel plane (smallest principal extent).
     std::vector<Panel> panels;
+    std::vector<Joint> joints;
 };
 
 struct Hypothesis {Class type{Class::Unknown};double score{};std::string reason;};

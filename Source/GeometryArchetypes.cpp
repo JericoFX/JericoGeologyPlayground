@@ -186,6 +186,7 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
     }
     std::sort(principalExtent.begin(),principalExtent.end(),std::greater<double>());
     evidence.thinness=principalExtent[2]/diagonal;
+    evidence.thinAxis=axes[2];
     evidence.elongation=principalExtent[1]>kDegenerate?principalExtent[0]/principalExtent[1]:1;
 
     // Planar regions over welded adjacency. Tolerances are scan-tolerant on purpose:
@@ -266,6 +267,56 @@ Report classify(std::span<const Vec3> positions,std::span<const std::uint32_t> i
         }
         evidence.panels.push_back(panel);
     }
+
+    // Straight crease runs: a hinge edge is many short tessellated edges on one line,
+    // detected from dihedral angle so it does not depend on an exact planar region.
+    {
+        struct Run {Vec3 direction{},point{};double minimum{},maximum{},length{};};
+        const double lateralLimit=0.01*diagonal;
+        std::unordered_map<std::uint64_t,std::vector<Run>> buckets;
+        const auto bucketKey=[&](Vec3 direction) {
+            Vec3 axis=direction;
+            const double first=std::abs(axis.x)>1e-6?axis.x:(std::abs(axis.y)>1e-6?axis.y:axis.z);
+            if(first<0)axis=axis*-1.0;
+            const auto quantize=[&](double value){return std::int64_t(std::llround(value*12.0));};
+            return std::uint64_t(std::uint32_t(std::int32_t(quantize(axis.x))))<<32|std::uint32_t(std::int32_t(quantize(axis.y)));
+        };
+        for(std::size_t edge=0;edge<edges.size();++edge) {
+            const auto triangle=edges[edge].second;
+            bool crease=false;
+            if(edge+1<edges.size()&&edges[edge+1].first==edges[edge].first) {
+                if(std::abs(dot(triangles[triangle].normal,triangles[edges[edge+1].second].normal))<0.866)crease=true;
+            } else if(edge==0||edges[edge-1].first!=edges[edge].first)crease=true;
+            if(!crease)continue;
+            const auto a=positions[std::uint32_t(edges[edge].first&0xffffffffu)];
+            const auto b=positions[std::uint32_t(edges[edge].first>>32)];
+            const double segment=length(b-a);
+            if(segment<=1e-9)continue;
+            const Vec3 direction=normalized(b-a);
+            auto& bucket=buckets[bucketKey(direction)];
+            bool joined=false;
+            for(auto& run:bucket) {
+                if(std::abs(dot(run.direction,direction))<0.985)continue;
+                const Vec3 offset=a-run.point;
+                if(length(offset-run.direction*dot(offset,run.direction))>lateralLimit)continue;
+                const double along=dot(a-run.point,run.direction),alongB=dot(b-run.point,run.direction);
+                run.minimum=std::min({run.minimum,along,alongB});
+                run.maximum=std::max({run.maximum,along,alongB});
+                run.length=run.maximum-run.minimum;
+                joined=true;break;
+            }
+            if(!joined)bucket.push_back({direction,a,0.0,segment,segment});
+        }
+        for(const auto& [key,bucket]:buckets)for(const auto& run:bucket) {
+            if(run.length<0.05*diagonal)continue;
+            Joint joint;joint.axis=run.direction;
+            joint.point=run.point+run.direction*((run.minimum+run.maximum)*0.5);
+            joint.lengthMeters=run.length;joint.score=run.length;joint.prismatic=false;
+            evidence.joints.push_back(joint);
+        }
+    }
+    std::sort(evidence.joints.begin(),evidence.joints.end(),[](const auto& x,const auto& y){return x.lengthMeters>y.lengthMeters;});
+    if(evidence.joints.size()>6)evidence.joints.resize(6);
 
     {
         std::vector<JE::GeometryAnalysis::Vec3> points(positions.size());

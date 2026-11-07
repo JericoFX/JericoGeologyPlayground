@@ -47,7 +47,8 @@ Json evidenceJson(const A::Evidence& e) {
         {"degenerate",e.degenerateTriangles},{"components",e.componentCount},{"boxiness",e.boxiness},
         {"planar_area_fraction",e.planarAreaFraction},{"thinness",e.thinness},{"elongation",e.elongation},
         {"symmetry_error",e.symmetryError},{"supports",e.supportCount},{"grounded_area_fraction",e.groundedAreaFraction},
-        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},
+        {"vertical_area_fraction",e.verticalPanelFraction},{"vertical_coverage",e.verticalCoverage},{"support_spread",e.supportSpread},{"thin_axis",{e.thinAxis.x,e.thinAxis.y,e.thinAxis.z}},
+        {"joints",[&]{Json list=Json::array();for(const auto& j:e.joints)list.push_back({{"axis",{j.axis.x,j.axis.y,j.axis.z}},{"point",{j.point.x,j.point.y,j.point.z}},{"length",j.lengthMeters}});return list;}()},
         {"panels",panels}};
 }
 
@@ -115,6 +116,27 @@ int main(int argc,char** argv) {
                 item["pass"]=ok;
                 if(ok)++passed;else mismatches.push_back({{"id",entry.id},{"expected",A::name(entry.expected)},{"accepted",accepted},
                     {"top_score",item["ranked"][0]["score"]},{"runner_up",item["ranked"][1]["class"]},{"runner_up_score",item["ranked"][1]["score"]}});
+            }
+            if(entry.gate&&entry.expected==A::Class::HingedPanel) {
+                // A hinge candidate must be a long straight crease run that lies in the
+                // panel plane. Orientation-free: these scans are not stored upright.
+                const auto& evidence=item["evidence"];
+                const auto& list=evidence["joints"];
+                const auto thin=evidence["thin_axis"];
+                const double thinX=thin[0].get<double>(),thinY=thin[1].get<double>(),thinZ=thin[2].get<double>();
+                const double diagonal=evidence["diagonal"].get<double>();
+                double longest=0,bestPlanarity=1;
+                for(const auto& joint:list) {
+                    const auto axis=joint["axis"];
+                    const double planarity=std::abs(axis[0].get<double>()*thinX+axis[1].get<double>()*thinY+axis[2].get<double>()*thinZ);
+                    const double runLength=joint["length"].get<double>();
+                    longest=std::max(longest,runLength);
+                    if(runLength>0.5*diagonal)bestPlanarity=std::min(bestPlanarity,planarity);
+                }
+                item["hinge_longest_run"]=longest;item["hinge_planarity"]=bestPlanarity;
+                if(!(longest>0.5*diagonal&&bestPlanarity<0.25))
+                    throw std::runtime_error("No in-plane hinge run for "+entry.id);
+                std::cout<<"  hinge: longest="<<longest<<"m in-plane residual="<<bestPlanarity<<"\n";
             }
             result["corpus"].push_back(item);
             std::cout<<entry.id<<": "<<item["accepted"].get<std::string>()<<" (expected "<<A::name(entry.expected)<<")"
