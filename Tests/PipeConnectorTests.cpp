@@ -3,6 +3,7 @@
 #include "SocketInference.hpp"
 #include "DamageGeometry.hpp"
 #include "GeometryAnalysis.hpp"
+#include <Jerico/ProceduralAuthoring/SolidEvaluator.hpp>
 #include <nlohmann/json.hpp>
 #include <cmath>
 #include <filesystem>
@@ -263,13 +264,53 @@ int main(int argc,char** argv) {
                 if(count==1)++weldedOpen;
                 else if(count>2)++weldedNonManifold;
             }
+            // Manifold rejects more than open edges: it needs a consistent outward winding and
+            // no duplicate faces. Signed volume and duplicate faces tell the two apart.
+            double signedVolume=0;
+            std::map<std::array<std::uint32_t,3>,int> faceCount;
+            for(std::size_t triangle=0;triangle+2<weldedPipe.indices.size();triangle+=3) {
+                const auto a=weldedPipe.positions[weldedPipe.indices[triangle]];
+                const auto b=weldedPipe.positions[weldedPipe.indices[triangle+1]];
+                const auto c=weldedPipe.positions[weldedPipe.indices[triangle+2]];
+                signedVolume+=(a.x*(b.y*c.z-b.z*c.y)+a.y*(b.z*c.x-b.x*c.z)+a.z*(b.x*c.y-b.y*c.x))/6.0;
+                std::array<std::uint32_t,3> key{weldedPipe.indices[triangle],weldedPipe.indices[triangle+1],weldedPipe.indices[triangle+2]};
+                std::sort(key.begin(),key.end());
+                ++faceCount[key];
+            }
+            std::size_t duplicateFaces=0;
+            for(const auto& [key,count]:faceCount)if(count>1)++duplicateFaces;
             result["break"]={{"pipe_triangles",pipe.mesh.mesh.indices.size()/3},
+                {"signed_volume",signedVolume},{"duplicate_faces",duplicateFaces},
                 {"welded_triangles",weldedPipe.indices.size()/3},{"welded_open_edges",weldedOpen},
                 {"welded_non_manifold_edges",weldedNonManifold},
                 {"slab_triangles",slab.indices.size()/3}};
             std::cout<<"break: welded_triangles="<<weldedPipe.indices.size()/3
                      <<" open_edges="<<weldedOpen<<" non_manifold_edges="<<weldedNonManifold
-                     <<" slab="<<slab.indices.size()/3<<"\n";
+                     <<" volume="<<signedVolume<<" duplicates="<<duplicateFaces<<"\n";
+            // Degenerate triangles survive welding and Manifold refuses them, while
+            // validateClosedMesh canonicalises first and therefore accepts them.
+            std::size_t degenerate=0;
+            for(std::size_t triangle=0;triangle+2<weldedPipe.indices.size();triangle+=3) {
+                const auto a=weldedPipe.positions[weldedPipe.indices[triangle]];
+                const auto b=weldedPipe.positions[weldedPipe.indices[triangle+1]];
+                const auto c=weldedPipe.positions[weldedPipe.indices[triangle+2]];
+                const double ux=b.x-a.x,uy=b.y-a.y,uz=b.z-a.z;
+                const double vx=c.x-a.x,vy=c.y-a.y,vz=c.z-a.z;
+                const double cx=uy*vz-uz*vy,cy=uz*vx-ux*vz,cz=ux*vy-uy*vx;
+                if(std::sqrt(cx*cx+cy*cy+cz*cz)*0.5<1e-12)++degenerate;
+            }
+            result["break"]["degenerate_triangles"]=degenerate;
+            std::cout<<"  degenerate triangles="<<degenerate<<"\n";
+            // The damage backend passes a per-triangle region map to Manifold; an empty region
+            // list may be why it rejects a host the validator accepts.
+            Jerico::Guid pipeRegion{};
+            pipeRegion.bytes[0]=std::byte{0x5a};
+            weldedPipe.triangleRegions.assign(weldedPipe.indices.size()/3,pipeRegion);
+            const bool hostClosed=Playground::PA::validateClosedMesh(weldedPipe).hasValue();
+            const bool volumeClosed=Playground::PA::validateClosedMesh(slab).hasValue();
+            result["break"]["host_closed"]=hostClosed;
+            result["break"]["volume_closed"]=volumeClosed;
+            std::cout<<"  validator says host="<<hostClosed<<" volume="<<volumeClosed<<"\n";
             if(weldedOpen==0&&weldedNonManifold==0) try {
                 const auto broken=Playground::subtractDamageVolume(weldedPipe,slab,240000);
                 std::vector<JE::GeometryAnalysis::Vec3> points;
@@ -278,8 +319,27 @@ int main(int argc,char** argv) {
                 analysisSettings.maximumVertices=1000000;
                 analysisSettings.maximumTriangles=1000000;
                 const auto analysis=JE::GeometryAnalysis::analyze({points,broken.indices},analysisSettings);
-                std::size_t largeComponents=0;
-                for(const auto& component:analysis.components)if(component.vertices.size()>=20)++largeComponents;
+                std::size_t largeComponents=0,closedComponents=0;
+                for(const auto& component:analysis.components) {
+                    if(component.vertices.size()<20)continue;
+                    ++largeComponents;
+                    std::vector<unsigned char> inComponent(points.size(),0);
+                    for(const auto vertex:component.vertices)inComponent[vertex]=1;
+                    std::map<std::pair<std::uint32_t,std::uint32_t>,int> edgeUse;
+                    for(std::size_t triangle=0;triangle+2<broken.indices.size();triangle+=3) {
+                        const auto a=broken.indices[triangle],b=broken.indices[triangle+1],c=broken.indices[triangle+2];
+                        if(!inComponent[a]||!inComponent[b]||!inComponent[c])continue;
+                        ++edgeUse[{std::min(a,b),std::max(a,b)}];
+                        ++edgeUse[{std::min(b,c),std::max(b,c)}];
+                        ++edgeUse[{std::min(c,a),std::max(c,a)}];
+                    }
+                    bool closed=true;
+                    for(const auto& [edge,count]:edgeUse)if(count!=2){closed=false;break;}
+                    if(closed)++closedComponents;
+                }
+                result["break"]["closed_components"]=closedComponents;
+                std::cout<<"  closed fragments="<<closedComponents<<"\n";
+                require(closedComponents==2,"A pipe fragment is not a closed solid");
                 result["break"]["components"]=largeComponents;
                 result["break"]["broken_triangles"]=broken.indices.size()/3;
                 std::cout<<"  broken: triangles="<<broken.indices.size()/3<<" components="<<largeComponents<<"\n";
