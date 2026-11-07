@@ -388,6 +388,21 @@ int main(int argc,char** argv) {
             require(tipVertices>0,"No vertices are bound to the chain tip");
             require(worstTip<0.15,"Skinning did not follow the solved pose");
         };
+        // The archetype rig is what the application's asset model would consume.
+        {
+            auto asset=Playground::AnimationImport::loadAsset(std::filesystem::path(PLAYGROUND_ROOT)/"models/Philips.fbx");
+            Playground::AnimationImport::createArchetypeRig(asset,4);
+            const auto built=Playground::AnimationImport::animationAsset(asset);
+            JE::AnimationTools::validateAsset(built);
+            result["archetype_rig"]={{"chains",asset.chains.size()},{"bones",asset.document.bones.size()},
+                {"description",asset.rigDescription},{"influences",asset.skin.influences.size()}};
+            std::cout<<"archetype rig: chains="<<asset.chains.size()<<" bones="<<asset.document.bones.size()
+                     <<" desc="<<asset.rigDescription<<"\n";
+            require(asset.chains.size()==2,"Biped archetype rig did not produce two limb chains");
+            require(asset.document.bones.size()==1+2*4,"Biped archetype rig bone count is wrong");
+            require(asset.rigDescription.rfind("Archetype Biped",0)==0,"Archetype rig description does not name the class first");
+            require(asset.skin.influences.size()==asset.renderMesh.mesh.mesh.positions.size(),"Archetype rig did not bind every vertex");
+        }
         result["ik"]=Json::object();
         ikTest(philipsMesh,"humanoid");
         // Joint limits: aim behind the knee so the unconstrained solver hyperextends.
