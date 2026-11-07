@@ -165,16 +165,49 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
             }
             const double determinant=sxx*syy-sxy*sxy;
             if(std::abs(determinant)<1e-18){++report.rejectedLoops;continue;}
-            const double cx=(sxz*syy-syz*sxy)/determinant*0.5;
-            const double cy=(syz*sxx-sxz*sxy)/determinant*0.5;
+            double cx=(sxz*syy-syz*sxy)/determinant*0.5;
+            double cy=(syz*sxx-sxz*sxy)/determinant*0.5;
+            // Robust refit: a border walk that runs along a UV seam drags one vertex far off the
+            // circle, and a single outlier was enough to reject an otherwise perfect rim.
+            std::vector<std::uint32_t> inliers=loop;
+            for(int pass=0;pass<2;++pass) {
+                std::vector<double> residuals;
+                residuals.reserve(inliers.size());
+                double radiusSum=0;
+                for(const auto vertex:inliers) {
+                    const auto delta=sub(welded.points[vertex],centre);
+                    const double radial=std::hypot(dot(delta,u)-cx,dot(delta,v)-cy);
+                    residuals.push_back(radial);radiusSum+=radial;
+                }
+                const double medianRadius=radiusSum/double(inliers.size());
+                std::vector<std::uint32_t> kept;
+                for(std::size_t index=0;index<inliers.size();++index)
+                    if(std::abs(residuals[index]-medianRadius)<=std::max(0.10*medianRadius,0.002))kept.push_back(inliers[index]);
+                if(kept.size()<8||kept.size()==inliers.size())break;
+                inliers=kept;
+                double nxx=0,nxy=0,nyy=0,nxz=0,nyz=0;
+                for(const auto vertex:inliers) {
+                    const auto delta=sub(welded.points[vertex],centre);
+                    const double x=dot(delta,u),y=dot(delta,v);
+                    nxx+=x*x;nxy+=x*y;nyy+=y*y;nxz+=x*x*x+x*y*y;nyz+=y*y*y+x*x*y;
+                }
+                const double nd=nxx*nyy-nxy*nxy;
+                if(std::abs(nd)<1e-18)break;
+                cx=(nxz*nyy-nyz*nxy)/nd*0.5;
+                cy=(nyz*nxx-nxz*nxy)/nd*0.5;
+            }
             double radialSum=0,radialMax=0;
-            for(const auto vertex:loop) {
+            for(const auto vertex:inliers) {
                 const auto delta=sub(welded.points[vertex],centre);
-                const double x=dot(delta,u),y=dot(delta,v);
-                const double radial=std::hypot(x-cx,y-cy);
+                const double radial=std::hypot(dot(delta,u)-cx,dot(delta,v)-cy);
                 radialSum+=radial;radialMax=std::max(radialMax,radial);
             }
-            const double radius=radialSum/double(loop.size());
+            const double radius=radialSum/double(inliers.size());
+            double inlierPlaneDeviation=0;
+            for(const auto vertex:inliers) {
+                const auto delta=sub(welded.points[vertex],centre);
+                inlierPlaneDeviation=std::max(inlierPlaneDeviation,std::abs(dot(delta,normal)));
+            }
             if(radius<=kEpsilon){++report.rejectedLoops;continue;}
             SocketCandidate socket;
             socket.position=add(centre,add(mul(u,cx),mul(v,cy)));
@@ -182,8 +215,8 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
             if(dot(socket.forward,sub(socket.position,centroid))<0)socket.forward=mul(socket.forward,-1.0);
             socket.diameter=radius*2;
             socket.radialErrorMeters=radialMax-radius;
-            socket.planeErrorMeters=maximumPlaneDeviation;
-            socket.loopVertices=loop.size();
+            socket.planeErrorMeters=inlierPlaneDeviation;
+            socket.loopVertices=inliers.size();
             socket.closedLoop=true;
             if(socket.radialErrorMeters>settings.maximumRadialErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
             if(socket.planeErrorMeters>settings.maximumPlaneErrorRelative*socket.diameter) {++report.rejectedLoops;continue;}
@@ -453,6 +486,21 @@ Report infer(std::span<const Vec3> positions,std::span<const std::uint32_t> indi
         }
     }
 
+    // Two arcs of the same rim can survive as separate sockets; keep the richer one.
+    std::vector<SocketCandidate> merged;
+    for(const auto& candidate:report.sockets) {
+        bool duplicate=false;
+        for(auto& kept:merged) {
+            const double separation=length(sub(candidate.position,kept.position));
+            if(separation<0.35*std::max(candidate.diameter,kept.diameter)
+                && std::abs(dot(candidate.forward,kept.forward))>0.95) {
+                if(candidate.loopVertices>kept.loopVertices)kept=candidate;
+                duplicate=true;break;
+            }
+        }
+        if(!duplicate)merged.push_back(candidate);
+    }
+    report.sockets=std::move(merged);
     std::sort(report.sockets.begin(),report.sockets.end(),[](const auto& x,const auto& y){return x.diameter>y.diameter;});
     return report;
 }
