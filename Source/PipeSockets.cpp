@@ -305,9 +305,16 @@ std::vector<TriangleMesh> breakPipe(const TriangleMesh& pipe,double fraction,
             fragment.positions.push_back(cut.positions[vertex]);
             return next;
         };
-        fragment.indices.push_back(remapVertex(a));
-        fragment.indices.push_back(remapVertex(b));
-        fragment.indices.push_back(remapVertex(c));
+        const auto ia=remapVertex(a);
+        const auto ib=remapVertex(b);
+        const auto ic=remapVertex(c);
+        fragment.indices.push_back(ia);
+        fragment.indices.push_back(ib);
+        fragment.indices.push_back(ic);
+        // Preserve triangleRegions from the cut mesh (one per triangle)
+        if (!cut.triangleRegions.empty() && triangle/3 < cut.triangleRegions.size()) {
+            fragment.triangleRegions.push_back(cut.triangleRegions[triangle/3]);
+        }
     }
     std::vector<TriangleMesh> result;
     for(auto& fragment:fragments)if(fragment.indices.size()>=3*20)result.push_back(std::move(fragment));
