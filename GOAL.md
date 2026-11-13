@@ -86,6 +86,40 @@ Los fragmentos ahora tienen `triangleRegions` válidas (una por triángulo), que
 
 Bocas en la brida (mismo commit): el grupo plano del codo no es un disco sino un **anillo** (área 0,0906 m², exterior 0,270 m, hueco 0,210 m); el socket es el **agujero**, no el borde. Con esa lectura el Socket 1 declarado coincide a **22,0 mm, 1,36° y 8,5 % de diámetro**. El Socket 2 sigue en rojo (posición 4,9 mm y eje 0,03° correctos, diámetro 31,8 % alto porque su anillo no está cerrado). Un ajuste de círculo al borde interior **empeoró** el resultado (movió 7 cm un socket que ya coincidía) y se revirtió. 
 
+
+---
+
+## Estado actual (2026-11-12, ronda 45)
+
+### Línea B (Tuberías) — COMPLETA en la biblioteca
+
+| Componente | Estado |
+|---|---|
+| Inferencia de sockets desde malla | ✅ (JE::SocketInference, commit da3b2d2, ac970ea, 932ca28) |
+| Ruteo socket-a-socket (Pipes::connect) | ✅ (f9bc764, dd3c4c3) |
+| Barrido con perfil de anillo (Pipes::routed) | ✅ (f9bc764) |
+| Válvula en línea (Pipes::insertValve) | ✅ (4e71022) |
+| Rotura (Pipes::breakPipe) | ✅ (2645156, c014344) |
+| UI: botón "Fit route between A/B" | ✅ (f9bc764, verificado en app) |
+| UI: botón "Route this module's own sockets" | ✅ (3497c26, verificado en app) |
+| UI: botón "Break last generated pipe" | ✅ geometría OK (4f4142e, c014344), fragments con triangleRegions |
+| UI: botón válvula | ⏳ pendiente |
+
+**Tests pasando**: PipeConnectorTests (3/4 socket pairs), ArchetypeTests (13/13).
+
+### Línea A (Muebles/Huesos/Megascans) — PENDIENTE
+
+Directiva del propietario (2026-11-07):
+1. Algoritmo de huesos/arquetipos que reconozca bípedos, arácnidos, armarios, cajones, puertas, piezas mecánicas (no solo conteo de patas) — base en JE::GeometryArchetypes ya existe
+2. Sockets y tuberías por spline con acoplamiento automático, válvulas, roturas — Línea B completa
+3. Integración Megascans — solo info/plan, sin código
+
+Próximos pasos:
+1. Añadir botón de válvula en UI de tuberías
+2. Construir app (PLAYGROUND_CHAIN_EDGE_RECOVERY=OFF) y probar botones de rotura y válvula en ventana
+3. Avanzar Línea A: muebles con cajones (reconstrucción de mecánica sin interior), materiales Megascans
+
+
 Banco de pruebas externo: [`docs/FAB_TEST_ASSETS_2026_11_07.md`](docs/FAB_TEST_ASSETS_2026_11_07.md) fija qué mallas faltan (mueble con cajones primero, luego humanoide y cuadrúpedo), por qué el repositorio público no puede contener los binarios, y los dos caminos de descarga (manual o `egs-api-py` con login del propietario).
 
 Seguimiento de superficie publicado en `a87fb1db72aaadcb16f1448782321941f9ba370a`: `Follow surface` conserva la guía canónica y proyecta/refina sus tramos contra el receptor mediante el BVH existente. Distancia máxima explícita, perfiles orientados a la superficie, escala no uniforme y transformación de handles; no modifica el receptor ni los puntos guardados. La receta v4 conserva lectura v1–v3 y el recorrido libre anterior. El RED del tubo medía 1,528mm de separación en centros y 1,648mm entre muestras; GREEN deja centros sobre la superficie y 0,175mm de error muestreado de los tramos. El error se comprueba en cuartos/punto medio: no es una cota demostrada sobre toda la superficie. Anchura y profundidad siguen siendo las del autor; no implica protección automática contra atravesar una pared.
